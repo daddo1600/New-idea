@@ -6,5 +6,6 @@
 | [`02-top-10-app-ideas.md`](02-top-10-app-ideas.md) | Market intelligence and 10 app ideas scored out of 35, with monetisation models |
 | [`03-recommendation.md`](03-recommendation.md) | **The pick: an auto mileage + receipt tax tracker.** Why it wins, scope, pricing, projections, risks, and open decisions |
 | [`04-plugins-and-tooling.md`](04-plugins-and-tooling.md) | Claude plugins and external tools to review before building |
+| [`05-getting-started.md`](05-getting-started.md) | **Start here next.** Your to-do list, the build route (Expo, no Mac needed), and App Review questions |
 
-**Status:** Research complete. Waiting on the decisions at the end of `03-recommendation.md` before starting design.
+**Status:** App chosen. iOS first, Android later, built with Expo. Waiting on launch market and name before scaffolding (see `05-getting-started.md`).
