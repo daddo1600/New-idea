@@ -13,7 +13,7 @@
 
 | # | Action | Cost | Why |
 |---|---|---|---|
-| 1 | **Pick launch market: US or UK** | – | Decides tax rules, currency and wording |
+| 1 | ~~Pick launch market~~ **Done: US first**, UK later (same developer account, just a territory toggle) | – | – |
 | 2 | **Pick a name** (shortlist below, or your own) | – | Needed for the bundle ID and App Store listing |
 | 3 | **Enrol in the Apple Developer Program** at developer.apple.com: *Individual* (your legal name shows as seller) or *Organisation* (needs a D-U-N-S number, takes about 1–2 weeks) | $99/yr | Required to publish |
 | 4 | **Get an iPhone for testing.** A used iPhone 12 or newer is fine; iPhone 15 Pro or newer if you want to test on-device AI | ~$150–400 used | You have to drive with it to test trip detection. The simulator can't do this. |
@@ -48,7 +48,7 @@ Apple signing credentials are handled by EAS on its own servers. You log in to A
 
 MileMint · DriveDeduct · Milebook · Logbook+ · Claimly Miles · RoadReceipt
 
-## What Claude does next, once 1–2 are answered
+## What Claude does next, once a name is chosen
 
 1. Scaffold the Expo app (TypeScript, Expo Router, EAS config), with CI running lint and tests.
 2. Build the data model, manual trip logging and the running deductions counter. This runs in Expo Go or the web preview.
