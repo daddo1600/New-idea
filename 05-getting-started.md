@@ -44,9 +44,17 @@ Apple signing credentials are handled by EAS on its own servers. You log in to A
 | 5.1.2(i) | Sending personal data to third-party AI without consent | AI runs on the device; any cloud AI is opt-in, with the provider named |
 | 3.1.1 / 3.1.2 | Subscriptions outside Apple's in-app purchase system, or an unclear paywall | StoreKit through RevenueCat; price, trial length and renewal terms shown clearly; Restore button |
 
-## Name shortlist (availability not yet checked)
+## Name shortlist (web and App Store search, 29 Sep 2026; not a legal trademark search)
 
-MileMint · DriveDeduct · Milebook · Logbook+ · Claimly Miles · RoadReceipt
+| Name | Result |
+|---|---|
+| **MileMint** | ✅ No app found. The closest is "MiloMint", a family chores app, so no clash. **Recommended.** |
+| **DriveDeduct** | ✅ No app found. Clear, but longer. |
+| Milebook | ❌ Too close to the existing "MileageBook" mileage tracker |
+| RoadReceipt | ❌ Too close to the existing "Road Receipts" app |
+
+**Use one name everywhere:** Expo account username and project slug `milemint`, bundle ID `com.milemint.app`, App Store name "MileMint: Mileage Tracker". The words after the colon count as search keywords.
+Before committing to it: check the USPTO trademark search (tmsearch.uspto.gov) and domain availability.
 
 ## What Claude does next, once a name is chosen
 
