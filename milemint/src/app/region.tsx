@@ -33,9 +33,16 @@ export default function RegionScreen() {
 
   const done = async () => {
     setSaving(true);
-    await setRegion(selected);
+    // Close first: saving tells the home screen a country is chosen, and it
+    // then opens the tracking setup. Closing afterwards would dismiss that
+    // screen instead of this one and leave this one stuck.
     if (router.canGoBack()) router.back();
     else router.replace('/');
+    try {
+      await setRegion(selected);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (

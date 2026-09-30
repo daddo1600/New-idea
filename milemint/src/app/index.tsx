@@ -1,4 +1,4 @@
-import { router, Stack } from 'expo-router';
+import { router, Stack, useIsFocused } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -83,8 +83,11 @@ export default function HomeScreen() {
       .reduce((sum, trip) => sum + (deductions.get(trip.id) ?? 0), 0);
   }, [visible, places, region, taxYear, deductions]);
 
-  // First launch: where do you drive? Then location access.
+  // First launch: where do you drive? Then location access. Only while this
+  // screen is on top, so one set-up screen never opens over another.
+  const focused = useIsFocused();
   useEffect(() => {
+    if (!focused) return;
     if (loaded && !chosen && !promptedForRegion) {
       promptedForRegion = true;
       router.push('/region');
@@ -92,7 +95,7 @@ export default function HomeScreen() {
       promptedForTracking = true;
       router.push('/setup-tracking');
     }
-  }, [loaded, chosen, status]);
+  }, [focused, loaded, chosen, status]);
 
   if (!trips) return <ActivityIndicator style={styles.loading} />;
 
