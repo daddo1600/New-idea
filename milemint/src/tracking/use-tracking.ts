@@ -16,8 +16,12 @@ import {
 /**
  * Tracking status for the UI. Re-checked on focus and whenever the app returns
  * to the foreground (the user may have changed permissions in Settings).
+ *
+ * `watch` re-checks every second while the app is open, for screens waiting
+ * on a permission: coming back from Settings, iOS can report the new
+ * "Always" a moment after the app is active again, so one check isn't enough.
  */
-export function useTracking(onForeground?: () => void) {
+export function useTracking(onForeground?: () => void, { watch = false }: { watch?: boolean } = {}) {
   const db = useSQLiteContext();
   const [status, setStatus] = useState<TrackingStatus | null>(null);
 
@@ -33,7 +37,8 @@ export function useTracking(onForeground?: () => void) {
 
   useEffect(() => {
     const catchUp = async () => {
-      await reconcileTracking(db);
+      // The status must still update if catching up fails (e.g. no GPS fix indoors).
+      await reconcileTracking(db).catch(() => {});
       await refresh();
       onForeground?.();
     };
@@ -44,6 +49,14 @@ export function useTracking(onForeground?: () => void) {
     });
     return () => subscription.remove();
   }, [db, refresh, onForeground]);
+
+  useEffect(() => {
+    if (!watch || DEMO_MODE) return;
+    const timer = setInterval(() => {
+      if (AppState.currentState === 'active') refresh().catch(() => {});
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [watch, refresh]);
 
   /** Requests permissions and, if granted "Always", switches tracking on. */
   const enable = useCallback(async (): Promise<TrackingStatus> => {

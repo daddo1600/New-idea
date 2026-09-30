@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSQLiteContext } from 'expo-sqlite';
 import {
   KeyboardAvoidingView,
@@ -31,6 +31,7 @@ import { formatRate, REGIONS, type RegionCode } from '@/domain/regions';
 import { useTheme } from '@/hooks/use-theme';
 import { useRegion } from '@/region/region';
 import { enableWeeklyReminder, REMINDERS_SUPPORTED, scheduleWorkHoursNudge } from '@/reminders/weekly';
+import type { TrackingStatus } from '@/tracking/background';
 import { useTracking } from '@/tracking/use-tracking';
 
 /**
@@ -55,12 +56,14 @@ export default function WelcomeScreen() {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
   const { region, chosen, setRegion, finishOnboarding } = useRegion();
-  const { status, enable } = useTracking();
   const [step, setStep] = useState(0);
+  const { status, enable } = useTracking(undefined, { watch: step === 2 });
   const [country, setCountry] = useState<RegionCode>(() => (chosen ? region.code : phoneRegion()));
   const [busy, setBusy] = useState(false);
   // iOS asks only once; after a "Don't Allow" the only way back is Settings.
   const [asked, setAsked] = useState(false);
+  /** Sent to Settings to choose "Always": carry on by ourselves once it's chosen. */
+  const [inSettings, setInSettings] = useState(false);
   const db = useSQLiteContext();
   const [week, setWeek] = useState<SimpleWeek>(DEFAULT_SIMPLE_WEEK);
   const [hoursSet, setHoursSet] = useState(false);
@@ -87,6 +90,23 @@ export default function WelcomeScreen() {
       setBusy(false);
     }
   };
+  // Back from Settings with "Always" chosen: switch tracking on and move on, no extra tap.
+  const cameBackWithAlways = step === 2 && inSettings && (status === 'off' || status === 'on');
+  useEffect(() => {
+    if (!cameBackWithAlways) return;
+    let current = true;
+    (status === 'on' ? Promise.resolve<TrackingStatus>('on') : enable()).then((next) => {
+      if (!current) return;
+      setInSettings(false);
+      if (next === 'on') setStep(HOURS);
+    }, () => {});
+    return () => {
+      current = false;
+    };
+    // Runs once per return from Settings; `status` and `enable` are read, not watched.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cameBackWithAlways]);
+
 
   const saveHours = async () => {
     const settings = await loadSettings(db);
@@ -348,7 +368,10 @@ export default function WelcomeScreen() {
             (status === 'on' || status === 'unsupported'
               ? primary('Continue', () => setStep(HOURS))
               : status === 'needs-always' || (status === 'needs-permission' && asked)
-                ? primary('Open Settings', () => Linking.openSettings())
+                ? primary('Open Settings', () => {
+                  setInSettings(true);
+                  Linking.openSettings();
+                })
                 : primary(busy ? 'Waiting for your answer…' : 'Allow location', allowLocation))}
           {step === 2 &&
             status !== 'on' &&

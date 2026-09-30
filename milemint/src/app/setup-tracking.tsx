@@ -1,11 +1,12 @@
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Linking, Pressable, ScrollView, StyleSheet } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import type { TrackingStatus } from '@/tracking/background';
 import { useTracking } from '@/tracking/use-tracking';
 
 const POINTS = [
@@ -16,8 +17,25 @@ const POINTS = [
 
 export default function SetupTrackingScreen() {
   const theme = useTheme();
-  const { status, enable } = useTracking();
+  const { status, enable } = useTracking(undefined, { watch: true });
   const [busy, setBusy] = useState(false);
+  /** Sent to Settings to choose "Always": finish by ourselves once it's chosen. */
+  const [inSettings, setInSettings] = useState(false);
+
+  // Back from Settings with "Always" chosen: switch tracking on and close, no extra tap.
+  const cameBackWithAlways = inSettings && (status === 'off' || status === 'on');
+  useEffect(() => {
+    if (!cameBackWithAlways) return;
+    let current = true;
+    (status === 'on' ? Promise.resolve<TrackingStatus>('on') : enable()).then((next) => {
+      if (current && next === 'on') router.back();
+    }, () => {});
+    return () => {
+      current = false;
+    };
+    // Runs once per return from Settings; `status` and `enable` are read, not watched.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cameBackWithAlways]);
 
   const turnOn = async () => {
     setBusy(true);
@@ -65,7 +83,14 @@ export default function SetupTrackingScreen() {
           <Pressable
             accessibilityRole="button"
             disabled={busy}
-            onPress={needsSettings ? () => Linking.openSettings() : turnOn}
+            onPress={
+              needsSettings
+                ? () => {
+                    setInSettings(true);
+                    Linking.openSettings();
+                  }
+                : turnOn
+            }
             style={[styles.button, { backgroundColor: theme.accent, opacity: busy ? 0.6 : 1 }]}>
             <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
               {needsSettings ? 'Open Settings' : 'Turn on automatic tracking'}
