@@ -9,6 +9,7 @@ import ReanimatedSwipeable, {
 } from 'react-native-gesture-handler/ReanimatedSwipeable';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
+import { AddTripButton, MenuButton } from '@/components/header-menu';
 import { LeafMark } from '@/components/leaf-mark';
 import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
@@ -32,6 +33,7 @@ import { type Classification, toLocalIsoDate, type Trip } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { usePro } from '@/purchases/pro';
 import { useRegion } from '@/region/region';
+import { useReminders } from '@/reminders/use-reminders';
 import type { TrackingStatus } from '@/tracking/background';
 import { useTracking } from '@/tracking/use-tracking';
 
@@ -59,6 +61,7 @@ export default function HomeScreen() {
   const { isPro } = usePro();
   const { region, loaded, onboarded } = useRegion();
   const taxYear = currentTaxYear(region);
+  useReminders(region.unit);
   const locked = useMemo(() => lockedTripIds(trips ?? [], isPro), [trips, isPro]);
   // Locked drives don't count towards the total (or a tier limit) until they're unlocked.
   const visible = useMemo(() => (trips ?? []).filter((trip) => !locked.has(trip.id)), [trips, locked]);
@@ -116,8 +119,8 @@ export default function HomeScreen() {
       <Stack.Screen
         options={{
           headerTitle: () => <BrandTitle />,
-          headerLeft: () => <SettingsLink />,
-          headerRight: () => <AddMissedTripLink />,
+          headerLeft: () => <MenuButton />,
+          headerRight: () => <AddTripButton />,
         }}
       />
       <FlatList
@@ -585,7 +588,6 @@ function BrandTitle() {
   const theme = useTheme();
   return (
     <View style={styles.brand} accessibilityRole="header" accessibilityLabel="MileMint">
-      <LeafMark size={26} />
       <Text style={[styles.brandText, { color: theme.text }]}>
         Mile<Text style={{ color: theme.accent }}>Mint</Text>
       </Text>
@@ -605,38 +607,6 @@ function LiveDot({ color }: { color: string }) {
       <Animated.View style={[StyleSheet.absoluteFill, styles.dot, { backgroundColor: color }, ring]} />
       <View style={[styles.dot, { backgroundColor: color }]} />
     </View>
-  );
-}
-
-function SettingsLink() {
-  const theme = useTheme();
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel="Settings: work hours and places"
-      hitSlop={12}
-      onPress={() => router.push('/settings')}
-      style={styles.headerLink}>
-      <ThemedText type="small" style={{ color: theme.accent }}>
-        Settings
-      </ThemedText>
-    </Pressable>
-  );
-}
-
-function AddMissedTripLink() {
-  const theme = useTheme();
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel="Add a missed trip manually"
-      hitSlop={12}
-      onPress={() => router.push('/add-trip')}
-      style={styles.headerLink}>
-      <ThemedText type="small" style={{ color: theme.accent }}>
-        Add missed trip
-      </ThemedText>
-    </Pressable>
   );
 }
 
@@ -764,7 +734,6 @@ const styles = StyleSheet.create({
   planCard: { borderRadius: 16, padding: Spacing.three, gap: Spacing.two },
   meter: { height: 6, borderRadius: 3, overflow: 'hidden' },
   meterFill: { height: '100%', borderRadius: 3 },
-  headerLink: { paddingHorizontal: Spacing.three },
   trackingOn: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, paddingHorizontal: Spacing.one },
   dot: { width: 8, height: 8, borderRadius: 4 },
   trackingCard: { borderRadius: 16, borderWidth: 1, padding: Spacing.three, gap: Spacing.one },

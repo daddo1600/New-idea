@@ -1,25 +1,49 @@
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useSQLiteContext } from 'expo-sqlite';
+import {
+  KeyboardAvoidingView,
+  Linking,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CountryOptions, phoneRegion } from '@/components/country-options';
+import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import {
+  DEFAULT_SIMPLE_WEEK,
+  toWorkWeek,
+  WorkHoursQuick,
+  type SimpleWeek,
+} from '@/components/work-hours-quick';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
+import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
+import { loadSettings, saveSettings } from '@/db/settings-repo';
 import { formatRate, REGIONS, type RegionCode } from '@/domain/regions';
 import { useTheme } from '@/hooks/use-theme';
 import { useRegion } from '@/region/region';
+import { enableWeeklyReminder, REMINDERS_SUPPORTED, scheduleWorkHoursNudge } from '@/reminders/weekly';
 import { useTracking } from '@/tracking/use-tracking';
 
 /**
  * First launch, as one full-screen flow instead of a chain of pop-ups:
- * welcome → country → automatic tracking → done. Each step does one thing,
+ * welcome → country → automatic tracking → work hours → home and work → done.
+ * The last three are optional and skip in one tap. Each step does one thing,
  * and the user always sees how far along they are.
  */
 
-const STEPS = 4;
+const STEPS = 6;
+const HOURS = 3;
+const PLACES = 4;
+const DONE = 5;
 
 const WELCOME_POINTS = [
   ['Automatic', 'Drives are logged in the background. No buttons to press.'],
@@ -37,6 +61,13 @@ export default function WelcomeScreen() {
   const [busy, setBusy] = useState(false);
   // iOS asks only once; after a "Don't Allow" the only way back is Settings.
   const [asked, setAsked] = useState(false);
+  const db = useSQLiteContext();
+  const [week, setWeek] = useState<SimpleWeek>(DEFAULT_SIMPLE_WEEK);
+  const [hoursSet, setHoursSet] = useState(false);
+  const [home, setHome] = useState<PlaceDraft>(EMPTY_PLACE);
+  const [work, setWork] = useState<PlaceDraft>(EMPTY_PLACE);
+  const [placeError, setPlaceError] = useState<string | null>(null);
+  const [reminder, setReminder] = useState(REMINDERS_SUPPORTED);
 
   const picked = REGIONS[country];
   const topRate = formatRate(picked.rates[picked.rates.length - 1].tiers[0].rate, picked);
@@ -50,14 +81,54 @@ export default function WelcomeScreen() {
     setBusy(true);
     try {
       const next = await enable();
-      if (next === 'on') setStep(3);
+      if (next === 'on') setStep(HOURS);
     } finally {
       setAsked(true);
       setBusy(false);
     }
   };
 
+  const saveHours = async () => {
+    const settings = await loadSettings(db);
+    await saveSettings(db, { ...settings, workHoursEnabled: true, workWeek: toWorkWeek(week) });
+    setHoursSet(true);
+    setStep(PLACES);
+  };
+
+  const savePlaces = async () => {
+    setPlaceError(null);
+    setBusy(true);
+    try {
+      const existing = await listPlaces(db);
+      for (const [draft, kind, name] of [
+        [home, 'home', 'Home'],
+        [work, 'work', 'Work'],
+      ] as const) {
+        if (!draft.text.trim() && !draft.at) continue;
+        const at = await resolvePlace(draft);
+        // Going back and saving again replaces the place instead of adding a second one.
+        for (const old of existing.filter((place) => place.kind === kind && place.name === name)) {
+          await deletePlace(db, old.id);
+        }
+        await insertPlace(db, { name, kind, at });
+      }
+      setStep(DONE);
+    } catch (error) {
+      setPlaceError(error instanceof Error ? error.message : 'Couldn’t save those places. Please try again.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const finish = async () => {
+    setBusy(true);
+    try {
+      const scheduled = reminder ? await enableWeeklyReminder(picked.unit).catch(() => false) : false;
+      await saveSettings(db, { ...(await loadSettings(db)), weeklyReminder: scheduled });
+      if (!hoursSet) await scheduleWorkHoursNudge().catch(() => {});
+    } finally {
+      setBusy(false);
+    }
     await finishOnboarding();
     router.replace('/');
   };
@@ -82,10 +153,18 @@ export default function WelcomeScreen() {
   );
 
   return (
-    <ThemedView style={[styles.container, { paddingTop: insets.top + Spacing.three, paddingBottom: insets.bottom + Spacing.three }]}>
+    <ThemedView
+      style={[
+        styles.container,
+        { paddingTop: insets.top + Spacing.three, paddingBottom: insets.bottom + Spacing.three },
+      ]}>
       <View style={styles.top}>
-        {step > 0 && step < 3 ? (
-          <Pressable accessibilityRole="button" accessibilityLabel="Back" hitSlop={12} onPress={() => setStep(step - 1)}>
+        {step > 0 && step < DONE ? (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Back"
+            hitSlop={12}
+            onPress={() => setStep(step - 1)}>
             <ThemedText type="small" style={{ color: theme.accent }}>
               Back
             </ThemedText>
@@ -97,124 +176,194 @@ export default function WelcomeScreen() {
           {Array.from({ length: STEPS }, (_, i) => (
             <View
               key={i}
-              style={[styles.dot, { backgroundColor: i <= step ? theme.accent : theme.backgroundSelected }, i === step && styles.dotCurrent]}
+              style={[
+                styles.dot,
+                { backgroundColor: i <= step ? theme.accent : theme.backgroundSelected },
+                i === step && styles.dotCurrent,
+              ]}
             />
           ))}
         </View>
         <View style={styles.topSpacer} />
       </View>
 
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {step === 0 && (
-          <>
-            <Image source={require('@/../assets/images/icon.png')} style={styles.icon} accessibilityIgnoresInvertColors />
-            <ThemedText type="title" style={styles.heading}>
-              Every business mile, counted.
-            </ThemedText>
-            <ThemedText themeColor="textSecondary">
-              MileMint logs your drives automatically and works out what they’re worth at tax time.
-            </ThemedText>
-            <View style={styles.points}>
-              {WELCOME_POINTS.map(([title, body]) => (
-                <View key={title} style={styles.point}>
-                  <ThemedText type="smallBold" style={{ color: theme.accent }}>
-                    ✓
-                  </ThemedText>
+      <KeyboardAvoidingView style={styles.flexFill} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <ScrollView
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled">
+          {step === 0 && (
+            <>
+              <Image
+                source={require('@/../assets/images/icon.png')}
+                style={styles.icon}
+                accessibilityIgnoresInvertColors
+              />
+              <ThemedText type="title" style={styles.heading}>
+                Every business mile, counted.
+              </ThemedText>
+              <ThemedText themeColor="textSecondary">
+                MileMint logs your drives automatically and works out what they’re worth at tax time.
+              </ThemedText>
+              <View style={styles.points}>
+                {WELCOME_POINTS.map(([title, body]) => (
+                  <View key={title} style={styles.point}>
+                    <ThemedText type="smallBold" style={{ color: theme.accent }}>
+                      ✓
+                    </ThemedText>
+                    <View style={styles.flex}>
+                      <ThemedText type="smallBold">{title}</ThemedText>
+                      <ThemedText type="small" themeColor="textSecondary">
+                        {body}
+                      </ThemedText>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            </>
+          )}
+
+          {step === 1 && (
+            <>
+              <ThemedText type="subtitle" style={styles.heading}>
+                Where do you drive?
+              </ThemedText>
+              <ThemedText type="small" themeColor="textSecondary">
+                This sets your currency, miles or kilometres, tax year and official mileage rate. You can
+                change it later in Settings.
+              </ThemedText>
+              <CountryOptions value={country} onChange={setCountry} />
+            </>
+          )}
+
+          {step === 2 && (
+            <>
+              <ThemedText type="subtitle" style={styles.heading}>
+                Log every drive automatically
+              </ThemedText>
+              <ThemedText themeColor="textSecondary">
+                To notice when you start driving, even when MileMint is closed, it needs location access set
+                to “Always”. GPS only runs while you drive, and your trips never leave your iPhone.
+              </ThemedText>
+              <ThemedView type="backgroundElement" style={styles.card}>
+                <ThemedText type="smallBold">What you’ll see next</ThemedText>
+                <ThemedText type="small" themeColor="textSecondary">
+                  1. Tap “Allow While Using App”.{'\n'}2. Then tap “Change to Always Allow”.
+                </ThemedText>
+              </ThemedView>
+              {status === 'needs-always' && (
+                <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
+                  Location is set to “While Using”, so drives would be missed while MileMint is closed. In
+                  Settings, tap Location and choose “Always”.
+                </ThemedText>
+              )}
+              {status === 'needs-permission' && asked && !busy && (
+                <ThemedText type="small" themeColor="textSecondary">
+                  If you chose “Don’t Allow”, you can turn location on in Settings at any time.
+                </ThemedText>
+              )}
+              {status === 'unsupported' && (
+                <ThemedText type="small" themeColor="textSecondary">
+                  Automatic tracking runs on your iPhone. You can still add trips by hand here.
+                </ThemedText>
+              )}
+            </>
+          )}
+
+          {step === HOURS && (
+            <>
+              <ThemedText type="subtitle" style={styles.heading}>
+                When do you usually work?
+              </ThemedText>
+              <ThemedText type="small" themeColor="textSecondary">
+                Drives during these hours are marked business for you, the rest personal. Set it once and
+                forget it. You can always swipe to change a trip.
+              </ThemedText>
+              <WorkHoursQuick value={week} onChange={setWeek} locale={picked.locale} />
+            </>
+          )}
+
+          {step === PLACES && (
+            <>
+              <ThemedText type="subtitle" style={styles.heading}>
+                Where are home and work?
+              </ThemedText>
+              <ThemedText type="small" themeColor="textSecondary">
+                Trips then read “Home → Work” instead of street names, and commutes are flagged for you. Both
+                are optional.
+              </ThemedText>
+              <PlaceField label="Home" placeholder="Address or postcode" value={home} onChange={setHome} />
+              <PlaceField label="Work" placeholder="Address or postcode" value={work} onChange={setWork} />
+              {placeError && (
+                <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
+                  {placeError}
+                </ThemedText>
+              )}
+            </>
+          )}
+
+          {step === DONE && (
+            <>
+              <ThemedText type="title" style={styles.heading}>
+                You’re all set.
+              </ThemedText>
+              <ThemedText themeColor="textSecondary">
+                {status === 'on'
+                  ? `Just drive. Each trip appears after you park, and business drives count at ${picked.authority}’s ${topRate} rate.`
+                  : 'You can turn on automatic tracking from the home screen whenever you’re ready, or add trips by hand.'}
+              </ThemedText>
+              <ThemedView type="backgroundElement" style={styles.card}>
+                <ThemedText type="smallBold">Good to know</ThemedText>
+                <ThemedText type="small" themeColor="textSecondary">
+                  • Swipe a trip right for business, left for personal.{'\n'}• Add more places (clients, the
+                  depot, the gym) from any trip with “Save as place”, or in Settings → Places.
+                  {hoursSet ? '' : '\n• Set your work hours any time in Settings.'}
+                </ThemedText>
+              </ThemedView>
+              {REMINDERS_SUPPORTED && (
+                <ThemedView type="backgroundElement" style={[styles.card, styles.reminderRow]}>
                   <View style={styles.flex}>
-                    <ThemedText type="smallBold">{title}</ThemedText>
+                    <ThemedText type="smallBold">Sunday evening check-in</ThemedText>
                     <ThemedText type="small" themeColor="textSecondary">
-                      {body}
+                      A (slightly cheeky) weekly nudge to sort your drives, so no business mile goes
+                      unclaimed.
                     </ThemedText>
                   </View>
-                </View>
-              ))}
-            </View>
-          </>
-        )}
+                  <Switch
+                    accessibilityLabel="Sunday evening check-in"
+                    value={reminder}
+                    onValueChange={setReminder}
+                    trackColor={{ true: theme.accent }}
+                  />
+                </ThemedView>
+              )}
+            </>
+          )}
+        </ScrollView>
 
-        {step === 1 && (
-          <>
-            <ThemedText type="subtitle" style={styles.heading}>
-              Where do you drive?
-            </ThemedText>
-            <ThemedText type="small" themeColor="textSecondary">
-              This sets your currency, miles or kilometres, tax year and official mileage rate. You can change
-              it later in Settings.
-            </ThemedText>
-            <CountryOptions value={country} onChange={setCountry} />
-          </>
-        )}
-
-        {step === 2 && (
-          <>
-            <ThemedText type="subtitle" style={styles.heading}>
-              Log every drive automatically
-            </ThemedText>
-            <ThemedText themeColor="textSecondary">
-              To notice when you start driving, even when MileMint is closed, it needs location access set
-              to “Always”. GPS only runs while you drive, and your trips never leave your iPhone.
-            </ThemedText>
-            <ThemedView type="backgroundElement" style={styles.card}>
-              <ThemedText type="smallBold">What you’ll see next</ThemedText>
-              <ThemedText type="small" themeColor="textSecondary">
-                1. Tap “Allow While Using App”.{'\n'}2. Then tap “Change to Always Allow”.
-              </ThemedText>
-            </ThemedView>
-            {status === 'needs-always' && (
-              <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
-                Location is set to “While Using”, so drives would be missed while MileMint is closed. In
-                Settings, tap Location and choose “Always”.
-              </ThemedText>
+        <View style={styles.actions}>
+          {step === 0 && primary('Get started', () => setStep(1))}
+          {step === 1 && primary('Continue', saveCountry)}
+          {step === 2 &&
+            (status === 'on' || status === 'unsupported'
+              ? primary('Continue', () => setStep(HOURS))
+              : status === 'needs-always' || (status === 'needs-permission' && asked)
+                ? primary('Open Settings', () => Linking.openSettings())
+                : primary(busy ? 'Waiting for your answer…' : 'Allow location', allowLocation))}
+          {step === 2 &&
+            status !== 'on' &&
+            status !== 'unsupported' &&
+            secondary(status === 'needs-always' ? 'Continue without “Always”' : 'Not now', () =>
+              setStep(HOURS),
             )}
-            {status === 'needs-permission' && asked && !busy && (
-              <ThemedText type="small" themeColor="textSecondary">
-                If you chose “Don’t Allow”, you can turn location on in Settings at any time.
-              </ThemedText>
-            )}
-            {status === 'unsupported' && (
-              <ThemedText type="small" themeColor="textSecondary">
-                Automatic tracking runs on your iPhone. You can still add trips by hand here.
-              </ThemedText>
-            )}
-          </>
-        )}
-
-        {step === 3 && (
-          <>
-            <ThemedText type="title" style={styles.heading}>
-              You’re all set.
-            </ThemedText>
-            <ThemedText themeColor="textSecondary">
-              {status === 'on'
-                ? `Just drive. Each trip appears after you park, and business drives count at ${picked.authority}’s ${topRate} rate.`
-                : 'You can turn on automatic tracking from the home screen whenever you’re ready, or add trips by hand.'}
-            </ThemedText>
-            <ThemedView type="backgroundElement" style={styles.card}>
-              <ThemedText type="smallBold">Tip</ThemedText>
-              <ThemedText type="small" themeColor="textSecondary">
-                Swipe a trip right for business or left for personal. Set your work hours in Settings and
-                MileMint sorts many trips for you.
-              </ThemedText>
-            </ThemedView>
-          </>
-        )}
-      </ScrollView>
-
-      <View style={styles.actions}>
-        {step === 0 && primary('Get started', () => setStep(1))}
-        {step === 1 && primary('Continue', saveCountry)}
-        {step === 2 &&
-          (status === 'on' || status === 'unsupported'
-            ? primary('Continue', () => setStep(3))
-            : status === 'needs-always' || (status === 'needs-permission' && asked)
-              ? primary('Open Settings', () => Linking.openSettings())
-              : primary(busy ? 'Waiting for your answer…' : 'Allow location', allowLocation))}
-        {step === 2 &&
-          status !== 'on' &&
-          status !== 'unsupported' &&
-          secondary(status === 'needs-always' ? 'Continue without “Always”' : 'Not now', () => setStep(3))}
-        {step === 3 && primary('Start using MileMint', finish)}
-      </View>
+          {step === HOURS && primary('Save my hours', saveHours)}
+          {step === HOURS && secondary('I don’t have set hours', () => setStep(PLACES))}
+          {step === PLACES &&
+            primary(busy ? 'Saving…' : home.text || work.text ? 'Save places' : 'Continue', savePlaces)}
+          {step === PLACES && secondary('Skip for now', () => setStep(DONE))}
+          {step === DONE && primary('Start using MileMint', finish)}
+        </View>
+      </KeyboardAvoidingView>
     </ThemedView>
   );
 }
@@ -240,6 +389,8 @@ const styles = StyleSheet.create({
   points: { gap: Spacing.three, marginTop: Spacing.two },
   point: { flexDirection: 'row', gap: Spacing.two },
   flex: { flex: 1, gap: Spacing.half },
+  flexFill: { flex: 1 },
+  reminderRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three },
   card: { borderRadius: 12, padding: Spacing.three, gap: Spacing.one },
   actions: { gap: Spacing.two, width: '100%', maxWidth: MaxContentWidth, alignSelf: 'center' },
   primary: { alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12 },

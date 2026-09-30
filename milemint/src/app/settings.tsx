@@ -12,10 +12,12 @@ import {
   View,
 } from 'react-native';
 
+import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
+import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
-import { deletePlace, listPlaces } from '@/db/places-repo';
+import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, saveSettings, type AppSettings } from '@/db/settings-repo';
 import { isValidShift, type WorkShift } from '@/domain/classify-rules';
 import { FREE_AUTO_DRIVES_PER_MONTH } from '@/domain/plan';
@@ -23,7 +25,12 @@ import type { Place, PlaceKind } from '@/domain/places';
 import { useTheme } from '@/hooks/use-theme';
 import { usePro } from '@/purchases/pro';
 import { useRegion } from '@/region/region';
-import { disableWeeklyReminder, enableWeeklyReminder, REMINDERS_SUPPORTED } from '@/reminders/weekly';
+import {
+  cancelWorkHoursNudge,
+  disableWeeklyReminder,
+  enableWeeklyReminder,
+  REMINDERS_SUPPORTED,
+} from '@/reminders/weekly';
 
 /** Monday first, as people read a work week; values are `Date.getDay()` indexes. */
 const DAYS = [
@@ -85,6 +92,7 @@ export default function SettingsScreen() {
     const settings: AppSettings = { ...(await loadSettings(db)), workHoursEnabled: enabled, workWeek: week };
     try {
       await saveSettings(db, settings);
+      if (enabled) cancelWorkHoursNudge().catch(() => {});
       setMessage({ error: false, text: 'Saved. New drives will use these hours.' });
     } catch {
       setMessage({ error: true, text: 'Could not save. Please try again.' });
@@ -236,7 +244,7 @@ export default function SettingsScreen() {
         <ThemedView type="backgroundElement" style={styles.card}>
           {places.length === 0 ? (
             <ThemedText type="small" themeColor="textSecondary">
-              No places yet. Open a trip and tap “Save as place” to name where it started or ended.
+              No places yet. Add one below, or open a trip and tap “Save as place”.
             </ThemedText>
           ) : (
             places.map((place) => (
@@ -262,15 +270,97 @@ export default function SettingsScreen() {
               </Pressable>
             ))
           )}
+          <AddPlace onAdded={async () => setPlaces(await listPlaces(db))} />
         </ThemedView>
       </ScrollView>
     </ThemedView>
   );
 }
 
+/** Settings → Places: name a spot and find it by address, from Apple Maps suggestions. */
+function AddPlace({ onAdded }: { onAdded: () => void }) {
+  const db = useSQLiteContext();
+  const theme = useTheme();
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [kind, setKind] = useState<PlaceKind>('client');
+  const [where, setWhere] = useState<PlaceDraft>(EMPTY_PLACE);
+  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  if (!open) {
+    return (
+      <Pressable accessibilityRole="button" hitSlop={8} onPress={() => setOpen(true)}>
+        <ThemedText type="smallBold" style={{ color: theme.accent }}>
+          + Add a place
+        </ThemedText>
+      </Pressable>
+    );
+  }
+
+  const save = async () => {
+    if (!name.trim()) return setError('Give the place a name, e.g. “Acme HQ”.');
+    if (!where.text.trim()) return setError('Search for its address, or use “I’m here now”.');
+    setError(null);
+    setSaving(true);
+    try {
+      await insertPlace(db, { name: name.trim(), kind, at: await resolvePlace(where) });
+      setOpen(false);
+      setName('');
+      setWhere(EMPTY_PLACE);
+      onAdded();
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : 'Couldn’t save the place. Please try again.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <View style={styles.addPlace}>
+      <TextInput
+        accessibilityLabel="Place name"
+        value={name}
+        onChangeText={setName}
+        placeholder="Name, e.g. Acme HQ"
+        placeholderTextColor={theme.textSecondary}
+        style={[styles.nameInput, { color: theme.text, backgroundColor: theme.background }]}
+      />
+      <Segmented
+        options={(['home', 'work', 'client', 'other'] as const).map((value) => ({ value, label: KIND_LABELS[value] }))}
+        value={kind}
+        onChange={setKind}
+      />
+      <PlaceField label="Address" placeholder="Search an address or place" value={where} onChange={setWhere} />
+      {error && (
+        <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
+          {error}
+        </ThemedText>
+      )}
+      <View style={styles.rowBetween}>
+        <Pressable accessibilityRole="button" hitSlop={8} onPress={() => setOpen(false)}>
+          <ThemedText type="small" themeColor="textSecondary">
+            Cancel
+          </ThemedText>
+        </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          disabled={saving}
+          onPress={save}
+          style={[styles.smallButton, { backgroundColor: theme.accent, opacity: saving ? 0.6 : 1 }]}>
+          <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
+            {saving ? 'Saving…' : 'Save place'}
+          </ThemedText>
+        </Pressable>
+      </View>
+    </View>
+  );
+}
+
 function ReminderSection() {
   const db = useSQLiteContext();
   const theme = useTheme();
+  const { region } = useRegion();
   const [on, setOn] = useState<boolean | null>(null);
   const [note, setNote] = useState<string | null>(null);
 
@@ -280,7 +370,7 @@ function ReminderSection() {
 
   const change = async (value: boolean) => {
     setNote(null);
-    const scheduled = value ? await enableWeeklyReminder() : (await disableWeeklyReminder(), false);
+    const scheduled = value ? await enableWeeklyReminder(region.unit) : (await disableWeeklyReminder(), false);
     if (value && !scheduled) {
       setNote('Notifications are off for MileMint. Turn them on in iPhone Settings → Notifications.');
     }
@@ -296,7 +386,7 @@ function ReminderSection() {
           <View style={styles.flex}>
             <ThemedText type="smallBold">Weekly reminder</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              A nudge on Sunday evening to sort the week’s drives.
+              A (slightly cheeky) nudge on Sunday evening to sort the week’s drives.
             </ThemedText>
           </View>
           <Switch
@@ -398,6 +488,9 @@ function ProSection() {
 }
 
 const styles = StyleSheet.create({
+  addPlace: { gap: Spacing.two },
+  nameInput: { borderRadius: 8, paddingHorizontal: Spacing.three, paddingVertical: Spacing.two, fontSize: 16 },
+  smallButton: { paddingHorizontal: Spacing.four, paddingVertical: Spacing.two, borderRadius: 10 },
   loading: { flex: 1 },
   container: { flex: 1 },
   content: {
