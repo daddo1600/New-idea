@@ -2,13 +2,21 @@ import * as Location from 'expo-location';
 import { requireOptionalNativeModule } from 'expo';
 
 import { DEMO_MODE } from '@/dev/demo';
+import { rankAddresses } from '@/domain/address-rank';
 import { distanceMeters, type LatLng } from '@/domain/geo';
 
 /** An Apple Maps suggestion, e.g. { title: "10 Downing Street", subtitle: "London, SW1A 2AA, England" }. */
-export type AddressSuggestion = { title: string; subtitle: string };
+export type AddressSuggestion = {
+  title: string;
+  subtitle: string;
+  /** Known already for full-search results, so choosing one needs no second look-up. */
+  at?: LatLng;
+};
+
+type NativeSuggestion = { title: string; subtitle: string; latitude?: string; longitude?: string };
 
 type AddressSearchNative = {
-  suggest(query: string, latitude: number | null, longitude: number | null): Promise<AddressSuggestion[]>;
+  suggest(query: string, latitude: number | null, longitude: number | null): Promise<NativeSuggestion[]>;
   resolve(title: string, subtitle: string): Promise<LatLng | null>;
   drivingDistance(fromLat: number, fromLng: number, toLat: number, toLng: number): Promise<number | null>;
 };
@@ -31,14 +39,24 @@ export const SUGGESTIONS_AVAILABLE = native !== null || DEMO_MODE;
 export async function suggestAddresses(query: string, near: LatLng | null): Promise<AddressSuggestion[]> {
   if (native) {
     try {
-      return await native.suggest(query, near?.latitude ?? null, near?.longitude ?? null);
+      const found = await native.suggest(query, near?.latitude ?? null, near?.longitude ?? null);
+      const suggestions = found.map(({ title, subtitle, latitude, longitude }): AddressSuggestion => {
+        const at = { latitude: Number(latitude), longitude: Number(longitude) };
+        return Number.isFinite(at.latitude) && Number.isFinite(at.longitude) && latitude && longitude
+          ? { title, subtitle, at }
+          : { title, subtitle };
+      });
+      return rankAddresses(query, suggestions);
     } catch {
       return [];
     }
   }
   if (!DEMO_MODE || query.trim().length < 2) return [];
   const words = query.toLowerCase().split(/\s+/).filter(Boolean);
-  return DEMO_ADDRESSES.filter((a) => words.every((w) => `${a.title} ${a.subtitle}`.toLowerCase().includes(w)));
+  return rankAddresses(
+    query,
+    DEMO_ADDRESSES.filter((a) => words.some((w) => `${a.title} ${a.subtitle}`.toLowerCase().includes(w))),
+  );
 }
 
 /** Coordinates for a chosen suggestion or typed address, or null when it can't be found. */

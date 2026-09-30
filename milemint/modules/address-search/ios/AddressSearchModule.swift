@@ -11,7 +11,11 @@ public class AddressSearchModule: Module {
   public func definition() -> ModuleDefinition {
     Name("AddressSearch")
 
-    /** Up to 8 suggestions for what's typed so far, nearest `latitude`/`longitude` first when given. */
+    /**
+     * Suggestions for what's typed so far: the as-you-type completer (which favours places
+     * near the phone), plus, once there are a couple of words, a full Apple Maps search of the
+     * whole phrase, so "The Forge, London" finds The Forge in London from anywhere.
+     */
     AsyncFunction("suggest") { (query: String, latitude: Double?, longitude: Double?) async -> [[String: String]] in
       return await AddressCompleter.shared.suggest(query, latitude: latitude, longitude: longitude)
     }
@@ -49,6 +53,16 @@ final class AddressCompleter: NSObject, MKLocalSearchCompleterDelegate {
   }
 
   func suggest(_ query: String, latitude: Double?, longitude: Double?) async -> [[String: String]] {
+    let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+    let wantsSearch = trimmed.contains(",") || trimmed.split(separator: " ").count >= 2
+    let searching: Task<[[String: String]], Never>? = wantsSearch ? Task { await self.search(trimmed) } : nil
+    let completed = await complete(query, latitude: latitude, longitude: longitude)
+    let searched = await searching?.value ?? []
+    // Full-search results first: they match the whole phrase, not just the end of it.
+    return searched + completed
+  }
+
+  private func complete(_ query: String, latitude: Double?, longitude: Double?) async -> [[String: String]] {
     // A newer keystroke replaces the one still waiting.
     finish([])
     let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -71,6 +85,28 @@ final class AddressCompleter: NSObject, MKLocalSearchCompleterDelegate {
       } else {
         completer.queryFragment = trimmed
       }
+    }
+  }
+
+  /** A full Apple Maps search: places with their coordinates, so choosing one needs no second look-up. */
+  private func search(_ query: String) async -> [[String: String]] {
+    let request = MKLocalSearch.Request()
+    request.naturalLanguageQuery = query
+    request.resultTypes = [.address, .pointOfInterest]
+    guard let response = try? await MKLocalSearch(request: request).start() else { return [] }
+    return response.mapItems.prefix(5).map { item -> [String: String] in
+      let placemark = item.placemark
+      let title = item.name ?? placemark.name ?? query
+      let street = [placemark.subThoroughfare, placemark.thoroughfare].compactMap { $0 }.joined(separator: " ")
+      let subtitle = [street, placemark.locality ?? "", placemark.postalCode ?? ""]
+        .filter { !$0.isEmpty && $0 != title }
+        .joined(separator: ", ")
+      return [
+        "title": title,
+        "subtitle": subtitle,
+        "latitude": String(placemark.coordinate.latitude),
+        "longitude": String(placemark.coordinate.longitude),
+      ]
     }
   }
 

@@ -35,7 +35,8 @@ function describe(address: Location.LocationGeocodedAddress | undefined): string
   return [street, address.city].filter(Boolean).join(', ') || 'Current location';
 }
 
-const SUGGEST_DELAY_MS = 180;
+/** Waits for a pause in typing, so Apple Maps isn't asked about every keystroke. */
+const SUGGEST_DELAY_MS = 250;
 
 export function PlaceField({
   label,
@@ -89,7 +90,7 @@ export function PlaceField({
     Keyboard.dismiss();
     setLocating(true);
     onChange({ text: suggestion.title, at: null, placeId: null });
-    const at = await locateAddress(suggestion.title, suggestion.subtitle);
+    const at = suggestion.at ?? (await locateAddress(suggestion.title, suggestion.subtitle));
     setLocating(false);
     if (at) onChange({ text: suggestion.title, at, placeId: null });
     else setNote('Apple Maps couldn’t place that one. Try another suggestion.');
