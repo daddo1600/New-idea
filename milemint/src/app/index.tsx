@@ -13,15 +13,18 @@ import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTrips } from '@/db/use-trips';
 import { isCommute, type AutoReason } from '@/domain/classify-rules';
 import { formatCents, formatMiles } from '@/domain/format';
+import { autoDrivesInMonth, FREE_AUTO_DRIVES_PER_MONTH, lockedTripIds } from '@/domain/plan';
 import type { Place } from '@/domain/places';
 import {
   metersToMiles,
   summarizeYear,
   tripDeductionCents,
   type Classification,
+  toLocalIsoDate,
   type Trip,
 } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
+import { usePro } from '@/purchases/pro';
 import type { TrackingStatus } from '@/tracking/background';
 import { useTracking } from '@/tracking/use-tracking';
 
@@ -45,8 +48,14 @@ let promptedForTracking = false;
 export default function HomeScreen() {
   const { trips, places, classify, remove, reload } = useTrips();
   const { status } = useTracking(reload);
+  const { isPro } = usePro();
   const year = new Date().getFullYear();
-  const summary = useMemo(() => summarizeYear(trips ?? [], year), [trips, year]);
+  const locked = useMemo(() => lockedTripIds(trips ?? [], isPro), [trips, isPro]);
+  // Locked drives don't count towards the total until they're unlocked.
+  const summary = useMemo(
+    () => summarizeYear((trips ?? []).filter((trip) => !locked.has(trip.id)), year),
+    [trips, locked, year],
+  );
 
   useEffect(() => {
     if (status === 'needs-permission' && !promptedForTracking) {
@@ -78,6 +87,7 @@ export default function HomeScreen() {
           <View style={styles.header}>
             <SummaryCard year={year} summary={summary} />
             <TrackingCard status={status} />
+            {!isPro && <PlanCard trips={trips} lockedCount={locked.size} />}
           </View>
         }
         ListEmptyComponent={
@@ -87,14 +97,18 @@ export default function HomeScreen() {
               : 'Turn on automatic tracking and your drives will appear here.'}
           </ThemedText>
         }
-        renderItem={({ item }) => (
-          <TripRow
-            trip={item}
-            commute={isCommute(kindOf(item.startPlaceId), kindOf(item.endPlaceId))}
-            onClassify={(c) => classify(item, c)}
-            onLongPress={() => confirmDelete(item)}
-          />
-        )}
+        renderItem={({ item }) =>
+          locked.has(item.id) ? (
+            <LockedTripRow trip={item} />
+          ) : (
+            <TripRow
+              trip={item}
+              commute={isCommute(kindOf(item.startPlaceId), kindOf(item.endPlaceId))}
+              onClassify={(c) => classify(item, c)}
+              onLongPress={() => confirmDelete(item)}
+            />
+          )
+        }
       />
     </ThemedView>
   );
@@ -217,6 +231,91 @@ function TripRow({
         </ThemedView>
       </Pressable>
     </ReanimatedSwipeable>
+  );
+}
+
+/**
+ * A drive over the free monthly limit: recorded and kept, but its details and
+ * classification wait for Pro. Distance and date stay visible so the user can
+ * see it's real.
+ */
+function LockedTripRow({ trip }: { trip: Trip }) {
+  const theme = useTheme();
+  const worth = tripDeductionCents({ ...trip, classification: 'business' });
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`Locked drive on ${trip.localDate}, ${formatMiles(metersToMiles(trip.distanceMeters))}`}
+      accessibilityHint="Opens MileMint Pro to unlock it"
+      onPress={() => router.push('/pro')}>
+      <ThemedView type="backgroundElement" style={styles.row}>
+        <View style={styles.rowHeader}>
+          <ThemedText type="smallBold" themeColor="textSecondary" style={styles.route}>
+            🔒 Locked drive
+          </ThemedText>
+          <ThemedText type="smallBold">{formatMiles(metersToMiles(trip.distanceMeters))}</ThemedText>
+        </View>
+        <ThemedText type="small" themeColor="textSecondary">
+          {[trip.localDate, formatTime(trip.startedAt), worth > 0 ? `worth up to ${formatCents(worth)}` : '']
+            .filter(Boolean)
+            .join(' · ')}
+        </ThemedText>
+        <ThemedText type="smallBold" style={{ color: theme.accent }}>
+          Unlock with MileMint Pro
+        </ThemedText>
+      </ThemedView>
+    </Pressable>
+  );
+}
+
+/** Free plan meter: how much of this month's allowance is used. */
+function PlanCard({ trips, lockedCount }: { trips: readonly Trip[]; lockedCount: number }) {
+  const theme = useTheme();
+  const now = new Date();
+  const used = Math.min(
+    autoDrivesInMonth(trips, toLocalIsoDate(now).slice(0, 7)),
+    FREE_AUTO_DRIVES_PER_MONTH,
+  );
+  const month = now.toLocaleDateString('en-US', { month: 'long' });
+  const full = used >= FREE_AUTO_DRIVES_PER_MONTH;
+  return (
+    <Pressable accessibilityRole="button" onPress={() => router.push('/pro')}>
+      <ThemedView
+        type="backgroundElement"
+        style={[styles.planCard, lockedCount > 0 && { borderColor: theme.accent, borderWidth: 1 }]}>
+        <View style={styles.rowHeader}>
+          <ThemedText type="smallBold">
+            {used} of {FREE_AUTO_DRIVES_PER_MONTH} free drives in {month}
+          </ThemedText>
+          <ThemedText type="smallBold" style={{ color: theme.accent }}>
+            Go Pro
+          </ThemedText>
+        </View>
+        <View style={[styles.meter, { backgroundColor: theme.backgroundSelected }]}>
+          <View
+            style={[
+              styles.meterFill,
+              {
+                width: `${(used / FREE_AUTO_DRIVES_PER_MONTH) * 100}%`,
+                backgroundColor: full ? theme.danger : theme.accent,
+              },
+            ]}
+          />
+        </View>
+        {lockedCount > 0 ? (
+          <ThemedText type="small" themeColor="textSecondary">
+            {lockedCount} {lockedCount === 1 ? 'drive is' : 'drives are'} locked. Upgrade for unlimited
+            drives.
+          </ThemedText>
+        ) : (
+          full && (
+            <ThemedText type="small" themeColor="textSecondary">
+              New drives this month are saved but locked until you upgrade.
+            </ThemedText>
+          )
+        )}
+      </ThemedView>
+    </Pressable>
   );
 }
 
@@ -353,6 +452,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   header: { gap: Spacing.three },
+  planCard: { borderRadius: 16, padding: Spacing.three, gap: Spacing.two },
+  meter: { height: 6, borderRadius: 3, overflow: 'hidden' },
+  meterFill: { height: '100%', borderRadius: 3 },
   headerLink: { paddingHorizontal: Spacing.three },
   trackingOn: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, paddingHorizontal: Spacing.one },
   dot: { width: 8, height: 8, borderRadius: 4 },

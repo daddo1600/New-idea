@@ -17,6 +17,7 @@ All of this is stored **only on your device**, in a database encrypted with AES-
 ## Services MileMint uses
 
 - **Apple location services.** To show place names such as street addresses instead of coordinates, MileMint asks Apple's geocoding service to look up the start and end points of a trip. Apple handles this under its own privacy policy: https://www.apple.com/legal/privacy/
+- **App Store purchases.** If you subscribe to MileMint Pro, Apple processes the payment and manages the subscription under its own privacy policy. MileMint checks whether your subscription is active directly with the App Store on your phone; we don't receive your name, payment details or Apple Account.
 - **iCloud Backup.** If you have iCloud Backup turned on, your iPhone's encrypted backup includes MileMint's data, so it can be restored to a new phone. This is controlled by you in iOS Settings.
 
 ## Location permission
@@ -33,7 +34,7 @@ MileMint is not directed at children under 13 and does not knowingly collect inf
 
 ## Changes
 
-If a future version adds features that send data off your phone (such as sync or subscriptions), we will update this policy and the App Store privacy details before that version is released.
+If a future version adds features that send data off your phone (such as sync), we will update this policy and the App Store privacy details before that version is released.
 
 ## Contact
 

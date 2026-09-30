@@ -1,4 +1,4 @@
-import { useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
 import {
@@ -18,8 +18,10 @@ import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { deletePlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, saveSettings, type AppSettings } from '@/db/settings-repo';
 import { isValidShift, type WorkShift } from '@/domain/classify-rules';
+import { FREE_AUTO_DRIVES_PER_MONTH } from '@/domain/plan';
 import type { Place, PlaceKind } from '@/domain/places';
 import { useTheme } from '@/hooks/use-theme';
+import { usePro } from '@/purchases/pro';
 
 /** Monday first, as people read a work week; values are `Date.getDay()` indexes. */
 const DAYS = [
@@ -102,6 +104,8 @@ export default function SettingsScreen() {
   return (
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+        <ProSection />
+
         <ThemedText type="smallBold">Work hours</ThemedText>
         <ThemedView type="backgroundElement" style={styles.card}>
           <View style={styles.rowBetween}>
@@ -252,6 +256,55 @@ export default function SettingsScreen() {
         </ThemedView>
       </ScrollView>
     </ThemedView>
+  );
+}
+
+function ProSection() {
+  const theme = useTheme();
+  const { isPro, storeAvailable, busy, restore, manage } = usePro();
+  const onRestore = async () => {
+    const found = await restore();
+    Alert.alert(
+      found ? 'MileMint Pro restored' : 'No subscription found',
+      found ? 'Every drive is unlocked.' : 'This Apple Account doesn’t have MileMint Pro.',
+    );
+  };
+  return (
+    <>
+      <ThemedText type="smallBold">MileMint Pro</ThemedText>
+      <ThemedView type="backgroundElement" style={styles.card}>
+        <ThemedText type="small" themeColor="textSecondary">
+          {isPro
+            ? 'Pro is active: unlimited automatic drives.'
+            : `Free plan: ${FREE_AUTO_DRIVES_PER_MONTH} automatic drives a month, unlimited manual trips.`}
+        </ThemedText>
+        {isPro ? (
+          storeAvailable && (
+            <Pressable accessibilityRole="button" onPress={manage} hitSlop={8}>
+              <ThemedText type="small" style={{ color: theme.accent }}>
+                Manage subscription
+              </ThemedText>
+            </Pressable>
+          )
+        ) : (
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => router.push('/pro')}
+            style={[styles.button, { backgroundColor: theme.accent }]}>
+            <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
+              Upgrade to Pro
+            </ThemedText>
+          </Pressable>
+        )}
+        {!isPro && storeAvailable && (
+          <Pressable accessibilityRole="button" disabled={busy} onPress={onRestore} hitSlop={8}>
+            <ThemedText type="small" style={{ color: theme.accent }}>
+              Restore purchases
+            </ThemedText>
+          </Pressable>
+        )}
+      </ThemedView>
+    </>
   );
 }
 
