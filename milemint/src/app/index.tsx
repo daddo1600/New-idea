@@ -137,6 +137,7 @@ function SummaryCard({
   summary: ReturnType<typeof summarizeYear>;
   commuteCents: number;
 }) {
+  const theme = useTheme();
   return (
     <ThemedView type="backgroundElement" style={styles.card}>
       <ThemedText type="small" themeColor="textSecondary">
@@ -149,6 +150,16 @@ function SummaryCard({
         {formatMiles(summary.businessMiles)} business
         {summary.unclassifiedCount > 0 && ` · ${summary.unclassifiedCount} to review`}
       </ThemedText>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Reports: export your mileage log"
+        hitSlop={8}
+        onPress={() => router.push('/report')}
+        style={styles.reportLink}>
+        <ThemedText type="smallBold" style={{ color: theme.accent }}>
+          Export report
+        </ThemedText>
+      </Pressable>
       {commuteCents > 0 && (
         <ThemedText type="small" themeColor="danger">
           Includes {formatCents(commuteCents)} from home ↔ work commutes, which usually aren’t deductible.
@@ -463,6 +474,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   card: { borderRadius: 16, padding: Spacing.four, gap: Spacing.one },
+  reportLink: { alignSelf: 'flex-start', marginTop: Spacing.one },
   empty: { textAlign: 'center', marginTop: Spacing.five },
   row: { borderRadius: 12, padding: Spacing.three, gap: Spacing.two },
   rowHeader: { flexDirection: 'row', justifyContent: 'space-between', gap: Spacing.two },

@@ -58,7 +58,7 @@ Many missed trips are caused by permission or settings problems: location set to
 | Monthly | **$5.99** | $13.99 | $8.99 | $8.99+ |
 | Annual | **$49.99** (30-day trial) | – | – | – |
 | Lifetime | **$129.99** (tests well against subscription fatigue) | – | – | – |
-| Free tier | **20 auto drives/mo + unlimited manual** (Pro is cheap, so the free tier stays tight) | 40 | 30 | 15 |
+| Free tier | **40 auto drives/mo + unlimited manual + free CSV export** | 40 | 30 | 15 |
 
 Against the free apps (Stride, Gridwise): we win on reliability, no upsells and privacy. The free tier stays generous so we compete on quality, not price.
 

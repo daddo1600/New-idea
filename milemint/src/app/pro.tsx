@@ -20,6 +20,7 @@ const PRIVACY_URL =
 const BENEFITS = [
   ['Unlimited automatic drives', `Free covers ${FREE_AUTO_DRIVES_PER_MONTH} a month. Pro logs every one.`],
   ['Unlocks drives you’ve already made', 'Drives over the free limit are kept, never lost.'],
+  ['IRS-ready PDF report', 'Schedule C totals and a full trip log for you or your accountant.'],
   ['Still private', 'No account, no ads, and your trips never leave your iPhone.'],
 ] as const;
 

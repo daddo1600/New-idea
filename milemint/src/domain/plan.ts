@@ -1,11 +1,11 @@
 import type { Trip } from './trip';
 
 /**
- * Free plan: this many automatically logged drives per calendar month, about
- * a week of work driving: enough to trust the app before being asked to pay.
- * Manual trips are always free and never count.
+ * Free plan: this many automatically logged drives per calendar month, the
+ * same allowance as MileIQ, so light drivers can stay free for good.
+ * Manual trips and CSV export are always free.
  */
-export const FREE_AUTO_DRIVES_PER_MONTH = 20;
+export const FREE_AUTO_DRIVES_PER_MONTH = 40;
 
 /** YYYY-MM of a trip's local date: the month its drive counts towards. */
 function monthOf(trip: Pick<Trip, 'localDate'>): string {
@@ -41,7 +41,7 @@ export function lockedTripIds(
   return locked;
 }
 
-/** Automatic drives logged in the given month (YYYY-MM), for the "12 of 20" meter. */
+/** Automatic drives logged in the given month (YYYY-MM), for the "12 of 40" meter. */
 export function autoDrivesInMonth(
   trips: readonly Pick<Trip, 'localDate' | 'source'>[],
   month: string,

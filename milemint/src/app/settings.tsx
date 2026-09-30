@@ -278,7 +278,7 @@ function ProSection() {
         <ThemedText type="small" themeColor="textSecondary">
           {isPro
             ? 'Pro is active: unlimited automatic drives.'
-            : `Free plan: ${FREE_AUTO_DRIVES_PER_MONTH} automatic drives a month, unlimited manual trips.`}
+            : `Free plan: ${FREE_AUTO_DRIVES_PER_MONTH} automatic drives a month, unlimited manual trips and CSV export.`}
         </ThemedText>
         {isPro ? (
           storeAvailable && (

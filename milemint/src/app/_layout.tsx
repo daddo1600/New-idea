@@ -33,6 +33,7 @@ export default function RootLayout() {
                 />
                 <Stack.Screen name="settings" options={{ title: 'Settings' }} />
                 <Stack.Screen name="trip/[id]" options={{ title: 'Trip' }} />
+                <Stack.Screen name="report" options={{ title: 'Reports' }} />
                 <Stack.Screen name="pro" options={{ title: 'MileMint Pro', presentation: 'modal' }} />
               </Stack>
             </ProProvider>

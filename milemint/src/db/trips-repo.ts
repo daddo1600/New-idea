@@ -51,6 +51,14 @@ export async function listTrips(db: SQLiteDatabase): Promise<Trip[]> {
   return rows.map(fromRow);
 }
 
+/** Trips changed after they were recorded, for the "Edited later" column of reports. */
+export async function listEditedTripIds(db: SQLiteDatabase): Promise<Set<string>> {
+  const rows = await db.getAllAsync<{ trip_id: string }>(
+    "SELECT DISTINCT trip_id FROM trip_edits WHERE action = 'update';",
+  );
+  return new Set(rows.map((row) => row.trip_id));
+}
+
 /** Whether an automatically logged trip with this start time is already saved. */
 export async function autoTripExists(db: SQLiteDatabase, startedAt: string): Promise<boolean> {
   const row = await db.getFirstAsync<{ found: number }>(
