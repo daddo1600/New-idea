@@ -5,15 +5,19 @@ import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
-import { DEFAULT_REGION, REGION_LIST, regionFromLocale, type Region, type RegionCode } from '@/domain/regions';
+import { DEFAULT_REGION, REGION_LIST, regionFromLocale, type RegionCode } from '@/domain/regions';
 import { useTheme } from '@/hooks/use-theme';
 import { useRegion } from '@/region/region';
 
 const UNIT_NAMES = { mi: 'miles', km: 'kilometres' } as const;
 
-function currencySymbol(region: Region): string {
-  const parts = new Intl.NumberFormat(region.locale, { style: 'currency', currency: region.currency }).formatToParts(0);
-  return parts.find((part) => part.type === 'currency')?.value ?? region.currency;
+/** The phone's locale, e.g. "en-GB"; undefined if the JS engine can't say. */
+function phoneLocale(): string | undefined {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().locale;
+  } catch {
+    return undefined;
+  }
 }
 
 /** First launch (and Settings): where do you drive? Sets currency, units, tax year and rules. */
@@ -23,7 +27,7 @@ export default function RegionScreen() {
   const [selected, setSelected] = useState<RegionCode>(() =>
     chosen
       ? region.code
-      : (regionFromLocale(Intl.DateTimeFormat().resolvedOptions().locale) ?? DEFAULT_REGION),
+      : (regionFromLocale(phoneLocale()) ?? DEFAULT_REGION),
   );
   const [saving, setSaving] = useState(false);
 
@@ -66,7 +70,7 @@ export default function RegionScreen() {
                 <View style={styles.flex}>
                   <ThemedText type="smallBold">{option.name}</ThemedText>
                   <ThemedText type="small" themeColor="textSecondary">
-                    {currencySymbol(option)} · {UNIT_NAMES[option.unit]} · {option.authority}
+                    {option.currencySymbol} · {UNIT_NAMES[option.unit]} · {option.authority}
                   </ThemedText>
                   <ThemedText type="small" themeColor="textSecondary">
                     {option.rule}

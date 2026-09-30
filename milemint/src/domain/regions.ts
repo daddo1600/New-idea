@@ -28,6 +28,8 @@ export type Region = {
   name: string;
   flag: string;
   currency: string;
+  /** Shown on the country picker; a literal so it doesn't depend on Intl support. */
+  currencySymbol: string;
   /** For number and currency formatting. */
   locale: string;
   unit: DistanceUnit;
@@ -58,6 +60,7 @@ export const REGIONS: Record<RegionCode, Region> = {
     name: 'United States',
     flag: '🇺🇸',
     currency: 'USD',
+    currencySymbol: '$',
     locale: 'en-US',
     unit: 'mi',
     authority: 'IRS',
@@ -85,6 +88,7 @@ export const REGIONS: Record<RegionCode, Region> = {
     name: 'United Kingdom',
     flag: '🇬🇧',
     currency: 'GBP',
+    currencySymbol: '£',
     locale: 'en-GB',
     unit: 'mi',
     authority: 'HMRC',
@@ -110,6 +114,7 @@ export const REGIONS: Record<RegionCode, Region> = {
     name: 'Canada',
     flag: '🇨🇦',
     currency: 'CAD',
+    currencySymbol: '$',
     locale: 'en-CA',
     unit: 'km',
     authority: 'CRA',
@@ -137,6 +142,7 @@ export const REGIONS: Record<RegionCode, Region> = {
     name: 'Australia',
     flag: '🇦🇺',
     currency: 'AUD',
+    currencySymbol: '$',
     locale: 'en-AU',
     unit: 'km',
     authority: 'ATO',

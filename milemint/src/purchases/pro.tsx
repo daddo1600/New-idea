@@ -82,17 +82,23 @@ export function ProProvider({ children }: { children: ReactNode }) {
       .then(setPlans)
       .catch(() => setPlans([]))
       .finally(() => setPlansLoaded(true));
-    const stopListening = onPurchase({
-      success: () => {
-        setBusy(false);
-        setError(null);
-        remember(true);
-      },
-      error: (purchaseError) => {
-        setBusy(false);
-        if (!isCancelled(purchaseError)) setError('The purchase didn’t go through. Please try again.');
-      },
-    });
+    // A store that can't be reached must never stop the app from opening.
+    let stopListening = () => {};
+    try {
+      stopListening = onPurchase({
+        success: () => {
+          setBusy(false);
+          setError(null);
+          remember(true);
+        },
+        error: (purchaseError) => {
+          setBusy(false);
+          if (!isCancelled(purchaseError)) setError('The purchase didn’t go through. Please try again.');
+        },
+      });
+    } catch (listenError) {
+      console.warn('[pro] purchase listener unavailable', listenError);
+    }
     // Renewals, cancellations and refunds show up when the app comes back.
     const foreground = AppState.addEventListener('change', (state) => state === 'active' && refresh());
     return () => {
