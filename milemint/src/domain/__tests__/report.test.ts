@@ -27,6 +27,8 @@ function trip(overrides: Partial<Trip> & { units?: number }, region: Region = US
     startPlaceId: null,
     endPlaceId: null,
     autoReason: null,
+    vehicle: 'car',
+    shiftId: null,
     ...rest,
   };
 }

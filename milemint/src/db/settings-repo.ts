@@ -2,6 +2,7 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 
 import type { WorkWeek } from '@/domain/classify-rules';
 import { REGIONS, type RegionCode } from '@/domain/regions';
+import type { VehicleType } from '@/domain/trip';
 
 export type AppSettings = {
   /** Off by default: guessing from the clock is wrong for anyone without set hours. */
@@ -14,6 +15,10 @@ export type AppSettings = {
   weeklyReminder: boolean;
   /** The first-launch welcome flow has been completed. */
   onboarded: boolean;
+  /** What new trips are driven in, unless changed on the trip. */
+  vehicle: VehicleType;
+  /** Couriers and gig drivers: a Start shift / End shift button instead of (or as well as) work hours. */
+  shiftMode: boolean;
 };
 
 const WEEKDAY_9_TO_5 = [{ start: '09:00', end: '17:00' }];
@@ -24,6 +29,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
   region: null,
   weeklyReminder: false,
   onboarded: false,
+  vehicle: 'car',
+  shiftMode: false,
 };
 
 export async function loadSettings(db: SQLiteDatabase): Promise<AppSettings> {

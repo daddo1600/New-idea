@@ -4,7 +4,15 @@ import { BrandGradient } from '@/components/brand-gradient';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
-import { DEFAULT_REGION, REGION_LIST, REGIONS, regionFromLocale, type RegionCode } from '@/domain/regions';
+import {
+  DEFAULT_REGION,
+  REGION_LIST,
+  REGIONS,
+  regionFromLocale,
+  vehicleRule,
+  type RegionCode,
+} from '@/domain/regions';
+import type { VehicleType } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 
 const UNIT_NAMES = { mi: 'miles', km: 'km' } as const;
@@ -23,7 +31,16 @@ export function phoneRegion(): RegionCode {
  * screen. The chosen one fills with the brand green; its official rate shows
  * underneath.
  */
-export function CountryOptions({ value, onChange }: { value: RegionCode; onChange: (code: RegionCode) => void }) {
+export function CountryOptions({
+  value,
+  onChange,
+  vehicle = 'car',
+}: {
+  value: RegionCode;
+  onChange: (code: RegionCode) => void;
+  /** Shows the rate for this vehicle under the grid. */
+  vehicle?: VehicleType;
+}) {
   const theme = useTheme();
   const chosen = REGIONS[value];
   return (
@@ -62,7 +79,7 @@ export function CountryOptions({ value, onChange }: { value: RegionCode; onChang
       <ThemedView type="backgroundElement" style={styles.rate}>
         <View style={[styles.rateDot, { backgroundColor: theme.accent }]} />
         <ThemedText type="small" themeColor="textSecondary" style={styles.flex} accessibilityLiveRegion="polite">
-          {chosen.rule}
+          {vehicleRule(chosen, vehicle)}
         </ThemedText>
       </ThemedView>
     </View>

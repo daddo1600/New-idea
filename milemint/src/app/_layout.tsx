@@ -47,6 +47,7 @@ export default function RootLayout() {
                   <Stack.Screen name="report" options={{ title: 'Reports' }} />
                   <Stack.Screen name="region" options={{ title: 'Your country', presentation: 'modal' }} />
                   <Stack.Screen name="pro" options={{ title: 'MileMint Pro', presentation: 'modal' }} />
+                  <Stack.Screen name="compare" options={{ title: 'Missed miles check', presentation: 'modal' }} />
                 </Stack>
               </ProProvider>
             </RegionProvider>

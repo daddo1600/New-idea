@@ -3,7 +3,9 @@ import type { Trip } from './trip';
 /**
  * Free plan: this many automatically logged drives per calendar month, the
  * same allowance as MileIQ, so light drivers can stay free for good.
- * Manual trips and CSV export are always free.
+ * Manual trips and CSV export are always free. In shift mode a whole shift
+ * counts as one drive: a delivery shift is split into many drives by the
+ * waits at each pickup.
  */
 export const FREE_AUTO_DRIVES_PER_MONTH = 40;
 
@@ -18,14 +20,21 @@ function monthOf(trip: Pick<Trip, 'localDate'>): string {
  * The earliest drives of a month are the free ones, so logging a new drive
  * never locks one the user has already seen.
  */
+type Countable = Pick<Trip, 'id' | 'localDate' | 'startedAt' | 'source'> & { shiftId?: string | null };
+
+/** What uses up the allowance: each drive on its own, or all of one shift's drives together. */
+function allowanceKey(trip: Countable): string {
+  return trip.shiftId ? `shift:${trip.shiftId}` : trip.id;
+}
+
 export function lockedTripIds(
-  trips: readonly Pick<Trip, 'id' | 'localDate' | 'startedAt' | 'source'>[],
+  trips: readonly Countable[],
   isPro: boolean,
   allowance = FREE_AUTO_DRIVES_PER_MONTH,
 ): Set<string> {
   const locked = new Set<string>();
   if (isPro) return locked;
-  const byMonth = new Map<string, Pick<Trip, 'id' | 'startedAt'>[]>();
+  const byMonth = new Map<string, Countable[]>();
   for (const trip of trips) {
     if (trip.source !== 'auto') continue;
     const month = monthOf(trip);
@@ -34,17 +43,26 @@ export function lockedTripIds(
     else byMonth.set(month, [trip]);
   }
   for (const drives of byMonth.values()) {
-    if (drives.length <= allowance) continue;
     drives.sort((a, b) => a.startedAt.localeCompare(b.startedAt));
-    for (const drive of drives.slice(allowance)) locked.add(drive.id);
+    const free = new Set<string>();
+    for (const drive of drives) {
+      const key = allowanceKey(drive);
+      if (free.has(key)) continue;
+      if (free.size < allowance) free.add(key);
+      else locked.add(drive.id);
+    }
   }
   return locked;
 }
 
 /** Automatic drives logged in the given month (YYYY-MM), for the "12 of 40" meter. */
 export function autoDrivesInMonth(
-  trips: readonly Pick<Trip, 'localDate' | 'source'>[],
+  trips: readonly (Pick<Trip, 'id' | 'localDate' | 'source'> & { shiftId?: string | null })[],
   month: string,
 ): number {
-  return trips.filter((trip) => trip.source === 'auto' && monthOf(trip) === month).length;
+  const counted = new Set<string>();
+  for (const trip of trips) {
+    if (trip.source === 'auto' && monthOf(trip) === month) counted.add(trip.shiftId ? `shift:${trip.shiftId}` : trip.id);
+  }
+  return counted.size;
 }

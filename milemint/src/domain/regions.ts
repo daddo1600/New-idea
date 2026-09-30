@@ -1,4 +1,4 @@
-import { METERS_PER_MILE, type Trip } from './trip';
+import { METERS_PER_MILE, type Trip, type VehicleType } from './trip';
 
 /**
  * Where the user drives decides the currency, the distance unit, the tax
@@ -37,7 +37,16 @@ export type Region = {
   authority: string;
   /** First day of the tax year. */
   taxYearStart: { month: number; day: number };
+  /** Rates for cars and vans. */
   rates: readonly RatePeriod[];
+  /**
+   * Rates for two-wheelers, where the tax office has one. Missing means the
+   * official per-distance rate only covers cars: those trips are logged but
+   * valued at nothing (see `vehicleNote`).
+   */
+  otherVehicleRates: Partial<Record<Exclude<VehicleType, 'car'>, readonly RatePeriod[]>>;
+  /** Shown when a two-wheeler has no official rate here. */
+  vehicleNote: string | null;
   /** One line on how the figure is worked out, shown when choosing a region. */
   rule: string;
   /** Anything the user should know about what the figure means. */
@@ -73,6 +82,8 @@ export const REGIONS: Record<RegionCode, Region> = {
     ],
     rule: 'IRS standard mileage rate: 76¢ a mile from July 2026',
     caveat: null,
+    otherVehicleRates: {},
+    vehicleNote: 'The IRS standard mileage rate is for cars, vans and pickups. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.',
     report: {
       summaryHeading: 'Vehicle use (Schedule C, Part IV)',
       guidance: [
@@ -99,6 +110,11 @@ export const REGIONS: Record<RegionCode, Region> = {
     ],
     rule: 'HMRC mileage rate: 55p a mile for the first 10,000 business miles, then 25p',
     caveat: null,
+    otherVehicleRates: {
+      motorbike: [{ from: '2011-04-06', tiers: [{ upTo: null, rate: 240 }] }],
+      bicycle: [{ from: '2011-04-06', tiers: [{ upTo: null, rate: 200 }] }],
+    },
+    vehicleNote: null,
     report: {
       summaryHeading: 'Business mileage (HMRC simplified expenses)',
       guidance: [
@@ -127,6 +143,8 @@ export const REGIONS: Record<RegionCode, Region> = {
     rule: 'CRA per-km rate: 73¢ for the first 5,000 km, then 67¢',
     caveat:
       'This is CRA’s reimbursement rate for employees. If you’re self-employed, CRA usually wants your actual car costs, so treat the figure as an estimate.',
+    otherVehicleRates: {},
+    vehicleNote: 'The CRA per-km rate is for cars. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.',
     report: {
       summaryHeading: 'Business use of your vehicle',
       guidance: [
@@ -154,6 +172,8 @@ export const REGIONS: Record<RegionCode, Region> = {
     ],
     rule: 'ATO cents per km method: 91c a km, up to 5,000 km per car a year',
     caveat: null,
+    otherVehicleRates: {},
+    vehicleNote: 'The ATO cents per km method is for cars only. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.',
     report: {
       summaryHeading: 'Work-related car use (cents per km method)',
       guidance: [
@@ -260,10 +280,16 @@ export function formatLongDate(localDate: string, region: Region): string {
  * The part of a tax year a rate period covers, e.g. "1 Jan – 30 Jun 2026".
  * Null when the period covers the whole tax year.
  */
-export function periodRangeInTaxYear(period: RatePeriod, startYear: number, region: Region): string | null {
+export function periodRangeInTaxYear(
+  period: RatePeriod,
+  startYear: number,
+  region: Region,
+  vehicle: VehicleType = 'car',
+): string | null {
   const bounds = taxYearBounds(startYear, region);
-  const index = region.rates.indexOf(period);
-  const nextFrom = region.rates[index + 1]?.from;
+  const periods = ratesFor(region, vehicle) ?? [];
+  const index = periods.indexOf(period);
+  const nextFrom = index >= 0 ? periods[index + 1]?.from : undefined;
   const start = period.from > bounds.start ? period.from : bounds.start;
   let end = bounds.end;
   if (nextFrom && nextFrom <= bounds.end) {
@@ -282,14 +308,35 @@ export function currentTaxYear(region: Region, today: Date = new Date()): number
 // ─── Rates and deductions ───────────────────────────────────────────────────
 
 /** The rate period in force on `localDate`, or null before the first known one. */
-export function ratePeriodFor(localDate: string, region: Region): RatePeriod | null {
+export function ratePeriodFor(
+  localDate: string,
+  region: Region,
+  vehicle: VehicleType = 'car',
+): RatePeriod | null {
+  const periods = ratesFor(region, vehicle);
+  if (!periods) return null;
   const day = localDate.slice(0, 10);
   let match: RatePeriod | null = null;
-  for (const period of region.rates) {
+  for (const period of periods) {
     if (period.from <= day) match = period;
     else break;
   }
   return match;
+}
+
+/** The rate periods for a vehicle, or null when the tax office has no per-distance rate for it. */
+export function ratesFor(region: Region, vehicle: VehicleType = 'car'): readonly RatePeriod[] | null {
+  return vehicle === 'car' ? region.rates : (region.otherVehicleRates[vehicle] ?? null);
+}
+
+/** One line on how a vehicle's trips are valued here, e.g. "HMRC rate for motorbikes: 24p a mile". */
+export function vehicleRule(region: Region, vehicle: VehicleType): string {
+  if (vehicle === 'car') return region.rule;
+  const periods = ratesFor(region, vehicle);
+  if (!periods) return region.vehicleNote ?? `${region.authority} has no per-${region.unit === 'mi' ? 'mile' : 'km'} rate for this vehicle.`;
+  const latest = periods[periods.length - 1];
+  const kind = vehicle === 'motorbike' ? 'motorbikes and scooters' : 'bicycles';
+  return `${region.authority} rate for ${kind}: ${describeTier(latest, 0, region)}`;
 }
 
 /** The earliest date MileMint has a rate for in this region. */
@@ -298,14 +345,25 @@ export function earliestDate(region: Region): string {
 }
 
 /** Part of a trip's business distance priced at one rate. */
-export type DeductionPart = { period: RatePeriod; tier: number; units: number; rate: number };
+export type DeductionPart = {
+  period: RatePeriod;
+  tier: number;
+  units: number;
+  rate: number;
+  vehicle: VehicleType;
+};
 
 /**
  * How `units` more business distance is priced when `already` units have
  * been driven this tax year: tiers apply to the year's running total, not to
  * each trip, so one trip can straddle two rates.
  */
-function tieredParts(period: RatePeriod, already: number, units: number): DeductionPart[] {
+function tieredParts(
+  period: RatePeriod,
+  already: number,
+  units: number,
+  vehicle: VehicleType = 'car',
+): DeductionPart[] {
   const parts: DeductionPart[] = [];
   const to = already + units;
   let floor = 0;
@@ -313,7 +371,7 @@ function tieredParts(period: RatePeriod, already: number, units: number): Deduct
     const ceiling = tier.upTo ?? Infinity;
     const start = Math.max(already, floor);
     const end = Math.min(to, ceiling);
-    if (end > start) parts.push({ period, tier: index, units: end - start, rate: tier.rate });
+    if (end > start) parts.push({ period, tier: index, units: end - start, rate: tier.rate, vehicle });
     floor = ceiling;
   });
   return parts;
@@ -330,17 +388,19 @@ export function computeDeductionParts(
   region: Region,
 ): Map<string, DeductionPart[]> {
   const result = new Map<string, DeductionPart[]>();
-  const driven = new Map<number, number>();
+  // Running totals per tax year and vehicle: the UK's 10,000-mile threshold counts cars and vans only.
+  const driven = new Map<string, number>();
   const business = trips
     .filter((trip) => trip.classification === 'business')
     .sort((a, b) => a.startedAt.localeCompare(b.startedAt));
   for (const trip of business) {
-    const period = ratePeriodFor(trip.localDate, region);
-    const year = taxYearOf(trip.localDate, region);
-    const already = driven.get(year) ?? 0;
+    const vehicle = trip.vehicle ?? 'car';
+    const period = ratePeriodFor(trip.localDate, region, vehicle);
+    const key = `${taxYearOf(trip.localDate, region)}:${vehicle}`;
+    const already = driven.get(key) ?? 0;
     const units = toUnits(trip.distanceMeters, region);
-    driven.set(year, already + units);
-    result.set(trip.id, period ? tieredParts(period, already, units) : []);
+    driven.set(key, already + units);
+    result.set(trip.id, period ? tieredParts(period, already, units, vehicle) : []);
   }
   return result;
 }
@@ -361,7 +421,10 @@ export function describeTier(period: RatePeriod, tier: number, region: Region): 
   return below !== null ? `${rate} after ${number(below)} ${units}` : rate;
 }
 
-export type DeductionTrip = Pick<Trip, 'id' | 'localDate' | 'startedAt' | 'distanceMeters' | 'classification'>;
+export type DeductionTrip = Pick<Trip, 'id' | 'localDate' | 'startedAt' | 'distanceMeters' | 'classification'> & {
+  /** Cars when missing. */
+  vehicle?: VehicleType;
+};
 
 /**
  * Deduction per business trip, in minor units. Trips are taken in the order
@@ -385,11 +448,18 @@ export function potentialDeduction(
   trips: readonly DeductionTrip[],
   region: Region,
 ): number {
-  const period = ratePeriodFor(trip.localDate, region);
+  const vehicle = trip.vehicle ?? 'car';
+  const period = ratePeriodFor(trip.localDate, region, vehicle);
   if (!period) return 0;
   const year = taxYearOf(trip.localDate, region);
   const already = trips
-    .filter((t) => t.classification === 'business' && t.id !== trip.id && taxYearOf(t.localDate, region) === year)
+    .filter(
+      (t) =>
+        t.classification === 'business' &&
+        t.id !== trip.id &&
+        (t.vehicle ?? 'car') === vehicle &&
+        taxYearOf(t.localDate, region) === year,
+    )
     .reduce((sum, t) => sum + toUnits(t.distanceMeters, region), 0);
   return Math.round(tieredValue(period, already, toUnits(trip.distanceMeters, region)) / 10);
 }

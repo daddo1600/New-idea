@@ -3,6 +3,17 @@ import type { AutoReason } from './classify-rules';
 export type Classification = 'unclassified' | 'business' | 'personal';
 export type TripSource = 'manual' | 'auto';
 
+/** What the trip was driven (or ridden) in; tax offices price them differently. */
+export type VehicleType = 'car' | 'motorbike' | 'bicycle';
+
+export const VEHICLE_ICONS: Record<VehicleType, string> = { car: '🚗', motorbike: '🛵', bicycle: '🚲' };
+
+export const VEHICLE_LABELS: Record<VehicleType, string> = {
+  car: 'Car or van',
+  motorbike: 'Motorbike or scooter',
+  bicycle: 'Bicycle',
+};
+
 export type Trip = {
   id: string;
   /** ISO timestamp (UTC) when the drive started. */
@@ -26,6 +37,9 @@ export type Trip = {
   endPlaceId: string | null;
   /** Why the classification was set automatically; null once the user sets it. */
   autoReason: AutoReason | null;
+  vehicle: VehicleType;
+  /** The shift the drive was part of (shift mode), or null. */
+  shiftId: string | null;
 };
 
 export const METERS_PER_MILE = 1609.344;

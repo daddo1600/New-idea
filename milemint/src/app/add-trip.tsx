@@ -11,13 +11,14 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { listPlaces } from '@/db/places-repo';
+import { loadSettings } from '@/db/settings-repo';
 import { insertTrip, listTrips } from '@/db/trips-repo';
 import { parseMiles } from '@/domain/format';
 import type { LatLng } from '@/domain/geo';
 import { matchPlace, type Place } from '@/domain/places';
 import { earliestDate, formatDistance, formatLongDate, fromUnits, toUnits } from '@/domain/regions';
 import { frequentPurposes, frequentSpots } from '@/domain/suggestions';
-import { toLocalIsoDate, type Trip } from '@/domain/trip';
+import { toLocalIsoDate, type Trip, VEHICLE_ICONS, VEHICLE_LABELS, type VehicleType } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { drivingDistance } from '@/places/address-search';
 import { useRegion } from '@/region/region';
@@ -41,6 +42,7 @@ export default function AddTripScreen() {
   const today = toLocalIsoDate(new Date());
 
   const [kind, setKind] = useState<Kind>('business');
+  const [vehicle, setVehicle] = useState<VehicleType>('car');
   const [date, setDate] = useState(today);
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [from, setFrom] = useState<PlaceDraft>(EMPTY_PLACE);
@@ -56,6 +58,7 @@ export default function AddTripScreen() {
 
   useEffect(() => {
     listPlaces(db).then(setPlaces, () => {});
+    loadSettings(db).then((settings) => setVehicle(settings.vehicle), () => {});
     listTrips(db).then(setHistory, () => {});
   }, [db]);
 
@@ -120,6 +123,7 @@ export default function AddTripScreen() {
         classification: kind,
         purpose: purpose.trim(),
         source: 'manual',
+        vehicle,
         startPlaceId: await placeFor(from),
         endPlaceId: await placeFor(to),
       });
@@ -226,6 +230,17 @@ export default function AddTripScreen() {
             near={near}
             here={false}
           />
+
+          <View style={styles.chips} accessibilityRole="radiogroup" accessibilityLabel="Vehicle">
+            {(['car', 'motorbike', 'bicycle'] as const).map((value) => (
+              <Chip
+                key={value}
+                label={`${VEHICLE_ICONS[value]} ${VEHICLE_LABELS[value]}`}
+                selected={vehicle === value}
+                onPress={() => setVehicle(value)}
+              />
+            ))}
+          </View>
 
           <View style={styles.field}>
             <View style={styles.labelRow}>

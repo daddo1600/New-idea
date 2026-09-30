@@ -21,7 +21,7 @@ import { BrandGradient } from '@/components/brand-gradient';
 import { CountryOptions, phoneRegion } from '@/components/country-options';
 import { LeafMark } from '@/components/leaf-mark';
 import { MintWash, NumberedSteps, StepHeader } from '@/components/step-header';
-import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
+import { Chip, EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import {
@@ -39,6 +39,7 @@ import { useRegion } from '@/region/region';
 import { enableWeeklyReminder, REMINDERS_SUPPORTED, scheduleWorkHoursNudge } from '@/reminders/weekly';
 import type { TrackingStatus } from '@/tracking/background';
 import { useTracking } from '@/tracking/use-tracking';
+import { VEHICLE_ICONS, type VehicleType } from '@/domain/trip';
 
 /**
  * First launch, as one full-screen flow instead of a chain of pop-ups:
@@ -73,6 +74,9 @@ export default function WelcomeScreen() {
   const db = useSQLiteContext();
   const [week, setWeek] = useState<SimpleWeek>(DEFAULT_SIMPLE_WEEK);
   const [hoursSet, setHoursSet] = useState(false);
+  const [vehicle, setVehicle] = useState<VehicleType>('car');
+  /** Chose shifts (delivery apps) instead of set hours. */
+  const [shifts, setShifts] = useState(false);
   const [home, setHome] = useState<PlaceDraft>(EMPTY_PLACE);
   const [work, setWork] = useState<PlaceDraft>(EMPTY_PLACE);
   const [placeError, setPlaceError] = useState<string | null>(null);
@@ -83,6 +87,7 @@ export default function WelcomeScreen() {
 
   const saveCountry = async () => {
     await setRegion(country);
+    await saveSettings(db, { ...(await loadSettings(db)), vehicle });
     setStep(2);
   };
 
@@ -115,6 +120,12 @@ export default function WelcomeScreen() {
     // Runs once per return from Settings; `status` and `enable` are read, not watched.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cameBackWithAlways]);
+
+  const chooseShifts = async () => {
+    await saveSettings(db, { ...(await loadSettings(db)), shiftMode: true, workHoursEnabled: false });
+    setShifts(true);
+    setStep(PLACES);
+  };
 
   const saveHours = async () => {
     const settings = await loadSettings(db);
@@ -153,7 +164,7 @@ export default function WelcomeScreen() {
     try {
       const scheduled = reminder ? await enableWeeklyReminder(picked.unit).catch(() => false) : false;
       await saveSettings(db, { ...(await loadSettings(db)), weeklyReminder: scheduled });
-      if (!hoursSet) await scheduleWorkHoursNudge().catch(() => {});
+      if (!hoursSet && !shifts) await scheduleWorkHoursNudge().catch(() => {});
     } finally {
       setBusy(false);
     }
@@ -281,7 +292,25 @@ export default function WelcomeScreen() {
                 Sets your currency, miles or kilometres, tax year and official mileage rate. You can change it
                 later.
               </StepHeader>
-              <CountryOptions value={country} onChange={setCountry} />
+              <CountryOptions value={country} onChange={setCountry} vehicle={vehicle} />
+              <View
+                style={styles.vehicles}
+                accessibilityRole="radiogroup"
+                accessibilityLabel="What do you drive?">
+                <ThemedText type="small" themeColor="textSecondary">
+                  What do you drive?
+                </ThemedText>
+                <View style={styles.vehicleChips}>
+                  {(['car', 'motorbike', 'bicycle'] as const).map((value) => (
+                    <Chip
+                      key={value}
+                      label={`${VEHICLE_ICONS[value]} ${value === 'car' ? 'Car or van' : value === 'motorbike' ? 'Motorbike' : 'Bicycle'}`}
+                      selected={vehicle === value}
+                      onPress={() => setVehicle(value)}
+                    />
+                  ))}
+                </View>
+              </View>
             </>
           )}
 
@@ -369,9 +398,21 @@ export default function WelcomeScreen() {
                     '📍',
                     'Add more places (clients, the depot, the gym) with “Save as place” on any trip, or in Settings → Places.',
                   ],
-                  ...(hoursSet
-                    ? []
-                    : [['⏱️', 'Set your work hours any time in Settings, and most drives sort themselves.']]),
+                  ...(shifts
+                    ? [
+                        [
+                          '▶️',
+                          'Tap “Start shift” on the home screen when you start work. Every drive until you end it is business.',
+                        ],
+                      ]
+                    : hoursSet
+                      ? []
+                      : [
+                          [
+                            '⏱️',
+                            'Set your work hours any time in Settings, and most drives sort themselves.',
+                          ],
+                        ]),
                 ].map(([icon, text]) => (
                   <View key={icon} style={styles.tip}>
                     <Text style={styles.tipIcon}>{icon}</Text>
@@ -421,6 +462,7 @@ export default function WelcomeScreen() {
               setStep(HOURS),
             )}
           {step === HOURS && primary('Save my hours', saveHours)}
+          {step === HOURS && secondary('I work in shifts (delivery apps)', chooseShifts)}
           {step === HOURS && secondary('I don’t have set hours', () => setStep(PLACES))}
           {step === PLACES &&
             primary(busy ? 'Saving…' : home.text || work.text ? 'Save and continue' : 'Continue', savePlaces)}
@@ -480,6 +522,8 @@ const styles = StyleSheet.create({
   point: { flexDirection: 'row', gap: Spacing.two },
   flex: { flex: 1, gap: Spacing.half },
   flexFill: { flex: 1 },
+  vehicles: { gap: Spacing.two },
+  vehicleChips: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
   reminderRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three },
   card: { borderRadius: 12, padding: Spacing.three, gap: Spacing.one },
   actions: { gap: Spacing.two, width: '100%', maxWidth: MaxContentWidth, alignSelf: 'center' },

@@ -22,7 +22,7 @@ import type { LatLng } from '@/domain/geo';
 import type { PlaceKind } from '@/domain/places';
 import { formatDistance } from '@/domain/regions';
 import { frequentPurposes } from '@/domain/suggestions';
-import { type Classification, type Trip } from '@/domain/trip';
+import { type Classification, type Trip, VEHICLE_ICONS, type VehicleType } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { useRegion } from '@/region/region';
 
@@ -50,6 +50,7 @@ export default function TripScreen() {
   const [startLabel, setStartLabel] = useState('');
   const [endLabel, setEndLabel] = useState('');
   const [purpose, setPurpose] = useState('');
+  const [vehicle, setVehicle] = useState<VehicleType>('car');
   const [purposes, setPurposes] = useState<string[]>([]);
   useEffect(() => {
     listTrips(db).then((trips) => setPurposes(frequentPurposes(trips, 6)), () => {});
@@ -68,6 +69,7 @@ export default function TripScreen() {
         setStartLabel(loaded.startLabel);
         setEndLabel(loaded.endLabel);
         setPurpose(loaded.purpose);
+        setVehicle(loaded.vehicle);
       }
     })();
     return () => {
@@ -132,6 +134,7 @@ export default function TripScreen() {
         startLabel: startLabel.trim(),
         endLabel: endLabel.trim(),
         purpose: purpose.trim(),
+        vehicle,
       });
       router.back();
     } catch {
@@ -156,6 +159,16 @@ export default function TripScreen() {
           value={trip.classification === 'unclassified' ? null : trip.classification}
           onChange={classify}
         />
+        <Field label="Vehicle">
+          <Segmented
+            options={(['car', 'motorbike', 'bicycle'] as const).map((value) => ({
+              value,
+              label: `${VEHICLE_ICONS[value]} ${value === 'car' ? 'Car or van' : value === 'motorbike' ? 'Motorbike' : 'Bicycle'}`,
+            }))}
+            value={vehicle}
+            onChange={setVehicle}
+          />
+        </Field>
         <Field label="From">
           <TextInput style={inputStyle} value={startLabel} onChangeText={setStartLabel} />
         </Field>

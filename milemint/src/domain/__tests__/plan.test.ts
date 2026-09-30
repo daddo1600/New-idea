@@ -56,3 +56,23 @@ describe('autoDrivesInMonth', () => {
     expect(autoDrivesInMonth(trips, '2026-10')).toBe(7);
   });
 });
+
+describe('shift mode', () => {
+  it('counts every drive in a shift as one', () => {
+    const shift = drives('2026-09', 30, 's').map((d) => ({ ...d, shiftId: 'shift-1' }));
+    const single = drives('2026-09', 39, 'd');
+    expect(autoDrivesInMonth([...shift, ...single], '2026-09')).toBe(40);
+    expect(lockedTripIds([...shift, ...single], false).size).toBe(0);
+  });
+
+  it('locks a whole later shift once the allowance is used', () => {
+    const early = drives('2026-09', FREE, 'd');
+    const late = drives('2026-09', 5, 'late').map((d) => ({
+      ...d,
+      localDate: '2026-09-30',
+      startedAt: `2026-09-30T2${d.id.slice(4)}:00:00.000Z`,
+      shiftId: 'shift-2',
+    }));
+    expect(lockedTripIds([...early, ...late], false)).toEqual(new Set(late.map((d) => d.id)));
+  });
+});

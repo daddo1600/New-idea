@@ -84,6 +84,19 @@ const MIGRATIONS: readonly string[] = [
     PRIMARY KEY (region, tax_year)
   );
   `,
+  `
+  -- What each trip was driven in: tax offices price cars, motorbikes and bicycles differently.
+  ALTER TABLE trips ADD COLUMN vehicle TEXT NOT NULL DEFAULT 'car'
+    CHECK (vehicle IN ('car', 'motorbike', 'bicycle'));
+  -- Shift mode (couriers): the shift a drive belongs to. Drives in one shift
+  -- are marked business and count as one drive towards the free plan.
+  ALTER TABLE trips ADD COLUMN shift_id TEXT;
+  CREATE TABLE shifts (
+    id TEXT PRIMARY KEY,
+    started_at TEXT NOT NULL,
+    ended_at TEXT
+  );
+  `,
 ];
 
 export async function migrate(db: SQLiteDatabase): Promise<void> {

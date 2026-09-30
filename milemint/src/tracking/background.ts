@@ -6,6 +6,7 @@ import { Platform } from 'react-native';
 import { getBackgroundDatabase } from '@/db/database';
 import { listPlaces } from '@/db/places-repo';
 import { loadSettings } from '@/db/settings-repo';
+import { shiftAt } from '@/db/shifts-repo';
 import { autoTripExists, insertTrip, listClassificationHistory } from '@/db/trips-repo';
 import { suggestClassification } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
@@ -116,6 +117,8 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
     endPlace?.name ?? labelFor(trip.end),
   ]);
   const started = new Date(trip.startedAt);
+  // Shift mode: every drive in a shift is work.
+  const shift = settings.shiftMode ? await shiftAt(db, started.toISOString()) : null;
   const suggestion = suggestClassification(
     {
       start: { placeId: startPlace?.id ?? null, point: trip.start },
@@ -135,13 +138,16 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
       startLabel,
       endLabel,
       distanceMeters: trip.distanceMeters,
-      classification: suggestion.classification ?? 'unclassified',
+      classification: shift ? 'business' : (suggestion.classification ?? 'unclassified'),
       // Business without a learned purpose stays empty; the trip list asks for one.
-      purpose: suggestion.purpose ?? '',
+      purpose: suggestion.purpose ?? (shift ? 'Deliveries' : ''),
       source: 'auto',
       startPlaceId: startPlace?.id ?? null,
       endPlaceId: endPlace?.id ?? null,
-      autoReason: suggestion.classification ? suggestion.reason : null,
+      // Stored as the work-hours rule (a shift is working time); shiftId tells them apart.
+      autoReason: shift ? 'work-hours' : suggestion.classification ? suggestion.reason : null,
+      vehicle: settings.vehicle,
+      shiftId: shift?.id ?? null,
     },
     trip.route,
   );

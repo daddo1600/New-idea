@@ -104,6 +104,13 @@ function Menu({ onClose }: { onClose: () => void }) {
       onPress: () => go('/pro'),
     },
     {
+      icon: 'chart.bar.fill',
+      glyph: '📊',
+      title: 'Missed miles check',
+      detail: 'Compare with your delivery app',
+      onPress: () => go('/compare'),
+    },
+    {
       icon: 'gearshape.fill',
       glyph: '⚙️',
       title: 'Settings',

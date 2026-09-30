@@ -3,7 +3,7 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 
 import type { AutoReason, ClassifiedTrip } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
-import type { Classification, Trip, TripSource } from '@/domain/trip';
+import type { Classification, Trip, TripSource, VehicleType } from '@/domain/trip';
 
 type TripRow = {
   id: string;
@@ -20,6 +20,8 @@ type TripRow = {
   start_place_id: string | null;
   end_place_id: string | null;
   auto_reason: AutoReason | null;
+  vehicle: VehicleType | null;
+  shift_id: string | null;
 };
 
 function fromRow(row: TripRow): Trip {
@@ -38,10 +40,12 @@ function fromRow(row: TripRow): Trip {
     startPlaceId: row.start_place_id,
     endPlaceId: row.end_place_id,
     autoReason: row.auto_reason,
+    vehicle: row.vehicle ?? 'car',
+    shiftId: row.shift_id ?? null,
   };
 }
 
-type AutoFields = 'startPlaceId' | 'endPlaceId' | 'autoReason';
+type AutoFields = 'startPlaceId' | 'endPlaceId' | 'autoReason' | 'vehicle' | 'shiftId';
 export type NewTrip = Omit<Trip, 'id' | 'createdAt' | AutoFields> & Partial<Pick<Trip, AutoFields>>;
 
 export async function listTrips(db: SQLiteDatabase): Promise<Trip[]> {
@@ -142,6 +146,8 @@ export async function insertTrip(
     startPlaceId: null,
     endPlaceId: null,
     autoReason: null,
+    vehicle: 'car',
+    shiftId: null,
     ...input,
     id: Crypto.randomUUID(),
     createdAt: new Date().toISOString(),
@@ -150,8 +156,8 @@ export async function insertTrip(
     await db.runAsync(
       `INSERT INTO trips (id, started_at, local_date, ended_at, start_label, end_label,
          distance_meters, classification, purpose, source, created_at,
-         start_place_id, end_place_id, auto_reason)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+         start_place_id, end_place_id, auto_reason, vehicle, shift_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
       trip.id,
       trip.startedAt,
       trip.localDate,
@@ -166,6 +172,8 @@ export async function insertTrip(
       trip.startPlaceId,
       trip.endPlaceId,
       trip.autoReason,
+      trip.vehicle,
+      trip.shiftId,
     );
     if (route.length > 1) {
       await db.runAsync(
@@ -212,9 +220,14 @@ export async function setClassification(
 export async function updateTripDetails(
   db: SQLiteDatabase,
   trip: Trip,
-  changes: Partial<Pick<Trip, 'purpose' | 'startLabel' | 'endLabel'>>,
+  changes: Partial<Pick<Trip, 'purpose' | 'startLabel' | 'endLabel' | 'vehicle'>>,
 ): Promise<void> {
-  const columns = { purpose: 'purpose', startLabel: 'start_label', endLabel: 'end_label' } as const;
+  const columns = {
+    purpose: 'purpose',
+    startLabel: 'start_label',
+    endLabel: 'end_label',
+    vehicle: 'vehicle',
+  } as const;
   const changed = (Object.keys(columns) as (keyof typeof columns)[]).filter(
     (key) => changes[key] !== undefined && changes[key] !== trip[key],
   );

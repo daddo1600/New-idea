@@ -23,6 +23,8 @@ function trip(overrides: Partial<Trip>): Trip {
     startPlaceId: null,
     endPlaceId: null,
     autoReason: null,
+    vehicle: 'car',
+    shiftId: null,
     ...overrides,
   };
 }
@@ -92,5 +94,31 @@ describe('input parsing', () => {
     expect(isValidIsoDate('2026-02-28')).toBe(true);
     expect(isValidIsoDate('2026-02-30')).toBe(false);
     expect(isValidIsoDate('26-2-3')).toBe(false);
+  });
+});
+
+describe('vehicles', () => {
+  const GB = REGIONS.GB;
+  const inGB = (overrides: Partial<Trip>) =>
+    trip({ localDate: '2026-05-01', startedAt: '2026-05-01T09:00:00.000Z', ...overrides });
+
+  it('prices UK motorbikes at 24p and bicycles at 20p a mile, flat', () => {
+    const bike = inGB({ id: 'b', vehicle: 'bicycle' });
+    const moto = inGB({ id: 'm', vehicle: 'motorbike' });
+    const values = computeDeductions([bike, moto], GB);
+    expect(values.get('b')).toBe(2000); // 100 miles × 20p
+    expect(values.get('m')).toBe(2400); // 100 miles × 24p
+  });
+
+  it("keeps two-wheeler miles out of the car's 10,000-mile threshold", () => {
+    const scooter = inGB({ id: 's', vehicle: 'motorbike', distanceMeters: milesToMeters(12_000) });
+    const car = inGB({ id: 'c', startedAt: '2026-05-02T09:00:00.000Z', localDate: '2026-05-02' });
+    expect(computeDeductions([scooter, car], GB).get('c')).toBe(5500); // still 55p
+  });
+
+  it('values two-wheelers at nothing where the rate is for cars only', () => {
+    const bike = trip({ id: 'b', vehicle: 'bicycle' });
+    expect(computeDeductions([bike], US).get('b')).toBe(0);
+    expect(US.vehicleNote).toMatch(/cars/);
   });
 });

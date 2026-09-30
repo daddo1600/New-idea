@@ -15,6 +15,7 @@ import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
+import type { Shift } from '@/db/shifts-repo';
 import { useTrips } from '@/db/use-trips';
 import { isCommute, type AutoReason } from '@/domain/classify-rules';
 import { autoDrivesInMonth, FREE_AUTO_DRIVES_PER_MONTH, lockedTripIds } from '@/domain/plan';
@@ -35,6 +36,7 @@ import { usePro } from '@/purchases/pro';
 import { useRegion } from '@/region/region';
 import { useReminders } from '@/reminders/use-reminders';
 import type { TrackingStatus } from '@/tracking/background';
+import { useShift } from '@/tracking/use-shift';
 import { useTracking } from '@/tracking/use-tracking';
 
 const CLASSIFY_OPTIONS = [
@@ -62,6 +64,7 @@ export default function HomeScreen() {
   const { region, loaded, onboarded } = useRegion();
   const taxYear = currentTaxYear(region);
   useReminders(region.unit);
+  const shiftMode = useShift();
   const locked = useMemo(() => lockedTripIds(trips ?? [], isPro), [trips, isPro]);
   // Locked drives don't count towards the total (or a tier limit) until they're unlocked.
   const visible = useMemo(() => (trips ?? []).filter((trip) => !locked.has(trip.id)), [trips, locked]);
@@ -131,6 +134,14 @@ export default function HomeScreen() {
           <View style={styles.header}>
             <SummaryCard summary={summary} commuteCents={commuteCents} />
             <TrackingCard status={status} />
+            {shiftMode.enabled && (
+              <ShiftBar
+                shift={shiftMode.shift}
+                drives={shiftMode.shift ? (trips ?? []).filter((t) => t.shiftId === shiftMode.shift?.id).length : 0}
+                onStart={shiftMode.start}
+                onEnd={shiftMode.end}
+              />
+            )}
             {!isPro && <PlanCard trips={trips} lockedCount={locked.size} />}
             {visible.length > 0 && (
               <SelectBar
@@ -430,7 +441,7 @@ function TripRow({
           </ThemedText>
           {trip.autoReason && (
             <ThemedText type="small" themeColor="textSecondary">
-              {AUTO_NOTES[trip.autoReason]}
+              {trip.shiftId ? 'Auto: on shift' : AUTO_NOTES[trip.autoReason]}
             </ThemedText>
           )}
           {business && commute && (
@@ -576,6 +587,70 @@ function formatTime(iso: string): string {
   return new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
 }
 
+/** Shift mode: one tap to start, and everything until "End shift" is work. */
+function ShiftBar({
+  shift,
+  drives,
+  onStart,
+  onEnd,
+}: {
+  shift: Shift | null;
+  drives: number;
+  onStart: () => void;
+  onEnd: () => void;
+}) {
+  const theme = useTheme();
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (!shift) return;
+    const timer = setInterval(() => setNow(Date.now()), 30_000);
+    return () => clearInterval(timer);
+  }, [shift]);
+
+  if (!shift) {
+    return (
+      <Pressable
+        accessibilityRole="button"
+        accessibilityHint="Every drive until you end the shift counts as business"
+        onPress={onStart}
+        style={({ pressed }) => [
+          styles.shiftStart,
+          { borderColor: theme.accent, backgroundColor: theme.accent + (pressed ? '29' : '14') },
+        ]}>
+        <View style={[styles.shiftPlay, { backgroundColor: theme.accent }]}>
+          <Text style={[styles.shiftPlayText, { color: theme.onAccent }]}>▶</Text>
+        </View>
+        <View style={styles.flex}>
+          <ThemedText type="smallBold" style={{ color: theme.accent }}>
+            Start shift
+          </ThemedText>
+          <ThemedText type="small" themeColor="textSecondary">
+            Every drive until you end it counts as business.
+          </ThemedText>
+        </View>
+      </Pressable>
+    );
+  }
+
+  const minutes = Math.max(0, Math.floor((now - Date.parse(shift.startedAt)) / 60_000));
+  const elapsed = `${Math.floor(minutes / 60)}h ${String(minutes % 60).padStart(2, '0')}m`;
+  return (
+    <View style={styles.shiftOn} accessibilityLabel={`On shift for ${elapsed}, ${drives} drives`}>
+      <BrandGradient />
+      <LiveDot color="#FACC15" />
+      <View style={styles.flex}>
+        <Text style={styles.shiftTitle}>On shift · {elapsed}</Text>
+        <Text style={styles.shiftSub}>
+          {drives} {drives === 1 ? 'drive' : 'drives'} so far, all business
+        </Text>
+      </View>
+      <Pressable accessibilityRole="button" onPress={onEnd} style={styles.shiftEnd}>
+        <Text style={styles.shiftEndText}>End shift</Text>
+      </Pressable>
+    </View>
+  );
+}
+
 function BrandTitle() {
   const theme = useTheme();
   return (
@@ -695,6 +770,28 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.one,
   },
   liveDot: { width: 8, height: 8 },
+  shiftStart: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.three,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    padding: Spacing.three,
+  },
+  shiftPlay: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
+  shiftPlayText: { fontSize: 14, marginLeft: 2 },
+  shiftOn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.three,
+    borderRadius: 16,
+    padding: Spacing.three,
+    overflow: 'hidden',
+  },
+  shiftTitle: { color: '#FFFFFF', fontSize: 16, fontWeight: '800' },
+  shiftSub: { color: '#D1FAE5', fontSize: 13 },
+  shiftEnd: { backgroundColor: '#FFFFFF', borderRadius: 999, paddingHorizontal: Spacing.three, paddingVertical: Spacing.two },
+  shiftEndText: { color: '#064E3B', fontSize: 14, fontWeight: '700' },
   row: { borderRadius: 12, padding: Spacing.three, gap: Spacing.two },
   rowHeader: { flexDirection: 'row', justifyContent: 'space-between', gap: Spacing.two },
   route: { flex: 1 },

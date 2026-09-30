@@ -21,6 +21,7 @@ import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, saveSettings, type AppSettings } from '@/db/settings-repo';
 import { isValidShift, type WorkShift } from '@/domain/classify-rules';
 import { FREE_AUTO_DRIVES_PER_MONTH } from '@/domain/plan';
+import { vehicleRule } from '@/domain/regions';
 import type { Place, PlaceKind } from '@/domain/places';
 import { useTheme } from '@/hooks/use-theme';
 import { usePro } from '@/purchases/pro';
@@ -120,6 +121,8 @@ export default function SettingsScreen() {
         <ProSection />
 
         <CountrySection />
+
+        <DrivingSection />
 
         {REMINDERS_SUPPORTED && <ReminderSection />}
 
@@ -407,6 +410,60 @@ function ReminderSection() {
   );
 }
 
+/** What you drive (priced per vehicle) and shift mode for couriers. */
+function DrivingSection() {
+  const db = useSQLiteContext();
+  const theme = useTheme();
+  const { region } = useRegion();
+  const [settings, setSettings] = useState<AppSettings | null>(null);
+
+  useEffect(() => {
+    loadSettings(db).then(setSettings, () => {});
+  }, [db]);
+  if (!settings) return null;
+
+  const change = async (changes: Partial<AppSettings>) => {
+    const next = { ...(await loadSettings(db)), ...changes };
+    setSettings(next);
+    await saveSettings(db, next);
+  };
+
+  return (
+    <>
+      <ThemedText type="smallBold">Your driving</ThemedText>
+      <ThemedView type="backgroundElement" style={styles.card}>
+        <ThemedText type="smallBold">Vehicle</ThemedText>
+        <Segmented
+          options={(['car', 'motorbike', 'bicycle'] as const).map((value) => ({
+            value,
+            label: value === 'car' ? 'Car or van' : value === 'motorbike' ? 'Motorbike' : 'Bicycle',
+          }))}
+          value={settings.vehicle}
+          onChange={(vehicle) => change({ vehicle })}
+        />
+        <ThemedText type="small" themeColor="textSecondary">
+          {vehicleRule(region, settings.vehicle)}. New drives use this; change any trip on its own screen.
+        </ThemedText>
+        <View style={[styles.rowBetween, styles.spaced]}>
+          <View style={styles.flex}>
+            <ThemedText type="smallBold">Shift mode</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">
+              For delivery and gig drivers: a Start shift button on the home screen. Every drive in a shift
+              is business, and a whole shift counts as one drive on the free plan.
+            </ThemedText>
+          </View>
+          <Switch
+            accessibilityLabel="Shift mode"
+            value={settings.shiftMode}
+            onValueChange={(shiftMode) => change({ shiftMode })}
+            trackColor={{ true: theme.accent }}
+          />
+        </View>
+      </ThemedView>
+    </>
+  );
+}
+
 function CountrySection() {
   const theme = useTheme();
   const { region } = useRegion();
@@ -488,6 +545,7 @@ function ProSection() {
 }
 
 const styles = StyleSheet.create({
+  spaced: { marginTop: Spacing.two },
   addPlace: { gap: Spacing.two },
   nameInput: { borderRadius: 8, paddingHorizontal: Spacing.three, paddingVertical: Spacing.two, fontSize: 16 },
   smallButton: { paddingHorizontal: Spacing.four, paddingVertical: Spacing.two, borderRadius: 10 },

@@ -16,7 +16,7 @@ import {
   type DeductionPart,
   type Region,
 } from './regions';
-import type { Trip } from './trip';
+import { type Trip, VEHICLE_LABELS } from './trip';
 
 /**
  * The tax-year mileage log: what tax offices ask a driver to keep (date,
@@ -119,11 +119,13 @@ export function buildReport(
       report.businessDistance += row.distance;
       report.deduction += row.deduction;
       for (const part of row.parts) {
-        const key = `${part.period.from}#${part.tier}`;
-        const range = periodRangeInTaxYear(part.period, taxYear, region);
+        // Cars first (sorted by key), then two-wheelers, each labelled.
+        const key = `${part.vehicle === 'car' ? 0 : part.vehicle === 'motorbike' ? 1 : 2}#${part.period.from}#${part.tier}`;
+        const range = periodRangeInTaxYear(part.period, taxYear, region, part.vehicle);
         const tier = describeTier(part.period, part.tier, region);
+        const what = part.vehicle === 'car' ? tier : `${VEHICLE_LABELS[part.vehicle]}: ${tier}`;
         const total = byRate.get(key) ?? {
-          label: range ? `${range}: ${tier}` : tier,
+          label: range ? `${range}: ${what}` : what,
           distance: 0,
           deduction: 0,
           tenths: 0,
@@ -178,6 +180,7 @@ export function csvColumns(region: Region): string[] {
     'From',
     'To',
     region.unit === 'mi' ? 'Miles' : 'Kilometres',
+    'Vehicle',
     'Classification',
     'Business purpose',
     `Rate (${region.authority})`,
@@ -201,6 +204,7 @@ export function toCsv(report: MileageReport): string {
         trip.startLabel,
         trip.endLabel,
         row.distance.toFixed(1),
+        VEHICLE_LABELS[trip.vehicle ?? 'car'],
         CLASSIFICATION_LABELS[trip.classification],
         trip.purpose,
         business ? ratesText(row.parts, region) : '',
@@ -283,7 +287,8 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
         `<td>${formatDate(trip.localDate, region)}</td>` +
         `<td>${escapeHtml(trip.startLabel)} → ${escapeHtml(trip.endLabel)}</td>` +
         `<td class="num">${row.distance.toFixed(1)}</td>` +
-        `<td>${CLASSIFICATION_LABELS[trip.classification]}${row.commute ? ' (commute)' : ''}</td>` +
+        `<td>${CLASSIFICATION_LABELS[trip.classification]}${row.commute ? ' (commute)' : ''}` +
+        `${(trip.vehicle ?? 'car') === 'car' ? '' : ` · ${VEHICLE_LABELS[trip.vehicle]}`}</td>` +
         `<td>${escapeHtml(trip.purpose)}</td>` +
         `<td class="num">${business ? money(row.deduction) : ''}</td>` +
         `<td>${trip.source === 'auto' ? 'Auto' : 'Manual'}${row.edited ? ', edited' : ''}</td>` +
