@@ -37,5 +37,5 @@ export function useTrips() {
     [db, reload],
   );
 
-  return { trips, classify, remove };
+  return { trips, classify, remove, reload };
 }

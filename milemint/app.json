@@ -42,7 +42,18 @@
           "useSQLCipher": true
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "MileMint logs your drives automatically in the background, so you never miss a deductible mile. Your trips are stored encrypted on your phone.",
+          "locationWhenInUsePermission": "MileMint uses your location to log your drives and label where they started and ended.",
+          "isIosBackgroundLocationEnabled": true,
+          "isAndroidBackgroundLocationEnabled": true,
+          "isAndroidForegroundServiceEnabled": true,
+          "motionUsagePermission": false
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

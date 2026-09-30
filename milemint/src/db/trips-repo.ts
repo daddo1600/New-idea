@@ -1,6 +1,7 @@
 import * as Crypto from 'expo-crypto';
 import type { SQLiteDatabase } from 'expo-sqlite';
 
+import type { LatLng } from '@/domain/geo';
 import type { Classification, Trip, TripSource } from '@/domain/trip';
 
 type TripRow = {
@@ -42,7 +43,11 @@ export async function listTrips(db: SQLiteDatabase): Promise<Trip[]> {
   return rows.map(fromRow);
 }
 
-export async function insertTrip(db: SQLiteDatabase, input: NewTrip): Promise<Trip> {
+export async function insertTrip(
+  db: SQLiteDatabase,
+  input: NewTrip,
+  route: readonly LatLng[] = [],
+): Promise<Trip> {
   const trip: Trip = { ...input, id: Crypto.randomUUID(), createdAt: new Date().toISOString() };
   await db.withTransactionAsync(async () => {
     await db.runAsync(
@@ -61,6 +66,13 @@ export async function insertTrip(db: SQLiteDatabase, input: NewTrip): Promise<Tr
       trip.source,
       trip.createdAt,
     );
+    if (route.length > 1) {
+      await db.runAsync(
+        'INSERT INTO trip_routes (trip_id, points) VALUES (?, ?);',
+        trip.id,
+        JSON.stringify(route),
+      );
+    }
     await logEdit(db, trip.id, 'create', null, null, trip.source);
   });
   return trip;

@@ -9,8 +9,12 @@ npm install
 npm test            # unit tests (rates, deductions, parsing)
 npm run typecheck
 npm run lint
-npx expo start      # scan the QR code with Expo Go on an iPhone, or press w for web
+npx expo start      # press w for the web preview (also generates route types)
 ```
+
+**Web preview demo:** open `http://localhost:8081/?demo` to see sample auto-logged drives, or `?demo=setup` to see first launch. This works in development only.
+
+**Testing automatic tracking needs a development build on a real iPhone** (`npx eas-cli@latest build --profile development --platform ios`). Background location doesn't run in Expo Go or on the web.
 
 **Expo Go and web are previews only.** They don't include SQLCipher, so the database is **not encrypted** there. Development and App Store builds made with EAS always encrypt, and a store build refuses to open an unencrypted database.
 
@@ -18,21 +22,27 @@ npx expo start      # scan the QR code with Expo Go on an iPhone, or press w for
 
 | Path | What |
 |---|---|
-| `src/domain/` | Pure logic: IRS rate table (split-rate years), deductions, yearly summary, input parsing. Unit-tested. |
+| `src/domain/` | Pure logic, unit-tested: IRS rate table (split-rate years), deductions, trip detector (GPS samples → drives, stop merging, walk/jitter/glitch filtering), battery policy (geofence ↔ GPS) |
+| `src/tracking/` | Background tracking: geofence while parked, GPS while driving, trips saved with route and place names |
 | `src/db/` | Encrypted SQLite (SQLCipher, key in Keychain), migrations, trip repository with an append-only edit history for audits |
 | `src/app/` | Screens (Expo Router): home with deductions counter and trip list, add-trip modal |
 
 ## Status
 
 **Done:**
-- Manual trips
-- Business/personal classification
+- Automatic trip detection (geofence + GPS, low battery)
+- Permission setup and a tracking-status card
+- Business/personal classification with a "worth $X if business" prompt
 - Deductions counter
 - Split IRS rates
 - Encrypted storage with edit history
+- Manual "add missed trip" fallback
 
 **Next:**
-- Automatic trip detection (motion, car Bluetooth/CarPlay, background location)
+- Auto-classify: work hours, learned routes, named places
+- Swipe and bulk classify, trip map, commute warning
+- Motion-sensor and car Bluetooth/CarPlay triggers
+- Field test on an iPhone
 - Receipt scanning
 - Paywall (RevenueCat)
 - PDF/CSV export

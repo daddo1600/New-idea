@@ -1,4 +1,5 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
+import { Platform } from 'react-native';
 
 /**
  * Ordered schema migrations; the array index + 1 is the schema version stored
@@ -34,15 +35,35 @@ const MIGRATIONS: readonly string[] = [
   );
   CREATE INDEX trip_edits_trip ON trip_edits (trip_id);
   `,
+  `
+  -- Route polyline for the trip map, as a JSON array of {latitude, longitude}.
+  CREATE TABLE trip_routes (
+    trip_id TEXT PRIMARY KEY NOT NULL REFERENCES trips (id) ON DELETE CASCADE,
+    points TEXT NOT NULL
+  );
+
+  -- Single-row store for the background tracker, which may be killed between wake-ups.
+  CREATE TABLE tracker_state (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    json TEXT NOT NULL
+  );
+  `,
 ];
 
 export async function migrate(db: SQLiteDatabase): Promise<void> {
-  const row = await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version;');
-  const current = row?.user_version ?? 0;
-  for (let version = current; version < MIGRATIONS.length; version++) {
-    await db.withTransactionAsync(async () => {
-      await db.execAsync(MIGRATIONS[version]);
-      await db.execAsync(`PRAGMA user_version = ${version + 1};`);
-    });
-  }
+  const run = async (txn: Pick<SQLiteDatabase, 'getFirstAsync' | 'execAsync'>) => {
+    const row = await txn.getFirstAsync<{ user_version: number }>('PRAGMA user_version;');
+    const current = row?.user_version ?? 0;
+    for (let version = current; version < MIGRATIONS.length; version++) {
+      await txn.execAsync(MIGRATIONS[version]);
+    }
+    if (current < MIGRATIONS.length) {
+      await txn.execAsync(`PRAGMA user_version = ${MIGRATIONS.length};`);
+    }
+  };
+  // On devices the app and a background location wake-up can open the database
+  // at the same moment, so migrate exclusively and re-read the version inside.
+  // The web preview has a single connection and no exclusive transactions.
+  if (Platform.OS === 'web') await db.withTransactionAsync(() => run(db));
+  else await db.withExclusiveTransactionAsync(run);
 }

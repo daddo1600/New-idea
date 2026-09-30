@@ -73,17 +73,18 @@ export default function AddTripScreen() {
           onChange={setKind}
         />
         <Field label="Date (YYYY-MM-DD)">
-          <TextInput style={inputStyle} value={date} onChangeText={setDate} inputMode="numeric" />
+          <TextInput style={inputStyle} placeholderTextColor={theme.textSecondary} value={date} onChangeText={setDate} inputMode="numeric" />
         </Field>
         <Field label="From">
-          <TextInput style={inputStyle} value={from} onChangeText={setFrom} placeholder="Home" />
+          <TextInput style={inputStyle} placeholderTextColor={theme.textSecondary} value={from} onChangeText={setFrom} placeholder="Home" />
         </Field>
         <Field label="To">
-          <TextInput style={inputStyle} value={to} onChangeText={setTo} placeholder="Client office" />
+          <TextInput style={inputStyle} placeholderTextColor={theme.textSecondary} value={to} onChangeText={setTo} placeholder="Client office" />
         </Field>
         <Field label="Miles">
           <TextInput
             style={inputStyle}
+            placeholderTextColor={theme.textSecondary}
             value={miles}
             onChangeText={setMiles}
             inputMode="decimal"
@@ -93,6 +94,7 @@ export default function AddTripScreen() {
         <Field label={kind === 'business' ? 'Business purpose' : 'Note (optional)'}>
           <TextInput
             style={inputStyle}
+            placeholderTextColor={theme.textSecondary}
             value={purpose}
             onChangeText={setPurpose}
             placeholder="Client meeting"

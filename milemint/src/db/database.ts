@@ -1,7 +1,7 @@
 import Constants, { ExecutionEnvironment } from 'expo-constants';
 import * as Crypto from 'expo-crypto';
 import * as SecureStore from 'expo-secure-store';
-import type { SQLiteDatabase } from 'expo-sqlite';
+import { openDatabaseAsync, type SQLiteDatabase } from 'expo-sqlite';
 import { Platform } from 'react-native';
 
 import { migrate } from './migrations';
@@ -57,6 +57,24 @@ export async function initDatabase(db: SQLiteDatabase): Promise<void> {
       console.warn('SQLCipher unavailable (Expo Go?): database is NOT encrypted.');
     }
   }
-  await db.execAsync('PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;');
+  await db.execAsync('PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 5000;');
   await migrate(db);
+}
+
+let backgroundDb: Promise<SQLiteDatabase> | null = null;
+
+/**
+ * Database connection for background tasks, which run outside React and so
+ * can't use SQLiteProvider. Opened once per process.
+ */
+export function getBackgroundDatabase(): Promise<SQLiteDatabase> {
+  backgroundDb ??= (async () => {
+    const db = await openDatabaseAsync(DATABASE_NAME);
+    await initDatabase(db);
+    return db;
+  })().catch((error) => {
+    backgroundDb = null;
+    throw error;
+  });
+  return backgroundDb;
 }
