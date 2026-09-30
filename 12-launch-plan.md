@@ -44,6 +44,30 @@
 | **Referral push** | "Give a mate a free month": in-app banner and WhatsApp share |
 | **US (from January)** | Start the US plan in `09-social-campaigns.md` at small scale; use UK results to decide how hard to push |
 
+## Audience 2: delivery couriers (Uber Eats, Deliveroo, Just Eat, Amazon Flex, Evri, DPD)
+
+**Who can claim:**
+- **Yes:** self-employed riders and drivers using their own or hired car or van. Uber Eats, Deliveroo, Just Eat, Amazon Flex, Evri and DPD owner-drivers are usually self-employed.
+- **UK two wheels:** motorbikes and scooters 24p a mile, bicycles 20p.
+- **No:** drivers in Amazon-branded vans employed by Amazon's delivery partners, because the firm covers the van's costs.
+
+**The hook:** the delivery apps only count miles while you're carrying an order. Driving to the restaurant, between orders and home are business miles too, and MileMint logs them all. For example, 25,000 business miles a year ≈ **£9,250** at 55p and 25p (always "estimated").
+
+**Where and how:**
+1. **Where they wait:** QR cards at pickup hotspots (fast-food car parks, food courts), Amazon Flex stations, Evri and DPD depots. "Waiting for an order? See what your miles are worth."
+2. **WhatsApp and Facebook courier groups** (by city and language): work with the admins on a pinned post and a giveaway, never spam.
+3. **"MileMint Riders" ambassadors:** 10–20 active couriers across a few cities, with free Pro for a year and a personal referral code.
+4. **Courier creators** ("day in the life", "what I earned"): paid per paying user.
+5. **Accountants who specialise in gig workers.**
+6. **Translated cards and messages** (Portuguese, Romanian, Bengali, Arabic, Spanish) for couriers whose first language isn't English.
+7. Mention "for Deliveroo, Uber Eats and Amazon Flex drivers" in text only. No platform logos.
+
+**App gaps to close first:**
+1. **Vehicle type** (car or van, motorbike or scooter at 24p, bicycle at 20p in the UK). Without it many riders can't use MileMint.
+2. **Shift mode** ("I'm working" means everything is business; commutes aren't flagged for couriers without a fixed workplace).
+3. **Free tier fairness:** count a delivery shift as one drive, as restaurant waits split a shift into many.
+4. **"Missed miles" comparison:** "Your delivery app counted 612 miles. MileMint logged 941." The most shareable screenshot we could have.
+
 ## After January
 
 - **Perks pilot** (`11-growth-ideas.md`) in your area, now that there are local users to show cafés.
