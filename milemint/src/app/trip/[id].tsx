@@ -3,6 +3,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, TextInput } from 'react-native';
 
+import { PurposePicker } from '@/components/purpose-picker';
 import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -12,6 +13,7 @@ import {
   deleteTrip,
   getRoute,
   getTrip,
+  listTrips,
   setClassification,
   setTripPlace,
   updateTripDetails,
@@ -19,6 +21,7 @@ import {
 import type { LatLng } from '@/domain/geo';
 import type { PlaceKind } from '@/domain/places';
 import { formatDistance } from '@/domain/regions';
+import { frequentPurposes } from '@/domain/suggestions';
 import { type Classification, type Trip } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { useRegion } from '@/region/region';
@@ -47,6 +50,10 @@ export default function TripScreen() {
   const [startLabel, setStartLabel] = useState('');
   const [endLabel, setEndLabel] = useState('');
   const [purpose, setPurpose] = useState('');
+  const [purposes, setPurposes] = useState<string[]>([]);
+  useEffect(() => {
+    listTrips(db).then((trips) => setPurposes(frequentPurposes(trips, 6)), () => {});
+  }, [db]);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -156,14 +163,17 @@ export default function TripScreen() {
           <TextInput style={inputStyle} value={endLabel} onChangeText={setEndLabel} />
         </Field>
         <Field label={business ? 'Business purpose' : 'Note (optional)'}>
-          <TextInput
-            style={inputStyle}
-            placeholderTextColor={theme.textSecondary}
-            value={purpose}
-            onChangeText={setPurpose}
-            placeholder={business ? 'Client meeting' : 'Optional'}
-            autoFocus={business && !trip.purpose}
-          />
+          {business ? (
+            <PurposePicker value={purpose} onChange={setPurpose} recent={purposes} />
+          ) : (
+            <TextInput
+              style={inputStyle}
+              placeholderTextColor={theme.textSecondary}
+              value={purpose}
+              onChangeText={setPurpose}
+              placeholder="Optional"
+            />
+          )}
         </Field>
         {error && (
           <ThemedText type="small" themeColor="danger" accessibilityRole="alert">

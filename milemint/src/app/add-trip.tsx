@@ -5,6 +5,7 @@ import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text
 
 import { CalendarPicker } from '@/components/calendar-picker';
 import { Chip, EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
+import { PurposePicker } from '@/components/purpose-picker';
 import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -59,7 +60,7 @@ export default function AddTripScreen() {
   }, [db]);
 
   const spots = useMemo(() => frequentSpots(history, places), [history, places]);
-  const purposes = useMemo(() => frequentPurposes(history), [history]);
+  const purposes = useMemo(() => frequentPurposes(history, 6), [history]);
   const home = places.find((place) => place.kind === 'home');
   const near: LatLng | null = from.at ?? to.at ?? (home ? { latitude: home.latitude, longitude: home.longitude } : null);
 
@@ -262,32 +263,28 @@ export default function AddTripScreen() {
             <ThemedText type="small" themeColor="textSecondary">
               {kind === 'business' ? 'Business purpose' : 'Note (optional)'}
             </ThemedText>
-            {kind === 'business' && purposes.length > 0 && (
-              <View style={styles.chips}>
-                {purposes.map((text) => (
-                  <Chip
-                    key={text}
-                    label={text}
-                    selected={purpose === text}
-                    onPress={() => {
-                      clearError();
-                      setPurpose(text);
-                    }}
-                  />
-                ))}
-              </View>
+            {kind === 'business' ? (
+              <PurposePicker
+                value={purpose}
+                recent={purposes}
+                onChange={(value) => {
+                  clearError();
+                  setPurpose(value);
+                }}
+              />
+            ) : (
+              <TextInput
+                accessibilityLabel="Note"
+                style={inputStyle}
+                placeholderTextColor={theme.textSecondary}
+                value={purpose}
+                onChangeText={(value) => {
+                  clearError();
+                  setPurpose(value);
+                }}
+                placeholder="Optional"
+              />
             )}
-            <TextInput
-              accessibilityLabel={kind === 'business' ? 'Business purpose' : 'Note'}
-              style={inputStyle}
-              placeholderTextColor={theme.textSecondary}
-              value={purpose}
-              onChangeText={(value) => {
-                clearError();
-                setPurpose(value);
-              }}
-              placeholder={kind === 'business' ? 'e.g. Client meeting' : 'Optional'}
-            />
           </View>
 
           {error && (
