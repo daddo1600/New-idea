@@ -1,5 +1,5 @@
-import { Image } from 'expo-image';
 import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { useSQLiteContext } from 'expo-sqlite';
 import {
@@ -10,11 +10,14 @@ import {
   ScrollView,
   StyleSheet,
   Switch,
+  Text,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { BrandGradient } from '@/components/brand-gradient';
 import { CountryOptions, phoneRegion } from '@/components/country-options';
+import { LeafMark } from '@/components/leaf-mark';
 import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -153,13 +156,19 @@ export default function WelcomeScreen() {
     router.replace('/');
   };
 
+  // The first screen stays on the launch animation's green, so one flows into the other.
+  const onBrand = step === 0;
+
   const primary = (label: string, onPress: () => void) => (
     <Pressable
       accessibilityRole="button"
       disabled={busy}
       onPress={onPress}
-      style={[styles.primary, { backgroundColor: theme.accent, opacity: busy ? 0.6 : 1 }]}>
-      <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
+      style={[
+        styles.primary,
+        { backgroundColor: onBrand ? '#FFFFFF' : theme.accent, opacity: busy ? 0.6 : 1 },
+      ]}>
+      <ThemedText type="smallBold" style={{ color: onBrand ? '#064E3B' : theme.onAccent }}>
         {label}
       </ThemedText>
     </Pressable>
@@ -178,6 +187,8 @@ export default function WelcomeScreen() {
         styles.container,
         { paddingTop: insets.top + Spacing.three, paddingBottom: insets.bottom + Spacing.three },
       ]}>
+      <StatusBar style={onBrand ? 'light' : 'auto'} />
+      {onBrand && <BrandGradient />}
       <View style={styles.top}>
         {step > 0 && step < DONE ? (
           <Pressable
@@ -198,7 +209,15 @@ export default function WelcomeScreen() {
               key={i}
               style={[
                 styles.dot,
-                { backgroundColor: i <= step ? theme.accent : theme.backgroundSelected },
+                {
+                  backgroundColor: onBrand
+                    ? i <= step
+                      ? '#FFFFFF'
+                      : 'rgba(255,255,255,0.3)'
+                    : i <= step
+                      ? theme.accent
+                      : theme.backgroundSelected,
+                },
                 i === step && styles.dotCurrent,
               ]}
             />
@@ -214,28 +233,20 @@ export default function WelcomeScreen() {
           keyboardShouldPersistTaps="handled">
           {step === 0 && (
             <>
-              <Image
-                source={require('@/../assets/images/icon.png')}
-                style={styles.icon}
-                accessibilityIgnoresInvertColors
-              />
-              <ThemedText type="title" style={styles.heading}>
-                Every business mile, counted.
-              </ThemedText>
-              <ThemedText themeColor="textSecondary">
+              <LeafMark size={132} />
+              <Text style={[styles.brandTitle, styles.heading]}>Every business mile, counted.</Text>
+              <Text style={styles.brandBody}>
                 MileMint logs your drives automatically and works out what they’re worth at tax time.
-              </ThemedText>
+              </Text>
               <View style={styles.points}>
                 {WELCOME_POINTS.map(([title, body]) => (
                   <View key={title} style={styles.point}>
-                    <ThemedText type="smallBold" style={{ color: theme.accent }}>
-                      ✓
-                    </ThemedText>
+                    <View style={styles.pointTick}>
+                      <Text style={styles.pointTickText}>✓</Text>
+                    </View>
                     <View style={styles.flex}>
-                      <ThemedText type="smallBold">{title}</ThemedText>
-                      <ThemedText type="small" themeColor="textSecondary">
-                        {body}
-                      </ThemedText>
+                      <Text style={styles.pointTitle}>{title}</Text>
+                      <Text style={styles.pointBody}>{body}</Text>
                     </View>
                   </View>
                 ))}
@@ -393,6 +404,20 @@ export default function WelcomeScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: Spacing.four },
+  brandTitle: { color: '#FFFFFF', fontSize: 40, lineHeight: 46, fontWeight: '800', letterSpacing: -0.5 },
+  brandBody: { color: '#D1FAE5', fontSize: 17, lineHeight: 24 },
+  pointTick: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: '#FACC15',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 1,
+  },
+  pointTickText: { color: '#064E3B', fontSize: 12, fontWeight: '800' },
+  pointTitle: { color: '#FFFFFF', fontSize: 15, fontWeight: '700' },
+  pointBody: { color: '#D1FAE5', fontSize: 14, lineHeight: 20 },
   top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 32 },
   topSpacer: { width: 32 },
   dots: { flexDirection: 'row', gap: Spacing.one },
@@ -407,7 +432,6 @@ const styles = StyleSheet.create({
     maxWidth: MaxContentWidth,
     alignSelf: 'center',
   },
-  icon: { width: 88, height: 88, borderRadius: 20 },
   heading: { marginTop: Spacing.two },
   points: { gap: Spacing.three, marginTop: Spacing.two },
   point: { flexDirection: 'row', gap: Spacing.two },

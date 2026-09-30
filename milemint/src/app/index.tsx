@@ -7,9 +7,9 @@ import ReanimatedSwipeable, {
   SwipeDirection,
   type SwipeableMethods,
 } from 'react-native-gesture-handler/ReanimatedSwipeable';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { AddTripButton, MenuButton } from '@/components/header-menu';
+import { BrandGradient } from '@/components/brand-gradient';
 import { LeafMark } from '@/components/leaf-mark';
 import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
@@ -328,15 +328,7 @@ function SummaryCard({ summary, commuteCents }: { summary: TaxYearSummary; commu
   return (
     <View style={styles.card}>
       {/* The app icon's gradient, with the leaf growing out of the corner. */}
-      <Svg style={StyleSheet.absoluteFill} preserveAspectRatio="none" viewBox="0 0 100 100">
-        <Defs>
-          <LinearGradient id="hero" x1="0" y1="0" x2="1" y2="1">
-            <Stop offset="0" stopColor="#0E9F6E" />
-            <Stop offset="1" stopColor="#053D2E" />
-          </LinearGradient>
-        </Defs>
-        <Rect width="100" height="100" fill="url(#hero)" />
-      </Svg>
+      <BrandGradient />
       <View style={styles.watermark} pointerEvents="none">
         <LeafMark size={190} opacity={0.22} />
       </View>

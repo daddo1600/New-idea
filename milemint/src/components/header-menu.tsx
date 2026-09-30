@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { Linking, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
+import { BrandGradient } from '@/components/brand-gradient';
 import { LeafMark } from '@/components/leaf-mark';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
@@ -133,15 +133,7 @@ function Menu({ onClose }: { onClose: () => void }) {
         ]}>
         {/* The deductions card's gradient and leaf, so the menu belongs to the app. */}
         <View style={styles.hero}>
-          <Svg style={StyleSheet.absoluteFill} preserveAspectRatio="none" viewBox="0 0 100 100">
-            <Defs>
-              <LinearGradient id="menuHero" x1="0" y1="0" x2="1" y2="1">
-                <Stop offset="0" stopColor="#0E9F6E" />
-                <Stop offset="1" stopColor="#053D2E" />
-              </LinearGradient>
-            </Defs>
-            <Rect width="100" height="100" fill="url(#menuHero)" />
-          </Svg>
+          <BrandGradient />
           <View style={styles.heroLeaf} pointerEvents="none">
             <LeafMark size={120} opacity={0.25} />
           </View>
