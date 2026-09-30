@@ -30,7 +30,8 @@ export const DEMO_REGION =
     ? (new URLSearchParams(window.location.search).get('region')?.toUpperCase() ?? 'US')
     : null;
 
-export const DEMO_TRACKING_STATUS = demoParam === 'setup' ? 'needs-permission' : 'on';
+export const DEMO_TRACKING_STATUS =
+  demoParam === 'setup' ? 'needs-permission' : demoParam === 'always' ? 'needs-always' : 'on';
 
 /** Demo users are Pro (every drive visible) unless showing the free plan. */
 export const DEMO_PRO = DEMO_MODE && demoParam !== 'free';

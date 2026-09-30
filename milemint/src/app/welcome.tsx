@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { AlwaysGuide } from '@/components/always-guide';
 import { BrandGradient } from '@/components/brand-gradient';
 import { CountryOptions, phoneRegion } from '@/components/country-options';
 import { LeafMark } from '@/components/leaf-mark';
@@ -276,22 +277,18 @@ export default function WelcomeScreen() {
                 To notice when you start driving, even when MileMint is closed, it needs location access set
                 to “Always”. GPS only runs while you drive, and your trips never leave your iPhone.
               </ThemedText>
-              <ThemedView type="backgroundElement" style={styles.card}>
-                <ThemedText type="smallBold">What you’ll see next</ThemedText>
-                <ThemedText type="small" themeColor="textSecondary">
-                  1. Tap “Allow While Using App”.{'\n'}2. Then tap “Change to Always Allow”.
-                </ThemedText>
-              </ThemedView>
-              {status === 'needs-always' && (
-                <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
-                  Location is set to “While Using”, so drives would be missed while MileMint is closed. In
-                  Settings, tap Location and choose “Always”.
-                </ThemedText>
-              )}
-              {status === 'needs-permission' && asked && !busy && (
-                <ThemedText type="small" themeColor="textSecondary">
-                  If you chose “Don’t Allow”, you can turn location on in Settings at any time.
-                </ThemedText>
+              {status === 'needs-always' || (status === 'needs-permission' && asked) ? (
+                <AlwaysGuide current={status === 'needs-always' ? 'While Using the App' : 'Never'} />
+              ) : (
+                status !== 'unsupported' && (
+                  <ThemedView type="backgroundElement" style={styles.card}>
+                    <ThemedText type="smallBold">What you’ll see next</ThemedText>
+                    <ThemedText type="small" themeColor="textSecondary">
+                      1. Tap “Allow While Using App”.{'\n'}2. If iOS then offers “Change to Always Allow”, tap
+                      it. If not, we’ll show you the quick switch in Settings.
+                    </ThemedText>
+                  </ThemedView>
+                )
               )}
               {status === 'unsupported' && (
                 <ThemedText type="small" themeColor="textSecondary">

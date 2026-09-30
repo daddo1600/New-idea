@@ -2,6 +2,7 @@ import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Linking, Pressable, ScrollView, StyleSheet } from 'react-native';
 
+import { AlwaysGuide } from '@/components/always-guide';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
@@ -27,9 +28,12 @@ export default function SetupTrackingScreen() {
   useEffect(() => {
     if (!cameBackWithAlways) return;
     let current = true;
-    (status === 'on' ? Promise.resolve<TrackingStatus>('on') : enable()).then((next) => {
-      if (current && next === 'on') router.back();
-    }, () => {});
+    (status === 'on' ? Promise.resolve<TrackingStatus>('on') : enable()).then(
+      (next) => {
+        if (current && next === 'on') router.back();
+      },
+      () => {},
+    );
     return () => {
       current = false;
     };
@@ -55,25 +59,22 @@ export default function SetupTrackingScreen() {
       <ScrollView contentContainerStyle={styles.content}>
         <ThemedText type="subtitle">Log every drive automatically</ThemedText>
         <ThemedText themeColor="textSecondary">
-          MileMint needs location access set to “Always” to notice when you start driving, even
-          when the app is closed.
+          MileMint needs location access set to “Always” to notice when you start driving, even when the app
+          is closed.
         </ThemedText>
 
-        {POINTS.map(([title, body]) => (
-          <ThemedView key={title} type="backgroundElement" style={styles.point}>
-            <ThemedText type="smallBold">{title}</ThemedText>
-            <ThemedText type="small" themeColor="textSecondary">
-              {body}
-            </ThemedText>
-          </ThemedView>
-        ))}
+        {/* Once only the Settings switch is left, it goes straight under the heading. */}
+        {!needsSettings &&
+          POINTS.map(([title, body]) => (
+            <ThemedView key={title} type="backgroundElement" style={styles.point}>
+              <ThemedText type="smallBold">{title}</ThemedText>
+              <ThemedText type="small" themeColor="textSecondary">
+                {body}
+              </ThemedText>
+            </ThemedView>
+          ))}
 
-        {needsSettings && (
-          <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
-            Location is set to “While Using”, so drives would be missed when the app is closed. In
-            Settings, tap Location and choose “Always”.
-          </ThemedText>
-        )}
+        {needsSettings && <AlwaysGuide current="While Using the App" />}
 
         {status === 'unsupported' ? (
           <ThemedText type="small" themeColor="textSecondary">
