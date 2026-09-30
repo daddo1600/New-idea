@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { autoDrivesInMonth, lockedTripIds } from '../plan';
+import { autoDrivesInMonth, FREE_AUTO_DRIVES_PER_MONTH as FREE, lockedTripIds } from '../plan';
 import type { Trip } from '../trip';
 
 type Drive = Pick<Trip, 'id' | 'localDate' | 'startedAt' | 'source'>;
@@ -21,23 +21,23 @@ function drives(month: string, count: number, prefix = 'd', source: Trip['source
 
 describe('lockedTripIds', () => {
   it('locks nothing within the allowance', () => {
-    expect(lockedTripIds(drives('2026-10', 40), false).size).toBe(0);
+    expect(lockedTripIds(drives('2026-10', FREE), false).size).toBe(0);
   });
 
   it('locks the drives after the allowance, keeping the earliest free', () => {
-    const october = drives('2026-10', 43);
+    const october = drives('2026-10', FREE + 3);
     // Newest first, as the trip list stores them: order must not matter.
     const locked = lockedTripIds([...october].reverse(), false);
-    expect([...locked].sort()).toEqual(['d40', 'd41', 'd42']);
+    expect([...locked].sort()).toEqual([`d${FREE}`, `d${FREE + 1}`, `d${FREE + 2}`].sort());
   });
 
   it('counts each month separately', () => {
-    const trips = [...drives('2026-09', 41, 's'), ...drives('2026-10', 40, 'o')];
-    expect([...lockedTripIds(trips, false)]).toEqual(['s40']);
+    const trips = [...drives('2026-09', FREE + 1, 's'), ...drives('2026-10', FREE, 'o')];
+    expect([...lockedTripIds(trips, false)]).toEqual([`s${FREE}`]);
   });
 
   it('never locks manual trips or counts them towards the allowance', () => {
-    const trips = [...drives('2026-10', 40), ...drives('2026-10', 5, 'm', 'manual')];
+    const trips = [...drives('2026-10', FREE), ...drives('2026-10', 5, 'm', 'manual')];
     expect(lockedTripIds(trips, false).size).toBe(0);
   });
 
