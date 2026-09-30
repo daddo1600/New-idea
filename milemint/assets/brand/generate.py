@@ -1,8 +1,12 @@
 """Generate MileMint app icons and brand images from one source.
 
+The mark is a serrated mint leaf whose centre vein is a road, starting at a
+gold coin: every mile driven turns into money saved.
+
 Usage (from milemint/):  pip install cairosvg pillow && python3 assets/brand/generate.py
 """
 import io
+import math
 from pathlib import Path
 
 import cairosvg
@@ -12,55 +16,82 @@ ROOT = Path(__file__).resolve().parents[2]
 BRAND = ROOT / "assets" / "brand"
 IMAGES = ROOT / "assets" / "images"
 
-MINT = "#34D399"
-EMERALD = "#0B7A55"
-DEEP = "#065F46"
 GOLD = "#FACC15"
+ROAD = "#064E3B"
+VEIN = "#15803D"
+SHADOW = "#011C14"
 
-# The mark: an "M" drawn as a road, ending at a gold destination coin.
-ROAD = "M232 770 L372 290 L512 600 L652 290 L792 770"
+GRADIENTS = (
+    '<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">'
+    '<stop offset="0" stop-color="#0E9F6E"/><stop offset="1" stop-color="#053D2E"/></linearGradient>'
+    '<linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1">'
+    '<stop offset="0" stop-color="#BBF7D0"/><stop offset="0.5" stop-color="#4ADE80"/>'
+    '<stop offset="1" stop-color="#16A34A"/></linearGradient>'
+)
 
 
-def mark(road="#FFFFFF", line=EMERALD, shadow=True, coin=True):
-    shadow_def = (
-        '<filter id="s" x="-20%" y="-20%" width="140%" height="140%">'
-        '<feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#022C22" flood-opacity="0.35"/>'
-        "</filter>"
-        if shadow
-        else ""
-    )
-    group_filter = ' filter="url(#s)"' if shadow else ""
-    center_line = (
-        f'<path d="{ROAD}" stroke="{line}" stroke-width="18" stroke-dasharray="44 40" stroke-linecap="butt"/>'
-        if line
-        else ""
-    )
-    coin_el = (
-        f'<circle cx="792" cy="770" r="46" fill="{GOLD}" stroke="{road}" stroke-width="16"/>'
-        if coin
-        else ""
-    )
-    return (
-        f"<defs>{shadow_def}</defs>"
-        f'<g{group_filter} fill="none" stroke-linecap="round" stroke-linejoin="round">'
-        f'<path d="{ROAD}" stroke="{road}" stroke-width="140"/>{center_line}</g>{coin_el}'
+def _cubic(points, t):
+    u = 1 - t
+    return tuple(
+        u**3 * a + 3 * u * u * t * b + 3 * u * t * t * c + t**3 * d for a, b, c, d in zip(*points)
     )
 
 
-def svg(body, background=None, scale=1.0, size=1024):
-    bg = ""
-    if background == "gradient":
-        bg = (
-            '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">'
-            f'<stop offset="0" stop-color="{MINT}"/><stop offset="1" stop-color="{DEEP}"/>'
-            f'</linearGradient></defs><rect width="{size}" height="{size}" fill="url(#g)"/>'
+def leaf_path(teeth=9, depth=24, steps=200):
+    """Ovate leaf with saw-tooth edges, base at y=+330 and tip at y=-440."""
+    right = [(0, 330), (360, 280), (220, -140), (0, -440)]
+    points = []
+    for side in (1, -1):
+        edge = []
+        for i in range(steps + 1):
+            t = i / steps
+            x, y = _cubic([(side * px, py) for px, py in right], t)
+            envelope = math.sin(math.pi * min(1, max(0, (t - 0.15) / 0.7)))
+            tooth = 1 - abs(2 * ((teeth * t) % 1) - 1)
+            edge.append((x + side * depth * envelope * tooth, y))
+        points += edge if side == 1 else edge[::-1]
+    return "M" + " L".join(f"{x:.1f},{y:.1f}" for x, y in points) + "Z"
+
+
+LEAF = leaf_path()
+ROAD_PATH = "M0,420 C-20,200 25,0 0,-330"
+
+
+def veins():
+    paths = []
+    for y in (200, 90, -20, -130, -230):
+        for s in (1, -1):
+            paths.append(
+                f'<path d="M0,{y} Q{s * 117},{y - 52} {s * 286},{y - 150}" stroke="{VEIN}" '
+                'stroke-opacity="0.45" stroke-width="13" fill="none" stroke-linecap="round"/>'
+            )
+    return "".join(paths)
+
+
+def mark(mono=False):
+    """The mark, drawn in a 1024x1024 box."""
+    if mono:  # single-colour silhouette for Android themed icons
+        body = f'<path d="{LEAF}" fill="#FFFFFF"/><circle cx="0" cy="430" r="58" fill="#FFFFFF"/>'
+    else:
+        body = (
+            f'<path d="{LEAF}" transform="translate(-14 18)" fill="{SHADOW}" fill-opacity="0.3"/>'
+            f'<path d="{LEAF}" fill="url(#leaf)"/>'
+            f'<g clip-path="url(#leafclip)">{veins()}</g>'
+            f'<path d="{ROAD_PATH}" stroke="{ROAD}" stroke-width="62" fill="none" stroke-linecap="round"/>'
+            f'<path d="{ROAD_PATH}" stroke="#FFFFFF" stroke-width="10" fill="none" '
+            'stroke-dasharray="30 26" stroke-linecap="round"/>'
+            f'<circle cx="0" cy="430" r="58" fill="{GOLD}" stroke="#FFFFFF" stroke-width="16"/>'
         )
-    elif background:
-        bg = f'<rect width="{size}" height="{size}" fill="{background}"/>'
-    offset = size * (1 - scale) / 2
+    return f'<g transform="translate(530 490) rotate(40)">{body}</g>'
+
+
+def svg(background=False, scale=1.0, mono=False):
+    offset = 1024 * (1 - scale) / 2
+    bg = '<rect width="1024" height="1024" fill="url(#bg)"/>' if background else ""
     return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {size} {size}">{bg}'
-        f'<g transform="translate({offset} {offset}) scale({scale * size / 1024})">{body}</g></svg>'
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">'
+        f'<defs>{GRADIENTS}<clipPath id="leafclip"><path d="{LEAF}"/></clipPath></defs>{bg}'
+        f'<g transform="translate({offset} {offset}) scale({scale})">{mark(mono)}</g></svg>'
     )
 
 
@@ -73,19 +104,23 @@ def png(svg_text, path, px, opaque=False):
 
 
 def main():
-    icon = svg(mark(), background="gradient", scale=0.9)
+    icon = svg(background=True, scale=0.92)
     (BRAND / "icon.svg").write_text(icon)
-    (BRAND / "mark.svg").write_text(svg(mark(road=EMERALD, line="#FFFFFF", shadow=False)))
+    (BRAND / "mark.svg").write_text(svg())
 
     png(icon, IMAGES / "icon.png", 1024, opaque=True)
     png(icon, IMAGES / "favicon.png", 48, opaque=True)
-    # Splash: white mark on the emerald splash background.
-    png(svg(mark(line=EMERALD)), IMAGES / "splash-icon.png", 512)
+    png(svg(), IMAGES / "splash-icon.png", 512)
     # Android adaptive icon: art must sit inside the central 66% safe zone.
-    png(svg(mark(), scale=0.62), IMAGES / "android-icon-foreground.png", 1024)
-    png(svg("", background="gradient"), IMAGES / "android-icon-background.png", 1024, opaque=True)
-    png(svg(mark(road="#FFFFFF", line=None, shadow=False, coin=False), scale=0.62),
-        IMAGES / "android-icon-monochrome.png", 1024)
+    png(svg(scale=0.62), IMAGES / "android-icon-foreground.png", 1024)
+    png(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">'
+        f'<defs>{GRADIENTS}</defs><rect width="1024" height="1024" fill="url(#bg)"/></svg>',
+        IMAGES / "android-icon-background.png",
+        1024,
+        opaque=True,
+    )
+    png(svg(scale=0.62, mono=True), IMAGES / "android-icon-monochrome.png", 1024)
 
 
 if __name__ == "__main__":
