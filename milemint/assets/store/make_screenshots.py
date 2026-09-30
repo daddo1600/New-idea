@@ -17,6 +17,7 @@ SHOTS = [
     ("swipe", "Swipe to sort\nbusiness trips.", "See what each drive is worth\nbefore you decide."),
     ("settings", "Set your hours once.\nIt sorts the rest.", "Work hours, saved places and your\nusual routes sort trips for you."),
     ("setup", "Your trips stay\non your iPhone.", "Encrypted on your phone.\nNo account. No ads."),
+    ("compare", "Free to start.\nPro when you need it.", "40 drives a month free, forever.\nUnlimited drives and PDF reports with Pro."),
 ]
 
 
@@ -104,9 +105,14 @@ def compose(key, headline, sub):
 
 def main():
     out = HERE / "ios"
+    out_65 = HERE / "ios-6.5"
     out.mkdir(exist_ok=True)
+    out_65.mkdir(exist_ok=True)
     for i, (key, headline, sub) in enumerate(SHOTS, 1):
-        compose(key, headline, sub).save(out / f"{i:02d}-{key}.png", optimize=True)
+        shot = compose(key, headline, sub)
+        shot.save(out / f"{i:02d}-{key}.png", optimize=True)
+        # App Store Connect also asks for the 6.5" size (1284x2778).
+        shot.resize((1284, 2778), Image.LANCZOS).save(out_65 / f"{i:02d}-{key}.png", optimize=True)
 
 
 if __name__ == "__main__":

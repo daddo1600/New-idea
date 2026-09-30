@@ -17,12 +17,17 @@ const TERMS_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stde
 const PRIVACY_URL =
   'https://github.com/daddo1600/New-idea/blob/claude/ios-app-ideas-market-of84qv/milemint/docs/privacy-policy.md';
 
-const BENEFITS = [
-  ['Unlimited automatic drives', `Free covers ${FREE_AUTO_DRIVES_PER_MONTH} a month. Pro logs every one.`],
-  ['Unlocks drives you’ve already made', 'Drives over the free limit are kept, never lost.'],
-  ['IRS-ready PDF report', 'Schedule C totals and a full trip log for you or your accountant.'],
-  ['Still private', 'No account, no ads, and your trips never leave your iPhone.'],
-] as const;
+/** What each plan includes: `true` is a tick, a string is shown as is. */
+const COMPARISON: readonly [feature: string, free: string | boolean, pro: string | boolean][] = [
+  ['Automatic drive logging', `${FREE_AUTO_DRIVES_PER_MONTH} a month`, 'Unlimited'],
+  ['Drives over the limit', 'Kept, locked', 'Unlocked'],
+  ['Add missed trips by hand', true, true],
+  ['Swipe to sort business trips', true, true],
+  ['Work hours, places, learned routes', true, true],
+  ['Mileage log export (CSV)', true, true],
+  ['IRS-ready PDF report', false, true],
+  ['Encrypted on your iPhone, no ads', true, true],
+];
 
 export default function ProScreen() {
   const theme = useTheme();
@@ -102,19 +107,7 @@ export default function ProScreen() {
           </ThemedView>
         )}
 
-        {BENEFITS.map(([title, body]) => (
-          <View key={title} style={styles.benefit}>
-            <ThemedText type="smallBold" style={{ color: theme.accent }}>
-              ✓
-            </ThemedText>
-            <View style={styles.flex}>
-              <ThemedText type="smallBold">{title}</ThemedText>
-              <ThemedText type="small" themeColor="textSecondary">
-                {body}
-              </ThemedText>
-            </View>
-          </View>
-        ))}
+        <Comparison />
 
         {!storeAvailable ? (
           <ThemedText type="small" themeColor="textSecondary">
@@ -218,7 +211,53 @@ export default function ProScreen() {
   );
 }
 
+function Comparison() {
+  const theme = useTheme();
+  const cell = (value: string | boolean, pro: boolean) =>
+    typeof value === 'string' ? (
+      <ThemedText type="small" style={[styles.planCell, pro && { color: theme.accent }]}>
+        {value}
+      </ThemedText>
+    ) : (
+      <ThemedText
+        type="smallBold"
+        accessibilityLabel={value ? 'Included' : 'Not included'}
+        style={[styles.planCell, { color: value ? theme.accent : theme.textSecondary }]}>
+        {value ? '✓' : '–'}
+      </ThemedText>
+    );
+  return (
+    <ThemedView type="backgroundElement" style={styles.table}>
+      <View style={styles.tableRow}>
+        <ThemedText type="small" themeColor="textSecondary" style={styles.feature}>
+          What’s included
+        </ThemedText>
+        <ThemedText type="smallBold" style={styles.planCell}>
+          Free
+        </ThemedText>
+        <ThemedText type="smallBold" style={[styles.planCell, { color: theme.accent }]}>
+          Pro
+        </ThemedText>
+      </View>
+      {COMPARISON.map(([feature, free, pro]) => (
+        <View key={feature} style={[styles.tableRow, { borderTopColor: theme.backgroundSelected }, styles.divided]}>
+          <ThemedText type="small" style={styles.feature}>
+            {feature}
+          </ThemedText>
+          {cell(free, false)}
+          {cell(pro, true)}
+        </View>
+      ))}
+    </ThemedView>
+  );
+}
+
 const styles = StyleSheet.create({
+  table: { borderRadius: 12, paddingHorizontal: Spacing.three, paddingVertical: Spacing.one },
+  tableRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, paddingVertical: Spacing.two },
+  divided: { borderTopWidth: StyleSheet.hairlineWidth },
+  feature: { flex: 1 },
+  planCell: { width: 84, textAlign: 'center' },
   container: { flex: 1 },
   content: {
     padding: Spacing.four,
@@ -228,7 +267,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   locked: { borderRadius: 12, borderWidth: 1, padding: Spacing.three, gap: Spacing.half },
-  benefit: { flexDirection: 'row', gap: Spacing.two },
   flex: { flex: 1, gap: Spacing.half },
   plan: {
     flexDirection: 'row',

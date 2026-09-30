@@ -2,7 +2,7 @@ import * as SecureStore from 'expo-secure-store';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { AppState, Platform } from 'react-native';
 
-import { DEMO_MODE } from '@/dev/demo';
+import { DEMO_MODE, DEMO_PRO } from '@/dev/demo';
 
 import {
   buy as storeBuy,
@@ -21,6 +21,12 @@ import {
  * (and offline) instead of a flash of locked trips while StoreKit answers.
  */
 const CACHE_KEY = 'milemint.pro-active';
+
+/** The web demo has no App Store; these stand in so the paywall can be previewed. */
+const DEMO_PLANS: ProPlan[] = [
+  { id: 'demo.yearly', price: '$49.99', period: 'year', trial: '30-day free trial' },
+  { id: 'demo.monthly', price: '$5.99', period: 'month', trial: null },
+];
 const canCache = Platform.OS !== 'web';
 
 type Pro = {
@@ -43,9 +49,9 @@ const ProContext = createContext<Pro | null>(null);
 
 export function ProProvider({ children }: { children: ReactNode }) {
   // The web demo stands in for a paying user so screenshots show every drive.
-  const [isPro, setIsPro] = useState(DEMO_MODE);
-  const [plans, setPlans] = useState<ProPlan[]>([]);
-  const [plansLoaded, setPlansLoaded] = useState(false);
+  const [isPro, setIsPro] = useState(DEMO_PRO);
+  const [plans, setPlans] = useState<ProPlan[]>(DEMO_MODE ? DEMO_PLANS : []);
+  const [plansLoaded, setPlansLoaded] = useState(DEMO_MODE);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -97,6 +103,7 @@ export function ProProvider({ children }: { children: ReactNode }) {
   }, [refresh, remember]);
 
   const buy = useCallback(async (planId: string) => {
+    if (DEMO_MODE) return; // Preview only: there is no App Store to buy from.
     setError(null);
     setBusy(true);
     try {
@@ -129,7 +136,7 @@ export function ProProvider({ children }: { children: ReactNode }) {
       isPro,
       plans,
       plansLoaded,
-      storeAvailable: STORE_AVAILABLE,
+      storeAvailable: STORE_AVAILABLE || DEMO_MODE,
       busy,
       error,
       buy,

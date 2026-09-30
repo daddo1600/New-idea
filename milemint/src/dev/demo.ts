@@ -14,6 +14,7 @@ import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/tri
  * driving. Never active in device builds.
  *   ?demo        tracking shown as on
  *   ?demo=setup  tracking shown as not yet allowed (first launch)
+ *   ?demo=free   a free-plan user, with sample App Store prices on the paywall
  */
 const demoParam =
   __DEV__ && Platform.OS === 'web' && typeof window !== 'undefined'
@@ -23,6 +24,9 @@ const demoParam =
 export const DEMO_MODE = demoParam !== null;
 
 export const DEMO_TRACKING_STATUS = demoParam === 'setup' ? 'needs-permission' : 'on';
+
+/** Demo users are Pro (every drive visible) unless showing the free plan. */
+export const DEMO_PRO = DEMO_MODE && demoParam !== 'free';
 
 type DemoTrip = [
   daysAgo: number,
