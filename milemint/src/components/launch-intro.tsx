@@ -35,8 +35,8 @@ export const INTRO_BACKGROUND = '#0B7A55';
 const SPLASH_SIZE = 120;
 const GROWN_SCALE = 1.5;
 
-const DRIVE_MS = 1700;
-const HOLD_MS = 350;
+const DRIVE_MS = 3200;
+const HOLD_MS = 500;
 const FADE_MS = 300;
 /** The drive the counter shows. */
 const DEMO_UNITS = 12.4;
@@ -109,7 +109,8 @@ export function LaunchIntro({ onDone }: { onDone: () => void }) {
   const [shown, setShown] = useState(reduceMotion ? 1 : 0);
 
   useEffect(() => {
-    const easing = Easing.inOut(Easing.cubic);
+    // Gentle: a steady drive, easing in and out only a little.
+    const easing = Easing.inOut(Easing.sin);
     const lead = reduceMotion ? 0 : 120;
     const drivingFor = reduceMotion ? 0 : DRIVE_MS;
     grow.value = withDelay(lead, withTiming(1, { duration: drivingFor * 0.6, easing }));

@@ -65,11 +65,11 @@ const GLYPHS: Record<string, ReactNode> = {
 
 /** Where each place sits: how far along the road (0–1) and which side of it. */
 const PLACES = [
-  { glyph: 'fuel', at: 0.16, side: -1 },
-  { glyph: 'shop', at: 0.32, side: 1 },
-  { glyph: 'cafe', at: 0.48, side: -1 },
-  { glyph: 'office', at: 0.64, side: 1 },
-  { glyph: 'tree', at: 0.78, side: -1 },
+  { glyph: 'fuel', at: 0.14, side: -1 },
+  { glyph: 'shop', at: 0.29, side: 1 },
+  { glyph: 'cafe', at: 0.44, side: -1 },
+  { glyph: 'office', at: 0.59, side: 1 },
+  { glyph: 'tree', at: 0.72, side: -1 },
 ] as const;
 
 const BADGE = 30;
@@ -102,8 +102,8 @@ function Place({
   drive: SharedValue<number>;
 }) {
   const style = useAnimatedStyle(() => {
-    const appear = Math.min(1, Math.max(0, (drive.value - (at - 0.22)) / 0.12));
-    const leave = Math.min(1, Math.max(0, (drive.value - (at + 0.06)) / 0.1));
+    const appear = Math.min(1, Math.max(0, (drive.value - (at - 0.24)) / 0.18));
+    const leave = Math.min(1, Math.max(0, (drive.value - (at + 0.08)) / 0.16));
     const passed = drive.value - at;
     return {
       opacity: appear * (1 - leave),
