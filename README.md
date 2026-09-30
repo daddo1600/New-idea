@@ -8,6 +8,7 @@
 | [`04-plugins-and-tooling.md`](04-plugins-and-tooling.md) | Claude plugins and external tools to review before building |
 | [`05-getting-started.md`](05-getting-started.md) | **Start here next.** Your to-do list, the build route (Expo, no Mac needed), and App Review questions |
 | [`06-competitive-strategy.md`](06-competitive-strategy.md) | **How we beat MileIQ, Everlance, Stride and the rest:** competitor map, 7 ways to win, pricing, US go-to-market |
+| [`milemint/`](milemint/) | **The app itself** (Expo, TypeScript) |
 | [`07-data-and-security.md`](07-data-and-security.md) | Where user data is stored and how it's protected (local-first, encrypted, private) |
 
-**Status:** App chosen. iOS first, Android later, built with Expo. **US launch first** (UK later). Waiting on the name before scaffolding (see `05-getting-started.md`).
+**Status:** App chosen. iOS first, Android later, built with Expo. **US launch first** (UK later). Name: **MileMint**. The first working slice is built in `milemint/`.
