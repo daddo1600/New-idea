@@ -1,12 +1,13 @@
 import { router } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
 import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
+import { getOdometer, saveOdometer, type OdometerReadings } from '@/db/odometer-repo';
 import { listEditedTripIds } from '@/db/trips-repo';
 import { useTrips } from '@/db/use-trips';
 import { lockedTripIds } from '@/domain/plan';
@@ -35,6 +36,18 @@ export default function ReportScreen() {
     listEditedTripIds(db).then(setEditedIds, () => setEditedIds(new Set()));
   }, [db]);
 
+  // Readings for the chosen country and tax year, tagged so a stale load never shows for another year.
+  const odometerKey = `${region.code}-${year}`;
+  const [loadedOdometer, setLoadedOdometer] = useState<{ key: string; readings: OdometerReadings } | null>(null);
+  useEffect(() => {
+    const empty = { start: null, end: null };
+    getOdometer(db, region.code, Number(year)).then(
+      (readings) => setLoadedOdometer({ key: odometerKey, readings }),
+      () => setLoadedOdometer({ key: odometerKey, readings: empty }),
+    );
+  }, [db, region.code, year, odometerKey]);
+  const odometer = loadedOdometer?.key === odometerKey ? loadedOdometer.readings : null;
+
   const years = useMemo(() => {
     const withTrips = reportYears(trips ?? [], region);
     const current = currentTaxYear(region);
@@ -45,8 +58,8 @@ export default function ReportScreen() {
   const report = useMemo(() => {
     const locked = lockedTripIds(trips ?? [], isPro);
     const visible = (trips ?? []).filter((trip) => !locked.has(trip.id));
-    return buildReport(visible, region, Number(year), { places, editedIds });
-  }, [trips, isPro, region, year, places, editedIds]);
+    return buildReport(visible, region, Number(year), { places, editedIds, odometer: odometer ?? undefined });
+  }, [trips, isPro, region, year, places, editedIds, odometer]);
 
   if (!trips) return <ActivityIndicator style={styles.loading} />;
 
@@ -100,6 +113,18 @@ export default function ReportScreen() {
             </ThemedText>
           )}
         </ThemedView>
+
+        {odometer && (
+          <OdometerCard
+            key={odometerKey}
+            readings={odometer}
+            report={report}
+            onSave={async (readings) => {
+              await saveOdometer(db, region.code, Number(year), readings);
+              setLoadedOdometer({ key: odometerKey, readings });
+            }}
+          />
+        )}
 
         {error && (
           <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
@@ -163,6 +188,110 @@ export default function ReportScreen() {
   );
 }
 
+/** Start and end of tax-year odometer readings, for total distance driven and the business-use share. */
+function OdometerCard({
+  readings,
+  report,
+  onSave,
+}: {
+  readings: OdometerReadings;
+  report: ReturnType<typeof buildReport>;
+  onSave: (readings: OdometerReadings) => Promise<void>;
+}) {
+  const theme = useTheme();
+  const { region } = useRegion();
+  const show = (value: number | null) => (value === null ? '' : String(value));
+  const [start, setStart] = useState(show(readings.start));
+  const [end, setEnd] = useState(show(readings.end));
+  const [message, setMessage] = useState<{ error: boolean; text: string } | null>(null);
+
+  const parse = (text: string): number | null | undefined => {
+    const trimmed = text.trim().replace(/,/g, '');
+    if (!trimmed) return null;
+    return /^\d+(\.\d+)?$/.test(trimmed) ? Number(trimmed) : undefined;
+  };
+  const save = async () => {
+    const s = parse(start);
+    const e = parse(end);
+    if (s === undefined || e === undefined) {
+      return setMessage({ error: true, text: 'Enter odometer readings as numbers, e.g. 48210.' });
+    }
+    if (s !== null && e !== null && e < s) {
+      return setMessage({ error: true, text: 'The end reading must be higher than the start reading.' });
+    }
+    await onSave({ start: s, end: e });
+    setMessage({ error: false, text: 'Saved. The PDF report includes these readings.' });
+  };
+
+  const inputStyle = [styles.input, { color: theme.text, backgroundColor: theme.background }];
+  const unit = region.unit;
+  return (
+    <ThemedView type="backgroundElement" style={styles.card}>
+      <ThemedText type="smallBold">Odometer readings</ThemedText>
+      <ThemedText type="small" themeColor="textSecondary">
+        {region.report.askForOdometer
+          ? 'CRA needs your total distance driven to work out your business-use share.'
+          : 'Optional. Shows your total driving and the business share on the report.'}
+      </ThemedText>
+      <View style={styles.odoRow}>
+        <View style={styles.odoField}>
+          <ThemedText type="small" themeColor="textSecondary">
+            Start of {report.label}
+          </ThemedText>
+          <TextInput
+            accessibilityLabel={`Odometer at the start of ${report.label}, in ${unit}`}
+            style={inputStyle}
+            value={start}
+            onChangeText={(text) => {
+              setMessage(null);
+              setStart(text);
+            }}
+            placeholder={unit}
+            placeholderTextColor={theme.textSecondary}
+            keyboardType="decimal-pad"
+          />
+        </View>
+        <View style={styles.odoField}>
+          <ThemedText type="small" themeColor="textSecondary">
+            End of {report.label}
+          </ThemedText>
+          <TextInput
+            accessibilityLabel={`Odometer at the end of ${report.label}, in ${unit}`}
+            style={inputStyle}
+            value={end}
+            onChangeText={(text) => {
+              setMessage(null);
+              setEnd(text);
+            }}
+            placeholder={unit}
+            placeholderTextColor={theme.textSecondary}
+            keyboardType="decimal-pad"
+          />
+        </View>
+      </View>
+      {report.drivenDistance !== null && report.drivenDistance > 0 && (
+        <ThemedText type="small" themeColor="textSecondary">
+          {formatDistance(fromUnits(report.drivenDistance, region), region)} driven ·{' '}
+          {Math.round((report.businessDistance / report.drivenDistance) * 100)}% business
+        </ThemedText>
+      )}
+      {message && (
+        <ThemedText
+          type="small"
+          themeColor={message.error ? 'danger' : 'textSecondary'}
+          accessibilityRole={message.error ? 'alert' : undefined}>
+          {message.text}
+        </ThemedText>
+      )}
+      <Pressable accessibilityRole="button" onPress={save} hitSlop={8} style={styles.odoSave}>
+        <ThemedText type="smallBold" style={{ color: theme.accent }}>
+          Save readings
+        </ThemedText>
+      </Pressable>
+    </ThemedView>
+  );
+}
+
 function Line({ label, value, bold }: { label: string; value: string; bold?: boolean }) {
   return (
     <View style={styles.line}>
@@ -188,6 +317,10 @@ const styles = StyleSheet.create({
   lines: { gap: Spacing.one, marginTop: Spacing.one },
   line: { flexDirection: 'row', justifyContent: 'space-between', gap: Spacing.two },
   option: { gap: Spacing.two },
+  odoRow: { flexDirection: 'row', gap: Spacing.two },
+  odoField: { flex: 1, gap: Spacing.one },
+  odoSave: { alignSelf: 'flex-start' },
+  input: { borderRadius: 10, paddingHorizontal: Spacing.three, paddingVertical: 12, fontSize: 16 },
   outline: { alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12, borderWidth: 1 },
   filled: { alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12 },
 });

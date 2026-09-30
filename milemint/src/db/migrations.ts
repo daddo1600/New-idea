@@ -73,6 +73,17 @@ const MIGRATIONS: readonly string[] = [
   ALTER TABLE trips ADD COLUMN auto_reason TEXT
     CHECK (auto_reason IN ('learned-route', 'work-hours', 'commute'));
   `,
+  `
+  -- Odometer at the start and end of each tax year, in the region's unit.
+  -- CRA needs them for the business-use share; any report can show them.
+  CREATE TABLE odometer_readings (
+    region TEXT NOT NULL,
+    tax_year INTEGER NOT NULL,
+    start_reading REAL CHECK (start_reading IS NULL OR start_reading >= 0),
+    end_reading REAL CHECK (end_reading IS NULL OR end_reading >= 0),
+    PRIMARY KEY (region, tax_year)
+  );
+  `,
 ];
 
 export async function migrate(db: SQLiteDatabase): Promise<void> {

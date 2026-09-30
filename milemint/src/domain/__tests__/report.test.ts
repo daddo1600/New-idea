@@ -189,3 +189,27 @@ describe('each country’s printed report', () => {
   });
 });
 
+describe('odometer readings', () => {
+  const trips = [trip({ localDate: '2026-03-01', units: 3_000 }, CA)];
+
+  it('works out distance driven and the business-use share from the readings', () => {
+    const report = buildReport(trips, CA, 2026, { odometer: { start: 40_000, end: 52_000 } });
+    expect(report.drivenDistance).toBe(12_000);
+    const html = toReportHtml(report);
+    expect(html).toContain('25%'); // 3,000 business of 12,000 driven
+    expect(html).toContain('40,000 km');
+  });
+
+  it('ignores readings that go backwards', () => {
+    expect(buildReport(trips, CA, 2026, { odometer: { start: 52_000, end: 40_000 } }).drivenDistance).toBeNull();
+  });
+
+  it('only adds the section outside Canada when readings were entered', () => {
+    const us = [trip({})];
+    expect(toReportHtml(buildReport(us, US, 2026))).not.toContain('Odometer readings');
+    expect(toReportHtml(buildReport(us, US, 2026, { odometer: { start: 1_000, end: 11_000 } }))).toContain(
+      'Odometer readings',
+    );
+  });
+});
+

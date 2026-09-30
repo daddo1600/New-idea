@@ -54,6 +54,10 @@ export type MileageReport = {
   unclassifiedCount: number;
   deduction: number;
   byRate: RateTotal[];
+  /** Odometer at the start and end of the tax year (region's unit), when the user entered them. */
+  odometer: { start: number | null; end: number | null };
+  /** End minus start, when both readings make sense. */
+  drivenDistance: number | null;
 };
 
 /** Tax years that have trips, newest first. */
@@ -66,7 +70,11 @@ export function buildReport(
   trips: readonly Trip[],
   region: Region,
   taxYear: number,
-  options: { places?: readonly Place[]; editedIds?: ReadonlySet<string> } = {},
+  options: {
+    places?: readonly Place[];
+    editedIds?: ReadonlySet<string>;
+    odometer?: { start: number | null; end: number | null };
+  } = {},
 ): MileageReport {
   const kindOf = (id: string | null) => options.places?.find((place) => place.id === id)?.kind ?? null;
   // Tiers depend on every business trip of the year, so price them all first.
@@ -98,7 +106,11 @@ export function buildReport(
     unclassifiedCount: 0,
     deduction: 0,
     byRate: [],
+    odometer: options.odometer ?? { start: null, end: null },
+    drivenDistance: null,
   };
+  const { start, end } = report.odometer;
+  if (start !== null && end !== null && end >= start) report.drivenDistance = end - start;
   const byRate = new Map<string, RateTotal & { tenths: number }>();
   for (const row of rows) {
     report.totalDistance += row.distance;
@@ -228,18 +240,32 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
   const yearName = report.label.length > 4 ? `${report.label} tax year` : report.label;
   const bounds = taxYearBounds(report.taxYear, region);
   const period = `${formatDate(bounds.start, region)} to ${formatDate(bounds.end, region)}`;
-  const share =
-    report.totalDistance > 0 ? `${Math.round((report.businessDistance / report.totalDistance) * 100)}%` : '–';
-  const odometer = region.report.askForOdometer
-    ? `<h2>Odometer readings</h2>
+  const percent = (part: number, whole: number) => `${Math.round((part / whole) * 100)}%`;
+  const loggedShare = report.totalDistance > 0 ? percent(report.businessDistance, report.totalDistance) : '–';
+  const reading = (value: number | null) =>
+    value === null
+      ? '<td class="blank"></td>'
+      : `<td class="num">${escapeHtml(new Intl.NumberFormat(region.locale, { maximumFractionDigits: 1 }).format(value))} ${region.unit}</td>`;
+  const driven = report.drivenDistance;
+  const hasReadings = report.odometer.start !== null || report.odometer.end !== null;
+  // Canada always gets the section (fill-in lines if empty); elsewhere only when readings were entered.
+  const odometer =
+    region.report.askForOdometer || hasReadings
+      ? `<h2>Odometer readings</h2>
   <table class="summary">
-    <tr><td>Odometer on ${formatDate(bounds.start, region)}</td><td class="blank"></td></tr>
-    <tr><td>Odometer on ${formatDate(bounds.end, region)}</td><td class="blank"></td></tr>
-    <tr><td>Total ${units} driven in the year (end minus start)</td><td class="blank"></td></tr>
-    <tr class="total"><td>Business-use share (business ${units} ÷ total ${units} driven)</td><td class="blank"></td></tr>
+    <tr><td>Odometer on ${formatDate(bounds.start, region)}</td>${reading(report.odometer.start)}</tr>
+    <tr><td>Odometer on ${formatDate(bounds.end, region)}</td>${reading(report.odometer.end)}</tr>
+    <tr><td>Total ${units} driven in the year (end minus start)</td>${driven === null ? '<td class="blank"></td>' : `<td class="num">${distance(driven)}</td>`}</tr>
+    <tr class="total"><td>Business-use share (business ${units} ÷ total ${units} driven)</td>${
+      driven ? `<td class="num">${percent(report.businessDistance, driven)}</td>` : '<td class="blank"></td>'
+    }</tr>
   </table>
-  <p class="hint">Business share of the ${units} MileMint logged: ${share}. Use your odometer total for the claim, since it includes any driving MileMint didn’t log.</p>`
-    : '';
+  <p class="hint">${
+    driven
+      ? `Business share of the ${units} MileMint logged: ${loggedShare}. The odometer share above includes driving MileMint didn’t log, so use it for the claim.`
+      : `Business share of the ${units} MileMint logged: ${loggedShare}. Use your odometer total for the claim, since it includes any driving MileMint didn’t log.`
+  }</p>`
+      : '';
   const guidance = region.report.guidance.map((line) => `<li>${escapeHtml(line)}</li>`).join('');
 
   const rateRows = report.byRate

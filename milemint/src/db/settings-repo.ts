@@ -10,6 +10,8 @@ export type AppSettings = {
   workWeek: WorkWeek;
   /** Where the user drives; null until they choose on first launch. */
   region: RegionCode | null;
+  /** Sunday-evening "sort this week's drives" notification. */
+  weeklyReminder: boolean;
 };
 
 const WEEKDAY_9_TO_5 = [{ start: '09:00', end: '17:00' }];
@@ -18,6 +20,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   workHoursEnabled: false,
   workWeek: [[], WEEKDAY_9_TO_5, WEEKDAY_9_TO_5, WEEKDAY_9_TO_5, WEEKDAY_9_TO_5, WEEKDAY_9_TO_5, []],
   region: null,
+  weeklyReminder: false,
 };
 
 export async function loadSettings(db: SQLiteDatabase): Promise<AppSettings> {

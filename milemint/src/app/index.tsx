@@ -1,6 +1,7 @@
 import { router, Stack } from 'expo-router';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ReanimatedSwipeable, {
   SwipeDirection,
   type SwipeableMethods,
@@ -51,7 +52,11 @@ let promptedForTracking = false;
 let promptedForRegion = false;
 
 export default function HomeScreen() {
-  const { trips, places, classify, remove, reload } = useTrips();
+  const { trips, places, classify, classifyMany, remove, reload } = useTrips();
+  const insets = useSafeAreaInsets();
+  // Bulk sort: pick several trips, then mark them all at once.
+  const [selecting, setSelecting] = useState(false);
+  const [selected, setSelected] = useState<ReadonlySet<string>>(new Set());
   const { status } = useTracking(reload);
   const { isPro } = usePro();
   const { region, chosen, loaded } = useRegion();
@@ -93,6 +98,23 @@ export default function HomeScreen() {
 
   const kindOf = (id: string | null) => places.find((place: Place) => place.id === id)?.kind ?? null;
 
+  const unsorted = visible.filter((trip) => trip.classification === 'unclassified');
+  const stopSelecting = () => {
+    setSelecting(false);
+    setSelected(new Set());
+  };
+  const toggle = (trip: Trip) =>
+    setSelected((current) => {
+      const next = new Set(current);
+      if (next.has(trip.id)) next.delete(trip.id);
+      else next.add(trip.id);
+      return next;
+    });
+  const markSelected = async (classification: Classification) => {
+    await classifyMany(visible.filter((trip) => selected.has(trip.id)), classification);
+    stopSelecting();
+  };
+
   const confirmDelete = (trip: Trip) =>
     Alert.alert('Delete trip?', `${trip.startLabel} → ${trip.endLabel}`, [
       { text: 'Cancel', style: 'cancel' },
@@ -107,12 +129,22 @@ export default function HomeScreen() {
       <FlatList
         data={trips}
         keyExtractor={(trip) => trip.id}
-        contentContainerStyle={styles.list}
+        // Room for the bulk actions bar while selecting.
+        contentContainerStyle={[styles.list, selecting && { paddingBottom: 160 + insets.bottom }]}
         ListHeaderComponent={
           <View style={styles.header}>
             <SummaryCard summary={summary} commuteCents={commuteCents} />
             <TrackingCard status={status} />
             {!isPro && <PlanCard trips={trips} lockedCount={locked.size} />}
+            {visible.length > 0 && (
+              <SelectBar
+                selecting={selecting}
+                unsortedCount={unsorted.length}
+                onStart={() => setSelecting(true)}
+                onSelectUnsorted={() => setSelected(new Set(unsorted.map((trip) => trip.id)))}
+                onCancel={stopSelecting}
+              />
+            )}
           </View>
         }
         ListEmptyComponent={
@@ -123,7 +155,11 @@ export default function HomeScreen() {
           </ThemedText>
         }
         renderItem={({ item }) =>
-          locked.has(item.id) ? (
+          selecting ? (
+            locked.has(item.id) ? null : (
+              <SelectableTripRow trip={item} selected={selected.has(item.id)} onToggle={() => toggle(item)} />
+            )
+          ) : locked.has(item.id) ? (
             <LockedTripRow trip={item} worth={potentialDeduction(item, visible, region)} />
           ) : (
             <TripRow
@@ -137,6 +173,150 @@ export default function HomeScreen() {
           )
         }
       />
+      {selecting && (
+        <BulkActions
+          count={selected.size}
+          bottom={insets.bottom}
+          onBusiness={() => markSelected('business')}
+          onPersonal={() => markSelected('personal')}
+        />
+      )}
+    </ThemedView>
+  );
+}
+
+/** "Select" above the list; while selecting, quick picks and Cancel. */
+function SelectBar({
+  selecting,
+  unsortedCount,
+  onStart,
+  onSelectUnsorted,
+  onCancel,
+}: {
+  selecting: boolean;
+  unsortedCount: number;
+  onStart: () => void;
+  onSelectUnsorted: () => void;
+  onCancel: () => void;
+}) {
+  const theme = useTheme();
+  return (
+    <View style={styles.selectBar}>
+      <ThemedText type="smallBold" themeColor="textSecondary">
+        Trips
+      </ThemedText>
+      <View style={styles.selectActions}>
+        {selecting && unsortedCount > 0 && (
+          <Pressable accessibilityRole="button" hitSlop={8} onPress={onSelectUnsorted}>
+            <ThemedText type="small" style={{ color: theme.accent }}>
+              Select {unsortedCount} unsorted
+            </ThemedText>
+          </Pressable>
+        )}
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={selecting ? 'Stop selecting trips' : 'Select several trips to sort at once'}
+          hitSlop={8}
+          onPress={selecting ? onCancel : onStart}>
+          <ThemedText type="smallBold" style={{ color: theme.accent }}>
+            {selecting ? 'Cancel' : 'Select'}
+          </ThemedText>
+        </Pressable>
+      </View>
+    </View>
+  );
+}
+
+/** A trip row in select mode: tap to tick it; no swiping or opening. */
+function SelectableTripRow({
+  trip,
+  selected,
+  onToggle,
+}: {
+  trip: Trip;
+  selected: boolean;
+  onToggle: () => void;
+}) {
+  const theme = useTheme();
+  const { region } = useRegion();
+  const status =
+    trip.classification === 'unclassified' ? 'Not sorted' : trip.classification === 'business' ? 'Business' : 'Personal';
+  return (
+    <Pressable
+      accessibilityRole="checkbox"
+      accessibilityState={{ checked: selected }}
+      accessibilityLabel={`${trip.startLabel} to ${trip.endLabel}, ${trip.localDate}, ${status}`}
+      onPress={onToggle}>
+      <ThemedView
+        type="backgroundElement"
+        style={[styles.row, styles.selectableRow, selected && { borderColor: theme.accent }]}>
+        <View
+          style={[
+            styles.check,
+            { borderColor: selected ? theme.accent : theme.textSecondary },
+            selected && { backgroundColor: theme.accent },
+          ]}>
+          {selected && (
+            <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
+              ✓
+            </ThemedText>
+          )}
+        </View>
+        <View style={styles.flex}>
+          <View style={styles.rowHeader}>
+            <ThemedText type="smallBold" style={styles.route} numberOfLines={1}>
+              {trip.startLabel} → {trip.endLabel}
+            </ThemedText>
+            <ThemedText type="smallBold">{formatDistance(trip.distanceMeters, region)}</ThemedText>
+          </View>
+          <ThemedText type="small" themeColor="textSecondary">
+            {trip.localDate} · {status}
+          </ThemedText>
+        </View>
+      </ThemedView>
+    </Pressable>
+  );
+}
+
+/** Pinned to the bottom while selecting. */
+function BulkActions({
+  count,
+  bottom,
+  onBusiness,
+  onPersonal,
+}: {
+  count: number;
+  bottom: number;
+  onBusiness: () => void;
+  onPersonal: () => void;
+}) {
+  const theme = useTheme();
+  const disabled = count === 0;
+  return (
+    <ThemedView
+      type="backgroundElement"
+      style={[styles.bulkBar, { paddingBottom: Spacing.three + bottom, borderTopColor: theme.backgroundSelected }]}>
+      <ThemedText type="small" themeColor="textSecondary" style={styles.bulkCount}>
+        {count === 0 ? 'Tap trips to select them' : `${count} selected`}
+      </ThemedText>
+      <View style={styles.bulkButtons}>
+        <Pressable
+          accessibilityRole="button"
+          disabled={disabled}
+          onPress={onBusiness}
+          style={[styles.bulkButton, { backgroundColor: theme.accent, opacity: disabled ? 0.5 : 1 }]}>
+          <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
+            Business
+          </ThemedText>
+        </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          disabled={disabled}
+          onPress={onPersonal}
+          style={[styles.bulkButton, { backgroundColor: theme.backgroundSelected, opacity: disabled ? 0.5 : 1 }]}>
+          <ThemedText type="smallBold">Personal</ThemedText>
+        </Pressable>
+      </View>
     </ThemedView>
   );
 }
@@ -499,6 +679,24 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   header: { gap: Spacing.three },
+  selectBar: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: Spacing.one },
+  selectActions: { flexDirection: 'row', gap: Spacing.four, alignItems: 'center' },
+  selectableRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three, borderWidth: 2, borderColor: 'transparent' },
+  check: { width: 24, height: 24, borderRadius: 12, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
+  flex: { flex: 1, gap: Spacing.one },
+  bulkBar: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingTop: Spacing.three,
+    paddingHorizontal: Spacing.three,
+    gap: Spacing.two,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  bulkCount: { textAlign: 'center' },
+  bulkButtons: { flexDirection: 'row', gap: Spacing.two, width: '100%', maxWidth: MaxContentWidth, alignSelf: 'center' },
+  bulkButton: { flex: 1, alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12 },
   planCard: { borderRadius: 16, padding: Spacing.three, gap: Spacing.two },
   meter: { height: 6, borderRadius: 3, overflow: 'hidden' },
   meterFill: { height: '100%', borderRadius: 3 },

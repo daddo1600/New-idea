@@ -1,6 +1,6 @@
 import { router, useFocusEffect } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -23,6 +23,7 @@ import type { Place, PlaceKind } from '@/domain/places';
 import { useTheme } from '@/hooks/use-theme';
 import { usePro } from '@/purchases/pro';
 import { useRegion } from '@/region/region';
+import { disableWeeklyReminder, enableWeeklyReminder, REMINDERS_SUPPORTED } from '@/reminders/weekly';
 
 /** Monday first, as people read a work week; values are `Date.getDay()` indexes. */
 const DAYS = [
@@ -111,6 +112,8 @@ export default function SettingsScreen() {
         <ProSection />
 
         <CountrySection />
+
+        {REMINDERS_SUPPORTED && <ReminderSection />}
 
         <ThemedText type="smallBold">Work hours</ThemedText>
         <ThemedView type="backgroundElement" style={styles.card}>
@@ -262,6 +265,55 @@ export default function SettingsScreen() {
         </ThemedView>
       </ScrollView>
     </ThemedView>
+  );
+}
+
+function ReminderSection() {
+  const db = useSQLiteContext();
+  const theme = useTheme();
+  const [on, setOn] = useState<boolean | null>(null);
+  const [note, setNote] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadSettings(db).then((settings) => setOn(settings.weeklyReminder), () => setOn(false));
+  }, [db]);
+
+  const change = async (value: boolean) => {
+    setNote(null);
+    const scheduled = value ? await enableWeeklyReminder() : (await disableWeeklyReminder(), false);
+    if (value && !scheduled) {
+      setNote('Notifications are off for MileMint. Turn them on in iPhone Settings → Notifications.');
+    }
+    setOn(scheduled);
+    await saveSettings(db, { ...(await loadSettings(db)), weeklyReminder: scheduled });
+  };
+
+  return (
+    <>
+      <ThemedText type="smallBold">Reminders</ThemedText>
+      <ThemedView type="backgroundElement" style={styles.card}>
+        <View style={styles.rowBetween}>
+          <View style={styles.flex}>
+            <ThemedText type="smallBold">Weekly reminder</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">
+              A nudge on Sunday evening to sort the week’s drives.
+            </ThemedText>
+          </View>
+          <Switch
+            accessibilityLabel="Weekly reminder"
+            disabled={on === null}
+            value={on ?? false}
+            onValueChange={change}
+            trackColor={{ true: theme.accent }}
+          />
+        </View>
+        {note && (
+          <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
+            {note}
+          </ThemedText>
+        )}
+      </ThemedView>
+    </>
   );
 }
 

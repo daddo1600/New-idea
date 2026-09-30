@@ -37,6 +37,16 @@ export function useTrips() {
     [db, reload],
   );
 
+  /** Bulk sort: one reload at the end instead of one per trip. */
+  const classifyMany = useCallback(
+    async (many: readonly Trip[], classification: Classification) => {
+      // Sequential: each change is its own transaction with its own audit entry.
+      for (const trip of many) await setClassification(db, trip, classification);
+      await reload();
+    },
+    [db, reload],
+  );
+
   const remove = useCallback(
     async (trip: Trip) => {
       await deleteTrip(db, trip);
@@ -45,5 +55,5 @@ export function useTrips() {
     [db, reload],
   );
 
-  return { trips, places, classify, remove, reload };
+  return { trips, places, classify, classifyMany, remove, reload };
 }
