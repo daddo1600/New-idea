@@ -67,8 +67,10 @@ export function WorkHoursQuick({
       accessibilityLabel={`${label} ${by < 0 ? 'earlier' : 'later'}`}
       hitSlop={6}
       onPress={() => shift(key, by)}
-      style={[styles.stepButton, { backgroundColor: theme.backgroundSelected }]}>
-      <ThemedText type="smallBold">{by < 0 ? '−' : '+'}</ThemedText>
+      style={[styles.stepButton, { backgroundColor: theme.accent + '1F' }]}>
+      <ThemedText type="smallBold" style={{ color: theme.accent }}>
+        {by < 0 ? '−' : '+'}
+      </ThemedText>
     </Pressable>
   );
 
@@ -99,7 +101,12 @@ export function WorkHoursQuick({
               accessibilityLabel={name}
               accessibilityState={{ checked: on }}
               onPress={() => onChange({ ...value, days: value.days.map((d, i) => (i === day ? !d : d)) })}
-              style={[styles.day, { backgroundColor: on ? theme.accent : theme.backgroundSelected }]}>
+              style={[
+                styles.day,
+                on
+                  ? { backgroundColor: theme.accent, borderColor: theme.accent }
+                  : { backgroundColor: 'transparent', borderColor: theme.backgroundSelected },
+              ]}>
               <ThemedText type="smallBold" style={{ color: on ? theme.onAccent : theme.textSecondary }}>
                 {letter}
               </ThemedText>
@@ -116,7 +123,14 @@ export function WorkHoursQuick({
 const styles = StyleSheet.create({
   card: { borderRadius: 12, padding: Spacing.three, gap: Spacing.three },
   days: { flexDirection: 'row', justifyContent: 'space-between' },
-  day: { width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center' },
+  day: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    borderWidth: 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   stepperRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   stepperLabel: { width: 56 },
   stepper: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },

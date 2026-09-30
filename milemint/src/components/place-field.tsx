@@ -40,6 +40,7 @@ const SUGGEST_DELAY_MS = 250;
 
 export function PlaceField({
   label,
+  icon,
   placeholder,
   value,
   onChange,
@@ -49,6 +50,8 @@ export function PlaceField({
   here = true,
 }: {
   label: string;
+  /** Shown in a small mint tile before the label, e.g. 🏠. */
+  icon?: string;
   placeholder: string;
   value: PlaceDraft;
   onChange: (next: PlaceDraft) => void;
@@ -136,7 +139,14 @@ export function PlaceField({
   return (
     <ThemedView type="backgroundElement" style={styles.card}>
       <View style={styles.header}>
-        <ThemedText type="smallBold">{label}</ThemedText>
+        <View style={styles.labelRow}>
+          {icon && (
+            <View style={[styles.iconTile, { backgroundColor: theme.accent + '1F' }]}>
+              <ThemedText style={styles.iconText}>{icon}</ThemedText>
+            </View>
+          )}
+          <ThemedText type="smallBold">{label}</ThemedText>
+        </View>
         {locating ? (
           <ActivityIndicator size="small" color={theme.accent} />
         ) : (
@@ -256,6 +266,9 @@ const styles = StyleSheet.create({
   card: { borderRadius: 12, padding: Spacing.three, gap: Spacing.two },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', minHeight: 20 },
   chips: { gap: Spacing.two },
+  labelRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
+  iconTile: { width: 30, height: 30, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
+  iconText: { fontSize: 16, lineHeight: 20 },
   chip: {
     borderRadius: 999,
     borderWidth: 1,

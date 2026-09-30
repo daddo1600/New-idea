@@ -20,6 +20,7 @@ import { AlwaysGuide } from '@/components/always-guide';
 import { BrandGradient } from '@/components/brand-gradient';
 import { CountryOptions, phoneRegion } from '@/components/country-options';
 import { LeafMark } from '@/components/leaf-mark';
+import { MintWash, NumberedSteps, StepHeader } from '@/components/step-header';
 import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -208,7 +209,7 @@ export default function WelcomeScreen() {
         { paddingTop: insets.top + Spacing.three, paddingBottom: insets.bottom + Spacing.three },
       ]}>
       <StatusBar style={onBrand ? 'light' : 'auto'} />
-      {onBrand && <BrandGradient />}
+      {onBrand ? <BrandGradient /> : <MintWash />}
       <View style={styles.top}>
         {step > 0 && step < DONE ? (
           <Pressable
@@ -248,7 +249,7 @@ export default function WelcomeScreen() {
 
       <KeyboardAvoidingView style={styles.flexFill} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView
-          contentContainerStyle={styles.content}
+          contentContainerStyle={[styles.content, !onBrand && styles.contentTop]}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled">
           {step === 0 && (
@@ -276,36 +277,32 @@ export default function WelcomeScreen() {
 
           {step === 1 && (
             <>
-              <ThemedText type="subtitle" style={styles.heading}>
-                Where do you drive?
-              </ThemedText>
-              <ThemedText type="small" themeColor="textSecondary">
-                This sets your currency, miles or kilometres, tax year and official mileage rate. You can
-                change it later in Settings.
-              </ThemedText>
+              <StepHeader glyph="globe" eyebrow="Step 1 · Country" title="Where do you drive?">
+                Sets your currency, miles or kilometres, tax year and official mileage rate. You can change it
+                later.
+              </StepHeader>
               <CountryOptions value={country} onChange={setCountry} />
             </>
           )}
 
           {step === 2 && (
             <>
-              <ThemedText type="subtitle" style={styles.heading}>
-                Log every drive automatically
-              </ThemedText>
-              <ThemedText themeColor="textSecondary">
-                To notice when you start driving, even when MileMint is closed, it needs location access set
-                to “Always”. GPS only runs while you drive, and your trips never leave your iPhone.
-              </ThemedText>
+              <StepHeader glyph="location" eyebrow="Step 2 · Tracking" title="Log every drive automatically">
+                To notice you’re driving even when MileMint is closed, it needs location set to “Always”. GPS
+                only runs while you drive, and trips never leave your iPhone.
+              </StepHeader>
               {status === 'needs-always' || (status === 'needs-permission' && asked) ? (
                 <AlwaysGuide current={status === 'needs-always' ? 'While Using the App' : 'Never'} />
               ) : (
                 status !== 'unsupported' && (
                   <ThemedView type="backgroundElement" style={styles.card}>
                     <ThemedText type="smallBold">What you’ll see next</ThemedText>
-                    <ThemedText type="small" themeColor="textSecondary">
-                      1. Tap “Allow While Using App”.{'\n'}2. If iOS then offers “Change to Always Allow”, tap
-                      it. If not, we’ll show you the quick switch in Settings.
-                    </ThemedText>
+                    <NumberedSteps
+                      steps={[
+                        'Tap “Allow While Using App”.',
+                        'If iOS offers “Change to Always Allow”, tap it. If not, we’ll show you the quick switch in Settings.',
+                      ]}
+                    />
                   </ThemedView>
                 )
               )}
@@ -319,28 +316,34 @@ export default function WelcomeScreen() {
 
           {step === HOURS && (
             <>
-              <ThemedText type="subtitle" style={styles.heading}>
-                When do you usually work?
-              </ThemedText>
-              <ThemedText type="small" themeColor="textSecondary">
-                Drives during these hours are marked business for you, the rest personal. Set it once and
-                forget it. You can always swipe to change a trip.
-              </ThemedText>
+              <StepHeader glyph="clock" eyebrow="Step 3 · Work hours" title="When do you usually work?">
+                Drives in these hours are marked business, the rest personal. Set it once and forget it; you
+                can always swipe to change a trip.
+              </StepHeader>
               <WorkHoursQuick value={week} onChange={setWeek} locale={picked.locale} />
             </>
           )}
 
           {step === PLACES && (
             <>
-              <ThemedText type="subtitle" style={styles.heading}>
-                Where are home and work?
-              </ThemedText>
-              <ThemedText type="small" themeColor="textSecondary">
+              <StepHeader glyph="home" eyebrow="Step 4 · Places" title="Where are home and work?">
                 Trips then read “Home → Work” instead of street names, and commutes are flagged for you. Both
                 are optional.
-              </ThemedText>
-              <PlaceField label="Home" placeholder="Address or postcode" value={home} onChange={setHome} />
-              <PlaceField label="Work" placeholder="Address or postcode" value={work} onChange={setWork} />
+              </StepHeader>
+              <PlaceField
+                label="Home"
+                icon="🏠"
+                placeholder="Address or postcode"
+                value={home}
+                onChange={setHome}
+              />
+              <PlaceField
+                label="Work"
+                icon="💼"
+                placeholder="Address or postcode"
+                value={work}
+                onChange={setWork}
+              />
               {placeError && (
                 <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
                   {placeError}
@@ -472,6 +475,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   heading: { marginTop: Spacing.two },
+  contentTop: { justifyContent: 'flex-start', paddingTop: Spacing.five },
   points: { gap: Spacing.three, marginTop: Spacing.two },
   point: { flexDirection: 'row', gap: Spacing.two },
   flex: { flex: 1, gap: Spacing.half },
