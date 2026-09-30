@@ -51,6 +51,15 @@ export async function listTrips(db: SQLiteDatabase): Promise<Trip[]> {
   return rows.map(fromRow);
 }
 
+/** Whether an automatically logged trip with this start time is already saved. */
+export async function autoTripExists(db: SQLiteDatabase, startedAt: string): Promise<boolean> {
+  const row = await db.getFirstAsync<{ found: number }>(
+    "SELECT 1 AS found FROM trips WHERE source = 'auto' AND started_at = ? LIMIT 1;",
+    startedAt,
+  );
+  return row !== null;
+}
+
 export async function getTrip(db: SQLiteDatabase, id: string): Promise<Trip | null> {
   const row = await db.getFirstAsync<TripRow>('SELECT * FROM trips WHERE id = ?;', id);
   return row ? fromRow(row) : null;

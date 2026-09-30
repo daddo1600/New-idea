@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
@@ -25,7 +25,7 @@ const BENEFITS = [
 
 export default function ProScreen() {
   const theme = useTheme();
-  const { isPro, plans, plansLoaded, storeAvailable, busy, error, buy, restore } = usePro();
+  const { isPro, plans, plansLoaded, storeAvailable, busy, error, buy, restore, manage } = usePro();
   const { trips } = useTrips();
   const [selected, setSelected] = useState<string | null>(null);
 
@@ -40,10 +40,42 @@ export default function ProScreen() {
     return { count: drives.length, cents };
   }, [trips]);
 
-  // Close once the subscription is active, whether bought or restored.
+  // Close once the subscription becomes active here, whether bought or restored.
+  const wasPro = useRef(isPro);
   useEffect(() => {
-    if (isPro && router.canGoBack()) router.back();
+    if (isPro && !wasPro.current && router.canGoBack()) router.back();
+    wasPro.current = isPro;
   }, [isPro]);
+
+  const close = () => (router.canGoBack() ? router.back() : router.replace('/'));
+
+  if (isPro) {
+    return (
+      <ThemedView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.content}>
+          <ThemedText type="subtitle">MileMint Pro is active</ThemedText>
+          <ThemedText type="small" themeColor="textSecondary">
+            Every drive is logged and unlocked. Thanks for supporting MileMint.
+          </ThemedText>
+          {storeAvailable && (
+            <Pressable accessibilityRole="button" onPress={manage} hitSlop={8}>
+              <ThemedText type="small" style={{ color: theme.accent }}>
+                Manage subscription
+              </ThemedText>
+            </Pressable>
+          )}
+          <Pressable
+            accessibilityRole="button"
+            onPress={close}
+            style={[styles.button, { backgroundColor: theme.accent }]}>
+            <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
+              Done
+            </ThemedText>
+          </Pressable>
+        </ScrollView>
+      </ThemedView>
+    );
+  }
 
   const plan = plans.find((p) => p.id === selected) ?? plans[0];
 
@@ -155,6 +187,12 @@ export default function ProScreen() {
           </>
         )}
 
+        <Pressable accessibilityRole="button" onPress={close} style={styles.notNow}>
+          <ThemedText type="small" themeColor="textSecondary">
+            Not now
+          </ThemedText>
+        </Pressable>
+
         <View style={styles.links}>
           {storeAvailable && (
             <Pressable accessibilityRole="button" disabled={busy} onPress={onRestore} hitSlop={8}>
@@ -201,5 +239,6 @@ const styles = StyleSheet.create({
   },
   button: { alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12 },
   legal: { fontSize: 12, lineHeight: 16 },
+  notNow: { alignItems: 'center', paddingVertical: Spacing.two },
   links: { flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', gap: Spacing.four },
 });

@@ -8,6 +8,7 @@ import {
   type DetectorState,
   type LocationSample,
 } from './trip-detector';
+import type { LatLng } from './geo';
 
 /**
  * Battery policy. While parked, only a geofence around the car is armed (no
@@ -20,6 +21,8 @@ export type TrackerRecord = {
   /** When GPS was switched on, to give up on false wake-ups (e.g. a walk). */
   gpsSince: number | null;
   detector: DetectorState;
+  /** Latest position from any fix, however imprecise: a fallback place to re-arm the geofence. */
+  lastSeen?: LatLng | null;
 };
 
 export const INITIAL_TRACKER_RECORD: TrackerRecord = {
@@ -42,7 +45,24 @@ export type TrackerDecision = {
 /** The geofence was exited: switch GPS on and start watching for a drive. */
 export function onGeofenceExit(record: TrackerRecord, now: number): TrackerRecord {
   if (!record.enabled || record.mode === 'gps') return record;
-  return { ...record, mode: 'gps', gpsSince: now, detector: INITIAL_DETECTOR_STATE };
+  // Keep where the car was parked, so the drive starts there rather than at the
+  // first fix outside the geofence (150 m or more away). Restamped so the time
+  // spent parked doesn't count as part of the drive.
+  const parked = record.detector.mode === 'idle' ? record.detector.anchor : null;
+  const detector: DetectorState = parked
+    ? { mode: 'idle', anchor: { ...parked, timestamp: now - 1 } }
+    : INITIAL_DETECTOR_STATE;
+  return { ...record, mode: 'gps', gpsSince: now, detector };
+}
+
+/** Tracking was just switched on with the phone at `here`: treat it as where the car is parked. */
+export function parkedAt(here: LatLng, now: number): TrackerRecord {
+  return {
+    ...INITIAL_TRACKER_RECORD,
+    enabled: true,
+    detector: { mode: 'idle', anchor: { latitude: here.latitude, longitude: here.longitude, timestamp: now } },
+    lastSeen: here,
+  };
 }
 
 /** A batch of GPS fixes arrived (or none, with `samples` empty, on a periodic check). */
@@ -65,14 +85,18 @@ export function onLocations(
   // A wake-up that never became a drive (walked out of the geofence, GPS drift).
   const falseStart =
     idle && record.gpsSince !== null && now - record.gpsSince >= config.stopDurationMs;
-  const anchor = idle ? detector.anchor : null;
+  const latest = samples.length > 0 ? samples.reduce((a, b) => (b.timestamp > a.timestamp ? b : a)) : null;
+  const lastSeen = latest ? { latitude: latest.latitude, longitude: latest.longitude } : (record.lastSeen ?? null);
+  // With no precise fix at all (underground car park, cell-only), fall back to
+  // the rough position rather than leaving GPS on all night.
+  const anchor = idle ? (detector.anchor ?? (falseStart ? lastSeen : null)) : null;
 
   if (record.mode === 'gps' && idle && (drove || falseStart) && anchor) {
     return {
-      record: { ...record, mode: 'geofence', gpsSince: null, detector },
+      record: { ...record, mode: 'geofence', gpsSince: null, detector, lastSeen },
       completed,
       switchToGeofenceAt: { latitude: anchor.latitude, longitude: anchor.longitude },
     };
   }
-  return { record: { ...record, detector }, completed, switchToGeofenceAt: null };
+  return { record: { ...record, detector, lastSeen }, completed, switchToGeofenceAt: null };
 }

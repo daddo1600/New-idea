@@ -8,11 +8,16 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { insertTrip } from '@/db/trips-repo';
-import { isValidIsoDate, parseMiles } from '@/domain/format';
+import { formatMiles, isValidIsoDate, parseMiles } from '@/domain/format';
+import { US_BUSINESS_RATES } from '@/domain/rates';
 import { milesToMeters, toLocalIsoDate } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 
 type Kind = 'business' | 'personal';
+
+/** One manual entry longer than this is almost certainly a typo (an extra zero). */
+const MAX_TRIP_MILES = 1000;
+const EARLIEST_DATE = US_BUSINESS_RATES[0].from;
 
 export default function AddTripScreen() {
   const db = useSQLiteContext();
@@ -26,11 +31,23 @@ export default function AddTripScreen() {
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
+  /** Clears a shown error as soon as the user starts fixing it. */
+  const edited = (set: (value: string) => void) => (value: string) => {
+    setError(null);
+    set(value);
+  };
+
   const save = async () => {
     const parsedMiles = parseMiles(miles);
-    if (!isValidIsoDate(date)) return setError('Enter the date as YYYY-MM-DD.');
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return setError('Enter the date as YYYY-MM-DD.');
+    if (!isValidIsoDate(date)) return setError('That date doesn’t exist. Check the month and day.');
+    if (date > toLocalIsoDate(new Date())) return setError('That date is in the future. Add trips you’ve already made.');
+    if (date < EARLIEST_DATE) return setError(`MileMint covers trips from ${EARLIEST_DATE.slice(0, 4)} onwards.`);
     if (!from.trim() || !to.trim()) return setError('Enter where you drove from and to.');
     if (parsedMiles === null) return setError('Enter the miles driven, e.g. 12.5.');
+    if (parsedMiles > MAX_TRIP_MILES) {
+      return setError(`${formatMiles(parsedMiles)} is more than one trip should be. Check for an extra digit.`);
+    }
     if (kind === 'business' && !purpose.trim()) {
       return setError('The IRS needs a business purpose, e.g. "Client meeting".');
     }
@@ -73,20 +90,20 @@ export default function AddTripScreen() {
           onChange={setKind}
         />
         <Field label="Date (YYYY-MM-DD)">
-          <TextInput style={inputStyle} placeholderTextColor={theme.textSecondary} value={date} onChangeText={setDate} inputMode="numeric" />
+          <TextInput style={inputStyle} placeholderTextColor={theme.textSecondary} value={date} onChangeText={edited(setDate)} keyboardType="numbers-and-punctuation" />
         </Field>
         <Field label="From">
-          <TextInput style={inputStyle} placeholderTextColor={theme.textSecondary} value={from} onChangeText={setFrom} placeholder="Home" />
+          <TextInput style={inputStyle} placeholderTextColor={theme.textSecondary} value={from} onChangeText={edited(setFrom)} placeholder="Home" />
         </Field>
         <Field label="To">
-          <TextInput style={inputStyle} placeholderTextColor={theme.textSecondary} value={to} onChangeText={setTo} placeholder="Client office" />
+          <TextInput style={inputStyle} placeholderTextColor={theme.textSecondary} value={to} onChangeText={edited(setTo)} placeholder="Client office" />
         </Field>
         <Field label="Miles">
           <TextInput
             style={inputStyle}
             placeholderTextColor={theme.textSecondary}
             value={miles}
-            onChangeText={setMiles}
+            onChangeText={edited(setMiles)}
             inputMode="decimal"
             placeholder="12.5"
           />
@@ -96,8 +113,8 @@ export default function AddTripScreen() {
             style={inputStyle}
             placeholderTextColor={theme.textSecondary}
             value={purpose}
-            onChangeText={setPurpose}
-            placeholder="Client meeting"
+            onChangeText={edited(setPurpose)}
+            placeholder={kind === 'business' ? 'Client meeting' : 'Optional'}
           />
         </Field>
         {error && (

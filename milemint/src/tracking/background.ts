@@ -6,7 +6,7 @@ import { Platform } from 'react-native';
 import { getBackgroundDatabase } from '@/db/database';
 import { listPlaces } from '@/db/places-repo';
 import { loadSettings } from '@/db/settings-repo';
-import { insertTrip, listClassificationHistory } from '@/db/trips-repo';
+import { autoTripExists, insertTrip, listClassificationHistory } from '@/db/trips-repo';
 import { suggestClassification } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
 import { matchPlace } from '@/domain/places';
@@ -15,6 +15,7 @@ import {
   INITIAL_TRACKER_RECORD,
   onGeofenceExit,
   onLocations,
+  parkedAt,
 } from '@/domain/tracker-policy';
 import { toLocalIsoDate } from '@/domain/trip';
 import type { DetectedTrip, LocationSample } from '@/domain/trip-detector';
@@ -100,6 +101,9 @@ async function labelFor(point: LatLng): Promise<string> {
 }
 
 async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise<void> {
+  // If the app was killed after saving a trip but before saving the tracker
+  // state, the same drive is detected again on the next wake-up.
+  if (await autoTripExists(db, new Date(trip.startedAt).toISOString())) return;
   const [places, history, settings] = await Promise.all([
     listPlaces(db),
     listClassificationHistory(db),
@@ -212,7 +216,8 @@ export async function startTracking(db: SQLiteDatabase): Promise<void> {
   if (!TRACKING_SUPPORTED) return;
   const here = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
   await serial(async () => {
-    await saveTrackerRecord(db, { ...INITIAL_TRACKER_RECORD, enabled: true });
+    // The phone is where the car is parked, so the first drive starts from here.
+    await saveTrackerRecord(db, parkedAt(here.coords, Date.now()));
     await stopTask(LOCATION_TASK, Location.hasStartedLocationUpdatesAsync, Location.stopLocationUpdatesAsync);
     await armGeofence(here.coords);
   });

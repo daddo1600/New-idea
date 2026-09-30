@@ -66,13 +66,24 @@ export type DetectedTrip = {
 };
 
 export type DetectorState =
-  | { mode: 'idle'; anchor: Fix | null }
+  | {
+      mode: 'idle';
+      anchor: Fix | null;
+      /**
+       * A fix far from the car with no speed reported: a Wi-Fi or cell fix can
+       * jump hundreds of metres while parked, so a drive only starts once a
+       * second fix confirms it.
+       */
+      candidate?: Fix | null;
+    }
   | {
       mode: 'driving';
       start: Fix;
       last: Fix;
       distanceM: number;
       maxSpeedMps: number;
+      /** Fastest speed the OS itself reported (absent in state saved by older versions). */
+      reportedMaxSpeedMps?: number;
       route: LatLng[];
       /** Where a possible stop began, and the distance driven up to it. */
       stop: { at: Fix; distanceM: number } | null;
@@ -97,8 +108,14 @@ function finish(
   config: DetectorConfig,
 ): StepResult {
   const idle: DetectorState = { mode: 'idle', anchor: end };
+  // Real driving reports its speed. Without that, only trust a trip that ended
+  // somewhere else: a "drive" out and back to the car built from GPS jumps is noise.
+  const reportedDriving = (state.reportedMaxSpeedMps ?? state.maxSpeedMps) >= config.minPeakSpeedMps;
+  const endedElsewhere = distanceMeters(state.start, end) >= config.startDistanceM;
   const isDrive =
-    distanceM >= config.minTripDistanceM && state.maxSpeedMps >= config.minPeakSpeedMps;
+    distanceM >= config.minTripDistanceM &&
+    state.maxSpeedMps >= config.minPeakSpeedMps &&
+    (reportedDriving || endedElsewhere);
   if (!isDrive) return { state: idle, completed: [] };
   const route = [...state.route];
   const lastRoute = route[route.length - 1];
@@ -152,6 +169,16 @@ export function step(
       // Still parked: keep the anchor where the car sits, not wherever GPS drifts.
       return { state: { mode: 'idle', anchor: anchor && moved < config.stopRadiusM ? anchor : fix }, completed: [] };
     }
+    if (!fastEnough) {
+      const candidate = state.candidate;
+      const confirmed =
+        candidate &&
+        fix.timestamp > candidate.timestamp &&
+        distanceMeters(anchor, candidate) >= config.startDistanceM &&
+        distanceMeters(candidate, fix) / Math.max(1, (fix.timestamp - candidate.timestamp) / 1000) <=
+          config.maxPlausibleSpeedMps;
+      if (!confirmed) return { state: { mode: 'idle', anchor, candidate: fix }, completed: [] };
+    }
     // The drive started where the car was parked, so count the distance from there.
     const elapsedS = Math.max(1, (fix.timestamp - anchor.timestamp) / 1000);
     const plausible = moved / elapsedS <= config.maxPlausibleSpeedMps;
@@ -162,6 +189,7 @@ export function step(
         last: plausible ? fix : anchor,
         distanceM: plausible ? moved : 0,
         maxSpeedMps: Math.max(speed ?? 0, plausible ? Math.min(moved / elapsedS, config.maxPlausibleSpeedMps) : 0),
+        reportedMaxSpeedMps: speed ?? 0,
         route: plausible
           ? [
               { latitude: anchor.latitude, longitude: anchor.longitude },
@@ -191,6 +219,7 @@ export function step(
 
   const distanceM = state.distanceM + hop;
   const maxSpeedMps = Math.max(state.maxSpeedMps, speed ?? Math.min(impliedSpeed, config.maxPlausibleSpeedMps));
+  const reportedMaxSpeedMps = Math.max(state.reportedMaxSpeedMps ?? state.maxSpeedMps, speed ?? 0);
   const lastRoute = state.route[state.route.length - 1];
   const route =
     !lastRoute || distanceMeters(lastRoute, fix) >= config.routePointSpacingM
@@ -204,11 +233,11 @@ export function step(
     stop = { at: fix, distanceM };
   } else if (fix.timestamp - stop.at.timestamp >= config.stopDurationMs) {
     // Parked long enough. End where the stop began; jitter while parked isn't mileage.
-    return finish({ ...state, route }, stop.at, stop.distanceM, config);
+    return finish({ ...state, route, reportedMaxSpeedMps }, stop.at, stop.distanceM, config);
   }
 
   return {
-    state: { ...state, last: fix, distanceM, maxSpeedMps, route, stop },
+    state: { ...state, last: fix, distanceM, maxSpeedMps, reportedMaxSpeedMps, route, stop },
     completed: [],
   };
 }

@@ -4,6 +4,7 @@ import {
   INITIAL_TRACKER_RECORD,
   onGeofenceExit,
   onLocations,
+  parkedAt,
   type TrackerRecord,
 } from '../tracker-policy';
 import type { LocationSample } from '../trip-detector';
@@ -61,5 +62,32 @@ describe('tracker policy', () => {
     const decision = onLocations(record, samples, T0 + 10_000);
     expect(decision.record.mode).toBe('gps');
     expect(decision.record.detector.mode).toBe('driving');
+  });
+
+  it('starts the drive where the car was parked, not at the geofence edge', () => {
+    const here = { latitude: 37.3382, longitude: -121.8863 };
+    // The geofence only fires once the car is ~150 m away; the first GPS fix is out there.
+    let record = onGeofenceExit(parkedAt(here, T0 - 3_600_000), T0);
+    const samples: LocationSample[] = [];
+    for (let s = 0; s <= 90; s += 5) samples.push(sample(160 + 13 * s, T0 + s * 1000, 13));
+    const arrived = T0 + 95_000;
+    for (let s = 0; s <= 360; s += 30) samples.push(sample(160 + 13 * 90, arrived + s * 1000, 0));
+    const decision = onLocations(record, samples, arrived + 360_000);
+    expect(decision.completed).toHaveLength(1);
+    const [trip] = decision.completed;
+    expect(trip.start.longitude).toBeCloseTo(here.longitude, 5);
+    // The 160 m to the first fix counts too.
+    expect(trip.distanceMeters).toBeGreaterThan(160 + 13 * 90 - 20);
+    record = decision.record;
+    expect(record.mode).toBe('geofence');
+  });
+
+  it('turns GPS off even when every fix is too imprecise to use', () => {
+    const record = onGeofenceExit(enabled, T0);
+    const poor: LocationSample[] = [];
+    for (let s = 0; s <= 400; s += 20) poor.push({ ...sample(0, T0 + s * 1000, -1), accuracy: 120 });
+    const later = onLocations(record, poor, T0 + 6 * 60_000);
+    expect(later.record.mode).toBe('geofence');
+    expect(later.switchToGeofenceAt).not.toBeNull();
   });
 });

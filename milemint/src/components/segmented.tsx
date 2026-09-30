@@ -11,14 +11,18 @@ export function Segmented<T extends string>({
   options,
   value,
   onChange,
+  accessibilityLabelFor,
 }: {
   options: readonly Option<T>[];
   value: T | null;
   onChange: (value: T) => void;
+  /** Spoken label per option when the visible one lacks context, e.g. "Mark Home → Office as business". */
+  accessibilityLabelFor?: (option: Option<T>) => string;
 }) {
   const theme = useTheme();
   return (
-    <View style={[styles.row, { backgroundColor: theme.backgroundElement }]}>
+    // Outlined so it reads as a control even on a card of the same colour.
+    <View style={[styles.row, { borderColor: theme.backgroundSelected }]}>
       {options.map((option) => {
         const selected = option.value === value;
         return (
@@ -26,11 +30,12 @@ export function Segmented<T extends string>({
             key={option.value}
             accessibilityRole="button"
             accessibilityState={{ selected }}
+            accessibilityLabel={accessibilityLabelFor?.(option)}
             onPress={() => onChange(option.value)}
             style={[styles.option, selected && { backgroundColor: theme.accent }]}>
             <ThemedText
               type="smallBold"
-              style={{ color: selected ? theme.onAccent : theme.textSecondary }}>
+              style={{ color: selected ? theme.onAccent : value === null ? theme.text : theme.textSecondary }}>
               {option.label}
             </ThemedText>
           </Pressable>
@@ -41,7 +46,7 @@ export function Segmented<T extends string>({
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: 'row', borderRadius: 10, padding: Spacing.half },
+  row: { flexDirection: 'row', borderRadius: 10, borderWidth: 1, padding: Spacing.half },
   option: {
     flex: 1,
     alignItems: 'center',

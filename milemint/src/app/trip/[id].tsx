@@ -1,18 +1,25 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, TextInput } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, TextInput } from 'react-native';
 
 import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
-import { insertPlace } from '@/db/places-repo';
-import { getRoute, getTrip, setTripPlace, updateTripDetails } from '@/db/trips-repo';
+import { insertPlace, listPlaces } from '@/db/places-repo';
+import {
+  deleteTrip,
+  getRoute,
+  getTrip,
+  setClassification,
+  setTripPlace,
+  updateTripDetails,
+} from '@/db/trips-repo';
 import { formatMiles } from '@/domain/format';
 import type { LatLng } from '@/domain/geo';
 import type { PlaceKind } from '@/domain/places';
-import { metersToMiles, type Trip } from '@/domain/trip';
+import { metersToMiles, type Classification, type Trip } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 
 const KIND_OPTIONS = [
@@ -23,6 +30,11 @@ const KIND_OPTIONS = [
 ] as const satisfies readonly { value: PlaceKind; label: string }[];
 
 type End = 'start' | 'end';
+
+const CLASSIFY_OPTIONS = [
+  { value: 'business', label: 'Business' },
+  { value: 'personal', label: 'Personal' },
+] as const satisfies readonly { value: Classification; label: string }[];
 
 export default function TripScreen() {
   const db = useSQLiteContext();
@@ -67,6 +79,38 @@ export default function TripScreen() {
 
   const business = trip.classification === 'business';
 
+  const classify = async (classification: Classification) => {
+    await setClassification(db, trip, classification);
+    setTrip(await getTrip(db, trip.id));
+  };
+
+  const confirmDelete = () =>
+    Alert.alert('Delete trip?', `${trip.startLabel} → ${trip.endLabel}`, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          await deleteTrip(db, trip);
+          router.back();
+        },
+      },
+    ]);
+
+  /**
+   * Names one end of the trip. The typed name is saved on the trip too, so the
+   * row and the place agree, and an existing place with that name is reused.
+   */
+  const saveAsPlace = async (end: End, name: string, kind: PlaceKind) => {
+    await updateTripDetails(db, trip, end === 'start' ? { startLabel: name } : { endLabel: name });
+    const existing = (await listPlaces(db)).find(
+      (place) => place.name.trim().toLowerCase() === name.toLowerCase(),
+    );
+    const place = existing ?? (await insertPlace(db, { name, kind, at: pointFor(end) }));
+    await setTripPlace(db, trip.id, end, place.id);
+    setTrip(await getTrip(db, trip.id));
+  };
+
   const save = async () => {
     if (!startLabel.trim() || !endLabel.trim()) return setError('Enter where you drove from and to.');
     if (business && !purpose.trim()) {
@@ -95,9 +139,14 @@ export default function TripScreen() {
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.form} keyboardShouldPersistTaps="handled">
         <ThemedText type="small" themeColor="textSecondary">
-          {trip.localDate} · {formatMiles(metersToMiles(trip.distanceMeters))} ·{' '}
-          {business ? 'Business' : trip.classification === 'personal' ? 'Personal' : 'Not classified'}
+          {trip.localDate} · {formatMiles(metersToMiles(trip.distanceMeters))}
+          {trip.source === 'manual' ? ' · Added manually' : ''}
         </ThemedText>
+        <Segmented
+          options={CLASSIFY_OPTIONS}
+          value={trip.classification === 'unclassified' ? null : trip.classification}
+          onChange={classify}
+        />
         <Field label="From">
           <TextInput style={inputStyle} value={startLabel} onChangeText={setStartLabel} />
         </Field>
@@ -110,7 +159,7 @@ export default function TripScreen() {
             placeholderTextColor={theme.textSecondary}
             value={purpose}
             onChangeText={setPurpose}
-            placeholder="Client meeting"
+            placeholder={business ? 'Client meeting' : 'Optional'}
             autoFocus={business && !trip.purpose}
           />
         </Field>
@@ -135,22 +184,22 @@ export default function TripScreen() {
               end="start"
               name={startLabel.trim()}
               linked={trip.startPlaceId !== null}
-              onSave={async (kind) => {
-                const place = await insertPlace(db, { name: startLabel.trim(), kind, at: pointFor('start') });
-                await setTripPlace(db, trip.id, 'start', place.id);
-              }}
+              onSave={(kind) => saveAsPlace('start', startLabel.trim(), kind)}
             />
             <SaveAsPlace
               end="end"
               name={endLabel.trim()}
               linked={trip.endPlaceId !== null}
-              onSave={async (kind) => {
-                const place = await insertPlace(db, { name: endLabel.trim(), kind, at: pointFor('end') });
-                await setTripPlace(db, trip.id, 'end', place.id);
-              }}
+              onSave={(kind) => saveAsPlace('end', endLabel.trim(), kind)}
             />
           </>
         )}
+
+        <Pressable accessibilityRole="button" onPress={confirmDelete} style={styles.delete}>
+          <ThemedText type="small" themeColor="danger">
+            Delete trip
+          </ThemedText>
+        </Pressable>
       </ScrollView>
     </ThemedView>
   );
@@ -243,6 +292,7 @@ const styles = StyleSheet.create({
   field: { gap: Spacing.one },
   input: { borderRadius: 10, paddingHorizontal: Spacing.three, paddingVertical: 12, fontSize: 16 },
   button: { alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12 },
+  delete: { alignItems: 'center', paddingVertical: Spacing.three },
   placeCard: { borderRadius: 12, padding: Spacing.three, gap: Spacing.two },
   placeButton: {
     alignItems: 'center',

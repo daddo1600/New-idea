@@ -56,6 +56,20 @@ export default function HomeScreen() {
     () => summarizeYear((trips ?? []).filter((trip) => !locked.has(trip.id)), year),
     [trips, locked, year],
   );
+  // Home ↔ work drives the user marked business anyway. Kept in the total (a
+  // home office can make them deductible), but called out so they get a second look.
+  const commuteCents = useMemo(() => {
+    const kind = (id: string | null) => places.find((place) => place.id === id)?.kind ?? null;
+    return (trips ?? [])
+      .filter(
+        (trip) =>
+          !locked.has(trip.id) &&
+          trip.localDate.startsWith(String(year)) &&
+          trip.classification === 'business' &&
+          isCommute(kind(trip.startPlaceId), kind(trip.endPlaceId)),
+      )
+      .reduce((sum, trip) => sum + tripDeductionCents(trip), 0);
+  }, [trips, places, locked, year]);
 
   useEffect(() => {
     if (status === 'needs-permission' && !promptedForTracking) {
@@ -85,7 +99,7 @@ export default function HomeScreen() {
         contentContainerStyle={styles.list}
         ListHeaderComponent={
           <View style={styles.header}>
-            <SummaryCard year={year} summary={summary} />
+            <SummaryCard year={year} summary={summary} commuteCents={commuteCents} />
             <TrackingCard status={status} />
             {!isPro && <PlanCard trips={trips} lockedCount={locked.size} />}
           </View>
@@ -117,9 +131,11 @@ export default function HomeScreen() {
 function SummaryCard({
   year,
   summary,
+  commuteCents,
 }: {
   year: number;
   summary: ReturnType<typeof summarizeYear>;
+  commuteCents: number;
 }) {
   return (
     <ThemedView type="backgroundElement" style={styles.card}>
@@ -133,6 +149,11 @@ function SummaryCard({
         {formatMiles(summary.businessMiles)} business
         {summary.unclassifiedCount > 0 && ` · ${summary.unclassifiedCount} to review`}
       </ThemedText>
+      {commuteCents > 0 && (
+        <ThemedText type="small" themeColor="danger">
+          Includes {formatCents(commuteCents)} from home ↔ work commutes, which usually aren’t deductible.
+        </ThemedText>
+      )}
     </ThemedView>
   );
 }
@@ -227,6 +248,7 @@ function TripRow({
             options={CLASSIFY_OPTIONS}
             value={unclassified ? null : trip.classification}
             onChange={onClassify}
+            accessibilityLabelFor={(option) => `Mark ${trip.startLabel} to ${trip.endLabel} as ${option.label.toLowerCase()}`}
           />
         </ThemedView>
       </Pressable>

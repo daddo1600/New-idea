@@ -149,4 +149,28 @@ describe('trip detector', () => {
     const second = stepAll(restored, all.slice(half));
     expect([...first.completed, ...second.completed]).toHaveLength(1);
   });
+
+  it('ignores a single Wi-Fi jump while parked (no speed reported)', () => {
+    const quiet = parked(0, T0, 3).map((f) => ({ ...f, speed: -1, accuracy: 30 }));
+    const jump = { ...at(320, T0 + 4 * MIN, -1, 50), speed: -1 };
+    const back = parked(0, T0 + 4 * MIN + 10_000, 10).map((f) => ({ ...f, speed: -1, accuracy: 30 }));
+    const { state, completed } = stepAll(INITIAL_DETECTOR_STATE, [...quiet, jump, ...back]);
+    const ended = flush(state, T0 + 30 * MIN);
+    expect([...completed, ...ended.completed]).toHaveLength(0);
+  });
+
+  it('still records a drive from sparse fixes with no speed once a second fix confirms it', () => {
+    const noSpeed = (s: LocationSample) => ({ ...s, speed: -1 });
+    // One fix every 30 s at 15 m/s: each is 450 m on, beyond the start distance.
+    const sparse: LocationSample[] = [];
+    for (let s = 30; s <= 330; s += 30) sparse.push(at(15 * s, T0 + 2 * MIN + s * 1000, -1, 20, s));
+    const samples = [
+      ...parked(0, T0, 2).map(noSpeed),
+      ...sparse,
+      ...parked(4950, T0 + 2 * MIN + 360_000, 6).map(noSpeed),
+    ];
+    const { completed } = stepAll(INITIAL_DETECTOR_STATE, samples);
+    expect(completed).toHaveLength(1);
+    expect(completed[0].distanceMeters).toBeGreaterThan(4500);
+  });
 });

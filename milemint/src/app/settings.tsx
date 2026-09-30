@@ -42,6 +42,8 @@ const KIND_LABELS: Record<PlaceKind, string> = {
 };
 
 const NEW_SHIFT: WorkShift = { start: '09:00', end: '17:00' };
+/** A second shift that day, pre-filled so it's clearly editable rather than a hint. */
+const EXTRA_SHIFT: WorkShift = { start: '18:00', end: '22:00' };
 
 export default function SettingsScreen() {
   const db = useSQLiteContext();
@@ -156,7 +158,7 @@ export default function SettingsScreen() {
                           onChangeText={(start) => setShift({ ...shift, start })}
                           placeholder="09:00"
                           placeholderTextColor={theme.textSecondary}
-                          inputMode="numeric"
+                          keyboardType="numbers-and-punctuation"
                           maxLength={5}
                         />
                         <ThemedText type="small" themeColor="textSecondary">
@@ -169,7 +171,7 @@ export default function SettingsScreen() {
                           onChangeText={(end) => setShift({ ...shift, end })}
                           placeholder="17:00"
                           placeholderTextColor={theme.textSecondary}
-                          inputMode="numeric"
+                          keyboardType="numbers-and-punctuation"
                           maxLength={5}
                         />
                         {shifts.length > 1 && (
@@ -190,7 +192,7 @@ export default function SettingsScreen() {
                     <Pressable
                       accessibilityRole="button"
                       hitSlop={8}
-                      onPress={() => updateDay(weekday, [...shifts, { start: '', end: '' }])}>
+                      onPress={() => updateDay(weekday, [...shifts, { ...EXTRA_SHIFT }])}>
                       <ThemedText type="small" style={{ color: theme.accent }}>
                         Add shift
                       </ThemedText>
