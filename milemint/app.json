@@ -63,7 +63,8 @@
           "motionUsagePermission": "MileMint does not use motion data. Drives are detected from location only."
         }
       ],
-      "expo-iap"
+      "expo-iap",
+      "./plugins/without-push-entitlement"
     ],
     "experiments": {
       "typedRoutes": true,
