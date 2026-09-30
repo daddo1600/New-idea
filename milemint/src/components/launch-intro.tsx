@@ -10,11 +10,12 @@ import Animated, {
   withDelay,
   withTiming,
 } from 'react-native-reanimated';
-import Svg, { Circle, Defs, G, LinearGradient, Path, Stop } from 'react-native-svg';
+import { Circle, Path } from 'react-native-svg';
 import { scheduleOnRN } from 'react-native-worklets';
 
-import { LEAF_PATH, LEAF_VEINS, ROAD_PATH } from '@/brand/leaf';
+import { ROAD_PATH } from '@/brand/leaf';
 import { phoneRegion } from '@/components/country-options';
+import { LeafMark } from '@/components/leaf-mark';
 import { formatDistance, formatMoney, fromUnits, ratePeriodFor, REGIONS } from '@/domain/regions';
 import { toLocalIsoDate } from '@/domain/trip';
 
@@ -139,48 +140,17 @@ export function LaunchIntro({ onDone }: { onDone: () => void }) {
       pointerEvents="none"
       style={[StyleSheet.absoluteFill, styles.container, fadeStyle]}>
       <Animated.View style={logoStyle}>
-        <Svg width={SPLASH_SIZE} height={SPLASH_SIZE} viewBox="0 0 1024 1024">
-          <Defs>
-            <LinearGradient id="leaf" x1="0" y1="0" x2="1" y2="1">
-              <Stop offset="0" stopColor="#BBF7D0" />
-              <Stop offset="0.5" stopColor="#4ADE80" />
-              <Stop offset="1" stopColor="#16A34A" />
-            </LinearGradient>
-          </Defs>
-          <G transform="translate(530 490) rotate(40)">
-            <Path d={LEAF_PATH} transform="translate(-14 18)" fill="#011C14" fillOpacity={0.3} />
-            <Path d={LEAF_PATH} fill="url(#leaf)" />
-            {LEAF_VEINS.map((vein) => (
-              <Path
-                key={vein}
-                d={vein}
-                stroke="#15803D"
-                strokeOpacity={0.45}
-                strokeWidth={13}
-                fill="none"
-                strokeLinecap="round"
-              />
-            ))}
-            <Path d={ROAD_PATH} stroke="#064E3B" strokeWidth={62} fill="none" strokeLinecap="round" />
-            <Path
-              d={ROAD_PATH}
-              stroke="#FFFFFF"
-              strokeWidth={10}
-              fill="none"
-              strokeDasharray="30 26"
-              strokeLinecap="round"
-            />
-            <AnimatedPath
-              d={ROAD_PATH}
-              stroke="#064E3B"
-              strokeWidth={16}
-              fill="none"
-              strokeDasharray={[roadLength, roadLength]}
-              animatedProps={unpavedProps}
-            />
-            <AnimatedCircle r={58} fill="#FACC15" stroke="#FFFFFF" strokeWidth={16} animatedProps={carProps} />
-          </G>
-        </Svg>
+        <LeafMark size={SPLASH_SIZE} car={false}>
+          <AnimatedPath
+            d={ROAD_PATH}
+            stroke="#064E3B"
+            strokeWidth={16}
+            fill="none"
+            strokeDasharray={[roadLength, roadLength]}
+            animatedProps={unpavedProps}
+          />
+          <AnimatedCircle r={58} fill="#FACC15" stroke="#FFFFFF" strokeWidth={16} animatedProps={carProps} />
+        </LeafMark>
       </Animated.View>
       <Animated.View style={[styles.counter, counterStyle]}>
         <Text style={styles.money}>{formatMoney(Math.round(units * ratePerUnit), region)}</Text>

@@ -1,12 +1,15 @@
 import { Redirect, router, Stack } from 'expo-router';
-import { useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ReanimatedSwipeable, {
   SwipeDirection,
   type SwipeableMethods,
 } from 'react-native-gesture-handler/ReanimatedSwipeable';
+import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
+import { LeafMark } from '@/components/leaf-mark';
 import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -111,7 +114,11 @@ export default function HomeScreen() {
   return (
     <ThemedView style={styles.container}>
       <Stack.Screen
-        options={{ headerLeft: () => <SettingsLink />, headerRight: () => <AddMissedTripLink /> }}
+        options={{
+          headerTitle: () => <BrandTitle />,
+          headerLeft: () => <SettingsLink />,
+          headerRight: () => <AddMissedTripLink />,
+        }}
       />
       <FlatList
         data={trips}
@@ -135,11 +142,15 @@ export default function HomeScreen() {
           </View>
         }
         ListEmptyComponent={
-          <ThemedText themeColor="textSecondary" style={styles.empty}>
-            {status === 'on'
-              ? 'Your next drive will appear here after you park.'
-              : 'Turn on automatic tracking and your drives will appear here.'}
-          </ThemedText>
+          <View style={styles.empty}>
+            <LeafMark size={72} />
+            <ThemedText type="smallBold">{status === 'on' ? 'Ready when you are' : 'No drives yet'}</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary" style={styles.emptyBody}>
+              {status === 'on'
+                ? 'Just drive. Each trip appears here after you park, ready to swipe business or personal.'
+                : 'Turn on automatic tracking and your drives will appear here.'}
+            </ThemedText>
+          </View>
         }
         renderItem={({ item }) =>
           selecting ? (
@@ -309,39 +320,49 @@ function BulkActions({
 }
 
 function SummaryCard({ summary, commuteCents }: { summary: TaxYearSummary; commuteCents: number }) {
-  const theme = useTheme();
   const { region } = useRegion();
   const total = formatMoney(summary.deduction, region);
   return (
-    <ThemedView type="backgroundElement" style={styles.card}>
-      <ThemedText type="small" themeColor="textSecondary">
+    <View style={styles.card}>
+      {/* The app icon's gradient, with the leaf growing out of the corner. */}
+      <Svg style={StyleSheet.absoluteFill} preserveAspectRatio="none" viewBox="0 0 100 100">
+        <Defs>
+          <LinearGradient id="hero" x1="0" y1="0" x2="1" y2="1">
+            <Stop offset="0" stopColor="#0E9F6E" />
+            <Stop offset="1" stopColor="#053D2E" />
+          </LinearGradient>
+        </Defs>
+        <Rect width="100" height="100" fill="url(#hero)" />
+      </Svg>
+      <View style={styles.watermark} pointerEvents="none">
+        <LeafMark size={190} opacity={0.22} />
+      </View>
+      <Text style={styles.heroLabel}>
         Deductions found in {summary.label}
         {summary.label.length > 4 ? ' tax year' : ''}
-      </ThemedText>
-      <ThemedText type="title" accessibilityLabel={`${total} found`}>
+      </Text>
+      <Text style={styles.heroTotal} accessibilityLabel={`${total} found`}>
         {total}
-      </ThemedText>
-      <ThemedText type="small" themeColor="textSecondary">
+      </Text>
+      <Text style={styles.heroLabel}>
         {formatDistance(summary.businessMeters, region)} business
         {summary.unclassifiedCount > 0 && ` · ${summary.unclassifiedCount} to review`}
-      </ThemedText>
+      </Text>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="Reports: export your mileage log"
         hitSlop={8}
         onPress={() => router.push('/report')}
         style={styles.reportLink}>
-        <ThemedText type="smallBold" style={{ color: theme.accent }}>
-          Export report
-        </ThemedText>
+        <Text style={styles.reportLinkText}>Export report</Text>
       </Pressable>
       {commuteCents > 0 && (
-        <ThemedText type="small" themeColor="danger">
+        <Text style={styles.heroWarning}>
           Includes {formatMoney(commuteCents, region)} from home ↔ work commutes, which usually aren’t
           deductible.
-        </ThemedText>
+        </Text>
       )}
-    </ThemedView>
+    </View>
   );
 }
 
@@ -560,6 +581,33 @@ function formatTime(iso: string): string {
   return new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
 }
 
+function BrandTitle() {
+  const theme = useTheme();
+  return (
+    <View style={styles.brand} accessibilityRole="header" accessibilityLabel="MileMint">
+      <LeafMark size={26} />
+      <Text style={[styles.brandText, { color: theme.text }]}>
+        Mile<Text style={{ color: theme.accent }}>Mint</Text>
+      </Text>
+    </View>
+  );
+}
+
+/** Gently pulses while automatic tracking is on. */
+function LiveDot({ color }: { color: string }) {
+  const pulse = useSharedValue(0);
+  useEffect(() => {
+    pulse.value = withRepeat(withTiming(1, { duration: 1600, easing: Easing.out(Easing.quad) }), -1);
+  }, [pulse]);
+  const ring = useAnimatedStyle(() => ({ opacity: 0.5 * (1 - pulse.value), transform: [{ scale: 1 + 1.4 * pulse.value }] }));
+  return (
+    <View style={styles.liveDot}>
+      <Animated.View style={[StyleSheet.absoluteFill, styles.dot, { backgroundColor: color }, ring]} />
+      <View style={[styles.dot, { backgroundColor: color }]} />
+    </View>
+  );
+}
+
 function SettingsLink() {
   const theme = useTheme();
   return (
@@ -614,9 +662,14 @@ function TrackingCard({ status }: { status: TrackingStatus | null }) {
   if (status === 'on') {
     return (
       <View style={styles.trackingOn} accessibilityRole="text">
-        <View style={[styles.dot, { backgroundColor: theme.accent }]} />
-        <ThemedText type="small" themeColor="textSecondary">
-          Automatic tracking on. Drives are logged when you park.
+        <View style={[styles.livePill, { backgroundColor: theme.accent + '1F' }]}>
+          <LiveDot color={theme.accent} />
+          <ThemedText type="smallBold" style={{ color: theme.accent }}>
+            Tracking on
+          </ThemedText>
+        </View>
+        <ThemedText type="small" themeColor="textSecondary" style={styles.flex}>
+          Drives are logged when you park.
         </ThemedText>
       </View>
     );
@@ -653,9 +706,33 @@ const styles = StyleSheet.create({
     maxWidth: MaxContentWidth,
     alignSelf: 'center',
   },
-  card: { borderRadius: 16, padding: Spacing.four, gap: Spacing.one },
-  reportLink: { alignSelf: 'flex-start', marginTop: Spacing.one },
-  empty: { textAlign: 'center', marginTop: Spacing.five },
+  card: { borderRadius: 20, padding: Spacing.four, gap: Spacing.one, overflow: 'hidden' },
+  watermark: { position: 'absolute', right: -44, bottom: -52 },
+  heroLabel: { color: '#D1FAE5', fontSize: 15, fontWeight: '500' },
+  heroTotal: { color: '#FFFFFF', fontSize: 48, lineHeight: 56, fontWeight: '800', fontVariant: ['tabular-nums'] },
+  heroWarning: { color: '#FDE68A', fontSize: 14, lineHeight: 20 },
+  reportLink: {
+    alignSelf: 'flex-start',
+    marginTop: Spacing.two,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 999,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
+  },
+  reportLinkText: { color: '#064E3B', fontSize: 14, fontWeight: '700' },
+  empty: { alignItems: 'center', gap: Spacing.two, marginTop: Spacing.five, paddingHorizontal: Spacing.four },
+  emptyBody: { textAlign: 'center' },
+  brand: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  brandText: { fontSize: 18, fontWeight: '800', letterSpacing: -0.3 },
+  livePill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+    borderRadius: 999,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.one,
+  },
+  liveDot: { width: 8, height: 8 },
   row: { borderRadius: 12, padding: Spacing.three, gap: Spacing.two },
   rowHeader: { flexDirection: 'row', justifyContent: 'space-between', gap: Spacing.two },
   route: { flex: 1 },
