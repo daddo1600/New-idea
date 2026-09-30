@@ -53,6 +53,33 @@ const TRIPS: DemoTrip[] = [
   [3, 10, 'Home', 'San Jose Airport (SJC)', 9.7, 'business', 'Flight to client'],
 ];
 
+// Earlier in the year: two business drives each workday, so the deductions
+// counter shows what a typical self-employed driver sees by autumn.
+const CLIENTS = [
+  'Acme Corp HQ, Santa Clara',
+  'Job site, Elm St',
+  'Bay Supply Co, Milpitas',
+  'Client office, Cupertino',
+  'Warehouse, Fremont',
+];
+
+function historyTrips(): DemoTrip[] {
+  const trips: DemoTrip[] = [];
+  const today = new Date();
+  const startOfYear = new Date(today.getFullYear(), 0, 1);
+  const days = Math.floor((today.getTime() - startOfYear.getTime()) / 86_400_000);
+  for (let daysAgo = 4; daysAgo <= days; daysAgo++) {
+    const day = new Date(today);
+    day.setDate(day.getDate() - daysAgo);
+    if (day.getDay() === 0 || day.getDay() === 6) continue;
+    const client = CLIENTS[daysAgo % CLIENTS.length];
+    const miles = 8 + ((daysAgo * 7) % 17);
+    trips.push([daysAgo, 9, 'Office, N 1st St', client, miles, 'business', 'Client visit', 'work-hours']);
+    trips.push([daysAgo, 15, client, 'Office, N 1st St', miles, 'business', 'Return from client', 'work-hours']);
+  }
+  return trips;
+}
+
 export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
   const existing = await db.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM trips;');
   if ((existing?.n ?? 0) > 0) return;
@@ -60,6 +87,7 @@ export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
   for (const place of PLACES) placeIds.set(place.name, (await insertPlace(db, place)).id);
   for (const [daysAgo, hour, from, to, miles, classification, purpose, autoReason] of [
     ...TRIPS,
+    ...historyTrips(),
   ].reverse()) {
     const start = new Date();
     start.setDate(start.getDate() - daysAgo);
