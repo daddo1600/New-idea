@@ -1,6 +1,6 @@
 # MileMint Support
 
-Need help with MileMint? Email **SUPPORT_EMAIL** and we'll get back to you within two business days.
+Need help with MileMint? Email **milemint.support@gmail.com** and we'll get back to you within two business days.
 
 ## Common questions
 

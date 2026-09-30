@@ -37,4 +37,4 @@ If a future version adds features that send data off your phone (such as sync or
 
 ## Contact
 
-Questions about privacy: SUPPORT_EMAIL
+Questions about privacy: milemint.support@gmail.com
