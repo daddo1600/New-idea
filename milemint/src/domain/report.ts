@@ -3,10 +3,13 @@ import type { Place } from './places';
 import {
   computeDeductionParts,
   describeTier,
+  formatDate,
   formatDistance,
   formatMoney,
   formatRate,
   fromUnits,
+  periodRangeInTaxYear,
+  taxYearBounds,
   taxYearLabel,
   taxYearOf,
   toUnits,
@@ -105,8 +108,10 @@ export function buildReport(
       report.deduction += row.deduction;
       for (const part of row.parts) {
         const key = `${part.period.from}#${part.tier}`;
+        const range = periodRangeInTaxYear(part.period, taxYear, region);
+        const tier = describeTier(part.period, part.tier, region);
         const total = byRate.get(key) ?? {
-          label: describeTier(part.period, part.tier, region),
+          label: range ? `${range}: ${tier}` : tier,
           distance: 0,
           deduction: 0,
           tenths: 0,
@@ -155,7 +160,7 @@ function csvCell(value: string | number): string {
 
 export function csvColumns(region: Region): string[] {
   return [
-    'Date',
+    'Date (YYYY-MM-DD)',
     'Start time',
     'End time',
     'From',
@@ -219,8 +224,23 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
   const Units = region.unit === 'mi' ? 'Miles' : 'Km';
   const distance = (value: number) => escapeHtml(formatDistance(fromUnits(value, region), region));
   const money = (minor: number) => escapeHtml(formatMoney(minor, region));
-  const summaryHeading = region.code === 'US' ? 'Summary (Schedule C, Part IV)' : 'Summary';
+  const summaryHeading = escapeHtml(region.report.summaryHeading);
   const yearName = report.label.length > 4 ? `${report.label} tax year` : report.label;
+  const bounds = taxYearBounds(report.taxYear, region);
+  const period = `${formatDate(bounds.start, region)} to ${formatDate(bounds.end, region)}`;
+  const share =
+    report.totalDistance > 0 ? `${Math.round((report.businessDistance / report.totalDistance) * 100)}%` : '–';
+  const odometer = region.report.askForOdometer
+    ? `<h2>Odometer readings</h2>
+  <table class="summary">
+    <tr><td>Odometer on ${formatDate(bounds.start, region)}</td><td class="blank"></td></tr>
+    <tr><td>Odometer on ${formatDate(bounds.end, region)}</td><td class="blank"></td></tr>
+    <tr><td>Total ${units} driven in the year (end minus start)</td><td class="blank"></td></tr>
+    <tr class="total"><td>Business-use share (business ${units} ÷ total ${units} driven)</td><td class="blank"></td></tr>
+  </table>
+  <p class="hint">Business share of the ${units} MileMint logged: ${share}. Use your odometer total for the claim, since it includes any driving MileMint didn’t log.</p>`
+    : '';
+  const guidance = region.report.guidance.map((line) => `<li>${escapeHtml(line)}</li>`).join('');
 
   const rateRows = report.byRate
     .map(
@@ -234,7 +254,7 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
       const business = trip.classification === 'business';
       return (
         `<tr${business ? '' : ' class="dim"'}>` +
-        `<td>${trip.localDate}</td>` +
+        `<td>${formatDate(trip.localDate, region)}</td>` +
         `<td>${escapeHtml(trip.startLabel)} → ${escapeHtml(trip.endLabel)}</td>` +
         `<td class="num">${row.distance.toFixed(1)}</td>` +
         `<td>${CLASSIFICATION_LABELS[trip.classification]}${row.commute ? ' (commute)' : ''}</td>` +
@@ -266,12 +286,16 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
   .summary td:first-child { width: 70%; }
   .total td { font-weight: 700; }
   .warn { color: #9a5b00; }
+  .blank { border-bottom: 0.75pt solid #16201c; width: 30%; }
+  .hint { color: #55635d; font-size: 9pt; }
+  ul { margin: 0; padding-left: 14pt; }
+  li { margin: 0 0 4pt; }
   .note { color: #55635d; font-size: 8.5pt; margin-top: 16pt; }
   thead { display: table-header-group; }
   tr { page-break-inside: avoid; }
 </style></head><body>
   <h1>Vehicle mileage log · ${escapeHtml(yearName)}</h1>
-  <p class="sub">Prepared with MileMint on ${generatedAt.toISOString().slice(0, 10)} · ${escapeHtml(region.name)} · ${escapeHtml(region.authority)} rates</p>
+  <p class="sub">${escapeHtml(region.name)} · ${period} · ${escapeHtml(region.authority)} rates · prepared with MileMint on ${formatDate(generatedAt.toISOString().slice(0, 10), region)}</p>
 
   <h2>${summaryHeading}</h2>
   <table class="summary">
@@ -281,6 +305,7 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
     <tr class="total"><td>Total ${units} logged</td><td class="num">${distance(report.totalDistance)}</td></tr>
   </table>
   ${warning}
+  ${odometer}
 
   <h2>Deduction at ${escapeHtml(region.authority)} rates</h2>
   <table>
@@ -293,6 +318,9 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
     <thead><tr><th>Date</th><th>From → To</th><th class="num">${Units}</th><th>Type</th><th>Business purpose</th><th class="num">Deduction</th><th>Recorded</th></tr></thead>
     <tbody>${tripRows}</tbody>
   </table>
+
+  <h2>Where these figures go</h2>
+  <ul>${guidance}</ul>
 
   <p class="note">“Auto” trips were recorded by the phone while driving; “Manual” trips were added by hand. MileMint keeps a history of every change to a trip, and trips changed after they were recorded are marked “edited”. Deductions are estimates at ${escapeHtml(region.authority)} rates and are not tax advice.${caveat}</p>
 </body></html>`;

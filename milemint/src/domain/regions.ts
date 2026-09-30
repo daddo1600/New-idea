@@ -40,6 +40,14 @@ export type Region = {
   rule: string;
   /** Anything the user should know about what the figure means. */
   caveat: string | null;
+  /** How the printed report is worded for this tax office. */
+  report: {
+    summaryHeading: string;
+    /** Where the figures go, in the tax office's own terms. */
+    guidance: readonly string[];
+    /** CRA needs total distance driven (odometer) to work out the business-use share. */
+    askForOdometer: boolean;
+  };
 };
 
 const METERS_PER_KM = 1000;
@@ -62,6 +70,15 @@ export const REGIONS: Record<RegionCode, Region> = {
     ],
     rule: 'IRS standard mileage rate: 76¢ a mile from July 2026',
     caveat: null,
+    report: {
+      summaryHeading: 'Vehicle use (Schedule C, Part IV)',
+      guidance: [
+        'Self-employed: enter business, commuting and other miles on Schedule C, Part IV (lines 44a–44c) and the deduction on line 9, Car and truck expenses, using the standard mileage rate.',
+        'Parking fees and tolls for business trips can be deducted on top of the standard mileage rate.',
+        'The IRS asks for a record made at or near the time of each trip, showing the date, where you went, the business purpose and the miles.',
+      ],
+      askForOdometer: false,
+    },
   },
   GB: {
     code: 'GB',
@@ -78,6 +95,15 @@ export const REGIONS: Record<RegionCode, Region> = {
     ],
     rule: 'HMRC mileage rate: 55p a mile for the first 10,000 business miles, then 25p',
     caveat: null,
+    report: {
+      summaryHeading: 'Business mileage (HMRC simplified expenses)',
+      guidance: [
+        'Self-employed: this total is your simplified expenses figure for business mileage. Include it in Car, van and travel expenses on your Self Assessment return.',
+        'Employees: you can claim Mileage Allowance Relief on the difference between this total and any mileage allowance your employer paid you.',
+        'Ordinary commuting between home and your permanent workplace is not business mileage.',
+      ],
+      askForOdometer: false,
+    },
   },
   CA: {
     code: 'CA',
@@ -96,6 +122,15 @@ export const REGIONS: Record<RegionCode, Region> = {
     rule: 'CRA per-km rate: 73¢ for the first 5,000 km, then 67¢',
     caveat:
       'This is CRA’s reimbursement rate for employees. If you’re self-employed, CRA usually wants your actual car costs, so treat the figure as an estimate.',
+    report: {
+      summaryHeading: 'Business use of your vehicle',
+      guidance: [
+        'Self-employed (T2125): claim your actual vehicle costs multiplied by your business-use share, which is business kilometres divided by total kilometres driven in the year. Record your odometer readings below to work it out.',
+        'Employees reimbursed at CRA’s per-km rate: the figure above is what your employer can pay you tax-free.',
+        'CRA asks for a logbook showing the date, destination, purpose and kilometres of each business trip, plus your odometer readings at the start and end of the year.',
+      ],
+      askForOdometer: true,
+    },
   },
   AU: {
     code: 'AU',
@@ -113,6 +148,15 @@ export const REGIONS: Record<RegionCode, Region> = {
     ],
     rule: 'ATO cents per km method: 91c a km, up to 5,000 km per car a year',
     caveat: null,
+    report: {
+      summaryHeading: 'Work-related car use (cents per km method)',
+      guidance: [
+        'Individuals: enter the deduction as Work-related car expenses (D1) using the cents per km method. Sole traders: include it with your business motor vehicle expenses.',
+        'You can claim up to 5,000 business kilometres per car each income year. This report assumes one car.',
+        'You don’t need a logbook for this method, but the ATO may ask how you worked out your kilometres. This trip log shows that.',
+      ],
+      askForOdometer: false,
+    },
   },
 };
 
@@ -174,6 +218,54 @@ export function taxYearLabel(startYear: number, region: Region): string {
   if (region.taxYearStart.month === 1 && region.taxYearStart.day === 1) return String(startYear);
   const next = String((startYear + 1) % 100).padStart(2, '0');
   return region.code === 'GB' ? `${startYear}/${next}` : `${startYear}–${next}`;
+}
+
+const iso = (y: number, m: number, d: number) =>
+  `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+
+/** First and last day (YYYY-MM-DD) of the tax year starting in `startYear`. */
+export function taxYearBounds(startYear: number, region: Region): { start: string; end: string } {
+  const { month, day } = region.taxYearStart;
+  const start = iso(startYear, month, day);
+  const next = new Date(Date.UTC(startYear + 1, month - 1, day - 1));
+  return { start, end: next.toISOString().slice(0, 10) };
+}
+
+/** A date as people in the region write it: 9/30/2026, 30/09/2026 or 2026-09-30 (Canada). */
+export function formatDate(localDate: string, region: Region): string {
+  const [y, m, d] = localDate.slice(0, 10).split('-');
+  if (region.code === 'US') return `${Number(m)}/${Number(d)}/${y}`;
+  if (region.code === 'CA') return `${y}-${m}-${d}`;
+  return `${d}/${m}/${y}`;
+}
+
+/** e.g. "1 Jul 2026" (or "Jul 1, 2026" in the US). */
+export function formatLongDate(localDate: string, region: Region): string {
+  const [y, m, d] = localDate.slice(0, 10).split('-').map(Number);
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(region.locale, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+}
+
+/**
+ * The part of a tax year a rate period covers, e.g. "1 Jan – 30 Jun 2026".
+ * Null when the period covers the whole tax year.
+ */
+export function periodRangeInTaxYear(period: RatePeriod, startYear: number, region: Region): string | null {
+  const bounds = taxYearBounds(startYear, region);
+  const index = region.rates.indexOf(period);
+  const nextFrom = region.rates[index + 1]?.from;
+  const start = period.from > bounds.start ? period.from : bounds.start;
+  let end = bounds.end;
+  if (nextFrom && nextFrom <= bounds.end) {
+    const [y, m, d] = nextFrom.split('-').map(Number);
+    end = new Date(Date.UTC(y, m - 1, d - 1)).toISOString().slice(0, 10);
+  }
+  if (start === bounds.start && end === bounds.end) return null;
+  return `${formatLongDate(start, region)} – ${formatLongDate(end, region)}`;
 }
 
 export function currentTaxYear(region: Region, today: Date = new Date()): number {
@@ -256,6 +348,9 @@ export function describeTier(period: RatePeriod, tier: number, region: Region): 
   const number = (n: number) => new Intl.NumberFormat(region.locale).format(n);
   const upTo = period.tiers[tier].upTo;
   const below = tier > 0 ? period.tiers[tier - 1].upTo : null;
+  if (period.tiers[tier].rate === 0 && below !== null) {
+    return `Over ${number(below)} ${units}: not claimable (${region.authority} limit)`;
+  }
   if (upTo !== null) return `${rate}, first ${number(upTo)} ${units}`;
   return below !== null ? `${rate} after ${number(below)} ${units}` : rate;
 }

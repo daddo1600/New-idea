@@ -5,7 +5,7 @@ import { REGIONS, fromUnits, type Region } from '../regions';
 import { buildReport, pageSize, reportYears, toCsv, toReportHtml } from '../report';
 import type { Trip } from '../trip';
 
-const { US, GB, AU } = REGIONS;
+const { US, GB, CA, AU } = REGIONS;
 
 let next = 0;
 function trip(overrides: Partial<Trip> & { units?: number }, region: Region = US): Trip {
@@ -62,7 +62,10 @@ describe('buildReport (US)', () => {
   });
 
   it('prices each half of 2026 at its own rate', () => {
-    expect(report.byRate.map((r) => r.label)).toEqual(['72.5¢ a mile', '76¢ a mile']);
+    expect(report.byRate.map((r) => r.label)).toEqual([
+      'Jan 1, 2026 – Jun 30, 2026: 72.5¢ a mile',
+      'Jul 1, 2026 – Dec 31, 2026: 76¢ a mile',
+    ]);
     expect(report.deduction).toBe(725 + 760);
   });
 
@@ -138,3 +141,51 @@ describe('toReportHtml', () => {
     expect(pageSize(GB)).toEqual({ width: 595, height: 842 });
   });
 });
+
+describe('each country’s printed report', () => {
+  it('US: Schedule C wording and US dates', () => {
+    const html = toReportHtml(buildReport([trip({ localDate: '2026-09-30' })], US, 2026));
+    expect(html).toContain('Schedule C, Part IV');
+    expect(html).toContain('line 9');
+    expect(html).toContain('9/30/2026');
+    expect(html).toContain('1/1/2026 to 12/31/2026');
+    expect(html).not.toContain('Odometer');
+  });
+
+  it('UK: Self Assessment and Mileage Allowance Relief, UK dates, 6 April year', () => {
+    const html = toReportHtml(buildReport([trip({ localDate: '2026-09-30' }, GB)], GB, 2026));
+    expect(html).toContain('HMRC simplified expenses');
+    expect(html).toContain('Mileage Allowance Relief');
+    expect(html).toContain('30/09/2026');
+    expect(html).toContain('06/04/2026 to 05/04/2027');
+    expect(html).not.toContain('Schedule C');
+  });
+
+  it('Canada: odometer readings and business-use share for T2125', () => {
+    const trips = [
+      trip({ localDate: '2026-03-01', units: 300 }, CA),
+      trip({ localDate: '2026-03-02', units: 100, classification: 'personal', purpose: '' }, CA),
+    ];
+    const html = toReportHtml(buildReport(trips, CA, 2026));
+    expect(html).toContain('Odometer on 2026-01-01');
+    expect(html).toContain('Odometer on 2026-12-31');
+    expect(html).toContain('T2125');
+    expect(html).toContain('75%'); // 300 of 400 km logged
+    expect(html).toContain('estimate');
+  });
+
+  it('Australia: D1 guidance, the 5,000 km limit, 1 July year', () => {
+    const trips = [trip({ localDate: '2026-08-01', units: 5_200 }, AU)];
+    const report = buildReport(trips, AU, 2026);
+    expect(report.deduction).toBe(5_000 * 91);
+    expect(report.byRate.map((r) => r.label)).toEqual([
+      '91c a km, first 5,000 km',
+      'Over 5,000 km: not claimable (ATO limit)',
+    ]);
+    const html = toReportHtml(report);
+    expect(html).toContain('Work-related car expenses (D1)');
+    expect(html).toContain('01/07/2026 to 30/06/2027');
+    expect(html).toContain('2026–27 tax year');
+  });
+});
+
