@@ -63,3 +63,14 @@ Before committing to it: check the USPTO trademark search (tmsearch.uspto.gov) a
 3. Add trip detection (background location, geofencing, car Bluetooth) and receipt scanning.
 4. Add the paywall (RevenueCat) and reports (PDF/CSV).
 5. Once the Apple account and `EXPO_TOKEN` exist: EAS build, then TestFlight on your iPhone.
+
+## Step-by-step: accounts and access (for the first iPhone test build)
+
+1. **Apple Developer Program ($99/yr):** enrol at https://developer.apple.com/programs/enroll/. The **Apple Developer app** on your iPhone is usually quickest. Choose *Individual* unless you want a company name shown as the seller (that needs a D-U-N-S number).
+2. **Expo account (free):** sign up at https://expo.dev/signup, ideally with the username `milemint`.
+3. **Expo access token:** on expo.dev go to Account settings → Access tokens → Create token. Copy it; **don't paste it into chat**.
+4. **Give this cloud environment the token and network access:** open the cloud environment menu in the Claude session's title bar and choose **Edit**:
+   - Add an environment variable `EXPO_TOKEN` (or use the API credentials section, if shown) with the token.
+   - Under **Network access**, allow `expo.dev`, `api.expo.dev` and `storage.googleapis.com` (EAS uploads the project there for building), or choose a broader access level. Access levels are explained at https://code.claude.com/docs/en/claude-code-on-the-web.
+   - Start a **new session** so the changes take effect. Everything is in this repo, so nothing is lost.
+5. **First build only:** Expo needs a one-time link to your Apple account to create signing certificates. Claude will walk you through it when we get there.
