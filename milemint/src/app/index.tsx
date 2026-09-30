@@ -1,5 +1,5 @@
-import { router, Stack, useIsFocused } from 'expo-router';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Redirect, router, Stack } from 'expo-router';
+import { useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ReanimatedSwipeable, {
@@ -46,11 +46,6 @@ const AUTO_NOTES: Record<AutoReason, string> = {
 /** How far a row must be dragged before letting go classifies it. */
 const SWIPE_THRESHOLD = 80;
 
-/** Show the tracking setup once per launch until location access is granted. */
-let promptedForTracking = false;
-/** Ask where the user drives once per launch until they've chosen. */
-let promptedForRegion = false;
-
 export default function HomeScreen() {
   const { trips, places, classify, classifyMany, remove, reload } = useTrips();
   const insets = useSafeAreaInsets();
@@ -59,7 +54,7 @@ export default function HomeScreen() {
   const [selected, setSelected] = useState<ReadonlySet<string>>(new Set());
   const { status } = useTracking(reload);
   const { isPro } = usePro();
-  const { region, chosen, loaded } = useRegion();
+  const { region, loaded, onboarded } = useRegion();
   const taxYear = currentTaxYear(region);
   const locked = useMemo(() => lockedTripIds(trips ?? [], isPro), [trips, isPro]);
   // Locked drives don't count towards the total (or a tier limit) until they're unlocked.
@@ -83,20 +78,9 @@ export default function HomeScreen() {
       .reduce((sum, trip) => sum + (deductions.get(trip.id) ?? 0), 0);
   }, [visible, places, region, taxYear, deductions]);
 
-  // First launch: where do you drive? Then location access. Only while this
-  // screen is on top, so one set-up screen never opens over another.
-  const focused = useIsFocused();
-  useEffect(() => {
-    if (!focused) return;
-    if (loaded && !chosen && !promptedForRegion) {
-      promptedForRegion = true;
-      router.push('/region');
-    } else if (chosen && status === 'needs-permission' && !promptedForTracking) {
-      promptedForTracking = true;
-      router.push('/setup-tracking');
-    }
-  }, [focused, loaded, chosen, status]);
-
+  // First launch goes through the welcome flow before anything else is shown.
+  if (!loaded) return <ActivityIndicator style={styles.loading} />;
+  if (!onboarded) return <Redirect href="/welcome" />;
   if (!trips) return <ActivityIndicator style={styles.loading} />;
 
   const kindOf = (id: string | null) => places.find((place: Place) => place.id === id)?.kind ?? null;

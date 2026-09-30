@@ -12,6 +12,8 @@ export type AppSettings = {
   region: RegionCode | null;
   /** Sunday-evening "sort this week's drives" notification. */
   weeklyReminder: boolean;
+  /** The first-launch welcome flow has been completed. */
+  onboarded: boolean;
 };
 
 const WEEKDAY_9_TO_5 = [{ start: '09:00', end: '17:00' }];
@@ -21,6 +23,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   workWeek: [[], WEEKDAY_9_TO_5, WEEKDAY_9_TO_5, WEEKDAY_9_TO_5, WEEKDAY_9_TO_5, WEEKDAY_9_TO_5, []],
   region: null,
   weeklyReminder: false,
+  onboarded: false,
 };
 
 export async function loadSettings(db: SQLiteDatabase): Promise<AppSettings> {

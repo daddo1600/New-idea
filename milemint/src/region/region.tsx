@@ -12,6 +12,9 @@ type RegionState = {
   /** Settings have been read; before that `chosen` isn't known yet. */
   loaded: boolean;
   setRegion: (code: RegionCode) => Promise<void>;
+  /** The welcome flow has been completed (the demo counts as done). */
+  onboarded: boolean;
+  finishOnboarding: () => Promise<void>;
 };
 
 const RegionContext = createContext<RegionState | null>(null);
@@ -26,6 +29,7 @@ export function RegionProvider({ children }: { children: ReactNode }) {
   const demo = demoRegion();
   const [code, setCode] = useState<RegionCode | null>(demo);
   const [loaded, setLoaded] = useState(demo !== null);
+  const [onboarded, setOnboarded] = useState(demo !== null);
 
   useEffect(() => {
     if (demo) return;
@@ -34,6 +38,7 @@ export function RegionProvider({ children }: { children: ReactNode }) {
       (settings) => {
         if (cancelled) return;
         setCode(settings.region);
+        setOnboarded(settings.onboarded);
         setLoaded(true);
       },
       () => !cancelled && setLoaded(true),
@@ -52,9 +57,22 @@ export function RegionProvider({ children }: { children: ReactNode }) {
     [db, demo],
   );
 
+  const finishOnboarding = useCallback(async () => {
+    setOnboarded(true);
+    if (demo) return;
+    await saveSettings(db, { ...(await loadSettings(db)), onboarded: true });
+  }, [db, demo]);
+
   const value = useMemo<RegionState>(
-    () => ({ region: REGIONS[code ?? DEFAULT_REGION], chosen: code !== null, loaded, setRegion }),
-    [code, loaded, setRegion],
+    () => ({
+      region: REGIONS[code ?? DEFAULT_REGION],
+      chosen: code !== null,
+      loaded,
+      setRegion,
+      onboarded,
+      finishOnboarding,
+    }),
+    [code, loaded, setRegion, onboarded, finishOnboarding],
   );
   return <RegionContext.Provider value={value}>{children}</RegionContext.Provider>;
 }

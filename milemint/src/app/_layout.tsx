@@ -29,6 +29,10 @@ export default function RootLayout() {
               <ProProvider>
                 <Stack>
                   <Stack.Screen name="index" options={{ title: 'MileMint' }} />
+                  <Stack.Screen
+                    name="welcome"
+                    options={{ headerShown: false, gestureEnabled: false, animation: 'fade' }}
+                  />
                   <Stack.Screen name="add-trip" options={{ title: 'Add missed trip', presentation: 'modal' }} />
                   <Stack.Screen
                     name="setup-tracking"
