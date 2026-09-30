@@ -120,14 +120,13 @@ export default function HomeScreen() {
         options={{
           headerTitle: () => <BrandTitle />,
           headerLeft: () => <MenuButton />,
-          headerRight: () => <AddTripButton />,
         }}
       />
       <FlatList
         data={trips}
         keyExtractor={(trip) => trip.id}
         // Room for the bulk actions bar while selecting.
-        contentContainerStyle={[styles.list, selecting && { paddingBottom: 160 + insets.bottom }]}
+        contentContainerStyle={[styles.list, { paddingBottom: (selecting ? 160 : 96) + insets.bottom }]}
         ListHeaderComponent={
           <View style={styles.header}>
             <SummaryCard summary={summary} commuteCents={commuteCents} />
@@ -174,6 +173,7 @@ export default function HomeScreen() {
           )
         }
       />
+      {!selecting && <AddTripButton bottom={insets.bottom} />}
       {selecting && (
         <BulkActions
           count={selected.size}
@@ -622,7 +622,7 @@ const TRACKING_MESSAGES: Record<Exclude<TrackingStatus, 'on'>, { title: string; 
   off: { title: 'Automatic tracking is paused', body: 'Turn it back on to keep logging drives.' },
   unsupported: {
     title: 'Preview mode',
-    body: 'Automatic tracking runs on your iPhone. Use “Add missed trip” to try the app here.',
+    body: 'Automatic tracking runs on your iPhone. Tap + to add a trip and try the app here.',
   },
 };
 
