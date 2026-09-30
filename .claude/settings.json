@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx -y eas-cli@latest build:*)",
+      "Bash(npx eas-cli@latest build:*)"
+    ]
+  }
+}
