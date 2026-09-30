@@ -12,5 +12,6 @@
 | [`07-data-and-security.md`](07-data-and-security.md) | Where user data is stored and how it's protected (local-first, encrypted, private) |
 | [`08-feature-gap-analysis.md`](08-feature-gap-analysis.md) | Feature-by-feature comparison with competitors: what to add, what to skip, and why |
 | [`09-social-campaigns.md`](09-social-campaigns.md) | Social media campaign ideas, creator programme, launch timeline |
+| [`10-roadmap-teams.md`](10-roadmap-teams.md) | **Future: MileMint for Teams.** Business plan for fleets: how it works, what's needed (domain, backend, payments, legal), order of work |
 
 **Status:** App chosen. iOS first, Android later, built with Expo. **US launch first** (UK later). Name: **MileMint**. The first working slice is built in `milemint/`.
