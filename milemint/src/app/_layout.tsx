@@ -6,13 +6,11 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { DATABASE_NAME, initDatabase } from '@/db/database';
 import { DEMO_MODE, seedDemoTrips } from '@/dev/demo';
-import { describeError, installFatalErrorAlert } from '@/errors/fatal-errors';
+import { describeError } from '@/errors/fatal-errors';
 import { ProProvider } from '@/purchases/pro';
 import { RegionProvider } from '@/region/region';
 // Registers the background location tasks; must run before the app renders.
 import '@/tracking/background';
-
-installFatalErrorAlert();
 
 async function onInit(db: SQLiteDatabase) {
   await initDatabase(db);
