@@ -4,32 +4,32 @@ Two ideas to grow MileMint and keep drivers coming back. Neither is started. Bot
 
 ---
 
-## 1. Referral scheme: "Give a month, get a month"
+## 1. Referral scheme
 
-**Offer:** the friend who uses your code gets **1 month of Pro free**. You get **1 month of Pro for each friend who becomes a real user**, plus milestones:
+**Rewards only for real paying customers:**
 
-| Friends who join | Reward |
-|---|---|
-| 1 | 1 month of Pro |
-| 3 | 3 months + "Founding Driver" badge |
-| 5 | A free year of Pro |
-| 10 | Pro for life |
+| Your referral | You get | They get |
+|---|---|---|
+| A friend **subscribes to Pro** (monthly or yearly) | **1 month of Pro free** per friend | 1 month of Pro free |
+| A business **signs up to MileMint Teams** | **A year of Pro free** | Their first month of Teams free (or a launch discount) |
+
+Rewards stack: three friends subscribing earns three free months. Paying referrals can't be faked, so there's no need to police free installs.
 
 **Sharing:**
-- "Invite friends" in the logo menu, with a live tally ("2 joined · 3 more for a free year").
+- "Invite friends" in the logo menu, with a live tally ("2 friends subscribed · 2 free months earned").
 - Prompts at happy moments: first £100 / $100 found, after exporting a report, after a fully sorted Sunday check-in.
 - The share sheet covers WhatsApp, iMessage and email, with a ready-made message, the code and a link with a branded preview (`milemint.app/r/MINT-7K2P`).
+- A second option, "Get your company on MileMint", shares the Teams page with the same code.
 
-**Fairness:**
-- A referral only counts once the friend has **logged 5+ drives**.
-- Apple DeviceCheck stops reinstall farming.
-- No accounts: codes are anonymous.
+**How rewards are delivered (Apple-friendly):**
+- Each referral reward is an Apple **one-time offer code**: 1 month free, or 1 year free for a Teams referral. We create them in App Store Connect; the app gets them from our server and opens Apple's redeem sheet in one tap.
+- **Free user:** Pro starts free for the month or year, then renews at the normal price unless cancelled. This must be stated clearly before redeeming.
+- **Paying subscriber:** the free period applies from their next renewal.
+- **Tracking who subscribed through whose code** uses Apple's App Store Server Notifications, which confirm a real purchase. Teams sign-ups are confirmed by the first paid invoice. Codes are anonymous, and no accounts are needed.
 
 **Phases:**
-1. **At launch, no server:** one Apple **offer code** (a free month for friends), shared from an "Invite a friend" button. It only works once the app is live on the App Store.
-2. **With a server:** personal codes, a tally, milestones and automatic rewards. Apple allows 2 renewal-date extensions a year for paying subscribers; free users can earn any amount.
-
-**Bridge to Teams:** "Get your company on MileMint": if a driver's employer signs up to Teams, the driver gets a free year of Pro.
+1. **At launch, no server:** one shared Apple offer code ("a friend's first month free") behind an "Invite a friend" button. Friends benefit and the app grows, but the sharer isn't rewarded yet. Offer codes only work once the app is live on the App Store.
+2. **With a server** (shared with Teams): personal codes, confirmation that the friend paid, and automatic rewards of 1 month per paying friend and 1 year per Teams customer.
 
 ---
 
