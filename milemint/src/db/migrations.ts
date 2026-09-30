@@ -97,9 +97,20 @@ export async function migrate(db: SQLiteDatabase): Promise<void> {
       await txn.execAsync(`PRAGMA user_version = ${MIGRATIONS.length};`);
     }
   };
+  // The web preview has a single connection and no locking to worry about.
+  if (Platform.OS === 'web') return db.withTransactionAsync(() => run(db));
   // On devices the app and a background location wake-up can open the database
-  // at the same moment, so migrate exclusively and re-read the version inside.
-  // The web preview has a single connection and no exclusive transactions.
-  if (Platform.OS === 'web') await db.withTransactionAsync(() => run(db));
-  else await db.withExclusiveTransactionAsync(run);
+  // at the same moment. BEGIN IMMEDIATE takes the write lock up front (waiting
+  // out the other side via busy_timeout), and the version is re-read inside.
+  // Not withExclusiveTransactionAsync: that opens a second connection which
+  // never received the SQLCipher key, so it can't read the encrypted file
+  // ("file is not a database") and the app failed on launch.
+  await db.execAsync('BEGIN IMMEDIATE;');
+  try {
+    await run(db);
+    await db.execAsync('COMMIT;');
+  } catch (error) {
+    await db.execAsync('ROLLBACK;').catch(() => {});
+    throw error;
+  }
 }
