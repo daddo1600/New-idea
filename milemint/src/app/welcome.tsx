@@ -9,6 +9,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  Keyboard,
   Switch,
   Text,
   View,
@@ -99,18 +100,20 @@ export default function WelcomeScreen() {
   useEffect(() => {
     if (!cameBackWithAlways) return;
     let current = true;
-    (status === 'on' ? Promise.resolve<TrackingStatus>('on') : enable()).then((next) => {
-      if (!current) return;
-      setInSettings(false);
-      if (next === 'on') setStep(HOURS);
-    }, () => {});
+    (status === 'on' ? Promise.resolve<TrackingStatus>('on') : enable()).then(
+      (next) => {
+        if (!current) return;
+        setInSettings(false);
+        if (next === 'on') setStep(HOURS);
+      },
+      () => {},
+    );
     return () => {
       current = false;
     };
     // Runs once per return from Settings; `status` and `enable` are read, not watched.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cameBackWithAlways]);
-
 
   const saveHours = async () => {
     const settings = await loadSettings(db);
@@ -157,8 +160,24 @@ export default function WelcomeScreen() {
     router.replace('/');
   };
 
-  // The first screen stays on the launch animation's green, so one flows into the other.
-  const onBrand = step === 0;
+  // The first and last screens are on the brand green: the first flows on from the launch
+  // animation, the last bookends the set-up.
+  const onBrand = step === 0 || step === DONE;
+  // While typing, the buttons would ride up above the keyboard, right over the address
+  // suggestions, so a tap meant for a suggestion could save and move on. Hide them meanwhile.
+  const [typing, setTyping] = useState(false);
+  useEffect(() => {
+    const show = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow', () =>
+      setTyping(true),
+    );
+    const hide = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide', () =>
+      setTyping(false),
+    );
+    return () => {
+      show.remove();
+      hide.remove();
+    };
+  }, []);
 
   const primary = (label: string, onPress: () => void) => (
     <Pressable
@@ -176,7 +195,7 @@ export default function WelcomeScreen() {
   );
   const secondary = (label: string, onPress: () => void) => (
     <Pressable accessibilityRole="button" onPress={onPress} hitSlop={8} style={styles.secondary}>
-      <ThemedText type="small" themeColor="textSecondary">
+      <ThemedText type="small" themeColor="textSecondary" style={onBrand && styles.brandSoft}>
         {label}
       </ThemedText>
     </Pressable>
@@ -332,44 +351,55 @@ export default function WelcomeScreen() {
 
           {step === DONE && (
             <>
-              <ThemedText type="title" style={styles.heading}>
-                You’re all set.
-              </ThemedText>
-              <ThemedText themeColor="textSecondary">
+              <LeafMark size={96} />
+              <Text style={[styles.brandTitle, styles.heading]}>You’re all set.</Text>
+              <Text style={styles.brandBody}>
                 {status === 'on'
                   ? `Just drive. Each trip appears after you park, and business drives count at ${picked.authority}’s ${topRate} rate.`
-                  : 'You can turn on automatic tracking from the home screen whenever you’re ready, or add trips by hand.'}
-              </ThemedText>
-              <ThemedView type="backgroundElement" style={styles.card}>
-                <ThemedText type="smallBold">Good to know</ThemedText>
-                <ThemedText type="small" themeColor="textSecondary">
-                  • Swipe a trip right for business, left for personal.{'\n'}• Add more places (clients, the
-                  depot, the gym) from any trip with “Save as place”, or in Settings → Places.
-                  {hoursSet ? '' : '\n• Set your work hours any time in Settings.'}
-                </ThemedText>
-              </ThemedView>
+                  : 'Turn on automatic tracking from the home screen whenever you’re ready, or add trips with the + button.'}
+              </Text>
+              <View style={styles.glass}>
+                <Text style={styles.pointTitle}>Good to know</Text>
+                {[
+                  ['👉', 'Swipe a trip right for business, left for personal.'],
+                  [
+                    '📍',
+                    'Add more places (clients, the depot, the gym) with “Save as place” on any trip, or in Settings → Places.',
+                  ],
+                  ...(hoursSet
+                    ? []
+                    : [['⏱️', 'Set your work hours any time in Settings, and most drives sort themselves.']]),
+                ].map(([icon, text]) => (
+                  <View key={icon} style={styles.tip}>
+                    <Text style={styles.tipIcon}>{icon}</Text>
+                    <Text style={[styles.pointBody, styles.flex]}>{text}</Text>
+                  </View>
+                ))}
+              </View>
               {REMINDERS_SUPPORTED && (
-                <ThemedView type="backgroundElement" style={[styles.card, styles.reminderRow]}>
+                <View style={[styles.glass, styles.reminderRow]}>
                   <View style={styles.flex}>
-                    <ThemedText type="smallBold">Sunday evening check-in</ThemedText>
-                    <ThemedText type="small" themeColor="textSecondary">
+                    <Text style={styles.pointTitle}>Sunday evening check-in</Text>
+                    <Text style={styles.pointBody}>
                       A (slightly cheeky) weekly nudge to sort your drives, so no business mile goes
                       unclaimed.
-                    </ThemedText>
+                    </Text>
                   </View>
                   <Switch
                     accessibilityLabel="Sunday evening check-in"
                     value={reminder}
                     onValueChange={setReminder}
-                    trackColor={{ true: theme.accent }}
+                    trackColor={{ true: '#FACC15', false: 'rgba(255,255,255,0.3)' }}
+                    thumbColor="#FFFFFF"
+                    ios_backgroundColor="rgba(255,255,255,0.3)"
                   />
-                </ThemedView>
+                </View>
               )}
             </>
           )}
         </ScrollView>
 
-        <View style={styles.actions}>
+        <View style={[styles.actions, typing && step === PLACES && styles.hidden]}>
           {step === 0 && primary('Get started', () => setStep(1))}
           {step === 1 && primary('Continue', saveCountry)}
           {step === 2 &&
@@ -377,9 +407,9 @@ export default function WelcomeScreen() {
               ? primary('Continue', () => setStep(HOURS))
               : status === 'needs-always' || (status === 'needs-permission' && asked)
                 ? primary('Open Settings', () => {
-                  setInSettings(true);
-                  Linking.openSettings();
-                })
+                    setInSettings(true);
+                    Linking.openSettings();
+                  })
                 : primary(busy ? 'Waiting for your answer…' : 'Allow location', allowLocation))}
           {step === 2 &&
             status !== 'on' &&
@@ -390,7 +420,7 @@ export default function WelcomeScreen() {
           {step === HOURS && primary('Save my hours', saveHours)}
           {step === HOURS && secondary('I don’t have set hours', () => setStep(PLACES))}
           {step === PLACES &&
-            primary(busy ? 'Saving…' : home.text || work.text ? 'Save places' : 'Continue', savePlaces)}
+            primary(busy ? 'Saving…' : home.text || work.text ? 'Save and continue' : 'Continue', savePlaces)}
           {step === PLACES && secondary('Skip for now', () => setStep(DONE))}
           {step === DONE && primary('Start using MileMint', finish)}
         </View>
@@ -415,6 +445,18 @@ const styles = StyleSheet.create({
   pointTickText: { color: '#064E3B', fontSize: 12, fontWeight: '800' },
   pointTitle: { color: '#FFFFFF', fontSize: 15, fontWeight: '700' },
   pointBody: { color: '#D1FAE5', fontSize: 14, lineHeight: 20 },
+  brandSoft: { color: '#D1FAE5' },
+  glass: {
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderColor: 'rgba(255,255,255,0.18)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 16,
+    padding: Spacing.three,
+    gap: Spacing.two,
+  },
+  tip: { flexDirection: 'row', gap: Spacing.two, alignItems: 'flex-start' },
+  tipIcon: { fontSize: 15, lineHeight: 20 },
+  hidden: { display: 'none' },
   top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 32 },
   topSpacer: { width: 32 },
   dots: { flexDirection: 'row', gap: Spacing.one },
