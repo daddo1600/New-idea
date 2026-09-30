@@ -1,9 +1,10 @@
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider, type ErrorBoundaryProps } from 'expo-router';
 import { SQLiteProvider, type SQLiteDatabase } from 'expo-sqlite';
-import { Suspense } from 'react';
+import { Suspense, useCallback, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import { LaunchIntro } from '@/components/launch-intro';
 import { DATABASE_NAME, initDatabase } from '@/db/database';
 import { DEMO_MODE, seedDemoTrips } from '@/dev/demo';
 import { describeError } from '@/errors/fatal-errors';
@@ -19,6 +20,9 @@ async function onInit(db: SQLiteDatabase) {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  // The web demo (store screenshots) opens straight onto the app.
+  const [intro, setIntro] = useState(!DEMO_MODE);
+  const endIntro = useCallback(() => setIntro(false), []);
   return (
     // Needed for swipe-to-classify on trip rows.
     <GestureHandlerRootView style={styles.root}>
@@ -49,6 +53,7 @@ export default function RootLayout() {
           </SQLiteProvider>
         </Suspense>
       </ThemeProvider>
+      {intro && <LaunchIntro onDone={endIntro} />}
     </GestureHandlerRootView>
   );
 }
