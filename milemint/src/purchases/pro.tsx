@@ -27,6 +27,8 @@ type Pro = {
   isPro: boolean;
   /** Empty until the App Store answers, or when purchases aren't available here. */
   plans: ProPlan[];
+  /** The App Store has answered (possibly with no plans, e.g. before prices are set). */
+  plansLoaded: boolean;
   storeAvailable: boolean;
   /** A purchase or restore is in progress. */
   busy: boolean;
@@ -43,6 +45,7 @@ export function ProProvider({ children }: { children: ReactNode }) {
   // The web demo stands in for a paying user so screenshots show every drive.
   const [isPro, setIsPro] = useState(DEMO_MODE);
   const [plans, setPlans] = useState<ProPlan[]>([]);
+  const [plansLoaded, setPlansLoaded] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -71,7 +74,8 @@ export function ProProvider({ children }: { children: ReactNode }) {
     const initial = setTimeout(refresh, 0);
     loadPlans()
       .then(setPlans)
-      .catch(() => setPlans([]));
+      .catch(() => setPlans([]))
+      .finally(() => setPlansLoaded(true));
     const stopListening = onPurchase({
       success: () => {
         setBusy(false);
@@ -124,6 +128,7 @@ export function ProProvider({ children }: { children: ReactNode }) {
     () => ({
       isPro,
       plans,
+      plansLoaded,
       storeAvailable: STORE_AVAILABLE,
       busy,
       error,
@@ -131,7 +136,7 @@ export function ProProvider({ children }: { children: ReactNode }) {
       restore,
       manage: manageSubscription,
     }),
-    [isPro, plans, busy, error, buy, restore],
+    [isPro, plans, plansLoaded, busy, error, buy, restore],
   );
 
   return <ProContext.Provider value={value}>{children}</ProContext.Provider>;

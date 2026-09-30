@@ -25,7 +25,7 @@ const BENEFITS = [
 
 export default function ProScreen() {
   const theme = useTheme();
-  const { isPro, plans, storeAvailable, busy, error, buy, restore } = usePro();
+  const { isPro, plans, plansLoaded, storeAvailable, busy, error, buy, restore } = usePro();
   const { trips } = useTrips();
   const [selected, setSelected] = useState<string | null>(null);
 
@@ -88,7 +88,14 @@ export default function ProScreen() {
             Subscriptions are available in the App Store version of MileMint on iPhone.
           </ThemedText>
         ) : plans.length === 0 ? (
-          <ActivityIndicator />
+          plansLoaded ? (
+            <ThemedText type="small" themeColor="textSecondary">
+              Couldn’t load subscription options from the App Store. Check your connection and try again
+              later.
+            </ThemedText>
+          ) : (
+            <ActivityIndicator />
+          )
         ) : (
           <>
             {plans.map((option) => {

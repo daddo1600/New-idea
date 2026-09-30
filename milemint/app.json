@@ -60,7 +60,7 @@
           "isIosBackgroundLocationEnabled": true,
           "isAndroidBackgroundLocationEnabled": true,
           "isAndroidForegroundServiceEnabled": true,
-          "motionUsagePermission": false
+          "motionUsagePermission": "MileMint does not use motion data. Drives are detected from location only."
         }
       ],
       "expo-iap"
