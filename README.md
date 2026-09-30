@@ -12,6 +12,7 @@
 | [`07-data-and-security.md`](07-data-and-security.md) | Where user data is stored and how it's protected (local-first, encrypted, private) |
 | [`08-feature-gap-analysis.md`](08-feature-gap-analysis.md) | Feature-by-feature comparison with competitors: what to add, what to skip, and why |
 | [`09-social-campaigns.md`](09-social-campaigns.md) | Social media campaign ideas, creator programme, launch timeline |
+| [`13-courier-week-1.md`](13-courier-week-1.md) | **Next week's courier push, day by day:** targets, set-up, where to go and when, scripts, message templates, card artwork, FAQs, budget |
 | [`12-launch-plan.md`](12-launch-plan.md) | **Launch plan: first users and momentum.** UK-first, local and personal, timed for the 31 Jan Self Assessment deadline; weekly measures, budget, week-by-week checklist |
 | [`11-growth-ideas.md`](11-growth-ideas.md) | **To review later for marketing:** referral scheme (a free month per friend who subscribes, a free year per business on Teams) and partner perks (a free weekly coffee from local cafés and service stations) |
 | [`10-roadmap-teams.md`](10-roadmap-teams.md) | **Future: MileMint for Teams.** Business plan for fleets: how it works, what's needed (domain, backend, payments, legal), order of work |
