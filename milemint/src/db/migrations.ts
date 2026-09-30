@@ -48,6 +48,31 @@ const MIGRATIONS: readonly string[] = [
     json TEXT NOT NULL
   );
   `,
+  `
+  -- Named places (home, work, clients) for labels, learned routes and commutes.
+  CREATE TABLE places (
+    id TEXT PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL,
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL,
+    radius_m REAL NOT NULL CHECK (radius_m > 0),
+    kind TEXT NOT NULL CHECK (kind IN ('home', 'work', 'client', 'other')),
+    created_at TEXT NOT NULL
+  );
+
+  -- Single-row store for user preferences such as work hours.
+  CREATE TABLE settings (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    json TEXT NOT NULL
+  );
+
+  -- Deleting a place only unlinks trips; their labels and history stay.
+  ALTER TABLE trips ADD COLUMN start_place_id TEXT REFERENCES places (id) ON DELETE SET NULL;
+  ALTER TABLE trips ADD COLUMN end_place_id TEXT REFERENCES places (id) ON DELETE SET NULL;
+  -- Set when a rule classified the trip, cleared when the user classifies it.
+  ALTER TABLE trips ADD COLUMN auto_reason TEXT
+    CHECK (auto_reason IN ('learned-route', 'work-hours', 'commute'));
+  `,
 ];
 
 export async function migrate(db: SQLiteDatabase): Promise<void> {

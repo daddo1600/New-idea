@@ -1,7 +1,11 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
 import { Platform } from 'react-native';
 
+import { insertPlace } from '@/db/places-repo';
 import { insertTrip } from '@/db/trips-repo';
+import type { AutoReason } from '@/domain/classify-rules';
+import type { LatLng } from '@/domain/geo';
+import type { PlaceKind } from '@/domain/places';
 import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/trip';
 
 /**
@@ -28,21 +32,35 @@ type DemoTrip = [
   miles: number,
   classification: Classification,
   purpose: string,
+  autoReason?: AutoReason,
+];
+
+// Named places so home ↔ office drives show the commute warning.
+const PLACES: { name: string; kind: PlaceKind; at: LatLng }[] = [
+  { name: 'Home', kind: 'home', at: { latitude: 37.3229, longitude: -121.9471 } },
+  { name: 'Office, N 1st St', kind: 'work', at: { latitude: 37.3861, longitude: -121.9312 } },
+  { name: 'Acme Corp HQ, Santa Clara', kind: 'client', at: { latitude: 37.3875, longitude: -121.9636 } },
 ];
 
 const TRIPS: DemoTrip[] = [
   [0, 16, '1st Street, San Jose', 'Westfield Valley Fair', 6.8, 'unclassified', ''],
-  [0, 9, 'Home', 'Acme Corp HQ, Santa Clara', 12.4, 'unclassified', ''],
-  [1, 14, 'Acme Corp HQ, Santa Clara', 'Job site, Elm St', 18.5, 'business', 'Site inspection'],
+  [0, 11, 'Office, N 1st St', 'Acme Corp HQ, Santa Clara', 2.1, 'business', 'Client meeting', 'learned-route'],
+  [0, 8, 'Home', 'Office, N 1st St', 7.9, 'business', 'Picked up samples', 'learned-route'],
+  [1, 14, 'Acme Corp HQ, Santa Clara', 'Job site, Elm St', 18.5, 'business', '', 'work-hours'],
   [1, 8, 'Home', 'Acme Corp HQ, Santa Clara', 12.4, 'business', 'Client meeting'],
-  [2, 18, 'Home', 'Trader Joe’s, Campbell', 4.2, 'personal', ''],
+  [1, 19, 'Office, N 1st St', 'Home', 7.9, 'personal', '', 'commute'],
+  [2, 18, 'Home', 'Trader Joe’s, Campbell', 4.2, 'personal', '', 'work-hours'],
   [3, 10, 'Home', 'San Jose Airport (SJC)', 9.7, 'business', 'Flight to client'],
 ];
 
 export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
   const existing = await db.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM trips;');
   if ((existing?.n ?? 0) > 0) return;
-  for (const [daysAgo, hour, from, to, miles, classification, purpose] of [...TRIPS].reverse()) {
+  const placeIds = new Map<string, string>();
+  for (const place of PLACES) placeIds.set(place.name, (await insertPlace(db, place)).id);
+  for (const [daysAgo, hour, from, to, miles, classification, purpose, autoReason] of [
+    ...TRIPS,
+  ].reverse()) {
     const start = new Date();
     start.setDate(start.getDate() - daysAgo);
     start.setHours(hour, 12, 0, 0);
@@ -57,6 +75,9 @@ export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
       classification,
       purpose,
       source: 'auto',
+      startPlaceId: placeIds.get(from) ?? null,
+      endPlaceId: placeIds.get(to) ?? null,
+      autoReason: autoReason ?? null,
     });
   }
 }

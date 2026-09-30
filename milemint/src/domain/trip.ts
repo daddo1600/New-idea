@@ -1,3 +1,4 @@
+import type { AutoReason } from './classify-rules';
 import { rateForDate, type RatePeriod, US_BUSINESS_RATES } from './rates';
 
 export type Classification = 'unclassified' | 'business' | 'personal';
@@ -21,6 +22,11 @@ export type Trip = {
   purpose: string;
   source: TripSource;
   createdAt: string;
+  /** Named places the drive started/ended at, when matched. */
+  startPlaceId: string | null;
+  endPlaceId: string | null;
+  /** Why the classification was set automatically; null once the user sets it. */
+  autoReason: AutoReason | null;
 };
 
 export const METERS_PER_MILE = 1609.344;

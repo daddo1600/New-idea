@@ -17,6 +17,9 @@ function trip(overrides: Partial<Trip>): Trip {
     purpose: 'Client visit',
     source: 'manual',
     createdAt: '2026-03-10T09:00:00.000Z',
+    startPlaceId: null,
+    endPlaceId: null,
+    autoReason: null,
     ...overrides,
   };
 }

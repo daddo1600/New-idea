@@ -1,7 +1,8 @@
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import { SQLiteProvider, type SQLiteDatabase } from 'expo-sqlite';
 import { Suspense } from 'react';
-import { ActivityIndicator, useColorScheme } from 'react-native';
+import { ActivityIndicator, StyleSheet, useColorScheme } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { DATABASE_NAME, initDatabase } from '@/db/database';
 import { DEMO_MODE, seedDemoTrips } from '@/dev/demo';
@@ -16,19 +17,26 @@ async function onInit(db: SQLiteDatabase) {
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Suspense fallback={<ActivityIndicator style={{ flex: 1 }} />}>
-        <SQLiteProvider databaseName={DATABASE_NAME} onInit={onInit} useSuspense>
-          <Stack>
-            <Stack.Screen name="index" options={{ title: 'MileMint' }} />
-            <Stack.Screen name="add-trip" options={{ title: 'Add missed trip', presentation: 'modal' }} />
-            <Stack.Screen
-              name="setup-tracking"
-              options={{ title: 'Automatic tracking', presentation: 'modal' }}
-            />
-          </Stack>
-        </SQLiteProvider>
-      </Suspense>
-    </ThemeProvider>
+    // Needed for swipe-to-classify on trip rows.
+    <GestureHandlerRootView style={styles.root}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Suspense fallback={<ActivityIndicator style={{ flex: 1 }} />}>
+          <SQLiteProvider databaseName={DATABASE_NAME} onInit={onInit} useSuspense>
+            <Stack>
+              <Stack.Screen name="index" options={{ title: 'MileMint' }} />
+              <Stack.Screen name="add-trip" options={{ title: 'Add missed trip', presentation: 'modal' }} />
+              <Stack.Screen
+                name="setup-tracking"
+                options={{ title: 'Automatic tracking', presentation: 'modal' }}
+              />
+              <Stack.Screen name="settings" options={{ title: 'Settings' }} />
+              <Stack.Screen name="trip/[id]" options={{ title: 'Trip' }} />
+            </Stack>
+          </SQLiteProvider>
+        </Suspense>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({ root: { flex: 1 } });

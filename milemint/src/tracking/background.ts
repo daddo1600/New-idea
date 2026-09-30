@@ -4,8 +4,12 @@ import * as TaskManager from 'expo-task-manager';
 import { Platform } from 'react-native';
 
 import { getBackgroundDatabase } from '@/db/database';
-import { insertTrip } from '@/db/trips-repo';
+import { listPlaces } from '@/db/places-repo';
+import { loadSettings } from '@/db/settings-repo';
+import { insertTrip, listClassificationHistory } from '@/db/trips-repo';
+import { suggestClassification } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
+import { matchPlace } from '@/domain/places';
 import {
   GEOFENCE_RADIUS_M,
   INITIAL_TRACKER_RECORD,
@@ -96,19 +100,44 @@ async function labelFor(point: LatLng): Promise<string> {
 }
 
 async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise<void> {
-  const [startLabel, endLabel] = await Promise.all([labelFor(trip.start), labelFor(trip.end)]);
+  const [places, history, settings] = await Promise.all([
+    listPlaces(db),
+    listClassificationHistory(db),
+    loadSettings(db),
+  ]);
+  const startPlace = matchPlace(trip.start, places);
+  const endPlace = matchPlace(trip.end, places);
+  const [startLabel, endLabel] = await Promise.all([
+    startPlace?.name ?? labelFor(trip.start),
+    endPlace?.name ?? labelFor(trip.end),
+  ]);
+  const started = new Date(trip.startedAt);
+  const suggestion = suggestClassification(
+    {
+      start: { placeId: startPlace?.id ?? null, point: trip.start },
+      end: { placeId: endPlace?.id ?? null, point: trip.end },
+      // The phone's current time zone: work hours are "when I work where I am".
+      weekday: started.getDay(),
+      minutesOfDay: started.getHours() * 60 + started.getMinutes(),
+    },
+    { history, places, workHours: settings.workHoursEnabled ? settings.workWeek : null },
+  );
   await insertTrip(
     db,
     {
-      startedAt: new Date(trip.startedAt).toISOString(),
-      localDate: toLocalIsoDate(new Date(trip.startedAt)),
+      startedAt: started.toISOString(),
+      localDate: toLocalIsoDate(started),
       endedAt: new Date(trip.endedAt).toISOString(),
       startLabel,
       endLabel,
       distanceMeters: trip.distanceMeters,
-      classification: 'unclassified',
-      purpose: '',
+      classification: suggestion.classification ?? 'unclassified',
+      // Business without a learned purpose stays empty; the trip list asks for one.
+      purpose: suggestion.purpose ?? '',
       source: 'auto',
+      startPlaceId: startPlace?.id ?? null,
+      endPlaceId: endPlace?.id ?? null,
+      autoReason: suggestion.classification ? suggestion.reason : null,
     },
     trip.route,
   );

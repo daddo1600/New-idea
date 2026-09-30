@@ -1,13 +1,19 @@
 import { router, Stack } from 'expo-router';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
+import ReanimatedSwipeable, {
+  SwipeDirection,
+  type SwipeableMethods,
+} from 'react-native-gesture-handler/ReanimatedSwipeable';
 
 import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTrips } from '@/db/use-trips';
+import { isCommute, type AutoReason } from '@/domain/classify-rules';
 import { formatCents, formatMiles } from '@/domain/format';
+import type { Place } from '@/domain/places';
 import {
   metersToMiles,
   summarizeYear,
@@ -24,11 +30,20 @@ const CLASSIFY_OPTIONS = [
   { value: 'personal', label: 'Personal' },
 ] as const satisfies readonly { value: Classification; label: string }[];
 
+const AUTO_NOTES: Record<AutoReason, string> = {
+  'learned-route': 'Auto: usual route',
+  'work-hours': 'Auto: work hours',
+  commute: 'Auto: commute',
+};
+
+/** How far a row must be dragged before letting go classifies it. */
+const SWIPE_THRESHOLD = 80;
+
 /** Show the tracking setup once per launch until location access is granted. */
 let promptedForTracking = false;
 
 export default function HomeScreen() {
-  const { trips, classify, remove, reload } = useTrips();
+  const { trips, places, classify, remove, reload } = useTrips();
   const { status } = useTracking(reload);
   const year = new Date().getFullYear();
   const summary = useMemo(() => summarizeYear(trips ?? [], year), [trips, year]);
@@ -42,6 +57,8 @@ export default function HomeScreen() {
 
   if (!trips) return <ActivityIndicator style={styles.loading} />;
 
+  const kindOf = (id: string | null) => places.find((place: Place) => place.id === id)?.kind ?? null;
+
   const confirmDelete = (trip: Trip) =>
     Alert.alert('Delete trip?', `${trip.startLabel} → ${trip.endLabel}`, [
       { text: 'Cancel', style: 'cancel' },
@@ -50,7 +67,9 @@ export default function HomeScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <Stack.Screen options={{ headerRight: () => <AddMissedTripLink /> }} />
+      <Stack.Screen
+        options={{ headerLeft: () => <SettingsLink />, headerRight: () => <AddMissedTripLink /> }}
+      />
       <FlatList
         data={trips}
         keyExtractor={(trip) => trip.id}
@@ -71,6 +90,7 @@ export default function HomeScreen() {
         renderItem={({ item }) => (
           <TripRow
             trip={item}
+            commute={isCommute(kindOf(item.startPlaceId), kindOf(item.endPlaceId))}
             onClassify={(c) => classify(item, c)}
             onLongPress={() => confirmDelete(item)}
           />
@@ -105,15 +125,20 @@ function SummaryCard({
 
 function TripRow({
   trip,
+  commute,
   onClassify,
   onLongPress,
 }: {
   trip: Trip;
+  /** Home ↔ work: shown with a warning if marked business. */
+  commute: boolean;
   onClassify: (classification: Classification) => void;
   onLongPress: () => void;
 }) {
   const theme = useTheme();
+  const swipeable = useRef<SwipeableMethods>(null);
   const unclassified = trip.classification === 'unclassified';
+  const business = trip.classification === 'business';
   const deduction = tripDeductionCents(trip);
   // What the trip would be worth as business: the nudge to classify it.
   const potential = unclassified ? tripDeductionCents({ ...trip, classification: 'business' }) : 0;
@@ -123,35 +148,120 @@ function TripRow({
     trip.purpose,
     deduction > 0 ? formatCents(deduction) : '',
   ].filter(Boolean);
+  const openDetails = () => router.push({ pathname: '/trip/[id]', params: { id: trip.id } });
+
+  // Swipe right = Business, left = Personal. The buttons below stay for
+  // VoiceOver and anyone who doesn't discover the gesture.
   return (
-    <Pressable onLongPress={onLongPress} accessibilityHint="Long press to delete">
-      <ThemedView type="backgroundElement" style={styles.row}>
-        <View style={styles.rowHeader}>
-          <ThemedText type="smallBold" style={styles.route} numberOfLines={1}>
-            {trip.startLabel} → {trip.endLabel}
-          </ThemedText>
-          <ThemedText type="smallBold">{formatMiles(metersToMiles(trip.distanceMeters))}</ThemedText>
-        </View>
-        <ThemedText type="small" themeColor="textSecondary">
-          {details.join(' · ')}
-        </ThemedText>
-        {unclassified && (
-          <ThemedText type="smallBold" style={{ color: theme.accent }}>
-            Business or personal?{potential > 0 ? ` Worth ${formatCents(potential)} if business.` : ''}
-          </ThemedText>
-        )}
-        <Segmented
-          options={CLASSIFY_OPTIONS}
-          value={unclassified ? null : trip.classification}
-          onChange={onClassify}
+    <ReanimatedSwipeable
+      ref={swipeable}
+      friction={2}
+      leftThreshold={SWIPE_THRESHOLD}
+      rightThreshold={SWIPE_THRESHOLD}
+      renderLeftActions={() => (
+        <SwipeAction label="Business" color={theme.accent} textColor={theme.onAccent} side="left" />
+      )}
+      renderRightActions={() => (
+        <SwipeAction
+          label="Personal"
+          color={theme.backgroundSelected}
+          textColor={theme.text}
+          side="right"
         />
-      </ThemedView>
-    </Pressable>
+      )}
+      onSwipeableOpen={(direction) => {
+        swipeable.current?.close();
+        onClassify(direction === SwipeDirection.RIGHT ? 'business' : 'personal');
+      }}>
+      <Pressable
+        onPress={openDetails}
+        onLongPress={onLongPress}
+        accessibilityHint="Opens trip details. Long press to delete">
+        <ThemedView type="backgroundElement" style={styles.row}>
+          <View style={styles.rowHeader}>
+            <ThemedText type="smallBold" style={styles.route} numberOfLines={1}>
+              {trip.startLabel} → {trip.endLabel}
+            </ThemedText>
+            <ThemedText type="smallBold">{formatMiles(metersToMiles(trip.distanceMeters))}</ThemedText>
+          </View>
+          <ThemedText type="small" themeColor="textSecondary">
+            {details.join(' · ')}
+          </ThemedText>
+          {trip.autoReason && (
+            <ThemedText type="small" themeColor="textSecondary">
+              {AUTO_NOTES[trip.autoReason]}
+            </ThemedText>
+          )}
+          {business && commute && (
+            <ThemedText type="small" themeColor="danger">
+              Commute between home and work isn’t deductible.
+            </ThemedText>
+          )}
+          {unclassified && (
+            <ThemedText type="smallBold" style={{ color: theme.accent }}>
+              Business or personal?{potential > 0 ? ` Worth ${formatCents(potential)} if business.` : ''}
+            </ThemedText>
+          )}
+          {business && !trip.purpose.trim() && (
+            <Pressable accessibilityRole="button" onPress={openDetails} hitSlop={8}>
+              <ThemedText type="smallBold" style={{ color: theme.accent }}>
+                Add business purpose
+              </ThemedText>
+            </Pressable>
+          )}
+          <Segmented
+            options={CLASSIFY_OPTIONS}
+            value={unclassified ? null : trip.classification}
+            onChange={onClassify}
+          />
+        </ThemedView>
+      </Pressable>
+    </ReanimatedSwipeable>
+  );
+}
+
+function SwipeAction({
+  label,
+  color,
+  textColor,
+  side,
+}: {
+  label: string;
+  color: string;
+  textColor: string;
+  side: 'left' | 'right';
+}) {
+  return (
+    <View
+      style={[
+        styles.swipeAction,
+        { backgroundColor: color, alignItems: side === 'left' ? 'flex-start' : 'flex-end' },
+      ]}>
+      <ThemedText type="smallBold" style={{ color: textColor }}>
+        {label}
+      </ThemedText>
+    </View>
   );
 }
 
 function formatTime(iso: string): string {
   return new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+}
+
+function SettingsLink() {
+  const theme = useTheme();
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="Settings: work hours and places"
+      hitSlop={12}
+      onPress={() => router.push('/settings')}
+      style={styles.headerLink}>
+      <ThemedText type="small" style={{ color: theme.accent }}>
+        Settings
+      </ThemedText>
+    </Pressable>
+  );
 }
 
 function AddMissedTripLink() {
@@ -236,6 +346,12 @@ const styles = StyleSheet.create({
   row: { borderRadius: 12, padding: Spacing.three, gap: Spacing.two },
   rowHeader: { flexDirection: 'row', justifyContent: 'space-between', gap: Spacing.two },
   route: { flex: 1 },
+  swipeAction: {
+    width: 120,
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.four,
+    borderRadius: 12,
+  },
   header: { gap: Spacing.three },
   headerLink: { paddingHorizontal: Spacing.three },
   trackingOn: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, paddingHorizontal: Spacing.one },

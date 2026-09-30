@@ -32,6 +32,8 @@ npx expo start      # press w for the web preview (also generates route types)
 **Done:**
 - Automatic trip detection (geofence + GPS, low battery)
 - Permission setup and a tracking-status card
+- Automatic sorting: learned routes, work hours, named places, commute warning (home ↔ work isn't deductible)
+- Swipe to classify, trip detail screen (purpose, labels, save as place), settings (work hours, places)
 - Business/personal classification with a "worth $X if business" prompt
 - Deductions counter
 - Split IRS rates
@@ -39,8 +41,7 @@ npx expo start      # press w for the web preview (also generates route types)
 - Manual "add missed trip" fallback
 
 **Next:**
-- Auto-classify: work hours, learned routes, named places
-- Swipe and bulk classify, trip map, commute warning
+- Bulk classify, trip map, edit place name/type/radius
 - Motion-sensor and car Bluetooth/CarPlay triggers
 - Field test on an iPhone
 - Receipt scanning
