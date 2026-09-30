@@ -5,6 +5,8 @@ import { loadSettings, saveSettings } from '@/db/settings-repo';
 import { DEMO_REGION } from '@/dev/demo';
 import { DEFAULT_REGION, REGIONS, type Region, type RegionCode } from '@/domain/regions';
 
+import { rememberRegion } from './remembered-region';
+
 type RegionState = {
   region: Region;
   /** False until the user has picked where they drive (first launch). */
@@ -38,6 +40,7 @@ export function RegionProvider({ children }: { children: ReactNode }) {
       (settings) => {
         if (cancelled) return;
         setCode(settings.region);
+        if (settings.region) rememberRegion(settings.region);
         setOnboarded(settings.onboarded);
         setLoaded(true);
       },
@@ -52,6 +55,7 @@ export function RegionProvider({ children }: { children: ReactNode }) {
     async (next: RegionCode) => {
       setCode(next);
       if (demo) return;
+      rememberRegion(next);
       await saveSettings(db, { ...(await loadSettings(db)), region: next });
     },
     [db, demo],

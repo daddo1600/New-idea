@@ -15,14 +15,17 @@ import { scheduleOnRN } from 'react-native-worklets';
 
 import { ROAD_PATH } from '@/brand/leaf';
 import { phoneRegion } from '@/components/country-options';
+import { IntroScenery } from '@/components/intro-scenery';
 import { LeafMark } from '@/components/leaf-mark';
-import { formatDistance, formatMoney, fromUnits, ratePeriodFor, REGIONS } from '@/domain/regions';
+import { formatDistance, formatMoney, fromUnits, ratePeriodFor, REGIONS, type RegionCode } from '@/domain/regions';
 import { toLocalIsoDate } from '@/domain/trip';
+import { recallRegion } from '@/region/remembered-region';
 
 /**
  * Plays on every launch while the app opens underneath: the car (the logo's
  * yellow dot) drives up the leaf's road, laying the lane markings behind it,
- * while the miles and their tax value count up. Starts exactly where the
+ * past a petrol station, shops and a café, while the miles and their tax
+ * value count up in the user's currency. Starts exactly where the
  * native splash screen leaves off (same colour, size and position).
  */
 
@@ -32,7 +35,7 @@ export const INTRO_BACKGROUND = '#0B7A55';
 const SPLASH_SIZE = 120;
 const GROWN_SCALE = 1.5;
 
-const DRIVE_MS = 1300;
+const DRIVE_MS = 1700;
 const HOLD_MS = 350;
 const FADE_MS = 300;
 /** The drive the counter shows. */
@@ -74,12 +77,27 @@ function sampleRoad() {
   return { roadXs: xs, roadYs: ys, roadLength: total };
 }
 
+/** A point `t` (0–1) of the way along the road, in leaf units. */
+function roadAt(t: number) {
+  const i = Math.round(Math.min(1, Math.max(0, t)) * SAMPLES);
+  return { x: roadXs[i], y: roadYs[i] };
+}
+
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 export function LaunchIntro({ onDone }: { onDone: () => void }) {
   const reduceMotion = useReducedMotion();
-  const region = REGIONS[phoneRegion()];
+  // The phone's country until the one chosen in set-up has been read (a few milliseconds).
+  const [code, setCode] = useState<RegionCode>(phoneRegion);
+  useEffect(() => {
+    let current = true;
+    recallRegion().then((remembered) => current && remembered && setCode(remembered));
+    return () => {
+      current = false;
+    };
+  }, []);
+  const region = REGIONS[code];
   const ratePerUnit = useMemo(() => {
     const period = ratePeriodFor(toLocalIsoDate(new Date()), region) ?? region.rates[region.rates.length - 1];
     return period.tiers[0].rate / 10; // minor units (cents, pence) per mile or km
@@ -151,6 +169,7 @@ export function LaunchIntro({ onDone }: { onDone: () => void }) {
           />
           <AnimatedCircle r={58} fill="#FACC15" stroke="#FFFFFF" strokeWidth={16} animatedProps={carProps} />
         </LeafMark>
+        {!reduceMotion && <IntroScenery size={SPLASH_SIZE} drive={drive} roadAt={roadAt} />}
       </Animated.View>
       <Animated.View style={[styles.counter, counterStyle]}>
         <Text style={styles.money}>{formatMoney(Math.round(units * ratePerUnit), region)}</Text>
