@@ -1,15 +1,3 @@
-const usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
-
-export function formatCents(cents: number): string {
-  return usd.format(cents / 100);
-}
-
-const oneDecimal = new Intl.NumberFormat('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-
-export function formatMiles(miles: number): string {
-  return `${oneDecimal.format(miles)} mi`;
-}
-
 /** Parses user-typed miles ("12", "12.5", " 3 "); returns null if not a positive number. */
 export function parseMiles(input: string): number | null {
   const trimmed = input.trim();

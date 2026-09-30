@@ -12,19 +12,22 @@ import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTrips } from '@/db/use-trips';
 import { isCommute, type AutoReason } from '@/domain/classify-rules';
-import { formatCents, formatMiles } from '@/domain/format';
 import { autoDrivesInMonth, FREE_AUTO_DRIVES_PER_MONTH, lockedTripIds } from '@/domain/plan';
 import type { Place } from '@/domain/places';
 import {
-  metersToMiles,
-  summarizeYear,
-  tripDeductionCents,
-  type Classification,
-  toLocalIsoDate,
-  type Trip,
-} from '@/domain/trip';
+  computeDeductions,
+  currentTaxYear,
+  formatDistance,
+  formatMoney,
+  potentialDeduction,
+  summarizeTaxYear,
+  taxYearOf,
+  type TaxYearSummary,
+} from '@/domain/regions';
+import { type Classification, toLocalIsoDate, type Trip } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { usePro } from '@/purchases/pro';
+import { useRegion } from '@/region/region';
 import type { TrackingStatus } from '@/tracking/background';
 import { useTracking } from '@/tracking/use-tracking';
 
@@ -44,39 +47,47 @@ const SWIPE_THRESHOLD = 80;
 
 /** Show the tracking setup once per launch until location access is granted. */
 let promptedForTracking = false;
+/** Ask where the user drives once per launch until they've chosen. */
+let promptedForRegion = false;
 
 export default function HomeScreen() {
   const { trips, places, classify, remove, reload } = useTrips();
   const { status } = useTracking(reload);
   const { isPro } = usePro();
-  const year = new Date().getFullYear();
+  const { region, chosen, loaded } = useRegion();
+  const taxYear = currentTaxYear(region);
   const locked = useMemo(() => lockedTripIds(trips ?? [], isPro), [trips, isPro]);
-  // Locked drives don't count towards the total until they're unlocked.
+  // Locked drives don't count towards the total (or a tier limit) until they're unlocked.
+  const visible = useMemo(() => (trips ?? []).filter((trip) => !locked.has(trip.id)), [trips, locked]);
+  const deductions = useMemo(() => computeDeductions(visible, region), [visible, region]);
   const summary = useMemo(
-    () => summarizeYear((trips ?? []).filter((trip) => !locked.has(trip.id)), year),
-    [trips, locked, year],
+    () => summarizeTaxYear(visible, region, taxYear, deductions),
+    [visible, region, taxYear, deductions],
   );
   // Home ↔ work drives the user marked business anyway. Kept in the total (a
   // home office can make them deductible), but called out so they get a second look.
   const commuteCents = useMemo(() => {
     const kind = (id: string | null) => places.find((place) => place.id === id)?.kind ?? null;
-    return (trips ?? [])
+    return visible
       .filter(
         (trip) =>
-          !locked.has(trip.id) &&
-          trip.localDate.startsWith(String(year)) &&
+          taxYearOf(trip.localDate, region) === taxYear &&
           trip.classification === 'business' &&
           isCommute(kind(trip.startPlaceId), kind(trip.endPlaceId)),
       )
-      .reduce((sum, trip) => sum + tripDeductionCents(trip), 0);
-  }, [trips, places, locked, year]);
+      .reduce((sum, trip) => sum + (deductions.get(trip.id) ?? 0), 0);
+  }, [visible, places, region, taxYear, deductions]);
 
+  // First launch: where do you drive? Then location access.
   useEffect(() => {
-    if (status === 'needs-permission' && !promptedForTracking) {
+    if (loaded && !chosen && !promptedForRegion) {
+      promptedForRegion = true;
+      router.push('/region');
+    } else if (chosen && status === 'needs-permission' && !promptedForTracking) {
       promptedForTracking = true;
       router.push('/setup-tracking');
     }
-  }, [status]);
+  }, [loaded, chosen, status]);
 
   if (!trips) return <ActivityIndicator style={styles.loading} />;
 
@@ -99,7 +110,7 @@ export default function HomeScreen() {
         contentContainerStyle={styles.list}
         ListHeaderComponent={
           <View style={styles.header}>
-            <SummaryCard year={year} summary={summary} commuteCents={commuteCents} />
+            <SummaryCard summary={summary} commuteCents={commuteCents} />
             <TrackingCard status={status} />
             {!isPro && <PlanCard trips={trips} lockedCount={locked.size} />}
           </View>
@@ -113,10 +124,12 @@ export default function HomeScreen() {
         }
         renderItem={({ item }) =>
           locked.has(item.id) ? (
-            <LockedTripRow trip={item} />
+            <LockedTripRow trip={item} worth={potentialDeduction(item, visible, region)} />
           ) : (
             <TripRow
               trip={item}
+              deduction={deductions.get(item.id) ?? 0}
+              potential={item.classification === 'unclassified' ? potentialDeduction(item, visible, region) : 0}
               commute={isCommute(kindOf(item.startPlaceId), kindOf(item.endPlaceId))}
               onClassify={(c) => classify(item, c)}
               onLongPress={() => confirmDelete(item)}
@@ -128,26 +141,21 @@ export default function HomeScreen() {
   );
 }
 
-function SummaryCard({
-  year,
-  summary,
-  commuteCents,
-}: {
-  year: number;
-  summary: ReturnType<typeof summarizeYear>;
-  commuteCents: number;
-}) {
+function SummaryCard({ summary, commuteCents }: { summary: TaxYearSummary; commuteCents: number }) {
   const theme = useTheme();
+  const { region } = useRegion();
+  const total = formatMoney(summary.deduction, region);
   return (
     <ThemedView type="backgroundElement" style={styles.card}>
       <ThemedText type="small" themeColor="textSecondary">
-        Deductions found in {year}
+        Deductions found in {summary.label}
+        {summary.label.length > 4 ? ' tax year' : ''}
       </ThemedText>
-      <ThemedText type="title" accessibilityLabel={`${formatCents(summary.deductionCents)} found`}>
-        {formatCents(summary.deductionCents)}
+      <ThemedText type="title" accessibilityLabel={`${total} found`}>
+        {total}
       </ThemedText>
       <ThemedText type="small" themeColor="textSecondary">
-        {formatMiles(summary.businessMiles)} business
+        {formatDistance(summary.businessMeters, region)} business
         {summary.unclassifiedCount > 0 && ` · ${summary.unclassifiedCount} to review`}
       </ThemedText>
       <Pressable
@@ -162,7 +170,8 @@ function SummaryCard({
       </Pressable>
       {commuteCents > 0 && (
         <ThemedText type="small" themeColor="danger">
-          Includes {formatCents(commuteCents)} from home ↔ work commutes, which usually aren’t deductible.
+          Includes {formatMoney(commuteCents, region)} from home ↔ work commutes, which usually aren’t
+          deductible.
         </ThemedText>
       )}
     </ThemedView>
@@ -171,28 +180,31 @@ function SummaryCard({
 
 function TripRow({
   trip,
+  deduction,
+  potential,
   commute,
   onClassify,
   onLongPress,
 }: {
   trip: Trip;
+  deduction: number;
+  /** What the trip would be worth as business: the nudge to classify it. */
+  potential: number;
   /** Home ↔ work: shown with a warning if marked business. */
   commute: boolean;
   onClassify: (classification: Classification) => void;
   onLongPress: () => void;
 }) {
   const theme = useTheme();
+  const { region } = useRegion();
   const swipeable = useRef<SwipeableMethods>(null);
   const unclassified = trip.classification === 'unclassified';
   const business = trip.classification === 'business';
-  const deduction = tripDeductionCents(trip);
-  // What the trip would be worth as business: the nudge to classify it.
-  const potential = unclassified ? tripDeductionCents({ ...trip, classification: 'business' }) : 0;
   const details = [
     trip.localDate,
     trip.source === 'auto' ? formatTime(trip.startedAt) : 'Added manually',
     trip.purpose,
-    deduction > 0 ? formatCents(deduction) : '',
+    deduction > 0 ? formatMoney(deduction, region) : '',
   ].filter(Boolean);
   const openDetails = () => router.push({ pathname: '/trip/[id]', params: { id: trip.id } });
 
@@ -228,7 +240,7 @@ function TripRow({
             <ThemedText type="smallBold" style={styles.route} numberOfLines={1}>
               {trip.startLabel} → {trip.endLabel}
             </ThemedText>
-            <ThemedText type="smallBold">{formatMiles(metersToMiles(trip.distanceMeters))}</ThemedText>
+            <ThemedText type="smallBold">{formatDistance(trip.distanceMeters, region)}</ThemedText>
           </View>
           <ThemedText type="small" themeColor="textSecondary">
             {details.join(' · ')}
@@ -245,7 +257,7 @@ function TripRow({
           )}
           {unclassified && (
             <ThemedText type="smallBold" style={{ color: theme.accent }}>
-              Business or personal?{potential > 0 ? ` Worth ${formatCents(potential)} if business.` : ''}
+              Business or personal?{potential > 0 ? ` Worth ${formatMoney(potential, region)} if business.` : ''}
             </ThemedText>
           )}
           {business && !trip.purpose.trim() && (
@@ -272,13 +284,14 @@ function TripRow({
  * classification wait for Pro. Distance and date stay visible so the user can
  * see it's real.
  */
-function LockedTripRow({ trip }: { trip: Trip }) {
+function LockedTripRow({ trip, worth }: { trip: Trip; worth: number }) {
   const theme = useTheme();
-  const worth = tripDeductionCents({ ...trip, classification: 'business' });
+  const { region } = useRegion();
+  const distance = formatDistance(trip.distanceMeters, region);
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`Locked drive on ${trip.localDate}, ${formatMiles(metersToMiles(trip.distanceMeters))}`}
+      accessibilityLabel={`Locked drive on ${trip.localDate}, ${distance}`}
       accessibilityHint="Opens MileMint Pro to unlock it"
       onPress={() => router.push('/pro')}>
       <ThemedView type="backgroundElement" style={styles.row}>
@@ -286,10 +299,10 @@ function LockedTripRow({ trip }: { trip: Trip }) {
           <ThemedText type="smallBold" themeColor="textSecondary" style={styles.route}>
             🔒 Locked drive
           </ThemedText>
-          <ThemedText type="smallBold">{formatMiles(metersToMiles(trip.distanceMeters))}</ThemedText>
+          <ThemedText type="smallBold">{distance}</ThemedText>
         </View>
         <ThemedText type="small" themeColor="textSecondary">
-          {[trip.localDate, formatTime(trip.startedAt), worth > 0 ? `worth up to ${formatCents(worth)}` : '']
+          {[trip.localDate, formatTime(trip.startedAt), worth > 0 ? `worth up to ${formatMoney(worth, region)}` : '']
             .filter(Boolean)
             .join(' · ')}
         </ThemedText>

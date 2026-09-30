@@ -7,11 +7,11 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTrips } from '@/db/use-trips';
-import { formatCents } from '@/domain/format';
 import { FREE_AUTO_DRIVES_PER_MONTH, lockedTripIds } from '@/domain/plan';
-import { tripDeductionCents } from '@/domain/trip';
+import { formatMoney, potentialDeduction } from '@/domain/regions';
 import { useTheme } from '@/hooks/use-theme';
 import { usePro } from '@/purchases/pro';
+import { useRegion } from '@/region/region';
 
 const TERMS_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
 const PRIVACY_URL =
@@ -25,7 +25,7 @@ const COMPARISON: readonly [feature: string, free: string | boolean, pro: string
   ['Swipe to sort business trips', true, true],
   ['Work hours, places, learned routes', true, true],
   ['Mileage log export (CSV)', true, true],
-  ['IRS-ready PDF report', false, true],
+  ['Tax-ready PDF report', false, true],
   ['Encrypted on your iPhone, no ads', true, true],
 ];
 
@@ -33,18 +33,17 @@ export default function ProScreen() {
   const theme = useTheme();
   const { isPro, plans, plansLoaded, storeAvailable, busy, error, buy, restore, manage } = usePro();
   const { trips } = useTrips();
+  const { region } = useRegion();
   const [selected, setSelected] = useState<string | null>(null);
 
   // What upgrading is worth to this user right now, if they've hit the limit.
   const locked = useMemo(() => {
     const ids = lockedTripIds(trips ?? [], false);
+    const visible = (trips ?? []).filter((trip) => !ids.has(trip.id));
     const drives = (trips ?? []).filter((trip) => ids.has(trip.id));
-    const cents = drives.reduce(
-      (sum, trip) => sum + tripDeductionCents({ ...trip, classification: 'business' }),
-      0,
-    );
-    return { count: drives.length, cents };
-  }, [trips]);
+    const value = drives.reduce((sum, trip) => sum + potentialDeduction(trip, visible, region), 0);
+    return { count: drives.length, value };
+  }, [trips, region]);
 
   // Close once the subscription becomes active here, whether bought or restored.
   const wasPro = useRef(isPro);
@@ -99,9 +98,9 @@ export default function ProScreen() {
             <ThemedText type="smallBold">
               {locked.count} {locked.count === 1 ? 'drive is' : 'drives are'} waiting to be unlocked
             </ThemedText>
-            {locked.cents > 0 && (
+            {locked.value > 0 && (
               <ThemedText type="small" themeColor="textSecondary">
-                Worth up to {formatCents(locked.cents)} in deductions if they were for business.
+                Worth up to {formatMoney(locked.value, region)} in deductions if they were for business.
               </ThemedText>
             )}
           </ThemedView>

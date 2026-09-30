@@ -7,6 +7,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { DATABASE_NAME, initDatabase } from '@/db/database';
 import { DEMO_MODE, seedDemoTrips } from '@/dev/demo';
 import { ProProvider } from '@/purchases/pro';
+import { RegionProvider } from '@/region/region';
 // Registers the background location tasks; must run before the app renders.
 import '@/tracking/background';
 
@@ -23,20 +24,23 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Suspense fallback={<ActivityIndicator style={{ flex: 1 }} />}>
           <SQLiteProvider databaseName={DATABASE_NAME} onInit={onInit} useSuspense>
-            <ProProvider>
-              <Stack>
-                <Stack.Screen name="index" options={{ title: 'MileMint' }} />
-                <Stack.Screen name="add-trip" options={{ title: 'Add missed trip', presentation: 'modal' }} />
-                <Stack.Screen
-                  name="setup-tracking"
-                  options={{ title: 'Automatic tracking', presentation: 'modal' }}
-                />
-                <Stack.Screen name="settings" options={{ title: 'Settings' }} />
-                <Stack.Screen name="trip/[id]" options={{ title: 'Trip' }} />
-                <Stack.Screen name="report" options={{ title: 'Reports' }} />
-                <Stack.Screen name="pro" options={{ title: 'MileMint Pro', presentation: 'modal' }} />
-              </Stack>
-            </ProProvider>
+            <RegionProvider>
+              <ProProvider>
+                <Stack>
+                  <Stack.Screen name="index" options={{ title: 'MileMint' }} />
+                  <Stack.Screen name="add-trip" options={{ title: 'Add missed trip', presentation: 'modal' }} />
+                  <Stack.Screen
+                    name="setup-tracking"
+                    options={{ title: 'Automatic tracking', presentation: 'modal' }}
+                  />
+                  <Stack.Screen name="settings" options={{ title: 'Settings' }} />
+                  <Stack.Screen name="trip/[id]" options={{ title: 'Trip' }} />
+                  <Stack.Screen name="report" options={{ title: 'Reports' }} />
+                  <Stack.Screen name="region" options={{ title: 'Your country', presentation: 'modal' }} />
+                  <Stack.Screen name="pro" options={{ title: 'MileMint Pro', presentation: 'modal' }} />
+                </Stack>
+              </ProProvider>
+            </RegionProvider>
           </SQLiteProvider>
         </Suspense>
       </ThemeProvider>

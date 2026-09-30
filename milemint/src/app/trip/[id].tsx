@@ -16,11 +16,12 @@ import {
   setTripPlace,
   updateTripDetails,
 } from '@/db/trips-repo';
-import { formatMiles } from '@/domain/format';
 import type { LatLng } from '@/domain/geo';
 import type { PlaceKind } from '@/domain/places';
-import { metersToMiles, type Classification, type Trip } from '@/domain/trip';
+import { formatDistance } from '@/domain/regions';
+import { type Classification, type Trip } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
+import { useRegion } from '@/region/region';
 
 const KIND_OPTIONS = [
   { value: 'home', label: 'Home' },
@@ -39,6 +40,7 @@ const CLASSIFY_OPTIONS = [
 export default function TripScreen() {
   const db = useSQLiteContext();
   const theme = useTheme();
+  const { region } = useRegion();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [trip, setTrip] = useState<Trip | null | undefined>(undefined);
   const [route, setRoute] = useState<LatLng[]>([]);
@@ -114,7 +116,7 @@ export default function TripScreen() {
   const save = async () => {
     if (!startLabel.trim() || !endLabel.trim()) return setError('Enter where you drove from and to.');
     if (business && !purpose.trim()) {
-      return setError('The IRS needs a business purpose, e.g. "Client meeting".');
+      return setError(`${region.authority} needs a business purpose, e.g. "Client meeting".`);
     }
     setError(null);
     setSaving(true);
@@ -139,7 +141,7 @@ export default function TripScreen() {
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.form} keyboardShouldPersistTaps="handled">
         <ThemedText type="small" themeColor="textSecondary">
-          {trip.localDate} · {formatMiles(metersToMiles(trip.distanceMeters))}
+          {trip.localDate} · {formatDistance(trip.distanceMeters, region)}
           {trip.source === 'manual' ? ' · Added manually' : ''}
         </ThemedText>
         <Segmented

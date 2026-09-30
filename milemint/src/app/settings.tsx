@@ -22,6 +22,7 @@ import { FREE_AUTO_DRIVES_PER_MONTH } from '@/domain/plan';
 import type { Place, PlaceKind } from '@/domain/places';
 import { useTheme } from '@/hooks/use-theme';
 import { usePro } from '@/purchases/pro';
+import { useRegion } from '@/region/region';
 
 /** Monday first, as people read a work week; values are `Date.getDay()` indexes. */
 const DAYS = [
@@ -79,7 +80,8 @@ export default function SettingsScreen() {
         text: `Check ${invalid.map(([, name]) => name).join(', ')}: use 24-hour times like 09:00, and an end different from the start.`,
       });
     }
-    const settings: AppSettings = { workHoursEnabled: enabled, workWeek: week };
+    // Keep the other settings (such as the region) as they are.
+    const settings: AppSettings = { ...(await loadSettings(db)), workHoursEnabled: enabled, workWeek: week };
     try {
       await saveSettings(db, settings);
       setMessage({ error: false, text: 'Saved. New drives will use these hours.' });
@@ -107,6 +109,8 @@ export default function SettingsScreen() {
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <ProSection />
+
+        <CountrySection />
 
         <ThemedText type="smallBold">Work hours</ThemedText>
         <ThemedView type="backgroundElement" style={styles.card}>
@@ -258,6 +262,37 @@ export default function SettingsScreen() {
         </ThemedView>
       </ScrollView>
     </ThemedView>
+  );
+}
+
+function CountrySection() {
+  const theme = useTheme();
+  const { region } = useRegion();
+  return (
+    <>
+      <ThemedText type="smallBold">Country</ThemedText>
+      <ThemedView type="backgroundElement" style={styles.card}>
+        <View style={styles.rowBetween}>
+          <View style={styles.flex}>
+            <ThemedText type="smallBold">
+              {region.flag} {region.name}
+            </ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">
+              {region.rule}
+            </ThemedText>
+          </View>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Change country"
+            hitSlop={8}
+            onPress={() => router.push('/region')}>
+            <ThemedText type="small" style={{ color: theme.accent }}>
+              Change
+            </ThemedText>
+          </Pressable>
+        </View>
+      </ThemedView>
+    </>
   );
 }
 

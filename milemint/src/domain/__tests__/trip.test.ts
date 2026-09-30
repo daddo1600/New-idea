@@ -1,8 +1,11 @@
 import { describe, expect, it } from '@jest/globals';
 
 import { isValidIsoDate, parseMiles } from '../format';
-import { rateForDate } from '../rates';
-import { milesToMeters, summarizeYear, tripDeductionCents, type Trip } from '../trip';
+import { computeDeductions, ratePeriodFor, REGIONS, summarizeTaxYear } from '../regions';
+import { milesToMeters, type Trip } from '../trip';
+
+const US = REGIONS.US;
+const deductionOf = (t: Trip) => computeDeductions([t], US).get(t.id) ?? 0;
 
 function trip(overrides: Partial<Trip>): Trip {
   return {
@@ -24,57 +27,56 @@ function trip(overrides: Partial<Trip>): Trip {
   };
 }
 
-describe('rateForDate', () => {
+describe('US rate periods', () => {
   it('uses the first-half 2026 rate through 30 June', () => {
-    expect(rateForDate('2026-06-30')?.tenthsOfCentPerMile).toBe(725);
+    expect(ratePeriodFor('2026-06-30', US)?.tiers[0].rate).toBe(725);
   });
 
   it('switches to the mid-year rate on 1 July 2026', () => {
-    expect(rateForDate('2026-07-01T00:00:00Z')?.tenthsOfCentPerMile).toBe(760);
+    expect(ratePeriodFor('2026-07-01', US)?.tiers[0].rate).toBe(760);
   });
 
   it('returns null before the first known period', () => {
-    expect(rateForDate('2023-12-31')).toBeNull();
+    expect(ratePeriodFor('2023-12-31', US)).toBeNull();
   });
 });
 
-describe('tripDeductionCents', () => {
+describe('US deduction per trip', () => {
   it('prices 100 business miles at 72.5¢', () => {
-    expect(tripDeductionCents(trip({}))).toBe(7250);
+    expect(deductionOf(trip({}))).toBe(7250);
   });
 
   it('prices a July trip at the new rate', () => {
-    expect(tripDeductionCents(trip({ localDate: '2026-07-15' }))).toBe(7600);
+    expect(deductionOf(trip({ localDate: '2026-07-15' }))).toBe(7600);
   });
 
   it('uses the local date, not UTC, at the rate boundary', () => {
     // 8pm on 30 June in California is 03:00 on 1 July UTC.
-    expect(
-      tripDeductionCents(trip({ startedAt: '2026-07-01T03:00:00Z', localDate: '2026-06-30' })),
-    ).toBe(7250);
+    expect(deductionOf(trip({ startedAt: '2026-07-01T03:00:00Z', localDate: '2026-06-30' }))).toBe(7250);
   });
 
   it('gives nothing for personal or unclassified trips', () => {
-    expect(tripDeductionCents(trip({ classification: 'personal' }))).toBe(0);
-    expect(tripDeductionCents(trip({ classification: 'unclassified' }))).toBe(0);
+    expect(deductionOf(trip({ classification: 'personal' }))).toBe(0);
+    expect(deductionOf(trip({ classification: 'unclassified' }))).toBe(0);
   });
 });
 
-describe('summarizeYear', () => {
+describe('US tax-year summary', () => {
   it('totals business miles across a split-rate year and counts unclassified', () => {
-    const summary = summarizeYear(
+    const summary = summarizeTaxYear(
       [
         trip({ id: 'a' }),
-        trip({ id: 'b', localDate: '2026-08-01' }),
+        trip({ id: 'b', localDate: '2026-08-01', startedAt: '2026-08-01T09:00:00.000Z' }),
         trip({ id: 'c', classification: 'unclassified' }),
-        trip({ id: 'd', localDate: '2025-12-31' }),
+        trip({ id: 'd', localDate: '2025-12-31', startedAt: '2025-12-31T09:00:00.000Z' }),
       ],
+      US,
       2026,
     );
     expect(summary.tripCount).toBe(3);
     expect(summary.unclassifiedCount).toBe(1);
-    expect(summary.businessMiles).toBeCloseTo(200, 3);
-    expect(summary.deductionCents).toBe(7250 + 7600);
+    expect(summary.businessMeters).toBe(2 * milesToMeters(100));
+    expect(summary.deduction).toBe(7250 + 7600);
   });
 });
 

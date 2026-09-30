@@ -3,7 +3,7 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { Platform } from 'react-native';
 
-import { toCsv, toReportHtml, type MileageReport } from '@/domain/report';
+import { pageSize, toCsv, toReportHtml, type MileageReport } from '@/domain/report';
 
 /**
  * Hands a report to the iOS share sheet (Mail, Files, AirDrop, the
@@ -30,7 +30,7 @@ function download(name: string, text: string, type: string) {
 }
 
 export async function shareCsv(report: MileageReport): Promise<void> {
-  const name = `MileMint ${report.year} mileage log.csv`;
+  const name = `MileMint ${report.label.replace('/', '-')} mileage log.csv`;
   const csv = toCsv(report);
   if (Platform.OS === 'web') return download(name, csv, 'text/csv');
   const file = cacheFile(name);
@@ -43,12 +43,11 @@ export async function shareCsv(report: MileageReport): Promise<void> {
 }
 
 export async function sharePdf(report: MileageReport): Promise<void> {
-  const name = `MileMint ${report.year} IRS mileage report.pdf`;
+  const name = `MileMint ${report.label.replace('/', '-')} ${report.region.authority} mileage report.pdf`;
   const { uri } = await Print.printToFileAsync({
     html: toReportHtml(report),
-    // US Letter with half-inch margins.
-    width: 612,
-    height: 792,
+    // US Letter or A4, with half-inch margins.
+    ...pageSize(report.region),
     margins: { left: 36, right: 36, top: 36, bottom: 36 },
   });
   const file = cacheFile(name);

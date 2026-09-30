@@ -15,6 +15,7 @@ import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/tri
  *   ?demo        tracking shown as on
  *   ?demo=setup  tracking shown as not yet allowed (first launch)
  *   ?demo=free   a free-plan user, with sample App Store prices on the paywall
+ *   &region=GB   preview another country's currency, units and rules
  */
 const demoParam =
   __DEV__ && Platform.OS === 'web' && typeof window !== 'undefined'
@@ -22,6 +23,12 @@ const demoParam =
     : null;
 
 export const DEMO_MODE = demoParam !== null;
+
+/** Region shown in the demo (US unless `&region=` names another). */
+export const DEMO_REGION =
+  DEMO_MODE && typeof window !== 'undefined'
+    ? (new URLSearchParams(window.location.search).get('region')?.toUpperCase() ?? 'US')
+    : null;
 
 export const DEMO_TRACKING_STATUS = demoParam === 'setup' ? 'needs-permission' : 'on';
 

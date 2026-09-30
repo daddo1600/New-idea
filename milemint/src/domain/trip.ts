@@ -1,5 +1,4 @@
 import type { AutoReason } from './classify-rules';
-import { rateForDate, type RatePeriod, US_BUSINESS_RATES } from './rates';
 
 export type Classification = 'unclassified' | 'business' | 'personal';
 export type TripSource = 'manual' | 'auto';
@@ -37,50 +36,6 @@ export function metersToMiles(meters: number): number {
 
 export function milesToMeters(miles: number): number {
   return Math.round(miles * METERS_PER_MILE);
-}
-
-/** Deduction for one trip in whole cents; zero unless the trip is business. */
-export function tripDeductionCents(
-  trip: Pick<Trip, 'localDate' | 'distanceMeters' | 'classification'>,
-  rates: readonly RatePeriod[] = US_BUSINESS_RATES,
-): number {
-  if (trip.classification !== 'business') return 0;
-  const rate = rateForDate(trip.localDate, rates);
-  if (!rate) return 0;
-  return Math.round((metersToMiles(trip.distanceMeters) * rate.tenthsOfCentPerMile) / 10);
-}
-
-export type YearSummary = {
-  year: number;
-  businessMiles: number;
-  deductionCents: number;
-  unclassifiedCount: number;
-  tripCount: number;
-};
-
-export function summarizeYear(
-  trips: readonly Trip[],
-  year: number,
-  rates: readonly RatePeriod[] = US_BUSINESS_RATES,
-): YearSummary {
-  const prefix = String(year);
-  const summary: YearSummary = {
-    year,
-    businessMiles: 0,
-    deductionCents: 0,
-    unclassifiedCount: 0,
-    tripCount: 0,
-  };
-  for (const trip of trips) {
-    if (!trip.localDate.startsWith(prefix)) continue;
-    summary.tripCount += 1;
-    if (trip.classification === 'unclassified') summary.unclassifiedCount += 1;
-    if (trip.classification === 'business') {
-      summary.businessMiles += metersToMiles(trip.distanceMeters);
-      summary.deductionCents += tripDeductionCents(trip, rates);
-    }
-  }
-  return summary;
 }
 
 /** Local calendar date (YYYY-MM-DD) of a Date in the device's time zone. */

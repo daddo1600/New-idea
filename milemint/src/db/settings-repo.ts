@@ -1,12 +1,15 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
 
 import type { WorkWeek } from '@/domain/classify-rules';
+import { REGIONS, type RegionCode } from '@/domain/regions';
 
 export type AppSettings = {
   /** Off by default: guessing from the clock is wrong for anyone without set hours. */
   workHoursEnabled: boolean;
   /** Kept while switched off so turning it back on restores the schedule. */
   workWeek: WorkWeek;
+  /** Where the user drives; null until they choose on first launch. */
+  region: RegionCode | null;
 };
 
 const WEEKDAY_9_TO_5 = [{ start: '09:00', end: '17:00' }];
@@ -14,6 +17,7 @@ const WEEKDAY_9_TO_5 = [{ start: '09:00', end: '17:00' }];
 export const DEFAULT_SETTINGS: AppSettings = {
   workHoursEnabled: false,
   workWeek: [[], WEEKDAY_9_TO_5, WEEKDAY_9_TO_5, WEEKDAY_9_TO_5, WEEKDAY_9_TO_5, WEEKDAY_9_TO_5, []],
+  region: null,
 };
 
 export async function loadSettings(db: SQLiteDatabase): Promise<AppSettings> {
@@ -22,6 +26,7 @@ export async function loadSettings(db: SQLiteDatabase): Promise<AppSettings> {
   try {
     const stored = JSON.parse(row.json) as Partial<AppSettings>;
     const settings = { ...DEFAULT_SETTINGS, ...stored };
+    if (settings.region !== null && !(settings.region in REGIONS)) settings.region = null;
     // A damaged week would silently classify nothing; fall back instead.
     return Array.isArray(settings.workWeek) && settings.workWeek.length === 7
       ? settings

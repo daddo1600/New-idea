@@ -9,11 +9,12 @@ import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { listEditedTripIds } from '@/db/trips-repo';
 import { useTrips } from '@/db/use-trips';
-import { formatCents, formatMiles } from '@/domain/format';
 import { lockedTripIds } from '@/domain/plan';
 import { buildReport, reportYears } from '@/domain/report';
+import { currentTaxYear, formatDistance, formatMoney, fromUnits, taxYearLabel } from '@/domain/regions';
 import { useTheme } from '@/hooks/use-theme';
 import { usePro } from '@/purchases/pro';
+import { useRegion } from '@/region/region';
 import { PDF_AVAILABLE, shareCsv, sharePdf } from '@/reports/export';
 
 /** How many years to offer at once; older logs are rarely needed and still in the CSV of that year. */
@@ -23,9 +24,10 @@ export default function ReportScreen() {
   const db = useSQLiteContext();
   const theme = useTheme();
   const { isPro } = usePro();
+  const { region } = useRegion();
   const { trips, places } = useTrips();
   const [editedIds, setEditedIds] = useState<Set<string>>(new Set());
-  const [year, setYear] = useState(() => String(new Date().getFullYear()));
+  const [year, setYear] = useState(() => String(currentTaxYear(region)));
   const [busy, setBusy] = useState<'csv' | 'pdf' | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,17 +36,17 @@ export default function ReportScreen() {
   }, [db]);
 
   const years = useMemo(() => {
-    const withTrips = reportYears(trips ?? []);
-    const current = new Date().getFullYear();
+    const withTrips = reportYears(trips ?? [], region);
+    const current = currentTaxYear(region);
     return (withTrips.includes(current) ? withTrips : [current, ...withTrips]).slice(0, YEARS_SHOWN);
-  }, [trips]);
+  }, [trips, region]);
 
   // Drives over the free limit stay out until they're unlocked, as on the home screen.
   const report = useMemo(() => {
     const locked = lockedTripIds(trips ?? [], isPro);
     const visible = (trips ?? []).filter((trip) => !locked.has(trip.id));
-    return buildReport(visible, Number(year), { places, editedIds });
-  }, [trips, isPro, year, places, editedIds]);
+    return buildReport(visible, region, Number(year), { places, editedIds });
+  }, [trips, isPro, region, year, places, editedIds]);
 
   if (!trips) return <ActivityIndicator style={styles.loading} />;
 
@@ -61,13 +63,15 @@ export default function ReportScreen() {
   };
 
   const empty = report.rows.length === 0;
+  const units = region.unit === 'mi' ? 'miles' : 'km';
+  const distance = (value: number) => formatDistance(fromUnits(value, region), region);
 
   return (
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         {years.length > 1 && (
           <Segmented
-            options={years.map((y) => ({ value: String(y), label: String(y) }))}
+            options={years.map((y) => ({ value: String(y), label: taxYearLabel(y, region) }))}
             value={year}
             onChange={setYear}
           />
@@ -75,15 +79,20 @@ export default function ReportScreen() {
 
         <ThemedView type="backgroundElement" style={styles.card}>
           <ThemedText type="small" themeColor="textSecondary">
-            {year} at the IRS standard mileage rate
+            {report.label.length > 4 ? `${report.label} tax year` : report.label} at {region.authority} rates
           </ThemedText>
-          <ThemedText type="title">{formatCents(report.deductionCents)}</ThemedText>
+          <ThemedText type="title">{formatMoney(report.deduction, region)}</ThemedText>
           <View style={styles.lines}>
-            <Line label="Business miles" value={formatMiles(report.businessMiles)} />
-            <Line label="Commuting miles" value={formatMiles(report.commutingMiles)} />
-            <Line label="Other personal miles" value={formatMiles(report.otherMiles)} />
-            <Line label="Total miles" value={formatMiles(report.totalMiles)} bold />
+            <Line label={`Business ${units}`} value={distance(report.businessDistance)} />
+            <Line label={`Commuting ${units}`} value={distance(report.commutingDistance)} />
+            <Line label={`Other personal ${units}`} value={distance(report.otherDistance)} />
+            <Line label={`Total ${units}`} value={distance(report.totalDistance)} bold />
           </View>
+          {region.caveat && (
+            <ThemedText type="small" themeColor="textSecondary">
+              {region.caveat}
+            </ThemedText>
+          )}
           {report.unclassifiedCount > 0 && (
             <ThemedText type="small" themeColor="danger">
               {report.unclassifiedCount} trip{report.unclassifiedCount === 1 ? ' isn’t' : 's aren’t'} classified yet.
@@ -101,7 +110,7 @@ export default function ReportScreen() {
         <View style={styles.option}>
           <ThemedText type="smallBold">Mileage log (CSV)</ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
-            Every trip with date, places, miles, purpose and deduction. Opens in Excel, Numbers or Google
+            Every trip with date, places, {units === 'km' ? 'kilometres' : 'miles'}, purpose and deduction. Opens in Excel, Numbers or Google
             Sheets. Always free: it’s your data.
           </ThemedText>
           <Pressable
@@ -116,10 +125,11 @@ export default function ReportScreen() {
         </View>
 
         <View style={styles.option}>
-          <ThemedText type="smallBold">IRS mileage report (PDF) · Pro</ThemedText>
+          <ThemedText type="smallBold">{region.authority} mileage report (PDF) · Pro</ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
-            A ready-to-file report for you or your accountant: Schedule C Part IV totals, the deduction
-            for each IRS rate period, and the full trip log showing which trips were recorded while
+            A ready-to-file report for you or your accountant: your{' '}
+            {region.code === 'US' ? 'Schedule C Part IV' : 'mileage'} totals, the deduction at each{' '}
+            {region.authority} rate, and the full trip log showing which trips were recorded while
             driving and which were edited.
           </ThemedText>
           {!PDF_AVAILABLE ? (
@@ -141,7 +151,7 @@ export default function ReportScreen() {
 
         {empty && (
           <ThemedText type="small" themeColor="textSecondary">
-            No trips in {year} yet.
+            No trips in {taxYearLabel(Number(year), region)} yet.
           </ThemedText>
         )}
         <ThemedText type="small" themeColor="textSecondary">

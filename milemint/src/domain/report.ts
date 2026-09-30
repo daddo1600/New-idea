@@ -1,99 +1,129 @@
 import { isCommute } from './classify-rules';
-import { formatCents, formatMiles } from './format';
 import type { Place } from './places';
-import { rateForDate, US_BUSINESS_RATES, type RatePeriod } from './rates';
-import { metersToMiles, tripDeductionCents, type Trip } from './trip';
+import {
+  computeDeductionParts,
+  describeTier,
+  formatDistance,
+  formatMoney,
+  formatRate,
+  fromUnits,
+  taxYearLabel,
+  taxYearOf,
+  toUnits,
+  type DeductionPart,
+  type Region,
+} from './regions';
+import type { Trip } from './trip';
 
 /**
- * The yearly mileage log: what the IRS asks a driver to keep (date, where,
- * miles, business purpose) plus the totals Schedule C Part IV asks for.
- * Pure, so the numbers in the CSV and the PDF are the ones tested here.
+ * The tax-year mileage log: what tax offices ask a driver to keep (date,
+ * where, distance, business purpose) plus totals, priced with the region's
+ * official rates. Pure, so the numbers in the CSV and PDF are the ones
+ * tested here.
  */
 
 export type ReportRow = {
   trip: Trip;
-  miles: number;
+  /** In the region's unit (miles or km). */
+  distance: number;
   commute: boolean;
-  /** Tenths of a cent per mile, when a rate applies to the date. */
-  rate: number | null;
-  deductionCents: number;
+  /** How the business distance was priced; empty for other trips. */
+  parts: DeductionPart[];
+  /** Minor units (cents, pence). */
+  deduction: number;
   /** Changed after it was recorded (the edit history keeps the originals). */
   edited: boolean;
 };
 
-export type RateTotal = { period: RatePeriod; businessMiles: number; deductionCents: number };
+export type RateTotal = { label: string; distance: number; deduction: number };
 
 export type MileageReport = {
-  year: number;
+  region: Region;
+  taxYear: number;
+  label: string;
   rows: ReportRow[];
-  totalMiles: number;
-  businessMiles: number;
+  totalDistance: number;
+  businessDistance: number;
   /** Home ↔ work drives not marked business. */
-  commutingMiles: number;
+  commutingDistance: number;
   /** Everything else: personal and not yet classified. */
-  otherMiles: number;
+  otherDistance: number;
   unclassifiedCount: number;
-  deductionCents: number;
+  deduction: number;
   byRate: RateTotal[];
 };
 
-/** Years that have trips, newest first. */
-export function reportYears(trips: readonly Pick<Trip, 'localDate'>[]): number[] {
-  const years = new Set(trips.map((trip) => Number(trip.localDate.slice(0, 4))));
+/** Tax years that have trips, newest first. */
+export function reportYears(trips: readonly Pick<Trip, 'localDate'>[], region: Region): number[] {
+  const years = new Set(trips.map((trip) => taxYearOf(trip.localDate, region)));
   return [...years].sort((a, b) => b - a);
 }
 
 export function buildReport(
   trips: readonly Trip[],
-  year: number,
+  region: Region,
+  taxYear: number,
   options: { places?: readonly Place[]; editedIds?: ReadonlySet<string> } = {},
-  rates: readonly RatePeriod[] = US_BUSINESS_RATES,
 ): MileageReport {
   const kindOf = (id: string | null) => options.places?.find((place) => place.id === id)?.kind ?? null;
-  const rows = trips
-    .filter((trip) => trip.localDate.startsWith(`${year}-`))
+  // Tiers depend on every business trip of the year, so price them all first.
+  const allParts = computeDeductionParts(trips, region);
+  const rows: ReportRow[] = trips
+    .filter((trip) => taxYearOf(trip.localDate, region) === taxYear)
     .sort((a, b) => a.startedAt.localeCompare(b.startedAt))
-    .map((trip) => ({
-      trip,
-      miles: metersToMiles(trip.distanceMeters),
-      commute: isCommute(kindOf(trip.startPlaceId), kindOf(trip.endPlaceId)),
-      rate: rateForDate(trip.localDate, rates)?.tenthsOfCentPerMile ?? null,
-      deductionCents: tripDeductionCents(trip, rates),
-      edited: options.editedIds?.has(trip.id) ?? false,
-    }));
+    .map((trip) => {
+      const parts = allParts.get(trip.id) ?? [];
+      return {
+        trip,
+        distance: toUnits(trip.distanceMeters, region),
+        commute: isCommute(kindOf(trip.startPlaceId), kindOf(trip.endPlaceId)),
+        parts,
+        deduction: Math.round(parts.reduce((sum, part) => sum + part.units * part.rate, 0) / 10),
+        edited: options.editedIds?.has(trip.id) ?? false,
+      };
+    });
 
   const report: MileageReport = {
-    year,
+    region,
+    taxYear,
+    label: taxYearLabel(taxYear, region),
     rows,
-    totalMiles: 0,
-    businessMiles: 0,
-    commutingMiles: 0,
-    otherMiles: 0,
+    totalDistance: 0,
+    businessDistance: 0,
+    commutingDistance: 0,
+    otherDistance: 0,
     unclassifiedCount: 0,
-    deductionCents: 0,
+    deduction: 0,
     byRate: [],
   };
-  const byRate = new Map<string, RateTotal>();
+  const byRate = new Map<string, RateTotal & { tenths: number }>();
   for (const row of rows) {
-    report.totalMiles += row.miles;
+    report.totalDistance += row.distance;
     if (row.trip.classification === 'unclassified') report.unclassifiedCount += 1;
     if (row.trip.classification === 'business') {
-      report.businessMiles += row.miles;
-      report.deductionCents += row.deductionCents;
-      const period = rateForDate(row.trip.localDate, rates);
-      if (period) {
-        const total = byRate.get(period.from) ?? { period, businessMiles: 0, deductionCents: 0 };
-        total.businessMiles += row.miles;
-        total.deductionCents += row.deductionCents;
-        byRate.set(period.from, total);
+      report.businessDistance += row.distance;
+      report.deduction += row.deduction;
+      for (const part of row.parts) {
+        const key = `${part.period.from}#${part.tier}`;
+        const total = byRate.get(key) ?? {
+          label: describeTier(part.period, part.tier, region),
+          distance: 0,
+          deduction: 0,
+          tenths: 0,
+        };
+        total.distance += part.units;
+        total.tenths += part.units * part.rate;
+        byRate.set(key, total);
       }
     } else if (row.commute) {
-      report.commutingMiles += row.miles;
+      report.commutingDistance += row.distance;
     } else {
-      report.otherMiles += row.miles;
+      report.otherDistance += row.distance;
     }
   }
-  report.byRate = [...byRate.values()].sort((a, b) => a.period.from.localeCompare(b.period.from));
+  report.byRate = [...byRate.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([, total]) => ({ label: total.label, distance: total.distance, deduction: Math.round(total.tenths / 10) }));
   return report;
 }
 
@@ -103,13 +133,14 @@ const CLASSIFICATION_LABELS: Record<Trip['classification'], string> = {
   unclassified: 'Not classified',
 };
 
-function localTime(iso: string | null): string {
+function localTime(iso: string | null, region: Region): string {
   if (!iso) return '';
-  return new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  return new Date(iso).toLocaleTimeString(region.locale, { hour: 'numeric', minute: '2-digit' });
 }
 
-function rateText(rate: number | null): string {
-  return rate === null ? '' : `${(rate / 1000).toFixed(3)}`;
+/** The rate(s) a trip was priced at, e.g. "55p" or "55p / 25p" when it crossed a tier. */
+function ratesText(parts: readonly DeductionPart[], region: Region): string {
+  return [...new Set(parts.map((part) => formatRate(part.rate, region)))].join(' / ');
 }
 
 /**
@@ -122,37 +153,41 @@ function csvCell(value: string | number): string {
   return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 }
 
-export const CSV_COLUMNS = [
-  'Date',
-  'Start time',
-  'End time',
-  'From',
-  'To',
-  'Miles',
-  'Classification',
-  'Business purpose',
-  'Rate ($/mile)',
-  'Deduction ($)',
-  'Recorded',
-  'Edited later',
-] as const;
+export function csvColumns(region: Region): string[] {
+  return [
+    'Date',
+    'Start time',
+    'End time',
+    'From',
+    'To',
+    region.unit === 'mi' ? 'Miles' : 'Kilometres',
+    'Classification',
+    'Business purpose',
+    `Rate (${region.authority})`,
+    `Deduction (${region.currency})`,
+    'Recorded',
+    'Edited later',
+  ];
+}
 
 export function toCsv(report: MileageReport): string {
-  const lines = [CSV_COLUMNS.map(csvCell).join(',')];
+  const { region } = report;
+  const lines = [csvColumns(region).map(csvCell).join(',')];
   for (const row of report.rows) {
     const { trip } = row;
+    const business = trip.classification === 'business';
     lines.push(
       [
         trip.localDate,
-        trip.source === 'auto' ? localTime(trip.startedAt) : '',
-        trip.source === 'auto' ? localTime(trip.endedAt) : '',
+        trip.source === 'auto' ? localTime(trip.startedAt, region) : '',
+        trip.source === 'auto' ? localTime(trip.endedAt, region) : '',
         trip.startLabel,
         trip.endLabel,
-        row.miles.toFixed(1),
+        row.distance.toFixed(1),
         CLASSIFICATION_LABELS[trip.classification],
         trip.purpose,
-        trip.classification === 'business' ? rateText(row.rate) : '',
-        trip.classification === 'business' ? (row.deductionCents / 100).toFixed(2) : '',
+        business ? ratesText(row.parts, region) : '',
+        business ? (row.deduction / 100).toFixed(2) : '',
         trip.source === 'auto' ? 'Automatically while driving' : `Added by hand on ${trip.createdAt.slice(0, 10)}`,
         row.edited ? 'Yes' : 'No',
       ]
@@ -160,7 +195,7 @@ export function toCsv(report: MileageReport): string {
         .join(','),
     );
   }
-  // CRLF and a byte-order mark so Excel opens it as UTF-8 (names with accents, "→").
+  // CRLF and a byte-order mark so Excel opens it as UTF-8 (names with accents, "→", "£").
   return `﻿${lines.join('\r\n')}\r\n`;
 }
 
@@ -172,13 +207,25 @@ function escapeHtml(text: string): string {
     .replace(/"/g, '&quot;');
 }
 
-/** The printable IRS mileage report (Pro), laid out for US Letter. */
+/** Page size for the PDF: US Letter in North America, A4 elsewhere (points). */
+export function pageSize(region: Region): { width: number; height: number } {
+  return region.code === 'US' || region.code === 'CA' ? { width: 612, height: 792 } : { width: 595, height: 842 };
+}
+
+/** The printable tax-year mileage report (Pro). */
 export function toReportHtml(report: MileageReport, generatedAt: Date = new Date()): string {
+  const { region } = report;
+  const units = region.unit === 'mi' ? 'miles' : 'km';
+  const Units = region.unit === 'mi' ? 'Miles' : 'Km';
+  const distance = (value: number) => escapeHtml(formatDistance(fromUnits(value, region), region));
+  const money = (minor: number) => escapeHtml(formatMoney(minor, region));
+  const summaryHeading = region.code === 'US' ? 'Summary (Schedule C, Part IV)' : 'Summary';
+  const yearName = report.label.length > 4 ? `${report.label} tax year` : report.label;
+
   const rateRows = report.byRate
     .map(
       (total) =>
-        `<tr><td>From ${total.period.from}</td><td class="num">${(total.period.tenthsOfCentPerMile / 10).toFixed(1)}¢</td>` +
-        `<td class="num">${escapeHtml(formatMiles(total.businessMiles))}</td><td class="num">${formatCents(total.deductionCents)}</td></tr>`,
+        `<tr><td>${escapeHtml(total.label)}</td><td class="num">${distance(total.distance)}</td><td class="num">${money(total.deduction)}</td></tr>`,
     )
     .join('');
   const tripRows = report.rows
@@ -189,10 +236,10 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
         `<tr${business ? '' : ' class="dim"'}>` +
         `<td>${trip.localDate}</td>` +
         `<td>${escapeHtml(trip.startLabel)} → ${escapeHtml(trip.endLabel)}</td>` +
-        `<td class="num">${row.miles.toFixed(1)}</td>` +
+        `<td class="num">${row.distance.toFixed(1)}</td>` +
         `<td>${CLASSIFICATION_LABELS[trip.classification]}${row.commute ? ' (commute)' : ''}</td>` +
         `<td>${escapeHtml(trip.purpose)}</td>` +
-        `<td class="num">${business ? formatCents(row.deductionCents) : ''}</td>` +
+        `<td class="num">${business ? money(row.deduction) : ''}</td>` +
         `<td>${trip.source === 'auto' ? 'Auto' : 'Manual'}${row.edited ? ', edited' : ''}</td>` +
         `</tr>`
       );
@@ -200,8 +247,9 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
     .join('');
   const warning =
     report.unclassifiedCount > 0
-      ? `<p class="warn">${report.unclassifiedCount} trip${report.unclassifiedCount === 1 ? ' is' : 's are'} not classified yet and ${report.unclassifiedCount === 1 ? 'is' : 'are'} counted as other miles.</p>`
+      ? `<p class="warn">${report.unclassifiedCount} trip${report.unclassifiedCount === 1 ? ' is' : 's are'} not classified yet and ${report.unclassifiedCount === 1 ? 'is' : 'are'} counted as other ${units}.</p>`
       : '';
+  const caveat = region.caveat ? ` ${escapeHtml(region.caveat)}` : '';
 
   return `<!doctype html><html><head><meta charset="utf-8"><style>
   body { font: 10pt -apple-system, Helvetica, Arial, sans-serif; color: #16201c; margin: 0; }
@@ -222,30 +270,30 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
   thead { display: table-header-group; }
   tr { page-break-inside: avoid; }
 </style></head><body>
-  <h1>Vehicle mileage log ${report.year}</h1>
-  <p class="sub">Prepared with MileMint on ${generatedAt.toISOString().slice(0, 10)} · IRS standard mileage rate</p>
+  <h1>Vehicle mileage log · ${escapeHtml(yearName)}</h1>
+  <p class="sub">Prepared with MileMint on ${generatedAt.toISOString().slice(0, 10)} · ${escapeHtml(region.name)} · ${escapeHtml(region.authority)} rates</p>
 
-  <h2>Summary (Schedule C, Part IV)</h2>
+  <h2>${summaryHeading}</h2>
   <table class="summary">
-    <tr><td>Business miles</td><td class="num">${escapeHtml(formatMiles(report.businessMiles))}</td></tr>
-    <tr><td>Commuting miles</td><td class="num">${escapeHtml(formatMiles(report.commutingMiles))}</td></tr>
-    <tr><td>Other personal miles</td><td class="num">${escapeHtml(formatMiles(report.otherMiles))}</td></tr>
-    <tr class="total"><td>Total miles logged</td><td class="num">${escapeHtml(formatMiles(report.totalMiles))}</td></tr>
+    <tr><td>Business ${units}</td><td class="num">${distance(report.businessDistance)}</td></tr>
+    <tr><td>Commuting ${units}</td><td class="num">${distance(report.commutingDistance)}</td></tr>
+    <tr><td>Other personal ${units}</td><td class="num">${distance(report.otherDistance)}</td></tr>
+    <tr class="total"><td>Total ${units} logged</td><td class="num">${distance(report.totalDistance)}</td></tr>
   </table>
   ${warning}
 
-  <h2>Deduction at the standard mileage rate</h2>
+  <h2>Deduction at ${escapeHtml(region.authority)} rates</h2>
   <table>
-    <thead><tr><th>Period</th><th class="num">Rate</th><th class="num">Business miles</th><th class="num">Deduction</th></tr></thead>
-    <tbody>${rateRows}<tr class="total"><td colspan="3">Total</td><td class="num">${formatCents(report.deductionCents)}</td></tr></tbody>
+    <thead><tr><th>Rate</th><th class="num">Business ${units}</th><th class="num">Deduction</th></tr></thead>
+    <tbody>${rateRows}<tr class="total"><td colspan="2">Total</td><td class="num">${money(report.deduction)}</td></tr></tbody>
   </table>
 
   <h2>Trip log</h2>
   <table class="log">
-    <thead><tr><th>Date</th><th>From → To</th><th class="num">Miles</th><th>Type</th><th>Business purpose</th><th class="num">Deduction</th><th>Recorded</th></tr></thead>
+    <thead><tr><th>Date</th><th>From → To</th><th class="num">${Units}</th><th>Type</th><th>Business purpose</th><th class="num">Deduction</th><th>Recorded</th></tr></thead>
     <tbody>${tripRows}</tbody>
   </table>
 
-  <p class="note">“Auto” trips were recorded by the phone while driving; “Manual” trips were added by hand. MileMint keeps a history of every change to a trip, and trips changed after they were recorded are marked “edited”. Deductions are estimates at the IRS standard mileage rate and are not tax advice.</p>
+  <p class="note">“Auto” trips were recorded by the phone while driving; “Manual” trips were added by hand. MileMint keeps a history of every change to a trip, and trips changed after they were recorded are marked “edited”. Deductions are estimates at ${escapeHtml(region.authority)} rates and are not tax advice.${caveat}</p>
 </body></html>`;
 }
