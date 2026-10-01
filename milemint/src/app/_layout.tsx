@@ -9,9 +9,13 @@ import { DATABASE_NAME, initDatabase } from '@/db/database';
 import { DEMO_MODE, seedDemoTrips } from '@/dev/demo';
 import { describeError } from '@/errors/fatal-errors';
 import { ProProvider } from '@/purchases/pro';
+import { loadLanguage } from '@/i18n/i18n';
 import { RegionProvider } from '@/region/region';
 // Registers the background location tasks; must run before the app renders.
 import '@/tracking/background';
+
+// The language picked last time, read while the launch animation plays.
+loadLanguage();
 
 async function onInit(db: SQLiteDatabase) {
   await initDatabase(db);
@@ -50,6 +54,7 @@ export default function RootLayout() {
                   <Stack.Screen name="compare" options={{ title: 'Missed miles check', presentation: 'modal' }} />
                   <Stack.Screen name="milestones" options={{ title: 'Milestones' }} />
                   <Stack.Screen name="tax-dates" options={{ title: 'Tax dates' }} />
+                  <Stack.Screen name="language" options={{ title: 'Language', presentation: 'modal' }} />
                 </Stack>
               </ProProvider>
             </RegionProvider>
