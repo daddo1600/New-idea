@@ -595,7 +595,6 @@ const dictionary: Dictionary = {
   "United States": "Statele Unite",
   "Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.": "Dacă nu se aplică o regulă (ore de lucru, navetă, un traseu pe care i l-ai arătat). Glisează la stânga pe cele care au fost personale; doar cursele de lucru se pot deduce.",
   "Unlimited": "Nelimitat",
-  "Unlimited drives and PDF reports": "Curse nelimitate și rapoarte PDF",
   "Unlock with MileMint Pro": "Deblochează cu MileMint Pro",
   "Unlock with Pro": "Deblochează cu Pro",
   "Unlocked": "Deblocate",
@@ -669,7 +668,9 @@ const dictionary: Dictionary = {
   "A manual journal for each month of business mileage, ready to import in Xero (Accounting › Manual journals › Import). Check the account codes match your chart of accounts.": "O notă contabilă manuală pentru fiecare lună de curse de lucru, gata de importat în Xero (Accounting › Manual journals › Import). Verifică dacă simbolurile conturilor se potrivesc cu planul tău de conturi.",
   "A journal entry for each month of business mileage, ready to import in QuickBooks Online (Settings › Import data › Journal entries). Check the account names match yours.": "O notă contabilă pentru fiecare lună de curse de lucru, gata de importat în QuickBooks Online (Settings › Import data › Journal entries). Verifică dacă denumirile conturilor se potrivesc cu ale tale.",
   "Your business trips with date, description, distance and vehicle: everything FreeAgent’s mileage form asks for.": "Cursele tale de lucru cu dată, descriere, distanță și vehicul: tot ce cere formularul de kilometraj din FreeAgent.",
-  "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.": "Câte o linie de decont pentru fiecare cursă de lucru (dată, de la, până la, scop, distanță, tarif și sumă) pentru sistemul de deconturi al angajatorului tău."
+  "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.": "Câte o linie de decont pentru fiecare cursă de lucru (dată, de la, până la, scop, distanță, tarif și sumă) pentru sistemul de deconturi al angajatorului tău.",
+  "Export to Xero, QuickBooks and FreeAgent": "Export în Xero, QuickBooks și FreeAgent",
+  "Unlimited drives, PDF reports and accounting exports": "Curse nelimitate, rapoarte PDF și exporturi contabile",
 };
 
 export default dictionary;

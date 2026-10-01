@@ -595,7 +595,6 @@ const dictionary: Dictionary = {
   'United States': '美国',
   'Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.': '除非有规则另作判断（工作时间、通勤、你教过它的路线）。私人行程请左滑；只有工作行程才应申报。',
   'Unlimited': '无限制',
-  'Unlimited drives and PDF reports': '无限行程和 PDF 报告',
   'Unlock with MileMint Pro': '用 MileMint Pro 解锁',
   'Unlock with Pro': '用 Pro 解锁',
   'Unlocked': '已解锁',
@@ -669,7 +668,9 @@ const dictionary: Dictionary = {
   'A manual journal for each month of business mileage, ready to import in Xero (Accounting › Manual journals › Import). Check the account codes match your chart of accounts.': '每月一张工作里程的手工记账凭证，可直接导入 Xero（Accounting › Manual journals › Import）。请核对科目代码是否与你的会计科目表一致。',
   'A journal entry for each month of business mileage, ready to import in QuickBooks Online (Settings › Import data › Journal entries). Check the account names match yours.': '每月一笔工作里程的会计分录，可直接导入 QuickBooks Online（Settings › Import data › Journal entries）。请核对科目名称是否与你的一致。',
   'Your business trips with date, description, distance and vehicle: everything FreeAgent’s mileage form asks for.': '你的工作行程，含日期、说明、距离和车辆：FreeAgent 里程表单要填的都在这里。',
-  'A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.': '每段工作行程一行报销明细（日期、起点、终点、事由、距离、费率和金额），用于提交到雇主的报销系统。'
+  'A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.': '每段工作行程一行报销明细（日期、起点、终点、事由、距离、费率和金额），用于提交到雇主的报销系统。',
+  'Export to Xero, QuickBooks and FreeAgent': '导出到 Xero、QuickBooks 和 FreeAgent',
+  'Unlimited drives, PDF reports and accounting exports': '无限行程、PDF 报告和会计软件导出',
 };
 
 export default dictionary;

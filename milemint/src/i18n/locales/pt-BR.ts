@@ -701,7 +701,6 @@ const dictionary: Dictionary = {
   "United States": "Estados Unidos",
   "Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.": "A não ser que uma regra diga outra coisa (horário de trabalho, deslocamento casa-trabalho, uma rota que você ensinou). Deslize para a esquerda os que forem pessoais; só trajetos profissionais podem ser declarados.",
   "Unlimited": "Ilimitado",
-  "Unlimited drives and PDF reports": "Trajetos ilimitados e relatórios em PDF",
   "Unlock with MileMint Pro": "Desbloquear com o MileMint Pro",
   "Unlock with Pro": "Desbloquear com o Pro",
   "Unlocked": "Desbloqueados",
@@ -775,7 +774,9 @@ const dictionary: Dictionary = {
   "A manual journal for each month of business mileage, ready to import in Xero (Accounting › Manual journals › Import). Check the account codes match your chart of accounts.": "Um lançamento manual para cada mês de quilometragem profissional, pronto para importar no Xero (Accounting › Manual journals › Import). Confira se os códigos das contas batem com o seu plano de contas.",
   "A journal entry for each month of business mileage, ready to import in QuickBooks Online (Settings › Import data › Journal entries). Check the account names match yours.": "Um lançamento contábil para cada mês de quilometragem profissional, pronto para importar no QuickBooks Online (Settings › Import data › Journal entries). Confira se os nomes das contas batem com os seus.",
   "Your business trips with date, description, distance and vehicle: everything FreeAgent’s mileage form asks for.": "Seus trajetos profissionais com data, descrição, distância e veículo: tudo o que o formulário de quilometragem do FreeAgent pede.",
-  "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.": "Uma linha de reembolso para cada trajeto profissional (data, origem, destino, finalidade, distância, taxa e valor) para o sistema de despesas do seu empregador."
+  "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.": "Uma linha de reembolso para cada trajeto profissional (data, origem, destino, finalidade, distância, taxa e valor) para o sistema de despesas do seu empregador.",
+  "Export to Xero, QuickBooks and FreeAgent": "Exportar para Xero, QuickBooks e FreeAgent",
+  "Unlimited drives, PDF reports and accounting exports": "Trajetos ilimitados, relatórios em PDF e exportação contábil",
 };
 
 export default dictionary;

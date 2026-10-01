@@ -745,7 +745,6 @@ const dictionary: Dictionary = {
   "United States": "Stany Zjednoczone",
   "Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.": "Chyba że reguła mówi inaczej (godziny pracy, dojazd do pracy, trasa, której nauczysz aplikację). Przesuń w lewo te, które były prywatne; odliczać można tylko przejazdy służbowe.",
   "Unlimited": "Bez limitu",
-  "Unlimited drives and PDF reports": "Przejazdy bez limitu i raporty PDF",
   "Unlock with MileMint Pro": "Odblokuj z MileMint Pro",
   "Unlock with Pro": "Odblokuj z Pro",
   "Unlocked": "Odblokowane",
@@ -819,7 +818,9 @@ const dictionary: Dictionary = {
   "A manual journal for each month of business mileage, ready to import in Xero (Accounting › Manual journals › Import). Check the account codes match your chart of accounts.": "Polecenie księgowania za każdy miesiąc przebiegu służbowego, gotowe do importu w Xero (Accounting › Manual journals › Import). Sprawdź, czy numery kont zgadzają się z Twoim planem kont.",
   "A journal entry for each month of business mileage, ready to import in QuickBooks Online (Settings › Import data › Journal entries). Check the account names match yours.": "Zapis księgowy za każdy miesiąc przebiegu służbowego, gotowy do importu w QuickBooks Online (Settings › Import data › Journal entries). Sprawdź, czy nazwy kont zgadzają się z Twoimi.",
   "Your business trips with date, description, distance and vehicle: everything FreeAgent’s mileage form asks for.": "Twoje przejazdy służbowe z datą, opisem, odległością i pojazdem: wszystko, o co pyta formularz przebiegu w FreeAgent.",
-  "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.": "Osobna pozycja zwrotu kosztów dla każdego przejazdu służbowego (data, skąd, dokąd, cel, odległość, stawka i kwota) do systemu rozliczania kosztów Twojego pracodawcy."
+  "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.": "Osobna pozycja zwrotu kosztów dla każdego przejazdu służbowego (data, skąd, dokąd, cel, odległość, stawka i kwota) do systemu rozliczania kosztów Twojego pracodawcy.",
+  "Export to Xero, QuickBooks and FreeAgent": "Eksport do Xero, QuickBooks i FreeAgent",
+  "Unlimited drives, PDF reports and accounting exports": "Przejazdy bez limitu, raporty PDF i eksport do księgowości",
 };
 
 export default dictionary;

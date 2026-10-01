@@ -595,7 +595,6 @@ const dictionary: Dictionary = {
   "United States": "যুক্তরাষ্ট্র",
   "Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.": "যদি না কোনো নিয়ম অন্য কিছু বলে (কাজের সময়, যাতায়াত, বা আপনার শেখানো কোনো রুট)। যেগুলো ব্যক্তিগত ছিল সেগুলো বাঁয়ে সোয়াইপ করুন; শুধু ব্যবসায়িক ট্রিপই দাবি করা উচিত।",
   "Unlimited": "আনলিমিটেড",
-  "Unlimited drives and PDF reports": "আনলিমিটেড ট্রিপ আর PDF রিপোর্ট",
   "Unlock with MileMint Pro": "MileMint Pro দিয়ে আনলক করুন",
   "Unlock with Pro": "Pro দিয়ে আনলক করুন",
   "Unlocked": "আনলক করা",
@@ -669,7 +668,9 @@ const dictionary: Dictionary = {
   "A manual journal for each month of business mileage, ready to import in Xero (Accounting › Manual journals › Import). Check the account codes match your chart of accounts.": "ব্যবসায়িক মাইলেজের প্রতিটি মাসের জন্য একটি ম্যানুয়াল জার্নাল এন্ট্রি, Xero-তে ইমপোর্ট করার জন্য তৈরি (Accounting › Manual journals › Import)। দেখে নিন অ্যাকাউন্ট কোডগুলো আপনার চার্ট অফ অ্যাকাউন্টস (হিসাবের তালিকা)-এর সঙ্গে মিলছে কি না।",
   "A journal entry for each month of business mileage, ready to import in QuickBooks Online (Settings › Import data › Journal entries). Check the account names match yours.": "ব্যবসায়িক মাইলেজের প্রতিটি মাসের জন্য একটি জার্নাল এন্ট্রি, QuickBooks Online-এ ইমপোর্ট করার জন্য তৈরি (Settings › Import data › Journal entries)। দেখে নিন অ্যাকাউন্টের নামগুলো আপনার অ্যাকাউন্টের নামের সঙ্গে মিলছে কি না।",
   "Your business trips with date, description, distance and vehicle: everything FreeAgent’s mileage form asks for.": "তারিখ, বিবরণ, দূরত্ব আর যানবাহনসহ আপনার ব্যবসায়িক ট্রিপ: FreeAgent-এর মাইলেজ ফর্মে যা যা চাওয়া হয়, সবই।",
-  "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.": "প্রতিটি ব্যবসায়িক ট্রিপের জন্য একটি দাবির লাইন (তারিখ, কোথা থেকে, কোথায়, উদ্দেশ্য, দূরত্ব, রেট আর পরিমাণ), আপনার নিয়োগকর্তার খরচের সিস্টেমের জন্য।"
+  "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.": "প্রতিটি ব্যবসায়িক ট্রিপের জন্য একটি দাবির লাইন (তারিখ, কোথা থেকে, কোথায়, উদ্দেশ্য, দূরত্ব, রেট আর পরিমাণ), আপনার নিয়োগকর্তার খরচের সিস্টেমের জন্য।",
+  "Export to Xero, QuickBooks and FreeAgent": "Xero, QuickBooks ও FreeAgent-এ এক্সপোর্ট",
+  "Unlimited drives, PDF reports and accounting exports": "আনলিমিটেড ট্রিপ, PDF রিপোর্ট আর অ্যাকাউন্টিং এক্সপোর্ট",
 };
 
 export default dictionary;

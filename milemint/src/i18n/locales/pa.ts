@@ -661,7 +661,6 @@ const dictionary: Dictionary = {
   "United States": "ਅਮਰੀਕਾ",
   "Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.": "ਜਦੋਂ ਤੱਕ ਕੋਈ ਨਿਯਮ ਹੋਰ ਨਾ ਕਹੇ (ਕੰਮ ਦੇ ਘੰਟੇ, ਘਰ-ਕੰਮ ਆਉਣ-ਜਾਣ, ਜਾਂ ਤੁਹਾਡਾ ਸਿਖਾਇਆ ਰਸਤਾ)। ਜੋ ਨਿੱਜੀ ਸਨ ਉਨ੍ਹਾਂ ਨੂੰ ਖੱਬੇ ਸਵਾਈਪ ਕਰੋ; ਸਿਰਫ਼ ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ਹੀ ਕਲੇਮ ਕਰਨੇ ਚਾਹੀਦੇ ਹਨ।",
   "Unlimited": "ਅਨਲਿਮਟਿਡ",
-  "Unlimited drives and PDF reports": "ਅਨਲਿਮਟਿਡ ਟ੍ਰਿਪ ਅਤੇ PDF ਰਿਪੋਰਟਾਂ",
   "Unlock with MileMint Pro": "MileMint Pro ਨਾਲ ਅਨਲੌਕ ਕਰੋ",
   "Unlock with Pro": "Pro ਨਾਲ ਅਨਲੌਕ ਕਰੋ",
   "Unlocked": "ਅਨਲੌਕ",
@@ -735,7 +734,9 @@ const dictionary: Dictionary = {
   "A manual journal for each month of business mileage, ready to import in Xero (Accounting › Manual journals › Import). Check the account codes match your chart of accounts.": "ਬਿਜ਼ਨਸ ਮਾਈਲੇਜ ਦੇ ਹਰ ਮਹੀਨੇ ਲਈ ਇੱਕ ਮੈਨੁਅਲ ਜਰਨਲ, Xero ਵਿੱਚ ਇੰਪੋਰਟ ਕਰਨ ਲਈ ਤਿਆਰ (Accounting › Manual journals › Import)। ਜਾਂਚ ਲਓ ਕਿ ਅਕਾਊਂਟ ਕੋਡ ਤੁਹਾਡੇ ਚਾਰਟ ਆਫ਼ ਅਕਾਊਂਟਸ (ਖਾਤਿਆਂ ਦੀ ਸੂਚੀ) ਨਾਲ ਮਿਲਦੇ ਹਨ।",
   "A journal entry for each month of business mileage, ready to import in QuickBooks Online (Settings › Import data › Journal entries). Check the account names match yours.": "ਬਿਜ਼ਨਸ ਮਾਈਲੇਜ ਦੇ ਹਰ ਮਹੀਨੇ ਲਈ ਇੱਕ ਜਰਨਲ ਐਂਟਰੀ, QuickBooks Online ਵਿੱਚ ਇੰਪੋਰਟ ਕਰਨ ਲਈ ਤਿਆਰ (Settings › Import data › Journal entries)। ਜਾਂਚ ਲਓ ਕਿ ਅਕਾਊਂਟਾਂ ਦੇ ਨਾਂ ਤੁਹਾਡੇ ਅਕਾਊਂਟਾਂ ਦੇ ਨਾਵਾਂ ਨਾਲ ਮਿਲਦੇ ਹਨ।",
   "Your business trips with date, description, distance and vehicle: everything FreeAgent’s mileage form asks for.": "ਤਾਰੀਖ਼, ਵੇਰਵੇ, ਦੂਰੀ ਅਤੇ ਗੱਡੀ ਸਮੇਤ ਤੁਹਾਡੇ ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ: ਉਹ ਸਭ ਕੁਝ ਜੋ FreeAgent ਦਾ ਮਾਈਲੇਜ ਫ਼ਾਰਮ ਮੰਗਦਾ ਹੈ।",
-  "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.": "ਹਰ ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ਲਈ ਇੱਕ ਕਲੇਮ ਲਾਈਨ (ਤਾਰੀਖ਼, ਕਿੱਥੋਂ, ਕਿੱਥੇ, ਮਕਸਦ, ਦੂਰੀ, ਰੇਟ ਅਤੇ ਰਕਮ), ਤੁਹਾਡੇ ਇੰਪਲਾਇਰ ਦੇ ਖ਼ਰਚਾ ਸਿਸਟਮ ਲਈ।"
+  "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.": "ਹਰ ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ਲਈ ਇੱਕ ਕਲੇਮ ਲਾਈਨ (ਤਾਰੀਖ਼, ਕਿੱਥੋਂ, ਕਿੱਥੇ, ਮਕਸਦ, ਦੂਰੀ, ਰੇਟ ਅਤੇ ਰਕਮ), ਤੁਹਾਡੇ ਇੰਪਲਾਇਰ ਦੇ ਖ਼ਰਚਾ ਸਿਸਟਮ ਲਈ।",
+  "Export to Xero, QuickBooks and FreeAgent": "Xero, QuickBooks ਅਤੇ FreeAgent ਵਿੱਚ ਐਕਸਪੋਰਟ",
+  "Unlimited drives, PDF reports and accounting exports": "ਅਨਲਿਮਟਿਡ ਟ੍ਰਿਪ, PDF ਰਿਪੋਰਟਾਂ ਅਤੇ ਅਕਾਊਂਟਿੰਗ ਐਕਸਪੋਰਟ",
 };
 
 export default dictionary;

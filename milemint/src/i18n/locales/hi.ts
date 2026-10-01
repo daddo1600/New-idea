@@ -595,7 +595,6 @@ const dictionary: Dictionary = {
   'United States': 'अमेरिका',
   'Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.': 'जब तक कोई नियम कुछ और न कहे (काम के घंटे, घर-काम आना-जाना, या कोई रास्ता जो आपने सिखाया है)। जो पर्सनल थीं उन्हें बाएँ स्वाइप करें; सिर्फ़ बिज़नेस ट्रिप ही क्लेम करनी चाहिए।',
   'Unlimited': 'अनलिमिटेड',
-  'Unlimited drives and PDF reports': 'अनलिमिटेड ट्रिप और PDF रिपोर्ट',
   'Unlock with MileMint Pro': 'MileMint Pro से अनलॉक करें',
   'Unlock with Pro': 'Pro से अनलॉक करें',
   'Unlocked': 'अनलॉक',
@@ -669,7 +668,9 @@ const dictionary: Dictionary = {
   'A manual journal for each month of business mileage, ready to import in Xero (Accounting › Manual journals › Import). Check the account codes match your chart of accounts.': 'बिज़नेस माइलेज के हर महीने के लिए एक मैनुअल जर्नल, Xero में इंपोर्ट करने के लिए तैयार (Accounting › Manual journals › Import)। जाँच लें कि अकाउंट कोड आपके चार्ट ऑफ़ अकाउंट्स (खातों की सूची) से मेल खाते हैं।',
   'A journal entry for each month of business mileage, ready to import in QuickBooks Online (Settings › Import data › Journal entries). Check the account names match yours.': 'बिज़नेस माइलेज के हर महीने के लिए एक जर्नल एंट्री, QuickBooks Online में इंपोर्ट करने के लिए तैयार (Settings › Import data › Journal entries)। जाँच लें कि अकाउंट के नाम आपके अकाउंट के नामों से मेल खाते हैं।',
   'Your business trips with date, description, distance and vehicle: everything FreeAgent’s mileage form asks for.': 'तारीख, विवरण, दूरी और गाड़ी के साथ आपकी बिज़नेस ट्रिप: FreeAgent के माइलेज फ़ॉर्म में जो कुछ माँगा जाता है, सब।',
-  'A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.': 'हर बिज़नेस ट्रिप के लिए एक क्लेम लाइन (तारीख, कहाँ से, कहाँ तक, मकसद, दूरी, रेट और रकम), आपके एम्प्लॉयर के खर्च सिस्टम के लिए।'
+  'A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.': 'हर बिज़नेस ट्रिप के लिए एक क्लेम लाइन (तारीख, कहाँ से, कहाँ तक, मकसद, दूरी, रेट और रकम), आपके एम्प्लॉयर के खर्च सिस्टम के लिए।',
+  'Export to Xero, QuickBooks and FreeAgent': 'Xero, QuickBooks और FreeAgent में एक्सपोर्ट',
+  'Unlimited drives, PDF reports and accounting exports': 'अनलिमिटेड ट्रिप, PDF रिपोर्ट और अकाउंटिंग एक्सपोर्ट',
 };
 
 export default dictionary;

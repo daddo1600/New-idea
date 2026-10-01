@@ -715,7 +715,6 @@ const dictionary: Dictionary = {
   "United States": "États-Unis",
   "Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.": "Sauf si une règle dit autre chose (heures de travail, trajet domicile-travail, itinéraire que vous lui avez appris). Balayez vers la gauche ceux qui étaient personnels ; seuls les trajets d’affaires doivent être déduits.",
   "Unlimited": "Illimité",
-  "Unlimited drives and PDF reports": "Trajets illimités et rapports PDF",
   "Unlock with MileMint Pro": "Débloquer avec MileMint Pro",
   "Unlock with Pro": "Débloquer avec Pro",
   "Unlocked": "Débloqués",
@@ -789,7 +788,9 @@ const dictionary: Dictionary = {
   "A manual journal for each month of business mileage, ready to import in Xero (Accounting › Manual journals › Import). Check the account codes match your chart of accounts.": "Une écriture comptable manuelle pour chaque mois de déplacements d’affaires, prête à importer dans Xero (Accounting › Manual journals › Import). Vérifiez que les numéros de compte correspondent à votre plan comptable.",
   "A journal entry for each month of business mileage, ready to import in QuickBooks Online (Settings › Import data › Journal entries). Check the account names match yours.": "Une écriture comptable pour chaque mois de déplacements d’affaires, prête à importer dans QuickBooks Online (Settings › Import data › Journal entries). Vérifiez que les noms de compte correspondent aux vôtres.",
   "Your business trips with date, description, distance and vehicle: everything FreeAgent’s mileage form asks for.": "Vos trajets d’affaires avec date, description, distance et véhicule : tout ce que demande le formulaire de déplacements de FreeAgent.",
-  "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.": "Une ligne de note de frais pour chaque trajet d’affaires (date, départ, arrivée, motif, distance, taux et montant) pour le système de notes de frais de votre employeur."
+  "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.": "Une ligne de note de frais pour chaque trajet d’affaires (date, départ, arrivée, motif, distance, taux et montant) pour le système de notes de frais de votre employeur.",
+  "Export to Xero, QuickBooks and FreeAgent": "Export vers Xero, QuickBooks et FreeAgent",
+  "Unlimited drives, PDF reports and accounting exports": "Trajets illimités, rapports PDF et exports comptables",
 };
 
 export default dictionary;
