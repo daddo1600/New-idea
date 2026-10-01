@@ -140,8 +140,6 @@ const dictionary: Dictionary = {
   "{{rule}}.": "{{rule}}.",
   "{{rule}}. Petrol, diesel, hybrid or electric: same rate for a car or van you own.": "{{rule}}. Benzină, motorină, hibrid sau electric: același tarif pentru o mașină sau dubă proprie.",
   "{{rule}}. Petrol, diesel, hybrid or electric: same rate.": "{{rule}}. Benzină, motorină, hibrid sau electric: același tarif.",
-  "{{trial}}, then {{price}}/month": "{{trial}}, apoi {{price}}/lună",
-  "{{trial}}, then {{price}}/year": "{{trial}}, apoi {{price}}/an",
   "{{year}} at {{authority}} rates": "{{year}} la tarifele {{authority}}",
   "{{year}} tax year": "Anul fiscal {{year}}",
   "{{year}} tax year at {{authority}} rates": "Anul fiscal {{year}} la tarifele {{authority}}",
@@ -214,7 +212,6 @@ const dictionary: Dictionary = {
   "Bank or post office": "Bancă sau poștă",
   "BAS: if you’re registered for GST or pay PAYG instalments, you lodge quarterly by 28 October, 28 February, 28 April and 28 July. Rideshare drivers must register for GST from their first ride; delivery riders only once turnover reaches $75,000.": "BAS: dacă ești înregistrat pentru GST sau plătești rate PAYG, depui trimestrial până la 28 octombrie, 28 februarie, 28 aprilie și 28 iulie. Șoferii de ridesharing trebuie să se înregistreze pentru GST de la prima cursă; curierii de livrări doar când cifra de afaceri ajunge la 75.000 $.",
   "Before Monday shows up, give this week’s drives a quick sort.": "Până vine luni, sortează rapid cursele din săptămâna asta.",
-  "Best value": "Mai avantajos",
   "Between workplaces": "Între locuri de muncă",
   "Bicycle": "Bicicletă",
   "Business": "De lucru",
@@ -1263,6 +1260,34 @@ const dictionary: Dictionary = {
   "Replay the tutorial": "Reia tutorialul",
   "Try sorting two sample drives again. Nothing is saved.": "Sortează din nou două curse de probă. Nu se salvează nimic.",
   "Replay": "Reia",
+  "{{count}} days free": {
+    "one": "{{count}} zi gratis",
+    "few": "{{count}} zile gratis",
+    "other": "{{count}} de zile gratis"
+  },
+  "{{count}} months free": {
+    "one": "{{count}} lună gratis",
+    "few": "{{count}} luni gratis",
+    "other": "{{count}} de luni gratis"
+  },
+  "{{count}} months": {
+    "one": "{{count}} lună",
+    "few": "{{count}} luni",
+    "other": "{{count}} de luni"
+  },
+  "{{price}} a month": "{{price}} pe lună",
+  "Most popular": "Cel mai popular",
+  "We’ll remind you 3 days before it ends.": "Îți amintim cu 3 zile înainte să se încheie.",
+  "{{trial}} free, then {{price}} a year. Cancel any time in Settings.": "{{trial}} gratis, apoi {{price}} pe an. Anulează oricând din Configurări.",
+  "{{trial}} free, then {{price}} a month. Cancel any time in Settings.": "{{trial}} gratis, apoi {{price}} pe lună. Anulează oricând din Configurări.",
+  "Free trial, then {{price}} a year. Cancel any time in Settings.": "Probă gratuită, apoi {{price}} pe an. Anulează oricând din Configurări.",
+  "Free trial, then {{price}} a month. Cancel any time in Settings.": "Probă gratuită, apoi {{price}} pe lună. Anulează oricând din Configurări.",
+  "{{price}} a year. Cancel any time in Settings.": "{{price}} pe an. Anulează oricând din Configurări.",
+  "{{price}} a month. Cancel any time in Settings.": "{{price}} pe lună. Anulează oricând din Configurări.",
+  "Your free month ends on {{date}}": "Luna ta gratuită se încheie pe {{date}}",
+  "Your free trial ends on {{date}}": "Perioada ta de probă gratuită se încheie pe {{date}}",
+  "Keep Pro for {{price}} a year, or cancel in Settings. Nothing to do if you’re staying.": "Păstrează Pro pentru {{price}} pe an sau anulează din Configurări. Dacă rămâi, nu trebuie să faci nimic.",
+  "Keep Pro for {{price}} a month, or cancel in Settings. Nothing to do if you’re staying.": "Păstrează Pro pentru {{price}} pe lună sau anulează din Configurări. Dacă rămâi, nu trebuie să faci nimic.",
 };
 
 export default dictionary;

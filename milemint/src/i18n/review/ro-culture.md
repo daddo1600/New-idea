@@ -358,3 +358,26 @@ The practice run after setup (sorting two sample drives, a sample shift) and hom
 | Replay the tutorial | Reia tutorialul | Replay the tutorial | Natural, fits its place. |
 | Try sorting two sample drives again. Nothing is saved. | Sortează din nou două curse de probă. Nu se salvează nimic. | Sort two trial trips again. Nothing is saved. | Natural, fits its place. |
 | Replay | Reia | Replay | Natural, fits its place. |
+
+## Round 8h: Pro screen
+
+Plain trial terms. “Configurări” is the iPhone Settings app, as in “Deschide Configurări”. “Gratis” is invariable, so it follows any length. {{date}} is “1 noiembrie”, so “pe {{date}}”. The trial pill and lengths are plurals, so “1 month” / “2 months” read right.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| {{count}} days free | {{count}} zi gratis / {{count}} zile gratis / {{count}} de zile gratis | {{count}} day(s) free |  |
+| {{count}} months free | {{count}} lună gratis / {{count}} luni gratis / {{count}} de luni gratis | {{count}} month(s) free |  |
+| {{count}} months | {{count}} lună / {{count}} luni / {{count}} de luni | {{count}} month(s) |  |
+| {{price}} a month | {{price}} pe lună | {{price}} per month | Under the yearly price: the yearly price ÷ 12. |
+| Most popular | Cel mai popular | The most popular | Badge on the yearly plan. |
+| We’ll remind you 3 days before it ends. | Îți amintim cu 3 zile înainte să se încheie. | We’ll remind you 3 days before it ends. |  |
+| {{trial}} free, then {{price}} a year. Cancel any time in Settings. | {{trial}} gratis, apoi {{price}} pe an. Anulează oricând din Configurări. | {{trial}} free, then {{price}} per year. Cancel any time from Settings. |  |
+| {{trial}} free, then {{price}} a month. Cancel any time in Settings. | {{trial}} gratis, apoi {{price}} pe lună. Anulează oricând din Configurări. | {{trial}} free, then {{price}} per month. Cancel any time from Settings. |  |
+| Free trial, then {{price}} a year. Cancel any time in Settings. | Probă gratuită, apoi {{price}} pe an. Anulează oricând din Configurări. | Free trial, then {{price}} per year. Cancel any time from Settings. |  |
+| Free trial, then {{price}} a month. Cancel any time in Settings. | Probă gratuită, apoi {{price}} pe lună. Anulează oricând din Configurări. | Free trial, then {{price}} per month. Cancel any time from Settings. |  |
+| {{price}} a year. Cancel any time in Settings. | {{price}} pe an. Anulează oricând din Configurări. | {{price}} per year. Cancel any time from Settings. |  |
+| {{price}} a month. Cancel any time in Settings. | {{price}} pe lună. Anulează oricând din Configurări. | {{price}} per month. Cancel any time from Settings. |  |
+| Your free month ends on {{date}} | Luna ta gratuită se încheie pe {{date}} | Your free month ends on {{date}} | Notification title, 3 days before a one-month trial ends. |
+| Your free trial ends on {{date}} | Perioada ta de probă gratuită se încheie pe {{date}} | Your free trial period ends on {{date}} | For other trial lengths. |
+| Keep Pro for {{price}} a year, or cancel in Settings. Nothing to do if you’re staying. | Păstrează Pro pentru {{price}} pe an sau anulează din Configurări. Dacă rămâi, nu trebuie să faci nimic. | Keep Pro for {{price}} per year or cancel from Settings. If you stay, you don’t have to do anything. | Notification body. |
+| Keep Pro for {{price}} a month, or cancel in Settings. Nothing to do if you’re staying. | Păstrează Pro pentru {{price}} pe lună sau anulează din Configurări. Dacă rămâi, nu trebuie să faci nimic. | Keep Pro for {{price}} per month or cancel from Settings. If you stay, you don’t have to do anything. |  |

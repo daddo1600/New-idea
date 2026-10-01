@@ -350,3 +350,26 @@ The practice run after setup (sorting two sample drives, a sample shift) and hom
 | Replay the tutorial | Repetir el tutorial | Repeat the tutorial | Natural, fits its place. |
 | Try sorting two sample drives again. Nothing is saved. | Vuelve a clasificar dos viajes de ejemplo. No se guarda nada. | Classify two sample trips again. Nothing is saved. | Natural, fits its place. |
 | Replay | Repetir | Repeat | Natural, fits its place. |
+
+## Round 8h: Pro screen
+
+Plain trial terms on the paywall, no “£0.00 hoy”. “Configuración” is the iPhone Settings app, as in “Abrir Configuración”. “Cancelar” for cancelling a subscription, as Apple’s Spanish App Store says. {{date}} is a long date (“1 de noviembre”), so “termina el {{date}}”. The trial pill and lengths are plurals, so “1 month” / “2 months” read right.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| {{count}} days free | {{count}} día gratis / {{count}} días gratis / {{count}} días gratis | {{count}} day(s) free |  |
+| {{count}} months free | {{count}} mes gratis / {{count}} meses gratis / {{count}} meses gratis | {{count}} month(s) free |  |
+| {{count}} months | {{count}} mes / {{count}} meses / {{count}} meses | {{count}} month(s) |  |
+| {{price}} a month | {{price}} al mes | {{price}} per month | Under the yearly price: the yearly price ÷ 12. |
+| Most popular | El más popular | The most popular | Badge on the yearly plan. |
+| We’ll remind you 3 days before it ends. | Te lo recordaremos 3 días antes de que termine. | We’ll remind you 3 days before it ends. |  |
+| {{trial}} free, then {{price}} a year. Cancel any time in Settings. | {{trial}} gratis, luego {{price}} al año. Cancela cuando quieras en Configuración. | {{trial}} free, then {{price}} a year. Cancel whenever you like in Settings. |  |
+| {{trial}} free, then {{price}} a month. Cancel any time in Settings. | {{trial}} gratis, luego {{price}} al mes. Cancela cuando quieras en Configuración. | {{trial}} free, then {{price}} a month. Cancel whenever you like in Settings. |  |
+| Free trial, then {{price}} a year. Cancel any time in Settings. | Prueba gratis, luego {{price}} al año. Cancela cuando quieras en Configuración. | Free trial, then {{price}} a year. Cancel whenever you like in Settings. |  |
+| Free trial, then {{price}} a month. Cancel any time in Settings. | Prueba gratis, luego {{price}} al mes. Cancela cuando quieras en Configuración. | Free trial, then {{price}} a month. Cancel whenever you like in Settings. |  |
+| {{price}} a year. Cancel any time in Settings. | {{price}} al año. Cancela cuando quieras en Configuración. | {{price}} a year. Cancel whenever you like in Settings. |  |
+| {{price}} a month. Cancel any time in Settings. | {{price}} al mes. Cancela cuando quieras en Configuración. | {{price}} a month. Cancel whenever you like in Settings. |  |
+| Your free month ends on {{date}} | Tu mes gratis termina el {{date}} | Your free month ends on {{date}} | Notification title, 3 days before a one-month trial ends. |
+| Your free trial ends on {{date}} | Tu prueba gratis termina el {{date}} | Your free trial ends on {{date}} | For other trial lengths. |
+| Keep Pro for {{price}} a year, or cancel in Settings. Nothing to do if you’re staying. | Sigue con Pro por {{price}} al año o cancela en Configuración. Si te quedas, no tienes que hacer nada. | Carry on with Pro for {{price}} a year or cancel in Settings. If you stay, you don’t have to do anything. | Notification body. |
+| Keep Pro for {{price}} a month, or cancel in Settings. Nothing to do if you’re staying. | Sigue con Pro por {{price}} al mes o cancela en Configuración. Si te quedas, no tienes que hacer nada. | Carry on with Pro for {{price}} a month or cancel in Settings. If you stay, you don’t have to do anything. |  |

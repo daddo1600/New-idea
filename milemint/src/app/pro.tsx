@@ -1,4 +1,5 @@
 import { router, type Href } from 'expo-router';
+import { getLocales } from 'expo-localization';
 import * as WebBrowser from 'expo-web-browser';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -9,12 +10,15 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTrips } from '@/db/use-trips';
+import { DEMO_MODE } from '@/dev/demo';
 import { lockedTripIds } from '@/domain/plan';
+import { formatPrice, offerTermsKey, perMonthPrice, remindsBeforeTrialEnds } from '@/domain/pro-offer';
 import { formatMoney, potentialDeductions } from '@/domain/regions';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
 import type { ProPlan, ProTrial } from '@/purchases/store';
+import { trialRemindersAllowed } from '@/purchases/trial-reminder';
 import { useReferral } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 
@@ -49,16 +53,40 @@ function trialText(t: T, trial: ProTrial): string {
   return t('Free trial');
 }
 
-/** e.g. "30-day free trial, then $49.99/year". */
+/** e.g. "£49.99/year". */
 function planPrice(t: T, plan: ProPlan): string {
   const price = plan.price;
-  if (plan.trial) {
-    const trial = trialText(t, plan.trial);
-    return plan.period === 'year'
-      ? t('{{trial}}, then {{price}}/year', { trial, price })
-      : t('{{trial}}, then {{price}}/month', { trial, price });
-  }
   return plan.period === 'year' ? t('{{price}}/year', { price }) : t('{{price}}/month', { price });
+}
+
+/** The trial pill on a plan, e.g. "1 month free". */
+function trialPill(t: T, trial: ProTrial): string {
+  const { count } = trial;
+  if (trial.unit === 'day') return t('{{count}} days free', { count });
+  if (trial.unit === 'month') return t('{{count}} months free', { count });
+  return t('Free trial');
+}
+
+/** A trial's length for the plain terms, e.g. "1 month". */
+function trialLength(t: T, trial: ProTrial): string {
+  const { count } = trial;
+  return trial.unit === 'day' ? t('{{count}} days', { count }) : t('{{count}} months', { count });
+}
+
+/** The yearly price a month, e.g. "£4.17 a month", in the phone's own number format like the App Store's price. */
+function perMonth(t: T, plan: ProPlan): string | null {
+  if (plan.period !== 'year' || plan.amount === null || !plan.currency) return null;
+  const amount = perMonthPrice(plan.amount, plan.currency);
+  if (amount === null) return null;
+  const locale = getLocales()[0]?.languageTag ?? 'en';
+  const price = formatPrice(amount, plan.currency, locale);
+  return price ? t('{{price}} a month', { price }) : null;
+}
+
+/** The plain sentence above the buy button, e.g. "1 month free, then £49.99 a year. Cancel any time in Settings." */
+function offerTerms(t: T, plan: ProPlan): string {
+  const trial = plan.trial?.unit ? trialLength(t, plan.trial) : '';
+  return t(offerTermsKey(plan), { trial, price: plan.price });
 }
 
 /** The renewal terms Apple requires next to an auto-renewing offer. */
@@ -95,6 +123,16 @@ export default function ProScreen() {
   const { region } = useRegion();
   const { allowance, counting, canRedeem } = useReferral();
   const [selected, setSelected] = useState<string | null>(null);
+  // The trial reminder is only promised when it can be sent; buying never asks.
+  const [canRemind, setCanRemind] = useState(DEMO_MODE);
+  useEffect(() => {
+    if (DEMO_MODE) return;
+    let live = true;
+    trialRemindersAllowed().then((allowed) => live && setCanRemind(allowed));
+    return () => {
+      live = false;
+    };
+  }, []);
 
   // What upgrading is worth to this user right now, if they've hit the limit.
   const locked = useMemo(() => {
@@ -205,6 +243,7 @@ export default function ProScreen() {
           <>
             {plans.map((option) => {
               const active = option.id === plan?.id;
+              const monthly = perMonth(t, option);
               return (
                 <Pressable
                   key={option.id}
@@ -219,16 +258,32 @@ export default function ProScreen() {
                     },
                   ]}>
                   <View style={styles.flex}>
-                    <ThemedText type="smallBold">{option.period === 'year' ? t('Yearly') : t('Monthly')}</ThemedText>
-                    <ThemedText type="small" themeColor="textSecondary">
-                      {planPrice(t, option)}
-                    </ThemedText>
+                    <View style={styles.planHeader}>
+                      <ThemedText type="smallBold" style={styles.flex}>
+                        {option.period === 'year' ? t('Yearly') : t('Monthly')}
+                      </ThemedText>
+                      {option.period === 'year' && (
+                        <View style={[styles.badge, { backgroundColor: theme.accent }]}>
+                          <ThemedText type="smallBold" style={[styles.badgeText, { color: theme.onAccent }]}>
+                            {t('Most popular')}
+                          </ThemedText>
+                        </View>
+                      )}
+                    </View>
+                    <ThemedText type="small">{planPrice(t, option)}</ThemedText>
+                    {monthly && (
+                      <ThemedText type="small" themeColor="textSecondary">
+                        {monthly}
+                      </ThemedText>
+                    )}
+                    {option.trial && (
+                      <View style={[styles.pill, { borderColor: theme.accent }]}>
+                        <ThemedText type="smallBold" style={[styles.badgeText, { color: theme.accent }]}>
+                          {trialPill(t, option.trial)}
+                        </ThemedText>
+                      </View>
+                    )}
                   </View>
-                  {option.period === 'year' && (
-                    <ThemedText type="smallBold" style={{ color: theme.accent }}>
-                      {t('Best value')}
-                    </ThemedText>
-                  )}
                 </Pressable>
               );
             })}
@@ -237,6 +292,19 @@ export default function ProScreen() {
               <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
                 {t(error)}
               </ThemedText>
+            )}
+
+            {plan && (
+              <View style={styles.terms}>
+                <ThemedText type="small" style={styles.centered}>
+                  {offerTerms(t, plan)}
+                </ThemedText>
+                {canRemind && remindsBeforeTrialEnds(plan) && (
+                  <ThemedText type="small" themeColor="textSecondary" style={styles.centered}>
+                    {t('We’ll remind you 3 days before it ends.')}
+                  </ThemedText>
+                )}
+              </View>
             )}
 
             <GoldButton
@@ -342,6 +410,19 @@ const styles = StyleSheet.create({
   locked: { borderRadius: 12, borderWidth: 1, padding: Spacing.three, gap: Spacing.half },
   rules: { borderRadius: 12, padding: Spacing.three },
   flex: { flex: 1, gap: Spacing.half },
+  planHeader: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
+  badge: { borderRadius: 999, paddingHorizontal: Spacing.two, paddingVertical: 2 },
+  pill: {
+    alignSelf: 'flex-start',
+    borderWidth: 1,
+    borderRadius: 999,
+    paddingHorizontal: Spacing.two,
+    paddingVertical: 2,
+    marginTop: Spacing.half,
+  },
+  badgeText: { fontSize: 12, lineHeight: 16 },
+  terms: { gap: Spacing.half },
+  centered: { textAlign: 'center' },
   plan: {
     flexDirection: 'row',
     alignItems: 'center',

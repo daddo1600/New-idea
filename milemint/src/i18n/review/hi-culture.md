@@ -363,3 +363,26 @@ The practice run after setup (sorting two sample drives, a sample shift) and hom
 | Replay the tutorial | ट्यूटोरियल फिर से देखें | See the tutorial again | Natural, fits its place. |
 | Try sorting two sample drives again. Nothing is saved. | दो सैंपल ट्रिप को फिर से छाँटकर देखें। कुछ भी सेव नहीं होता। | Try sorting two sample trips again. Nothing is saved. | Natural, fits its place. |
 | Replay | फिर से देखें | See again | Natural, fits its place. |
+
+## Round 8h: Pro screen
+
+Plain trial terms. “सेटिंग्ज़” is the iPhone Settings app, as in “सेटिंग्ज़ खोलें”. “फ़्री ट्रायल” as already used on the paywall. The trial pill and lengths are plurals, so “1 month” / “2 months” read right.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| {{count}} days free | {{count}} दिन फ़्री / {{count}} दिन फ़्री | {{count}} day(s) free |  |
+| {{count}} months free | {{count}} महीना फ़्री / {{count}} महीने फ़्री | {{count}} month(s) free |  |
+| {{count}} months | {{count}} महीना / {{count}} महीने | {{count}} month(s) |  |
+| {{price}} a month | {{price}} हर महीने | {{price}} every month | Under the yearly price: the yearly price ÷ 12. |
+| Most popular | सबसे लोकप्रिय | Most popular | Badge on the yearly plan. |
+| We’ll remind you 3 days before it ends. | ख़त्म होने से 3 दिन पहले हम आपको याद दिला देंगे। | We’ll remind you 3 days before it ends. |  |
+| {{trial}} free, then {{price}} a year. Cancel any time in Settings. | {{trial}} फ़्री, फिर {{price}} हर साल। सेटिंग्ज़ में कभी भी रद्द करें। | {{trial}} free, then {{price}} every year. Cancel any time in Settings. |  |
+| {{trial}} free, then {{price}} a month. Cancel any time in Settings. | {{trial}} फ़्री, फिर {{price}} हर महीने। सेटिंग्ज़ में कभी भी रद्द करें। | {{trial}} free, then {{price}} every month. Cancel any time in Settings. |  |
+| Free trial, then {{price}} a year. Cancel any time in Settings. | फ़्री ट्रायल, फिर {{price}} हर साल। सेटिंग्ज़ में कभी भी रद्द करें। | Free trial, then {{price}} every year. Cancel any time in Settings. |  |
+| Free trial, then {{price}} a month. Cancel any time in Settings. | फ़्री ट्रायल, फिर {{price}} हर महीने। सेटिंग्ज़ में कभी भी रद्द करें। | Free trial, then {{price}} every month. Cancel any time in Settings. |  |
+| {{price}} a year. Cancel any time in Settings. | {{price}} हर साल। सेटिंग्ज़ में कभी भी रद्द करें। | {{price}} every year. Cancel any time in Settings. |  |
+| {{price}} a month. Cancel any time in Settings. | {{price}} हर महीने। सेटिंग्ज़ में कभी भी रद्द करें। | {{price}} every month. Cancel any time in Settings. |  |
+| Your free month ends on {{date}} | आपका फ़्री महीना {{date}} को ख़त्म होगा | Your free month will end on {{date}} | Notification title, 3 days before a one-month trial ends. |
+| Your free trial ends on {{date}} | आपका फ़्री ट्रायल {{date}} को ख़त्म होगा | Your free trial will end on {{date}} | For other trial lengths. |
+| Keep Pro for {{price}} a year, or cancel in Settings. Nothing to do if you’re staying. | Pro को {{price}} सालाना में जारी रखें, या सेटिंग्ज़ में रद्द करें। जारी रखना है तो कुछ करने की ज़रूरत नहीं। | Continue Pro at {{price}} yearly, or cancel in Settings. If you’re continuing, nothing needs doing. | Notification body. |
+| Keep Pro for {{price}} a month, or cancel in Settings. Nothing to do if you’re staying. | Pro को {{price}} मासिक में जारी रखें, या सेटिंग्ज़ में रद्द करें। जारी रखना है तो कुछ करने की ज़रूरत नहीं। | Continue Pro at {{price}} monthly, or cancel in Settings. If you’re continuing, nothing needs doing. |  |

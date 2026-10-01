@@ -337,3 +337,26 @@ The practice run after setup (sorting two sample drives, a sample shift) and hom
 | Replay the tutorial | 重看教程 | Watch the tutorial again | Natural, fits its place. |
 | Try sorting two sample drives again. Nothing is saved. | 再练习分类两段示例行程。不会保存任何内容。 | Practise classifying two sample trips again. Nothing is saved. | Natural, fits its place. |
 | Replay | 重看 | Watch again | Natural, fits its place. |
+
+## Round 8h: Pro screen
+
+Plain trial terms. “设置” in quotes is the iPhone Settings app, as elsewhere. 你 as everywhere in the app. Plurals have only “other”. The trial pill and lengths are plurals, so “1 month” / “2 months” read right.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| {{count}} days free | 免费 {{count}} 天 | {{count}} days free |  |
+| {{count}} months free | 免费 {{count}} 个月 | {{count}} months free |  |
+| {{count}} months | {{count}} 个月 | {{count}} months |  |
+| {{price}} a month | 每月 {{price}} | {{price}} per month | Under the yearly price: the yearly price ÷ 12. |
+| Most popular | 最受欢迎 | Most popular | Badge on the yearly plan. |
+| We’ll remind you 3 days before it ends. | 结束前 3 天我们会提醒你。 | We’ll remind you 3 days before it ends. |  |
+| {{trial}} free, then {{price}} a year. Cancel any time in Settings. | 免费 {{trial}}，之后每年 {{price}}。可随时在“设置”中取消。 | Free for {{trial}}, then {{price}} per year. Cancel any time in “Settings”. |  |
+| {{trial}} free, then {{price}} a month. Cancel any time in Settings. | 免费 {{trial}}，之后每月 {{price}}。可随时在“设置”中取消。 | Free for {{trial}}, then {{price}} per month. Cancel any time in “Settings”. |  |
+| Free trial, then {{price}} a year. Cancel any time in Settings. | 免费试用，之后每年 {{price}}。可随时在“设置”中取消。 | Free trial, then {{price}} per year. Cancel any time in “Settings”. |  |
+| Free trial, then {{price}} a month. Cancel any time in Settings. | 免费试用，之后每月 {{price}}。可随时在“设置”中取消。 | Free trial, then {{price}} per month. Cancel any time in “Settings”. |  |
+| {{price}} a year. Cancel any time in Settings. | 每年 {{price}}。可随时在“设置”中取消。 | {{price}} per year. Cancel any time in “Settings”. |  |
+| {{price}} a month. Cancel any time in Settings. | 每月 {{price}}。可随时在“设置”中取消。 | {{price}} per month. Cancel any time in “Settings”. |  |
+| Your free month ends on {{date}} | 你的免费月将于 {{date}} 结束 | Your free month ends on {{date}} | Notification title, 3 days before a one-month trial ends. |
+| Your free trial ends on {{date}} | 你的免费试用将于 {{date}} 结束 | Your free trial ends on {{date}} | For other trial lengths. |
+| Keep Pro for {{price}} a year, or cancel in Settings. Nothing to do if you’re staying. | 以每年 {{price}} 继续使用 Pro，或在“设置”中取消。继续使用的话，无需任何操作。 | Keep using Pro for {{price}} a year, or cancel in “Settings”. If you keep using it, nothing to do. | Notification body. |
+| Keep Pro for {{price}} a month, or cancel in Settings. Nothing to do if you’re staying. | 以每月 {{price}} 继续使用 Pro，或在“设置”中取消。继续使用的话，无需任何操作。 | Keep using Pro for {{price}} a month, or cancel in “Settings”. If you keep using it, nothing to do. |  |

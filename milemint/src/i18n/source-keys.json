@@ -118,6 +118,7 @@
   {
     "key": "{{count}} days",
     "files": [
+      "app/pro.tsx",
       "domain/deadlines.ts"
     ]
   },
@@ -125,6 +126,12 @@
     "key": "{{count}} days ago",
     "files": [
       "components/tracking-health-card.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} days free",
+    "files": [
+      "app/pro.tsx"
     ]
   },
   {
@@ -185,6 +192,18 @@
     "key": "{{count}} minutes ago",
     "files": [
       "components/tracking-health-card.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} months",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} months free",
+    "files": [
+      "app/pro.tsx"
     ]
   },
   {
@@ -425,6 +444,24 @@
     ]
   },
   {
+    "key": "{{price}} a month",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "{{price}} a month. Cancel any time in Settings.",
+    "files": [
+      "domain/pro-offer.ts"
+    ]
+  },
+  {
+    "key": "{{price}} a year. Cancel any time in Settings.",
+    "files": [
+      "domain/pro-offer.ts"
+    ]
+  },
+  {
     "key": "{{price}} per month is charged to your Apple Account and renews automatically unless cancelled at least 24 hours before the end of the period.",
     "files": [
       "app/pro.tsx"
@@ -497,15 +534,15 @@
     ]
   },
   {
-    "key": "{{trial}}, then {{price}}/month",
+    "key": "{{trial}} free, then {{price}} a month. Cancel any time in Settings.",
     "files": [
-      "app/pro.tsx"
+      "domain/pro-offer.ts"
     ]
   },
   {
-    "key": "{{trial}}, then {{price}}/year",
+    "key": "{{trial}} free, then {{price}} a year. Cancel any time in Settings.",
     "files": [
-      "app/pro.tsx"
+      "domain/pro-offer.ts"
     ]
   },
   {
@@ -1170,12 +1207,6 @@
     "key": "Before Monday shows up, give this week’s drives a quick sort.",
     "files": [
       "domain/reminders.ts"
-    ]
-  },
-  {
-    "key": "Best value",
-    "files": [
-      "app/pro.tsx"
     ]
   },
   {
@@ -2459,6 +2490,18 @@
     ]
   },
   {
+    "key": "Free trial, then {{price}} a month. Cancel any time in Settings.",
+    "files": [
+      "domain/pro-offer.ts"
+    ]
+  },
+  {
+    "key": "Free trial, then {{price}} a year. Cancel any time in Settings.",
+    "files": [
+      "domain/pro-offer.ts"
+    ]
+  },
+  {
     "key": "Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.",
     "files": [
       "app/welcome.tsx"
@@ -2925,6 +2968,18 @@
     "files": [
       "app/logbook.tsx",
       "components/celebration.tsx"
+    ]
+  },
+  {
+    "key": "Keep Pro for {{price}} a month, or cancel in Settings. Nothing to do if you’re staying.",
+    "files": [
+      "purchases/trial-reminder.ts"
+    ]
+  },
+  {
+    "key": "Keep Pro for {{price}} a year, or cancel in Settings. Nothing to do if you’re staying.",
+    "files": [
+      "purchases/trial-reminder.ts"
     ]
   },
   {
@@ -3413,6 +3468,12 @@
     "key": "More free drives for every friend",
     "files": [
       "app/friends.tsx"
+    ]
+  },
+  {
+    "key": "Most popular",
+    "files": [
+      "app/pro.tsx"
     ]
   },
   {
@@ -5892,6 +5953,12 @@
     ]
   },
   {
+    "key": "We’ll remind you 3 days before it ends.",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
     "key": "Wed",
     "files": [
       "app/settings.tsx"
@@ -6308,9 +6375,21 @@
     ]
   },
   {
+    "key": "Your free month ends on {{date}}",
+    "files": [
+      "purchases/trial-reminder.ts"
+    ]
+  },
+  {
     "key": "Your free plan: {{count}} automatic drives a month.",
     "files": [
       "app/friends.tsx"
+    ]
+  },
+  {
+    "key": "Your free trial ends on {{date}}",
+    "files": [
+      "purchases/trial-reminder.ts"
     ]
   },
   {

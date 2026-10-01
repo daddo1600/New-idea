@@ -161,8 +161,6 @@ const dictionary: Dictionary = {
   "{{rule}}.": "{{rule}}.",
   "{{rule}}. Petrol, diesel, hybrid or electric: same rate for a car or van you own.": "{{rule}}. Benzyna, diesel, hybryda czy elektryk: ta sama stawka dla własnego auta lub vana.",
   "{{rule}}. Petrol, diesel, hybrid or electric: same rate.": "{{rule}}. Benzyna, diesel, hybryda czy elektryk: ta sama stawka.",
-  "{{trial}}, then {{price}}/month": "{{trial}}, potem {{price}}/mies.",
-  "{{trial}}, then {{price}}/year": "{{trial}}, potem {{price}}/rok",
   "{{year}} at {{authority}} rates": "{{year}} według stawek {{authority}}",
   "{{year}} tax year": "Rok podatkowy {{year}}",
   "{{year}} tax year at {{authority}} rates": "Rok podatkowy {{year}} według stawek {{authority}}",
@@ -237,7 +235,6 @@ const dictionary: Dictionary = {
   "Bank or post office": "Bank lub poczta",
   "BAS: if you’re registered for GST or pay PAYG instalments, you lodge quarterly by 28 October, 28 February, 28 April and 28 July. Rideshare drivers must register for GST from their first ride; delivery riders only once turnover reaches $75,000.": "BAS: jeśli masz rejestrację GST lub płacisz zaliczki PAYG, składasz rozliczenie co kwartał do 28 października, 28 lutego, 28 kwietnia i 28 lipca. Kierowcy przewożący pasażerów (rideshare) muszą zarejestrować się do GST od pierwszego kursu; kurierzy dostaw dopiero wtedy, gdy obrót osiągnie 75 000 $.",
   "Before Monday shows up, give this week’s drives a quick sort.": "Zanim nadejdzie poniedziałek, szybko oznacz przejazdy z tego tygodnia.",
-  "Best value": "Korzystniej",
   "Between workplaces": "Między miejscami pracy",
   "Bicycle": "Rower",
   "Business": "Służbowy",
@@ -1317,6 +1314,37 @@ const dictionary: Dictionary = {
   "Replay the tutorial": "Powtórz samouczek",
   "Try sorting two sample drives again. Nothing is saved.": "Jeszcze raz posortuj dwa przykładowe przejazdy. Nic nie zostanie zapisane.",
   "Replay": "Powtórz",
+  "{{count}} days free": {
+    "one": "{{count}} dzień za darmo",
+    "few": "{{count}} dni za darmo",
+    "many": "{{count}} dni za darmo",
+    "other": "{{count}} dnia za darmo"
+  },
+  "{{count}} months free": {
+    "one": "{{count}} miesiąc za darmo",
+    "few": "{{count}} miesiące za darmo",
+    "many": "{{count}} miesięcy za darmo",
+    "other": "{{count}} miesiąca za darmo"
+  },
+  "{{count}} months": {
+    "one": "{{count}} miesiąc",
+    "few": "{{count}} miesiące",
+    "many": "{{count}} miesięcy",
+    "other": "{{count}} miesiąca"
+  },
+  "{{price}} a month": "{{price}} miesięcznie",
+  "Most popular": "Najpopularniejszy",
+  "We’ll remind you 3 days before it ends.": "Przypomnimy Ci 3 dni przed końcem.",
+  "{{trial}} free, then {{price}} a year. Cancel any time in Settings.": "{{trial}} za darmo, potem {{price}} rocznie. Anuluj w każdej chwili w Ustawieniach.",
+  "{{trial}} free, then {{price}} a month. Cancel any time in Settings.": "{{trial}} za darmo, potem {{price}} miesięcznie. Anuluj w każdej chwili w Ustawieniach.",
+  "Free trial, then {{price}} a year. Cancel any time in Settings.": "Darmowy okres próbny, potem {{price}} rocznie. Anuluj w każdej chwili w Ustawieniach.",
+  "Free trial, then {{price}} a month. Cancel any time in Settings.": "Darmowy okres próbny, potem {{price}} miesięcznie. Anuluj w każdej chwili w Ustawieniach.",
+  "{{price}} a year. Cancel any time in Settings.": "{{price}} rocznie. Anuluj w każdej chwili w Ustawieniach.",
+  "{{price}} a month. Cancel any time in Settings.": "{{price}} miesięcznie. Anuluj w każdej chwili w Ustawieniach.",
+  "Your free month ends on {{date}}": "Twój darmowy miesiąc kończy się {{date}}",
+  "Your free trial ends on {{date}}": "Twój darmowy okres próbny kończy się {{date}}",
+  "Keep Pro for {{price}} a year, or cancel in Settings. Nothing to do if you’re staying.": "Zostań z Pro za {{price}} rocznie albo anuluj w Ustawieniach. Jeśli zostajesz, nic nie musisz robić.",
+  "Keep Pro for {{price}} a month, or cancel in Settings. Nothing to do if you’re staying.": "Zostań z Pro za {{price}} miesięcznie albo anuluj w Ustawieniach. Jeśli zostajesz, nic nie musisz robić.",
 };
 
 export default dictionary;

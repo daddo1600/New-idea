@@ -20,7 +20,9 @@ import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/tri
  *   ?demo=always location set to "While Using" only
  *   ?demo=gap    tracking stopped mid-drive: the "add the missed trip?" card
  *   ?demo=stopped / ?demo=precise  tracking not running / Precise Location off
- *   ?demo=free   a free-plan user, with sample App Store prices on the paywall
+ *   ?demo=free   a free-plan user, with sample App Store products on the paywall
+ *                (yearly 49.99 with a free month, monthly 5.99, in the region's
+ *                currency: /pro?demo=free&region=GB shows £)
  *   ?demo=courier shift mode on (the swipe-to-start shift bar)
  *   ?demo=places no Home or Work saved yet: "Is this home?" (then, after No, "Is this work?")
  *   ?demo=motion Motion & Fitness not asked yet: set-up offers it after location

@@ -1,9 +1,13 @@
 import * as SecureStore from 'expo-secure-store';
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useSQLiteContext } from 'expo-sqlite';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AppState, Platform } from 'react-native';
 
-import { DEMO_MODE, DEMO_PRO } from '@/dev/demo';
+import { DEMO_MODE, DEMO_PRO, DEMO_REGION } from '@/dev/demo';
+import { formatPrice } from '@/domain/pro-offer';
+import { displayLocale, REGIONS, type RegionCode } from '@/domain/regions';
 import { msg } from '@/i18n/i18n';
+import { useRegion } from '@/region/region';
 
 import {
   buy as storeBuy,
@@ -16,6 +20,7 @@ import {
   STORE_AVAILABLE,
   type ProPlan,
 } from './store';
+import { cancelTrialReminder, scheduleTrialReminder } from './trial-reminder';
 
 /**
  * Last status the App Store reported, so Pro users see their drives at once
@@ -23,11 +28,23 @@ import {
  */
 const CACHE_KEY = 'milemint.pro-active';
 
-/** The web demo has no App Store; these stand in so the paywall can be previewed. */
-const DEMO_PLANS: ProPlan[] = [
-  { id: 'demo.yearly', price: '$49.99', period: 'year', trial: { count: 30, unit: 'day' } },
-  { id: 'demo.monthly', price: '$5.99', period: 'month', trial: null },
-];
+/**
+ * The web demo has no App Store; these stand in so the paywall can be
+ * previewed, as App Store Connect has them (yearly with a free month), in the
+ * demo region's currency (`?demo=free&region=GB`).
+ */
+function demoPlans(): ProPlan[] {
+  const region = REGIONS[(DEMO_REGION ?? 'US') as RegionCode] ?? REGIONS.US;
+  const plan = (id: string, amount: number, period: ProPlan['period'], trial: ProPlan['trial']): ProPlan => ({
+    id,
+    price: formatPrice(amount, region.currency, region.locale) ?? String(amount),
+    amount,
+    currency: region.currency,
+    period,
+    trial,
+  });
+  return [plan('demo.yearly', 49.99, 'year', { count: 1, unit: 'month' }), plan('demo.monthly', 5.99, 'month', null)];
+}
 const canCache = Platform.OS !== 'web';
 
 type Pro = {
@@ -52,15 +69,28 @@ const ProContext = createContext<Pro | null>(null);
 export function ProProvider({ children }: { children: ReactNode }) {
   // The web demo stands in for a paying user so screenshots show every drive.
   const [isPro, setIsPro] = useState(DEMO_PRO);
-  const [plans, setPlans] = useState<ProPlan[]>(DEMO_MODE ? DEMO_PLANS : []);
+  const db = useSQLiteContext();
+  const { region } = useRegion();
+  const [plans, setPlans] = useState<ProPlan[]>(() => (DEMO_MODE ? demoPlans() : []));
   const [plansLoaded, setPlansLoaded] = useState(DEMO_MODE);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const remember = useCallback((active: boolean) => {
-    setIsPro(active);
-    if (canCache) SecureStore.setItemAsync(CACHE_KEY, active ? '1' : '0').catch(() => {});
-  }, []);
+  // Read when a purchase arrives, which can be long after the listener was set up.
+  const latest = useRef({ plans, locale: displayLocale(region) });
+  useEffect(() => {
+    latest.current = { plans, locale: displayLocale(region) };
+  }, [plans, region]);
+
+  const remember = useCallback(
+    (active: boolean) => {
+      setIsPro(active);
+      if (canCache) SecureStore.setItemAsync(CACHE_KEY, active ? '1' : '0').catch(() => {});
+      // Cancelled or lapsed: no "your trial ends soon" for a trial that's over.
+      if (!active) cancelTrialReminder(db).catch(() => {});
+    },
+    [db],
+  );
 
   const refresh = useCallback(async () => {
     if (!STORE_AVAILABLE) return;
@@ -88,10 +118,18 @@ export function ProProvider({ children }: { children: ReactNode }) {
     let stopListening = () => {};
     try {
       stopListening = onPurchase({
-        success: () => {
+        success: (purchase) => {
           setBusy(false);
           setError(null);
           remember(true);
+          // The plan's trial is the intro offer the user was eligible for when they bought.
+          const { plans: offered, locale } = latest.current;
+          const plan = offered.find((option) => option.id === purchase.productId);
+          if (plan?.trial) {
+            scheduleTrialReminder(db, plan, purchase.transactionDate || Date.now(), locale).catch((reminderError) =>
+              console.warn('[pro] trial reminder not scheduled', reminderError),
+            );
+          }
         },
         error: (purchaseError) => {
           setBusy(false);
@@ -108,7 +146,7 @@ export function ProProvider({ children }: { children: ReactNode }) {
       stopListening();
       foreground.remove();
     };
-  }, [refresh, remember]);
+  }, [db, refresh, remember]);
 
   const buy = useCallback(async (planId: string) => {
     if (DEMO_MODE) return; // Preview only: there is no App Store to buy from.
