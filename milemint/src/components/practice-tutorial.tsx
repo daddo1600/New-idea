@@ -20,6 +20,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, G, Rect } from 'react-native-svg';
 
 import { GoldButton } from '@/components/gold-button';
+import { useLaunchIntroDone } from '@/components/launch-intro-state';
 import { LeafMark } from '@/components/leaf-mark';
 import { ShiftSwitch } from '@/components/shift-switch';
 import { ThemedText } from '@/components/themed-text';
@@ -71,10 +72,28 @@ let replayAsked = false;
  * the real thing (swiping right is business, left personal; the Business and
  * Personal buttons on the row count too).
  */
-export function PracticeTutorial({ TripRow }: { TripRow: ComponentType<SampleRowProps> }) {
+export function PracticeTutorial({
+  TripRow,
+  hold = false,
+}: {
+  TripRow: ComponentType<SampleRowProps>;
+  /**
+   * Not now: a drive is being recorded, a shift is running, or another
+   * overlay is up. The practice run waits (it never opens over the real
+   * thing), and once open it stays until finished or skipped.
+   */
+  hold?: boolean;
+}) {
   const db = useSQLiteContext();
-  const [shown, setShown] = useState<{ shiftWorker: boolean; run: number } | null>(null);
+  const [shown, setShown] = useState<{ shiftWorker: boolean; run: number; asked: boolean } | null>(null);
   const demoSeen = useRef(false);
+  // Never under (so, on iOS, over) the launch animation: a native Modal would cover it.
+  const introDone = useLaunchIntroDone();
+  const [opened, setOpened] = useState<number | null>(null);
+  // Replayed from Settings: asked for, so it opens straight away.
+  const ready = introDone && (!hold || !!shown?.asked);
+  // Once open it stays open (a drive starting meanwhile doesn't snatch it away).
+  if (shown && ready && opened !== shown.run) setOpened(shown.run);
 
   // Read each time home comes into view: Settings' "Replay the tutorial" sets it going again.
   useFocusEffect(
@@ -84,7 +103,9 @@ export function PracticeTutorial({ TripRow }: { TripRow: ComponentType<SampleRow
         (settings) => {
           if (!current) return;
           const due = replayAsked || (DEMO_MODE ? DEMO_TUTORIAL && !demoSeen.current : !settings.tutorialDone);
-          setShown((now) => (due ? (now ?? { shiftWorker: settings.shiftMode, run: Date.now() }) : null));
+          setShown((now) =>
+            due ? (now ?? { shiftWorker: settings.shiftMode, run: Date.now(), asked: replayAsked }) : null,
+          );
         },
         () => {},
       );
@@ -101,7 +122,7 @@ export function PracticeTutorial({ TripRow }: { TripRow: ComponentType<SampleRow
     if (!DEMO_MODE) updateSettings(db, { tutorialDone: true }).catch(() => {});
   }, [db]);
 
-  if (!shown) return null;
+  if (!shown || opened !== shown.run) return null;
   return <TutorialOverlay key={shown.run} shiftWorker={shown.shiftWorker} TripRow={TripRow} onClose={close} />;
 }
 

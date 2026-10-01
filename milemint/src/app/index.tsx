@@ -489,7 +489,11 @@ export default function HomeScreen() {
       {waiting && <ValueWaitsNotice bottom={insets.bottom} onClose={() => setRejoined(null)} />}
       <Celebration content={celebration.content} onClose={celebration.close} />
       {/* Once after setup (or replayed from Settings): sort two sample drives, nothing saved. */}
-      <PracticeTutorial TripRow={TripRow} />
+      <PracticeTutorial
+        TripRow={TripRow}
+        // Never over a drive being recorded, a running shift, or another overlay.
+        hold={liveDrive !== null || shiftMode.shift !== null || celebration.content !== null || picking !== null}
+      />
       <VehicleSheet
         visible={picking !== null}
         title={picking === 'shift' ? t('Which vehicle today?') : t('What are you driving?')}
