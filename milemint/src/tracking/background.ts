@@ -9,6 +9,7 @@ import { loadSettings } from '@/db/settings-repo';
 import { shiftAt } from '@/db/shifts-repo';
 import { refreshLaunchTotal } from '@/region/launch-total';
 import { autoTripExists, insertTrip, listClassificationHistory } from '@/db/trips-repo';
+import { autoClassify } from '@/domain/auto-classify';
 import { suggestClassification } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
 import { matchPlace } from '@/domain/places';
@@ -149,6 +150,12 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
     },
     { history, places, workHours: settings.workHoursEnabled ? settings.workWeek : null },
   );
+  const sorted = autoClassify({
+    inShift: shift !== null,
+    suggestion,
+    shiftMode: settings.shiftMode,
+    defaultBusiness: settings.defaultBusiness,
+  });
   await insertTrip(
     db,
     {
@@ -158,22 +165,14 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
       startLabel,
       endLabel,
       distanceMeters: trip.distanceMeters,
-      classification: shift
-        ? 'business'
-        : (suggestion.classification ?? (settings.defaultBusiness ? 'business' : 'unclassified')),
+      classification: sorted.classification,
       // Business without a learned purpose stays empty; the trip list asks for one.
-      purpose: suggestion.purpose ?? (shift ? 'Deliveries' : ''),
+      purpose: sorted.purpose,
       source: 'auto',
       startPlaceId: startPlace?.id ?? null,
       endPlaceId: endPlace?.id ?? null,
-      // Stored as the work-hours rule (a shift is working time); shiftId tells them apart.
-      autoReason: shift
-        ? 'work-hours'
-        : suggestion.classification
-          ? suggestion.reason
-          : settings.defaultBusiness
-            ? 'default'
-            : null,
+      // A shift is stored as the work-hours rule (working time); shiftId tells them apart.
+      autoReason: sorted.reason,
       vehicle: settings.vehicle,
       vehicleId: settings.currentVehicleId,
       shiftId: shift?.id ?? null,
