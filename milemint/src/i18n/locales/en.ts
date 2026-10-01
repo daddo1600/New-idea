@@ -54,6 +54,10 @@ const en: Dictionary = {
     one: '{{distance}} · {{value}} · {{count}} drive',
     other: '{{distance}} · {{value}} · {{count}} drives',
   },
+  'Claim it before {{date}}. {{total}} unclaimed across {{count}} earlier tax years.': {
+    one: 'Claim it before {{date}}. {{total}} unclaimed across {{count}} earlier tax year.',
+    other: 'Claim it before {{date}}. {{total}} unclaimed across {{count}} earlier tax years.',
+  },
 };
 
 export default en;

@@ -4,6 +4,8 @@ import * as Sharing from 'expo-sharing';
 import { Platform } from 'react-native';
 
 import { exportFile, type ExportFormat } from '@/domain/accounting-export';
+import { type MarOptions, type MarSummary, p87FileName, toP87Csv, toP87Html } from '@/domain/mar';
+import type { Region } from '@/domain/regions';
 import { pageSize, toReportHtml, type MileageReport } from '@/domain/report';
 
 /**
@@ -49,6 +51,36 @@ export async function sharePdf(report: MileageReport): Promise<void> {
     html: toReportHtml(report),
     // US Letter or A4, with half-inch margins.
     ...pageSize(report.region),
+    margins: { left: 36, right: 36, top: 36, bottom: 36 },
+  });
+  const file = cacheFile(name);
+  new File(uri).move(file);
+  await Sharing.shareAsync(file.uri, { mimeType: 'application/pdf', UTI: 'com.adobe.pdf', dialogTitle: name });
+}
+
+/** The Mileage Allowance Relief figures per tax year, to fill in a P87 or Self Assessment. */
+export async function shareP87Summary(
+  summary: MarSummary,
+  region: Region,
+  options: MarOptions,
+  kind: 'csv' | 'pdf',
+): Promise<void> {
+  const name = p87FileName(kind);
+  if (kind === 'csv') {
+    const csv = toP87Csv(summary);
+    if (Platform.OS === 'web') return download(name, csv, 'text/csv');
+    const file = cacheFile(name);
+    file.write(csv);
+    await Sharing.shareAsync(file.uri, {
+      mimeType: 'text/csv',
+      UTI: 'public.comma-separated-values-text',
+      dialogTitle: name,
+    });
+    return;
+  }
+  const { uri } = await Print.printToFileAsync({
+    html: toP87Html(summary, region, options),
+    ...pageSize(region),
     margins: { left: 36, right: 36, top: 36, bottom: 36 },
   });
   const file = cacheFile(name);

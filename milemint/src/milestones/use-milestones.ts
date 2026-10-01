@@ -11,6 +11,7 @@ import {
   type Progress,
   reachedMilestones,
 } from '@/domain/milestones';
+import { marApplies } from '@/domain/mar';
 import { toUnits, type Region } from '@/domain/regions';
 import { toLocalIsoDate, type Trip } from '@/domain/trip';
 
@@ -63,7 +64,8 @@ export function useMilestoneCelebration(
       if (!milestone || !current) return;
       const celebrated = [...new Set([...settings.celebrated, ...reached.map((m) => m.id)])];
       await saveSettings(db, { ...(await loadSettings(db)), celebrated });
-      if (current) setContent(celebrationFor(milestone, region));
+      const employee = settings.employment === 'employee' && marApplies(region);
+      if (current) setContent(celebrationFor(milestone, region, employee));
     })().catch(() => {});
     return () => {
       current = false;

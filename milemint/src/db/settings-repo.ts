@@ -2,6 +2,7 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 
 import type { ExportFormat } from '@/domain/accounting-export';
 import type { WorkWeek } from '@/domain/classify-rules';
+import type { TaxBand } from '@/domain/mar';
 import { REGIONS, type RegionCode } from '@/domain/regions';
 import type { VehicleType } from '@/domain/trip';
 
@@ -37,6 +38,18 @@ export type AppSettings = {
   shiftMode: boolean;
   /** Drives no rule decides start as business (swipe left if personal); off leaves them unsorted. */
   defaultBusiness: boolean;
+  /**
+   * How the user is paid for business mileage (UK only for now). Employees
+   * don't deduct mileage themselves: they claim Mileage Allowance Relief on
+   * whatever their employer pays below HMRC's rate.
+   */
+  employment: 'self-employed' | 'employee';
+  /** The employer's mileage rate in tenths of a penny a mile (450 = 45p); 0 when they pay nothing. */
+  employerRate: number;
+  /** Income tax band for the "tax back" estimate; "unsure" estimates at 20%. */
+  taxBand: TaxBand;
+  /** Tax years (start year) the user has marked as claimed, so home stops nudging about them. */
+  claimedReliefYears: number[];
 };
 
 const WEEKDAY_9_TO_5 = [{ start: '09:00', end: '17:00' }];
@@ -56,6 +69,10 @@ export const DEFAULT_SETTINGS: AppSettings = {
   currentVehicleId: null,
   shiftMode: false,
   defaultBusiness: true,
+  employment: 'self-employed',
+  employerRate: 450,
+  taxBand: 'unsure',
+  claimedReliefYears: [],
 };
 
 export async function loadSettings(db: SQLiteDatabase): Promise<AppSettings> {
@@ -65,6 +82,8 @@ export async function loadSettings(db: SQLiteDatabase): Promise<AppSettings> {
     const stored = JSON.parse(row.json) as Partial<AppSettings>;
     const settings = { ...DEFAULT_SETTINGS, ...stored };
     if (settings.region !== null && !(settings.region in REGIONS)) settings.region = null;
+    if (!Number.isFinite(settings.employerRate) || settings.employerRate < 0) settings.employerRate = DEFAULT_SETTINGS.employerRate;
+    if (!Array.isArray(settings.claimedReliefYears)) settings.claimedReliefYears = [];
     // A damaged week would silently classify nothing; fall back instead.
     return Array.isArray(settings.workWeek) && settings.workWeek.length === 7
       ? settings

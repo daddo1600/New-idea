@@ -23,6 +23,7 @@ import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, saveSettings, type AppSettings } from '@/db/settings-repo';
 import { isValidShift, type WorkShift } from '@/domain/classify-rules';
+import { marApplies, parsePence, TAX_BAND_RATES, type TaxBand } from '@/domain/mar';
 import { FREE_AUTO_DRIVES_PER_MONTH } from '@/domain/plan';
 import { vehicleRule } from '@/domain/regions';
 import { VEHICLE_ICONS, VEHICLE_LABELS, type VehicleType } from '@/domain/trip';
@@ -30,6 +31,7 @@ import { defaultVehicleName, normaliseRegistration, type Vehicle } from '@/domai
 import { addVehicle, removeVehicle, updateVehicle } from '@/db/vehicles-repo';
 import { useVehicles } from '@/vehicles/use-vehicles';
 import type { Place, PlaceKind } from '@/domain/places';
+import { type MileagePay, useMileagePay } from '@/hooks/use-mileage-pay';
 import { useTheme } from '@/hooks/use-theme';
 import { LANGUAGES, msg, useLanguage, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
@@ -136,6 +138,8 @@ export default function SettingsScreen() {
         <LanguageSection />
 
         <DrivingSection />
+
+        <MileagePaySection />
 
         {REMINDERS_SUPPORTED && <ReminderSection />}
 
@@ -644,6 +648,137 @@ function DrivingSection() {
         </View>
       </ThemedView>
     </>
+  );
+}
+
+const TAX_BAND_LABELS: Record<TaxBand, string> = {
+  basic: msg('Basic'),
+  higher: msg('Higher'),
+  additional: msg('Additional'),
+  unsure: msg('Not sure'),
+};
+
+/**
+ * UK: self-employed, or an employee paid a mileage allowance (or nothing), so
+ * home shows Mileage Allowance Relief instead of a deduction.
+ */
+function MileagePaySection() {
+  const t = useT();
+  const { region } = useRegion();
+  const { pay, update } = useMileagePay();
+  if (!marApplies(region) || !pay) return null;
+  return (
+    <>
+      <ThemedText type="smallBold">{t('How you’re paid for mileage')}</ThemedText>
+      <MileagePayForm pay={pay} update={update} />
+    </>
+  );
+}
+
+function MileagePayForm({
+  pay,
+  update,
+}: {
+  pay: MileagePay;
+  update: ReturnType<typeof useMileagePay>['update'];
+}) {
+  const theme = useTheme();
+  const t = useT();
+  const show = (rate: number) => (rate > 0 ? String(rate / 10) : '');
+  const [rateText, setRateText] = useState(() => show(pay.employerRate));
+  const [paysNothing, setPaysNothing] = useState(pay.employerRate === 0);
+  const rateError = !paysNothing && rateText.trim() !== '' && parsePence(rateText) === null;
+
+  return (
+    <ThemedView type="backgroundElement" style={styles.card}>
+      <Segmented
+        options={[
+          { value: 'self-employed', label: t('Self-employed') },
+          { value: 'employee', label: t('Employee') },
+        ]}
+        value={pay.employee ? 'employee' : 'self-employed'}
+        onChange={(employment) => update({ employment })}
+      />
+      <ThemedText type="small" themeColor="textSecondary">
+        {pay.employee
+          ? t(
+              'You drive your own vehicle for your employer. If they pay less than HMRC’s rate (or nothing), you can claim tax relief on the difference.',
+            )
+          : t('Your business mileage is an expense on your Self Assessment return.')}
+      </ThemedText>
+      {pay.employee && (
+        <>
+          <View style={styles.flex}>
+            <ThemedText type="smallBold">{t('What does your employer pay?')}</ThemedText>
+            <Segmented
+              options={[
+                { value: 'rate', label: t('Per mile') },
+                { value: 'nothing', label: t('Nothing') },
+              ]}
+              value={paysNothing ? 'nothing' : 'rate'}
+              onChange={(choice) => {
+                const nothing = choice === 'nothing';
+                setPaysNothing(nothing);
+                if (nothing) update({ employerRate: 0 });
+                else {
+                  const rate = parsePence(rateText) ?? 450;
+                  setRateText(show(rate));
+                  update({ employerRate: rate });
+                }
+              }}
+            />
+          </View>
+          {!paysNothing && (
+            <View style={styles.shift}>
+              <TextInput
+                accessibilityLabel={t('Pence per mile your employer pays')}
+                style={[styles.time, { color: theme.text, backgroundColor: theme.background }]}
+                value={rateText}
+                onChangeText={(text) => {
+                  setRateText(text);
+                  const rate = parsePence(text);
+                  if (rate !== null) update({ employerRate: rate });
+                }}
+                placeholder="45"
+                placeholderTextColor={theme.textSecondary}
+                keyboardType="decimal-pad"
+                maxLength={5}
+              />
+              <ThemedText type="small" themeColor="textSecondary">
+                {t('pence a mile')}
+              </ThemedText>
+            </View>
+          )}
+          {rateError && (
+            <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
+              {t('Enter pence a mile as a number, e.g. 45.')}
+            </ThemedText>
+          )}
+          <View style={styles.flex}>
+            <ThemedText type="smallBold">{t('Your income tax rate')}</ThemedText>
+            <Segmented
+              options={(['basic', 'higher', 'additional', 'unsure'] as const).map((value) => ({
+                value,
+                label: t(TAX_BAND_LABELS[value]),
+              }))}
+              value={pay.band}
+              onChange={(taxBand) => update({ taxBand })}
+            />
+            <ThemedText type="small" themeColor="textSecondary">
+              {t(
+                'For the tax back estimate: basic {{basic}}%, higher {{higher}}%, additional {{additional}}%. Not sure? MileMint uses {{basic}}%. Scottish rates differ a little.',
+                TAX_BAND_RATES,
+              )}
+            </ThemedText>
+          </View>
+          <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/claim-relief' as Href)}>
+            <ThemedText type="smallBold" style={{ color: theme.accent }}>
+              {t('How to claim Mileage Allowance Relief ›')}
+            </ThemedText>
+          </Pressable>
+        </>
+      )}
+    </ThemedView>
   );
 }
 

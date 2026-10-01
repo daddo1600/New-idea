@@ -235,7 +235,7 @@ export function toCsv(report: MileageReport): string {
   return `﻿${lines.join('\r\n')}\r\n`;
 }
 
-function escapeHtml(text: string): string {
+export function escapeHtml(text: string): string {
   return text
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')

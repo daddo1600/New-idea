@@ -30,6 +30,24 @@
     ]
   },
   {
+    "key": "{{amount}} of business mileage logged",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "{{amount}} relief to claim",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "{{amount}} relief unclaimed from {{year}}",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
     "key": "{{authority}} has no per-km rate for this vehicle.",
     "files": [
       "domain/regions.ts"
@@ -371,6 +389,8 @@
   {
     "key": "{{year}} tax year",
     "files": [
+      "app/claim-relief.tsx",
+      "app/index.tsx",
       "app/tax-dates.tsx"
     ]
   },
@@ -543,6 +563,18 @@
     ]
   },
   {
+    "key": "About {{amount}} tax back",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "About {{amount}} tax back at {{percent}}%",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
     "key": "Active · thank you!",
     "files": [
       "components/header-menu.tsx"
@@ -588,6 +620,12 @@
     "key": "Added manually",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Additional",
+    "files": [
+      "app/settings.tsx"
     ]
   },
   {
@@ -785,6 +823,12 @@
     ]
   },
   {
+    "key": "Basic",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "Before Monday shows up, give this week’s drives a quick sort.",
     "files": [
       "domain/reminders.ts"
@@ -846,6 +890,7 @@
   {
     "key": "Business miles",
     "files": [
+      "app/claim-relief.tsx",
       "app/milestones.tsx",
       "app/report.tsx"
     ]
@@ -973,9 +1018,52 @@
     ]
   },
   {
+    "key": "Choose the route. Use form P87 if your employment expenses for the year are {{limit}} or less and you don’t file a Self Assessment return. Otherwise, claim on your Self Assessment return.",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
     "key": "Choose where you drove from and to.",
     "files": [
       "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Claim it before {{date}}.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Claim it before {{date}}. {{total}} unclaimed across {{count}} earlier tax years.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Claim mileage relief",
+    "files": [
+      "app/_layout.tsx",
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Claim on GOV.UK (P87)",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
+    "key": "Claim online on GOV.UK with your Government Gateway login, or print the P87 form and post it. You can claim this tax year and the 4 before it.",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
+    "key": "Claim with a P87 (or Self Assessment) by {{date}}.",
+    "files": [
+      "app/claim-relief.tsx"
     ]
   },
   {
@@ -1068,6 +1156,7 @@
   {
     "key": "Couldn’t create the file. Please try again.",
     "files": [
+      "app/claim-relief.tsx",
       "app/report.tsx"
     ]
   },
@@ -1292,7 +1381,25 @@
     ]
   },
   {
+    "key": "Each tax year’s business miles, HMRC’s approved amount, what your employer paid and the relief to claim, in English for HMRC.",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
     "key": "Edit this vehicle",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Employed, in your own vehicle?",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Employee",
     "files": [
       "app/settings.tsx"
     ]
@@ -1370,6 +1477,12 @@
     ]
   },
   {
+    "key": "Enter pence a mile as a number, e.g. 45.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "Enter the kilometres driven, e.g. 12.5.",
     "files": [
       "app/add-trip.tsx"
@@ -1394,9 +1507,21 @@
     ]
   },
   {
+    "key": "Estimated tax back",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
     "key": "Estimated tax: if you expect to owe $1,000 or more, pay quarterly with Form 1040-ES by April 15, June 15, September 15 and January 15. Your mileage lowers your profit, so keep it up to date to avoid overpaying.",
     "files": [
       "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Estimates from your logged business drives at HMRC’s approved mileage rates. The tax you get back depends on your income and tax rate. Not tax advice.",
+    "files": [
+      "app/claim-relief.tsx"
     ]
   },
   {
@@ -1574,6 +1699,24 @@
     ]
   },
   {
+    "key": "For employees: P87 or Self Assessment",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "For the tax back estimate: basic {{basic}}%, higher {{higher}}%, additional {{additional}}%. Not sure? MileMint uses {{basic}}%. Scottish rates differ a little.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "For UK employees who use their own vehicle for work. If that’s you, choose Employee under “How you’re paid for mileage” in Settings.",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
     "key": "Found for you so far",
     "files": [
       "app/milestones.tsx"
@@ -1738,6 +1881,12 @@
     ]
   },
   {
+    "key": "Have to hand: your employer’s name and PAYE reference (on your payslip or P60), your National Insurance number, and for each tax year your business miles and the mileage allowance you were paid. The P87 summary below has the figures.",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
     "key": "Help & feedback",
     "files": [
       "components/header-menu.tsx"
@@ -1750,9 +1899,27 @@
     ]
   },
   {
+    "key": "Higher",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "HMRC approved amount",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
     "key": "HMRC mileage rate: 55p a mile for the first 10,000 business miles, then 25p",
     "files": [
       "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "HMRC usually changes your tax code for this year and refunds earlier years. They may ask to see your mileage log: export it from Reports.",
+    "files": [
+      "app/claim-relief.tsx"
     ]
   },
   {
@@ -1770,6 +1937,25 @@
     ]
   },
   {
+    "key": "How to claim",
+    "files": [
+      "app/claim-relief.tsx",
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "How to claim Mileage Allowance Relief ›",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "How you’re paid for mileage",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "I use MileMint to log my business mileage automatically. It works out what every drive is worth at tax time, so nothing goes unclaimed. 🚗💸",
     "files": [
       "referral/links.ts"
@@ -1782,7 +1968,25 @@
     ]
   },
   {
+    "key": "I’ve claimed the {{year}} tax year",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
+    "key": "I’ve claimed this year",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
     "key": "I’ve found {{amount}} in business mileage with MileMint 🚗💸 Every mile counted, automatically.",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "I’ve logged {{amount}} of business mileage with MileMint 🚗 Every mile counted, automatically.",
     "files": [
       "milestones/copy.ts"
     ]
@@ -2072,9 +2276,39 @@
     ]
   },
   {
+    "key": "Mileage Allowance Relief",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
+    "key": "Mileage Allowance Relief is a UK tax relief for employees.",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
+    "key": "Mileage Allowance Relief to claim, {{year}} tax year",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Mileage Allowance Relief you can claim",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
     "key": "Mileage log export (CSV)",
     "files": [
       "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Mileage logged for your expense claims",
+    "files": [
+      "app/index.tsx"
     ]
   },
   {
@@ -2103,6 +2337,12 @@
   },
   {
     "key": "MileMint has now found {{amount}} in business mileage for you. You’ve earned every penny of it.",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "MileMint has now logged {{amount}} of business mileage at {{authority}} rates, ready for your expense and relief claims.",
     "files": [
       "milestones/copy.ts"
     ]
@@ -2165,6 +2405,12 @@
     "key": "MileMint uses your country’s currency, distance unit, tax year and official mileage rate.",
     "files": [
       "app/region.tsx"
+    ]
+  },
+  {
+    "key": "MileMint works out the tax relief you can claim. Optional.",
+    "files": [
+      "app/welcome.tsx"
     ]
   },
   {
@@ -2432,6 +2678,12 @@
     ]
   },
   {
+    "key": "Not sure",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "Note",
     "files": [
       "app/add-trip.tsx"
@@ -2442,6 +2694,13 @@
     "files": [
       "app/add-trip.tsx",
       "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Nothing",
+    "files": [
+      "app/settings.tsx",
+      "app/welcome.tsx"
     ]
   },
   {
@@ -2541,8 +2800,15 @@
     ]
   },
   {
+    "key": "Only business journeys count, not ordinary commuting between home and your usual workplace.",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
     "key": "Open Settings",
     "files": [
+      "app/claim-relief.tsx",
       "app/setup-tracking.tsx",
       "app/welcome.tsx"
     ]
@@ -2616,6 +2882,30 @@
     ]
   },
   {
+    "key": "Over {{limit}}: claim on a Self Assessment return by {{date}}.",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
+    "key": "p a mile",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "P87 summary",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
+    "key": "Paid by your employer",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
     "key": "Parking fees and tolls for business trips can be deducted on top of the standard mileage rate.",
     "files": [
       "domain/regions.ts"
@@ -2628,9 +2918,34 @@
     ]
   },
   {
+    "key": "PDF",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
     "key": "PDF reports are created on iPhone.",
     "files": [
       "app/report.tsx"
+    ]
+  },
+  {
+    "key": "pence a mile",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Pence per mile your employer pays",
+    "files": [
+      "app/settings.tsx",
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Per mile",
+    "files": [
+      "app/settings.tsx"
     ]
   },
   {
@@ -2674,6 +2989,7 @@
   {
     "key": "Preparing…",
     "files": [
+      "app/claim-relief.tsx",
       "app/report.tsx"
     ]
   },
@@ -2718,6 +3034,12 @@
     "key": "Recording a drive · {{distance}}",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Relief to claim",
+    "files": [
+      "app/claim-relief.tsx"
     ]
   },
   {
@@ -2901,6 +3223,12 @@
     ]
   },
   {
+    "key": "See how to claim ›",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
     "key": "See what each business drive saves you at tax time.",
     "files": [
       "app/welcome.tsx"
@@ -2934,6 +3262,12 @@
     "key": "Self Assessment return due in a week 📄",
     "files": [
       "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Self-employed",
+    "files": [
+      "app/settings.tsx"
     ]
   },
   {
@@ -3109,6 +3443,12 @@
     "key": "Spreadsheet",
     "files": [
       "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Spreadsheet (CSV)",
+    "files": [
+      "app/claim-relief.tsx"
     ]
   },
   {
@@ -3784,6 +4124,12 @@
     ]
   },
   {
+    "key": "What does your employer pay?",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "What’s included",
     "files": [
       "app/pro.tsx"
@@ -3942,6 +4288,12 @@
     ]
   },
   {
+    "key": "You drive your own vehicle for your employer. If they pay less than HMRC’s rate (or nothing), you can claim tax relief on the difference.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "You’ll choose which one when you start a shift.",
     "files": [
       "app/welcome.tsx"
@@ -3996,6 +4348,12 @@
     ]
   },
   {
+    "key": "Your business mileage is an expense on your Self Assessment return.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "Your business trips with date, description, distance and vehicle: everything FreeAgent’s mileage form asks for.",
     "files": [
       "app/report.tsx"
@@ -4015,6 +4373,36 @@
   },
   {
     "key": "Your driving",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Your employer paid {{amount}} more than HMRC’s approved amount. The extra is taxable pay.",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
+    "key": "Your employer pays",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Your employer pays {{employerRate}} a mile. HMRC’s rate is {{rate}} a mile for the first 10,000 business miles.",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
+    "key": "Your employer pays nothing for mileage. HMRC’s rate is {{rate}} a mile for the first 10,000 business miles.",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
+    "key": "Your income tax rate",
     "files": [
       "app/settings.tsx"
     ]

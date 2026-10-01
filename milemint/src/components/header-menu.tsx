@@ -131,6 +131,18 @@ function Menu({ onClose }: { onClose: () => void }) {
       detail: t('When and how to claim with {{authority}}', { authority: region.authority }),
       onPress: () => go('/tax-dates'),
     },
+    // UK employees: Mileage Allowance Relief and the P87.
+    ...(region.code === 'GB'
+      ? [
+          {
+            icon: 'sterlingsign.circle.fill',
+            glyph: '💷',
+            title: t('Claim mileage relief'),
+            detail: t('For employees: P87 or Self Assessment'),
+            onPress: () => go('/claim-relief' as Href),
+          } satisfies MenuItem,
+        ]
+      : []),
     {
       icon: 'chart.bar.fill',
       glyph: '📊',

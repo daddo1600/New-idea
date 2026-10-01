@@ -14,8 +14,26 @@ const MONEY_MESSAGES = [
 
 const pounds = (region: Region, major: number) => formatMoney(major * 100, region).replace(/[.,]00$/, '');
 
-/** The celebration for a milestone, in the current language. */
-export function celebrationFor(milestone: Milestone, region: Region): CelebrationContent {
+/**
+ * The celebration for a milestone, in the current language. `employee`: a UK
+ * employee, whose mileage isn't money back by itself (they claim relief on
+ * what the employer didn't pay), so the money milestones talk about mileage logged.
+ */
+export function celebrationFor(milestone: Milestone, region: Region, employee = false): CelebrationContent {
+  if (milestone.kind === 'money' && employee) {
+    const amount = pounds(region, milestone.threshold);
+    return {
+      emoji: '💰',
+      title: t('{{amount}} of business mileage logged', { amount }),
+      message: t(
+        'MileMint has now logged {{amount}} of business mileage at {{authority}} rates, ready for your expense and relief claims.',
+        { amount, authority: region.authority },
+      ),
+      share: withInvite(
+        t('I’ve logged {{amount}} of business mileage with MileMint 🚗 Every mile counted, automatically.', { amount }),
+      ),
+    };
+  }
   if (milestone.kind === 'money') {
     const amount = pounds(region, milestone.threshold);
     const message = MONEY_MESSAGES[Math.round(Math.log10(milestone.threshold) * 3) % MONEY_MESSAGES.length];
