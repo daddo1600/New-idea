@@ -233,6 +233,9 @@ Each page gets its own campaign link, so App Store Connect shows which audience 
 
 0a. Set up campaign links and the three custom product pages (section 6a).
 0b. Build "Import drives" for the switch campaign (section 6b), after the tab bar.
+0c. **US partners to follow through at launch (from research_notes/launch-2026/communities-us.md):**
+   - **The Rideshare Guy** (therideshareguy.com, Harry Campbell; blog, newsletter, YouTube ~99k, podcast, Spanish channel). Its "11 Best Mileage Tracker Apps of 2026" article (updated 15 Jun 2026) still quotes the old 67¢ IRS rate in its FAQ; the 2026 rate is 72.5¢ (Jan–Jun) and 76¢ (Jul–Dec). Step 1: send a friendly correction via the contact form, no pitch. Step 2 (after the US listing is live and has a few ratings): ask to be considered for the list, and ask about their affiliate/advertising terms (they run affiliate deals for MileIQ, Solo, Stride, TripLog).
+   - **EntreCourier** (entrecourier.com, Ron Walter; courier since 2018, quoted by NYT/CNN; podcast "Deliver on Your Business"). Grades mileage trackers with letter-grade report cards (mileage and expenses count double). Step: once the app is stable in the US, offer a review copy (free Pro offer code) via entrecourier.com/contact, with a short note on what's different (shift rows, missed-drive warnings, no account).
 0. **Must do at launch:** lead every gig-worker channel with "Uber only sees Uber" (see the box at the top), using real TestFlight couriers' missed-miles numbers, collected with permission.
 1. Submit 1.0 for App Store review (needs a contact phone number in App Store Connect).
 2. On approval: create the "1 month Pro free" offer code and set `FRIEND_OFFER_CODE` in `milemint/src/referral/links.ts`.
