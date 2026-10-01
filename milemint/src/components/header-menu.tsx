@@ -122,6 +122,13 @@ function Menu({ onClose }: { onClose: () => void }) {
       onPress: () => go('/milestones'),
     },
     {
+      icon: 'calendar',
+      glyph: '🗓️',
+      title: 'Tax dates',
+      detail: `When and how to claim with ${region.authority}`,
+      onPress: () => go('/tax-dates'),
+    },
+    {
       icon: 'chart.bar.fill',
       glyph: '📊',
       title: 'Missed miles check',

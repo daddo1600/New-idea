@@ -4,9 +4,9 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect } from 'react';
 
 import { loadSettings } from '@/db/settings-repo';
-import type { DistanceUnit } from '@/domain/regions';
+import type { Region } from '@/domain/regions';
 
-import { refreshWeeklyReminder, REMINDERS_SUPPORTED } from './weekly';
+import { refreshCountdownReminders, refreshWeeklyReminder, REMINDERS_SUPPORTED } from './weekly';
 
 /** The last notification tap already acted on, so a relaunch doesn't repeat it. */
 let handledResponse: string | null = null;
@@ -22,9 +22,13 @@ function open(response: Notifications.NotificationResponse | null) {
   if (typeof url === 'string' && url !== '/') router.push(url as Href);
 }
 
-/** For the home screen: keeps Sunday reminders queued and opens the screen a tapped reminder points to. */
-export function useReminders(unit: DistanceUnit) {
+/**
+ * For the home screen: keeps Sunday reminders and the tax-year countdown
+ * queued, and opens the screen a tapped reminder points to.
+ */
+export function useReminders(region: Region) {
   const db = useSQLiteContext();
+  const unit = region.unit;
 
   useEffect(() => {
     if (!REMINDERS_SUPPORTED) return;
@@ -32,6 +36,10 @@ export function useReminders(unit: DistanceUnit) {
       .then((settings) => (settings.weeklyReminder ? refreshWeeklyReminder(unit) : undefined))
       .catch(() => {});
   }, [db, unit]);
+
+  useEffect(() => {
+    refreshCountdownReminders(region).catch(() => {});
+  }, [region]);
 
   useEffect(() => {
     if (!REMINDERS_SUPPORTED) return;

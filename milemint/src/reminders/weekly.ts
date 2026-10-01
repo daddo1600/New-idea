@@ -1,7 +1,8 @@
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 
-import type { DistanceUnit } from '@/domain/regions';
+import { countdownReminders } from '@/domain/deadlines';
+import type { DistanceUnit, Region } from '@/domain/regions';
 import { tomorrowAt, upcomingSundays, weeklyMessage } from '@/domain/reminders';
 
 /**
@@ -41,7 +42,10 @@ async function scheduleWeekly(unit: DistanceUnit): Promise<void> {
     await Notifications.scheduleNotificationAsync({
       identifier: `${WEEKLY_PREFIX}${i}`,
       content: { ...weeklyMessage(sunday, unit), data: { url: '/' } },
-      trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: sunday },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DATE,
+        date: sunday,
+      },
     });
   }
 }
@@ -77,11 +81,45 @@ export async function scheduleWorkHoursNudge(): Promise<void> {
       body: 'Tell MileMint your work hours once and it sorts most drives for you. Takes 30 seconds.',
       data: { url: '/settings' },
     },
-    trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: tomorrowAt(new Date(), HOUR) },
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.DATE,
+      date: tomorrowAt(new Date(), HOUR),
+    },
   });
 }
 
 export async function cancelWorkHoursNudge(): Promise<void> {
   if (!REMINDERS_SUPPORTED) return;
   await Notifications.cancelScheduledNotificationAsync(WORK_HOURS_NUDGE_ID);
+}
+
+const COUNTDOWN_PREFIX = 'milemint-countdown-';
+const COUNTDOWN_IDS = ['year-end-0', 'year-end-1', 'year-end-2', 'return-0', 'return-1'];
+
+/**
+ * Tax-year countdown: two months, a month and a week before the tax year
+ * ends, then a month and a week before the return is due. Kept in step with
+ * the region on every launch. Only if notifications are already allowed.
+ */
+export async function refreshCountdownReminders(region: Region): Promise<void> {
+  if (!REMINDERS_SUPPORTED) return;
+  await Promise.all(
+    COUNTDOWN_IDS.map((id) => Notifications.cancelScheduledNotificationAsync(`${COUNTDOWN_PREFIX}${id}`)),
+  );
+  if (!(await allowed(false))) return;
+  for (const reminder of countdownReminders(region, new Date())) {
+    const [y, m, d] = reminder.date.split('-').map(Number);
+    await Notifications.scheduleNotificationAsync({
+      identifier: `${COUNTDOWN_PREFIX}${reminder.id}`,
+      content: {
+        title: reminder.title,
+        body: reminder.body,
+        data: { url: reminder.id.startsWith('return') ? '/report' : '/' },
+      },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DATE,
+        date: new Date(y, m - 1, d, HOUR),
+      },
+    });
+  }
 }

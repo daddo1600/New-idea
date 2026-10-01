@@ -13,6 +13,7 @@ import { BrandGradient } from '@/components/brand-gradient';
 import { LeafMark } from '@/components/leaf-mark';
 import { Celebration } from '@/components/celebration';
 import { ReminderAsk } from '@/components/reminder-ask';
+import { TaxCountdown } from '@/components/tax-countdown';
 import { Segmented } from '@/components/segmented';
 import { VehicleSheet } from '@/components/vehicle-sheet';
 import { ThemedText } from '@/components/themed-text';
@@ -72,7 +73,7 @@ export default function HomeScreen() {
   const { isPro } = usePro();
   const { region, loaded, onboarded } = useRegion();
   const taxYear = currentTaxYear(region);
-  useReminders(region.unit);
+  useReminders(region);
   const shiftMode = useShift();
   const liveDrive = useLiveDrive();
   const garage = useVehicles();
@@ -173,6 +174,14 @@ export default function HomeScreen() {
             {liveDrive && <LiveDriveBanner drive={liveDrive} />}
             <SummaryCard summary={summary} commuteCents={commuteCents} />
             <TrackingCard status={status} />
+            <TaxCountdown
+              foundMinor={summary.deduction}
+              unsortedCount={unsorted.length}
+              onSortUnsorted={() => {
+                setSelecting(true);
+                setSelected(new Set(unsorted.map((trip) => trip.id)));
+              }}
+            />
             {visible.length > 0 && <ReminderAsk />}
             {garage.vehicles.length > 1 && garage.current && (
               <Pressable
