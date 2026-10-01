@@ -69,3 +69,38 @@ The panel reviewed build 1.0 (5). Since then, work on this branch has added seve
 New wording needs to go through the translation process in `milemint/src/i18n/` (9 languages, three checks) before release.
 
 **Pricing signal:** willingness to pay was highest among realtors and sales (20%) and trades (17%), and lowest among gig drivers (6%), who compare against free Stride and Gridwise. That supports keeping automatic tracking **free and unlimited**, putting export in Pro, and aiming paid marketing at trades and professionals rather than gig drivers.
+
+---
+
+# Round 2: same 500 personas, latest build (1 Oct 2026)
+
+Same personas, re-scored after seeing the full setup flow, shift mode, export, Pro paywall, milestones, tax dates and missed-miles check. Still **simulated**. Raw data: `data/user-panel/v2/`.
+
+| | Round 1 | Round 2 |
+|---|---|---|
+| First impression | 5.8 | 6.5 |
+| Easy to understand | 6.7 | **7.2** |
+| Looks | 6.7 | **7.3** |
+| Trust/privacy | 7.0 | 7.1 |
+| Would download | 5.3 | 6.0 |
+| Would pay $69.99/yr | 52 of 500 | 70 of 500 |
+| Net Promoter Score | −79 | −71 |
+
+| Segment | Download | Ease | Would pay |
+|---|---|---|---|
+| Gig | 4.8 → **6.2** | 6.7 → **7.6** | 6 → 5 |
+| Trades | 6.0 → 6.4 | 7.0 → 7.4 | 17 → **27** |
+| Sales, real estate | 5.6 → 5.8 | 6.8 → 7.2 | 20 → 21 |
+| Employees | 5.1 → 5.6 | 6.5 → 6.9 | 2 → 4 |
+| Switchers | 5.3 → 5.8 | 6.6 → 7.0 | 7 → 13 |
+
+**What moved scores up:** export (CSV free, PDF in Pro) and shift mode, where a whole shift counts as one drive.
+
+**What's still holding scores down:**
+1. **The 40-drive free cap.** Route trades and home health hit it in days, and the dollar value shown on locked drives reads as "ransom". "I left MileIQ's 40-drive cap and you built a 40-drive cap."
+2. **The commute contradiction.** A trip is marked Business, flagged in red, and still counted in the total. There's no setting for a home-based business.
+3. **"Deductions found" and "Money back" badges** for employees, who can't deduct mileage. The Milestones badges made the refund confusion worse.
+4. **No cloud backup.** 35 professionals and 30 trades want it.
+5. **US screens show UK wording:** Deliveroo, Evri, DPD, "postcode", "Petrol". Lyft, DoorDash, Instacart and Spark are missing from the gig app list.
+6. **No auto-end for a forgotten shift**, ISO dates, 24-hour times, and no larger text option.
+7. **Pricing mismatch.** The paywall shows $49.99/yr while the plan is $69.99/yr.
