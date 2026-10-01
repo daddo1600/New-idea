@@ -902,6 +902,8 @@ function ShiftBar({
   const [now, setNow] = useState(() => Date.now());
   /** A send-off shown for a few seconds after swiping to start. */
   const [cheer, setCheer] = useState<string | null>(null);
+  const cheerTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(cheerTimer.current), []);
   useEffect(() => {
     if (!shift) return;
     const timer = setInterval(() => setNow(Date.now()), 30_000);
@@ -923,7 +925,8 @@ function ShiftBar({
         endLabel={t('On shift for {{elapsed}}, {{count}} drives', { elapsed, count: drives })}
         onStart={() => {
           setCheer(shiftCheer(region.code, Math.floor(Date.now() / 1000), getLanguage()));
-          setTimeout(() => setCheer(null), 3500);
+          clearTimeout(cheerTimer.current);
+          cheerTimer.current = setTimeout(() => setCheer(null), 3500);
           onStart();
         }}
         onEnd={() => {

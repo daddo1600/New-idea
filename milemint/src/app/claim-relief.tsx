@@ -88,11 +88,11 @@ export default function ClaimReliefScreen() {
     }
   };
   const toggleClaimed = (year: number, claimed: boolean) =>
-    update({
+    update((saved) => ({
       claimedReliefYears: claimed
-        ? [...new Set([...pay.claimedYears, year])]
-        : pay.claimedYears.filter((other) => other !== year),
-    });
+        ? [...new Set([...saved.claimedReliefYears, year])]
+        : saved.claimedReliefYears.filter((other) => other !== year),
+    }));
   const limit = p87Limit(region);
   const period = ratePeriodFor(toLocalIsoDate(today), region);
   const hmrcRate = period ? formatRate(period.tiers[0].rate, region) : '';

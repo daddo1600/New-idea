@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 
 import { loadSettings, saveSettings } from '@/db/settings-repo';
 import type { Region } from '@/domain/regions';
+import { useLanguage } from '@/i18n/i18n';
 
 import { enableWeeklyReminder, refreshCountdownReminders, refreshWeeklyReminder, REMINDERS_SUPPORTED } from './weekly';
 
@@ -29,6 +30,9 @@ function open(response: Notifications.NotificationResponse | null) {
 export function useReminders(region: Region) {
   const db = useSQLiteContext();
   const unit = region.unit;
+  // Reminders are written in the app's language when they're queued: queue them
+  // again when it changes (including once the saved choice loads at launch).
+  const language = useLanguage();
 
   useEffect(() => {
     if (!REMINDERS_SUPPORTED) return;
@@ -46,11 +50,11 @@ export function useReminders(region: Region) {
         });
       })
       .catch(() => {});
-  }, [db, unit]);
+  }, [db, unit, language]);
 
   useEffect(() => {
     refreshCountdownReminders(region).catch(() => {});
-  }, [region]);
+  }, [region, language]);
 
   useEffect(() => {
     if (!REMINDERS_SUPPORTED) return;

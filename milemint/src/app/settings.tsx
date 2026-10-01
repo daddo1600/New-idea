@@ -888,8 +888,12 @@ function ClientPrivacySection() {
   const change = async (value: boolean) => {
     setNote(null);
     setOn(value);
-    await saveSettings(db, { ...(await loadSettings(db)), clientPrivacy: value });
-    if (value) await offerScrub();
+    try {
+      await saveSettings(db, { ...(await loadSettings(db)), clientPrivacy: value });
+      if (value) await offerScrub();
+    } catch {
+      setOn(!value);
+    }
   };
 
   return (
