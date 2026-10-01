@@ -3,6 +3,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
+import { GoldButton } from '@/components/gold-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
@@ -160,15 +161,11 @@ export default function ProScreen() {
               </ThemedText>
             )}
 
-            <Pressable
-              accessibilityRole="button"
+            <GoldButton
+              label={busy ? 'Opening the App Store…' : plan?.trial ? 'Start free trial' : 'Subscribe'}
               disabled={busy || !plan}
               onPress={() => plan && buy(plan.id)}
-              style={[styles.button, { backgroundColor: theme.accent, opacity: busy ? 0.6 : 1 }]}>
-              <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-                {busy ? 'Opening the App Store…' : plan?.trial ? 'Start free trial' : 'Subscribe'}
-              </ThemedText>
-            </Pressable>
+            />
 
             {/* Terms Apple requires next to any auto-renewing subscription offer. */}
             <ThemedText type="small" themeColor="textSecondary" style={styles.legal}>

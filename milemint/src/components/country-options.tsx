@@ -16,6 +16,8 @@ import type { VehicleType } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 
 const UNIT_NAMES = { mi: 'miles', km: 'km' } as const;
+/** Short enough to fit a half-width tile beside the flag. */
+const SHORT_NAMES: Record<RegionCode, string> = { US: 'USA', GB: 'UK', CA: 'Canada', AU: 'Australia' };
 
 /** The phone's region as a MileMint country, e.g. an en-GB phone → GB. */
 export function phoneRegion(): RegionCode {
@@ -35,11 +37,14 @@ export function CountryOptions({
   value,
   onChange,
   vehicle = 'car',
+  showRate = true,
 }: {
   value: RegionCode;
   onChange: (code: RegionCode) => void;
   /** Shows the rate for this vehicle under the grid. */
   vehicle?: VehicleType;
+  /** Off when the screen shows the rate itself (set-up shows it under the vehicle choice). */
+  showRate?: boolean;
 }) {
   const theme = useTheme();
   const chosen = REGIONS[value];
@@ -66,22 +71,30 @@ export function CountryOptions({
                 </View>
               )}
               <Text style={styles.flag}>{option.flag}</Text>
-              <ThemedText type="smallBold" style={active && styles.onBrand} numberOfLines={1}>
-                {option.name}
-              </ThemedText>
-              <ThemedText type="small" themeColor="textSecondary" style={active && styles.onBrandSoft}>
-                {option.currencySymbol} · {UNIT_NAMES[option.unit]} · {option.authority}
-              </ThemedText>
+              <View style={styles.flex}>
+                <ThemedText type="smallBold" style={active && styles.onBrand} numberOfLines={1}>
+                  {SHORT_NAMES[option.code]}
+                </ThemedText>
+                <ThemedText
+                  type="small"
+                  themeColor="textSecondary"
+                  numberOfLines={1}
+                  style={active && styles.onBrandSoft}>
+                  {option.currencySymbol} · {UNIT_NAMES[option.unit]}
+                </ThemedText>
+              </View>
             </Pressable>
           );
         })}
       </View>
-      <ThemedView type="backgroundElement" style={styles.rate}>
-        <View style={[styles.rateDot, { backgroundColor: theme.accent }]} />
-        <ThemedText type="small" themeColor="textSecondary" style={styles.flex} accessibilityLiveRegion="polite">
-          {vehicleRule(chosen, vehicle)}
-        </ThemedText>
-      </ThemedView>
+      {showRate && (
+        <ThemedView type="backgroundElement" style={styles.rate}>
+          <View style={[styles.rateDot, { backgroundColor: theme.accent }]} />
+          <ThemedText type="small" themeColor="textSecondary" style={styles.flex} accessibilityLiveRegion="polite">
+            {vehicleRule(chosen, vehicle)}
+          </ThemedText>
+        </ThemedView>
+      )}
     </View>
   );
 }
@@ -92,28 +105,30 @@ const styles = StyleSheet.create({
   tile: {
     flexBasis: '47%',
     flexGrow: 1,
-    borderRadius: 18,
-    padding: Spacing.three,
-    gap: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two + 2,
+    borderRadius: 16,
+    paddingVertical: Spacing.three,
+    paddingHorizontal: Spacing.three,
     overflow: 'hidden',
-    minHeight: 104,
-    justifyContent: 'flex-end',
   },
-  flag: { fontSize: 32, lineHeight: 40, marginBottom: 2 },
+
+  flag: { fontSize: 30, lineHeight: 36 },
   onBrand: { color: '#FFFFFF' },
   onBrandSoft: { color: '#D1FAE5' },
   tick: {
     position: 'absolute',
-    top: Spacing.two + 2,
-    right: Spacing.two + 2,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    top: Spacing.two,
+    right: Spacing.two,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     backgroundColor: '#FACC15',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  tickText: { color: '#064E3B', fontSize: 13, fontWeight: '800' },
+  tickText: { color: '#064E3B', fontSize: 11, fontWeight: '800' },
   rate: { flexDirection: 'row', gap: Spacing.two, borderRadius: 12, padding: Spacing.three, alignItems: 'flex-start' },
   rateDot: { width: 8, height: 8, borderRadius: 4, marginTop: 6 },
   flex: { flex: 1 },

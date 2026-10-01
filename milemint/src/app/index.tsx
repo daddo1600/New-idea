@@ -527,9 +527,9 @@ function PlanCard({ trips, lockedCount }: { trips: readonly Trip[]; lockedCount:
           <ThemedText type="smallBold">
             {used} of {FREE_AUTO_DRIVES_PER_MONTH} free drives in {month}
           </ThemedText>
-          <ThemedText type="smallBold" style={{ color: theme.accent }}>
-            Go Pro
-          </ThemedText>
+          <View style={styles.goPro}>
+            <Text style={styles.goProText}>★ Go Pro</Text>
+          </View>
         </View>
         <View style={[styles.meter, { backgroundColor: theme.backgroundSelected }]}>
           <View
@@ -770,6 +770,8 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.one,
   },
   liveDot: { width: 8, height: 8 },
+  goPro: { backgroundColor: '#FACC15', borderRadius: 999, paddingHorizontal: Spacing.two + 2, paddingVertical: 3 },
+  goProText: { color: '#064E3B', fontSize: 13, fontWeight: '800' },
   shiftStart: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -793,7 +795,7 @@ const styles = StyleSheet.create({
   shiftEnd: { backgroundColor: '#FFFFFF', borderRadius: 999, paddingHorizontal: Spacing.three, paddingVertical: Spacing.two },
   shiftEndText: { color: '#064E3B', fontSize: 14, fontWeight: '700' },
   row: { borderRadius: 12, padding: Spacing.three, gap: Spacing.two },
-  rowHeader: { flexDirection: 'row', justifyContent: 'space-between', gap: Spacing.two },
+  rowHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: Spacing.two },
   route: { flex: 1 },
   swipeAction: {
     width: 120,

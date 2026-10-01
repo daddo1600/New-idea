@@ -12,6 +12,7 @@ import {
   View,
 } from 'react-native';
 
+import { GoldButton } from '@/components/gold-button';
 import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
@@ -523,14 +524,7 @@ function ProSection() {
             </Pressable>
           )
         ) : (
-          <Pressable
-            accessibilityRole="button"
-            onPress={() => router.push('/pro')}
-            style={[styles.button, { backgroundColor: theme.accent }]}>
-            <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-              Upgrade to Pro
-            </ThemedText>
-          </Pressable>
+          <GoldButton label="Upgrade to Pro" onPress={() => router.push('/pro')} />
         )}
         {!isPro && storeAvailable && (
           <Pressable accessibilityRole="button" disabled={busy} onPress={onRestore} hitSlop={8}>

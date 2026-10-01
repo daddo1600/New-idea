@@ -33,7 +33,7 @@ import {
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, saveSettings } from '@/db/settings-repo';
-import { formatRate, REGIONS, type RegionCode } from '@/domain/regions';
+import { formatRate, REGIONS, vehicleRule, type RegionCode } from '@/domain/regions';
 import { useKeyboardOpen } from '@/hooks/use-keyboard-open';
 import { useTheme } from '@/hooks/use-theme';
 import { useRegion } from '@/region/region';
@@ -301,12 +301,16 @@ export default function WelcomeScreen() {
                   setTimeout(() => scroller.current?.scrollToEnd({ animated: true }), 150);
                 }}
                 vehicle={vehicle}
+                showRate={false}
               />
               <View style={styles.vehicles}>
                 <ThemedText type="small" themeColor="textSecondary">
                   What do you drive?
                 </ThemedText>
                 <VehiclePicker value={vehicle} onChange={setVehicle} />
+                <ThemedText type="small" themeColor="textSecondary" accessibilityLiveRegion="polite">
+                  {vehicleRule(picked, vehicle)}
+                </ThemedText>
               </View>
             </>
           )}
@@ -520,7 +524,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   heading: { marginTop: Spacing.two },
-  contentTop: { justifyContent: 'flex-start', paddingTop: Spacing.five },
+  contentTop: { justifyContent: 'flex-start', paddingTop: Spacing.three },
   points: { gap: Spacing.three, marginTop: Spacing.two },
   point: { flexDirection: 'row', gap: Spacing.two },
   flex: { flex: 1, gap: Spacing.half },
