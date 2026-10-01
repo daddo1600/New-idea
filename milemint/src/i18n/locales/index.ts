@@ -1,24 +1,33 @@
 import type { Dictionary, Lang } from '../i18n';
-import bn from './bn';
-import en from './en';
-import es from './es';
-import fr from './fr';
-import hi from './hi';
-import pa from './pa';
-import pl from './pl';
-import ptBR from './pt-BR';
-import ro from './ro';
-import zhHans from './zh-Hans';
 
-export const DICTIONARIES: Record<Lang, Dictionary> = {
-  en,
-  es,
-  'pt-BR': ptBR,
-  fr,
-  ro,
-  pl,
-  hi,
-  pa,
-  bn,
-  'zh-Hans': zhHans,
+/*
+ * Each language is loaded the first time it's needed: the app builds only
+ * the phone's own language (and English, the fallback), not all ten, which
+ * keeps start-up quicker and memory lower. Metro still ships every file, so
+ * switching language in Settings works offline.
+ */
+/* eslint-disable @typescript-eslint/no-require-imports */
+const LOADERS: Record<Lang, () => Dictionary> = {
+  en: () => require('./en').default,
+  es: () => require('./es').default,
+  'pt-BR': () => require('./pt-BR').default,
+  fr: () => require('./fr').default,
+  ro: () => require('./ro').default,
+  pl: () => require('./pl').default,
+  hi: () => require('./hi').default,
+  pa: () => require('./pa').default,
+  bn: () => require('./bn').default,
+  'zh-Hans': () => require('./zh-Hans').default,
 };
+/* eslint-enable @typescript-eslint/no-require-imports */
+
+const loaded: Partial<Record<Lang, Dictionary>> = {};
+
+/** The dictionary for a language, loaded on first use. */
+export function dictionary(lang: Lang): Dictionary | undefined {
+  const load = LOADERS[lang];
+  if (!load) return undefined;
+  return (loaded[lang] ??= load());
+}
+
+export const LANGS = Object.keys(LOADERS) as Lang[];

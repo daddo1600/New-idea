@@ -3,7 +3,9 @@ import { join } from 'node:path';
 
 import { extractKeys, placeholders } from '../extract';
 import { LANGUAGES, translate, type Plural } from '../i18n';
-import { DICTIONARIES } from '../locales';
+import { dictionary, LANGS } from '../locales';
+
+const DICTIONARIES = Object.fromEntries(LANGS.map((lang) => [lang, dictionary(lang)!]));
 
 const keys = extractKeys(join(__dirname, '..', '..'));
 const forms = (entry: string | Plural) => (typeof entry === 'string' ? [entry] : Object.values(entry));

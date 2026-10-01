@@ -3,7 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 import { useSyncExternalStore } from 'react';
 import { Platform } from 'react-native';
 
-import { DICTIONARIES } from './locales';
+import { dictionary } from './locales';
 
 /**
  * The app's words in the user's language. English text is the key
@@ -73,7 +73,7 @@ function fill(text: string, params?: Params): string {
 
 /** `key` in `lang`, falling back to English and then to the key itself. */
 export function translate(lang: Lang, key: string, params?: Params): string {
-  const entry = DICTIONARIES[lang]?.[key] ?? DICTIONARIES.en[key] ?? key;
+  const entry = dictionary(lang)?.[key] ?? dictionary('en')?.[key] ?? key;
   if (typeof entry === 'string') return fill(entry, params);
   const count = typeof params?.count === 'number' ? params.count : 0;
   // A language can word zero its own way ("0 milhas", where its rules would pick the singular).
