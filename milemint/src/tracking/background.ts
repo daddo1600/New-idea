@@ -138,14 +138,22 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
       startLabel,
       endLabel,
       distanceMeters: trip.distanceMeters,
-      classification: shift ? 'business' : (suggestion.classification ?? 'unclassified'),
+      classification: shift
+        ? 'business'
+        : (suggestion.classification ?? (settings.defaultBusiness ? 'business' : 'unclassified')),
       // Business without a learned purpose stays empty; the trip list asks for one.
       purpose: suggestion.purpose ?? (shift ? 'Deliveries' : ''),
       source: 'auto',
       startPlaceId: startPlace?.id ?? null,
       endPlaceId: endPlace?.id ?? null,
       // Stored as the work-hours rule (a shift is working time); shiftId tells them apart.
-      autoReason: shift ? 'work-hours' : suggestion.classification ? suggestion.reason : null,
+      autoReason: shift
+        ? 'work-hours'
+        : suggestion.classification
+          ? suggestion.reason
+          : settings.defaultBusiness
+            ? 'default'
+            : null,
       vehicle: settings.vehicle,
       shiftId: shift?.id ?? null,
     },

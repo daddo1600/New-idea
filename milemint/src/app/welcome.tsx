@@ -76,6 +76,7 @@ export default function WelcomeScreen() {
   const [week, setWeek] = useState<SimpleWeek>(DEFAULT_SIMPLE_WEEK);
   const [hoursSet, setHoursSet] = useState(false);
   const [vehicle, setVehicle] = useState<VehicleType>('car');
+  const [workStyle, setWorkStyle] = useState<'hours' | 'shifts'>('hours');
   /** Chose shifts (delivery apps) instead of set hours. */
   const [shifts, setShifts] = useState(false);
   const [home, setHome] = useState<PlaceDraft>(EMPTY_PLACE);
@@ -184,7 +185,10 @@ export default function WelcomeScreen() {
   /** Moves an address box near the top, so its suggestions show above the keyboard. */
   const scrollFieldUp = (field: 'home' | 'work') =>
     // After the keyboard has started to open and the extra room has been added.
-    setTimeout(() => scroller.current?.scrollTo({ y: Math.max(0, fieldTops.current[field] - 8), animated: true }), 250);
+    setTimeout(
+      () => scroller.current?.scrollTo({ y: Math.max(0, fieldTops.current[field] - 8), animated: true }),
+      250,
+    );
 
   const primary = (label: string, onPress: () => void) => (
     <Pressable
@@ -310,6 +314,7 @@ export default function WelcomeScreen() {
                 <VehiclePicker value={vehicle} onChange={setVehicle} />
                 <ThemedText type="small" themeColor="textSecondary" accessibilityLiveRegion="polite">
                   {vehicleRule(picked, vehicle)}
+                  {vehicle === 'car' ? '. Petrol, diesel, hybrid or electric: same rate.' : ''}
                 </ThemedText>
               </View>
             </>
@@ -346,11 +351,26 @@ export default function WelcomeScreen() {
 
           {step === HOURS && (
             <>
-              <StepHeader glyph="clock" eyebrow="Step 3 · Work hours" title="When do you usually work?">
-                Drives in these hours are marked business, the rest personal. Set it once and forget it; you
-                can always swipe to change a trip.
+              <StepHeader glyph="clock" eyebrow="Step 3 · Your work" title="How do you work?">
+                MileMint sorts your drives to match. You can always swipe to change a trip.
               </StepHeader>
-              <WorkHoursQuick value={week} onChange={setWeek} locale={picked.locale} />
+              <WorkStyleOption
+                selected={workStyle === 'hours'}
+                emoji="🗓️"
+                title="Set hours"
+                detail="Trades, sales, care and office work. Drives in your hours count as business."
+                onPress={() => setWorkStyle('hours')}
+              />
+              {workStyle === 'hours' && (
+                <WorkHoursQuick value={week} onChange={setWeek} locale={picked.locale} />
+              )}
+              <WorkStyleOption
+                selected={workStyle === 'shifts'}
+                emoji="🛵"
+                title="Shifts: delivery & rideshare apps"
+                detail="Uber Eats, Deliveroo, Just Eat, Amazon Flex, Uber. Tap Start shift and every drive until you end it is business, stop-start and waiting included."
+                onPress={() => setWorkStyle('shifts')}
+              />
             </>
           )}
 
@@ -468,9 +488,11 @@ export default function WelcomeScreen() {
             secondary(status === 'needs-always' ? 'Continue without “Always”' : 'Not now', () =>
               setStep(HOURS),
             )}
-          {step === HOURS && primary('Save my hours', saveHours)}
-          {step === HOURS && secondary('I work in shifts (delivery apps)', chooseShifts)}
-          {step === HOURS && secondary('I don’t have set hours', () => setStep(PLACES))}
+          {step === HOURS &&
+            (workStyle === 'hours'
+              ? primary('Save my hours', saveHours)
+              : primary('Use shifts', chooseShifts))}
+          {step === HOURS && secondary('Neither, I’ll sort drives myself', () => setStep(PLACES))}
           {step === PLACES &&
             primary(busy ? 'Saving…' : home.text || work.text ? 'Save and continue' : 'Continue', savePlaces)}
           {step === PLACES && secondary('Skip for now', () => setStep(DONE))}
@@ -481,7 +503,71 @@ export default function WelcomeScreen() {
   );
 }
 
+/** One of the "How do you work?" choices: a card that fills with a mint tint and a tick when chosen. */
+function WorkStyleOption({
+  selected,
+  emoji,
+  title,
+  detail,
+  onPress,
+}: {
+  selected: boolean;
+  emoji: string;
+  title: string;
+  detail: string;
+  onPress: () => void;
+}) {
+  const theme = useTheme();
+  return (
+    <Pressable
+      accessibilityRole="radio"
+      accessibilityState={{ selected }}
+      onPress={onPress}
+      style={[
+        styles.workStyle,
+        {
+          borderColor: selected ? theme.accent : theme.backgroundSelected,
+          backgroundColor: selected ? theme.accent + '14' : theme.backgroundElement,
+        },
+      ]}>
+      <Text style={styles.workStyleEmoji}>{emoji}</Text>
+      <View style={styles.flex}>
+        <ThemedText type="smallBold">{title}</ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          {detail}
+        </ThemedText>
+      </View>
+      <View
+        style={[
+          styles.radio,
+          { borderColor: selected ? theme.accent : theme.backgroundSelected },
+          selected && { backgroundColor: theme.accent },
+        ]}>
+        {selected && <Text style={[styles.radioTick, { color: theme.onAccent }]}>✓</Text>}
+      </View>
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
+  workStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.three,
+    borderWidth: 1.5,
+    borderRadius: 16,
+    padding: Spacing.three,
+  },
+  workStyleEmoji: { fontSize: 26, lineHeight: 32 },
+  radio: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  radioTick: { fontSize: 13, fontWeight: '800' },
   container: { flex: 1, paddingHorizontal: Spacing.four },
   brandTitle: { color: '#FFFFFF', fontSize: 40, lineHeight: 46, fontWeight: '800', letterSpacing: -0.5 },
   brandBody: { color: '#D1FAE5', fontSize: 17, lineHeight: 24 },

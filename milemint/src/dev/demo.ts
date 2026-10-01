@@ -33,6 +33,9 @@ export const DEMO_REGION =
 export const DEMO_TRACKING_STATUS =
   demoParam === 'setup' ? 'needs-permission' : demoParam === 'always' ? 'needs-always' : 'on';
 
+/** `?demo=driving`: the home screen shows a drive being recorded. */
+export const DEMO_DRIVING = demoParam === 'driving';
+
 /** Demo users are Pro (every drive visible) unless showing the free plan. */
 export const DEMO_PRO = DEMO_MODE && demoParam !== 'free';
 

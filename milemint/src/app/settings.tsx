@@ -445,6 +445,27 @@ function DrivingSection() {
         <ThemedText type="small" themeColor="textSecondary">
           {vehicleRule(region, settings.vehicle)}. New drives use this; change any trip on its own screen.
         </ThemedText>
+        {settings.vehicle === 'car' && (
+          <ThemedText type="small" themeColor="textSecondary">
+            Petrol, diesel, hybrid or electric: the same rate applies to a car or van you own. Company cars
+            follow different rules.
+          </ThemedText>
+        )}
+        <View style={[styles.rowBetween, styles.spaced]}>
+          <View style={styles.flex}>
+            <ThemedText type="smallBold">New drives start as business</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">
+              Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any
+              that were personal; only business drives should be claimed.
+            </ThemedText>
+          </View>
+          <Switch
+            accessibilityLabel="New drives start as business"
+            value={settings.defaultBusiness}
+            onValueChange={(defaultBusiness) => change({ defaultBusiness })}
+            trackColor={{ true: theme.accent }}
+          />
+        </View>
         <View style={[styles.rowBetween, styles.spaced]}>
           <View style={styles.flex}>
             <ThemedText type="smallBold">Shift mode</ThemedText>

@@ -97,6 +97,12 @@ const MIGRATIONS: readonly string[] = [
     ended_at TEXT
   );
   `,
+  `
+  -- Marked business only because new drives start as business (no rule
+  -- applied). Kept apart from auto_reason, whose CHECK predates it; cleared
+  -- like auto_reason when the user classifies the trip.
+  ALTER TABLE trips ADD COLUMN auto_default INTEGER NOT NULL DEFAULT 0;
+  `,
 ];
 
 export async function migrate(db: SQLiteDatabase): Promise<void> {

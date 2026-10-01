@@ -92,3 +92,14 @@ Bring a one-page leaflet with the counter-top QR, what staff do at the till (gla
 1. Sign 3–5 independents in one area.
 2. Run for 8 weeks and track perks unlocked, redemptions, repeat visits and upgrades to Pro.
 3. With those numbers, approach one regional chain.
+
+---
+
+## 3. Something to do while waiting (couriers): future idea
+
+Couriers spend a lot of time parked, waiting for the next order. A light, quick game could keep MileMint open in those moments and make it the app they *like*, not just the one that logs miles.
+
+- **Short and pausable:** one-thumb, under a minute, drops instantly when an order pings. Never anything that could tempt use while driving: only playable when the tracker says the car is parked.
+- **On brand:** e.g. "Mint Run", where the yellow car dot drives the leaf's road collecting coins, and the best scores of the week go on a city leaderboard of Founding Riders.
+- **Tied to the real thing:** bonus lives for a fully sorted week, or a weekly perk (see Partner perks) for a top-ten finish.
+- **Later, not now:** build once couriers are using MileMint regularly; check it doesn't slow the app or drain the battery.

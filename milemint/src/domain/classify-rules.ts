@@ -14,7 +14,11 @@ import { matchPlace, type Place, type PlaceKind } from './places';
  * time so tests don't depend on the machine's time zone.
  */
 
-export type AutoReason = 'learned-route' | 'work-hours' | 'commute';
+/**
+ * Why a trip was classified without the user. 'default' means no rule
+ * applied and new drives start as business (the user's choice in settings).
+ */
+export type AutoReason = 'learned-route' | 'work-hours' | 'commute' | 'default';
 
 export type ClassificationSuggestion = {
   classification: 'business' | 'personal' | null;

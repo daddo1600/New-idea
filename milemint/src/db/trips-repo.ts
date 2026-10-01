@@ -19,7 +19,8 @@ type TripRow = {
   created_at: string;
   start_place_id: string | null;
   end_place_id: string | null;
-  auto_reason: AutoReason | null;
+  auto_reason: Exclude<AutoReason, 'default'> | null;
+  auto_default: number | null;
   vehicle: VehicleType | null;
   shift_id: string | null;
 };
@@ -39,7 +40,7 @@ function fromRow(row: TripRow): Trip {
     createdAt: row.created_at,
     startPlaceId: row.start_place_id,
     endPlaceId: row.end_place_id,
-    autoReason: row.auto_reason,
+    autoReason: row.auto_reason ?? (row.auto_default ? 'default' : null),
     vehicle: row.vehicle ?? 'car',
     shiftId: row.shift_id ?? null,
   };
@@ -120,7 +121,7 @@ export async function listClassificationHistory(
        json_extract(r.points, '$[' || (json_array_length(r.points) - 1) || '].latitude') AS end_lat,
        json_extract(r.points, '$[' || (json_array_length(r.points) - 1) || '].longitude') AS end_lng
      FROM trips t LEFT JOIN trip_routes r ON r.trip_id = t.id
-     WHERE t.classification IN ('business', 'personal') AND t.auto_reason IS NULL
+     WHERE t.classification IN ('business', 'personal') AND t.auto_reason IS NULL AND t.auto_default = 0
        AND (r.trip_id IS NOT NULL OR t.start_place_id IS NOT NULL OR t.end_place_id IS NOT NULL)
      ORDER BY t.started_at DESC
      LIMIT ?;`,
@@ -156,8 +157,8 @@ export async function insertTrip(
     await db.runAsync(
       `INSERT INTO trips (id, started_at, local_date, ended_at, start_label, end_label,
          distance_meters, classification, purpose, source, created_at,
-         start_place_id, end_place_id, auto_reason, vehicle, shift_id)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+         start_place_id, end_place_id, auto_reason, auto_default, vehicle, shift_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
       trip.id,
       trip.startedAt,
       trip.localDate,
@@ -171,7 +172,8 @@ export async function insertTrip(
       trip.createdAt,
       trip.startPlaceId,
       trip.endPlaceId,
-      trip.autoReason,
+      trip.autoReason === 'default' ? null : trip.autoReason,
+      trip.autoReason === 'default' ? 1 : 0,
       trip.vehicle,
       trip.shiftId,
     );
@@ -203,7 +205,7 @@ export async function setClassification(
   // the auto note disappears and the trip starts counting towards learned routes.
   await db.withTransactionAsync(async () => {
     await db.runAsync(
-      'UPDATE trips SET classification = ?, auto_reason = NULL WHERE id = ?;',
+      'UPDATE trips SET classification = ?, auto_reason = NULL, auto_default = 0 WHERE id = ?;',
       classification,
       trip.id,
     );

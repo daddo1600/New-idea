@@ -19,6 +19,8 @@ export type AppSettings = {
   vehicle: VehicleType;
   /** Couriers and gig drivers: a Start shift / End shift button instead of (or as well as) work hours. */
   shiftMode: boolean;
+  /** Drives no rule decides start as business (swipe left if personal); off leaves them unsorted. */
+  defaultBusiness: boolean;
 };
 
 const WEEKDAY_9_TO_5 = [{ start: '09:00', end: '17:00' }];
@@ -31,6 +33,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   onboarded: false,
   vehicle: 'car',
   shiftMode: false,
+  defaultBusiness: true,
 };
 
 export async function loadSettings(db: SQLiteDatabase): Promise<AppSettings> {

@@ -37,6 +37,7 @@ import { useRegion } from '@/region/region';
 import { useReminders } from '@/reminders/use-reminders';
 import type { TrackingStatus } from '@/tracking/background';
 import { useShift } from '@/tracking/use-shift';
+import { type LiveDrive, useLiveDrive } from '@/tracking/use-live-drive';
 import { useTracking } from '@/tracking/use-tracking';
 
 const CLASSIFY_OPTIONS = [
@@ -48,6 +49,7 @@ const AUTO_NOTES: Record<AutoReason, string> = {
   'learned-route': 'Auto: usual route',
   'work-hours': 'Auto: work hours',
   commute: 'Auto: commute',
+  default: 'Auto: business by default · swipe left if personal',
 };
 
 /** How far a row must be dragged before letting go classifies it. */
@@ -65,10 +67,15 @@ export default function HomeScreen() {
   const taxYear = currentTaxYear(region);
   useReminders(region.unit);
   const shiftMode = useShift();
+  const liveDrive = useLiveDrive();
   const locked = useMemo(() => lockedTripIds(trips ?? [], isPro), [trips, isPro]);
   // Locked drives don't count towards the total (or a tier limit) until they're unlocked.
   const visible = useMemo(() => (trips ?? []).filter((trip) => !locked.has(trip.id)), [trips, locked]);
   const deductions = useMemo(() => computeDeductions(visible, region), [visible, region]);
+  const shiftTrips = useMemo(
+    () => (shiftMode.shift ? visible.filter((t) => t.shiftId === shiftMode.shift?.id) : []),
+    [visible, shiftMode.shift],
+  );
   const summary = useMemo(
     () => summarizeTaxYear(visible, region, taxYear, deductions),
     [visible, region, taxYear, deductions],
@@ -132,16 +139,23 @@ export default function HomeScreen() {
         contentContainerStyle={[styles.list, { paddingBottom: (selecting ? 160 : 96) + insets.bottom }]}
         ListHeaderComponent={
           <View style={styles.header}>
-            <SummaryCard summary={summary} commuteCents={commuteCents} />
-            <TrackingCard status={status} />
+            {/* Couriers: the shift comes first, it's what they tap every day. */}
             {shiftMode.enabled && (
               <ShiftBar
                 shift={shiftMode.shift}
-                drives={shiftMode.shift ? (trips ?? []).filter((t) => t.shiftId === shiftMode.shift?.id).length : 0}
+                drives={shiftTrips.length}
+                distance={formatDistance(shiftTrips.reduce((sum, t) => sum + t.distanceMeters, 0), region)}
+                value={formatMoney(
+                  shiftTrips.reduce((sum, t) => sum + (deductions.get(t.id) ?? 0), 0),
+                  region,
+                )}
                 onStart={shiftMode.start}
                 onEnd={shiftMode.end}
               />
             )}
+            {liveDrive && <LiveDriveBanner drive={liveDrive} />}
+            <SummaryCard summary={summary} commuteCents={commuteCents} />
+            <TrackingCard status={status} />
             {!isPro && <PlanCard trips={trips} lockedCount={locked.size} />}
             {visible.length > 0 && (
               <SelectBar
@@ -587,15 +601,44 @@ function formatTime(iso: string): string {
   return new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
 }
 
+/** A drive being recorded right now, so nobody has to wait until parking to know it's working. */
+function LiveDriveBanner({ drive }: { drive: LiveDrive }) {
+  const theme = useTheme();
+  const { region } = useRegion();
+  const since = new Date(drive.startedAt).toLocaleTimeString(region.locale, { hour: 'numeric', minute: '2-digit' });
+  return (
+    <View
+      accessibilityRole="text"
+      accessibilityLiveRegion="polite"
+      style={[styles.liveDrive, { borderColor: theme.accent, backgroundColor: theme.accent + '14' }]}>
+      <LiveDot color={drive.stopped ? '#FACC15' : theme.accent} />
+      <View style={styles.flex}>
+        <ThemedText type="smallBold" style={{ color: theme.accent }}>
+          {drive.stopped ? 'Stopped' : 'Recording a drive'} · {formatDistance(drive.distanceMeters, region)}
+        </ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          {drive.stopped
+            ? 'If you’ve parked, the trip is saved after 5 minutes.'
+            : `Since ${since}. It’s saved as a trip once you park.`}
+        </ThemedText>
+      </View>
+    </View>
+  );
+}
+
 /** Shift mode: one tap to start, and everything until "End shift" is work. */
 function ShiftBar({
   shift,
   drives,
+  distance,
+  value,
   onStart,
   onEnd,
 }: {
   shift: Shift | null;
   drives: number;
+  distance: string;
+  value: string;
   onStart: () => void;
   onEnd: () => void;
 }) {
@@ -641,7 +684,7 @@ function ShiftBar({
       <View style={styles.flex}>
         <Text style={styles.shiftTitle}>On shift · {elapsed}</Text>
         <Text style={styles.shiftSub}>
-          {drives} {drives === 1 ? 'drive' : 'drives'} so far, all business
+          {drives > 0 ? `${distance} · ${value} · ${drives} ${drives === 1 ? 'drive' : 'drives'}` : 'Every drive counts as business'}
         </Text>
       </View>
       <Pressable accessibilityRole="button" onPress={onEnd} style={styles.shiftEnd}>
@@ -770,6 +813,14 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.one,
   },
   liveDot: { width: 8, height: 8 },
+  liveDrive: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.three,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    padding: Spacing.three,
+  },
   goPro: { backgroundColor: '#FACC15', borderRadius: 999, paddingHorizontal: Spacing.two + 2, paddingVertical: 3 },
   goProText: { color: '#064E3B', fontSize: 13, fontWeight: '800' },
   shiftStart: {
