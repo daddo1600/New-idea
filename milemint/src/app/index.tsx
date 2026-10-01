@@ -1,7 +1,7 @@
 import { Redirect, router, Stack } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming, ZoomIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ReanimatedSwipeable, {
   SwipeDirection,
@@ -13,6 +13,7 @@ import { BrandGradient } from '@/components/brand-gradient';
 import { LeafMark } from '@/components/leaf-mark';
 import { Celebration } from '@/components/celebration';
 import { ReminderAsk } from '@/components/reminder-ask';
+import { SwipeToStart } from '@/components/swipe-to-start';
 import { TaxCountdown } from '@/components/tax-countdown';
 import { Segmented } from '@/components/segmented';
 import { VehicleSheet } from '@/components/vehicle-sheet';
@@ -22,6 +23,7 @@ import { MaxContentWidth, Spacing } from '@/constants/theme';
 import type { Shift } from '@/db/shifts-repo';
 import { useTrips } from '@/db/use-trips';
 import { DEMO_MODE } from '@/dev/demo';
+import { shiftCheer } from '@/domain/cheers';
 import { isCommute, type AutoReason } from '@/domain/classify-rules';
 import { autoDrivesInMonth, FREE_AUTO_DRIVES_PER_MONTH, lockedTripIds } from '@/domain/plan';
 import type { Place } from '@/domain/places';
@@ -706,8 +708,10 @@ function ShiftBar({
   onStart: () => void;
   onEnd: () => void;
 }) {
-  const theme = useTheme();
+  const { region } = useRegion();
   const [now, setNow] = useState(() => Date.now());
+  /** A send-off shown for a few seconds after swiping to start. */
+  const [cheer, setCheer] = useState<string | null>(null);
   useEffect(() => {
     if (!shift) return;
     const timer = setInterval(() => setNow(Date.now()), 30_000);
@@ -716,26 +720,20 @@ function ShiftBar({
 
   if (!shift) {
     return (
-      <Pressable
-        accessibilityRole="button"
-        accessibilityHint="Every drive until you end the shift counts as business"
-        onPress={onStart}
-        style={({ pressed }) => [
-          styles.shiftStart,
-          { borderColor: theme.accent, backgroundColor: theme.accent + (pressed ? '29' : '14') },
-        ]}>
-        <View style={[styles.shiftPlay, { backgroundColor: theme.accent }]}>
-          <Text style={[styles.shiftPlayText, { color: theme.onAccent }]}>▶</Text>
-        </View>
-        <View style={styles.flex}>
-          <ThemedText type="smallBold" style={{ color: theme.accent }}>
-            Start shift
-          </ThemedText>
-          <ThemedText type="small" themeColor="textSecondary">
-            Every drive until you end it counts as business.
-          </ThemedText>
-        </View>
-      </Pressable>
+      <View style={styles.shiftStart}>
+        <SwipeToStart
+          label="Swipe to start shift"
+          hint="Every drive until you end it counts as business"
+          onComplete={() => {
+            setCheer(shiftCheer(region.code, Math.floor(Date.now() / 1000)));
+            setTimeout(() => setCheer(null), 3500);
+            onStart();
+          }}
+        />
+        <ThemedText type="small" themeColor="textSecondary" style={styles.shiftHint}>
+          Every drive until you end it counts as business.
+        </ThemedText>
+      </View>
     );
   }
 
@@ -746,7 +744,17 @@ function ShiftBar({
       <BrandGradient />
       <LiveDot color="#FACC15" />
       <View style={styles.flex}>
-        <Text style={styles.shiftTitle}>On shift · {elapsed}</Text>
+        {cheer ? (
+          <Animated.Text
+            entering={ZoomIn.springify().damping(12)}
+            style={styles.cheer}
+            numberOfLines={1}
+            adjustsFontSizeToFit>
+            {cheer}
+          </Animated.Text>
+        ) : (
+          <Text style={styles.shiftTitle}>On shift · {elapsed}</Text>
+        )}
         <Text style={styles.shiftSub}>
           {drives > 0 ? `${distance} · ${value} · ${drives} ${drives === 1 ? 'drive' : 'drives'}` : 'Every drive counts as business'}
         </Text>
@@ -896,16 +904,9 @@ const styles = StyleSheet.create({
   },
   goPro: { backgroundColor: '#FACC15', borderRadius: 999, paddingHorizontal: Spacing.two + 2, paddingVertical: 3 },
   goProText: { color: '#064E3B', fontSize: 13, fontWeight: '800' },
-  shiftStart: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.three,
-    borderRadius: 16,
-    borderWidth: 1.5,
-    padding: Spacing.three,
-  },
-  shiftPlay: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
-  shiftPlayText: { fontSize: 14, marginLeft: 2 },
+  shiftStart: { gap: Spacing.one + 2 },
+  shiftHint: { textAlign: 'center' },
+  cheer: { color: '#FACC15', fontSize: 20, fontWeight: '800' },
   shiftOn: {
     flexDirection: 'row',
     alignItems: 'center',
