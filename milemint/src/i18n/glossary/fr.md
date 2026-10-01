@@ -141,3 +141,9 @@ Nothing says money comes "back" or is "saved": amounts are "trouvés", lines say
 18. **"Claim mileage relief" as "Demander l’allègement fiscal"**: drops "mileage" to stay short; "Allègement fiscal pour déplacements" is the longer alternative.
 19. **"Employed, in your own vehicle?" as "Employé, avec votre propre véhicule ?"**: masculine generic, as elsewhere in the glossary.
 20. **Resolved (round 3b):** the amount example is now "2400 ou 2400,50". The logbook parser accepts a decimal comma, so the example uses the French format.
+
+## Round 7: tracking health
+
+| English | Term | Why |
+|---|---|---|
+| Precise Location (iOS toggle) | Position exacte | Apple’s own name for the toggle under Location. |

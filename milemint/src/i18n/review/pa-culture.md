@@ -202,3 +202,36 @@ Referrals now use single-use invites: every share makes a new code that works fo
 | Your friend’s invite couldn’t be used | ਤੁਹਾਡੇ ਦੋਸਤ ਦਾ ਸੱਦਾ ਵਰਤਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ | “Your friend’s invitation couldn’t be used” |
 
 **Sign-off:** approved, pending an on-device check of the new alert titles.
+
+## Round 7: tracking health
+
+Tracking health: home card, Settings “ਟ੍ਰੈਕਿੰਗ ਦੀ ਜਾਂਚ” row and background notifications. 24 new lines. Terms: *ਟ੍ਰਿਪ* (m.), *ਟ੍ਰੈਕਿੰਗ*, *ਦਰਜ*, *ਰਹਿ ਗਿਆ*, ਤੁਸੀਂ. iOS wording: *ਸੈਟਿੰਗਾਂ*, *ਟਿਕਾਣਾ*, *ਸਹੀ ਟਿਕਾਣਾ* (best guess, as iOS may show English here: see Unsure). Three passes per line: translate; cold back-translation against the English; culture, honesty and length (titles and the Settings row wrap; buttons ≤1.3× English). Rule for all of them: say plainly what's wrong and the one tap that fixes it, never blame the driver, and say "may" wherever a missed drive isn't certain. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Precise Location is off | ਸਹੀ ਟਿਕਾਣਾ ਬੰਦ ਹੈ | “Precise location is off”. Unsure: Apple’s Punjabi toggle name not confirmed. |
+| MileMint only gets a rough position, so drives can’t be measured. In Settings, tap Location and turn on Precise Location. | MileMint ਨੂੰ ਸਿਰਫ਼ ਅੰਦਾਜ਼ਨ ਟਿਕਾਣਾ ਮਿਲ ਰਿਹਾ ਹੈ, ਇਸ ਲਈ ਟ੍ਰਿਪ ਮਾਪੇ ਨਹੀਂ ਜਾ ਸਕਦੇ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਟਿਕਾਣਾ ’ਤੇ ਟੈਪ ਕਰੋ ਅਤੇ ਸਹੀ ਟਿਕਾਣਾ ਚਾਲੂ ਕਰੋ। | “MileMint is only getting a rough location, so trips can’t be measured. In Settings tap Location and turn on Precise Location.” |
+| Tracking has stopped | ਟ੍ਰੈਕਿੰਗ ਰੁਕ ਗਈ ਹੈ | “Tracking has stopped”. |
+| Automatic tracking stopped running, so new drives aren’t being logged. | ਆਟੋਮੈਟਿਕ ਟ੍ਰੈਕਿੰਗ ਚੱਲਣੀ ਬੰਦ ਹੋ ਗਈ ਹੈ, ਇਸ ਲਈ ਨਵੇਂ ਟ੍ਰਿਪ ਦਰਜ ਨਹੀਂ ਹੋ ਰਹੇ। | “Automatic tracking has stopped running, so new trips aren’t being recorded.” |
+| Tracking may have stopped | ਹੋ ਸਕਦਾ ਹੈ ਟ੍ਰੈਕਿੰਗ ਰੁਕ ਗਈ ਹੋਵੇ | “It may be that tracking has stopped”. |
+| No location since {{time}}, in the middle of a drive. | ਟ੍ਰਿਪ ਦੇ ਵਿਚਕਾਰ {{time}} ਤੋਂ ਕੋਈ ਟਿਕਾਣਾ ਨਹੀਂ ਮਿਲਿਆ। | “In the middle of the trip, no location since {{time}}.” |
+| Turn tracking back on | ਟ੍ਰੈਕਿੰਗ ਮੁੜ ਚਾਲੂ ਕਰੋ | “Turn tracking on again”. |
+| Tracking stopped {{from}}–{{to}} | ਟ੍ਰੈਕਿੰਗ {{from}}–{{to}} ਰੁਕੀ ਰਹੀ | “Tracking stayed stopped {{from}}–{{to}}”. |
+| A drive may have been missed | ਹੋ ਸਕਦਾ ਹੈ ਇੱਕ ਟ੍ਰਿਪ ਰਹਿ ਗਿਆ ਹੋਵੇ | “It may be that one trip was left”. *ਰਹਿ ਗਿਆ* as in “ਰਹਿ ਗਿਆ ਟ੍ਰਿਪ ਜੋੜੋ”. |
+| About {{distance}} may be missing. Add the missed trip? | ਲਗਭਗ {{distance}} ਰਹਿ ਗਏ ਹੋ ਸਕਦੇ ਹਨ। ਰਹਿ ਗਿਆ ਟ੍ਰਿਪ ਜੋੜਨਾ ਹੈ? | “About {{distance}} may have been left. Add the left-out trip?” |
+| Your phone moved about {{distance}} between {{from}} and {{to}}, but no drive was logged. Add the missed trip? | ਤੁਹਾਡਾ ਫ਼ੋਨ {{from}} ਤੋਂ {{to}} ਵਿਚਕਾਰ ਲਗਭਗ {{distance}} ਅੱਗੇ ਗਿਆ, ਪਰ ਕੋਈ ਟ੍ਰਿਪ ਦਰਜ ਨਹੀਂ ਹੋਇਆ। ਰਹਿ ਗਿਆ ਟ੍ਰਿਪ ਜੋੜਨਾ ਹੈ? | “Your phone went about {{distance}} between {{from}} and {{to}}, but no trip was recorded. Add the left-out trip?” |
+| Not a drive | ਇਹ ਟ੍ਰਿਪ ਨਹੀਂ ਸੀ | “This wasn’t a trip”. |
+| All good | ਸਭ ਠੀਕ ਹੈ | “All is fine”. |
+| just now | ਹੁਣੇ-ਹੁਣੇ | “just now”. |
+| {{count}} minutes ago | one: {{count}} ਮਿੰਟ ਪਹਿਲਾਂ / other: {{count}} ਮਿੰਟ ਪਹਿਲਾਂ | “{{count}} minute(s) ago”. |
+| {{count}} hours ago | one: {{count}} ਘੰਟਾ ਪਹਿਲਾਂ / other: {{count}} ਘੰਟੇ ਪਹਿਲਾਂ | “{{count}} hour(s) ago”: ਘੰਟਾ/ਘੰਟੇ. |
+| {{count}} days ago | one: {{count}} ਦਿਨ ਪਹਿਲਾਂ / other: {{count}} ਦਿਨ ਪਹਿਲਾਂ | “{{count}} day(s) ago”. |
+| Tracking check | ਟ੍ਰੈਕਿੰਗ ਦੀ ਜਾਂਚ | “Tracking check”. |
+| Last location: {{ago}} | ਆਖ਼ਰੀ ਟਿਕਾਣਾ: {{ago}} | “Last location: {{ago}}”. |
+| No location yet | ਹਾਲੇ ਕੋਈ ਟਿਕਾਣਾ ਨਹੀਂ | “No location yet”. |
+| Location access for MileMint is off, so drives aren’t being logged. Tap to turn it back on. | MileMint ਲਈ ਟਿਕਾਣੇ ਦੀ ਇਜਾਜ਼ਤ ਬੰਦ ਹੈ, ਇਸ ਲਈ ਟ੍ਰਿਪ ਦਰਜ ਨਹੀਂ ਹੋ ਰਹੇ। ਮੁੜ ਚਾਲੂ ਕਰਨ ਲਈ ਟੈਪ ਕਰੋ। | “Location permission for MileMint is off, so trips aren’t being recorded. Tap to turn it on again.” |
+| Drives can’t be measured from a rough position. Tap to fix it. | ਅੰਦਾਜ਼ਨ ਟਿਕਾਣੇ ਨਾਲ ਟ੍ਰਿਪ ਮਾਪੇ ਨਹੀਂ ਜਾ ਸਕਦੇ। ਠੀਕ ਕਰਨ ਲਈ ਟੈਪ ਕਰੋ। | “With a rough location trips can’t be measured. Tap to fix.” |
+| New drives aren’t being logged. Tap to turn tracking back on. | ਨਵੇਂ ਟ੍ਰਿਪ ਦਰਜ ਨਹੀਂ ਹੋ ਰਹੇ। ਟ੍ਰੈਕਿੰਗ ਮੁੜ ਚਾਲੂ ਕਰਨ ਲਈ ਟੈਪ ਕਰੋ। | “New trips aren’t being recorded. Tap to turn tracking on again.” |
+| No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up. | ਟ੍ਰਿਪ ਦੇ ਵਿਚਕਾਰ {{time}} ਤੋਂ ਕੋਈ ਟਿਕਾਣਾ ਨਹੀਂ ਮਿਲਿਆ। ਟ੍ਰੈਕਿੰਗ ਮੁੜ ਸ਼ੁਰੂ ਕਰਨ ਲਈ MileMint ਖੋਲ੍ਹੋ। | “In the middle of the trip, no location since {{time}}. Open MileMint to start tracking again.” |
+
+**Sign-off:** approved, pending an on-device check of the iOS wording.

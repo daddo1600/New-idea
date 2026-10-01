@@ -106,6 +106,9 @@ const en: Dictionary = {
     one: 'Friends joined: {{count}} · +{{drives}} free drives a month',
     other: 'Friends joined: {{count}} · +{{drives}} free drives a month',
   },
+  '{{count}} minutes ago': { one: '{{count}} minute ago', other: '{{count}} minutes ago' },
+  '{{count}} hours ago': { one: '{{count}} hour ago', other: '{{count}} hours ago' },
+  '{{count}} days ago': { one: '{{count}} day ago', other: '{{count}} days ago' },
   'Your free plan: {{count}} automatic drives a month.': {
     one: 'Your free plan: {{count}} automatic drive a month.',
     other: 'Your free plan: {{count}} automatic drives a month.',

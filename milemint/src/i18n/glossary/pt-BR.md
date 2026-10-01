@@ -131,3 +131,9 @@ pt-BR categories are `one`, `many`, `other`. `many` is always the same as `other
 3. **Resolved (round 3b):** "Enter amounts as numbers, e.g. 2400 or 2,400.50." is now "Digite os valores em números, ex.: 2400 ou 2.400,50." The logbook parser accepts a decimal comma, so the "com ponto" note was dropped.
 4. **"abatimento"** for "relief": clear and honest, but less formal than "dedução". Reviewers may prefer "alívio fiscal" (a calque) or "isenção" (wrong: it isn't an exemption). I'd keep "abatimento".
 5. **"Encerrar antes"** (End early) and **"Imposto de volta estimado"** (Estimated tax back) are 1.4–1.55× the English; both sit in places with room (see `review/pt-BR-culture.md`, Round 3).
+
+## Round 7: tracking health
+
+| English | Term | Why |
+|---|---|---|
+| Precise Location (iOS toggle) | Localização Precisa | Apple’s own name for the toggle under Location. |

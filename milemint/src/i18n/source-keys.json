@@ -109,6 +109,12 @@
     ]
   },
   {
+    "key": "{{count}} days ago",
+    "files": [
+      "components/tracking-health-card.tsx"
+    ]
+  },
+  {
     "key": "{{count}} days left",
     "files": [
       "app/tax-dates.tsx"
@@ -142,6 +148,18 @@
     "key": "{{count}} drives in this period aren’t sorted yet. They count as private until you sort them.",
     "files": [
       "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} hours ago",
+    "files": [
+      "components/tracking-health-card.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} minutes ago",
+    "files": [
+      "components/tracking-health-card.tsx"
     ]
   },
   {
@@ -599,6 +617,12 @@
     ]
   },
   {
+    "key": "A drive may have been missed",
+    "files": [
+      "components/tracking-health-card.tsx"
+    ]
+  },
+  {
     "key": "A few swipes tonight beats a shoebox of receipts at tax time.",
     "files": [
       "domain/reminders.ts"
@@ -671,6 +695,12 @@
     ]
   },
   {
+    "key": "About {{distance}} may be missing. Add the missed trip?",
+    "files": [
+      "components/tracking-health-card.tsx"
+    ]
+  },
+  {
     "key": "Active · thank you!",
     "files": [
       "components/header-menu.tsx"
@@ -709,7 +739,8 @@
   {
     "key": "Add missed trip",
     "files": [
-      "app/_layout.tsx"
+      "app/_layout.tsx",
+      "components/tracking-health-card.tsx"
     ]
   },
   {
@@ -764,6 +795,12 @@
     "key": "After the {{trial}}, {{price}} per year is charged to your Apple Account and renews automatically unless cancelled at least 24 hours before the end of the period.",
     "files": [
       "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "All good",
+    "files": [
+      "components/tracking-health-card.tsx"
     ]
   },
   {
@@ -904,13 +941,16 @@
   {
     "key": "Automatic tracking is off",
     "files": [
-      "app/index.tsx"
+      "app/index.tsx",
+      "components/tracking-health-card.tsx",
+      "tracking/health-alerts.ts"
     ]
   },
   {
     "key": "Automatic tracking is paused",
     "files": [
-      "app/index.tsx"
+      "app/index.tsx",
+      "components/tracking-health-card.tsx"
     ]
   },
   {
@@ -929,6 +969,12 @@
     "key": "Automatic tracking runs on your iPhone. You can still add trips by hand here.",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Automatic tracking stopped running, so new drives aren’t being logged.",
+    "files": [
+      "components/tracking-health-card.tsx"
     ]
   },
   {
@@ -1653,9 +1699,17 @@
     ]
   },
   {
+    "key": "Drives can’t be measured from a rough position. Tap to fix it.",
+    "files": [
+      "tracking/health-alerts.ts"
+    ]
+  },
+  {
     "key": "Drives may be missed",
     "files": [
-      "app/index.tsx"
+      "app/index.tsx",
+      "components/tracking-health-card.tsx",
+      "tracking/health-alerts.ts"
     ]
   },
   {
@@ -2586,6 +2640,12 @@
     ]
   },
   {
+    "key": "just now",
+    "files": [
+      "components/tracking-health-card.tsx"
+    ]
+  },
+  {
     "key": "Keep a logbook for 12 weeks in a row. It gives your car’s business-use percentage, and you claim that share of what the car cost to run. One logbook lasts 5 years.",
     "files": [
       "app/logbook.tsx"
@@ -2702,6 +2762,12 @@
     ]
   },
   {
+    "key": "Last location: {{ago}}",
+    "files": [
+      "components/tracking-health-card.tsx"
+    ]
+  },
+  {
     "key": "Last month",
     "files": [
       "domain/missed-miles.ts"
@@ -2738,6 +2804,12 @@
     ]
   },
   {
+    "key": "Location access for MileMint is off, so drives aren’t being logged. Tap to turn it back on.",
+    "files": [
+      "tracking/health-alerts.ts"
+    ]
+  },
+  {
     "key": "Location is off for MileMint, so type the address instead.",
     "files": [
       "components/place-field.tsx"
@@ -2746,7 +2818,8 @@
   {
     "key": "Location is set to “While Using”. Switch it to “Always” so drives are logged when the app is closed.",
     "files": [
-      "app/index.tsx"
+      "app/index.tsx",
+      "tracking/health-alerts.ts"
     ]
   },
   {
@@ -2946,6 +3019,12 @@
     "key": "MileMint needs location access set to “Always” to notice when you start driving, even when the app is closed.",
     "files": [
       "app/setup-tracking.tsx"
+    ]
+  },
+  {
+    "key": "MileMint only gets a rough position, so drives can’t be measured. In Settings, tap Location and turn on Precise Location.",
+    "files": [
+      "components/tracking-health-card.tsx"
     ]
   },
   {
@@ -3168,6 +3247,12 @@
     ]
   },
   {
+    "key": "New drives aren’t being logged. Tap to turn tracking back on.",
+    "files": [
+      "tracking/health-alerts.ts"
+    ]
+  },
+  {
     "key": "New drives read like “{{example}}”, with no route saved. Places you saved yourself, like Home, keep their names. For the tax office, the area, the distance and the purpose are enough; add initials or a client number to the purpose if you like.",
     "files": [
       "app/settings.tsx"
@@ -3211,6 +3296,24 @@
     ]
   },
   {
+    "key": "No location since {{time}}, in the middle of a drive.",
+    "files": [
+      "components/tracking-health-card.tsx"
+    ]
+  },
+  {
+    "key": "No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up.",
+    "files": [
+      "tracking/health-alerts.ts"
+    ]
+  },
+  {
+    "key": "No location yet",
+    "files": [
+      "components/tracking-health-card.tsx"
+    ]
+  },
+  {
     "key": "No places yet. Add one below, or open a trip and tap “Save as place”.",
     "files": [
       "app/settings.tsx"
@@ -3239,6 +3342,12 @@
     "key": "No trips in {{year}} yet.",
     "files": [
       "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Not a drive",
+    "files": [
+      "components/tracking-health-card.tsx"
     ]
   },
   {
@@ -3432,7 +3541,8 @@
       "app/claim-relief.tsx",
       "app/logbook.tsx",
       "app/setup-tracking.tsx",
-      "app/welcome.tsx"
+      "app/welcome.tsx",
+      "components/tracking-health-card.tsx"
     ]
   },
   {
@@ -3662,6 +3772,13 @@
     "key": "Plot twist: driving pays",
     "files": [
       "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Precise Location is off",
+    "files": [
+      "components/tracking-health-card.tsx",
+      "tracking/health-alerts.ts"
     ]
   },
   {
@@ -4848,9 +4965,35 @@
     ]
   },
   {
+    "key": "Tracking check",
+    "files": [
+      "components/tracking-health-card.tsx"
+    ]
+  },
+  {
+    "key": "Tracking has stopped",
+    "files": [
+      "components/tracking-health-card.tsx",
+      "tracking/health-alerts.ts"
+    ]
+  },
+  {
+    "key": "Tracking may have stopped",
+    "files": [
+      "components/tracking-health-card.tsx",
+      "tracking/health-alerts.ts"
+    ]
+  },
+  {
     "key": "Tracking on",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Tracking stopped {{from}}–{{to}}",
+    "files": [
+      "components/tracking-health-card.tsx"
     ]
   },
   {
@@ -4935,6 +5078,12 @@
     "key": "Turn on automatic tracking from the home screen whenever you’re ready, or add trips with the + button.",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Turn tracking back on",
+    "files": [
+      "components/tracking-health-card.tsx"
     ]
   },
   {
@@ -5527,6 +5676,12 @@
     "key": "Your own purpose",
     "files": [
       "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Your phone moved about {{distance}} between {{from}} and {{to}}, but no drive was logged. Add the missed trip?",
+    "files": [
+      "components/tracking-health-card.tsx"
     ]
   },
   {

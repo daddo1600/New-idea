@@ -128,3 +128,36 @@ Referrals now use single-use invites: every share makes a new code that works fo
 | Your friend’s invite couldn’t be used | 无法使用朋友的邀请 | “Can’t use the friend’s invitation” |
 
 **Sign-off:** approved, pending an on-device check of the new alert titles.
+
+## Round 7: tracking health
+
+Tracking health: home card, Settings “追踪检查” row and background notifications. 24 new lines. Terms: *行程*, *自动追踪*, *记录*, *补记*, 你. iOS wording: “设置”, “位置”, “精确位置” in Apple’s corner quotes style; *轻点* as elsewhere. Three passes per line: translate; cold back-translation against the English; culture, honesty and length (titles and the Settings row wrap; buttons ≤1.3× English). Rule for all of them: say plainly what's wrong and the one tap that fixes it, never blame the driver, and say "may" wherever a missed drive isn't certain. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Precise Location is off | “精确位置”已关闭 | ““Precise Location” is off”. Apple’s zh-Hans toggle is 精确位置. |
+| MileMint only gets a rough position, so drives can’t be measured. In Settings, tap Location and turn on Precise Location. | MileMint 只能获得大致位置，无法测量行程。请在“设置”中轻点“位置”，然后打开“精确位置”。 | “MileMint can only get an approximate location and can’t measure trips. In “Settings” tap “Location”, then turn on “Precise Location”.” |
+| Tracking has stopped | 追踪已停止 | “Tracking has stopped”. |
+| Automatic tracking stopped running, so new drives aren’t being logged. | 自动追踪已停止运行，新行程不会被记录。 | “Automatic tracking has stopped running; new trips won’t be recorded.” |
+| Tracking may have stopped | 追踪可能已停止 | “Tracking may have stopped”. |
+| No location since {{time}}, in the middle of a drive. | 行程途中，自 {{time}} 起没有位置信息。 | “During the trip, no location information since {{time}}.” |
+| Turn tracking back on | 重新开启追踪 | “Turn tracking back on”. 6 characters. |
+| Tracking stopped {{from}}–{{to}} | 追踪中断：{{from}}–{{to}} | “Tracking interrupted: {{from}}–{{to}}”. |
+| A drive may have been missed | 可能漏记了一次行程 | “A trip may have been missed”. 漏记 = “missed recording”. |
+| About {{distance}} may be missing. Add the missed trip? | 约 {{distance}} 可能漏记了。要补记这次行程吗？ | “About {{distance}} may have been missed. Record this trip afterwards?” 补记 matches the “补记行程” button. |
+| Your phone moved about {{distance}} between {{from}} and {{to}}, but no drive was logged. Add the missed trip? | 你的手机在 {{from}} 到 {{to}} 之间移动了约 {{distance}}，但没有记录任何行程。要补记这次行程吗？ | “Your phone moved about {{distance}} between {{from}} and {{to}}, but no trip was recorded. Record this trip afterwards?” |
+| Not a drive | 不是行程 | “Not a trip”. |
+| All good | 一切正常 | “Everything is normal”. |
+| just now | 刚刚 | “just now”. |
+| {{count}} minutes ago | other: {{count}} 分钟前 | “{{count}} minutes ago”. other only. |
+| {{count}} hours ago | other: {{count}} 小时前 | “{{count}} hours ago”. |
+| {{count}} days ago | other: {{count}} 天前 | “{{count}} days ago”. |
+| Tracking check | 追踪检查 | “Tracking check”. |
+| Last location: {{ago}} | 上次位置：{{ago}} | “Last location: {{ago}}”. |
+| No location yet | 暂无位置 | “No location for now”. |
+| Location access for MileMint is off, so drives aren’t being logged. Tap to turn it back on. | MileMint 的位置权限已关闭，行程不会被记录。轻点即可重新开启。 | “MileMint’s location permission is off; trips won’t be recorded. Tap to turn it back on.” |
+| Drives can’t be measured from a rough position. Tap to fix it. | 仅凭大致位置无法测量行程。轻点即可修复。 | “Trips can’t be measured from an approximate location alone. Tap to fix.” |
+| New drives aren’t being logged. Tap to turn tracking back on. | 新行程没有被记录。轻点即可重新开启追踪。 | “New trips aren’t being recorded. Tap to turn tracking back on.” |
+| No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up. | 行程途中，自 {{time}} 起没有位置信息。打开 MileMint 即可继续追踪。 | “During the trip, no location information since {{time}}. Open MileMint to continue tracking.” |
+
+**Sign-off:** approved.

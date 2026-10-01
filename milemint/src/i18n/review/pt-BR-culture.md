@@ -161,3 +161,36 @@ Referrals now use single-use invites: every share makes a new code that works fo
 | Your friend’s invite couldn’t be used | Não foi possível usar o convite do seu amigo | “It wasn’t possible to use your friend’s invite” Alert title. |
 
 **Sign-off:** approved, pending an on-device check of the new alert titles.
+
+## Round 7: tracking health
+
+Tracking health: home card, Settings “Status do rastreamento” row and background notifications. 24 new lines. Terms: *trajeto*, *rastreamento*, *registrar*, *ficar de fora* (as in “Trajetos podem ficar de fora”), você. iOS wording: *Ajustes*, *Localização*, *Localização Precisa* (Apple pt-BR capitalises it). Three passes per line: translate; cold back-translation against the English; culture, honesty and length (titles and the Settings row wrap; buttons ≤1.3× English). Rule for all of them: say plainly what's wrong and the one tap that fixes it, never blame the driver, and say "may" wherever a missed drive isn't certain. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Precise Location is off | Localização Precisa desativada | “Precise Location deactivated”. Apple’s pt-BR toggle name, capitalised as on screen. |
+| MileMint only gets a rough position, so drives can’t be measured. In Settings, tap Location and turn on Precise Location. | O MileMint só recebe uma localização aproximada e não consegue medir os trajetos. Nos Ajustes, toque em Localização e ative Localização Precisa. | “MileMint only receives an approximate location and can’t measure the trips. In Settings, tap Location and turn on Precise Location.” |
+| Tracking has stopped | O rastreamento parou | “Tracking stopped”. |
+| Automatic tracking stopped running, so new drives aren’t being logged. | O rastreamento automático parou de funcionar, então os novos trajetos não estão sendo registrados. | “Automatic tracking stopped working, so new trips aren’t being recorded.” |
+| Tracking may have stopped | O rastreamento pode ter parado | “Tracking may have stopped”. |
+| No location since {{time}}, in the middle of a drive. | Sem localização desde {{time}}, no meio de um trajeto. | “No location since {{time}}, in the middle of a trip.” |
+| Turn tracking back on | Reativar rastreamento | “Reactivate tracking”. Button, 21 chars (1.0×). |
+| Tracking stopped {{from}}–{{to}} | Rastreamento parado: {{from}}–{{to}} | “Tracking stopped: {{from}}–{{to}}”. |
+| A drive may have been missed | Um trajeto pode ter ficado de fora | “A trip may have been left out”. Same idiom as the existing “Trajetos podem ficar de fora”. |
+| About {{distance}} may be missing. Add the missed trip? | Cerca de {{distance}} podem ter ficado de fora. Adicionar o trajeto que faltou? | “About {{distance}} may have been left out. Add the trip that was missing?” Plural agreement works for “11 km”. |
+| Your phone moved about {{distance}} between {{from}} and {{to}}, but no drive was logged. Add the missed trip? | Seu celular se deslocou cerca de {{distance}} entre {{from}} e {{to}}, mas nenhum trajeto foi registrado. Adicionar o trajeto que faltou? | “Your phone moved about {{distance}} between {{from}} and {{to}}, but no trip was recorded. Add the trip that was missing?” |
+| Not a drive | Não foi um trajeto | “It wasn’t a trip”. Link, 18 chars (1.6×). Sits beside a 17-char button with room on a 375 pt screen; shorter forms (“Não era”) lose the meaning. |
+| All good | Tudo certo | “All fine”. Everyday Brazilian. |
+| just now | agora mesmo | “just now”. |
+| {{count}} minutes ago | one: há {{count}} minuto / many: há {{count}} minutos / other: há {{count}} minutos | “{{count}} minute(s) ago”. *há* + one/many/other (pt treats 0 and 1 as “one”; 0 never shows: under a minute is “agora mesmo”). |
+| {{count}} hours ago | one: há {{count}} hora / many: há {{count}} horas / other: há {{count}} horas | “{{count}} hour(s) ago”. |
+| {{count}} days ago | one: há {{count}} dia / many: há {{count}} dias / other: há {{count}} dias | “{{count}} day(s) ago”. |
+| Tracking check | Status do rastreamento | “Tracking status”. *Status* is common in pt-BR apps. |
+| Last location: {{ago}} | Última localização: {{ago}} | “Last location: {{ago}}”. |
+| No location yet | Nenhuma localização ainda | “No location yet”. |
+| Location access for MileMint is off, so drives aren’t being logged. Tap to turn it back on. | O acesso à localização do MileMint está desativado, então os trajetos não estão sendo registrados. Toque para reativar. | “MileMint’s location access is off, so trips aren’t being recorded. Tap to reactivate.” |
+| Drives can’t be measured from a rough position. Tap to fix it. | Com uma localização aproximada não dá para medir os trajetos. Toque para corrigir. | “With an approximate location you can’t measure trips. Tap to fix.” |
+| New drives aren’t being logged. Tap to turn tracking back on. | Os novos trajetos não estão sendo registrados. Toque para reativar o rastreamento. | “New trips aren’t being recorded. Tap to reactivate tracking.” |
+| No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up. | Sem localização desde {{time}}, no meio de um trajeto. Abra o MileMint para retomar o rastreamento. | “No location since {{time}}, in the middle of a trip. Open MileMint to resume tracking.” |
+
+**Sign-off:** approved.

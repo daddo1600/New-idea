@@ -119,3 +119,9 @@ The user is always **你** (never 您), as Apple's Simplified Chinese iOS does. 
 13. **“Client visit · 区域”** in the add-trip privacy alert. "Client visit" is kept in English because the app stores that English label on the trip. Chinese readers might want a gloss, but adding 客户探访 would no longer match what they see.
 14. **里程费用的结算方式** (How you’re paid for mileage). This is a little formal for a Settings header. It is quoted in the claim-relief notice, so both lines must stay the same.
 15. **基本 / 较高 / 附加** as standalone tax-band options. These are clear next to the 你的所得税税率 header, but terse.
+
+## Round 7: tracking health
+
+| English | Term | Why |
+|---|---|---|
+| Precise Location (iOS toggle) | 精确位置 | Apple’s own name for the toggle under Location. |

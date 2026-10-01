@@ -13,6 +13,19 @@ import {
   type TrackingStatus,
 } from './background';
 
+/** Told whenever tracking has just been caught up or changed, so the health check reads again. */
+const checkListeners = new Set<() => void>();
+export function trackingChecked(): void {
+  for (const listener of checkListeners) listener();
+}
+/** Calls `listener` after each check; returns the unsubscribe. */
+export function onTrackingChecked(listener: () => void): () => void {
+  checkListeners.add(listener);
+  return () => {
+    checkListeners.delete(listener);
+  };
+}
+
 /**
  * Tracking status for the UI. Re-checked on focus and whenever the app returns
  * to the foreground (the user may have changed permissions in Settings).
@@ -40,6 +53,7 @@ export function useTracking(onForeground?: () => void, { watch = false }: { watc
       // The status must still update if catching up fails (e.g. no GPS fix indoors).
       await reconcileTracking(db).catch(() => {});
       await refresh();
+      trackingChecked();
       onForeground?.();
     };
     // On launch too: iOS may have dropped the geofence (e.g. after a restart).
@@ -65,9 +79,11 @@ export function useTracking(onForeground?: () => void, { watch = false }: { watc
       if (next === 'off') {
         await startTracking(db);
         setStatus('on');
+        trackingChecked();
         return 'on';
       }
       setStatus(next);
+      trackingChecked();
       return next;
     },
     [db],

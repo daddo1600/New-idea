@@ -140,3 +140,36 @@ Referrals now use single-use invites: every share makes a new code that works fo
 | Your friend’s invite couldn’t be used | আপনার বন্ধুর আমন্ত্রণটি ব্যবহার করা যায়নি | “Your friend’s invitation couldn’t be used” |
 
 **Sign-off:** approved, pending an on-device check of the new alert titles.
+
+## Round 7: tracking health
+
+Tracking health: home card, Settings “ট্র্যাকিং যাচাই” row and background notifications. 24 new lines. Terms: *ট্রিপ*, *ট্র্যাকিং*, *রেকর্ড*, *বাদ পড়া*, আপনি. iOS wording: *সেটিংস*, *লোকেশন*, *সুনির্দিষ্ট লোকেশন* (see Unsure). Three passes per line: translate; cold back-translation against the English; culture, honesty and length (titles and the Settings row wrap; buttons ≤1.3× English). Rule for all of them: say plainly what's wrong and the one tap that fixes it, never blame the driver, and say "may" wherever a missed drive isn't certain. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Precise Location is off | সুনির্দিষ্ট লোকেশন বন্ধ আছে | “Precise location is off”. Unsure: Apple’s Bengali toggle name not confirmed. |
+| MileMint only gets a rough position, so drives can’t be measured. In Settings, tap Location and turn on Precise Location. | MileMint শুধু আনুমানিক অবস্থান পাচ্ছে, তাই ট্রিপ মাপা যাচ্ছে না। সেটিংসে লোকেশন-এ ট্যাপ করুন এবং সুনির্দিষ্ট লোকেশন চালু করুন। | “MileMint is only getting an approximate position, so trips can’t be measured. In Settings tap Location and turn on Precise Location.” |
+| Tracking has stopped | ট্র্যাকিং থেমে গেছে | “Tracking has stopped”. |
+| Automatic tracking stopped running, so new drives aren’t being logged. | অটোমেটিক ট্র্যাকিং চলা বন্ধ হয়ে গেছে, তাই নতুন ট্রিপ রেকর্ড হচ্ছে না। | “Automatic tracking has stopped running, so new trips aren’t being recorded.” |
+| Tracking may have stopped | ট্র্যাকিং হয়তো থেমে গেছে | “Tracking has perhaps stopped”. |
+| No location since {{time}}, in the middle of a drive. | ট্রিপের মাঝখানে {{time}} থেকে কোনো লোকেশন পাওয়া যায়নি। | “In the middle of the trip, no location found since {{time}}.” |
+| Turn tracking back on | আবার ট্র্যাকিং চালু করুন | “Turn tracking on again”. Button. |
+| Tracking stopped {{from}}–{{to}} | ট্র্যাকিং বন্ধ ছিল {{from}}–{{to}} | “Tracking was off {{from}}–{{to}}”. |
+| A drive may have been missed | হয়তো একটি ট্রিপ বাদ পড়েছে | “Perhaps a trip was left out”. *বাদ পড়া* as in “বাদ পড়া ট্রিপ যোগ করুন”. |
+| About {{distance}} may be missing. Add the missed trip? | প্রায় {{distance}} বাদ পড়ে থাকতে পারে। বাদ পড়া ট্রিপটি যোগ করবেন? | “About {{distance}} may have been left out. Will you add the left-out trip?” |
+| Your phone moved about {{distance}} between {{from}} and {{to}}, but no drive was logged. Add the missed trip? | আপনার ফোন {{from}} থেকে {{to}}-এর মধ্যে প্রায় {{distance}} সরেছে, কিন্তু কোনো ট্রিপ রেকর্ড হয়নি। বাদ পড়া ট্রিপটি যোগ করবেন? | “Your phone moved about {{distance}} between {{from}} and {{to}}, but no trip was recorded. Will you add the left-out trip?” |
+| Not a drive | এটা ট্রিপ ছিল না | “This wasn’t a trip”. |
+| All good | সব ঠিক আছে | “All is fine”. |
+| just now | এইমাত্র | “just now”. |
+| {{count}} minutes ago | one: {{count}} মিনিট আগে / other: {{count}} মিনিট আগে | “{{count}} minute(s) ago”. |
+| {{count}} hours ago | one: {{count}} ঘণ্টা আগে / other: {{count}} ঘণ্টা আগে | “{{count}} hour(s) ago”. |
+| {{count}} days ago | one: {{count}} দিন আগে / other: {{count}} দিন আগে | “{{count}} day(s) ago”. |
+| Tracking check | ট্র্যাকিং যাচাই | “Tracking check”. |
+| Last location: {{ago}} | শেষ লোকেশন: {{ago}} | “Last location: {{ago}}”. |
+| No location yet | এখনও কোনো লোকেশন নেই | “No location yet”. |
+| Location access for MileMint is off, so drives aren’t being logged. Tap to turn it back on. | MileMint-এর লোকেশন অ্যাক্সেস বন্ধ, তাই ট্রিপ রেকর্ড হচ্ছে না। আবার চালু করতে ট্যাপ করুন। | “MileMint’s location access is off, so trips aren’t being recorded. Tap to turn it on again.” |
+| Drives can’t be measured from a rough position. Tap to fix it. | আনুমানিক অবস্থান দিয়ে ট্রিপ মাপা যায় না। ঠিক করতে ট্যাপ করুন। | “Trips can’t be measured with an approximate position. Tap to fix.” |
+| New drives aren’t being logged. Tap to turn tracking back on. | নতুন ট্রিপ রেকর্ড হচ্ছে না। আবার ট্র্যাকিং চালু করতে ট্যাপ করুন। | “New trips aren’t being recorded. Tap to turn tracking on again.” |
+| No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up. | ট্রিপের মাঝখানে {{time}} থেকে কোনো লোকেশন পাওয়া যায়নি। আবার ট্র্যাকিং শুরু করতে MileMint খুলুন। | “In the middle of the trip, no location found since {{time}}. Open MileMint to start tracking again.” |
+
+**Sign-off:** approved, pending an on-device check of *সুনির্দিষ্ট লোকেশন*.

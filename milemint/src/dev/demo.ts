@@ -5,8 +5,10 @@ import { insertPlace } from '@/db/places-repo';
 import { updateSettings } from '@/db/settings-repo';
 import { insertTrip } from '@/db/trips-repo';
 import type { AutoReason } from '@/domain/classify-rules';
-import type { LatLng } from '@/domain/geo';
+import { distanceMeters, type LatLng } from '@/domain/geo';
 import type { PlaceKind } from '@/domain/places';
+import type { TrackingGap } from '@/domain/tracker-policy';
+import type { TrackingHealth } from '@/domain/tracking-health';
 import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/trip';
 
 /**
@@ -15,6 +17,9 @@ import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/tri
  * driving. Never active in device builds.
  *   ?demo        tracking shown as on
  *   ?demo=setup  tracking shown as not yet allowed (first launch)
+ *   ?demo=always location set to "While Using" only
+ *   ?demo=gap    tracking stopped mid-drive: the "add the missed trip?" card
+ *   ?demo=stopped / ?demo=precise  tracking not running / Precise Location off
  *   ?demo=free   a free-plan user, with sample App Store prices on the paywall
  *   ?demo=courier shift mode on (the swipe-to-start shift bar)
  *   &region=GB   preview another country's currency, units and rules
@@ -34,6 +39,36 @@ export const DEMO_REGION =
 
 export const DEMO_TRACKING_STATUS =
   demoParam === 'setup' ? 'needs-permission' : demoParam === 'always' ? 'needs-always' : 'on';
+
+/**
+ * Tracking health in the demo: `?demo=gap` shows the "tracking stopped, add
+ * the missed trip?" card for a drive cut short this afternoon; `?demo=stopped`
+ * and `?demo=precise` show those faults.
+ */
+export function demoTrackingHealth(now: number, gapDismissed: boolean): TrackingHealth {
+  const lastSeenAt = now - 3 * 60_000;
+  if (demoParam === 'setup') return { issue: 'needs-permission', gap: null, lastSeenAt: null };
+  if (demoParam === 'always') return { issue: 'needs-always', gap: null, lastSeenAt };
+  if (demoParam === 'stopped') return { issue: 'tracking-stopped', gap: null, lastSeenAt };
+  if (demoParam === 'precise') return { issue: 'precise-location-off', gap: null, lastSeenAt };
+  if (demoParam !== 'gap' || gapDismissed) return { issue: 'ok', gap: null, lastSeenAt };
+  const gap: TrackingGap = {
+    id: 'demo-gap',
+    reason: 'cut',
+    from: DEMO_GAP_PLACES.from.at,
+    fromAt: now - 2 * 3_600_000,
+    to: DEMO_GAP_PLACES.to.at,
+    toAt: now - 25 * 60_000,
+    distanceM: Math.round(distanceMeters(DEMO_GAP_PLACES.from.at, DEMO_GAP_PLACES.to.at)),
+  };
+  return { issue: 'gap', gap, lastSeenAt };
+}
+
+/** Where the demo gap starts and ends, with the names the add-trip form is filled with. */
+export const DEMO_GAP_PLACES = {
+  from: { label: 'Home', at: { latitude: 37.3229, longitude: -121.9471 } },
+  to: { label: 'Bay Supply Co, Milpitas', at: { latitude: 37.4323, longitude: -121.8996 } },
+};
 
 /** `?demo=celebrate`: shows the milestone celebration for the demo trips. */
 export const DEMO_CELEBRATE = demoParam === 'celebrate';

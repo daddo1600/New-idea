@@ -21,6 +21,7 @@ import { tripCount, type Snapshot } from '@/backup/snapshot';
 import { GoldButton } from '@/components/gold-button';
 import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { Segmented } from '@/components/segmented';
+import { TrackingCheckRow } from '@/components/tracking-health-card';
 import { VehiclePicker } from '@/components/vehicle-picker';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -152,6 +153,8 @@ export default function SettingsScreen() {
         <LanguageSection />
 
         <DrivingSection />
+
+        <TrackingCheckRow />
 
         <MileagePaySection />
 

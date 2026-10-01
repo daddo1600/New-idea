@@ -502,6 +502,29 @@ export function step(
   return { state: { ...next, stop }, completed: [] };
 }
 
+/**
+ * Whether `step` would end the drive in progress because of a long silence
+ * before `sample` (the app was killed, GPS stopped): where the car was last
+ * seen and where the phone turned up. Read-only: it changes nothing about
+ * detection, it lets the tracker note that miles in between may be missing.
+ */
+export function silenceGap(
+  state: DetectorState,
+  sample: LocationSample,
+  config: DetectorConfig = DEFAULT_DETECTOR_CONFIG,
+): { from: Fix; to: Fix } | null {
+  if (state.mode !== 'driving' || !isValidSample(sample)) return null;
+  if (sample.accuracy !== null && sample.accuracy !== undefined && sample.accuracy > config.maxAccuracyM) return null;
+  const fix = toFix(sample);
+  const silenceMs = fix.timestamp - state.last.timestamp;
+  if (silenceMs < config.stopDurationMs) return null;
+  const hop = distanceMeters(state.last, fix);
+  const impliedSpeed = hop / Math.max(1, silenceMs / 1000);
+  // The same test as `step`: anything else is bridged as a tunnel and counted.
+  if (hop >= config.stopRadiusM && impliedSpeed >= config.startSpeedMps) return null;
+  return { from: state.last, to: fix };
+}
+
 /** Runs a batch of samples (as delivered by the OS) through the detector. */
 export function stepAll(
   state: DetectorState,
