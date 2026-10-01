@@ -52,10 +52,12 @@ The app speaks to the user as **vous** throughout. Two exceptions:
 | odometer | odomètre | Québec/CRA term. |
 | weekend | fin de semaine | Québec usage, understood in France. |
 | Done | OK | Apple French convention. |
+| Best value (plan badge) | Meilleure offre | "Meilleur prix" would mean "lowest price". |
+| Money back (milestones section) / Your money back | Déductions trouvées / Vos déductions | Says what the figure is. Avoids "argent récupéré", which sounds like a promised refund. |
 | Milestones | Réussites | Avoids "Étape", which is already used for the onboarding steps. |
 | Missed miles check | Distance non comptée | Works for both miles and km. |
-| Car or van / Motorbike / Moped or motorbike / Bicycle | Voiture ou camionnette / Moto / Scooter ou moto / Vélo | Short names that fit a third of the screen width. |
-| UK / USA (tiles) | Royaume-Uni / États-Unis | Full names. French has no short form that reads naturally. |
+| Car or van / Motorbike / Moped or motorbike / Bicycle | Auto ou van / Moto / Scooter ou moto / Vélo | Short names that fit a third of the screen width (the vehicle picker shows one line only). "Auto" and "van" are everyday words in Québec and France. In full sentences "van" stays "camionnette". |
+| UK / USA (half-width tiles) | R.-U. / É.-U. | Standard French abbreviations, shown beside the flag. The full names (Royaume-Uni / États-Unis) are used everywhere else and are what VoiceOver reads on the tiles. |
 | CRA, IRS, ATO, HMRC | kept in English | Following the brief. Fixed sentences use "la CRA", "l’IRS", "l’ATO". |
 
 ## iOS wording used
@@ -67,7 +69,7 @@ The app speaks to the user as **vous** throughout. Two exceptions:
 | While Using the App / “While Using” | Lorsque l’app est active |
 | Always | Toujours |
 | Never | Jamais |
-| Ask Next Time Or When I Share | Demander la prochaine fois ou lors du partage |
+| Ask Next Time Or When I Share | Demander la prochaine fois ou lors de mon partage |
 | Location | Position |
 | ALLOW LOCATION ACCESS | AUTORISER L’ACCÈS À LA POSITION |
 | Open Settings | Ouvrir Réglages |
@@ -77,28 +79,41 @@ The app speaks to the user as **vous** throughout. Two exceptions:
 
 - "Knock knock" works as "Toc toc / Qui est là ?".
 - "Sunday scaries" became "Le blues du dimanche".
-- "Swipe right on savings" became "Un match avec vos économies", with the dating-app "match".
-- "Free money alert" became "Alerte : argent gratuit".
+- "Swipe right on savings" became "Coup de foudre pour vos déductions"; the body keeps the dating-app "match". "Économies" was dropped so nothing promises a saving.
+- "Free money alert" became "De l’argent qui dort ?" ("argent gratuit" read like spam).
+- "Your car did the hard part" became "Le plus dur est fait", which also suits bike couriers.
+- "The weekend’s nearly over" became "Déjà dimanche soir" (no "fin de semaine" / "week-end" split, no "fin… fin" repetition).
+- "Set it and forget it" became "Réglez-le une fois pour toutes".
+- "Wrap up warm out there" became "Couvrez-vous bien".
+- "A few swipes" (as a noun) became "quelques gestes"; "balayages" reads oddly as a noun.
 - "Future you says thanks" became "Le vous du futur vous dit merci".
 - "Spring has sprung" became "Le printemps est arrivé".
 - "G’day!" became "Salut ! Bel été sur la route".
 - "Fall" and "Autumn" both became "Les trajets d’automne s’additionnent", which doesn’t name a unit.
 - "Every penny" became "jusqu’au dernier sou".
 
+## Unit-neutral lines
+
+Lines that say "mile" in English but are shown in every country use **trajet** instead of a unit: "Ne manquez plus aucun trajet.", "Chaque trajet d’affaires, compté.", "L’app de déplacements qui compte chaque trajet.", "Chaque trajet compté, automatiquement." Lines with separate miles and km versions keep their own unit. "Taux kilométrique" is not used on the country-choice screens, which say "taux officiel par mile ou par km" / "taux officiel applicable aux déplacements".
+
+## Money wording
+
+Nothing says money comes "back" or is "saved": amounts are "trouvés", lines say what drives "valent" or that they "comptent au moment des impôts".
+
 ## Unsure
 
 1. **"Change to Always Allow"**: I used "Passer à Toujours autoriser". Apple’s exact French string for this iOS 13+ prompt button may be "Changer pour « Toujours autoriser »" or similar. Please check on a French-language iPhone.
 2. **"Allow While Using App"**: I used "Autoriser lorsque l’app est active". I’m fairly confident, but this should be checked against the current iOS.
-3. **"Ask Next Time Or When I Share"**: I used "Demander la prochaine fois ou lors du partage". Please check against iOS.
+3. ~~"Ask Next Time Or When I Share"~~: **resolved** in the accuracy review: "Demander la prochaine fois ou lors de mon partage" (Apple French support wording).
 4. **"ALLOW LOCATION ACCESS"**: I used "AUTORISER L’ACCÈS À LA POSITION". Please check against iOS.
 5. **"Open Settings"**: I used "Ouvrir Réglages". "Ouvrir les réglages" is also common.
-6. **Unit-neutral lines**: generic lines shown to every region use "kilomètre", for example "Chaque kilomètre d’affaires, compté.", "Ne manquez plus aucun kilomètre." and the share lines. That fits the main Canadian audience, but UK users count in miles.
+6. ~~Unit-neutral lines~~: **resolved** in the cultural review; they now say "trajet" (see above).
 7. **"taux kilométrique"**: this is used generically even for the UK and US, where the rate is per mile.
 8. **"Missed miles check" as "Distance non comptée"** and **"Milestones" as "Réussites"**: these are free renderings.
 9. **"Driving:" (label before the vehicle name) as "Véhicule :"**: I used "Véhicule" because "Au volant" doesn’t fit bikes.
 10. **"Use now" as "Utiliser"**: this is the same as "Use" in the purpose picker, kept short.
 11. **Referral line in "tu"**: "Nouveau sur Pro ? Ton premier mois est offert par moi". This could change to vous if the team prefers.
-12. **UK/USA half-width tiles**: "Royaume-Uni" and "États-Unis" are about 11 characters. Please check that they fit.
+12. ~~UK/USA half-width tiles~~: **resolved**: "R.-U." / "É.-U.".
 13. **"Self Assessment return is due" (returnIsDue)**: rendered as "Date limite de votre déclaration … {{year}}", so it works both as a heading above a date and before ": aujourd’hui" or ": encore N jours".
-14. **"Best value"**: rendered as "Meilleur prix".
+14. ~~"Best value"~~: **resolved**: "Meilleure offre".
 15. **"Shifts & rounds (delivery apps)"**: rendered as "Quarts et tournées (apps de livraison)".

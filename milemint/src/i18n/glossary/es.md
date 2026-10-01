@@ -42,7 +42,7 @@ Neutral international Spanish, written mainly for Latin American speakers in the
 | log (verb) | registrar | |
 | Pro | Pro | Plan name, kept. "Go Pro" = Hazte Pro; "Upgrade to Pro" = Mejorar a Pro. |
 | free plan / Free | plan gratis / Gratis | Short and everyday. |
-| free trial | prueba gratis | |
+| free trial | prueba gratis | Price lines read "{{trial}}. Después, se cobra …" so the trial name is not repeated ("periodo de prueba (Prueba gratis…)"). |
 | place (saved) | lugar | Home = Casa, Work = Trabajo, Client = Cliente, Other = Otro. |
 | From / To (trip) | Origen / Destino | Clearer than Desde/Hasta for address fields. |
 | Settings (app and iOS) | Configuración | Apple es-419 name of the Settings app. |
@@ -50,6 +50,11 @@ Neutral international Spanish, written mainly for Latin American speakers in the
 | Apple Account | Cuenta de Apple | Apple's Spanish name. |
 | Apple Maps | Mapas de Apple | Apple's Spanish name. |
 | delivery app | app de reparto | |
+| missed (drive/trip) | faltante ("Agregar viaje faltante") | Short enough for buttons; says the trip is missing without blaming the user. |
+| found (money) | encontrar; "Total encontrado: {{amount}}", "en deducciones este año fiscal" | Phrased so no adjective has to agree with the currency (dólares masc. / libras fem.). Same reason "about {{amount}}" = "alrededor de {{amount}}", never "unos {{amount}}". |
+| money back (milestones) | Dinero encontrado | "Dinero de vuelta" / "recuperado" reads as a promised tax refund. Never "saldo a favor" (a refund in Mexican tax language). |
+| cheeky (reminders) | con un toque de humor | "travieso"/"pícaro" can carry a flirty double meaning in some countries. |
+| unit-neutral taglines | viaje | Lines shown in every country ("Never miss a mile", "Every business mile, counted", share lines) say "viaje", not millas/km. |
 
 Kept in English as the brief requires: MileMint, Pro, HMRC, IRS, CRA, ATO, Self Assessment, Making Tax Digital/MTD, Mileage Allowance Relief, Car, van and travel expenses, Schedule C (Part IV), Car and truck expenses, Form 1040/1040-ES, T2125, T2200, T777, P87, BAS, PAYG, GST, D1 / Work-related car expenses, cents per km method, simplified expenses, delivery-app names and car models. Numbers keep the English format (5,000; 12.5).
 
@@ -62,7 +67,10 @@ es categories: one, many, other. Every plural entry gives `one`, plus `many` equ
 - "Knock knock" → "Toc, toc" / "¿Quién es?" (same joke format exists in Spanish).
 - "Swipe right on savings" → "Haz match con tus deducciones" (dating-app pun works in Spanish; avoids promising savings).
 - "Sunday scaries" → "¿Domingo de nervios? Que no sea por tus impuestos".
-- "Plot twist: driving pays" → "Giro inesperado: conducir te deja dinero".
+- "Plot twist: driving pays" → "Giro inesperado: tus viajes valen dinero" (no promise of earnings).
+- "Free money alert" / "Well, technically it’s your money" → "Hablemos de dinero" / "Bueno, de tu dinero. …" ("dinero gratis" sounds like spam/scam).
+- "{{amount}} back in your pocket" → "¡Ya llevas {{amount}}!" (no refund promise).
+- "The weekend’s nearly over" → "El fin de semana ya casi termina" (avoids "acabar", vulgar in Rioplatense Spanish).
 - "Shoebox of receipts" → "pelearte con una caja llena de recibos".
 - "Literally. We counted them." → "Literalmente: llevamos la cuenta." (plays on "cuenta" in the title).
 - "Your miles called" body rewritten to avoid gendered pronouns (millas fem. / kilómetros masc.).
@@ -82,12 +90,12 @@ es categories: one, many, other. Every plural entry gives `one`, plus `many` equ
    - Settings → Notifications → "Configuración → Notificaciones" (Spain iOS uses "Ajustes")
    - "Allow Once" and "Keep Only While Using" are not source lines right now; if added: "Permitir una vez", "Mantener solo mientras se usa".
 2. "kilometraje" as the generic word for "mileage" also for US users who see miles (alternative: "millaje", common in US Spanish but odd for km regions).
-3. "Go Pro" → "Hazte Pro" (9 chars vs 6; slightly over the 1.3× guide).
+3. "Go Pro" → "Hazte Pro" (9 chars vs 6; slightly over the 1.3× guide). Kept after check 3: it sits in a pill that grows with its text.
 4. "UK" → "Reino Unido" and "USA" → "EE. UU." in the half-width country tiles; "Reino Unido" is longer than "UK".
-5. "Best value" → "Mejor precio" (badge; "Más conveniente" is an alternative).
+5. "Best value" → "Mejor oferta" (changed in check 2).
 6. "Car or van" → "Auto o camioneta": "camioneta" can also mean pickup/SUV in some countries; "furgoneta" is the Spain term.
 7. "{{label}}: earned / not yet" → "logrado / todavía no".
-8. "Your driving" (Settings section) → "Al volante".
+8. "Your driving" (Settings section) → "Tus viajes" (check 3: "Al volante" did not fit bike and moto couriers).
 9. Lines with "antes del {{date}}" / "Vence el {{date}}" assume the date is formatted day-first in Spanish (e.g. "5 de abril").
 10. "{{day}} shift {{number}} start/end" and "Remove {{day}} shift {{number}}" → "{{day}}: inicio/fin del turno {{number}}", "{{day}}: quitar turno {{number}}" (screen-reader wording).
 11. "Site visit" → "Visita a obra" (fits tradespeople; less natural for sales reps).
