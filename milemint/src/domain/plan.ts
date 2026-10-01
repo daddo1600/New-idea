@@ -21,8 +21,13 @@ export const REFERRAL_BONUS_DRIVES = 10;
  * for having joined with a friend's code and one for each friend who joined
  * with this user's code (counted in iCloud; 0 until that's switched on).
  */
+/** No limit on friends in practice; this only stops a corrupted count reaching Infinity. */
+const MAX_FRIENDS_COUNTED = 10_000;
+
 export function monthlyAllowance({ redeemed, friendsJoined }: { redeemed: boolean; friendsJoined: number }): number {
-  const friends = Number.isFinite(friendsJoined) ? Math.max(0, Math.floor(friendsJoined)) : 0;
+  const friends = Number.isFinite(friendsJoined)
+    ? Math.min(MAX_FRIENDS_COUNTED, Math.max(0, Math.floor(friendsJoined)))
+    : 0;
   return FREE_AUTO_DRIVES_PER_MONTH + REFERRAL_BONUS_DRIVES * ((redeemed ? 1 : 0) + friends);
 }
 
@@ -39,9 +44,13 @@ function monthOf(trip: Pick<Trip, 'localDate'>): string {
  */
 type Countable = Pick<Trip, 'id' | 'localDate' | 'startedAt' | 'source'> & { shiftId?: string | null };
 
-/** What uses up the allowance: each drive on its own, or all of one shift's drives together. */
-function allowanceKey(trip: Countable): string {
-  return trip.shiftId ? `shift:${trip.shiftId}` : trip.id;
+/**
+ * What uses up the allowance: each drive on its own, or a shift's drives on
+ * one day together. Per day, so a shift that's never ended can't make every
+ * later drive free.
+ */
+function allowanceKey(trip: Pick<Countable, 'id' | 'localDate'> & { shiftId?: string | null }): string {
+  return trip.shiftId ? `shift:${trip.shiftId}:${trip.localDate}` : trip.id;
 }
 
 export function lockedTripIds(
@@ -79,7 +88,7 @@ export function autoDrivesInMonth(
 ): number {
   const counted = new Set<string>();
   for (const trip of trips) {
-    if (trip.source === 'auto' && monthOf(trip) === month) counted.add(trip.shiftId ? `shift:${trip.shiftId}` : trip.id);
+    if (trip.source === 'auto' && monthOf(trip) === month) counted.add(allowanceKey(trip));
   }
   return counted.size;
 }

@@ -34,7 +34,7 @@ export function RedeemCode({
   const theme = useTheme();
   const { canRedeem, redeemedCode, redeem } = useReferral();
   const [open, setOpen] = useState(!!initialCode);
-  const [text, setText] = useState(initialCode ?? '');
+  const [text, setText] = useState(String(initialCode ?? ''));
   const [problem, setProblem] = useState<RedeemProblem | null>(null);
   const [busy, setBusy] = useState(false);
   /** Redeemed here, just now: show the thank-you. */
@@ -142,3 +142,10 @@ const styles = StyleSheet.create({
   },
   button: { borderRadius: 10, paddingHorizontal: Spacing.three, paddingVertical: Spacing.two + 4 },
 });
+
+/** A code from a link's parameter: the first if repeated, at most 16 characters (whole characters, not half an emoji). */
+export function firstCode(param: string | string[] | undefined): string | undefined {
+  const value = Array.isArray(param) ? param[0] : param;
+  return value === undefined ? undefined : Array.from(String(value)).slice(0, 16).join('');
+}
+

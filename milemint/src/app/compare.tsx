@@ -21,11 +21,14 @@ import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { listTrips } from '@/db/trips-repo';
 import { parseMiles } from '@/domain/format';
 import { missedMiles, PERIOD_LABELS, periodBounds, type Period } from '@/domain/missed-miles';
+import { lockedTripIds } from '@/domain/plan';
 import { computeDeductions, formatMoney, toUnits } from '@/domain/regions';
 import type { Trip } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
+import { usePro } from '@/purchases/pro';
 import { withInvite } from '@/referral/links';
+import { useAllowance } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 
 type T = ReturnType<typeof useT>;
@@ -89,9 +92,15 @@ export default function CompareScreen() {
   const [period, setPeriod] = useState<Period>('this-month');
   const [counted, setCounted] = useState('');
 
+  const { isPro } = usePro();
+  const allowance = useAllowance();
   useEffect(() => {
-    listTrips(db).then(setTrips, () => {});
-  }, [db]);
+    // Locked drives (past the free plan's allowance) stay out of the figures, as everywhere else.
+    listTrips(db).then((all) => {
+      const locked = lockedTripIds(all, isPro, allowance);
+      setTrips(all.filter((trip) => !locked.has(trip.id)));
+    }, () => {});
+  }, [db, isPro, allowance]);
 
   const miles = region.unit === 'mi';
   const deductions = useMemo(() => computeDeductions(trips, region), [trips, region]);

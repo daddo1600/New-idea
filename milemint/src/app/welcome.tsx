@@ -25,7 +25,7 @@ import { CountryOptions, phoneRegion } from '@/components/country-options';
 import { LeafMark } from '@/components/leaf-mark';
 import { MintWash, StepHeader, StepIcon } from '@/components/step-header';
 import { VehiclePicker } from '@/components/vehicle-picker';
-import { RedeemCode } from '@/components/redeem-code';
+import { firstCode, RedeemCode } from '@/components/redeem-code';
 import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -91,7 +91,9 @@ export default function WelcomeScreen() {
   const { region, chosen, setRegion, finishOnboarding, reload } = useRegion();
   const referral = useReferral();
   /** A friend's code from an invite link (milemint://invite/CODE), offered on the last step. */
-  const { code: linkCode } = useLocalSearchParams<{ code?: string }>();
+  const { code: codeParam } = useLocalSearchParams<{ code?: string | string[] }>();
+  // A link can carry the parameter twice (an array) or be very long: take the first, cut short.
+  const linkCode = firstCode(codeParam);
   const [step, setStep] = useState(0);
   /** A backup in iCloud, offered when this iPhone has no trips yet. */
   const [backup, setBackup] = useState<FoundBackup | null>(null);

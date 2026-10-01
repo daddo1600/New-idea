@@ -34,6 +34,7 @@ import { setShareCode } from './links';
  */
 const CODE_KEY = 'milemint.referral-code';
 const REDEEMED_KEY = 'milemint.referral-redeemed';
+const INSTALLED_KEY = 'milemint.installed-at';
 const useKeychain = Platform.OS !== 'web';
 /** CloudKit is asked for the sharer's count at most this often. */
 const COUNT_EVERY_MS = 60 * 60 * 1000;
@@ -95,10 +96,16 @@ const pickSaved = (settings: AppSettings): Saved => ({
 async function prepare(db: SQLiteDatabase): Promise<Saved> {
   const settings = await loadSettings(db);
   const changes: Partial<AppSettings> = {};
-  if (!settings.installedAt) changes.installedAt = new Date().toISOString();
-  if (!settings.referralCode || !isReferralCode(settings.referralCode)) {
-    const kept = await keychainGet(CODE_KEY);
-    changes.referralCode = kept && isReferralCode(kept) ? kept : generateReferralCode(Crypto.getRandomBytes);
+  // The first install date is kept in the keychain too, so reinstalling doesn't reopen the 30 days.
+  const keptInstall = await keychainGet(INSTALLED_KEY);
+  if (keptInstall && (!settings.installedAt || keptInstall < settings.installedAt)) changes.installedAt = keptInstall;
+  else if (!settings.installedAt) changes.installedAt = new Date().toISOString();
+  // This iPhone's own code wins over one brought in by a restored backup.
+  const keptCode = await keychainGet(CODE_KEY);
+  if (keptCode && isReferralCode(keptCode)) {
+    if (settings.referralCode !== keptCode) changes.referralCode = keptCode;
+  } else if (!settings.referralCode || !isReferralCode(settings.referralCode)) {
+    changes.referralCode = generateReferralCode(Crypto.getRandomBytes);
   }
   if (!settings.redeemedCode) {
     try {
@@ -114,8 +121,8 @@ async function prepare(db: SQLiteDatabase): Promise<Saved> {
   }
   const next = { ...settings, ...changes };
   if (Object.keys(changes).length > 0) await saveSettings(db, { ...(await loadSettings(db)), ...changes });
-  // A restored backup brings its own code: keep the keychain in step with it.
-  if (next.referralCode) keychainSet(CODE_KEY, next.referralCode);
+  if (next.referralCode && next.referralCode !== keptCode) keychainSet(CODE_KEY, next.referralCode);
+  if (next.installedAt && next.installedAt !== keptInstall) keychainSet(INSTALLED_KEY, next.installedAt);
   return pickSaved(next);
 }
 

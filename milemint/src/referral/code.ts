@@ -38,7 +38,12 @@ export function generateReferralCode(randomBytes: (n: number) => Uint8Array): st
  * or null if it can't be a MileMint code. Case, spaces and dashes don't matter.
  */
 export function normalizeReferralCode(input: string): string | null {
-  const compact = input.toUpperCase().replace(/[\s\-–—_.]/g, '');
+  // NFKC turns full-width ＴＲＶＢ－７Ｋ２ (Chinese and Japanese keyboards) into plain characters;
+  // any dash, space, invisible character, dot or underscore is ignored.
+  const compact = String(input ?? '')
+    .normalize('NFKC')
+    .toUpperCase()
+    .replace(/[\s\p{Pd}\p{Cf}\u2212_.]/gu, '');
   if (compact.length !== 7) return null;
   const code = `${compact.slice(0, 4)}-${compact.slice(4)}`;
   return PATTERN.test(code) ? code : null;
@@ -62,7 +67,8 @@ export type RedeemState = {
 export function inRedeemWindow(installedAt: string | null, now: Date): boolean {
   if (!installedAt) return true;
   const since = now.getTime() - new Date(installedAt).getTime();
-  return !Number.isFinite(since) || since < REDEEM_WINDOW_DAYS * DAY_MS;
+  // An unreadable install date, or one in the future (the clock set back), closes the window.
+  return Number.isFinite(since) && since >= 0 && since < REDEEM_WINDOW_DAYS * DAY_MS;
 }
 
 /** Whether to offer "Got a code from a friend?" at all. */

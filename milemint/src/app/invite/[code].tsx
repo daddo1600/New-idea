@@ -1,5 +1,6 @@
 import { Redirect, useLocalSearchParams, type Href } from 'expo-router';
 
+import { firstCode } from '@/components/redeem-code';
 import { useRegion } from '@/region/region';
 
 /**
@@ -7,9 +8,9 @@ import { useRegion } from '@/region/region';
  * code filled in, or on first launch the welcome, whose last step asks for it.
  */
 export default function InviteLink() {
-  const { code } = useLocalSearchParams<{ code?: string }>();
+  const code = firstCode(useLocalSearchParams<{ code?: string | string[] }>().code);
   const { loaded, onboarded } = useRegion();
   if (!loaded) return null;
   const pathname = onboarded ? '/friends' : '/welcome';
-  return <Redirect href={{ pathname, params: code ? { code: String(code).slice(0, 16) } : {} } as Href} />;
+  return <Redirect href={{ pathname, params: code ? { code } : {} } as Href} />;
 }

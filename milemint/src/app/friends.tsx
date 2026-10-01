@@ -2,7 +2,7 @@ import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 
 import { BrandGradient } from '@/components/brand-gradient';
-import { RedeemCode } from '@/components/redeem-code';
+import { firstCode, RedeemCode } from '@/components/redeem-code';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
@@ -23,7 +23,9 @@ export default function FriendsScreen() {
   const { isPro } = usePro();
   const { code, redeemedCode, friendsJoined, counting, allowance } = useReferral();
   /** From an invite link (milemint://invite/CODE): filled in, ready to redeem. */
-  const { code: linkCode } = useLocalSearchParams<{ code?: string }>();
+  const { code: codeParam } = useLocalSearchParams<{ code?: string | string[] }>();
+  // A link can carry the parameter twice (an array) or be very long: take the first, cut short.
+  const linkCode = firstCode(codeParam);
 
   const share = () => Share.share({ message: inviteMessage() }).catch(() => {});
 

@@ -65,7 +65,13 @@ describe('autoDrivesInMonth', () => {
 
 describe('shift mode', () => {
   it('counts every drive in a shift as one', () => {
-    const shift = drives('2026-09', 30, 's').map((d) => ({ ...d, shiftId: 'shift-1' }));
+    // A real shift: 30 drives on one day.
+    const shift = drives('2026-09', 30, 's').map((d, i) => ({
+      ...d,
+      localDate: '2026-09-12',
+      startedAt: `2026-09-12T${String(8 + Math.floor(i / 3)).padStart(2, '0')}:${String((i % 3) * 20).padStart(2, '0')}:00Z`,
+      shiftId: 'shift-1',
+    }));
     const single = drives('2026-09', 39, 'd');
     expect(autoDrivesInMonth([...shift, ...single], '2026-09')).toBe(40);
     expect(lockedTripIds([...shift, ...single], false).size).toBe(0);
@@ -108,5 +114,19 @@ describe('monthlyAllowance', () => {
     const allowance = monthlyAllowance({ redeemed: true, friendsJoined: 1 });
     const locked = lockedTripIds(drives('2026-10', allowance + 2), false, allowance);
     expect([...locked].sort()).toEqual([`d${allowance}`, `d${allowance + 1}`].sort());
+  });
+});
+
+describe('a shift that is never ended', () => {
+  it('counts once per day, not once forever', () => {
+    const trips = Array.from({ length: 60 }, (_, i) => ({
+      id: `t${i}`,
+      localDate: `2026-10-${String(1 + Math.floor(i / 2)).padStart(2, '0')}`,
+      startedAt: `2026-10-${String(1 + Math.floor(i / 2)).padStart(2, '0')}T${i % 2 ? '18' : '09'}:00:00Z`,
+      source: 'auto' as const,
+      shiftId: 'forever',
+    }));
+    expect(autoDrivesInMonth(trips, '2026-10')).toBe(30);
+    expect(lockedTripIds(trips, false, 20).size).toBe(20);
   });
 });

@@ -89,3 +89,21 @@ describe('redeeming', () => {
     });
   });
 });
+
+describe('codes typed on other keyboards', () => {
+  it('reads full-width characters and other dashes', () => {
+    expect(normalizeReferralCode('ＴＲＶＢ－７Ｋ２')).toBe('TRVB-7K2');
+    expect(normalizeReferralCode('TRVB‐7K2')).toBe('TRVB-7K2');
+    expect(normalizeReferralCode('TRVB−7K2')).toBe('TRVB-7K2');
+    expect(normalizeReferralCode('TRVB​-7K2')).toBe('TRVB-7K2');
+  });
+});
+
+describe('the 30-day window', () => {
+  it('closes for an unreadable or future install date', () => {
+    const now = new Date('2026-10-01T12:00:00Z');
+    expect(inRedeemWindow('nonsense', now)).toBe(false);
+    expect(inRedeemWindow('2027-01-01T00:00:00Z', now)).toBe(false);
+    expect(inRedeemWindow('2026-09-20T00:00:00Z', now)).toBe(true);
+  });
+});
