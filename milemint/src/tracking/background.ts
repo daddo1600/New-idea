@@ -1,7 +1,7 @@
 import * as Location from 'expo-location';
 import type { SQLiteDatabase } from 'expo-sqlite';
 import * as TaskManager from 'expo-task-manager';
-import { Platform } from 'react-native';
+import { AppState, Platform } from 'react-native';
 
 import { getBackgroundDatabase } from '@/db/database';
 import { listPlaces } from '@/db/places-repo';
@@ -25,6 +25,7 @@ import { toLocalIsoDate } from '@/domain/trip';
 import type { DetectedTrip, LocationSample } from '@/domain/trip-detector';
 import { t } from '@/i18n/i18n';
 
+import { waitForPromptAnswer } from './prompt-answer';
 import { loadTrackerRecord, saveTrackerRecord } from './tracker-store';
 
 /**
@@ -254,7 +255,15 @@ export async function requestTrackingPermissions(
   const foreground = await Location.requestForegroundPermissionsAsync();
   if (foreground.granted) {
     onAsking?.(2);
-    await Location.requestBackgroundPermissionsAsync();
+    const background = await Location.requestBackgroundPermissionsAsync();
+    // The answer can come back while iOS's question is still on screen: keep
+    // the coaching up ("Tap Change to Always Allow") until it's really answered.
+    if (!background.granted && Platform.OS === 'ios') {
+      await waitForPromptAnswer({
+        appState: AppState,
+        answered: async () => (await Location.getBackgroundPermissionsAsync()).granted,
+      });
+    }
   }
   return getTrackingStatus(db);
 }
