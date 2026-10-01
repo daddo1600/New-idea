@@ -147,6 +147,74 @@ Always say **"estimated"** and **"based on HMRC rates"**; never promise a tax sa
 
 ---
 
+## 6a. Know where every download came from (no survey screen)
+
+We don't ask "How did you hear about us?" in set-up: it's another screen before the app works, and the answers are unreliable. Instead:
+
+**Campaign links.** App Store Connect counts downloads per campaign when the store link carries a provider token and a campaign name. Use one link per place we post, so the Monday numbers show which post worked:
+
+| Where | Campaign name (`ct=`) |
+|---|---|
+| Facebook courier groups (UK) | `fb-couriers-uk` |
+| Reddit r/UberEATS, r/deliveroo, r/AmazonFlexDrivers | `reddit-<sub>` |
+| Courier forums / Discords | `forum-<name>` |
+| Flyers and counter cards (QR) | `flyer-<place>` (e.g. `flyer-mcd-leeds`) |
+| Accountants and bookkeepers | `acct-<name>` |
+| TikTok / YouTube creators | `creator-<handle>` |
+| Switch-from-MileIQ page | `switch-mileiq` |
+| Friend invites | already counted by invite codes |
+
+Format: `https://apps.apple.com/app/apple-store/id6817748981?pt=<provider token>&ct=<campaign>&mt=8`. The provider token is on App Store Connect → Analytics → Campaigns (it's per developer account, not secret). Results: Analytics → Acquisition → Campaigns (from 5 downloads up; Apple hides smaller numbers).
+
+**Custom product pages.** Apple allows up to 35 versions of the store page, each with its own screenshots, promo text and link. Start with three:
+
+| Page | Lead screenshot | For |
+|---|---|---|
+| Couriers | "Every delivery app. One mileage log." + shift rows | gig groups, flyers, creators |
+| Trades & self-employed | "HMRC-ready report in one tap" + work hours | accountants, trade forums |
+| Switching from MileIQ | "Bring your MileIQ log. Carry on for less." | switch campaign (below) |
+
+Each page gets its own campaign link, so App Store Connect shows which audience converts best.
+
+**Later, if store data isn't enough:** one optional card on home after a week of use ("How did you find MileMint?", one tap, dismissable). Never in set-up.
+
+## 6b. The switch campaign: "Bring your miles with you"
+
+**Idea.** People stay with an old mileage app because their history is in it. Remove that reason: export your log from the old app, open it in MileMint, and your whole year carries on, with your totals, purposes and business/personal choices intact.
+
+**Needs in the app (next build after the tab bar):** "Import drives" in Settings that reads the CSV exports of MileIQ, Driversnote, Everlance, TripLog and a plain spreadsheet (auto-detected columns, a preview before saving, duplicates skipped, every imported drive marked "Imported" in the edit log so the audit trail stays honest). No account, nothing uploaded: the file is read on the phone.
+
+**The message (all channels except the App Store page):**
+- "Bring your miles with you. Import last year's log in a minute, then just drive."
+- "Same automatic tracking. Shifts, every delivery app, missed-drive warnings. No account."
+- Price, stated as facts with a date, never as an attack: "MileMint Pro: £5.99 a month or £49.99 a year (1 month free). Prices checked [date]."
+
+**Where:** a `/switch` page on the site with a 3-step how-to (screenshots of the old app's export screen), the switching product page above, courier groups, and replies when people complain about price rises.
+
+**Founding switchers:** first 500 who import a log get the first year of Pro at a lower founding price (an App Store introductory offer, set in App Store Connect, no code needed).
+
+### Naming competitors: the rules we follow
+
+- **App Store page: never name a competitor.** Apple's guideline 2.3.7 bars other apps' names in metadata and screenshots, and naming them is the quickest way to a rejection or a complaint. The store page says "Switching from another mileage app? Bring your log." instead.
+- **Website, social, ads (UK):** comparative advertising is legal in the UK if it compares like with like, is accurate and verifiable, is dated, doesn't denigrate, and doesn't use their logo or make us look affiliated (CAP Code section 3 / Business Protection from Misleading Marketing Regulations 2008). So: "MileMint Pro £49.99/year vs MileIQ Unlimited £94.99/year (UK App Store prices, checked 1 Oct 2026)" is fine; "MileIQ rips you off" is not. Keep a dated screenshot of their price as evidence, and update or remove the line when their price changes.
+- **US:** truthful comparative ads are allowed (FTC); the risk is a false-advertising claim if a comparison is wrong or out of date, so the same "accurate, dated, evidenced" rule covers it.
+- Use their name as plain text only; no logos, colours or their app icon.
+- Before spending money on a comparison ad, a one-off check with a solicitor (about an hour of their time) is worth it. This section is a working rule, not legal advice.
+
+## 6c. Partner rewards: a free coffee for drivers (to pitch at launch)
+
+**Idea.** A forecourt or coffee brand pays to reach drivers: MileMint users get a free hot drink each month (free plan) or each week (Pro).
+
+**Why a brand would pay:** a daily-driving audience, precisely targeted (couriers and self-employed drivers), measurable redemptions, and a reason to choose their forecourt on a route drivers already take. Candidates: Costa Express (Shell), Wild Bean Café (BP), Greggs, Moto / Welcome Break / Roadchef services, EG On the Move, independent forecourt groups.
+
+**Earning it (so people can't just download for coffee):** a reward unlocks only after real automatic drives, e.g. 10 drives logged by the app this month (not typed in), on a phone that has used MileMint for 2+ weeks. Pro users: weekly.
+
+**How codes work without giving away privacy:** the partner supplies a pool of single-use codes (or a QR their tills accept); the app shows one when the user qualifies. The partner gets redemption counts per month, never names, locations or trips. Each code is shown once per phone per period; it needs the iCloud/CloudKit piece (as for referrals) to stop reinstall farming.
+
+**Money models to pitch:** a monthly sponsorship fee, a fee per code redeemed (e.g. 30–60p on top of the drink's cost), or the drink at the partner's cost in exchange for "Partner of MileMint" placement. Start with a small paid pilot in one region (e.g. Leeds) with a fixed budget.
+
+**Deck (when ready to launch):** the audience and their weekly miles, how qualifying works, privacy promise, the pilot proposal, pricing options, and early numbers (downloads, weekly active drivers, drives per week). Built as a branded slide deck.
+
 ## 7. Budget
 
 | Item | Per month |
@@ -163,6 +231,8 @@ Always say **"estimated"** and **"based on HMRC rates"**; never promise a tax sa
 
 ## 8. To do next (in order)
 
+0a. Set up campaign links and the three custom product pages (section 6a).
+0b. Build "Import drives" for the switch campaign (section 6b), after the tab bar.
 0. **Must do at launch:** lead every gig-worker channel with "Uber only sees Uber" (see the box at the top), using real TestFlight couriers' missed-miles numbers, collected with permission.
 1. Submit 1.0 for App Store review (needs a contact phone number in App Store Connect).
 2. On approval: create the "1 month Pro free" offer code and set `FRIEND_OFFER_CODE` in `milemint/src/referral/links.ts`.
