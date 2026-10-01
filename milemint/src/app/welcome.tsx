@@ -18,7 +18,6 @@ import { AlwaysGuide } from '@/components/always-guide';
 import { BrandGradient } from '@/components/brand-gradient';
 import { CountryOptions, phoneRegion } from '@/components/country-options';
 import { LeafMark } from '@/components/leaf-mark';
-import { IosPromptMock } from '@/components/ios-prompt-mock';
 import { MintWash, StepHeader, StepIcon } from '@/components/step-header';
 import { VehiclePicker } from '@/components/vehicle-picker';
 import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
@@ -77,6 +76,8 @@ export default function WelcomeScreen() {
   const [busy, setBusy] = useState(false);
   // iOS asks only once; after a "Don't Allow" the only way back is Settings.
   const [asked, setAsked] = useState(false);
+  /** Which of iOS's two location questions is on screen, to say what to tap. */
+  const [asking, setAsking] = useState<1 | 2 | null>(null);
   /** Sent to Settings to choose "Always": carry on by ourselves once it's chosen. */
   const [inSettings, setInSettings] = useState(false);
   const db = useSQLiteContext();
@@ -113,9 +114,10 @@ export default function WelcomeScreen() {
   const allowLocation = async () => {
     setBusy(true);
     try {
-      const next = await enable();
+      const next = await enable(setAsking);
       if (next === 'on') setStep(HOURS);
     } finally {
+      setAsking(null);
       setAsked(true);
       setBusy(false);
     }
@@ -284,7 +286,7 @@ export default function WelcomeScreen() {
           ref={scroller}
           contentContainerStyle={[
             styles.content,
-            !onBrand && styles.contentTop,
+            (!onBrand || step === 2) && styles.contentTop,
             // Room to scroll an address box up to the top while the keyboard is open.
             typing && step === PLACES && styles.roomToScroll,
           ]}
@@ -342,46 +344,49 @@ export default function WelcomeScreen() {
             </>
           )}
 
-          {step === 2 && (
-            <>
-              <View style={styles.brandIcon}>
-                <StepIcon glyph="location" size={30} />
-              </View>
-              <Text style={styles.brandEyebrow}>STEP 2 · TRACKING</Text>
-              <Text style={styles.brandTitleSmall}>Never miss a mile.</Text>
-              <Text style={styles.brandBody}>
-                To log drives while MileMint is closed, location needs to be set to “Always”.
-              </Text>
-              <Text style={styles.brandCallout}>Every drive it misses is money you don’t get back.</Text>
-              {status === 'needs-always' || (status === 'needs-permission' && asked) ? (
-                <AlwaysGuide current={status === 'needs-always' ? 'While Using the App' : 'Never'} />
-              ) : (
-                <View style={styles.mocks}>
-                  <Text style={styles.pointTitle}>iOS asks twice. Here’s what to tap:</Text>
-                  <IosPromptMock
-                    step="1"
-                    title="Allow “MileMint” to use your location?"
-                    buttons={['Allow Once', 'Allow While Using App', 'Don’t Allow']}
-                    tap={1}
-                  />
-                  <IosPromptMock
-                    step="2"
-                    title="Allow “MileMint” to also use your location even when you are not using the app?"
-                    buttons={['Keep Only While Using', 'Change to Always Allow']}
-                    tap={1}
-                  />
-                  <Text style={styles.pointBody}>
-                    🔒 GPS only runs while you drive. Your trips never leave your iPhone.
+          {step === 2 &&
+            (asking ? (
+              // Shown behind iOS's own question (it dims the screen but this still reads).
+              <View style={styles.coach} accessibilityLiveRegion="polite">
+                <View style={styles.coachCard}>
+                  <Text style={styles.coachStep}>↑ {asking} OF 2</Text>
+                  <Text style={styles.coachText}>
+                    Tap “{asking === 1 ? 'Allow While Using App' : 'Change to Always Allow'}”
                   </Text>
                 </View>
-              )}
-              {status === 'unsupported' && (
-                <Text style={styles.pointBody}>
-                  Automatic tracking runs on your iPhone. You can still add trips by hand here.
+              </View>
+            ) : (
+              <>
+                <View style={styles.brandIcon}>
+                  <StepIcon glyph="location" size={30} />
+                </View>
+                <Text style={styles.brandEyebrow}>STEP 2 · TRACKING</Text>
+                <Text style={styles.brandTitleSmall}>Never miss a mile.</Text>
+                <Text style={styles.brandBody}>
+                  Set location to “Always” and MileMint logs every drive, even when it’s closed.
                 </Text>
-              )}
-            </>
-          )}
+                <Text style={styles.brandCallout}>Without “Always”, drives go unlogged and unclaimed.</Text>
+                {status === 'needs-always' || (status === 'needs-permission' && asked) ? (
+                  <AlwaysGuide current={status === 'needs-always' ? 'While Using the App' : 'Never'} />
+                ) : status === 'unsupported' ? (
+                  <Text style={styles.pointBody}>
+                    Automatic tracking runs on your iPhone. You can still add trips by hand here.
+                  </Text>
+                ) : (
+                  <>
+                    <View style={styles.glass}>
+                      <Text style={styles.pointBody}>
+                        iOS asks twice. Tap <Text style={styles.pointTitle}>Allow While Using App</Text>, then{' '}
+                        <Text style={styles.pointTitle}>Change to Always Allow</Text>.
+                      </Text>
+                    </View>
+                    <Text style={styles.privacy}>
+                      🔒 GPS runs only while you’re driving. Trips stay on your iPhone, never on our servers.
+                    </Text>
+                  </>
+                )}
+              </>
+            ))}
 
           {step === HOURS && (
             <>
@@ -558,8 +563,11 @@ export default function WelcomeScreen() {
                     setInSettings(true);
                     Linking.openSettings();
                   })
-                : primary(busy ? 'Waiting for your answer…' : 'Allow location', allowLocation))}
+                : asking
+                  ? null
+                  : primary('Set up auto-logging', allowLocation))}
           {step === 2 &&
+            !asking &&
             status !== 'on' &&
             status !== 'unsupported' &&
             secondary(status === 'needs-always' ? 'Continue without “Always”' : 'Not now', () =>
@@ -710,7 +718,18 @@ const styles = StyleSheet.create({
   flexFill: { flex: 1 },
   vehicles: { gap: Spacing.two },
   roomToScroll: { paddingBottom: 420 },
-  mocks: { gap: Spacing.three },
+  // Pinned low, below where iOS's alert sits, on a dark card so it still reads while dimmed.
+  coach: { flex: 1, justifyContent: 'flex-end' },
+  coachCard: {
+    backgroundColor: 'rgba(1,28,20,0.85)',
+    borderRadius: 20,
+    padding: Spacing.four,
+    gap: Spacing.one,
+    alignItems: 'center',
+  },
+  coachStep: { color: '#D1FAE5', fontSize: 15, fontWeight: '800', letterSpacing: 1.2 },
+  coachText: { color: '#FACC15', fontSize: 28, lineHeight: 35, fontWeight: '800', textAlign: 'center' },
+  privacy: { color: '#FFFFFF', fontSize: 15, lineHeight: 21 },
   extraRow: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
   extraChip: {
     borderWidth: 1.5,

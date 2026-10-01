@@ -221,11 +221,22 @@ export async function getTrackingStatus(db: SQLiteDatabase): Promise<TrackingSta
   return record.enabled ? 'on' : 'off';
 }
 
-/** Asks for location access (While Using, then Always). Returns the resulting status. */
-export async function requestTrackingPermissions(db: SQLiteDatabase): Promise<TrackingStatus> {
+/**
+ * Asks for location access (While Using, then Always). Returns the resulting
+ * status. `onAsking` says which of iOS's two questions is about to show, so
+ * the screen behind it can say what to tap.
+ */
+export async function requestTrackingPermissions(
+  db: SQLiteDatabase,
+  onAsking?: (question: 1 | 2) => void,
+): Promise<TrackingStatus> {
   if (!TRACKING_SUPPORTED) return 'unsupported';
+  onAsking?.(1);
   const foreground = await Location.requestForegroundPermissionsAsync();
-  if (foreground.granted) await Location.requestBackgroundPermissionsAsync();
+  if (foreground.granted) {
+    onAsking?.(2);
+    await Location.requestBackgroundPermissionsAsync();
+  }
   return getTrackingStatus(db);
 }
 

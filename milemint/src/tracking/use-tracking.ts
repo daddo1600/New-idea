@@ -59,16 +59,19 @@ export function useTracking(onForeground?: () => void, { watch = false }: { watc
   }, [watch, refresh]);
 
   /** Requests permissions and, if granted "Always", switches tracking on. */
-  const enable = useCallback(async (): Promise<TrackingStatus> => {
-    const next = await requestTrackingPermissions(db);
-    if (next === 'off') {
-      await startTracking(db);
-      setStatus('on');
-      return 'on';
-    }
-    setStatus(next);
-    return next;
-  }, [db]);
+  const enable = useCallback(
+    async (onAsking?: (question: 1 | 2) => void): Promise<TrackingStatus> => {
+      const next = await requestTrackingPermissions(db, onAsking);
+      if (next === 'off') {
+        await startTracking(db);
+        setStatus('on');
+        return 'on';
+      }
+      setStatus(next);
+      return next;
+    },
+    [db],
+  );
 
   return { status, refresh, enable };
 }
