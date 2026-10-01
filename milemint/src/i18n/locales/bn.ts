@@ -120,7 +120,6 @@ const dictionary: Dictionary = {
   "Add a missed drive": "বাদ পড়া ট্রিপ যোগ করুন",
   "Add a missed trip": "বাদ পড়া ট্রিপ যোগ করুন",
   "Add another time": "আরেকটি সময় যোগ করুন",
-  "Add business purpose": "ব্যবসায়িক উদ্দেশ্য যোগ করুন",
   "Add missed trip": "বাদ পড়া ট্রিপ যোগ করুন",
   "Add missed trips by hand": "বাদ পড়া ট্রিপ নিজে যোগ করুন",
   "Added manually": "নিজে যোগ করা",
@@ -1105,6 +1104,32 @@ const dictionary: Dictionary = {
   "New drives aren’t being logged. Tap to turn tracking back on.": "নতুন ট্রিপ রেকর্ড হচ্ছে না। আবার ট্র্যাকিং চালু করতে ট্যাপ করুন।",
   "No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up.": "ট্রিপের মাঝখানে {{time}} থেকে কোনো লোকেশন পাওয়া যায়নি। আবার ট্র্যাকিং শুরু করতে MileMint খুলুন।",
   "Where your shift started": "যেখানে শিফট শুরু হয়েছে",
+  "Opens trip details": "ট্রিপের বিস্তারিত খোলে",
+  "Usual purpose · tap to change": "সাধারণ উদ্দেশ্য · বদলাতে ট্যাপ করুন",
+  "Purpose needed for your tax records": "ট্যাক্স রেকর্ডের জন্য উদ্দেশ্য দরকার",
+  "Shows only the drives that need a purpose": "শুধু যেসব ট্রিপে উদ্দেশ্য দরকার সেগুলো দেখায়",
+  "{{count}} work drives need a purpose": {
+    "one": "{{count}}টি ব্যবসায়িক ট্রিপে উদ্দেশ্য দরকার",
+    "other": "{{count}}টি ব্যবসায়িক ট্রিপে উদ্দেশ্য দরকার"
+  },
+  "{{authority}} expects a purpose for every business drive. One tap each.": "{{authority}} প্রতিটি ব্যবসায়িক ট্রিপের উদ্দেশ্য চায়। প্রতিটিতে একটি ট্যাপ।",
+  "Add purposes ›": "উদ্দেশ্য যোগ করুন ›",
+  "Every work drive has a purpose ✓": "প্রতিটি ব্যবসায়িক ট্রিপের উদ্দেশ্য আছে ✓",
+  "Show all drives": "সব ট্রিপ দেখান",
+  "{{count}} work drives have no purpose": {
+    "one": "{{count}}টি ব্যবসায়িক ট্রিপে কোনো উদ্দেশ্য নেই",
+    "other": "{{count}}টি ব্যবসায়িক ট্রিপে কোনো উদ্দেশ্য নেই"
+  },
+  "{{authority}} expects a purpose for every business drive. Add them before you export?": "{{authority}} প্রতিটি ব্যবসায়িক ট্রিপের উদ্দেশ্য চায়। এক্সপোর্টের আগে যোগ করবেন?",
+  "Export anyway": "তবুও এক্সপোর্ট করুন",
+  "Add purposes": "উদ্দেশ্য যোগ করুন",
+  "Usual business purpose": "সাধারণ ব্যবসায়িক উদ্দেশ্য",
+  "Clear": "সরান",
+  "Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one.": "যেসব ব্যবসায়িক ট্রিপে উদ্দেশ্য নেই সেগুলোতে এটি বসানো হয়, যাতে আপনার ট্যাক্স রেকর্ড সম্পূর্ণ থাকে। শিফটের ট্রিপে “ডেলিভারি” থাকে, যদি না আপনি অন্য কিছু বেছে নেন।",
+  "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.": "যেসব ব্যবসায়িক ট্রিপে উদ্দেশ্য নেই সেগুলোতে এটি বসানো হয়, যাতে আপনার ট্যাক্স রেকর্ড সম্পূর্ণ থাকে। আপনি যেকোনো ট্রিপে এটি বদলাতে পারেন।",
+  "None: ask me each time": "কোনোটি নয়: প্রতিবার জিজ্ঞেস করুন",
+  "What are most of your work drives for?": "আপনার বেশিরভাগ ব্যবসায়িক ট্রিপ কীসের জন্য?",
+  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "ট্যাক্স কর্তৃপক্ষ প্রতিটি ব্যবসায়িক ট্রিপের উদ্দেশ্য চায়। আমরা এটি আপনার হয়ে বসিয়ে দেব, আর আপনি যেকোনো ট্রিপে এটি বদলাতে পারবেন।"
 };
 
 export default dictionary;

@@ -120,7 +120,6 @@ const dictionary: Dictionary = {
   "Add a missed drive": "छूटी हुई ट्रिप जोड़ें",
   "Add a missed trip": "छूटी हुई ट्रिप जोड़ें",
   "Add another time": "एक और समय जोड़ें",
-  "Add business purpose": "बिज़नेस का मकसद जोड़ें",
   "Add missed trip": "छूटी ट्रिप जोड़ें",
   "Add missed trips by hand": "छूटी ट्रिप हाथ से जोड़ें",
   "Added manually": "हाथ से जोड़ी गई",
@@ -1105,6 +1104,32 @@ const dictionary: Dictionary = {
   "New drives aren’t being logged. Tap to turn tracking back on.": "नई ट्रिप लॉग नहीं हो रही हैं। ट्रैकिंग फिर चालू करने के लिए टैप करें।",
   "No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up.": "ट्रिप के बीच {{time}} से कोई स्थान नहीं मिला। ट्रैकिंग फिर से शुरू करने के लिए MileMint खोलें।",
   "Where your shift started": "जहां शिफ्ट शुरू हुई",
+  "Opens trip details": "ट्रिप की जानकारी खोलता है",
+  "Usual purpose · tap to change": "आम मकसद · बदलने के लिए टैप करें",
+  "Purpose needed for your tax records": "टैक्स रिकॉर्ड के लिए मकसद ज़रूरी है",
+  "Shows only the drives that need a purpose": "सिर्फ़ वे ट्रिप दिखाता है जिनमें मकसद चाहिए",
+  "{{count}} work drives need a purpose": {
+    "one": "{{count}} बिज़नेस ट्रिप में मकसद चाहिए",
+    "other": "{{count}} बिज़नेस ट्रिप में मकसद चाहिए"
+  },
+  "{{authority}} expects a purpose for every business drive. One tap each.": "{{authority}} हर बिज़नेस ट्रिप का मकसद मांगता है। हर एक पर बस एक टैप।",
+  "Add purposes ›": "मकसद जोड़ें ›",
+  "Every work drive has a purpose ✓": "हर बिज़नेस ट्रिप का मकसद है ✓",
+  "Show all drives": "सभी ट्रिप दिखाएँ",
+  "{{count}} work drives have no purpose": {
+    "one": "{{count}} बिज़नेस ट्रिप में मकसद नहीं है",
+    "other": "{{count}} बिज़नेस ट्रिप में मकसद नहीं है"
+  },
+  "{{authority}} expects a purpose for every business drive. Add them before you export?": "{{authority}} हर बिज़नेस ट्रिप का मकसद मांगता है। एक्सपोर्ट से पहले जोड़ें?",
+  "Export anyway": "फिर भी एक्सपोर्ट करें",
+  "Add purposes": "मकसद जोड़ें",
+  "Usual business purpose": "आम बिज़नेस मकसद",
+  "Clear": "हटाएँ",
+  "Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one.": "जिन बिज़नेस ट्रिप में मकसद नहीं है, उनमें यह भर दिया जाता है, ताकि आपके टैक्स रिकॉर्ड पूरे रहें। शिफ्ट की ट्रिप में “डिलीवरी” रहता है, जब तक आप कुछ और न चुनें।",
+  "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.": "जिन बिज़नेस ट्रिप में मकसद नहीं है, उनमें यह भर दिया जाता है, ताकि आपके टैक्स रिकॉर्ड पूरे रहें। आप इसे किसी भी ट्रिप में बदल सकते हैं।",
+  "None: ask me each time": "कोई नहीं: हर बार पूछें",
+  "What are most of your work drives for?": "आपकी ज़्यादातर बिज़नेस ट्रिप किस काम के लिए होती हैं?",
+  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "टैक्स विभाग हर बिज़नेस ट्रिप का मकसद मांगता है। हम इसे आपके लिए भर देंगे, और आप इसे किसी भी ट्रिप में बदल सकते हैं।"
 };
 
 export default dictionary;

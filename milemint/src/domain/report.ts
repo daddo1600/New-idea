@@ -97,6 +97,8 @@ export type MileageReport = {
   /** Everything else: personal and not yet classified. */
   otherDistance: number;
   unclassifiedCount: number;
+  /** Business drives (with a value) that have no purpose, which tax offices expect on every one. */
+  missingPurposeCount: number;
   /** Drives in the log whose value waits for Pro; not in any total. */
   lockedCount: number;
   deduction: number;
@@ -169,6 +171,7 @@ export function buildReport(
     commutingDistance: 0,
     otherDistance: 0,
     unclassifiedCount: 0,
+    missingPurposeCount: 0,
     lockedCount: 0,
     deduction: 0,
     byRate: [],
@@ -200,6 +203,7 @@ export function buildReport(
       continue;
     }
     report.totalDistance += row.distance;
+    if (row.trip.classification === 'business' && !row.trip.purpose.trim()) report.missingPurposeCount += 1;
     if (row.trip.classification === 'business') {
       report.businessDistance += row.distance;
       report.deduction += row.deduction;

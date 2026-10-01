@@ -187,6 +187,7 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
       suggestion,
       shiftMode: settings.shiftMode,
       defaultBusiness: settings.defaultBusiness,
+      defaultPurpose: settings.defaultPurpose,
     });
     const newTrip: NewTrip = {
       startedAt: started.toISOString(),
@@ -197,7 +198,7 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
       endLabel: last ? endLabel : cutLabels[index],
       distanceMeters: leg.drive.distanceMeters,
       classification: sorted.classification,
-      // Business without a learned purpose stays empty; the trip list asks for one.
+      // Business: the learned purpose, else the usual one; with neither it stays empty and the trip list asks.
       purpose: sorted.purpose,
       source: 'auto',
       startPlaceId: legStartPlace?.id ?? null,

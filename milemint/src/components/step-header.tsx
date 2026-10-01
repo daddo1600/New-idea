@@ -30,9 +30,15 @@ const GLYPHS: Record<StepGlyph, ReactNode> = {
       <Rect x={10} y={14} width={4} height={6} />
     </>
   ),
+  briefcase: (
+    <>
+      <Rect x={3} y={7} width={18} height={13} rx={2} />
+      <Path d="M9 7V4.5h6V7M3 12.5h18" />
+    </>
+  ),
 };
 
-export type StepGlyph = 'globe' | 'location' | 'clock' | 'home';
+export type StepGlyph = 'globe' | 'location' | 'clock' | 'home' | 'briefcase';
 
 /**
  * The top of each set-up step: a green brand card like the home screen's,

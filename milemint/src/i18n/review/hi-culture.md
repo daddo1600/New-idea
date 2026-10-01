@@ -260,3 +260,28 @@ Tracking health: home card, Settings “ट्रैकिंग की जा�
 | English | hi | Back-translation | Note |
 |---|---|---|---|
 | Where your shift started | जहां शिफ्ट शुरू हुई | Where the shift started | Mirrors the existing "Where your shift ended" line, same length and register. |
+
+## Round 8b: business purpose
+
+| English | hi | Back-translation | Note |
+|---|---|---|---|
+| Opens trip details | ट्रिप की जानकारी खोलता है | Opens the trip information | Matches the row’s existing hint. |
+| Usual purpose · tap to change | आम मकसद · बदलने के लिए टैप करें | Usual purpose · tap to change | *मकसद* as in “बिज़नेस का मकसद”. |
+| Purpose needed for your tax records | टैक्स रिकॉर्ड के लिए मकसद ज़रूरी है | A purpose is necessary for tax records | Natural, fits its place. |
+| Shows only the drives that need a purpose | सिर्फ़ वे ट्रिप दिखाता है जिनमें मकसद चाहिए | Shows only the trips that need a purpose | Natural, fits its place. |
+| {{count}} work drives need a purpose | one: {{count}} बिज़नेस ट्रिप में मकसद चाहिए / other: {{count}} बिज़नेस ट्रिप में मकसद चाहिए | {{count}} business trip(s) need a purpose | Same form for one/other, as in the file. |
+| {{authority}} expects a purpose for every business drive. One tap each. | {{authority}} हर बिज़नेस ट्रिप का मकसद मांगता है। हर एक पर बस एक टैप। | {{authority}} asks for every business trip’s purpose. Just one tap on each. | Natural, fits its place. |
+| Add purposes › | मकसद जोड़ें › | Add purposes › | Natural, fits its place. |
+| Every work drive has a purpose ✓ | हर बिज़नेस ट्रिप का मकसद है ✓ | Every business trip has a purpose ✓ | Natural, fits its place. |
+| Show all drives | सभी ट्रिप दिखाएँ | Show all trips | Natural, fits its place. |
+| {{count}} work drives have no purpose | one: {{count}} बिज़नेस ट्रिप में मकसद नहीं है / other: {{count}} बिज़नेस ट्रिप में मकसद नहीं है | {{count}} business trip(s) have no purpose | Natural, fits its place. |
+| {{authority}} expects a purpose for every business drive. Add them before you export? | {{authority}} हर बिज़नेस ट्रिप का मकसद मांगता है। एक्सपोर्ट से पहले जोड़ें? | {{authority}} asks for every business trip’s purpose. Add before export? | Natural, fits its place. |
+| Export anyway | फिर भी एक्सपोर्ट करें | Export anyway | Natural, fits its place. |
+| Add purposes | मकसद जोड़ें | Add purposes | Natural, fits its place. |
+| Usual business purpose | आम बिज़नेस मकसद | Usual business purpose | Natural, fits its place. |
+| Clear | हटाएँ | Remove | “डिलीट करें” is kept for deleting trips. |
+| Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one. | जिन बिज़नेस ट्रिप में मकसद नहीं है, उनमें यह भर दिया जाता है, ताकि आपके टैक्स रिकॉर्ड पूरे रहें। शिफ्ट की ट्रिप में “डिलीवरी” रहता है, जब तक आप कुछ और न चुनें। | It is filled into business trips that have no purpose, so your tax records stay complete. Shift trips keep “Delivery” unless you choose something else. | *शिफ्ट* as in “ऑटो: शिफ्ट पर”. |
+| Filled in for work drives that have none, so your tax records are complete. You can change it on any trip. | जिन बिज़नेस ट्रिप में मकसद नहीं है, उनमें यह भर दिया जाता है, ताकि आपके टैक्स रिकॉर्ड पूरे रहें। आप इसे किसी भी ट्रिप में बदल सकते हैं। | It is filled into business trips that have no purpose, so your tax records stay complete. You can change it in any trip. | Natural, fits its place. |
+| None: ask me each time | कोई नहीं: हर बार पूछें | None: ask every time | Natural, fits its place. |
+| What are most of your work drives for? | आपकी ज़्यादातर बिज़नेस ट्रिप किस काम के लिए होती हैं? | What work are most of your business trips for? | Natural, fits its place. |
+| Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip. | टैक्स विभाग हर बिज़नेस ट्रिप का मकसद मांगता है। हम इसे आपके लिए भर देंगे, और आप इसे किसी भी ट्रिप में बदल सकते हैं। | The tax department asks for every business trip’s purpose. We’ll fill it in for you, and you can change it in any trip. | Natural, fits its place. |

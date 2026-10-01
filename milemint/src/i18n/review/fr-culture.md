@@ -234,3 +234,28 @@ Tracking health: home card, Settings “État du suivi” row and background not
 | English | fr | Back-translation | Note |
 |---|---|---|---|
 | Where your shift started | Lieu de début du quart | Place where the shift started | Mirrors the existing "Where your shift ended" line, same length and register. |
+
+## Round 8b: business purpose
+
+| English | fr | Back-translation | Note |
+|---|---|---|---|
+| Opens trip details | Ouvre les détails du trajet | Opens the trip details | Matches the row’s existing hint. |
+| Usual purpose · tap to change | Motif habituel · touchez pour changer | Usual reason · tap to change | *Motif* as in “Motif professionnel”. |
+| Purpose needed for your tax records | Motif requis pour vos dossiers fiscaux | Reason required for your tax records | Amber box title; *requis* is clear without being alarming. |
+| Shows only the drives that need a purpose | Affiche seulement les trajets sans motif | Shows only the trips without a reason | Natural, fits its place. |
+| {{count}} work drives need a purpose | one: {{count}} trajet d’affaires a besoin d’un motif / many: {{count}} trajets d’affaires ont besoin d’un motif / other: {{count}} trajets d’affaires ont besoin d’un motif | {{count}} business trip(s) need(s) a reason | *trajet d’affaires* as in the free-plan line. |
+| {{authority}} expects a purpose for every business drive. One tap each. | {{authority}} exige un motif pour chaque trajet d’affaires. Une touche suffit. | {{authority}} requires a reason for each business trip. One tap is enough. | “Une touche suffit” is more natural than “une touche chacun”. |
+| Add purposes › | Ajouter les motifs › | Add the reasons › | Natural, fits its place. |
+| Every work drive has a purpose ✓ | Chaque trajet d’affaires a son motif ✓ | Each business trip has its reason ✓ | Natural, fits its place. |
+| Show all drives | Voir tous les trajets | See all trips | Natural, fits its place. |
+| {{count}} work drives have no purpose | one: {{count}} trajet d’affaires n’a pas de motif / many: {{count}} trajets d’affaires n’ont pas de motif / other: {{count}} trajets d’affaires n’ont pas de motif | {{count}} business trip(s) has/have no reason | Natural, fits its place. |
+| {{authority}} expects a purpose for every business drive. Add them before you export? | {{authority}} exige un motif pour chaque trajet d’affaires. Les ajouter avant d’exporter ? | {{authority}} requires a reason for each business trip. Add them before exporting? | Narrow space before “?” per French typography, as elsewhere in the file. |
+| Export anyway | Exporter quand même | Export anyway | Natural, fits its place. |
+| Add purposes | Ajouter les motifs | Add the reasons | Natural, fits its place. |
+| Usual business purpose | Motif professionnel habituel | Usual business reason | Natural, fits its place. |
+| Clear | Effacer | Erase | Natural, fits its place. |
+| Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one. | Ajouté aux trajets d’affaires qui n’en ont pas, pour des dossiers fiscaux complets. Les trajets pendant un quart utilisent « Livraisons », sauf si vous en choisissez un. | Added to business trips that have none, for complete tax records. Trips during a shift use “Deliveries” unless you choose one. | *quart* as in “Auto : pendant un quart” (Canadian usage too). |
+| Filled in for work drives that have none, so your tax records are complete. You can change it on any trip. | Ajouté aux trajets d’affaires qui n’en ont pas, pour des dossiers fiscaux complets. Modifiable sur chaque trajet. | Added to business trips that have none, for complete tax records. Can be changed on each trip. | Natural, fits its place. |
+| None: ask me each time | Aucun : me demander à chaque fois | None: ask me each time | Natural, fits its place. |
+| What are most of your work drives for? | À quoi servent la plupart de vos trajets d’affaires ? | What do most of your business trips serve? | Idiomatic “À quoi servent…”. |
+| Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip. | Le fisc exige un motif pour chaque trajet d’affaires. Nous le remplirons pour vous, et vous pourrez le changer sur n’importe quel trajet. | The tax office requires a reason for each business trip. We’ll fill it in for you, and you can change it on any trip. | *Le fisc* is the everyday term in France and Quebec. |

@@ -1,12 +1,14 @@
 import * as Crypto from 'expo-crypto';
 import type { SQLiteDatabase } from 'expo-sqlite';
 
+import { SHIFT_PURPOSE, usualPurpose } from '@/domain/auto-classify';
 import type { AutoReason, ClassifiedTrip } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
 import { roundRoute } from '@/domain/polyline';
 import { splitRoute } from '@/domain/shift-split';
 import { toLocalIsoDate, type Classification, type Trip, type TripSource, type VehicleType } from '@/domain/trip';
 
+import { loadSettings } from './settings-repo';
 import { inWriteTransaction, withWriteLock } from './transaction';
 
 type TripRow = {
@@ -58,15 +60,31 @@ type AutoFields = 'startPlaceId' | 'endPlaceId' | 'autoReason' | 'vehicle' | 've
 export type NewTrip = Omit<Trip, 'id' | 'createdAt' | AutoFields> & Partial<Pick<Trip, AutoFields>>;
 
 export async function listTrips(db: SQLiteDatabase): Promise<Trip[]> {
-  const [rows, rejoined] = await Promise.all([
+  const [rows, rejoined, filled] = await Promise.all([
     db.getAllAsync<TripRow>('SELECT * FROM trips ORDER BY local_date DESC, started_at DESC;'),
     listRejoinedAt(db),
+    listFilledPurposeIds(db),
   ]);
   return rows.map((row) => {
     const trip = fromRow(row);
     const at = rejoined.get(trip.id);
-    return at ? { ...trip, rejoinedAt: at } : trip;
+    const withRejoined = at ? { ...trip, rejoinedAt: at } : trip;
+    return filled.has(trip.id) && trip.purpose ? { ...withRejoined, purposeFilled: true } : withRejoined;
   });
+}
+
+/**
+ * Trips whose purpose the app filled in (learned from a route, or the usual
+ * purpose) and the user hasn't changed since: the last purpose entry in the
+ * edit log is an automatic one.
+ */
+async function listFilledPurposeIds(db: SQLiteDatabase): Promise<Set<string>> {
+  const rows = await db.getAllAsync<{ trip_id: string }>(
+    `SELECT e.trip_id FROM trip_edits e
+       JOIN (SELECT MAX(id) AS id FROM trip_edits WHERE field = 'purpose' GROUP BY trip_id) last ON last.id = e.id
+      WHERE e.action = 'auto';`,
+  );
+  return new Set(rows.map((row) => row.trip_id));
 }
 
 /**
@@ -319,8 +337,7 @@ export async function splitTripUnlocked(
   );
 }
 
-/** What a drive in a shift is for, unless the user's history says otherwise. */
-export const SHIFT_PURPOSE = 'Deliveries';
+export { SHIFT_PURPOSE };
 
 /**
  * Moves a saved drive into a shift or out of it (a shift's times were
@@ -365,7 +382,12 @@ export async function setTripShiftUnlocked(db: SQLiteDatabase, tripId: string, s
  * edits then leave alone (no audit rows for a trip that doesn't exist).
  */
 
-/** Sets a trip's classification. */
+/**
+ * Sets a trip's classification. A drive marked business with no purpose gets
+ * the user's usual purpose (settings; "Deliveries" in shift mode), logged as
+ * filled in by the app so it reads apart from one the user chose, and shown
+ * in the trip list as "Usual purpose · tap to change".
+ */
 export async function setClassification(
   db: SQLiteDatabase,
   trip: Pick<Trip, 'id'>,
@@ -377,6 +399,7 @@ export async function setClassification(
     // Any choice by the user, even re-tapping an automatic one, makes it theirs:
     // the auto note disappears and the trip starts counting towards learned routes.
     if (saved.classification === classification && !saved.autoReason) return;
+    const usual = classification === 'business' && !saved.purpose.trim() ? usualPurpose(await loadSettings(db)) : null;
     await db.runAsync(
       'UPDATE trips SET classification = ?, auto_reason = NULL, auto_default = 0 WHERE id = ?;',
       classification,
@@ -387,6 +410,10 @@ export async function setClassification(
     }
     if (saved.autoReason) {
       await logEdit(db, saved.id, 'update', 'auto_reason', saved.autoReason, null);
+    }
+    if (usual) {
+      await db.runAsync('UPDATE trips SET purpose = ? WHERE id = ?;', usual, saved.id);
+      await logEdit(db, saved.id, 'auto', 'purpose', saved.purpose, usual);
     }
   });
 }
@@ -411,11 +438,26 @@ export async function updateTripDetails(
     if (!saved) return;
     for (const key of keys) {
       const value = changes[key] as string;
-      if (value === saved[key]) continue;
+      if (value === saved[key]) {
+        // Saving the purpose the app filled in, unchanged: the user has checked it, and it's theirs now.
+        if (key === 'purpose' && value && (await purposeWasFilled(db, saved.id))) {
+          await logEdit(db, saved.id, 'update', 'purpose', value, value);
+        }
+        continue;
+      }
       await db.runAsync(`UPDATE trips SET ${columns[key]} = ? WHERE id = ?;`, value, saved.id);
       await logEdit(db, saved.id, 'update', columns[key], saved[key], value);
     }
   });
+}
+
+/** Whether the last change to a trip's purpose was the app filling it in. */
+async function purposeWasFilled(db: SQLiteDatabase, tripId: string): Promise<boolean> {
+  const row = await db.getFirstAsync<{ action: string }>(
+    "SELECT action FROM trip_edits WHERE trip_id = ? AND field = 'purpose' ORDER BY id DESC LIMIT 1;",
+    tripId,
+  );
+  return row?.action === 'auto';
 }
 
 /**

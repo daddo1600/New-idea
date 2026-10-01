@@ -56,6 +56,12 @@ export type Trip = {
    * ended (or during a pause): not work, and left for the user to sort.
    */
   offShiftId?: string | null;
+  /**
+   * The purpose was filled in by the app (learned from the route, or the
+   * user's usual purpose) and not changed since (from the edit log), so the
+   * trip list can offer to check it.
+   */
+  purposeFilled?: boolean;
 };
 
 export const METERS_PER_MILE = 1609.344;

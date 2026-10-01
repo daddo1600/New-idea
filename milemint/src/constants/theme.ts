@@ -17,6 +17,8 @@ export const Colors = {
     accent: '#0B7A55',
     onAccent: '#FFFFFF',
     danger: '#C62828',
+    /** Amber: something to check or finish (a missed drive, a missing purpose), not an error. */
+    warning: '#CA8A04',
   },
   dark: {
     text: '#ffffff',
@@ -27,6 +29,7 @@ export const Colors = {
     accent: '#34D399',
     onAccent: '#04130D',
     danger: '#FF6B6B',
+    warning: '#CA8A04',
   },
 } as const;
 

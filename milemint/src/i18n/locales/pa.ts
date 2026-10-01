@@ -132,7 +132,6 @@ const dictionary: Dictionary = {
   "Add a missed drive": "ਰਹਿ ਗਿਆ ਟ੍ਰਿਪ ਜੋੜੋ",
   "Add a missed trip": "ਰਹਿ ਗਿਆ ਟ੍ਰਿਪ ਜੋੜੋ",
   "Add another time": "ਇੱਕ ਹੋਰ ਸਮਾਂ ਜੋੜੋ",
-  "Add business purpose": "ਬਿਜ਼ਨਸ ਮਕਸਦ ਜੋੜੋ",
   "Add missed trip": "ਰਹਿ ਗਿਆ ਟ੍ਰਿਪ ਜੋੜੋ",
   "Add missed trips by hand": "ਰਹਿ ਗਏ ਟ੍ਰਿਪ ਹੱਥੀਂ ਜੋੜੋ",
   "Added manually": "ਹੱਥੀਂ ਜੋੜਿਆ",
@@ -1117,6 +1116,32 @@ const dictionary: Dictionary = {
   "New drives aren’t being logged. Tap to turn tracking back on.": "ਨਵੇਂ ਟ੍ਰਿਪ ਦਰਜ ਨਹੀਂ ਹੋ ਰਹੇ। ਟ੍ਰੈਕਿੰਗ ਮੁੜ ਚਾਲੂ ਕਰਨ ਲਈ ਟੈਪ ਕਰੋ।",
   "No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up.": "ਟ੍ਰਿਪ ਦੇ ਵਿਚਕਾਰ {{time}} ਤੋਂ ਕੋਈ ਟਿਕਾਣਾ ਨਹੀਂ ਮਿਲਿਆ। ਟ੍ਰੈਕਿੰਗ ਮੁੜ ਸ਼ੁਰੂ ਕਰਨ ਲਈ MileMint ਖੋਲ੍ਹੋ।",
   "Where your shift started": "ਜਿੱਥੇ ਸ਼ਿਫਟ ਸ਼ੁਰੂ ਹੋਈ",
+  "Opens trip details": "ਟ੍ਰਿਪ ਦਾ ਵੇਰਵਾ ਖੋਲ੍ਹਦਾ ਹੈ",
+  "Usual purpose · tap to change": "ਆਮ ਮਕਸਦ · ਬਦਲਣ ਲਈ ਟੈਪ ਕਰੋ",
+  "Purpose needed for your tax records": "ਟੈਕਸ ਰਿਕਾਰਡ ਲਈ ਮਕਸਦ ਲੋੜੀਂਦਾ ਹੈ",
+  "Shows only the drives that need a purpose": "ਸਿਰਫ਼ ਉਹ ਟ੍ਰਿਪ ਦਿਖਾਉਂਦਾ ਹੈ ਜਿਨ੍ਹਾਂ ਨੂੰ ਮਕਸਦ ਚਾਹੀਦਾ ਹੈ",
+  "{{count}} work drives need a purpose": {
+    "one": "{{count}} ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ਨੂੰ ਮਕਸਦ ਚਾਹੀਦਾ ਹੈ",
+    "other": "{{count}} ਬਿਜ਼ਨਸ ਟ੍ਰਿਪਾਂ ਨੂੰ ਮਕਸਦ ਚਾਹੀਦਾ ਹੈ"
+  },
+  "{{authority}} expects a purpose for every business drive. One tap each.": "{{authority}} ਹਰ ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ਦਾ ਮਕਸਦ ਮੰਗਦਾ ਹੈ। ਹਰ ਇੱਕ ਲਈ ਬੱਸ ਇੱਕ ਟੈਪ।",
+  "Add purposes ›": "ਮਕਸਦ ਜੋੜੋ ›",
+  "Every work drive has a purpose ✓": "ਹਰ ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ਦਾ ਮਕਸਦ ਹੈ ✓",
+  "Show all drives": "ਸਾਰੇ ਟ੍ਰਿਪ ਦਿਖਾਓ",
+  "{{count}} work drives have no purpose": {
+    "one": "{{count}} ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ਦਾ ਕੋਈ ਮਕਸਦ ਨਹੀਂ",
+    "other": "{{count}} ਬਿਜ਼ਨਸ ਟ੍ਰਿਪਾਂ ਦਾ ਕੋਈ ਮਕਸਦ ਨਹੀਂ"
+  },
+  "{{authority}} expects a purpose for every business drive. Add them before you export?": "{{authority}} ਹਰ ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ਦਾ ਮਕਸਦ ਮੰਗਦਾ ਹੈ। ਐਕਸਪੋਰਟ ਤੋਂ ਪਹਿਲਾਂ ਜੋੜਨੇ ਹਨ?",
+  "Export anyway": "ਫਿਰ ਵੀ ਐਕਸਪੋਰਟ ਕਰੋ",
+  "Add purposes": "ਮਕਸਦ ਜੋੜੋ",
+  "Usual business purpose": "ਆਮ ਬਿਜ਼ਨਸ ਮਕਸਦ",
+  "Clear": "ਹਟਾਓ",
+  "Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one.": "ਜਿਨ੍ਹਾਂ ਬਿਜ਼ਨਸ ਟ੍ਰਿਪਾਂ ਦਾ ਮਕਸਦ ਨਹੀਂ, ਉਨ੍ਹਾਂ ਵਿੱਚ ਇਹ ਭਰਿਆ ਜਾਂਦਾ ਹੈ, ਤਾਂ ਜੋ ਤੁਹਾਡੇ ਟੈਕਸ ਰਿਕਾਰਡ ਪੂਰੇ ਰਹਿਣ। ਸ਼ਿਫਟ ਦੇ ਟ੍ਰਿਪ “ਡਿਲੀਵਰੀਆਂ” ਵਰਤਦੇ ਹਨ, ਜਦ ਤੱਕ ਤੁਸੀਂ ਕੋਈ ਹੋਰ ਨਾ ਚੁਣੋ।",
+  "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.": "ਜਿਨ੍ਹਾਂ ਬਿਜ਼ਨਸ ਟ੍ਰਿਪਾਂ ਦਾ ਮਕਸਦ ਨਹੀਂ, ਉਨ੍ਹਾਂ ਵਿੱਚ ਇਹ ਭਰਿਆ ਜਾਂਦਾ ਹੈ, ਤਾਂ ਜੋ ਤੁਹਾਡੇ ਟੈਕਸ ਰਿਕਾਰਡ ਪੂਰੇ ਰਹਿਣ। ਤੁਸੀਂ ਇਸਨੂੰ ਕਿਸੇ ਵੀ ਟ੍ਰਿਪ ਵਿੱਚ ਬਦਲ ਸਕਦੇ ਹੋ।",
+  "None: ask me each time": "ਕੋਈ ਨਹੀਂ: ਹਰ ਵਾਰ ਪੁੱਛੋ",
+  "What are most of your work drives for?": "ਤੁਹਾਡੇ ਜ਼ਿਆਦਾਤਰ ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ਕਿਸ ਕੰਮ ਲਈ ਹੁੰਦੇ ਹਨ?",
+  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "ਟੈਕਸ ਵਿਭਾਗ ਹਰ ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ਦਾ ਮਕਸਦ ਮੰਗਦਾ ਹੈ। ਅਸੀਂ ਇਹ ਤੁਹਾਡੇ ਲਈ ਭਰ ਦੇਵਾਂਗੇ, ਅਤੇ ਤੁਸੀਂ ਇਸਨੂੰ ਕਿਸੇ ਵੀ ਟ੍ਰਿਪ ਵਿੱਚ ਬਦਲ ਸਕਦੇ ਹੋ।"
 };
 
 export default dictionary;

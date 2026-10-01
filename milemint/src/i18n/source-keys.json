@@ -48,6 +48,19 @@
     ]
   },
   {
+    "key": "{{authority}} expects a purpose for every business drive. Add them before you export?",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "{{authority}} expects a purpose for every business drive. One tap each.",
+    "files": [
+      "app/index.tsx",
+      "app/report.tsx"
+    ]
+  },
+  {
     "key": "{{authority}} has no per-km rate for this vehicle.",
     "files": [
       "domain/regions.ts"
@@ -196,6 +209,18 @@
     "key": "{{count}} trips aren’t classified yet. Sort them first so the report is complete.",
     "files": [
       "app/report.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} work drives have no purpose",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} work drives need a purpose",
+    "files": [
+      "app/index.tsx"
     ]
   },
   {
@@ -738,12 +763,6 @@
     ]
   },
   {
-    "key": "Add business purpose",
-    "files": [
-      "app/index.tsx"
-    ]
-  },
-  {
     "key": "Add initials or a client number if you like. Never a name or address.",
     "files": [
       "components/purpose-picker.tsx"
@@ -760,6 +779,19 @@
     "key": "Add missed trips by hand",
     "files": [
       "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Add purposes",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Add purposes ›",
+    "files": [
+      "app/index.tsx",
+      "app/report.tsx"
     ]
   },
   {
@@ -1213,6 +1245,7 @@
   {
     "key": "Business purpose: {{purpose}}",
     "files": [
+      "app/index.tsx",
       "components/purpose-picker.tsx"
     ]
   },
@@ -1383,6 +1416,12 @@
   },
   {
     "key": "Classify by work hours",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Clear",
     "files": [
       "app/settings.tsx"
     ]
@@ -1721,6 +1760,7 @@
     "files": [
       "app/add-trip.tsx",
       "app/friends.tsx",
+      "app/index.tsx",
       "app/pro.tsx"
     ]
   },
@@ -2135,6 +2175,12 @@
     ]
   },
   {
+    "key": "Every work drive has a purpose ✓",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
     "key": "Every year",
     "files": [
       "app/tax-dates.tsx"
@@ -2148,6 +2194,12 @@
   },
   {
     "key": "Export",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Export anyway",
     "files": [
       "app/report.tsx"
     ]
@@ -2198,6 +2250,18 @@
     "key": "Files are shared straight from your iPhone. MileMint never uploads them. Deductions are estimates, not tax advice.",
     "files": [
       "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.",
+    "files": [
+      "app/settings.tsx"
     ]
   },
   {
@@ -3463,6 +3527,12 @@
     ]
   },
   {
+    "key": "None: ask me each time",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "Not a drive",
     "files": [
       "components/tracking-health-card.tsx"
@@ -3708,6 +3778,12 @@
     ]
   },
   {
+    "key": "Opens trip details",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
     "key": "Opens trip details. Long press to delete",
     "files": [
       "app/index.tsx"
@@ -3773,6 +3849,7 @@
   {
     "key": "Other…",
     "files": [
+      "app/index.tsx",
       "components/purpose-picker.tsx"
     ]
   },
@@ -3991,6 +4068,12 @@
     "key": "Pro is active: unlimited automatic drives.",
     "files": [
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Purpose needed for your tax records",
+    "files": [
+      "app/index.tsx"
     ]
   },
   {
@@ -4513,9 +4596,22 @@
     ]
   },
   {
+    "key": "Show all drives",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
     "key": "Show drives ▾",
     "files": [
       "components/shift-row.tsx"
+    ]
+  },
+  {
+    "key": "Shows only the drives that need a purpose",
+    "files": [
+      "app/index.tsx",
+      "app/report.tsx"
     ]
   },
   {
@@ -4914,6 +5010,12 @@
     "key": "Tax dates ›",
     "files": [
       "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.",
+    "files": [
+      "app/welcome.tsx"
     ]
   },
   {
@@ -5476,6 +5578,18 @@
     ]
   },
   {
+    "key": "Usual business purpose",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Usual purpose · tap to change",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
     "key": "Valid for the {{first}} to {{last}} income years, unless your work or your car changes.",
     "files": [
       "app/logbook.tsx"
@@ -5548,6 +5662,12 @@
     "key": "Well, technically it’s your money. Sort this week’s drives to claim it back.",
     "files": [
       "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "What are most of your work drives for?",
+    "files": [
+      "app/welcome.tsx"
     ]
   },
   {

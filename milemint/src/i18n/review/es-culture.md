@@ -247,3 +247,28 @@ Tracking health: the home card that says when tracking stopped (and offers to ad
 | English | es | Back-translation | Note |
 |---|---|---|---|
 | Where your shift started | Donde empezó tu turno | Where your shift started | Mirrors the existing "Where your shift ended" line, same length and register. |
+
+## Round 8b: business purpose
+
+| English | es | Back-translation | Note |
+|---|---|---|---|
+| Opens trip details | Abre los detalles del viaje | Opens the trip details | Accessibility hint; matches “Abre los detalles del viaje. Mantén presionado…”. |
+| Usual purpose · tap to change | Motivo habitual · toca para cambiarlo | Usual reason · tap to change it | Quiet note under the row; *motivo* as in “Motivo de trabajo”. |
+| Purpose needed for your tax records | Falta el motivo para tus registros fiscales | The reason for your tax records is missing | “Falta…” reads as a gentle alert in es-419; 43 chars, wraps once in the amber box. |
+| Shows only the drives that need a purpose | Muestra solo los viajes que necesitan un motivo | Shows only the trips that need a reason | Accessibility hint. |
+| {{count}} work drives need a purpose | one: {{count}} viaje de trabajo necesita un motivo / many: {{count}} viajes de trabajo necesitan un motivo / other: {{count}} viajes de trabajo necesitan un motivo | {{count}} work trip(s) need(s) a reason | one/many/other. *Viaje de trabajo* as in the free-plan line. |
+| {{authority}} expects a purpose for every business drive. One tap each. | {{authority}} pide un motivo para cada viaje de trabajo. Un toque cada uno. | {{authority}} asks for a reason for each work trip. One tap each. | *pide* as in “{{authority}} pide un motivo de trabajo”. |
+| Add purposes › | Agregar motivos › | Add reasons › | *Agregar* as in “Agregar motivo de trabajo” (es-419). |
+| Every work drive has a purpose ✓ | Todos los viajes de trabajo tienen motivo ✓ | All work trips have a reason ✓ | Natural, fits its place. |
+| Show all drives | Ver todos los viajes | See all trips | Link in the bar; short. |
+| {{count}} work drives have no purpose | one: {{count}} viaje de trabajo no tiene motivo / many: {{count}} viajes de trabajo no tienen motivo / other: {{count}} viajes de trabajo no tienen motivo | {{count}} work trip(s) has/have no reason | Report warning and alert title. |
+| {{authority}} expects a purpose for every business drive. Add them before you export? | {{authority}} pide un motivo para cada viaje de trabajo. ¿Los agregas antes de exportar? | {{authority}} asks for a reason for each work trip. Will you add them before exporting? | Friendly *¿Los agregas…?* offer, as in other es-419 prompts. |
+| Export anyway | Exportar de todos modos | Export anyway | Alert button. |
+| Add purposes | Agregar motivos | Add reasons | Alert button. |
+| Usual business purpose | Motivo de trabajo habitual | Usual work reason | Settings row title. |
+| Clear | Borrar | Erase | Clears the setting; *Eliminar* is kept for deleting trips. |
+| Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one. | Se completa en los viajes de trabajo que no lo tengan, para que tus registros fiscales estén completos. Los viajes de un turno usan “Entregas” salvo que elijas otro. | It’s filled in on work trips that don’t have one, so your tax records are complete. Trips in a shift use “Deliveries” unless you choose another. | *turno* as in “Automático: en turno”. |
+| Filled in for work drives that have none, so your tax records are complete. You can change it on any trip. | Se completa en los viajes de trabajo que no lo tengan, para que tus registros fiscales estén completos. Puedes cambiarlo en cualquier viaje. | It’s filled in on work trips that don’t have one, so your tax records are complete. You can change it on any trip. | Natural, fits its place. |
+| None: ask me each time | Ninguno: preguntarme cada vez | None: ask me each time | Placeholder in the picker field. |
+| What are most of your work drives for? | ¿Para qué son la mayoría de tus viajes de trabajo? | What are most of your work trips for? | Onboarding title; natural question form. |
+| Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip. | Las autoridades fiscales piden un motivo para cada viaje de trabajo. Lo completaremos por ti y podrás cambiarlo en cualquier viaje. | Tax authorities ask for a reason for every work trip. We’ll fill it in for you and you can change it on any trip. | Generic “autoridades fiscales”: no country named before the region is known in every case. |

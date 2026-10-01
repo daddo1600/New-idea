@@ -139,7 +139,6 @@ const dictionary: Dictionary = {
   "Add a missed drive": "Agregar viaje faltante",
   "Add a missed trip": "Agregar un viaje faltante",
   "Add another time": "Agregar otro horario",
-  "Add business purpose": "Agregar motivo de trabajo",
   "Add missed trip": "Agregar viaje faltante",
   "Add missed trips by hand": "Agrega a mano los viajes que faltaron",
   "Added manually": "Agregado a mano",
@@ -1153,6 +1152,34 @@ const dictionary: Dictionary = {
   "New drives aren’t being logged. Tap to turn tracking back on.": "Los viajes nuevos no se están registrando. Toca para reactivar el seguimiento.",
   "No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up.": "Sin ubicación desde {{time}}, a mitad de un viaje. Abre MileMint para retomarlo.",
   "Where your shift started": "Donde empezó tu turno",
+  "Opens trip details": "Abre los detalles del viaje",
+  "Usual purpose · tap to change": "Motivo habitual · toca para cambiarlo",
+  "Purpose needed for your tax records": "Falta el motivo para tus registros fiscales",
+  "Shows only the drives that need a purpose": "Muestra solo los viajes que necesitan un motivo",
+  "{{count}} work drives need a purpose": {
+    "one": "{{count}} viaje de trabajo necesita un motivo",
+    "many": "{{count}} viajes de trabajo necesitan un motivo",
+    "other": "{{count}} viajes de trabajo necesitan un motivo"
+  },
+  "{{authority}} expects a purpose for every business drive. One tap each.": "{{authority}} pide un motivo para cada viaje de trabajo. Un toque cada uno.",
+  "Add purposes ›": "Agregar motivos ›",
+  "Every work drive has a purpose ✓": "Todos los viajes de trabajo tienen motivo ✓",
+  "Show all drives": "Ver todos los viajes",
+  "{{count}} work drives have no purpose": {
+    "one": "{{count}} viaje de trabajo no tiene motivo",
+    "many": "{{count}} viajes de trabajo no tienen motivo",
+    "other": "{{count}} viajes de trabajo no tienen motivo"
+  },
+  "{{authority}} expects a purpose for every business drive. Add them before you export?": "{{authority}} pide un motivo para cada viaje de trabajo. ¿Los agregas antes de exportar?",
+  "Export anyway": "Exportar de todos modos",
+  "Add purposes": "Agregar motivos",
+  "Usual business purpose": "Motivo de trabajo habitual",
+  "Clear": "Borrar",
+  "Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one.": "Se completa en los viajes de trabajo que no lo tengan, para que tus registros fiscales estén completos. Los viajes de un turno usan “Entregas” salvo que elijas otro.",
+  "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.": "Se completa en los viajes de trabajo que no lo tengan, para que tus registros fiscales estén completos. Puedes cambiarlo en cualquier viaje.",
+  "None: ask me each time": "Ninguno: preguntarme cada vez",
+  "What are most of your work drives for?": "¿Para qué son la mayoría de tus viajes de trabajo?",
+  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "Las autoridades fiscales piden un motivo para cada viaje de trabajo. Lo completaremos por ti y podrás cambiarlo en cualquier viaje."
 };
 
 export default dictionary;

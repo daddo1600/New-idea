@@ -179,7 +179,6 @@ const dictionary: Dictionary = {
   "Add a missed drive": "Ajouter un trajet oublié",
   "Add a missed trip": "Ajouter un trajet oublié",
   "Add another time": "Ajouter une autre plage",
-  "Add business purpose": "Ajouter le motif professionnel",
   "Add missed trip": "Ajouter un trajet oublié",
   "Add missed trips by hand": "Ajout à la main des trajets oubliés",
   "Added manually": "Ajouté manuellement",
@@ -1193,6 +1192,34 @@ const dictionary: Dictionary = {
   "New drives aren’t being logged. Tap to turn tracking back on.": "Les nouveaux trajets ne sont pas enregistrés. Touchez pour réactiver le suivi.",
   "No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up.": "Aucune position depuis {{time}}, en plein trajet. Ouvrez MileMint pour reprendre le suivi.",
   "Where your shift started": "Lieu de début du quart",
+  "Opens trip details": "Ouvre les détails du trajet",
+  "Usual purpose · tap to change": "Motif habituel · touchez pour changer",
+  "Purpose needed for your tax records": "Motif requis pour vos dossiers fiscaux",
+  "Shows only the drives that need a purpose": "Affiche seulement les trajets sans motif",
+  "{{count}} work drives need a purpose": {
+    "one": "{{count}} trajet d’affaires a besoin d’un motif",
+    "many": "{{count}} trajets d’affaires ont besoin d’un motif",
+    "other": "{{count}} trajets d’affaires ont besoin d’un motif"
+  },
+  "{{authority}} expects a purpose for every business drive. One tap each.": "{{authority}} exige un motif pour chaque trajet d’affaires. Une touche suffit.",
+  "Add purposes ›": "Ajouter les motifs ›",
+  "Every work drive has a purpose ✓": "Chaque trajet d’affaires a son motif ✓",
+  "Show all drives": "Voir tous les trajets",
+  "{{count}} work drives have no purpose": {
+    "one": "{{count}} trajet d’affaires n’a pas de motif",
+    "many": "{{count}} trajets d’affaires n’ont pas de motif",
+    "other": "{{count}} trajets d’affaires n’ont pas de motif"
+  },
+  "{{authority}} expects a purpose for every business drive. Add them before you export?": "{{authority}} exige un motif pour chaque trajet d’affaires. Les ajouter avant d’exporter ?",
+  "Export anyway": "Exporter quand même",
+  "Add purposes": "Ajouter les motifs",
+  "Usual business purpose": "Motif professionnel habituel",
+  "Clear": "Effacer",
+  "Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one.": "Ajouté aux trajets d’affaires qui n’en ont pas, pour des dossiers fiscaux complets. Les trajets pendant un quart utilisent « Livraisons », sauf si vous en choisissez un.",
+  "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.": "Ajouté aux trajets d’affaires qui n’en ont pas, pour des dossiers fiscaux complets. Modifiable sur chaque trajet.",
+  "None: ask me each time": "Aucun : me demander à chaque fois",
+  "What are most of your work drives for?": "À quoi servent la plupart de vos trajets d’affaires ?",
+  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "Le fisc exige un motif pour chaque trajet d’affaires. Nous le remplirons pour vous, et vous pourrez le changer sur n’importe quel trajet."
 };
 
 export default dictionary;

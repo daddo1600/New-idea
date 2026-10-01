@@ -1,7 +1,7 @@
 import { router, type Href } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
 import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
@@ -172,6 +172,22 @@ export default function ReportScreen() {
   };
 
   const empty = report.rows.length === 0;
+  /** To home, showing only this year's work drives without a purpose, one tap each. */
+  const fixPurposes = () => router.navigate({ pathname: '/', params: { fill: 'purpose', year } });
+  /** Before exporting: tax offices expect a purpose on every business drive, so offer to add the missing ones first. */
+  const checkPurposes = (go: () => void) => () => {
+    if (report.missingPurposeCount === 0) return go();
+    Alert.alert(
+      t('{{count}} work drives have no purpose', { count: report.missingPurposeCount }),
+      t('{{authority}} expects a purpose for every business drive. Add them before you export?', {
+        authority: region.authority,
+      }),
+      [
+        { text: t('Export anyway'), onPress: go },
+        { text: t('Add purposes'), style: 'cancel', onPress: fixPurposes },
+      ],
+    );
+  };
   const miles = region.unit === 'mi';
   const distance = (value: number) => formatDistance(fromUnits(value, region), region);
 
@@ -223,6 +239,25 @@ export default function ReportScreen() {
                 count: report.unclassifiedCount,
               })}
             </ThemedText>
+          )}
+          {report.missingPurposeCount > 0 && (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityHint={t('Shows only the drives that need a purpose')}
+              onPress={fixPurposes}
+              style={[styles.purposeWarning, { borderColor: theme.warning, backgroundColor: theme.warning + '1A' }]}>
+              <ThemedText type="smallBold">
+                ⚠️ {t('{{count}} work drives have no purpose', { count: report.missingPurposeCount })}
+              </ThemedText>
+              <ThemedText type="small" themeColor="textSecondary">
+                {t('{{authority}} expects a purpose for every business drive. One tap each.', {
+                  authority: region.authority,
+                })}
+              </ThemedText>
+              <ThemedText type="smallBold" style={{ color: theme.accent }}>
+                {t('Add purposes ›')}
+              </ThemedText>
+            </Pressable>
           )}
         </ThemedView>
 
@@ -286,7 +321,7 @@ export default function ReportScreen() {
           <Pressable
             accessibilityRole="button"
             disabled={empty || busy !== null}
-            onPress={() => (PRO_FORMATS.has(format) && !isPro ? router.push('/pro') : run('csv'))}
+            onPress={PRO_FORMATS.has(format) && !isPro ? () => router.push('/pro') : checkPurposes(() => run('csv'))}
             style={[styles.outline, { borderColor: theme.accent, opacity: empty || busy ? 0.5 : 1 }]}>
             <ThemedText type="smallBold" style={{ color: theme.accent }}>
               {busy === 'csv'
@@ -321,7 +356,7 @@ export default function ReportScreen() {
             <Pressable
               accessibilityRole="button"
               disabled={empty || busy !== null}
-              onPress={() => (isPro ? run('pdf') : router.push('/pro'))}
+              onPress={isPro ? checkPurposes(() => run('pdf')) : () => router.push('/pro')}
               style={[styles.filled, { backgroundColor: theme.accent, opacity: empty || busy ? 0.5 : 1 }]}>
               <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
                 {busy === 'pdf' ? t('Preparing…') : isPro ? t('Create PDF report') : t('Unlock with Pro')}
@@ -511,6 +546,7 @@ const styles = StyleSheet.create({
   },
   card: { borderRadius: 16, padding: Spacing.four, gap: Spacing.two },
   lines: { gap: Spacing.one, marginTop: Spacing.one },
+  purposeWarning: { borderWidth: 1, borderRadius: 10, padding: Spacing.two + 2, gap: Spacing.one, marginTop: Spacing.one },
   line: { flexDirection: 'row', justifyContent: 'space-between', gap: Spacing.two },
   option: { gap: Spacing.two },
   formats: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },

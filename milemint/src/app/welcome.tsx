@@ -23,6 +23,7 @@ import { AlwaysGuide } from '@/components/always-guide';
 import { BrandGradient } from '@/components/brand-gradient';
 import { CountryOptions, phoneRegion } from '@/components/country-options';
 import { LeafMark } from '@/components/leaf-mark';
+import { purposeIcon, quickPurposes, shownPurpose } from '@/components/purpose-picker';
 import { MintWash, StepHeader, StepIcon } from '@/components/step-header';
 import { VehiclePicker } from '@/components/vehicle-picker';
 import { firstCode, RedeemCode } from '@/components/redeem-code';
@@ -38,6 +39,7 @@ import {
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, updateSettings } from '@/db/settings-repo';
+import { SHIFT_PURPOSE } from '@/domain/auto-classify';
 import { marApplies, parsePence } from '@/domain/mar';
 import { FREE_AUTO_DRIVES_PER_MONTH } from '@/domain/plan';
 import { displayLocale, formatRate, REGIONS, vehicleRule, type RegionCode } from '@/domain/regions';
@@ -58,8 +60,8 @@ import { ICloudBackup } from '../../modules/icloud-backup';
 
 /**
  * First launch, as one full-screen flow instead of a chain of pop-ups:
- * welcome → country → automatic tracking → work hours → home and work → done.
- * The last three are optional and skip in one tap. Each step does one thing,
+ * welcome → country → automatic tracking → work hours → usual purpose → home
+ * and work → done. The last four are optional and skip in one tap. Each step does one thing,
  * and the user always sees how far along they are.
  *
  * On a new iPhone with a MileMint backup in iCloud, the welcome offers to
@@ -67,6 +69,7 @@ import { ICloudBackup } from '../../modules/icloud-backup';
  * only the tracking step (a permission for this phone) remains.
  */
 
+/** Dots shown: the usual purpose is part of "Your work", not a step of its own. */
 const STEPS = 6;
 const EXTRA_LABELS: Record<VehicleType, string> = {
   car: msg('Car or van'),
@@ -74,8 +77,10 @@ const EXTRA_LABELS: Record<VehicleType, string> = {
   bicycle: msg('Bicycle'),
 };
 const HOURS = 3;
-const PLACES = 4;
-const DONE = 5;
+/** "What are most of your work drives for?", right after how they work. */
+const PURPOSE = 4;
+const PLACES = 5;
+const DONE = 6;
 
 const WELCOME_POINTS = [
   [msg('Automatic'), msg('Drives are logged in the background. No buttons to press.')],
@@ -145,6 +150,8 @@ export default function WelcomeScreen() {
   const [employed, setEmployed] = useState(false);
   const [employerPaysNothing, setEmployerPaysNothing] = useState(false);
   const [employerRateText, setEmployerRateText] = useState('45');
+  /** The usual business purpose tapped; undefined until one is (shift workers then see Deliveries chosen). */
+  const [usualChoice, setUsualChoice] = useState<string | undefined>(undefined);
 
   // A new iPhone: look for a backup in iCloud while the welcome is read.
   useEffect(() => {
@@ -262,7 +269,7 @@ export default function WelcomeScreen() {
     }
     setShifts(true);
     setHoursSet(false);
-    setStep(PLACES);
+    setStep(PURPOSE);
   };
 
   const saveHours = async () => {
@@ -277,7 +284,7 @@ export default function WelcomeScreen() {
     });
     setShifts(false);
     setHoursSet(true);
-    setStep(PLACES);
+    setStep(PURPOSE);
   };
 
   const chooseNeither = async () => {
@@ -286,8 +293,22 @@ export default function WelcomeScreen() {
     await updateSettings(db, { shiftMode: false, workHoursEnabled: false, clientPrivacy });
     setShifts(false);
     setHoursSet(false);
+    setStep(PURPOSE);
+  };
+
+  /**
+   * The usual purpose, saved as the user's own only when they tap one. Taking
+   * the preselected "Deliveries" (shift workers) or skipping saves none, so
+   * going back and choosing set hours instead leaves nothing behind: in shift
+   * mode no usual purpose already means "Deliveries" (domain/auto-classify).
+   */
+  const shownUsual = usualChoice ?? (shifts ? SHIFT_PURPOSE : null);
+  const saveUsual = async (purpose: string | undefined) => {
+    await updateSettings(db, { defaultPurpose: purpose ?? null });
+    setUsualChoice(purpose);
     setStep(PLACES);
   };
+  const purposeOptions = quickPurposes({ shiftMode: shifts, clientPrivacy }, 10);
 
   // Under whichever way of working is chosen: care and support work comes in all three.
   const privacyCheck = <ClientPrivacyCheck value={clientPrivacy} onChange={setClientPrivacy} />;
@@ -334,6 +355,8 @@ export default function WelcomeScreen() {
   // Full brand green for the welcome, the tracking ask (the one that matters most) and the
   // finish; the steps in between open with a green header card.
   const onBrand = step === 0 || step === 2 || step === DONE;
+  /** The dot lit for this step: the usual purpose shares "Your work"'s. */
+  const dot = step >= PURPOSE ? step - 1 : step;
   // While typing, the buttons would ride up above the keyboard, right over the address
   // suggestions, so a tap meant for a suggestion could save and move on. Hide them meanwhile.
   const typing = useKeyboardOpen();
@@ -392,7 +415,7 @@ export default function WelcomeScreen() {
         ) : (
           <View />
         )}
-        <View accessibilityLabel={t('Step {{step}} of {{total}}', { step: step + 1, total: STEPS })} style={styles.dots} pointerEvents="none">
+        <View accessibilityLabel={t('Step {{step}} of {{total}}', { step: dot + 1, total: STEPS })} style={styles.dots} pointerEvents="none">
           {Array.from({ length: STEPS }, (_, i) => (
             <View
               key={i}
@@ -400,14 +423,14 @@ export default function WelcomeScreen() {
                 styles.dot,
                 {
                   backgroundColor: onBrand
-                    ? i <= step
+                    ? i <= dot
                       ? '#FFFFFF'
                       : 'rgba(255,255,255,0.3)'
-                    : i <= step
+                    : i <= dot
                       ? theme.accent
                       : theme.backgroundSelected,
                 },
-                i === step && styles.dotCurrent,
+                i === dot && styles.dotCurrent,
               ]}
             />
           ))}
@@ -691,6 +714,41 @@ export default function WelcomeScreen() {
             </>
           )}
 
+          {step === PURPOSE && (
+            <>
+              <StepHeader
+                glyph="briefcase"
+                eyebrow={t('Step 3 · Your work')}
+                title={t('What are most of your work drives for?')}>
+                {t(
+                  'Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.',
+                )}
+              </StepHeader>
+              <View style={styles.extraRow} accessibilityRole="radiogroup">
+                {purposeOptions.map((purpose) => {
+                  const on = shownUsual === purpose;
+                  return (
+                    <Pressable
+                      key={purpose}
+                      accessibilityRole="radio"
+                      accessibilityState={{ selected: on }}
+                      onPress={once(() => saveUsual(purpose))}
+                      style={[
+                        styles.extraChip,
+                        on
+                          ? { backgroundColor: theme.accent, borderColor: theme.accent }
+                          : { borderColor: theme.backgroundSelected, backgroundColor: theme.backgroundElement },
+                      ]}>
+                      <ThemedText type="smallBold" style={{ color: on ? theme.onAccent : theme.text }}>
+                        {purposeIcon(purpose)} {shownPurpose(purpose, t)}
+                      </ThemedText>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            </>
+          )}
+
           {step === PLACES && (
             <>
               {shifts ? (
@@ -839,6 +897,8 @@ export default function WelcomeScreen() {
                 : workStyle === 'neither'
                   ? primary(t('Continue'), chooseNeither)
                   : primary(t('Choose one to continue'), () => {}, false))}
+          {step === PURPOSE && shownUsual !== null && primary(t('Continue'), () => saveUsual(usualChoice))}
+          {step === PURPOSE && secondary(t('Skip for now'), () => saveUsual(undefined))}
           {step === PLACES &&
             primary(
               busy ? t('Saving…') : home.text || work.text ? t('Save and continue') : t('Continue'),

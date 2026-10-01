@@ -179,7 +179,6 @@ const dictionary: Dictionary = {
   "Add a missed drive": "Adaugă o cursă ratată",
   "Add a missed trip": "Adaugă o cursă ratată",
   "Add another time": "Adaugă alt interval",
-  "Add business purpose": "Adaugă scopul de lucru",
   "Add missed trip": "Adaugă o cursă ratată",
   "Add missed trips by hand": "Adăugare manuală a curselor ratate",
   "Added manually": "Adăugată manual",
@@ -1193,6 +1192,34 @@ const dictionary: Dictionary = {
   "New drives aren’t being logged. Tap to turn tracking back on.": "Cursele noi nu se înregistrează. Atinge ca să repornești înregistrarea.",
   "No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up.": "Nicio localizare de la {{time}}, în mijlocul unei curse. Deschide MileMint ca să reia înregistrarea.",
   "Where your shift started": "Unde a început tura",
+  "Opens trip details": "Deschide detaliile cursei",
+  "Usual purpose · tap to change": "Scop obișnuit · atinge ca să-l schimbi",
+  "Purpose needed for your tax records": "Lipsește scopul pentru evidența fiscală",
+  "Shows only the drives that need a purpose": "Arată doar cursele care au nevoie de un scop",
+  "{{count}} work drives need a purpose": {
+    "one": "{{count}} cursă de lucru are nevoie de un scop",
+    "few": "{{count}} curse de lucru au nevoie de un scop",
+    "other": "{{count}} de curse de lucru au nevoie de un scop"
+  },
+  "{{authority}} expects a purpose for every business drive. One tap each.": "{{authority}} cere un scop pentru fiecare cursă de lucru. O atingere pentru fiecare.",
+  "Add purposes ›": "Adaugă scopurile ›",
+  "Every work drive has a purpose ✓": "Toate cursele de lucru au scop ✓",
+  "Show all drives": "Arată toate cursele",
+  "{{count}} work drives have no purpose": {
+    "one": "{{count}} cursă de lucru nu are scop",
+    "few": "{{count}} curse de lucru nu au scop",
+    "other": "{{count}} de curse de lucru nu au scop"
+  },
+  "{{authority}} expects a purpose for every business drive. Add them before you export?": "{{authority}} cere un scop pentru fiecare cursă de lucru. Le adaugi înainte de export?",
+  "Export anyway": "Exportă oricum",
+  "Add purposes": "Adaugă scopurile",
+  "Usual business purpose": "Scopul obișnuit al curselor de lucru",
+  "Clear": "Golește",
+  "Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one.": "Se completează la cursele de lucru care nu au unul, ca evidența fiscală să fie completă. Cursele din tură folosesc „Livrări”, dacă nu alegi altul.",
+  "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.": "Se completează la cursele de lucru care nu au unul, ca evidența fiscală să fie completă. Îl poți schimba la orice cursă.",
+  "None: ask me each time": "Niciunul: întreabă-mă de fiecare dată",
+  "What are most of your work drives for?": "Pentru ce sunt majoritatea curselor tale de lucru?",
+  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "Autoritățile fiscale cer un scop pentru fiecare cursă de lucru. Îl completăm noi, iar tu îl poți schimba la orice cursă."
 };
 
 export default dictionary;

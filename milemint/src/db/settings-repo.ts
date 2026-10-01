@@ -1,6 +1,7 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
 
 import { EXPORT_FORMATS, type ExportFormat } from '@/domain/accounting-export';
+import { MAX_PURPOSE_LENGTH } from '@/domain/auto-classify';
 import type { WorkShift, WorkWeek } from '@/domain/classify-rules';
 import { TAX_BANDS, type TaxBand } from '@/domain/mar';
 import { REGIONS, type RegionCode } from '@/domain/regions';
@@ -41,6 +42,13 @@ export type AppSettings = {
   shiftMode: boolean;
   /** Drives no rule decides start as business (swipe left if personal); off leaves them unsorted. */
   defaultBusiness: boolean;
+  /**
+   * The usual business purpose ("Client meeting"), filled in for business
+   * drives that have none: when they're saved and when the user taps
+   * Business. Common ones are stored in English, like trip purposes. Null:
+   * none chosen ("Deliveries" in shift mode, see domain/auto-classify).
+   */
+  defaultPurpose: string | null;
   /**
    * How the user is paid for business mileage (UK only for now). Employees
    * don't deduct mileage themselves: they claim Mileage Allowance Relief on
@@ -93,6 +101,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   currentVehicleId: null,
   shiftMode: false,
   defaultBusiness: true,
+  defaultPurpose: null,
   employment: 'self-employed',
   employerRate: 450,
   taxBand: 'unsure',
@@ -155,6 +164,12 @@ const CHECKS: { [K in keyof AppSettings]-?: Check<AppSettings[K]> } = {
   currentVehicleId: textOrNull,
   shiftMode: bool,
   defaultBusiness: bool,
+  defaultPurpose: (value) => {
+    if (value === null) return null;
+    if (typeof value !== 'string') return undefined;
+    // Blank means none; an over-long one (a damaged value) is cut to a phrase.
+    return value.trim().slice(0, MAX_PURPOSE_LENGTH).trim() || null;
+  },
   employment: oneOf(['self-employed', 'employee'] as const),
   employerRate: (value) => (typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : undefined),
   taxBand: oneOf(TAX_BANDS),
