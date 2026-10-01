@@ -5,6 +5,7 @@ import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, useColorSch
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { LaunchIntro } from '@/components/launch-intro';
+import { markLaunchIntroDone } from '@/components/launch-intro-state';
 import { DATABASE_NAME, initDatabase } from '@/db/database';
 import { DEMO_MODE, seedDemoTrips } from '@/dev/demo';
 import { describeError } from '@/errors/fatal-errors';
@@ -28,7 +29,11 @@ export default function RootLayout() {
   const t = useT();
   // The web demo (store screenshots) opens straight onto the app.
   const [intro, setIntro] = useState(!DEMO_MODE);
-  const endIntro = useCallback(() => setIntro(false), []);
+  const endIntro = useCallback(() => {
+    setIntro(false);
+    // Overlays waiting for the animation (the practice run) can open now.
+    markLaunchIntroDone();
+  }, []);
   return (
     // Needed for swipe-to-classify on trip rows.
     <GestureHandlerRootView style={styles.root}>
