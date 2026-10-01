@@ -39,9 +39,15 @@ export const DEMO_CELEBRATE = demoParam === 'celebrate';
 /** `?demo=driving`: the home screen shows a drive being recorded. */
 export const DEMO_DRIVING = demoParam === 'driving';
 
-/** `&today=2027-03-20`: the tax-year countdown as it looks on that date. */
+/**
+ * `?today=2027-03-20`: the tax-year countdown and the seasonal opening as they
+ * look on that date. Works without `demo` too, so the opening (skipped in the
+ * demo) can be previewed.
+ */
 export const DEMO_TODAY =
-  DEMO_MODE && typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('today') : null;
+  __DEV__ && Platform.OS === 'web' && typeof window !== 'undefined'
+    ? new URLSearchParams(window.location.search).get('today')
+    : null;
 
 /** Demo users are Pro (every drive visible) unless showing the free plan. */
 export const DEMO_PRO = DEMO_MODE && demoParam !== 'free';

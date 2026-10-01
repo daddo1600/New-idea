@@ -55,6 +55,35 @@ const GLYPHS: Record<string, ReactNode> = {
       )}
     </>
   ),
+  gift: (
+    <>
+      <Rect x={4} y={9} width={16} height={12} rx={1.5} fill="#DC2626" />
+      <Rect x={3} y={6.5} width={18} height={4} rx={1} fill="#B91C1C" />
+      <Rect x={10.8} y={6.5} width={2.4} height={14.5} fill={SUN} />
+      <Path d="M12 6.5C9 2 5.5 4 8 6.5M12 6.5c3-4.5 6.5-2.5 4 0" stroke={SUN} strokeWidth={1.8} fill="none" />
+    </>
+  ),
+  pumpkin: (
+    <>
+      <Path d="M12 6c0-2 1-3 3-3.5" stroke={LEAF} strokeWidth={1.8} fill="none" strokeLinecap="round" />
+      <Path d="M12 6c-6-1-9 3-9 7.5S6 21 12 20c6 1 9-2 9-6.5S18 5 12 6Z" fill="#F97316" />
+      <Path d="M8 11l2 2.5H6ZM16 11l2 2.5h-4ZM7.5 16q4.5 3 9 0" stroke="#431407" strokeWidth={1.2} fill="#431407" />
+    </>
+  ),
+  candy: (
+    <>
+      <Path d="M3 8l4 4-4 4ZM21 8l-4 4 4 4Z" fill="#A855F7" />
+      <Circle cx={12} cy={12} r={5.5} fill="#F97316" />
+      <Path d="M9 9.5l6 5M9.5 15l5-6" stroke="#FFFFFF" strokeWidth={1.2} />
+    </>
+  ),
+  ghost: (
+    <>
+      <Path d="M5 21V11a7 7 0 0 1 14 0v10l-2.5-2-2.3 2-2.2-2-2.2 2-2.3-2Z" fill="#E5E7EB" stroke={INK} strokeWidth={1.2} />
+      <Circle cx={9.5} cy={11} r={1.4} fill={INK} />
+      <Circle cx={14.5} cy={11} r={1.4} fill={INK} />
+    </>
+  ),
   tree: (
     <>
       <Rect x={10.8} y={13} width={2.4} height={8} rx={1} fill={INK} />
@@ -95,11 +124,14 @@ function Place({
   at,
   position,
   drive,
+  drop,
 }: {
   glyph: string;
   at: number;
   position: { left: number; top: number };
   drive: SharedValue<number>;
+  /** Falls into place, like a parcel dropped off the sleigh. */
+  drop: boolean;
 }) {
   const style = useAnimatedStyle(() => {
     const appear = Math.min(1, Math.max(0, (drive.value - (at - 0.24)) / 0.18));
@@ -109,7 +141,7 @@ function Place({
       opacity: appear * (1 - leave),
       transform: [
         { translateX: -FORWARD.x * DRIFT * passed * 2 },
-        { translateY: -FORWARD.y * DRIFT * passed * 2 },
+        { translateY: -FORWARD.y * DRIFT * passed * 2 - (drop ? 34 * (1 - appear) : 0) },
         { scale: 0.3 + 0.7 * appear - 0.3 * leave },
       ],
     };
@@ -128,19 +160,26 @@ export function IntroScenery({
   size,
   drive,
   roadAt,
+  glyphs,
+  drop = false,
 }: {
   size: number;
   drive: SharedValue<number>;
   roadAt: (t: number) => { x: number; y: number };
+  /** Seasonal stand-ins for the places, in order (presents at Christmas…). */
+  glyphs?: readonly string[];
+  drop?: boolean;
 }) {
   return (
     <>
-      {PLACES.map(({ glyph, at, side }) => {
+      {PLACES.map(({ glyph: place, at, side }, i) => {
+        const glyph = glyphs?.[i] ?? place;
         const road = roadAt(at);
         return (
           <Place
-            key={glyph}
+            key={place}
             glyph={glyph}
+            drop={drop}
             at={at}
             position={toScreen(road.x + side * OFFSET, road.y, size)}
             drive={drive}

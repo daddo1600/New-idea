@@ -17,12 +17,17 @@ import { ROAD_PATH } from '@/brand/leaf';
 import { phoneRegion } from '@/components/country-options';
 import { IntroScenery } from '@/components/intro-scenery';
 import { LeafMark } from '@/components/leaf-mark';
+import { SeasonAmbient } from '@/components/season/ambient';
+import { SeasonHat } from '@/components/season/hats';
+import { hasRider, SeasonRider } from '@/components/season/rider';
+import { DEMO_TODAY } from '@/dev/demo';
 import {
   formatMoney,
   ratePeriodFor,
   REGIONS,
   type RegionCode,
 } from '@/domain/regions';
+import { type Season, seasonFor } from '@/domain/seasons';
 import { toLocalIsoDate } from '@/domain/trip';
 import { type LaunchTotals, markTotalSeen, recallRegion, recallTotals } from '@/region/remembered-region';
 
@@ -44,6 +49,8 @@ const DRIVE_MS = 3200;
 const HOLD_MS = 500;
 const QUICK_DRIVE_MS = 850;
 const QUICK_HOLD_MS = 550;
+/** A little longer to enjoy the seasonal touches. */
+const SEASON_HOLD_MS = 900;
 const FADE_MS = 300;
 /** The drive the counter shows. */
 /**
@@ -129,6 +136,11 @@ export function LaunchIntro({ onDone }: { onDone: () => void }) {
     };
   }, []);
 
+  const season = useMemo(
+    () => (mode ? seasonFor(DEMO_TODAY ? new Date(`${DEMO_TODAY}T12:00:00`) : new Date(), mode.code) : null),
+    [mode],
+  );
+
   return (
     <Pressable
       accessibilityRole="button"
@@ -140,9 +152,9 @@ export function LaunchIntro({ onDone }: { onDone: () => void }) {
           <LeafMark size={SPLASH_SIZE} />
         </View>
       ) : mode.quick ? (
-        <QuickIntro code={mode.code} totals={mode.quick} skip={skip} onDone={onDone} />
+        <QuickIntro code={mode.code} season={season} totals={mode.quick} skip={skip} onDone={onDone} />
       ) : (
-        <FullIntro code={mode.code} skip={skip} onDone={onDone} />
+        <FullIntro code={mode.code} season={season} skip={skip} onDone={onDone} />
       )}
     </Pressable>
   );
@@ -151,11 +163,13 @@ export function LaunchIntro({ onDone }: { onDone: () => void }) {
 /** After set-up: the car zips up the leaf while their own total counts up. */
 function QuickIntro({
   code,
+  season,
   totals,
   skip,
   onDone,
 }: {
   code: RegionCode;
+  season: Season | null;
   totals: LaunchTotals;
   skip: boolean;
   onDone: () => void;
@@ -172,13 +186,13 @@ function QuickIntro({
     const easing = Easing.out(Easing.cubic);
     drive.value = withDelay(80, withTiming(1, { duration: reduceMotion ? 0 : QUICK_DRIVE_MS, easing }));
     fade.value = withDelay(
-      80 + (reduceMotion ? 0 : QUICK_DRIVE_MS) + QUICK_HOLD_MS,
+      80 + (reduceMotion ? 0 : QUICK_DRIVE_MS) + (season ? SEASON_HOLD_MS : QUICK_HOLD_MS),
       withTiming(0, { duration: FADE_MS }, (finished) => {
         if (finished) scheduleOnRN(onDone);
       }),
     );
     markTotalSeen(totals);
-  }, [drive, fade, onDone, reduceMotion, totals]);
+  }, [drive, fade, onDone, reduceMotion, totals, season]);
 
   useEffect(() => {
     if (!skip) return;
@@ -215,20 +229,15 @@ function QuickIntro({
 
   return (
     <Animated.View style={[StyleSheet.absoluteFill, styles.container, fadeStyle]}>
+      {season && <SeasonAmbient season={season.id} southern={code === 'AU'} />}
       <Animated.View style={logoStyle}>
-        <LeafMark size={SPLASH_SIZE} car={false}>
-          <AnimatedPath
-            d={ROAD_PATH}
-            stroke="#064E3B"
-            strokeWidth={16}
-            fill="none"
-            strokeDasharray={[roadLength, roadLength]}
-            animatedProps={unpavedProps}
-          />
-          <AnimatedCircle r={58} fill="#FACC15" stroke="#FFFFFF" strokeWidth={16} animatedProps={carProps} />
-        </LeafMark>
+        <SeasonalLeaf season={season} unpavedProps={unpavedProps} carProps={carProps} />
+        {season && hasRider(season.id) && (
+          <SeasonRider season={season.id} drive={drive} size={SPLASH_SIZE} xs={roadXs} ys={roadYs} samples={SAMPLES} />
+        )}
       </Animated.View>
       <Animated.View style={[styles.counter, counterStyle]}>
+        {season && <Text style={styles.greeting}>{season.greeting}</Text>}
         <Text style={styles.money}>{formatMoney(shown, region)}</Text>
         <Text style={styles.distance}>found this tax year</Text>
         {gained > 0 && (
@@ -240,7 +249,17 @@ function QuickIntro({
 }
 
 /** Before set-up: the full demo drive past a petrol station, shops and a café. */
-function FullIntro({ code, skip, onDone }: { code: RegionCode; skip: boolean; onDone: () => void }) {
+function FullIntro({
+  code,
+  season,
+  skip,
+  onDone,
+}: {
+  code: RegionCode;
+  season: Season | null;
+  skip: boolean;
+  onDone: () => void;
+}) {
   const reduceMotion = useReducedMotion();
   const region = REGIONS[code];
   const ratePerUnit = useMemo(() => {
@@ -308,21 +327,24 @@ function FullIntro({ code, skip, onDone }: { code: RegionCode; skip: boolean; on
   const units = Math.round(shown * DEMO_MONTH[region.unit]);
   return (
     <Animated.View style={[StyleSheet.absoluteFill, styles.container, fadeStyle]}>
+      {season && <SeasonAmbient season={season.id} southern={code === 'AU'} />}
       <Animated.View style={logoStyle}>
-        <LeafMark size={SPLASH_SIZE} car={false}>
-          <AnimatedPath
-            d={ROAD_PATH}
-            stroke="#064E3B"
-            strokeWidth={16}
-            fill="none"
-            strokeDasharray={[roadLength, roadLength]}
-            animatedProps={unpavedProps}
+        <SeasonalLeaf season={season} unpavedProps={unpavedProps} carProps={carProps} />
+        {season && hasRider(season.id) && (
+          <SeasonRider season={season.id} drive={drive} size={SPLASH_SIZE} xs={roadXs} ys={roadYs} samples={SAMPLES} />
+        )}
+        {!reduceMotion && (
+          <IntroScenery
+            size={SPLASH_SIZE}
+            drive={drive}
+            roadAt={roadAt}
+            glyphs={season ? SEASON_PLACES[season.id] : undefined}
+            drop={season?.id === 'festive'}
           />
-          <AnimatedCircle r={58} fill="#FACC15" stroke="#FFFFFF" strokeWidth={16} animatedProps={carProps} />
-        </LeafMark>
-        {!reduceMotion && <IntroScenery size={SPLASH_SIZE} drive={drive} roadAt={roadAt} />}
+        )}
       </Animated.View>
       <Animated.View style={[styles.counter, counterStyle]}>
+        {season && <Text style={styles.greeting}>{season.greeting}</Text>}
         <Text style={styles.money}>{formatMoney(Math.round(units * ratePerUnit), region)}</Text>
         <Text style={styles.distance}>
           {new Intl.NumberFormat(region.locale).format(units)} {region.unit === 'mi' ? 'miles' : 'km'} · a typical month
@@ -333,8 +355,43 @@ function FullIntro({ code, skip, onDone }: { code: RegionCode; skip: boolean; on
   );
 }
 
+/** Seasonal stand-ins for the places along the road. */
+const SEASON_PLACES: Partial<Record<Season['id'], readonly string[]>> = {
+  festive: ['gift', 'gift', 'gift', 'gift', 'gift'],
+  halloween: ['pumpkin', 'ghost', 'candy', 'pumpkin', 'ghost'],
+};
+
+/** The logo with the road being laid, the car (unless a rider stands in) and the season's hat. */
+function SeasonalLeaf({
+  season,
+  unpavedProps,
+  carProps,
+}: {
+  season: Season | null;
+  unpavedProps: Partial<{ strokeDashoffset: number }>;
+  carProps: Partial<{ cx: number; cy: number }>;
+}) {
+  return (
+    <LeafMark size={SPLASH_SIZE} car={false} bleed={season !== null} palette={season?.id === 'autumn' ? 'autumn' : 'mint'}>
+      <AnimatedPath
+        d={ROAD_PATH}
+        stroke="#064E3B"
+        strokeWidth={16}
+        fill="none"
+        strokeDasharray={[roadLength, roadLength]}
+        animatedProps={unpavedProps}
+      />
+      {!(season && hasRider(season.id)) && (
+        <AnimatedCircle r={58} fill="#FACC15" stroke="#FFFFFF" strokeWidth={16} animatedProps={carProps} />
+      )}
+      {season && <SeasonHat season={season.id} />}
+    </LeafMark>
+  );
+}
+
 const styles = StyleSheet.create({
   layer: { zIndex: 10 },
+  greeting: { color: '#FFFFFF', fontSize: 15, fontWeight: '700', marginBottom: 4 },
   gained: { color: '#FACC15', fontSize: 15, fontWeight: '700', marginTop: 6 },
   container: {
     backgroundColor: INTRO_BACKGROUND,
