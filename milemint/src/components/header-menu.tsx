@@ -93,19 +93,19 @@ function Menu({ onClose }: { onClose: () => void }) {
 
   const items: MenuItem[] = [
     {
-      icon: 'doc.text.fill',
-      glyph: '📄',
-      title: t('Reports & export'),
-      detail: t('Your mileage log for {{authority}}', { authority: region.authority }),
-      onPress: () => go('/report'),
-    },
-    {
       icon: 'star.fill',
       glyph: '⭐',
       title: isPro ? 'MileMint Pro' : t('Go Pro'),
       detail: isPro ? t('Active · thank you!') : t('Unlimited drives and PDF reports'),
       highlight: !isPro,
       onPress: () => go('/pro'),
+    },
+    {
+      icon: 'doc.text.fill',
+      glyph: '📄',
+      title: t('Reports & export'),
+      detail: t('Your mileage log for {{authority}}', { authority: region.authority }),
+      onPress: () => go('/report'),
     },
     {
       icon: 'gift.fill',
