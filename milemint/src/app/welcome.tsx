@@ -36,7 +36,7 @@ import { formatRate, REGIONS, vehicleRule, type RegionCode } from '@/domain/regi
 import { useKeyboardOpen } from '@/hooks/use-keyboard-open';
 import { useTheme } from '@/hooks/use-theme';
 import { useRegion } from '@/region/region';
-import { scheduleWorkHoursNudge } from '@/reminders/weekly';
+import { enableWeeklyReminder, scheduleWorkHoursNudge } from '@/reminders/weekly';
 import type { TrackingStatus } from '@/tracking/background';
 import { useTracking } from '@/tracking/use-tracking';
 import { VEHICLE_ICONS, type VehicleType } from '@/domain/trip';
@@ -188,7 +188,9 @@ export default function WelcomeScreen() {
   const finish = async () => {
     setBusy(true);
     try {
-      // Notifications are asked for later, when the first trip shows up (more yeses in context).
+      // The Sunday check-in is on by default: iOS asks once, here. Turning it off is in Settings.
+      const scheduled = await enableWeeklyReminder(picked.unit).catch(() => false);
+      await saveSettings(db, { ...(await loadSettings(db)), weeklyReminder: scheduled, reminderAsked: true });
       if (!hoursSet && !shifts) await scheduleWorkHoursNudge().catch(() => {});
     } finally {
       setBusy(false);
@@ -512,6 +514,7 @@ export default function WelcomeScreen() {
                 <Text style={styles.pointTitle}>Good to know</Text>
                 {[
                   ['👉', 'Swipe a trip right for business, left for personal.'],
+                  ['📅', 'A quick Sunday reminder to sort your week. Turn it off any time in Settings.'],
                   ['📍', 'Save places like clients or the depot from any trip.'],
                   ...(shifts
                     ? [
