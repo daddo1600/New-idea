@@ -94,6 +94,8 @@ export default function WelcomeScreen() {
   const [vehicle, setVehicle] = useState<VehicleType>('car');
   const [workStyle, setWorkStyle] = useState<'hours' | 'shifts' | 'neither' | null>(null);
   const [extraVehicles, setExtraVehicles] = useState<VehicleType[]>([]);
+  /** Visits clients or patients at home: keep only the area of each visit (domain/privacy). */
+  const [clientPrivacy, setClientPrivacy] = useState(false);
   /** Chose shifts (delivery apps) instead of set hours. */
   const [shifts, setShifts] = useState(false);
   const [home, setHome] = useState<PlaceDraft>(EMPTY_PLACE);
@@ -167,7 +169,7 @@ export default function WelcomeScreen() {
 
   const chooseShifts = async () => {
     await saveEmployment();
-    await saveSettings(db, { ...(await loadSettings(db)), shiftMode: true, workHoursEnabled: false });
+    await saveSettings(db, { ...(await loadSettings(db)), shiftMode: true, workHoursEnabled: false, clientPrivacy });
     // Couriers often switch between a car and a moped: add the others they ticked.
     const garage = await listVehicles(db);
     for (const type of extraVehicles) {
@@ -180,10 +182,19 @@ export default function WelcomeScreen() {
   const saveHours = async () => {
     await saveEmployment();
     const settings = await loadSettings(db);
-    await saveSettings(db, { ...settings, workHoursEnabled: true, workWeek: toWorkWeek(week) });
+    await saveSettings(db, { ...settings, workHoursEnabled: true, workWeek: toWorkWeek(week), clientPrivacy });
     setHoursSet(true);
     setStep(PLACES);
   };
+
+  const chooseNeither = async () => {
+    await saveEmployment();
+    await saveSettings(db, { ...(await loadSettings(db)), clientPrivacy });
+    setStep(PLACES);
+  };
+
+  // Under whichever way of working is chosen: care and support work comes in all three.
+  const privacyCheck = <ClientPrivacyCheck value={clientPrivacy} onChange={setClientPrivacy} />;
 
   const savePlaces = async () => {
     setPlaceError(null);
@@ -448,7 +459,10 @@ export default function WelcomeScreen() {
                 onPress={() => setWorkStyle('hours')}
               />
               {workStyle === 'hours' && (
-                <WorkHoursQuick value={week} onChange={setWeek} locale={displayLocale(picked)} />
+                <>
+                  <WorkHoursQuick value={week} onChange={setWeek} locale={displayLocale(picked)} />
+                  {privacyCheck}
+                </>
               )}
               <WorkStyleOption
                 selected={workStyle === 'shifts'}
@@ -493,6 +507,7 @@ export default function WelcomeScreen() {
                   </ThemedText>
                 </View>
               )}
+              {workStyle === 'shifts' && privacyCheck}
               <WorkStyleOption
                 selected={workStyle === 'neither'}
                 emoji="✋"
@@ -500,6 +515,7 @@ export default function WelcomeScreen() {
                 detail={t('I’ll swipe each drive myself.')}
                 onPress={() => setWorkStyle('neither')}
               />
+              {workStyle === 'neither' && privacyCheck}
               {marApplies(picked) && (
                 <View style={[styles.employed, { borderColor: theme.backgroundSelected }]}>
                   <View style={styles.employedRow}>
@@ -686,10 +702,7 @@ export default function WelcomeScreen() {
               : workStyle === 'shifts'
                 ? primary(t('Use shifts'), chooseShifts)
                 : workStyle === 'neither'
-                  ? primary(t('Continue'), async () => {
-                      await saveEmployment();
-                      setStep(PLACES);
-                    })
+                  ? primary(t('Continue'), chooseNeither)
                   : primary(t('Choose one to continue'), () => {}, false))}
           {step === PLACES &&
             primary(
@@ -750,7 +763,48 @@ function WorkStyleOption({
   );
 }
 
+/**
+ * "I visit clients or patients at home": one tick for care, nursing and support
+ * workers, who must not keep clients' addresses on their phone.
+ */
+function ClientPrivacyCheck({ value, onChange }: { value: boolean; onChange: (value: boolean) => void }) {
+  const theme = useTheme();
+  const t = useT();
+  return (
+    <Pressable
+      accessibilityRole="checkbox"
+      accessibilityState={{ checked: value }}
+      onPress={() => onChange(!value)}
+      style={styles.privacyCheck}>
+      <View
+        style={[
+          styles.checkbox,
+          { borderColor: value ? theme.accent : theme.textSecondary },
+          value && { backgroundColor: theme.accent },
+        ]}>
+        {value && <Text style={[styles.radioTick, { color: theme.onAccent }]}>✓</Text>}
+      </View>
+      <View style={styles.flex}>
+        <ThemedText type="smallBold">{t('I visit clients or patients at home (care, nursing, support work)')}</ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          {t('We’ll keep only the area, never their address.')}
+        </ThemedText>
+      </View>
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
+  privacyCheck: { flexDirection: 'row', alignItems: 'flex-start', gap: Spacing.three, paddingHorizontal: Spacing.one },
+  checkbox: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 1,
+  },
   workStyle: {
     flexDirection: 'row',
     alignItems: 'center',

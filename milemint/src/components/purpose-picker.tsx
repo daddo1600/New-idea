@@ -20,6 +20,10 @@ export const COMMON_PURPOSES = [
   ['🧾', msg('Business errand')],
 ] as const;
 
+/** Listed first in client privacy mode: the usual purpose for care and support work. */
+const CLIENT_VISIT_PURPOSE = ['🩺', msg('Client visit')] as const;
+const KNOWN_PURPOSES = [CLIENT_VISIT_PURPOSE, ...COMMON_PURPOSES];
+
 /**
  * Common purposes are saved in English (the reports to the tax office stay in
  * English) and shown in the app's language.
@@ -31,11 +35,18 @@ export function PurposePicker({
   value,
   onChange,
   recent = [],
+  clientPrivacy = false,
 }: {
   value: string;
   onChange: (purpose: string) => void;
   /** Purposes used before, most used first. */
   recent?: readonly string[];
+  /**
+   * Client privacy mode: "Client visit" comes first, and typing your own
+   * suggests a non-identifying client reference (initials or a client number),
+   * which with the area and distance is what the tax office needs.
+   */
+  clientPrivacy?: boolean;
 }) {
   const theme = useTheme();
   const t = useT();
@@ -44,9 +55,10 @@ export function PurposePicker({
   const [typing, setTyping] = useState(false);
   const [custom, setCustom] = useState('');
 
-  const common = COMMON_PURPOSES.map(([, text]) => text.toLowerCase());
+  const listed = clientPrivacy ? KNOWN_PURPOSES : COMMON_PURPOSES;
+  const common = KNOWN_PURPOSES.map(([, text]) => text.toLowerCase());
   const recentOnly = recent.filter((text) => !common.includes(text.toLowerCase())).slice(0, 4);
-  const match = COMMON_PURPOSES.find(([, text]) => text.toLowerCase() === value.trim().toLowerCase());
+  const match = KNOWN_PURPOSES.find(([, text]) => text.toLowerCase() === value.trim().toLowerCase());
   const icon = match?.[0];
   const shown = match ? t(match[1]) : value;
 
@@ -120,7 +132,12 @@ export function PurposePicker({
               {recentOnly.length > 0 && (
                 <View style={[styles.divider, { backgroundColor: theme.backgroundSelected }]} />
               )}
-              {COMMON_PURPOSES.map(([emoji, text]) => row(text, emoji, text, t(text)))}
+              {listed.map(([emoji, text]) => row(text, emoji, text, t(text)))}
+              {typing && clientPrivacy && (
+                <ThemedText type="small" themeColor="textSecondary" style={styles.hint}>
+                  {t('Add initials or a client number if you like. Never a name or address.')}
+                </ThemedText>
+              )}
               {typing ? (
                 <View style={styles.customRow}>
                   <TextInput
@@ -128,7 +145,7 @@ export function PurposePicker({
                     autoFocus
                     value={custom}
                     onChangeText={setCustom}
-                    placeholder={t('e.g. Quote for Acme Ltd')}
+                    placeholder={clientPrivacy ? t('e.g. Client visit, J.S. or no. 1042') : t('e.g. Quote for Acme Ltd')}
                     placeholderTextColor={theme.textSecondary}
                     returnKeyType="done"
                     onSubmitEditing={() => custom.trim() && pick(custom.trim())}
@@ -194,6 +211,7 @@ const styles = StyleSheet.create({
   },
   emoji: { fontSize: 18, lineHeight: 24, width: 26, textAlign: 'center' },
   divider: { height: StyleSheet.hairlineWidth, marginVertical: Spacing.one },
+  hint: { paddingHorizontal: Spacing.two, paddingTop: Spacing.two },
   customRow: { flexDirection: 'row', gap: Spacing.two, paddingVertical: Spacing.two, alignItems: 'center' },
   input: { flex: 1, borderRadius: 10, paddingHorizontal: Spacing.three, paddingVertical: 10, fontSize: 16 },
   use: { paddingHorizontal: Spacing.three, paddingVertical: 10, borderRadius: 10 },

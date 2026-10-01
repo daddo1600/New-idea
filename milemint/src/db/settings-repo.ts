@@ -50,6 +50,11 @@ export type AppSettings = {
   taxBand: TaxBand;
   /** Tax years (start year) the user has marked as claimed, so home stops nudging about them. */
   claimedReliefYears: number[];
+  /**
+   * Client privacy mode (care, nursing, support work): new drives keep only the
+   * area of stops the user hasn't named, and no GPS route. See domain/privacy.
+   */
+  clientPrivacy: boolean;
 };
 
 const WEEKDAY_9_TO_5 = [{ start: '09:00', end: '17:00' }];
@@ -73,6 +78,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   employerRate: 450,
   taxBand: 'unsure',
   claimedReliefYears: [],
+  clientPrivacy: false,
 };
 
 export async function loadSettings(db: SQLiteDatabase): Promise<AppSettings> {

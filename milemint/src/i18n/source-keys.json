@@ -121,6 +121,12 @@
     ]
   },
   {
+    "key": "{{count}} past trips may still have addresses and routes. Replace them with the area only and delete the routes?",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "{{count}} selected",
     "files": [
       "app/index.tsx"
@@ -455,6 +461,12 @@
     ]
   },
   {
+    "key": "🔒 Client privacy",
+    "files": [
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
     "key": "🔒 GPS runs only while you’re driving. Trips stay on your iPhone, never on our servers.",
     "files": [
       "app/welcome.tsx"
@@ -605,6 +617,12 @@
     ]
   },
   {
+    "key": "Add initials or a client number if you like. Never a name or address.",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
     "key": "Add missed trip",
     "files": [
       "app/_layout.tsx"
@@ -686,6 +704,12 @@
     "key": "April 30",
     "files": [
       "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Area only",
+    "files": [
+      "app/add-trip.tsx"
     ]
   },
   {
@@ -955,6 +979,7 @@
   {
     "key": "Cancel",
     "files": [
+      "app/add-trip.tsx",
       "app/index.tsx",
       "app/settings.tsx",
       "app/trip/[id].tsx"
@@ -1086,6 +1111,24 @@
     ]
   },
   {
+    "key": "Client privacy",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Client privacy is on. MileMint can save the town and postcode area instead of the address, as “Client visit · area”.",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Client visit",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
     "key": "Close",
     "files": [
       "components/purpose-picker.tsx",
@@ -1149,6 +1192,12 @@
   },
   {
     "key": "Could not save. Please try again.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Couldn’t change past trips. Please try again.",
     "files": [
       "app/settings.tsx"
     ]
@@ -1321,6 +1370,12 @@
     ]
   },
   {
+    "key": "Done. {{count}} past trips now show only the area.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "Drives are logged in the background. No buttons to press.",
     "files": [
       "app/welcome.tsx"
@@ -1372,6 +1427,12 @@
     "key": "Due {{date}}. Your mileage report for {{year}} is ready to export.",
     "files": [
       "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "e.g. Client visit, J.S. or no. 1042",
+    "files": [
+      "components/purpose-picker.tsx"
     ]
   },
   {
@@ -1630,6 +1691,12 @@
     "key": "Export report",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Export to Xero, QuickBooks and FreeAgent",
+    "files": [
+      "app/pro.tsx"
     ]
   },
   {
@@ -1962,6 +2029,13 @@
     ]
   },
   {
+    "key": "I visit clients or patients at home (care, nursing, support work)",
+    "files": [
+      "app/settings.tsx",
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "I’ll swipe each drive myself.",
     "files": [
       "app/welcome.tsx"
@@ -2073,6 +2147,18 @@
     "key": "Keep going",
     "files": [
       "components/celebration.tsx"
+    ]
+  },
+  {
+    "key": "Keep the address",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Keep them",
+    "files": [
+      "app/settings.tsx"
     ]
   },
   {
@@ -2597,6 +2683,12 @@
     ]
   },
   {
+    "key": "New drives read like “{{example}}”, with no route saved. Places you saved yourself, like Home, keep their names. For the tax office, the area, the distance and the purpose are enough; add initials or a client number to the purpose if you like.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "New drives start as business",
     "files": [
       "app/settings.tsx"
@@ -2636,6 +2728,12 @@
     "key": "No places yet. Add one below, or open a trip and tap “Save as place”.",
     "files": [
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "No route or address was kept for this drive, only the area and the distance: {{distance}}.",
+    "files": [
+      "app/trip/[id].tsx"
     ]
   },
   {
@@ -2918,6 +3016,12 @@
     ]
   },
   {
+    "key": "Past trips too?",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "PDF",
     "files": [
       "app/claim-relief.tsx"
@@ -3067,7 +3171,31 @@
     ]
   },
   {
+    "key": "Remove addresses",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Remove addresses from past trips",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Remove addresses from past trips?",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "Remove this vehicle",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Replace…",
     "files": [
       "app/settings.tsx"
     ]
@@ -3138,6 +3266,12 @@
     "key": "Save my hours",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Save only the area?",
+    "files": [
+      "app/add-trip.tsx"
     ]
   },
   {
@@ -3790,6 +3924,12 @@
     ]
   },
   {
+    "key": "This can’t be undone. Dates, distances and purposes stay as they are; places you saved keep their names.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "This is CRA’s reimbursement rate for employees. If you’re self-employed, CRA usually wants your actual car costs, so treat the figure as an estimate.",
     "files": [
       "domain/regions.ts"
@@ -4002,7 +4142,7 @@
     ]
   },
   {
-    "key": "Unlimited drives and PDF reports",
+    "key": "Unlimited drives, PDF reports and accounting exports",
     "files": [
       "components/header-menu.tsx"
     ]
@@ -4091,6 +4231,13 @@
     "key": "We read every message",
     "files": [
       "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "We’ll keep only the area, never their address.",
+    "files": [
+      "app/settings.tsx",
+      "app/welcome.tsx"
     ]
   },
   {

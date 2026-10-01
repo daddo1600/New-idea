@@ -1,7 +1,8 @@
+import * as Location from 'expo-location';
 import { router } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
 import { CalendarPicker } from '@/components/calendar-picker';
 import { Chip, EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
@@ -17,6 +18,8 @@ import { insertTrip, listTrips } from '@/db/trips-repo';
 import { parseMiles } from '@/domain/format';
 import type { LatLng } from '@/domain/geo';
 import { matchPlace, type Place } from '@/domain/places';
+import { areaLabel, clientVisitLabel, isNamedPlace, isPrivateLabel, privateLabel } from '@/domain/privacy';
+import { loadSettings } from '@/db/settings-repo';
 import { displayLocale, earliestDate, formatDistance, formatLongDate, fromUnits, toUnits } from '@/domain/regions';
 import { frequentPurposes, frequentSpots } from '@/domain/suggestions';
 import { toLocalIsoDate, type Trip, type VehicleType } from '@/domain/trip';
@@ -69,8 +72,11 @@ export default function AddTripScreen() {
   const [places, setPlaces] = useState<Place[]>([]);
   const [history, setHistory] = useState<Trip[]>([]);
 
+  const [clientPrivacy, setClientPrivacy] = useState(false);
+
   useEffect(() => {
     listPlaces(db).then(setPlaces, () => {});
+    loadSettings(db).then((settings) => setClientPrivacy(settings.clientPrivacy), () => {});
     ensureVehicles(db).then(({ vehicles: garage, current }) => {
       setVehicles(garage);
       setVehicle(current.type);
@@ -109,6 +115,24 @@ export default function AddTripScreen() {
 
   const clearError = () => setError(null);
 
+  /** True for the area only, false to keep the address as typed, null to go back and change it. */
+  const askAreaOnly = () =>
+    // The web preview has no alerts: the private choice.
+    Platform.OS === 'web'
+      ? Promise.resolve(true)
+      : new Promise<boolean | null>((resolve) =>
+          Alert.alert(
+            t('Save only the area?'),
+            t('Client privacy is on. MileMint can save the town and postcode area instead of the address, as “Client visit · area”.'),
+            [
+              { text: t('Cancel'), style: 'cancel', onPress: () => resolve(null) },
+              { text: t('Keep the address'), onPress: () => resolve(false) },
+              { text: t('Area only'), isPreferred: true, onPress: () => resolve(true) },
+            ],
+            { cancelable: true, onDismiss: () => resolve(null) },
+          ),
+        );
+
   const save = async () => {
     const parsed = parseMiles(distance);
     const meters = parsed === null ? null : fromUnits(parsed, region);
@@ -126,6 +150,22 @@ export default function AddTripScreen() {
     if (kind === 'business' && !purpose.trim()) {
       return setError(t('{{authority}} needs a business purpose, e.g. "Client meeting".', { authority: region.authority }));
     }
+    // Client privacy: address search still works, but offer to store just the area.
+    const placeNames = new Set(places.map((place) => place.name.trim().toLowerCase()));
+    const needsArea = (draft: PlaceDraft) =>
+      !draft.placeId && !isNamedPlace(draft.text, null, placeNames) && !isPrivateLabel(draft.text);
+    const areaOnly = clientPrivacy && (needsArea(from) || needsArea(to)) ? await askAreaOnly() : false;
+    if (areaOnly === null) return;
+    /** "Client visit · area" for an end the user didn't pick from their own places. */
+    const labelFor = async (draft: PlaceDraft) => {
+      if (!areaOnly || !needsArea(draft)) return draft.text.trim();
+      if (draft.at) {
+        const [found] = await Location.reverseGeocodeAsync(draft.at).catch(() => []);
+        const area = areaLabel(found, region.code);
+        if (area) return clientVisitLabel(area);
+      }
+      return privateLabel(draft.text, region.code);
+    };
     setError(null);
     setSaving(true);
     try {
@@ -140,8 +180,8 @@ export default function AddTripScreen() {
         startedAt: new Date(`${date}T12:00:00`).toISOString(),
         localDate: date,
         endedAt: null,
-        startLabel: from.text.trim(),
-        endLabel: to.text.trim(),
+        startLabel: await labelFor(from),
+        endLabel: await labelFor(to),
         distanceMeters: meters,
         classification: kind,
         purpose: purpose.trim(),
@@ -319,6 +359,7 @@ export default function AddTripScreen() {
               <PurposePicker
                 value={purpose}
                 recent={purposes}
+                clientPrivacy={clientPrivacy}
                 onChange={(value) => {
                   clearError();
                   setPurpose(value);

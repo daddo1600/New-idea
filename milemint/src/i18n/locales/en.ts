@@ -58,6 +58,14 @@ const en: Dictionary = {
     one: 'Claim it before {{date}}. {{total}} unclaimed across {{count}} earlier tax year.',
     other: 'Claim it before {{date}}. {{total}} unclaimed across {{count}} earlier tax years.',
   },
+  'Done. {{count}} past trips now show only the area.': {
+    one: 'Done. {{count}} past trip now shows only the area.',
+    other: 'Done. {{count}} past trips now show only the area.',
+  },
+  '{{count}} past trips may still have addresses and routes. Replace them with the area only and delete the routes?': {
+    one: '{{count}} past trip may still have an address and a route. Replace it with the area only and delete the route?',
+    other: '{{count}} past trips may still have addresses and routes. Replace them with the area only and delete the routes?',
+  },
 };
 
 export default en;

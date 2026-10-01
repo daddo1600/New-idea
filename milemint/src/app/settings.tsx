@@ -20,6 +20,8 @@ import { VehiclePicker } from '@/components/vehicle-picker';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
+import { countPastTrips, scrubPastTrips } from '@/db/privacy-repo';
+import { AREA_EXAMPLES, clientVisitLabel } from '@/domain/privacy';
 import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, saveSettings, type AppSettings } from '@/db/settings-repo';
 import { isValidShift, type WorkShift } from '@/domain/classify-rules';
@@ -140,6 +142,8 @@ export default function SettingsScreen() {
         <DrivingSection />
 
         <MileagePaySection />
+
+        <ClientPrivacySection />
 
         {REMINDERS_SUPPORTED && <ReminderSection />}
 
@@ -646,6 +650,111 @@ function DrivingSection() {
             trackColor={{ true: theme.accent }}
           />
         </View>
+      </ThemedView>
+    </>
+  );
+}
+
+/**
+ * Client privacy, for care workers, nurses and support workers who visit people
+ * at home: new drives keep the area of a visit, never the address or the route.
+ * Switching it on offers to do the same to past trips (which can't be undone).
+ */
+function ClientPrivacySection() {
+  const db = useSQLiteContext();
+  const theme = useTheme();
+  const t = useT();
+  const { region } = useRegion();
+  const [on, setOn] = useState<boolean | null>(null);
+  const [note, setNote] = useState<{ error: boolean; text: string } | null>(null);
+
+  useEffect(() => {
+    loadSettings(db).then((settings) => setOn(settings.clientPrivacy), () => setOn(false));
+  }, [db]);
+
+  const scrub = async () => {
+    try {
+      const count = await scrubPastTrips(db, region.code);
+      setNote({ error: false, text: t('Done. {{count}} past trips now show only the area.', { count }) });
+    } catch {
+      setNote({ error: true, text: t('Couldn’t change past trips. Please try again.') });
+    }
+  };
+
+  const confirmScrub = () =>
+    Alert.alert(
+      t('Remove addresses from past trips?'),
+      t('This can’t be undone. Dates, distances and purposes stay as they are; places you saved keep their names.'),
+      [
+        { text: t('Cancel'), style: 'cancel' },
+        { text: t('Remove addresses'), style: 'destructive', onPress: scrub },
+      ],
+    );
+
+  const offerScrub = async () => {
+    const count = await countPastTrips(db);
+    if (count === 0) return;
+    Alert.alert(
+      t('Past trips too?'),
+      t('{{count}} past trips may still have addresses and routes. Replace them with the area only and delete the routes?', {
+        count,
+      }),
+      [
+        { text: t('Keep them'), style: 'cancel' },
+        { text: t('Replace…'), onPress: confirmScrub },
+      ],
+    );
+  };
+
+  const change = async (value: boolean) => {
+    setNote(null);
+    setOn(value);
+    await saveSettings(db, { ...(await loadSettings(db)), clientPrivacy: value });
+    if (value) await offerScrub();
+  };
+
+  return (
+    <>
+      <ThemedText type="smallBold">{t('Client privacy')}</ThemedText>
+      <ThemedView type="backgroundElement" style={styles.card}>
+        <View style={styles.rowBetween}>
+          <View style={styles.flex}>
+            <ThemedText type="smallBold">{t('I visit clients or patients at home (care, nursing, support work)')}</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">
+              {t('We’ll keep only the area, never their address.')}
+            </ThemedText>
+          </View>
+          <Switch
+            accessibilityLabel={t('Client privacy')}
+            disabled={on === null}
+            value={on ?? false}
+            onValueChange={change}
+            trackColor={{ true: theme.accent }}
+          />
+        </View>
+        {on && (
+          <>
+            <ThemedText type="small" themeColor="textSecondary">
+              {t(
+                'New drives read like “{{example}}”, with no route saved. Places you saved yourself, like Home, keep their names. For the tax office, the area, the distance and the purpose are enough; add initials or a client number to the purpose if you like.',
+                { example: clientVisitLabel(AREA_EXAMPLES[region.code]) },
+              )}
+            </ThemedText>
+            <Pressable accessibilityRole="button" hitSlop={8} onPress={confirmScrub}>
+              <ThemedText type="small" style={{ color: theme.accent }}>
+                {t('Remove addresses from past trips')}
+              </ThemedText>
+            </Pressable>
+          </>
+        )}
+        {note && (
+          <ThemedText
+            type="small"
+            themeColor={note.error ? 'danger' : 'textSecondary'}
+            accessibilityRole={note.error ? 'alert' : undefined}>
+            {note.text}
+          </ThemedText>
+        )}
       </ThemedView>
     </>
   );

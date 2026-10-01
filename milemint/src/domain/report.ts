@@ -25,6 +25,11 @@ import { type Vehicle, vehicleLabel } from './vehicles';
  * where, distance, business purpose) plus totals, priced with the region's
  * official rates. Pure, so the numbers in the CSV and PDF are the ones
  * tested here.
+ *
+ * "Where" is whatever the trip stores. In client privacy mode that is the
+ * area only ("Client visit · Leeds LS6"), which with the purpose and distance
+ * is the business reason tax offices accept from care workers (see
+ * domain/privacy).
  */
 
 export type ReportRow = {
