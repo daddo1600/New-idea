@@ -39,6 +39,3 @@ export function inviteMessage(): string {
     ),
   );
 }
-
-/** The invite in the language the app opened in. Prefer `inviteMessage()`, which follows language changes. */
-export const INVITE_MESSAGE = inviteMessage();
