@@ -157,3 +157,53 @@ The free plan is made fair, with no surprise paywall. Personal drives no longer 
 | The month’s earliest drives go first, so a drive showing its value keeps it. The count starts again on the 1st. | Los primeros viajes del mes van primero, así que un viaje que muestra su valor lo conserva. La cuenta vuelve a empezar el día 1. | “The month’s first trips go first, so a trip that shows its value keeps it. The count starts again on day 1.” |
 
 **Sign-off:** approved, pending an on-device check of the “What counts?” sheet and the long welcome line on a small iPhone.
+
+## Round 6: shift rows
+
+The home list now shows one row per shift, which opens to its drives. A drive that runs past the end of a shift is cut there, and the part after it (the drive home) is left to sort. Shifts can be paused for an errand, started late (“Start shift from 10:40?”), have their times corrected, be undone for a few seconds after ending, and say when they end by themselves at 16 hours or the car has been parked at home a while. 41 new lines (row, legs, time steppers, pause, offers, undo toast, two notifications, a stored place label). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rules for all of them: the shift, drive and sort terms from the glossary; the part after a shift is never called personal (it is *not counted as work unless you choose*); nothing promises a tax result. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| {{count}} drives | one: {{count}} viaje / many: {{count}} viajes / other: {{count}} viajes | “{{count}} trip(s)” Plural one/many/other; *viaje* as everywhere. |
+| {{count}} drives since then look like deliveries. They’ll be added to the shift as business. | one: {{count}} viaje desde entonces parece una entrega. Se agregará al turno como de trabajo. / many: {{count}} viajes desde entonces parecen entregas. Se agregarán al turno como de trabajo. / other: {{count}} viajes desde entonces parecen entregas. Se agregarán al turno como de trabajo. | “{{count}} trips since then look like deliveries. They’ll be added to the shift as work.” *de trabajo* is this app’s word for business. |
+| {{purpose}} · {{count}} to sort | one: {{purpose}} · {{count}} por clasificar / many: {{purpose}} · {{count}} por clasificar / other: {{purpose}} · {{count}} por clasificar | “{{purpose}} · {{count}} to classify” Same text for every count. |
+| After your shift ended · not counted as work unless you say so | Después de terminar tu turno · no cuenta como trabajo salvo que tú lo marques | “After ending your shift · doesn’t count as work unless you mark it” Honest: it is left to the user. |
+| Deliveries | Entregas | “Deliveries” Purpose shown for shift drives. |
+| Did your shift start at {{time}}? | ¿Tu turno empezó a las {{time}}? | “Did your shift start at {{time}}?” |
+| Drives join or leave the shift by when they started. A drive past the end is cut there. | Los viajes entran o salen del turno según la hora en que empezaron. Un viaje que sigue después del final se corta ahí. | “Trips enter or leave the shift by the time they started. A trip that carries on after the end is cut there.” |
+| During a pause in your shift · not counted as work unless you say so | Durante una pausa del turno · no cuenta como trabajo salvo que tú lo marques | “During a pause of the shift · doesn’t count as work unless you mark it” |
+| End 15 minutes earlier | Adelantar el final 15 minutos | “Bring the end forward 15 minutes” VoiceOver only; *adelantar/atrasar* are the everyday es-419 verbs. |
+| End 15 minutes later | Atrasar el final 15 minutos | “Push the end back 15 minutes” |
+| End your shift? | ¿Terminar tu turno? | “End your shift?” Matches *Terminar turno*. |
+| Ended {{time}} | Terminó a las {{time}} | “Ended at {{time}}” |
+| Hide drives ▴ | Ocultar viajes ▴ | “Hide trips ▴” 1.2×. |
+| Hides the drives in this shift | Oculta los viajes de este turno | “Hides the trips of this shift” |
+| It was still on, so MileMint ended it. Drives from now on are left for you to sort. Tap to check the times. | Seguía activo, así que MileMint lo terminó. Los viajes de ahora en adelante quedan para que tú los clasifiques. Toca para revisar los horarios. | “It was still on, so MileMint ended it. Trips from now on are left for you to classify. Tap to check the times.” Notification body. |
+| Map of the drives in this shift | Mapa de los viajes de este turno | “Map of the trips of this shift” |
+| On shift | En turno | “On shift” Badge, as the shift bar. |
+| Pause | Pausar | “Pause” Button, 1.2×. |
+| Pause the shift for a personal errand | Pausar el turno para un asunto personal | “Pause the shift for a personal matter” *asunto personal*: neutral, not “errand” (*mandado* is regional). |
+| Paused · {{elapsed}} | En pausa · {{elapsed}} | “Paused · {{elapsed}}” |
+| Paused: drives now aren’t counted as work. Resume when you’re back. | En pausa: los viajes de ahora no cuentan como trabajo. Reanuda cuando vuelvas. | “Paused: trips now don’t count as work. Resume when you get back.” |
+| Resume | Reanudar | “Resume” |
+| Resume the shift | Reanudar el turno | “Resume the shift” |
+| Shift | Turno | “Shift” Badge. |
+| Shift ended | Turno terminado | “Shift ended” Toast. |
+| Shift on {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}} | Turno del {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}} | “Shift of {{date}}, …” VoiceOver label for the whole row. |
+| Show drives ▾ | Ver viajes ▾ | “See trips ▾” 0.9×. |
+| Shows the drives in this shift | Muestra los viajes de este turno | “Shows the trips of this shift” |
+| Since {{time}} | Desde las {{time}} | “Since {{time}}” As the live-drive banner. |
+| Start 15 minutes earlier | Adelantar el inicio 15 minutos | “Bring the start forward 15 minutes” |
+| Start 15 minutes later | Atrasar el inicio 15 minutos | “Push the start back 15 minutes” |
+| Start from {{time}} | Iniciar a las {{time}} | “Start at {{time}}” Button, 1.3×. |
+| Start shift from {{time}}? | ¿Iniciar turno desde las {{time}}? | “Start shift from {{time}}?” *Iniciar turno* as the swipe. |
+| Started {{time}} | Empezó a las {{time}} | “Started at {{time}}” |
+| Still working | Sigo trabajando | “I’m still working” First person: the user’s answer. |
+| Undo | Deshacer | “Undo” Apple’s es-419 wording. |
+| Undo ending the shift | Deshacer el fin del turno | “Undo the end of the shift” |
+| Where your shift ended | Donde terminó tu turno | “Where your shift ended” Stored as a place name, shown translated. |
+| You’ve been parked at home for a while and your shift is still on. Drives after it ends aren’t counted as work. | Llevas un rato estacionado en casa y tu turno sigue activo. Los viajes después de terminarlo no cuentan como trabajo. | “You’ve been parked at home for a while and your shift is still on. Trips after ending it don’t count as work.” *estacionado* (es-419). |
+| You’ve been parked at home since {{time}}. Drives after the shift aren’t counted as work. | Estás estacionado en casa desde las {{time}}. Los viajes después del turno no cuentan como trabajo. | “You’re parked at home since {{time}}. Trips after the shift don’t count as work.” |
+| Your shift ended after 16 hours | Tu turno terminó tras 16 horas | “Your shift ended after 16 hours” |
+
+**Sign-off:** approved, pending an on-device look at the shift row and the undo toast in this language.

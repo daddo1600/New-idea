@@ -130,6 +130,12 @@ const en: Dictionary = {
     one: 'Your free plan: {{count}} automatic drive a month.',
     other: 'Your free plan: {{count}} automatic drives a month.',
   },
+  '{{count}} drives': { one: '{{count}} drive', other: '{{count}} drives' },
+  '{{purpose}} · {{count}} to sort': { one: '{{purpose}} · {{count}} to sort', other: '{{purpose}} · {{count}} to sort' },
+  '{{count}} drives since then look like deliveries. They’ll be added to the shift as business.': {
+    one: '{{count}} drive since then looks like a delivery. It’ll be added to the shift as business.',
+    other: '{{count}} drives since then look like deliveries. They’ll be added to the shift as business.',
+  },
 };
 
 export default en;

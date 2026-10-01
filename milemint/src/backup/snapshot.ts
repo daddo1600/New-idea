@@ -24,6 +24,8 @@ export const BACKUP_TABLES = [
   'vehicles',
   'places',
   'shifts',
+  // Breaks in a shift: drives in them aren't work.
+  'shift_pauses',
   'trips',
   'trip_routes',
   // The audit trail: who changed what and when (IRS Pub 463). Restored as is.
@@ -212,7 +214,7 @@ const UPGRADES: Partial<Record<number, (tables: Tables) => Tables>> = {
   // 2: trip_routes. 3: places, settings, trip place links and auto_reason. 4: odometer_readings.
   // 5: trips.vehicle (default 'car'), trips.shift_id, shifts. 6: trips.auto_default (default 0).
   // 7: vehicles and trips.vehicle_id (null: the app links old trips to the first vehicle).
-  // 8: logbooks and car_expenses.
+  // 8: logbooks and car_expenses. 9: shift_pauses and trips.off_shift_id (null).
 };
 
 export function upgradeSnapshot(snapshot: Snapshot, currentSchema = SCHEMA_VERSION): Snapshot {
@@ -300,6 +302,7 @@ export function consistentTables(tables: Tables): Tables {
   const trips = ids(tables.trips, 'id');
   const places = ids(tables.places, 'id');
   const vehicles = ids(tables.vehicles, 'id');
+  const shifts = ids(tables.shifts, 'id');
   const link = (value: Cell | undefined, known: Set<Cell>) =>
     value === undefined || value === null || known.has(value) ? value : null;
   return {
@@ -317,6 +320,8 @@ export function consistentTables(tables: Tables): Tables {
     trip_routes: tables.trip_routes.filter((route) => trips.has(route.trip_id)),
     logbooks: tables.logbooks.filter((logbook) => vehicles.has(logbook.vehicle_id)),
     car_expenses: tables.car_expenses.filter((expenses) => vehicles.has(expenses.vehicle_id)),
+    // A pause can't outlive its shift (the shift deleted a moment before the backup).
+    shift_pauses: tables.shift_pauses.filter((pause) => shifts.has(pause.shift_id)),
   };
 }
 

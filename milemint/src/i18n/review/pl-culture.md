@@ -169,3 +169,53 @@ The free plan is made fair, with no surprise paywall. Personal drives no longer 
 | The month’s earliest drives go first, so a drive showing its value keeps it. The count starts again on the 1st. | Najpierw liczą się najwcześniejsze przejazdy miesiąca, więc przejazd, który pokazuje wartość, ją zachowuje. Licznik startuje od nowa 1. dnia miesiąca. | “The month’s earliest trips count first, so a trip that shows its value keeps it. The counter starts again on the 1st of the month.” |
 
 **Sign-off:** approved, pending an on-device check of the “What counts?” sheet and the long welcome line on a small iPhone.
+
+## Round 6: shift rows
+
+The home list now shows one row per shift, which opens to its drives. A drive that runs past the end of a shift is cut there, and the part after it (the drive home) is left to sort. Shifts can be paused for an errand, started late (“Start shift from 10:40?”), have their times corrected, be undone for a few seconds after ending, and say when they end by themselves at 16 hours or the car has been parked at home a while. 41 new lines (row, legs, time steppers, pause, offers, undo toast, two notifications, a stored place label). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rules for all of them: the shift, drive and sort terms from the glossary; the part after a shift is never called personal (it is *not counted as work unless you choose*); nothing promises a tax result. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| {{count}} drives | one: {{count}} przejazd / few: {{count}} przejazdy / many: {{count}} przejazdów / other: {{count}} przejazdu | “{{count}} drive(s)” one/few/many/other. |
+| {{count}} drives since then look like deliveries. They’ll be added to the shift as business. | one: {{count}} przejazd od tamtej pory wygląda na dostawę. Zostanie dodany do zmiany jako służbowy. / few: {{count}} przejazdy od tamtej pory wyglądają na dostawy. Zostaną dodane do zmiany jako służbowe. / many: {{count}} przejazdów od tamtej pory wygląda na dostawy. Zostaną dodane do zmiany jako służbowe. / other: {{count}} przejazdu od tamtej pory wygląda na dostawy. Zostaną dodane do zmiany jako służbowe. | “{{count}} drives since then look like deliveries. They’ll be added to the shift as business.” Verb agreement per form (*wygląda/wyglądają*). |
+| {{purpose}} · {{count}} to sort | one: {{purpose}} · do oznaczenia: {{count}} / few: {{purpose}} · do oznaczenia: {{count}} / many: {{purpose}} · do oznaczenia: {{count}} / other: {{purpose}} · do oznaczenia: {{count}} | “{{purpose}} · to mark: {{count}}” Count after a colon so one text fits every form. |
+| After your shift ended · not counted as work unless you say so | Po końcu zmiany · nie liczy się jako praca, chyba że zdecydujesz inaczej | “After the end of the shift · doesn’t count as work unless you decide otherwise” |
+| Deliveries | Dostawy | “Deliveries” |
+| Did your shift start at {{time}}? | Zmiana zaczęła się o {{time}}? | “The shift started at {{time}}?” |
+| Drives join or leave the shift by when they started. A drive past the end is cut there. | Przejazdy trafiają do zmiany albo z niej wypadają według godziny rozpoczęcia. Przejazd trwający dłużej niż zmiana zostaje podzielony w chwili jej końca. | “Drives go into the shift or drop out of it by their start time. A drive lasting past the shift is split at the moment it ends.” |
+| During a pause in your shift · not counted as work unless you say so | W przerwie w zmianie · nie liczy się jako praca, chyba że zdecydujesz inaczej | “In a break in the shift · doesn’t count as work unless you decide otherwise” |
+| End 15 minutes earlier | Koniec 15 minut wcześniej | “End 15 minutes earlier” |
+| End 15 minutes later | Koniec 15 minut później | “End 15 minutes later” |
+| End your shift? | Zakończyć zmianę? | “End the shift?” |
+| Ended {{time}} | Koniec o {{time}} | “End at {{time}}” |
+| Hide drives ▴ | Ukryj przejazdy ▴ | “Hide drives ▴” |
+| Hides the drives in this shift | Ukrywa przejazdy z tej zmiany | “Hides the drives from this shift” |
+| It was still on, so MileMint ended it. Drives from now on are left for you to sort. Tap to check the times. | Wciąż trwała, więc MileMint ją zakończył. Kolejne przejazdy zostawiamy Tobie do oznaczenia. Stuknij, aby sprawdzić godziny. | “It was still on, so MileMint ended it. We leave the next drives for you to mark. Tap to check the hours.” *Stuknij*, as elsewhere. |
+| Map of the drives in this shift | Mapa przejazdów z tej zmiany | “Map of the drives from this shift” |
+| On shift | Na zmianie | “On shift” |
+| Pause | Pauza | “Pause” |
+| Pause the shift for a personal errand | Wstrzymaj zmianę na prywatną sprawę | “Pause the shift for a private matter” |
+| Paused · {{elapsed}} | Pauza · {{elapsed}} | “Pause · {{elapsed}}” |
+| Paused: drives now aren’t counted as work. Resume when you’re back. | Pauza: przejazdy teraz nie liczą się jako praca. Wznów, gdy wrócisz. | “Pause: drives now don’t count as work. Resume when you’re back.” |
+| Resume | Wznów | “Resume” |
+| Resume the shift | Wznów zmianę | “Resume the shift” |
+| Shift | Zmiana | “Shift” |
+| Shift ended | Zmiana zakończona | “Shift ended” |
+| Shift on {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}} | Zmiana {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}} | “Shift {{date}}, …” |
+| Show drives ▾ | Pokaż przejazdy ▾ | “Show drives ▾” |
+| Shows the drives in this shift | Pokazuje przejazdy z tej zmiany | “Shows the drives from this shift” |
+| Since {{time}} | Od {{time}} | “From {{time}}” |
+| Start 15 minutes earlier | Początek 15 minut wcześniej | “Start 15 minutes earlier” |
+| Start 15 minutes later | Początek 15 minut później | “Start 15 minutes later” |
+| Start from {{time}} | Zacznij od {{time}} | “Start from {{time}}” |
+| Start shift from {{time}}? | Zacząć zmianę od {{time}}? | “Start the shift from {{time}}?” |
+| Started {{time}} | Początek o {{time}} | “Start at {{time}}” |
+| Still working | Wciąż pracuję | “Still working” |
+| Undo | Cofnij | “Undo” iOS Polish. |
+| Undo ending the shift | Cofnij zakończenie zmiany | “Undo ending the shift” |
+| Where your shift ended | Miejsce końca zmiany | “Place of the shift’s end” |
+| You’ve been parked at home for a while and your shift is still on. Drives after it ends aren’t counted as work. | Od dłuższego czasu stoisz zaparkowany pod domem, a zmiana wciąż trwa. Przejazdy po jej końcu nie liczą się jako praca. | “You’ve been parked outside your home for a long while and the shift is still on. Drives after it ends don’t count as work.” *pod domem*: what Poles say for parked at home. |
+| You’ve been parked at home since {{time}}. Drives after the shift aren’t counted as work. | Stoisz zaparkowany pod domem od {{time}}. Przejazdy po zmianie nie liczą się jako praca. | “You’ve been parked outside your home since {{time}}. Drives after the shift don’t count as work.” |
+| Your shift ended after 16 hours | Zmiana zakończyła się po 16 godzinach | “The shift ended after 16 hours” |
+
+**Sign-off:** approved, pending an on-device look at the shift row and the undo toast in this language.

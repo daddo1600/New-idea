@@ -6,14 +6,16 @@ import { AppState, Platform } from 'react-native';
 import { getBackgroundDatabase } from '@/db/database';
 import { listPlaces } from '@/db/places-repo';
 import { loadSettings } from '@/db/settings-repo';
-import { shiftAt } from '@/db/shifts-repo';
+import { shiftAround, shiftEndMs } from '@/db/shifts-repo';
+import { inWriteTransaction } from '@/db/transaction';
 import { refreshLaunchTotal } from '@/region/launch-total';
-import { autoTripExists, insertTrip, listClassificationHistory } from '@/db/trips-repo';
+import { autoTripExists, insertTripUnlocked, listClassificationHistory, type NewTrip } from '@/db/trips-repo';
 import { autoClassify } from '@/domain/auto-classify';
 import { suggestClassification } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
 import { matchPlace } from '@/domain/places';
 import { areaLabel, clientVisitLabel } from '@/domain/privacy';
+import { shiftLegs } from '@/domain/shift-split';
 import type { RegionCode } from '@/domain/regions';
 import {
   GEOFENCE_RADIUS_M,
@@ -28,6 +30,7 @@ import type { DetectedTrip, LocationSample } from '@/domain/trip-detector';
 import { t } from '@/i18n/i18n';
 
 import { waitForPromptAnswer } from './prompt-answer';
+import { cancelEndShiftPrompt, scheduleEndShiftPrompt } from './shift-notifications';
 import { loadTrackerRecord, saveTrackerRecord } from './tracker-store';
 
 /**
@@ -133,58 +136,76 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
     listClassificationHistory(db),
     loadSettings(db),
   ]);
+  // Shift mode: a drive is cut where the shift ended (or a pause began), and
+  // each part sorted on its own: the last delivery is work, the drive home isn't.
+  const around = settings.shiftMode ? await shiftAround(db, new Date(trip.startedAt).toISOString()) : null;
+  const legs = shiftLegs(trip, around && { ...around, end: shiftEndMs(around.shift) });
   const startPlace = matchPlace(trip.start, places);
   const endPlace = matchPlace(trip.end, places);
   // Places the user named (Home, Work, a saved office) keep their names, private or not.
   const label = settings.clientPrivacy ? (at: LatLng) => privateLabelFor(at, settings.region) : labelFor;
-  const [startLabel, endLabel] = await Promise.all([
+  const [startLabel, endLabel, ...cutLabels] = await Promise.all([
     startPlace?.name ?? label(trip.start),
     endPlace?.name ?? label(trip.end),
+    // Where each cut fell, looked up like any other stop.
+    ...legs.slice(1).map((leg) => label(leg.drive.start)),
   ]);
-  const started = new Date(trip.startedAt);
-  // Shift mode: every drive in a shift is work.
-  const shift = settings.shiftMode ? await shiftAt(db, started.toISOString()) : null;
-  const suggestion = suggestClassification(
-    {
-      start: { placeId: startPlace?.id ?? null, point: trip.start },
-      end: { placeId: endPlace?.id ?? null, point: trip.end },
-      // The phone's current time zone: work hours are "when I work where I am".
-      weekday: started.getDay(),
-      minutesOfDay: started.getHours() * 60 + started.getMinutes(),
-    },
-    { history, places, workHours: settings.workHoursEnabled ? settings.workWeek : null },
-  );
-  const sorted = autoClassify({
-    inShift: shift !== null,
-    suggestion,
-    shiftMode: settings.shiftMode,
-    defaultBusiness: settings.defaultBusiness,
-  });
-  await insertTrip(
-    db,
-    {
+  const rows = legs.map((leg, index) => {
+    const first = index === 0;
+    const last = index === legs.length - 1;
+    const legStartPlace = first ? startPlace : null;
+    const legEndPlace = last ? endPlace : null;
+    const started = new Date(leg.drive.startedAt);
+    const suggestion = suggestClassification(
+      {
+        start: { placeId: legStartPlace?.id ?? null, point: leg.drive.start },
+        end: { placeId: legEndPlace?.id ?? null, point: leg.drive.end },
+        // The phone's current time zone: work hours are "when I work where I am".
+        weekday: started.getDay(),
+        minutesOfDay: started.getHours() * 60 + started.getMinutes(),
+      },
+      { history, places, workHours: settings.workHoursEnabled ? settings.workWeek : null },
+    );
+    const sorted = autoClassify({
+      inShift: leg.shiftId !== null,
+      offShift: leg.offShiftId !== null,
+      suggestion,
+      shiftMode: settings.shiftMode,
+      defaultBusiness: settings.defaultBusiness,
+    });
+    const newTrip: NewTrip = {
       startedAt: started.toISOString(),
       // The date where the drive started, not where the phone is when it's saved.
-      localDate: isoDateAtOffset(trip.startedAt, trip.utcOffsetMin),
-      endedAt: new Date(trip.endedAt).toISOString(),
-      startLabel,
-      endLabel,
-      distanceMeters: trip.distanceMeters,
+      localDate: isoDateAtOffset(leg.drive.startedAt, trip.utcOffsetMin),
+      endedAt: new Date(leg.drive.endedAt).toISOString(),
+      startLabel: first ? startLabel : cutLabels[index - 1],
+      endLabel: last ? endLabel : cutLabels[index],
+      distanceMeters: leg.drive.distanceMeters,
       classification: sorted.classification,
       // Business without a learned purpose stays empty; the trip list asks for one.
       purpose: sorted.purpose,
       source: 'auto',
-      startPlaceId: startPlace?.id ?? null,
-      endPlaceId: endPlace?.id ?? null,
+      startPlaceId: legStartPlace?.id ?? null,
+      endPlaceId: legEndPlace?.id ?? null,
       // A shift is stored as the work-hours rule (working time); shiftId tells them apart.
       autoReason: sorted.reason,
       vehicle: settings.vehicle,
       vehicleId: settings.currentVehicleId,
-      shiftId: shift?.id ?? null,
-    },
+      shiftId: leg.shiftId,
+      offShiftId: leg.offShiftId,
+    };
     // Client privacy keeps no route at all: it would lead straight to the client's door.
-    settings.clientPrivacy ? [] : trip.route,
-  );
+    return { trip: newTrip, route: settings.clientPrivacy ? [] : leg.drive.route };
+  });
+  // All the parts or none: a drive is never half saved.
+  await inWriteTransaction(db, async () => {
+    for (const row of rows) await insertTripUnlocked(db, row.trip, row.route);
+  });
+  // Parked at Home with the shift still on: ask in a while whether it's over.
+  const lastLeg = legs[legs.length - 1];
+  if (around && !around.shift.endedAt && lastLeg.shiftId && endPlace?.kind === 'home') {
+    await scheduleEndShiftPrompt(trip.endedAt).catch(() => {});
+  }
   // Keep the opening animation's total current for the next launch.
   await refreshLaunchTotal(db).catch(() => {});
 }
@@ -207,6 +228,8 @@ async function handleGeofenceExit(): Promise<void> {
   const next = onGeofenceExit(record, Date.now());
   if (next === record) return;
   await saveTrackerRecord(db, next);
+  // Driving again: not parked at home after all.
+  await cancelEndShiftPrompt();
   await stopTask(GEOFENCE_TASK, Location.hasStartedGeofencingAsync, Location.stopGeofencingAsync);
   await startGps();
 }

@@ -144,3 +144,53 @@ The free plan is made fair, with no surprise paywall. Personal drives no longer 
 | The month’s earliest drives go first, so a drive showing its value keeps it. The count starts again on the 1st. | 每月最早的行程优先计入，所以已显示金额的行程会一直保留。每月 1 日重新计数。 | “Each month’s earliest trips count first, so a trip already showing its amount keeps it. The count restarts on the 1st of each month.” |
 
 **Sign-off:** approved, pending an on-device check of the “What counts?” sheet and the long welcome line on a small iPhone.
+
+## Round 6: shift rows
+
+The home list now shows one row per shift, which opens to its drives. A drive that runs past the end of a shift is cut there, and the part after it (the drive home) is left to sort. Shifts can be paused for an errand, started late (“Start shift from 10:40?”), have their times corrected, be undone for a few seconds after ending, and say when they end by themselves at 16 hours or the car has been parked at home a while. 41 new lines (row, legs, time steppers, pause, offers, undo toast, two notifications, a stored place label). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rules for all of them: the shift, drive and sort terms from the glossary; the part after a shift is never called personal (it is *not counted as work unless you choose*); nothing promises a tax result. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| {{count}} drives | other: {{count}} 次行程 | “{{count}} trips” |
+| {{count}} drives since then look like deliveries. They’ll be added to the shift as business. | other: 从那时起的 {{count}} 次行程看起来是在送货，会作为工作行程加入本班次。 | “The {{count}} trips since then look like delivering; they’ll join this shift as work trips.” 送货 as “Delivery or collection”. |
+| {{purpose}} · {{count}} to sort | other: {{purpose}} · {{count}} 次待分类 | “{{purpose}} · {{count}} to classify” |
+| After your shift ended · not counted as work unless you say so | 收工之后 · 除非你自己标记，否则不算工作 | “After finishing work · not counted as work unless you mark it yourself” 收工 = end of shift, as the button. |
+| Deliveries | 送货 | “Delivering goods” |
+| Did your shift start at {{time}}? | 你是 {{time}} 开工的吗？ | “Did you start work at {{time}}?” 开工 = start shift. |
+| Drives join or leave the shift by when they started. A drive past the end is cut there. | 行程按开始时间计入或移出班次。收工时还在进行的行程，会在收工那一刻分成两段。 | “Trips are counted into or out of the shift by start time. A trip still going at finishing time is split into two at that moment.” |
+| During a pause in your shift · not counted as work unless you say so | 班次暂停期间 · 除非你自己标记，否则不算工作 | “While the shift is paused · not counted as work unless you mark it yourself” |
+| End 15 minutes earlier | 收工时间提前 15 分钟 | “Finish time 15 minutes earlier” |
+| End 15 minutes later | 收工时间推后 15 分钟 | “Finish time 15 minutes later” |
+| End your shift? | 要收工吗？ | “Finish work?” |
+| Ended {{time}} | {{time}} 收工 | “Finished at {{time}}” |
+| Hide drives ▴ | 收起行程 ▴ | “Collapse trips ▴” |
+| Hides the drives in this shift | 收起这个班次的行程 | “Collapses this shift’s trips” |
+| It was still on, so MileMint ended it. Drives from now on are left for you to sort. Tap to check the times. | 班次一直没收工，MileMint 已帮你收工。之后的行程留给你自己分类。轻点查看时间。 | “The shift was never finished, so MileMint finished it for you. Later trips are left for you to classify. Tap to see the time.” 轻点, as elsewhere. |
+| Map of the drives in this shift | 这个班次的行程地图 | “Map of this shift’s trips” |
+| On shift | 开工中 | “Working” As the shift bar. |
+| Pause | 暂停 | “Pause” |
+| Pause the shift for a personal errand | 为私事暂停班次 | “Pause the shift for a personal matter” |
+| Paused · {{elapsed}} | 已暂停 · {{elapsed}} | “Paused · {{elapsed}}” |
+| Paused: drives now aren’t counted as work. Resume when you’re back. | 已暂停：现在的行程不算工作。回来后再继续。 | “Paused: current trips don’t count as work. Continue when you’re back.” |
+| Resume | 继续 | “Continue” |
+| Resume the shift | 继续班次 | “Continue the shift” |
+| Shift | 班次 | “Shift” |
+| Shift ended | 已收工 | “Finished work” |
+| Shift on {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}} | {{date}} 的班次，{{span}}，{{hours}}，{{distance}}，{{drives}}，{{value}} | “Shift of {{date}}, …” |
+| Show drives ▾ | 查看行程 ▾ | “View trips ▾” |
+| Shows the drives in this shift | 展开这个班次的行程 | “Expands this shift’s trips” |
+| Since {{time}} | 从 {{time}} 起 | “From {{time}}” |
+| Start 15 minutes earlier | 开工时间提前 15 分钟 | “Start time 15 minutes earlier” |
+| Start 15 minutes later | 开工时间推后 15 分钟 | “Start time 15 minutes later” |
+| Start from {{time}} | 从 {{time}} 开工 | “Start work from {{time}}” |
+| Start shift from {{time}}? | 从 {{time}} 开始算开工？ | “Count work as starting from {{time}}?” |
+| Started {{time}} | {{time}} 开工 | “Started work {{time}}” |
+| Still working | 还在干活 | “Still working” |
+| Undo | 撤销 | “Undo” iOS 撤销. |
+| Undo ending the shift | 撤销收工 | “Undo finishing work” |
+| Where your shift ended | 收工地点 | “Finishing place” |
+| You’ve been parked at home for a while and your shift is still on. Drives after it ends aren’t counted as work. | 你已在家停车一段时间，班次还没收工。收工后的行程不算工作。 | “You’ve been parked at home for a while and the shift isn’t finished. Trips after finishing don’t count as work.” |
+| You’ve been parked at home since {{time}}. Drives after the shift aren’t counted as work. | 你从 {{time}} 起就停在家里了。收工后的行程不算工作。 | “You’ve been parked at home since {{time}}. Trips after finishing don’t count as work.” |
+| Your shift ended after 16 hours | 班次满 16 小时，已自动收工 | “Shift reached 16 hours, finished automatically” |
+
+**Sign-off:** approved, pending an on-device look at the shift row and the undo toast in this language.

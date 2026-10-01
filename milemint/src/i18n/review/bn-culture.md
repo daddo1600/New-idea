@@ -156,3 +156,53 @@ The free plan is made fair, with no surprise paywall. Personal drives no longer 
 | The month’s earliest drives go first, so a drive showing its value keeps it. The count starts again on the 1st. | মাসের সবচেয়ে আগের ট্রিপগুলো আগে গোনা হয়, তাই যে ট্রিপের মূল্য দেখা যাচ্ছে, সেটি তা রাখে। প্রতি মাসের 1 তারিখে গোনা আবার শুরু হয়। | “The month’s earliest trips are counted first, so a trip whose value shows keeps it. Counting starts again on the 1st of every month.” |
 
 **Sign-off:** approved, pending an on-device check of the “What counts?” sheet and the long welcome line on a small iPhone.
+
+## Round 6: shift rows
+
+The home list now shows one row per shift, which opens to its drives. A drive that runs past the end of a shift is cut there, and the part after it (the drive home) is left to sort. Shifts can be paused for an errand, started late (“Start shift from 10:40?”), have their times corrected, be undone for a few seconds after ending, and say when they end by themselves at 16 hours or the car has been parked at home a while. 41 new lines (row, legs, time steppers, pause, offers, undo toast, two notifications, a stored place label). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rules for all of them: the shift, drive and sort terms from the glossary; the part after a shift is never called personal (it is *not counted as work unless you choose*); nothing promises a tax result. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| {{count}} drives | one: {{count}}টি ট্রিপ / other: {{count}}টি ট্রিপ | “{{count}} trip(s)” -টি classifier, Western digits as the rest of the file. |
+| {{count}} drives since then look like deliveries. They’ll be added to the shift as business. | one: তখন থেকে {{count}}টি ট্রিপ ডেলিভারির মতো লাগছে। এটি ব্যবসায়িক হিসেবে শিফটে যোগ হবে। / other: তখন থেকে {{count}}টি ট্রিপ ডেলিভারির মতো লাগছে। এগুলো ব্যবসায়িক হিসেবে শিফটে যোগ হবে। | “Since then {{count}} trips look like deliveries. They will be added to the shift as business.” |
+| {{purpose}} · {{count}} to sort | one: {{purpose}} · {{count}}টি বাছাই বাকি / other: {{purpose}} · {{count}}টি বাছাই বাকি | “{{purpose}} · {{count}} left to sort” |
+| After your shift ended · not counted as work unless you say so | শিফট শেষ হওয়ার পরে · আপনি না বাছলে কাজ হিসেবে গোনা হবে না | “After the shift ends · not counted as work unless you choose” *বাছা* ties to *বাছাই* (sort). |
+| Deliveries | ডেলিভারি | “Delivery” |
+| Did your shift start at {{time}}? | আপনার শিফট কি {{time}}-এ শুরু হয়েছিল? | “Did your shift start at {{time}}?” |
+| Drives join or leave the shift by when they started. A drive past the end is cut there. | কোন ট্রিপ কখন শুরু হয়েছে তা দেখে সেটি শিফটে যোগ হয় বা বাদ যায়। শিফট শেষের পরেও চলা ট্রিপ সেখানেই দুই ভাগ করা হয়। | “A trip joins or leaves the shift by when it started. A trip still going after the shift ends is split in two there.” |
+| During a pause in your shift · not counted as work unless you say so | শিফটের বিরতির সময় · আপনি না বাছলে কাজ হিসেবে গোনা হবে না | “During the shift’s break · not counted as work unless you choose” |
+| End 15 minutes earlier | শেষের সময় 15 মিনিট আগে করুন | “Make the end time 15 minutes earlier” |
+| End 15 minutes later | শেষের সময় 15 মিনিট পরে করুন | “Make the end time 15 minutes later” |
+| End your shift? | শিফট শেষ করবেন? | “Will you end the shift?” |
+| Ended {{time}} | {{time}}-এ শেষ | “Ended at {{time}}” |
+| Hide drives ▴ | ট্রিপ লুকান ▴ | “Hide trips ▴” |
+| Hides the drives in this shift | এই শিফটের ট্রিপগুলো লুকায় | “Hides this shift’s trips” |
+| It was still on, so MileMint ended it. Drives from now on are left for you to sort. Tap to check the times. | এটি তখনও চালু ছিল, তাই MileMint এটি শেষ করেছে। এখন থেকে ট্রিপগুলো আপনাকেই বাছাই করতে হবে। সময় দেখে নিতে ট্যাপ করুন। | “It was still on, so MileMint ended it. From now on you’ll have to sort the trips yourself. Tap to check the time.” |
+| Map of the drives in this shift | এই শিফটের ট্রিপগুলোর ম্যাপ | “Map of this shift’s trips” |
+| On shift | শিফটে | “On shift” |
+| Pause | বিরতি | “Break” |
+| Pause the shift for a personal errand | ব্যক্তিগত কাজের জন্য শিফটে বিরতি দিন | “Take a break in the shift for personal work” |
+| Paused · {{elapsed}} | বিরতিতে · {{elapsed}} | “On break · {{elapsed}}” |
+| Paused: drives now aren’t counted as work. Resume when you’re back. | বিরতিতে: এখনকার ট্রিপ কাজ হিসেবে গোনা হবে না। ফিরে এসে আবার শুরু করুন। | “On break: current trips won’t be counted as work. Come back and start again.” |
+| Resume | আবার শুরু | “Start again” |
+| Resume the shift | শিফট আবার শুরু করুন | “Start the shift again” |
+| Shift | শিফট | “Shift” |
+| Shift ended | শিফট শেষ হয়েছে | “The shift has ended” |
+| Shift on {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}} | {{date}}-এর শিফট, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}} | “Shift of {{date}}, …” |
+| Show drives ▾ | ট্রিপ দেখুন ▾ | “See trips ▾” |
+| Shows the drives in this shift | এই শিফটের ট্রিপগুলো দেখায় | “Shows this shift’s trips” |
+| Since {{time}} | {{time}} থেকে | “From {{time}}” |
+| Start 15 minutes earlier | শুরুর সময় 15 মিনিট আগে করুন | “Make the start time 15 minutes earlier” |
+| Start 15 minutes later | শুরুর সময় 15 মিনিট পরে করুন | “Make the start time 15 minutes later” |
+| Start from {{time}} | {{time}} থেকে শুরু | “Start from {{time}}” |
+| Start shift from {{time}}? | {{time}} থেকে শিফট শুরু করবেন? | “Will you start the shift from {{time}}?” |
+| Started {{time}} | {{time}}-এ শুরু | “Started at {{time}}” |
+| Still working | এখনও কাজ করছি | “Still working” |
+| Undo | ফিরিয়ে নিন | “Take it back” Shorter than iOS *পূর্বাবস্থায় ফেরান* for a toast link; same meaning. |
+| Undo ending the shift | শিফট শেষ করা ফিরিয়ে নিন | “Take back ending the shift” |
+| Where your shift ended | যেখানে শিফট শেষ হয়েছে | “Where the shift ended” |
+| You’ve been parked at home for a while and your shift is still on. Drives after it ends aren’t counted as work. | আপনি বেশ কিছুক্ষণ ধরে বাড়িতে পার্ক করে আছেন, আর আপনার শিফট এখনও চালু। শিফট শেষের পরের ট্রিপ কাজ হিসেবে গোনা হয় না। | “You’ve been parked at home for quite a while, and your shift is still on. Trips after the shift ends aren’t counted as work.” |
+| You’ve been parked at home since {{time}}. Drives after the shift aren’t counted as work. | আপনি {{time}} থেকে বাড়িতে পার্ক করে আছেন। শিফটের পরের ট্রিপ কাজ হিসেবে গোনা হয় না। | “You’ve been parked at home since {{time}}. Trips after the shift aren’t counted as work.” |
+| Your shift ended after 16 hours | আপনার শিফট 16 ঘণ্টা পরে শেষ হয়েছে | “Your shift ended after 16 hours” |
+
+**Sign-off:** approved, pending an on-device look at the shift row and the undo toast in this language.

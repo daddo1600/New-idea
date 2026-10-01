@@ -142,6 +142,20 @@ const MIGRATIONS: readonly string[] = [
     PRIMARY KEY (vehicle_id, tax_year)
   );
   `,
+  `
+  -- Pauses in a shift (a personal errand on the way): drives in one aren't work.
+  CREATE TABLE shift_pauses (
+    id TEXT PRIMARY KEY NOT NULL,
+    shift_id TEXT NOT NULL REFERENCES shifts (id) ON DELETE CASCADE,
+    started_at TEXT NOT NULL,
+    ended_at TEXT
+  );
+  CREATE INDEX shift_pauses_shift ON shift_pauses (shift_id);
+  -- A drive cut off a shift: the part after it ended (the drive home) or in a
+  -- pause. shift_id stays null (it isn't work, and doesn't share the shift's
+  -- free-plan drive); this says which shift it was cut from, for the list.
+  ALTER TABLE trips ADD COLUMN off_shift_id TEXT;
+  `,
 ];
 
 /** The schema this build creates: stored in PRAGMA user_version, and in iCloud backups. */

@@ -17,6 +17,8 @@ import { PlanSheet } from '@/components/plan-rules';
 import { Celebration } from '@/components/celebration';
 import { ReminderAsk } from '@/components/reminder-ask';
 import { shownPurpose } from '@/components/purpose-picker';
+import { BackdateOffer, EndShiftPrompt, UndoEndBar } from '@/components/shift-prompts';
+import { shortTime, ShiftRow } from '@/components/shift-row';
 import { ShiftSwitch } from '@/components/shift-switch';
 import { TaxCountdown } from '@/components/tax-countdown';
 import { Segmented } from '@/components/segmented';
@@ -32,6 +34,8 @@ import { isCommute, type AutoReason } from '@/domain/classify-rules';
 import { employerPaysLess, marForYear, marSummary, type MarYear, unclaimedNudge, type UnclaimedNudge } from '@/domain/mar';
 import { autoDrivesInMonth, lockedTripIds } from '@/domain/plan';
 import type { Place } from '@/domain/places';
+import { homeItems, itemKey, offShiftKind, type HomeItem } from '@/domain/shift-rows';
+import { backdateStart } from '@/domain/shift-split';
 import { shownLabel } from '@/domain/privacy';
 import {
   computeDeductions,
@@ -91,7 +95,18 @@ export default function HomeScreen() {
   useReminders(region);
   // Encrypted copy in the user's own iCloud, so a lost phone doesn't take the log with it.
   useAutoBackup(onboarded && !DEMO_MODE);
-  const shiftMode = useShift();
+  const shiftMode = useShift(reload);
+  /** Shift rows opened to show their drives. */
+  const [expanded, setExpanded] = useState<ReadonlySet<string>>(new Set());
+  /** Offers the user waved away ("Not now", "Still working"), by what they were about. */
+  const [dismissed, setDismissed] = useState<ReadonlySet<string>>(new Set());
+  const dismiss = (key: string) => setDismissed((current) => new Set(current).add(key));
+  /** The time the shift rows and offers are worked out at, ticking each minute. */
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(timer);
+  }, []);
   const liveDrive = useLiveDrive();
   const garage = useVehicles();
   const theme = useTheme();
@@ -157,6 +172,46 @@ export default function HomeScreen() {
 
   const kindOf = (id: string | null) => places.find((place: Place) => place.id === id)?.kind ?? null;
 
+  // The shift is the row: a shift's drives are one row that opens to them.
+  // Selecting works on drives, so it lists them one by one as before.
+  const items: HomeItem[] = selecting
+    ? trips.map((trip) => ({ kind: 'trip', trip }))
+    : homeItems(trips, shiftMode.shifts, expanded);
+  const toggleShift = (shiftId: string) =>
+    setExpanded((current) => {
+      const next = new Set(current);
+      if (next.has(shiftId)) next.delete(shiftId);
+      else next.add(shiftId);
+      return next;
+    });
+  // "Start shift from 10:40?": unsorted drives that look like work, before a
+  // shift was started (or with none started at all). Never into the last shift.
+  const lastShiftEnd = Math.max(0, ...shiftMode.shifts.map((s) => (s.endedAt ? Date.parse(s.endedAt) : 0)));
+  const runningSince = shiftMode.shift ? Date.parse(shiftMode.shift.startedAt) : null;
+  const offer = !shiftMode.enabled
+    ? null
+    : runningSince === null
+      ? backdateStart(visible, now, { notBefore: lastShiftEnd })
+      : // Started late: offered for the first two hours of the shift.
+        now - runningSince < 2 * 3_600_000
+        ? backdateStart(visible, runningSince, { notBefore: lastShiftEnd, minDrives: 1 })
+        : null;
+  const showOffer = offer && !dismissed.has(`offer:${offer.from}`) ? offer : null;
+  // "End shift?": the shift's last drive ended at Home a while ago and nothing's moved since.
+  const lastShiftTrip = shiftTrips.reduce<Trip | null>(
+    (latest, trip) => (!latest || trip.startedAt > latest.startedAt ? trip : latest),
+    null,
+  );
+  const parkedAtHome =
+    shiftMode.shift &&
+    !liveDrive &&
+    lastShiftTrip?.endedAt &&
+    kindOf(lastShiftTrip.endPlaceId) === 'home' &&
+    now - Date.parse(lastShiftTrip.endedAt) >= 45 * 60_000 &&
+    !dismissed.has(`home:${lastShiftTrip.id}`)
+      ? lastShiftTrip
+      : null;
+
   // Drives past the free allowance can be sorted too (sorting one personal frees a slot).
   const unsorted = trips.filter((trip) => trip.classification === 'unclassified');
   const stopSelecting = () => {
@@ -201,8 +256,8 @@ export default function HomeScreen() {
         }}
       />
       <FlatList
-        data={trips}
-        keyExtractor={(trip) => trip.id}
+        data={items}
+        keyExtractor={itemKey}
         // Room for the bulk actions bar while selecting.
         contentContainerStyle={[styles.list, { paddingBottom: (selecting ? 160 : 96) + insets.bottom }]}
         ListHeaderComponent={
@@ -211,6 +266,8 @@ export default function HomeScreen() {
             {shiftMode.enabled && (
               <ShiftBar
                 shift={shiftMode.shift}
+                paused={shiftMode.pause !== null}
+                onTogglePause={() => shiftMode.togglePause().catch(() => {})}
                 drives={shiftTrips.length}
                 distance={formatDistance(
                   shiftTrips.reduce((sum, trip) => sum + trip.distanceMeters, 0),
@@ -225,6 +282,38 @@ export default function HomeScreen() {
                   garage.vehicles.length > 1 ? setPicking('shift') : shiftMode.start().catch(bumpShiftRevision)
                 }
                 onEnd={() => shiftMode.end().catch(bumpShiftRevision)}
+              />
+            )}
+            {shiftMode.ended && (
+              <UndoEndBar
+                onUndo={() =>
+                  shiftMode
+                    .undo()
+                    .catch(() => {})
+                    .finally(bumpShiftRevision)
+                }
+              />
+            )}
+            {showOffer && (
+              <BackdateOffer
+                time={shortTime(showOffer.from, region)}
+                count={showOffer.tripIds.length}
+                running={shiftMode.shift !== null}
+                onAccept={() => {
+                  dismiss(`offer:${showOffer.from}`);
+                  shiftMode
+                    .startFrom(new Date(showOffer.from))
+                    .catch(() => {})
+                    .finally(bumpShiftRevision);
+                }}
+                onDismiss={() => dismiss(`offer:${showOffer.from}`)}
+              />
+            )}
+            {parkedAtHome && (
+              <EndShiftPrompt
+                since={shortTime(parkedAtHome.endedAt!, region)}
+                onEnd={() => shiftMode.end().catch(bumpShiftRevision)}
+                onDismiss={() => dismiss(`home:${parkedAtHome.id}`)}
               />
             )}
             {liveDrive && <LiveDriveBanner drive={liveDrive} />}
@@ -286,8 +375,22 @@ export default function HomeScreen() {
             </ThemedText>
           </View>
         }
-        renderItem={({ item }) =>
-          selecting ? (
+        renderItem={({ item: row }) => {
+          if (row.kind === 'shift') {
+            return (
+              <ShiftRow
+                group={row.group}
+                valueMinor={row.group.legs.reduce((sum, trip) => sum + (deductions.get(trip.id) ?? 0), 0)}
+                region={region}
+                expanded={row.expanded}
+                now={now}
+                onToggle={() => toggleShift(row.group.shiftId)}
+                onEditTimes={(changes) => shiftMode.editTimes(row.group.shiftId, changes).catch(() => {})}
+              />
+            );
+          }
+          const item = row.trip;
+          const content = selecting ? (
             <SelectableTripRow trip={item} selected={selected.has(item.id)} onToggle={() => toggle(item)} />
           ) : locked.has(item.id) ? (
             <LockedTripRow
@@ -301,11 +404,18 @@ export default function HomeScreen() {
               deduction={deductions.get(item.id) ?? 0}
               potential={item.classification === 'unclassified' ? potentialDeduction(item, visible, region) : 0}
               commute={isCommute(kindOf(item.startPlaceId), kindOf(item.endPlaceId))}
+              offShift={offShiftKind(item, shiftMode.shifts)}
               onClassify={(c) => sort([item], c)}
               onLongPress={() => confirmDelete(item)}
             />
-          )
-        }
+          );
+          // A shift's drives, under its row while it's open.
+          return row.kind === 'leg' ? (
+            <View style={[styles.leg, { borderLeftColor: theme.accent }]}>{content}</View>
+          ) : (
+            content
+          );
+        }}
       />
       {!selecting && <AddTripButton bottom={insets.bottom} />}
       {waiting && <ValueWaitsNotice bottom={insets.bottom} onClose={() => setRejoined(null)} />}
@@ -645,11 +755,14 @@ function TripRow({
   deduction,
   potential,
   commute,
+  offShift = null,
   onClassify,
   onLongPress,
 }: {
   trip: Trip;
   deduction: number;
+  /** Cut off a shift: the part after it ended (the drive home), or in a pause. */
+  offShift?: 'after' | 'pause' | null;
   /** What the trip would be worth as business: the nudge to classify it. */
   potential: number;
   /** Home ↔ work: shown with a warning if marked business. */
@@ -717,6 +830,13 @@ function TripRow({
                     ? t('Auto: in your work hours')
                     : t('Auto: outside your work hours · swipe right if it was work')
                   : t(AUTO_NOTES[trip.autoReason])}
+            </ThemedText>
+          )}
+          {offShift && (
+            <ThemedText type="small" themeColor="textSecondary">
+              {offShift === 'after'
+                ? t('After your shift ended · not counted as work unless you say so')
+                : t('During a pause in your shift · not counted as work unless you say so')}
             </ThemedText>
           )}
           {business && commute && (
@@ -991,15 +1111,20 @@ function LiveDriveBanner({ drive }: { drive: LiveDrive }) {
 /** Shift mode: swipe to start, swipe back to end; every drive in between is work. */
 function ShiftBar({
   shift,
+  paused,
   drives,
   distance,
   value,
   revision,
   onStart,
   onEnd,
+  onTogglePause,
 }: {
   revision: number;
   shift: Shift | null;
+  /** On a break for a personal errand: drives now aren't work. */
+  paused: boolean;
+  onTogglePause: () => void;
   drives: number;
   distance: string;
   value: string;
@@ -1007,6 +1132,7 @@ function ShiftBar({
   onEnd: () => void;
 }) {
   const t = useT();
+  const theme = useTheme();
   const { region } = useRegion();
   const [now, setNow] = useState(() => Date.now());
   /** A send-off shown for a few seconds after swiping to start. */
@@ -1056,7 +1182,7 @@ function ShiftBar({
                 </Animated.Text>
               ) : (
                 <Text style={styles.shiftTitle} numberOfLines={1}>
-                  {t('On shift · {{elapsed}}', { elapsed })}
+                  {paused ? t('Paused · {{elapsed}}', { elapsed }) : t('On shift · {{elapsed}}', { elapsed })}
                 </Text>
               )}
               <Text style={styles.shiftSub} numberOfLines={1}>
@@ -1068,9 +1194,27 @@ function ShiftBar({
           </>
         )}
       </ShiftSwitch>
-      <ThemedText type="small" themeColor="textSecondary" style={styles.shiftHint}>
-        {shift ? t('Swipe back to end your shift.') : t('Every drive until you end it counts as business.')}
-      </ThemedText>
+      <View style={styles.shiftFoot}>
+        <ThemedText type="small" themeColor="textSecondary" style={[styles.shiftHint, styles.flex]}>
+          {!shift
+            ? t('Every drive until you end it counts as business.')
+            : paused
+              ? t('Paused: drives now aren’t counted as work. Resume when you’re back.')
+              : t('Swipe back to end your shift.')}
+        </ThemedText>
+        {shift && (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={paused ? t('Resume the shift') : t('Pause the shift for a personal errand')}
+            hitSlop={8}
+            onPress={onTogglePause}
+            style={[styles.pauseButton, { borderColor: theme.accent }]}>
+            <ThemedText type="smallBold" style={{ color: theme.accent }}>
+              {paused ? t('Resume') : t('Pause')}
+            </ThemedText>
+          </Pressable>
+        )}
+      </View>
     </View>
   );
 }
@@ -1217,6 +1361,9 @@ const styles = StyleSheet.create({
   goProText: { color: '#064E3B', fontSize: 13, fontWeight: '800' },
   shiftStart: { gap: Spacing.one + 2 },
   shiftHint: { textAlign: 'center' },
+  shiftFoot: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
+  pauseButton: { borderWidth: 1, borderRadius: 999, paddingHorizontal: Spacing.three, paddingVertical: Spacing.one },
+  leg: { marginLeft: Spacing.three, paddingLeft: Spacing.two, borderLeftWidth: 2, marginTop: -Spacing.two },
   cheer: { color: '#FEF3C7', fontSize: 19, fontWeight: '800' },
   shiftTitle: { color: '#FFFFFF', fontSize: 15, fontWeight: '800' },
   shiftSub: { color: '#FEF3C7', fontSize: 12 },

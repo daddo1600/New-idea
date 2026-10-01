@@ -122,14 +122,152 @@ function historyTrips(): DemoTrip[] {
   return trips;
 }
 
+// ─── Courier demo: shifts as the detector logs them ─────────────────────────
+
+/** Where the courier demo's drives go, in Leeds (any coordinates do for the shift map). */
+const SPOTS: Record<string, LatLng> = {
+  Home: { latitude: 53.8243, longitude: -1.5715 },
+  'McDonald’s, Kirkstall Rd': { latitude: 53.8027, longitude: -1.5727 },
+  'Burley Rd': { latitude: 53.8086, longitude: -1.5797 },
+  'Nando’s, Headingley': { latitude: 53.8196, longitude: -1.5768 },
+  'Cardigan Rd': { latitude: 53.8143, longitude: -1.5846 },
+  'Wagamama, Trinity Leeds': { latitude: 53.7962, longitude: -1.5442 },
+  'Hyde Park': { latitude: 53.8106, longitude: -1.5664 },
+  'Five Guys, The Headrow': { latitude: 53.8004, longitude: -1.5459 },
+  'Meanwood Rd': { latitude: 53.8195, longitude: -1.5531 },
+  'Chapel Allerton': { latitude: 53.8296, longitude: -1.5376 },
+  'KFC, Kirkstall': { latitude: 53.8155, longitude: -1.6012 },
+  'Bramley': { latitude: 53.8102, longitude: -1.6371 },
+};
+
+type CourierLeg = [startMinute: number, minutes: number, from: string, to: string, miles: number];
+
+type CourierShift = {
+  daysAgo: number;
+  /** Minutes after midnight of that day; past 24 h runs into the next day. */
+  start: number;
+  end: number;
+  legs: CourierLeg[];
+  /** The drive home after the shift ended, cut off the last delivery. */
+  after?: CourierLeg;
+};
+
+/**
+ * Yesterday's evening shift (the last drop ran on into the drive home, cut
+ * where the shift ended), and a night shift two days ago that ran past
+ * midnight: one row each, dated by when they started.
+ */
+const COURIER_SHIFTS: CourierShift[] = [
+  {
+    daysAgo: 1,
+    start: 17 * 60 + 30,
+    end: 21 * 60 + 49,
+    legs: [
+      [17 * 60 + 34, 11, 'Home', 'McDonald’s, Kirkstall Rd', 2.6],
+      [17 * 60 + 58, 8, 'McDonald’s, Kirkstall Rd', 'Burley Rd', 1.4],
+      [18 * 60 + 31, 7, 'Burley Rd', 'Nando’s, Headingley', 1.2],
+      [18 * 60 + 52, 10, 'Nando’s, Headingley', 'Cardigan Rd', 1.9],
+      [19 * 60 + 40, 12, 'Cardigan Rd', 'Wagamama, Trinity Leeds', 2.3],
+      [20 * 60 + 5, 11, 'Wagamama, Trinity Leeds', 'Hyde Park', 1.8],
+      [21 * 60 + 10, 9, 'Hyde Park', 'Five Guys, The Headrow', 1.5],
+      [21 * 60 + 36, 13, 'Five Guys, The Headrow', 'Meanwood Rd', 2.7],
+    ],
+    after: [21 * 60 + 49, 13, 'Meanwood Rd', 'Home', 2.2],
+  },
+  {
+    daysAgo: 2,
+    start: 21 * 60 + 2,
+    end: 24 * 60 + 41,
+    legs: [
+      [21 * 60 + 6, 14, 'Home', 'KFC, Kirkstall', 2.4],
+      [21 * 60 + 41, 12, 'KFC, Kirkstall', 'Bramley', 2.1],
+      [22 * 60 + 30, 15, 'Bramley', 'Five Guys, The Headrow', 4.3],
+      [23 * 60 + 18, 14, 'Five Guys, The Headrow', 'Chapel Allerton', 2.6],
+      [24 * 60 + 20, 16, 'Chapel Allerton', 'Home', 1.6],
+    ],
+  },
+];
+
+/** A believable wiggly route between two spots, for the shift map. */
+function demoRoute(from: string, to: string): LatLng[] {
+  const a = SPOTS[from];
+  const b = SPOTS[to];
+  if (!a || !b) return [];
+  const steps = 12;
+  return Array.from({ length: steps + 1 }, (_, i) => {
+    const f = i / steps;
+    // Streets aren't straight: an L-ish bend with a little wobble.
+    const bend = Math.sin(f * Math.PI) * 0.0025;
+    return {
+      latitude: a.latitude + (b.latitude - a.latitude) * f + bend,
+      longitude: a.longitude + (b.longitude - a.longitude) * f + Math.sin(f * 9) * 0.0006,
+    };
+  });
+}
+
+function minutesInto(daysAgo: number, minute: number): Date {
+  const at = new Date();
+  at.setDate(at.getDate() - daysAgo);
+  at.setHours(0, 0, 0, 0);
+  return new Date(at.getTime() + minute * 60_000);
+}
+
+async function seedCourierShifts(db: SQLiteDatabase, placeIds: Map<string, string>): Promise<void> {
+  const drive = async (
+    [startMinute, minutes, from, to, miles]: CourierLeg,
+    daysAgo: number,
+    filed: { shiftId?: string; offShiftId?: string },
+  ) => {
+    const start = minutesInto(daysAgo, startMinute);
+    await insertTrip(
+      db,
+      {
+        startedAt: start.toISOString(),
+        localDate: toLocalIsoDate(start),
+        endedAt: new Date(start.getTime() + minutes * 60_000).toISOString(),
+        startLabel: from,
+        endLabel: to,
+        distanceMeters: milesToMeters(miles),
+        classification: filed.shiftId ? 'business' : 'unclassified',
+        purpose: filed.shiftId ? 'Deliveries' : '',
+        source: 'auto',
+        startPlaceId: from === 'Home' ? (placeIds.get('Home') ?? null) : null,
+        endPlaceId: to === 'Home' ? (placeIds.get('Home') ?? null) : null,
+        autoReason: filed.shiftId ? 'work-hours' : null,
+        shiftId: filed.shiftId ?? null,
+        offShiftId: filed.offShiftId ?? null,
+      },
+      demoRoute(from, to),
+    );
+  };
+  for (const [index, shift] of COURIER_SHIFTS.entries()) {
+    const id = `demo-shift-${index}`;
+    await db.runAsync(
+      'INSERT INTO shifts (id, started_at, ended_at) VALUES (?, ?, ?);',
+      id,
+      minutesInto(shift.daysAgo, shift.start).toISOString(),
+      minutesInto(shift.daysAgo, shift.end).toISOString(),
+    );
+    for (const leg of shift.legs) await drive(leg, shift.daysAgo, { shiftId: id });
+    if (shift.after) await drive(shift.after, shift.daysAgo, { offShiftId: id });
+  }
+  // Today: two drops before the shift was started, so "Start shift from …?" shows.
+  const now = new Date();
+  const minuteNow = now.getHours() * 60 + now.getMinutes();
+  await drive([minuteNow - 75, 12, 'Home', 'Nando’s, Headingley', 1.9], 0, {});
+  await drive([minuteNow - 41, 11, 'Nando’s, Headingley', 'Cardigan Rd', 1.3], 0, {});
+}
+
 export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
   const existing = await db.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM trips;');
   if ((existing?.n ?? 0) > 0) return;
   if (DEMO_COURIER) await updateSettings(db, { shiftMode: true });
   const placeIds = new Map<string, string>();
   for (const place of PLACES) placeIds.set(place.name, (await insertPlace(db, place)).id);
+  if (DEMO_COURIER) await seedCourierShifts(db, placeIds);
+  // A courier's own days are the shifts above; the office drives are history.
   for (const [daysAgo, hour, from, to, miles, classification, purpose, autoReason] of [
-    ...TRIPS,
+    ...(DEMO_COURIER ? [] : TRIPS),
     ...historyTrips(),
   ].reverse()) {
     const start = new Date();
