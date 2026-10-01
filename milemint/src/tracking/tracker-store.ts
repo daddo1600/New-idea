@@ -1,5 +1,6 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
 
+import { withWriteLock } from '@/db/transaction';
 import { INITIAL_TRACKER_RECORD, type TrackerRecord } from '@/domain/tracker-policy';
 import { sanitizeDetectorState } from '@/domain/trip-detector';
 
@@ -15,9 +16,12 @@ export async function loadTrackerRecord(db: SQLiteDatabase): Promise<TrackerReco
   }
 }
 
-export async function saveTrackerRecord(db: SQLiteDatabase, record: TrackerRecord): Promise<void> {
-  await db.runAsync(
-    'INSERT INTO tracker_state (id, json) VALUES (1, ?) ON CONFLICT (id) DO UPDATE SET json = excluded.json;',
-    JSON.stringify(record),
-  );
+/** Saved in its turn in the write queue, so it can't land inside another transaction (a restore, a scrub). */
+export function saveTrackerRecord(db: SQLiteDatabase, record: TrackerRecord): Promise<void> {
+  return withWriteLock(async () => {
+    await db.runAsync(
+      'INSERT INTO tracker_state (id, json) VALUES (1, ?) ON CONFLICT (id) DO UPDATE SET json = excluded.json;',
+      JSON.stringify(record),
+    );
+  });
 }

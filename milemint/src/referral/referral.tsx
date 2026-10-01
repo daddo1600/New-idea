@@ -4,7 +4,7 @@ import { useSQLiteContext, type SQLiteDatabase } from 'expo-sqlite';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Alert, AppState, Platform, Share } from 'react-native';
 
-import { loadSettings, saveSettings, type AppSettings } from '@/db/settings-repo';
+import { loadSettings, updateSettings, type AppSettings } from '@/db/settings-repo';
 import { msg, t } from '@/i18n/i18n';
 
 import { DRIVES_BEFORE_RECORDING, ReferralCloud } from './cloud';
@@ -158,7 +158,7 @@ async function prepare(db: SQLiteDatabase): Promise<Saved> {
     changes.redeemStatus = merged.status;
   }
   const next = { ...settings, ...changes };
-  if (Object.keys(changes).length > 0) await saveSettings(db, { ...(await loadSettings(db)), ...changes });
+  if (Object.keys(changes).length > 0) await updateSettings(db, changes);
   if (installedAt !== keptInstall) keychainSet(INSTALLED_KEY, installedAt);
   if (merged && (merged.code !== kept?.code || merged.status !== kept?.status)) keepRedemption(merged);
   if (await keychainGet(OLD_CODE_KEY)) keychainDelete(OLD_CODE_KEY);
@@ -200,8 +200,7 @@ export function ReferralProvider({ children }: { children: ReactNode }) {
       const run = queue.current.then(async () => {
         const { changes, result } = await change(pickSaved(await loadSettings(db)));
         if (Object.keys(changes).length > 0) {
-          const next = { ...(await loadSettings(db)), ...changes };
-          await saveSettings(db, next);
+          const next = await updateSettings(db, changes);
           setSaved(pickSaved(next));
         }
         return result;

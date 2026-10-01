@@ -2,7 +2,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useMemo, useState } from 'react';
 
 import type { CelebrationContent } from '@/components/celebration';
-import { loadSettings, saveSettings } from '@/db/settings-repo';
+import { loadSettings, updateSettings } from '@/db/settings-repo';
 import { DEMO_CELEBRATE, DEMO_MODE } from '@/dev/demo';
 import {
   hasSortedWeek,
@@ -62,8 +62,10 @@ export function useMilestoneCelebration(
       const reached = reachedMilestones(milestoneProgress(trips, deductions, region, settings.exportedReport));
       const milestone = milestoneToCelebrate(reached, new Set(settings.celebrated));
       if (!milestone || !current) return;
-      const celebrated = [...new Set([...settings.celebrated, ...reached.map((m) => m.id)])];
-      await saveSettings(db, { ...(await loadSettings(db)), celebrated });
+      // Added to what's saved now (another screen may have celebrated something meanwhile).
+      await updateSettings(db, (saved) => ({
+        celebrated: [...new Set([...saved.celebrated, ...reached.map((m) => m.id)])],
+      }));
       const employee = settings.employment === 'employee' && marApplies(region);
       if (current) setContent(celebrationFor(milestone, region, employee));
     })().catch(() => {});

@@ -3,9 +3,10 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 
 import type { AutoReason, ClassifiedTrip } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
+import { roundRoute } from '@/domain/polyline';
 import type { Classification, Trip, TripSource, VehicleType } from '@/domain/trip';
 
-import { inWriteTransaction } from './transaction';
+import { inWriteTransaction, withWriteLock } from './transaction';
 
 type TripRow = {
   id: string;
@@ -75,6 +76,12 @@ export async function autoTripExists(db: SQLiteDatabase, startedAt: string): Pro
     startedAt,
   );
   return row !== null;
+}
+
+/** Whether a row with this id is (still) in `table`. */
+async function exists(db: SQLiteDatabase, table: 'places' | 'vehicles', id: string | null): Promise<boolean> {
+  if (id === null) return false;
+  return (await db.getFirstAsync(`SELECT 1 AS found FROM ${table} WHERE id = ?;`, id)) !== null;
 }
 
 export async function getTrip(db: SQLiteDatabase, id: string): Promise<Trip | null> {
@@ -159,6 +166,11 @@ export async function insertTrip(
     createdAt: new Date().toISOString(),
   };
   await inWriteTransaction(db, async () => {
+    // A place or vehicle deleted since the caller looked it up (the background
+    // tracker reverse-geocodes for a while) only unlinks the trip: the drive is still saved.
+    if (!(await exists(db, 'places', trip.startPlaceId))) trip.startPlaceId = null;
+    if (!(await exists(db, 'places', trip.endPlaceId))) trip.endPlaceId = null;
+    if (!(await exists(db, 'vehicles', trip.vehicleId))) trip.vehicleId = null;
     await db.runAsync(
       `INSERT INTO trips (id, started_at, local_date, ended_at, start_label, end_label,
          distance_meters, classification, purpose, source, created_at,
@@ -187,7 +199,7 @@ export async function insertTrip(
       await db.runAsync(
         'INSERT INTO trip_routes (trip_id, points) VALUES (?, ?);',
         trip.id,
-        JSON.stringify(route),
+        JSON.stringify(roundRoute(route)),
       );
     }
     await logEdit(db, trip.id, 'create', null, null, trip.source);
@@ -201,33 +213,43 @@ export async function insertTrip(
   return trip;
 }
 
+/*
+ * Edits take the trip for its id only. What they compare against and log is
+ * the trip as saved, read inside their transaction: the caller's copy may be
+ * stale (edited on another screen), or of a trip deleted meanwhile, which
+ * edits then leave alone (no audit rows for a trip that doesn't exist).
+ */
+
+/** Sets a trip's classification. */
 export async function setClassification(
   db: SQLiteDatabase,
-  trip: Trip,
+  trip: Pick<Trip, 'id'>,
   classification: Classification,
 ): Promise<void> {
-  if (trip.classification === classification && !trip.autoReason) return;
-  // Any choice by the user, even re-tapping an automatic one, makes it theirs:
-  // the auto note disappears and the trip starts counting towards learned routes.
   await inWriteTransaction(db, async () => {
+    const saved = await getTrip(db, trip.id);
+    if (!saved) return;
+    // Any choice by the user, even re-tapping an automatic one, makes it theirs:
+    // the auto note disappears and the trip starts counting towards learned routes.
+    if (saved.classification === classification && !saved.autoReason) return;
     await db.runAsync(
       'UPDATE trips SET classification = ?, auto_reason = NULL, auto_default = 0 WHERE id = ?;',
       classification,
-      trip.id,
+      saved.id,
     );
-    if (trip.classification !== classification) {
-      await logEdit(db, trip.id, 'update', 'classification', trip.classification, classification);
+    if (saved.classification !== classification) {
+      await logEdit(db, saved.id, 'update', 'classification', saved.classification, classification);
     }
-    if (trip.autoReason) {
-      await logEdit(db, trip.id, 'update', 'auto_reason', trip.autoReason, null);
+    if (saved.autoReason) {
+      await logEdit(db, saved.id, 'update', 'auto_reason', saved.autoReason, null);
     }
   });
 }
 
-/** Updates purpose and place names, logging each changed field. */
+/** Updates purpose and place names, logging each field that differs from the saved trip. */
 export async function updateTripDetails(
   db: SQLiteDatabase,
-  trip: Trip,
+  trip: Pick<Trip, 'id'>,
   changes: Partial<Pick<Trip, 'purpose' | 'startLabel' | 'endLabel' | 'vehicle' | 'vehicleId'>>,
 ): Promise<void> {
   const columns = {
@@ -237,22 +259,24 @@ export async function updateTripDetails(
     vehicle: 'vehicle',
     vehicleId: 'vehicle_id',
   } as const;
-  const changed = (Object.keys(columns) as (keyof typeof columns)[]).filter(
-    (key) => changes[key] !== undefined && changes[key] !== trip[key],
-  );
-  if (changed.length === 0) return;
+  const keys = (Object.keys(columns) as (keyof typeof columns)[]).filter((key) => changes[key] !== undefined);
+  if (keys.length === 0) return;
   await inWriteTransaction(db, async () => {
-    for (const key of changed) {
+    const saved = await getTrip(db, trip.id);
+    if (!saved) return;
+    for (const key of keys) {
       const value = changes[key] as string;
-      await db.runAsync(`UPDATE trips SET ${columns[key]} = ? WHERE id = ?;`, value, trip.id);
-      await logEdit(db, trip.id, 'update', columns[key], trip[key], value);
+      if (value === saved[key]) continue;
+      await db.runAsync(`UPDATE trips SET ${columns[key]} = ? WHERE id = ?;`, value, saved.id);
+      await logEdit(db, saved.id, 'update', columns[key], saved[key], value);
     }
   });
 }
 
 /**
  * Links a trip end to a named place. Not logged: it only affects how future
- * trips are suggested, not what this trip claims.
+ * trips are suggested, not what this trip claims. Nothing happens if either
+ * the trip or the place is gone.
  */
 export async function setTripPlace(
   db: SQLiteDatabase,
@@ -261,13 +285,23 @@ export async function setTripPlace(
   placeId: string,
 ): Promise<void> {
   const column = end === 'start' ? 'start_place_id' : 'end_place_id';
-  await db.runAsync(`UPDATE trips SET ${column} = ? WHERE id = ?;`, placeId, tripId);
+  await withWriteLock(() =>
+    db.runAsync(
+      `UPDATE trips SET ${column} = ? WHERE id = ? AND EXISTS (SELECT 1 FROM places WHERE id = ?);`,
+      placeId,
+      tripId,
+      placeId,
+    ),
+  );
 }
 
-export async function deleteTrip(db: SQLiteDatabase, trip: Trip): Promise<void> {
+/** Deletes a trip, keeping it whole (as saved) in the edit history. Deleting it again does nothing. */
+export async function deleteTrip(db: SQLiteDatabase, trip: Pick<Trip, 'id'>): Promise<void> {
   await inWriteTransaction(db, async () => {
-    await db.runAsync('DELETE FROM trips WHERE id = ?;', trip.id);
-    await logEdit(db, trip.id, 'delete', null, JSON.stringify(trip), null);
+    const saved = await getTrip(db, trip.id);
+    if (!saved) return;
+    await db.runAsync('DELETE FROM trips WHERE id = ?;', saved.id);
+    await logEdit(db, saved.id, 'delete', null, JSON.stringify(saved), null);
   });
 }
 

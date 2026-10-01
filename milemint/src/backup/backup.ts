@@ -9,7 +9,7 @@ import { inReadTransaction, inWriteTransaction } from '@/db/transaction';
 
 import { ICloudBackup } from '../../modules/icloud-backup';
 import { clearScrub, pendingScrub } from './after-scrub';
-import { base64ToUtf8, utf8ToBase64 } from './base64';
+import { base64ToUtf8Async, utf8ToBase64Async } from './base64';
 import {
   BACKUPS_KEPT,
   backupDecision,
@@ -24,11 +24,14 @@ import {
   backupFileName,
   emptyTables,
   makeSnapshot,
+  mapRowsInTurns,
+  packRoute,
   parseSnapshot,
   restorePlan,
   type BackupTable,
   type Row,
   type Snapshot,
+  unpackRoute,
 } from './snapshot';
 
 /**
@@ -72,11 +75,29 @@ async function readTable(db: SQLiteDatabase, table: BackupTable): Promise<Row[]>
  * leave the backup with its edit history but not the trip, or the other way round.
  */
 async function readTables(db: SQLiteDatabase) {
-  return inReadTransaction(db, async () => {
-    const tables = emptyTables();
-    for (const table of BACKUP_TABLES) tables[table] = await readTable(db, table);
-    return tables;
+  const tables = await inReadTransaction(db, async () => {
+    const read = emptyTables();
+    for (const table of BACKUP_TABLES) read[table] = await readTable(db, table);
+    return read;
   });
+  // Packed here, a few at a time, rather than all at once in makeSnapshot (which then has nothing left to do).
+  tables.trip_routes = await mapRowsInTurns(tables.trip_routes, packRoute);
+  return tables;
+}
+
+/*
+ * The snapshot crosses to the native module as text where the build can take
+ * it (UTF-8 conversion in Swift, off the JavaScript thread). Builds from
+ * before that only take base64, made here a slice at a time.
+ */
+function seal(json: string): Promise<string> {
+  if (ICloudBackup.sealsText) return ICloudBackup.sealText(json);
+  return utf8ToBase64Async(json).then((base64) => ICloudBackup.seal(base64));
+}
+
+async function unseal(sealed: string): Promise<string> {
+  if (ICloudBackup.sealsText) return ICloudBackup.openText(sealed);
+  return base64ToUtf8Async(await ICloudBackup.open(sealed));
 }
 
 /** A cheap hash of the data, to tell whether anything changed since the last backup. */
@@ -140,7 +161,7 @@ async function run(db: SQLiteDatabase, force: boolean): Promise<BackupOutcome> {
 
   const snapshot = makeSnapshot(await readTables(db), { appVersion: appVersion(), createdAt: now });
   // Plaintext goes only as far as the native module, which encrypts it before anything is written.
-  const sealed = await ICloudBackup.seal(utf8ToBase64(JSON.stringify(snapshot)));
+  const sealed = await seal(JSON.stringify(snapshot));
   if (scrubbedAt === null) {
     await ICloudBackup.write(backupFileName(now), sealed, BACKUPS_KEPT);
   } else {
@@ -176,7 +197,7 @@ export function problemOf(error: unknown): BackupProblem {
 
 async function openBackup(name: string): Promise<Snapshot> {
   const sealed = await ICloudBackup.read(name);
-  return parseSnapshot(base64ToUtf8(await ICloudBackup.open(sealed)));
+  return parseSnapshot(await unseal(sealed));
 }
 
 /**
@@ -219,7 +240,9 @@ async function restore(db: SQLiteDatabase, snapshot: Snapshot): Promise<void> {
     const info = await db.getAllAsync<{ name: string }>(`PRAGMA table_info(${table});`);
     columns[table] = info.map((column) => column.name);
   }
-  const plan = restorePlan(snapshot, columns);
+  // Routes unpacked a few at a time first (restorePlan would do them all at once).
+  const routes = await mapRowsInTurns(snapshot.tables.trip_routes, unpackRoute);
+  const plan = restorePlan({ ...snapshot, tables: { ...snapshot.tables, trip_routes: routes } }, columns);
   await inWriteTransaction(db, async () => {
     for (const step of plan) {
       if (step.rows.length === 0) {

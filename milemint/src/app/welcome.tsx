@@ -37,7 +37,7 @@ import {
 } from '@/components/work-hours-quick';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
-import { loadSettings, saveSettings } from '@/db/settings-repo';
+import { loadSettings, updateSettings } from '@/db/settings-repo';
 import { marApplies, parsePence } from '@/domain/mar';
 import { displayLocale, formatRate, REGIONS, vehicleRule, type RegionCode } from '@/domain/regions';
 import { useKeyboardOpen } from '@/hooks/use-keyboard-open';
@@ -175,7 +175,7 @@ export default function WelcomeScreen() {
 
   const saveCountry = async () => {
     await setRegion(country);
-    await saveSettings(db, { ...(await loadSettings(db)), vehicle });
+    await updateSettings(db, { vehicle });
     // The first vehicle in the garage. Going back and changing the choice updates it.
     const { current } = await ensureVehicles(db);
     if (current.type !== vehicle) {
@@ -224,8 +224,7 @@ export default function WelcomeScreen() {
   const saveEmployment = async () => {
     if (!marApplies(picked)) return;
     const employerRate = employerPaysNothing ? 0 : (parsePence(employerRateText) ?? 450);
-    await saveSettings(db, {
-      ...(await loadSettings(db)),
+    await updateSettings(db, {
       employment: employed ? 'employee' : 'self-employed',
       employerRate,
     });
@@ -233,7 +232,7 @@ export default function WelcomeScreen() {
 
   const chooseShifts = async () => {
     await saveEmployment();
-    await saveSettings(db, { ...(await loadSettings(db)), shiftMode: true, workHoursEnabled: false, clientPrivacy });
+    await updateSettings(db, { shiftMode: true, workHoursEnabled: false, clientPrivacy });
     // Couriers often switch between a car and a moped: add the others they ticked.
     const garage = await listVehicles(db);
     for (const type of extraVehicles) {
@@ -246,10 +245,8 @@ export default function WelcomeScreen() {
 
   const saveHours = async () => {
     await saveEmployment();
-    const settings = await loadSettings(db);
     // Going back from "Shifts" and choosing hours instead turns shift mode off again.
-    await saveSettings(db, {
-      ...settings,
+    await updateSettings(db, {
       shiftMode: false,
       workHoursEnabled: true,
       workWeek: toWorkWeek(week),
@@ -262,7 +259,7 @@ export default function WelcomeScreen() {
 
   const chooseNeither = async () => {
     await saveEmployment();
-    await saveSettings(db, { ...(await loadSettings(db)), shiftMode: false, workHoursEnabled: false, clientPrivacy });
+    await updateSettings(db, { shiftMode: false, workHoursEnabled: false, clientPrivacy });
     setShifts(false);
     setHoursSet(false);
     setStep(PLACES);
@@ -301,7 +298,7 @@ export default function WelcomeScreen() {
     try {
       // The Sunday check-in is on by default: iOS asks once, here. Turning it off is in Settings.
       const scheduled = await enableWeeklyReminder(picked.unit).catch(() => false);
-      await saveSettings(db, { ...(await loadSettings(db)), weeklyReminder: scheduled, reminderAsked: true, reminderDefaulted: true });
+      await updateSettings(db, { weeklyReminder: scheduled, reminderAsked: true, reminderDefaulted: true });
       if (!hoursSet && !shifts) await scheduleWorkHoursNudge().catch(() => {});
     } finally {
       setBusy(false);

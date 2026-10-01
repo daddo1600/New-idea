@@ -2,7 +2,7 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 import { Platform } from 'react-native';
 
 import { insertPlace } from '@/db/places-repo';
-import { loadSettings, saveSettings } from '@/db/settings-repo';
+import { updateSettings } from '@/db/settings-repo';
 import { insertTrip } from '@/db/trips-repo';
 import type { AutoReason } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
@@ -125,7 +125,7 @@ function historyTrips(): DemoTrip[] {
 export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
   const existing = await db.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM trips;');
   if ((existing?.n ?? 0) > 0) return;
-  if (DEMO_COURIER) await saveSettings(db, { ...(await loadSettings(db)), shiftMode: true });
+  if (DEMO_COURIER) await updateSettings(db, { shiftMode: true });
   const placeIds = new Map<string, string>();
   for (const place of PLACES) placeIds.set(place.name, (await insertPlace(db, place)).id);
   for (const [daysAgo, hour, from, to, miles, classification, purpose, autoReason] of [

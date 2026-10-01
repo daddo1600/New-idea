@@ -2,8 +2,7 @@ import { useFocusEffect } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
 
-import { loadSettings, saveSettings, type AppSettings } from '@/db/settings-repo';
-import { withWriteLock } from '@/db/transaction';
+import { loadSettings, updateSettings, type AppSettings } from '@/db/settings-repo';
 import { marApplies, type TaxBand } from '@/domain/mar';
 import { useRegion } from '@/region/region';
 
@@ -43,12 +42,7 @@ export function useMileagePay() {
   /** Changes can be worked out from the saved settings, so quick taps in a row each build on the last. */
   const update = useCallback(
     (changes: Partial<PaySettings> | ((saved: PaySettings) => Partial<PaySettings>)) =>
-      withWriteLock(async () => {
-        const saved = await loadSettings(db);
-        const next = { ...saved, ...(typeof changes === 'function' ? changes(saved) : changes) };
-        setStored(next);
-        await saveSettings(db, next);
-      }),
+      updateSettings(db, changes).then((next) => setStored(next)),
     [db],
   );
 

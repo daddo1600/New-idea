@@ -1,6 +1,6 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
-import { migrate } from '../migrations';
+import { DatabaseTooNewError, migrate, SCHEMA_VERSION } from '../migrations';
 
 // Hoisted above the import by babel-jest: migrate() sees an iPhone.
 jest.mock('react-native', () => ({ Platform: { OS: 'ios' } }));
@@ -34,9 +34,17 @@ describe('migrate on a device', () => {
   });
 
   it('does nothing but begin and commit when already up to date', async () => {
-    const db = fakeDb(99);
+    const db = fakeDb(SCHEMA_VERSION);
     await migrate(db as never);
     expect(db.statements).toEqual(['BEGIN IMMEDIATE;', 'COMMIT;']);
+  });
+
+  it('refuses a database from a newer build: nothing migrated or written, a clear error', async () => {
+    const db = fakeDb(SCHEMA_VERSION + 1);
+    const result = migrate(db as never);
+    await expect(result).rejects.toBeInstanceOf(DatabaseTooNewError);
+    await expect(result).rejects.toMatchObject({ code: 'newer-app', databaseVersion: SCHEMA_VERSION + 1 });
+    expect(db.statements).toEqual(['BEGIN IMMEDIATE;', 'ROLLBACK;']);
   });
 
   it('rolls back and reports a failed migration', async () => {

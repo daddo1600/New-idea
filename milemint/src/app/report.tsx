@@ -9,7 +9,7 @@ import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { getCarExpenses, listLogbooks } from '@/db/logbooks-repo';
 import { getOdometer, saveOdometer, type OdometerReadings } from '@/db/odometer-repo';
-import { loadSettings, saveSettings } from '@/db/settings-repo';
+import { loadSettings, updateSettings } from '@/db/settings-repo';
 import { listEditedTripIds } from '@/db/trips-repo';
 import { listAllVehicles } from '@/db/vehicles-repo';
 import type { Vehicle } from '@/domain/vehicles';
@@ -78,9 +78,7 @@ export default function ReportScreen() {
   }, [db, region]);
   const chooseFormat = (next: ExportFormat) => {
     setFormat(next);
-    loadSettings(db)
-      .then((settings) => saveSettings(db, { ...settings, exportFormat: next }))
-      .catch(() => {});
+    updateSettings(db, { exportFormat: next }).catch(() => {});
   };
 
   useEffect(() => {
@@ -166,7 +164,7 @@ export default function ReportScreen() {
     try {
       await (kind === 'csv' ? shareCsv(report, format) : sharePdf(report));
       // A milestone: celebrated next time the home screen shows.
-      saveSettings(db, { ...(await loadSettings(db)), exportedReport: true }).catch(() => {});
+      updateSettings(db, { exportedReport: true }).catch(() => {});
     } catch {
       setError(msg('Couldn’t create the file. Please try again.'));
     } finally {

@@ -1,11 +1,13 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
 
-import type { ExportFormat } from '@/domain/accounting-export';
-import type { WorkWeek } from '@/domain/classify-rules';
-import type { TaxBand } from '@/domain/mar';
+import { EXPORT_FORMATS, type ExportFormat } from '@/domain/accounting-export';
+import type { WorkShift, WorkWeek } from '@/domain/classify-rules';
+import { TAX_BANDS, type TaxBand } from '@/domain/mar';
 import { REGIONS, type RegionCode } from '@/domain/regions';
-import type { VehicleType } from '@/domain/trip';
+import { VEHICLE_TYPES, type VehicleType } from '@/domain/trip';
 import { cleanInvites, type ClaimRefusal, type IssuedInvite, type RedeemStatus } from '@/referral/invites';
+
+import { withWriteLock } from './transaction';
 
 export type AppSettings = {
   /** Off by default: guessing from the clock is wrong for anyone without set hours. */
@@ -106,38 +108,129 @@ export const DEFAULT_SETTINGS: AppSettings = {
   installedAt: null,
 };
 
-export async function loadSettings(db: SQLiteDatabase): Promise<AppSettings> {
-  const row = await db.getFirstAsync<{ json: string }>('SELECT json FROM settings WHERE id = 1;');
-  if (!row) return DEFAULT_SETTINGS;
+type Check<T> = (value: unknown) => T | undefined;
+
+const bool: Check<boolean> = (value) => (typeof value === 'boolean' ? value : undefined);
+const oneOf =
+  <T extends string>(allowed: readonly T[]): Check<T> =>
+  (value) =>
+    allowed.includes(value as T) ? (value as T) : undefined;
+const textOrNull: Check<string | null> = (value) => (value === null || typeof value === 'string' ? value : undefined);
+const TIME = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+/** Seven days of work hours; a damaged week would silently classify nothing (or crash the settings screen). */
+const workWeek: Check<WorkWeek> = (value) => {
+  if (!Array.isArray(value) || value.length !== 7 || !value.every((day) => Array.isArray(day))) return undefined;
+  return value.map((day: unknown[]) =>
+    day.filter(
+      (shift): shift is WorkShift =>
+        typeof shift === 'object' &&
+        shift !== null &&
+        TIME.test(String((shift as WorkShift).start)) &&
+        TIME.test(String((shift as WorkShift).end)),
+    ),
+  );
+};
+
+/**
+ * How each stored field is checked: anything else (a value from an older or
+ * damaged build, the wrong type, an unknown choice) falls back to that
+ * field's default, so one bad field never breaks the rest.
+ */
+const CHECKS: { [K in keyof AppSettings]-?: Check<AppSettings[K]> } = {
+  workHoursEnabled: bool,
+  workWeek,
+  region: (value) =>
+    value === null || (typeof value === 'string' && Object.hasOwn(REGIONS, value))
+      ? (value as RegionCode | null)
+      : undefined,
+  weeklyReminder: bool,
+  reminderAsked: bool,
+  reminderDefaulted: bool,
+  celebrated: (value) => (Array.isArray(value) ? value.filter((id): id is string => typeof id === 'string') : undefined),
+  exportedReport: bool,
+  exportFormat: oneOf(EXPORT_FORMATS),
+  onboarded: bool,
+  vehicle: oneOf(VEHICLE_TYPES),
+  currentVehicleId: textOrNull,
+  shiftMode: bool,
+  defaultBusiness: bool,
+  employment: oneOf(['self-employed', 'employee'] as const),
+  employerRate: (value) => (typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : undefined),
+  taxBand: oneOf(TAX_BANDS),
+  claimedReliefYears: (value) =>
+    Array.isArray(value) ? value.filter((year): year is number => Number.isInteger(year)) : undefined,
+  clientPrivacy: bool,
+  invites: (value) => cleanInvites(value),
+  redeemedCode: textOrNull,
+  redeemedAt: textOrNull,
+  redeemStatus: oneOf(['pending', 'granted'] as const),
+  redeemRefusal: oneOf(['not-found', 'used', 'own', 'already-claimed'] as const),
+  qualifiedAt: textOrNull,
+  friendsJoined: (value) => (typeof value === 'number' && Number.isInteger(value) && value >= 0 ? value : undefined),
+  installedAt: textOrNull,
+};
+
+/** Stored settings, each field checked against its type and allowed values (see CHECKS). */
+export function parseSettings(json: string): AppSettings {
+  let stored: unknown;
   try {
-    const stored = JSON.parse(row.json) as Partial<AppSettings>;
-    const settings = { ...DEFAULT_SETTINGS, ...stored };
-    if (settings.region !== null && !(settings.region in REGIONS)) settings.region = null;
-    if (!Number.isFinite(settings.employerRate) || settings.employerRate < 0) settings.employerRate = DEFAULT_SETTINGS.employerRate;
-    if (!Array.isArray(settings.claimedReliefYears)) settings.claimedReliefYears = [];
-    if (!Number.isFinite(settings.friendsJoined) || settings.friendsJoined < 0) settings.friendsJoined = 0;
-    settings.invites = cleanInvites(settings.invites);
-    // A code entered before invites were checked in iCloud waits, pending, to be confirmed.
-    if (!settings.redeemedCode) settings.redeemStatus = null;
-    else if (settings.redeemStatus !== 'granted') settings.redeemStatus = 'pending';
-    if (!['not-found', 'used', 'own', 'already-claimed'].includes(settings.redeemRefusal as string)) {
-      settings.redeemRefusal = null;
-    }
-    // From before single-use invites: one permanent code, and the old iCloud record time.
-    delete (settings as Partial<Record<'referralCode' | 'referralRecordedAt', unknown>>).referralCode;
-    delete (settings as Partial<Record<'referralCode' | 'referralRecordedAt', unknown>>).referralRecordedAt;
-    // A damaged week would silently classify nothing; fall back instead.
-    return Array.isArray(settings.workWeek) && settings.workWeek.length === 7
-      ? settings
-      : { ...settings, workWeek: DEFAULT_SETTINGS.workWeek };
+    stored = JSON.parse(json);
   } catch {
     return DEFAULT_SETTINGS;
   }
+  if (typeof stored !== 'object' || stored === null || Array.isArray(stored)) return DEFAULT_SETTINGS;
+  const record = stored as Record<string, unknown>;
+  const settings: Record<string, unknown> = { ...DEFAULT_SETTINGS };
+  for (const key of Object.keys(CHECKS) as (keyof AppSettings)[]) {
+    if (!Object.hasOwn(record, key)) continue;
+    const checked = (CHECKS[key] as Check<unknown>)(record[key]);
+    if (checked !== undefined) settings[key] = checked;
+  }
+  // A code entered before invites were checked in iCloud waits, pending, to be confirmed.
+  if (!settings.redeemedCode) settings.redeemStatus = null;
+  else if (settings.redeemStatus !== 'granted') settings.redeemStatus = 'pending';
+  return settings as AppSettings;
 }
 
-export async function saveSettings(db: SQLiteDatabase, settings: AppSettings): Promise<void> {
+export async function loadSettings(db: Pick<SQLiteDatabase, 'getFirstAsync'>): Promise<AppSettings> {
+  const row = await db.getFirstAsync<{ json: string }>('SELECT json FROM settings WHERE id = 1;');
+  return row ? parseSettings(row.json) : DEFAULT_SETTINGS;
+}
+
+/**
+ * Writes the whole settings row without taking the write lock: only for code
+ * already inside inWriteTransaction/withWriteLock. Everything else uses
+ * updateSettings (or saveSettings).
+ */
+export async function writeSettings(db: Pick<SQLiteDatabase, 'runAsync'>, settings: AppSettings): Promise<void> {
   await db.runAsync(
     'INSERT INTO settings (id, json) VALUES (1, ?) ON CONFLICT (id) DO UPDATE SET json = excluded.json;',
     JSON.stringify(settings),
   );
+}
+
+/**
+ * Replaces the settings outright, in its turn in the write queue. To change
+ * some fields use updateSettings instead: settings loaded a moment ago may be
+ * stale by now, and saving them whole would undo another change made since.
+ */
+export function saveSettings(db: SQLiteDatabase, settings: AppSettings): Promise<void> {
+  return withWriteLock(() => writeSettings(db, settings));
+}
+
+export type SettingsPatch = Partial<AppSettings> | ((saved: AppSettings) => Partial<AppSettings>);
+
+/**
+ * Changes some settings: loads what's saved, applies `patch` (worked out from
+ * the saved settings when it's a function) and saves, all in one turn of the
+ * write queue, so two changes made at once both stick. Returns the new settings.
+ */
+export function updateSettings(db: SQLiteDatabase, patch: SettingsPatch): Promise<AppSettings> {
+  return withWriteLock(async () => {
+    const saved = await loadSettings(db);
+    const next = { ...saved, ...(typeof patch === 'function' ? patch(saved) : patch) };
+    await writeSettings(db, next);
+    return next;
+  });
 }

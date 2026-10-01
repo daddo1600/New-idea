@@ -3,6 +3,8 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 
 import { EXPENSE_CATEGORIES, plannedEndDate, type CarExpenses, type Logbook } from '@/domain/logbook';
 
+import { withWriteLock } from './transaction';
+
 type LogbookRow = {
   id: string;
   vehicle_id: string;
@@ -43,15 +45,17 @@ export async function startLogbook(
     odometerEnd: null,
     createdAt: new Date().toISOString(),
   };
-  await db.runAsync(
-    'INSERT INTO logbooks (id, vehicle_id, start_date, end_date, odometer_start, odometer_end, created_at) VALUES (?, ?, ?, ?, ?, ?, ?);',
-    logbook.id,
-    logbook.vehicleId,
-    logbook.startDate,
-    logbook.endDate,
-    logbook.odometerStart,
-    logbook.odometerEnd,
-    logbook.createdAt,
+  await withWriteLock(() =>
+    db.runAsync(
+      'INSERT INTO logbooks (id, vehicle_id, start_date, end_date, odometer_start, odometer_end, created_at) VALUES (?, ?, ?, ?, ?, ?, ?);',
+      logbook.id,
+      logbook.vehicleId,
+      logbook.startDate,
+      logbook.endDate,
+      logbook.odometerStart,
+      logbook.odometerEnd,
+      logbook.createdAt,
+    ),
   );
   return logbook;
 }
@@ -61,21 +65,25 @@ export async function saveLogbookOdometer(
   id: string,
   readings: { start: number | null; end: number | null },
 ): Promise<void> {
-  await db.runAsync(
-    'UPDATE logbooks SET odometer_start = ?, odometer_end = ? WHERE id = ?;',
-    readings.start,
-    readings.end,
-    id,
+  await withWriteLock(() =>
+    db.runAsync(
+      'UPDATE logbooks SET odometer_start = ?, odometer_end = ? WHERE id = ?;',
+      readings.start,
+      readings.end,
+      id,
+    ),
   );
 }
 
 /** Ends the period before its 12 weeks are up (the screen warns it won't be a valid logbook). */
 export async function closeLogbookEarly(db: SQLiteDatabase, id: string, endDate: string): Promise<void> {
-  await db.runAsync('UPDATE logbooks SET end_date = MAX(start_date, ?) WHERE id = ?;', endDate, id);
+  await withWriteLock(() =>
+    db.runAsync('UPDATE logbooks SET end_date = MAX(start_date, ?) WHERE id = ?;', endDate, id),
+  );
 }
 
 export async function deleteLogbook(db: SQLiteDatabase, id: string): Promise<void> {
-  await db.runAsync('DELETE FROM logbooks WHERE id = ?;', id);
+  await withWriteLock(() => db.runAsync('DELETE FROM logbooks WHERE id = ?;', id));
 }
 
 /** A car's running costs for an income year, or null when none were entered. */
@@ -105,11 +113,13 @@ export async function saveCarExpenses(
   taxYear: number,
   expenses: CarExpenses,
 ): Promise<void> {
-  await db.runAsync(
-    `INSERT INTO car_expenses (vehicle_id, tax_year, json) VALUES (?, ?, ?)
-     ON CONFLICT (vehicle_id, tax_year) DO UPDATE SET json = excluded.json;`,
-    vehicleId,
-    taxYear,
-    JSON.stringify(expenses),
+  await withWriteLock(() =>
+    db.runAsync(
+      `INSERT INTO car_expenses (vehicle_id, tax_year, json) VALUES (?, ?, ?)
+       ON CONFLICT (vehicle_id, tax_year) DO UPDATE SET json = excluded.json;`,
+      vehicleId,
+      taxYear,
+      JSON.stringify(expenses),
+    ),
   );
 }
