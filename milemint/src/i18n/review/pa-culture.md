@@ -358,3 +358,19 @@ The welcome’s privacy line now names the phone, not the iPhone. Home and work 
 | Is this work? {{place}} | ਕੀ ਇਹ ਕੰਮ ਦੀ ਥਾਂ ਹੈ? {{place}} | Is this the place of work? {{place}} | *ਕੰਮ ਦੀ ਥਾਂ* in the question; the saved place reads *ਕੰਮ* as in “Work”. |
 | You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes. | ਕੰਮ ਦੇ ਘੰਟਿਆਂ ਵਿੱਚ ਤੁਹਾਡੀ ਗੱਡੀ ਅਕਸਰ ਇੱਥੇ ਖੜ੍ਹੀ ਹੁੰਦੀ ਹੈ। ਟ੍ਰਿਪਾਂ ’ਤੇ “ਕੰਮ” ਲਿਖਿਆ ਆਵੇਗਾ, ਅਤੇ ਘਰ-ਕੰਮ ਆਉਣ-ਜਾਣ ਵੱਖਰਾ ਪਛਾਣਿਆ ਜਾਵੇਗਾ। | In work hours your vehicle is often parked here. Trips will say “Work”, and home-work travel will be recognised separately. | *ਘਰ-ਕੰਮ ਆਉਣ-ਜਾਣ* as in the old places line. |
 | Yes, that’s work | ਹਾਂ, ਇਹ ਕੰਮ ਦੀ ਥਾਂ ਹੈ | Yes, this is the place of work |  |
+
+
+## Round 8f: motion activity
+
+Unsure: iOS’s Punjabi button and Settings names aren’t known for certain; “ਇਜਾਜ਼ਤ ਦਿਓ” matches this file’s “Allow While Using App”. Please check against a Punjabi iPhone. “ਟ੍ਰਿਪ” as everywhere else. The alert’s own title and body come from iOS (the body is the English NSMotionUsageDescription), so the preview shows them as grey bars.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| One more for accuracy: Motion & Fitness | ਸ਼ੁੱਧਤਾ ਲਈ ਇੱਕ ਹੋਰ: ਮੋਸ਼ਨ ਅਤੇ ਫਿਟਨੈੱਸ | One more for accuracy: Motion & Fitness | |
+| Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone. | ਇਸ ਨਾਲ MileMint ਗੱਡੀ ਚਲਾਉਣ ਅਤੇ ਪੈਦਲ ਚੱਲਣ ਵਿੱਚ ਫ਼ਰਕ ਕਰ ਸਕਦਾ ਹੈ, ਤਾਂ ਜੋ ਸੈਰ ਕਦੇ ਵੀ ਟ੍ਰਿਪ ਵਜੋਂ ਦਰਜ ਨਾ ਹੋਵੇ। ਇਹ ਤੁਹਾਡੇ ਫ਼ੋਨ ’ਤੇ ਹੀ ਰਹਿੰਦਾ ਹੈ। | With this MileMint can tell driving from walking, so a stroll is never recorded as a trip. It stays on your phone. | |
+| Turn on Motion & Fitness | ਮੋਸ਼ਨ ਅਤੇ ਫਿਟਨੈੱਸ ਚਾਲੂ ਕਰੋ | Turn on Motion & Fitness | |
+| Allow | ਇਜਾਜ਼ਤ ਦਿਓ | Give permission | |
+| Don’t Allow | ਇਜਾਜ਼ਤ ਨਾ ਦਿਓ | Don’t give permission | |
+| Motion & Fitness | ਮੋਸ਼ਨ ਅਤੇ ਫਿਟਨੈੱਸ | Motion & Fitness | |
+| On | ਚਾਲੂ | On | |
+| Off | ਬੰਦ | Off | |

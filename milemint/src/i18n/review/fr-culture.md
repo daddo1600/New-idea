@@ -284,3 +284,19 @@ The welcome’s privacy line now names the phone, not the iPhone. Home and work 
 | Is this work? {{place}} | Est-ce votre lieu de travail ? {{place}} | Is this your workplace? {{place}} | *lieu de travail* reads better in a question than bare *Travail*. |
 | You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes. | Vous êtes souvent garé ici pendant vos heures de travail. Les trajets afficheront « Travail », et les trajets domicile-travail seront signalés. | You’re often parked here during your working hours. Trips will show “Work”, and home-work trips will be flagged. | *garé* as in the end-shift prompt; *domicile-travail* as before. |
 | Yes, that’s work | Oui, c’est mon travail | Yes, it’s my work |  |
+
+
+## Round 8f: motion activity
+
+iOS’s own names: “Mouvements et forme physique” (Réglages), “Autoriser” / “Ne pas autoriser” (alert). No-break space before the colon, as elsewhere in this file. The alert’s own title and body come from iOS (the body is the English NSMotionUsageDescription), so the preview shows them as grey bars.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| One more for accuracy: Motion & Fitness | Une de plus, pour la précision : Mouvements et forme physique | One more, for accuracy: Motion & Fitness | |
+| Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone. | Permet à MileMint de distinguer la conduite de la marche, pour qu’une balade ne soit jamais enregistrée comme un trajet. Tout reste sur votre téléphone. | Lets MileMint tell driving from walking, so a stroll is never recorded as a trip. Everything stays on your phone. | |
+| Turn on Motion & Fitness | Activer Mouvements et forme physique | Turn on Motion & Fitness | |
+| Allow | Autoriser | Allow | |
+| Don’t Allow | Ne pas autoriser | Don’t allow | |
+| Motion & Fitness | Mouvements et forme physique | Motion & Fitness | |
+| On | Activé | On | |
+| Off | Désactivé | Off | |

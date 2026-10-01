@@ -1136,6 +1136,14 @@ const dictionary: Dictionary = {
   "Is this work? {{place}}": "क्या यह काम की जगह है? {{place}}",
   "You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes.": "काम के घंटों में आपकी गाड़ी अक्सर यहीं खड़ी रहती है। ट्रिप पर “काम” दिखेगा, और घर-काम आना-जाना अलग से मार्क होगा।",
   "Yes, that’s work": "हाँ, यह काम की जगह है",
+  "One more for accuracy: Motion & Fitness": "सटीकता के लिए एक और: गति और फ़िटनेस",
+  "Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone.": "इससे MileMint गाड़ी चलाने और पैदल चलने में फ़र्क़ कर पाता है, ताकि टहलना कभी ट्रिप के रूप में दर्ज न हो। यह आपके फ़ोन पर ही रहता है।",
+  "Turn on Motion & Fitness": "गति और फ़िटनेस चालू करें",
+  "Allow": "अनुमति दें",
+  "Don’t Allow": "अनुमति न दें",
+  "Motion & Fitness": "गति और फ़िटनेस",
+  "On": "चालू",
+  "Off": "बंद",
 };
 
 export default dictionary;

@@ -44,7 +44,7 @@ npx expo start      # press w for the web preview (also generates route types)
 
 **Next:**
 - Bulk classify, trip map, edit place name/type/radius
-- Motion-sensor and car Bluetooth/CarPlay triggers
+- Motion-activity and car Bluetooth/CarPlay triggers to start a drive (Motion & Fitness already checks finished drives: walks are dropped, see `modules/motion-activity/`)
 - Field test on an iPhone
 - Receipt scanning
 - Paywall (RevenueCat)

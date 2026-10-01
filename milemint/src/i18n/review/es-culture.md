@@ -297,3 +297,19 @@ The welcome’s privacy line now names the phone, not the iPhone. Home and work 
 | Is this work? {{place}} | ¿Es tu trabajo? {{place}} | Is it your work? {{place}} | *Trabajo* as in “Work”. |
 | You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes. | Sueles estacionar aquí en tu horario de trabajo. Los viajes dirán “Trabajo”, y los trayectos casa-trabajo se marcarán. | You usually park here in your work hours. Trips will say “Work”, and home-work journeys will be marked. | *estacionar* as in the end-shift prompt (es-419); *casa-trabajo* as in “Automático: casa-trabajo”. |
 | Yes, that’s work | Sí, es mi trabajo | Yes, it’s my work | Short button. |
+
+
+## Round 8f: motion activity
+
+iOS’s own names: “Movimiento y forma física” is the Settings item; “Permitir” / “No permitir” are iOS’s alert buttons. “Viaje” as everywhere else. The alert’s own title and body come from iOS (the body is the English NSMotionUsageDescription), so the preview shows them as grey bars.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| One more for accuracy: Motion & Fitness | Una más, para más precisión: Movimiento y forma física | One more, for more accuracy: Motion & Fitness | |
+| Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone. | Permite que MileMint distinga entre conducir y caminar, para que un paseo nunca se registre como viaje. Se queda en tu teléfono. | Lets MileMint tell driving from walking, so a walk is never logged as a trip. It stays on your phone. | |
+| Turn on Motion & Fitness | Activar Movimiento y forma física | Turn on Motion & Fitness | |
+| Allow | Permitir | Allow | |
+| Don’t Allow | No permitir | Don’t allow | |
+| Motion & Fitness | Movimiento y forma física | Motion & Fitness | |
+| On | Activado | On | |
+| Off | Desactivado | Off | |

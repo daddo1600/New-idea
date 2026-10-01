@@ -1226,6 +1226,14 @@ const dictionary: Dictionary = {
   "Is this work? {{place}}": "Aici e serviciul? {{place}}",
   "You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes.": "Parchezi des aici în orele de lucru. Cursele vor arăta „Serviciu”, iar navetele dintre acasă și serviciu vor fi marcate.",
   "Yes, that’s work": "Da, e serviciul",
+  "One more for accuracy: Motion & Fitness": "Încă una, pentru precizie: Mișcare și fitness",
+  "Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone.": "Permite MileMint să deosebească mersul cu mașina de mersul pe jos, ca o plimbare să nu fie niciodată înregistrată drept cursă. Rămâne pe telefonul tău.",
+  "Turn on Motion & Fitness": "Pornește Mișcare și fitness",
+  "Allow": "Permite",
+  "Don’t Allow": "Nu permite",
+  "Motion & Fitness": "Mișcare și fitness",
+  "On": "Activat",
+  "Off": "Dezactivat",
 };
 
 export default dictionary;

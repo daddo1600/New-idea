@@ -1186,6 +1186,14 @@ const dictionary: Dictionary = {
   "Is this work? {{place}}": "¿Es tu trabajo? {{place}}",
   "You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes.": "Sueles estacionar aquí en tu horario de trabajo. Los viajes dirán “Trabajo”, y los trayectos casa-trabajo se marcarán.",
   "Yes, that’s work": "Sí, es mi trabajo",
+  "One more for accuracy: Motion & Fitness": "Una más, para más precisión: Movimiento y forma física",
+  "Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone.": "Permite que MileMint distinga entre conducir y caminar, para que un paseo nunca se registre como viaje. Se queda en tu teléfono.",
+  "Turn on Motion & Fitness": "Activar Movimiento y forma física",
+  "Allow": "Permitir",
+  "Don’t Allow": "No permitir",
+  "Motion & Fitness": "Movimiento y forma física",
+  "On": "Activado",
+  "Off": "Desactivado",
 };
 
 export default dictionary;

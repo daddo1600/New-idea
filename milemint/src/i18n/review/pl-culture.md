@@ -309,3 +309,19 @@ The welcome’s privacy line now names the phone, not the iPhone. Home and work 
 | Is this work? {{place}} | Czy to praca? {{place}} | Is this work? {{place}} | *Praca* as in “Work”. |
 | You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes. | W godzinach pracy często tu parkujesz. Przejazdy będą opisane jako „Praca”, a dojazdy między domem a pracą zostaną oznaczone. | You often park here during working hours. Trips will be described as “Work”, and commutes between home and work will be marked. | *dojazdy* as in the old places line. |
 | Yes, that’s work | Tak, to praca | Yes, it’s work |  |
+
+
+## Round 8f: motion activity
+
+“Pozwól” / “Nie pozwalaj” are iOS’s alert buttons. “Ruch i sprawność” is iOS’s Settings item as best known: Unsure, please check against a Polish iPhone. “Przejazd” as everywhere else. The alert’s own title and body come from iOS (the body is the English NSMotionUsageDescription), so the preview shows them as grey bars.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| One more for accuracy: Motion & Fitness | Jeszcze jedno, dla dokładności: Ruch i sprawność | One more, for accuracy: Motion & Fitness | |
+| Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone. | Pozwala MileMint odróżnić jazdę od chodzenia, więc spacer nigdy nie zostanie zapisany jako przejazd. Zostaje na Twoim telefonie. | Lets MileMint tell driving from walking, so a walk is never saved as a trip. It stays on your phone. | |
+| Turn on Motion & Fitness | Włącz Ruch i sprawność | Turn on Motion & Fitness | |
+| Allow | Pozwól | Allow | |
+| Don’t Allow | Nie pozwalaj | Don’t allow | |
+| Motion & Fitness | Ruch i sprawność | Motion & Fitness | |
+| On | Włączone | On | |
+| Off | Wyłączone | Off | |

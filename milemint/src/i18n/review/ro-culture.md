@@ -305,3 +305,19 @@ The welcome’s privacy line now names the phone, not the iPhone. Home and work 
 | Is this work? {{place}} | Aici e serviciul? {{place}} | Is this the job? {{place}} | *Serviciu* as in “Work”. |
 | You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes. | Parchezi des aici în orele de lucru. Cursele vor arăta „Serviciu”, iar navetele dintre acasă și serviciu vor fi marcate. | You often park here in working hours. Trips will show “Job”, and commutes between home and job will be marked. | *navete* as in the old places line. |
 | Yes, that’s work | Da, e serviciul | Yes, it’s the job |  |
+
+
+## Round 8f: motion activity
+
+“Permite” / “Nu permite” are iOS’s alert buttons. “Mișcare și fitness” is iOS’s Settings item as best known: Unsure, please check against a Romanian iPhone. “Cursă” as everywhere else. The alert’s own title and body come from iOS (the body is the English NSMotionUsageDescription), so the preview shows them as grey bars.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| One more for accuracy: Motion & Fitness | Încă una, pentru precizie: Mișcare și fitness | One more, for accuracy: Motion & Fitness | |
+| Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone. | Permite MileMint să deosebească mersul cu mașina de mersul pe jos, ca o plimbare să nu fie niciodată înregistrată drept cursă. Rămâne pe telefonul tău. | Lets MileMint tell driving from walking, so a walk is never recorded as a trip. It stays on your phone. | |
+| Turn on Motion & Fitness | Pornește Mișcare și fitness | Turn on Motion & Fitness | |
+| Allow | Permite | Allow | |
+| Don’t Allow | Nu permite | Don’t allow | |
+| Motion & Fitness | Mișcare și fitness | Motion & Fitness | |
+| On | Activat | On | |
+| Off | Dezactivat | Off | |

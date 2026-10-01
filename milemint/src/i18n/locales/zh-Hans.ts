@@ -1098,6 +1098,14 @@ const dictionary: Dictionary = {
   "Is this work? {{place}}": "这里是工作地点吗？{{place}}",
   "You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes.": "你常在工作时间停在这里。行程将显示为“工作地点”，家和工作地点之间的行程会标为通勤。",
   "Yes, that’s work": "是，这是工作地点",
+  "One more for accuracy: Motion & Fitness": "再开一项，记录更准确：运动与健身",
+  "Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone.": "让 MileMint 分辨开车和步行，散步绝不会被记成行程。数据只留在你的手机上。",
+  "Turn on Motion & Fitness": "开启运动与健身",
+  "Allow": "允许",
+  "Don’t Allow": "不允许",
+  "Motion & Fitness": "运动与健身",
+  "On": "已开启",
+  "Off": "已关闭",
 };
 
 export default dictionary;

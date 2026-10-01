@@ -60,7 +60,7 @@
           "isIosBackgroundLocationEnabled": true,
           "isAndroidBackgroundLocationEnabled": true,
           "isAndroidForegroundServiceEnabled": true,
-          "motionUsagePermission": "MileMint does not use motion data. Drives are detected from location only."
+          "motionUsagePermission": "So MileMint can tell driving from walking, and a walk is never logged as a drive. Motion data stays on your iPhone."
         }
       ],
       "expo-iap",

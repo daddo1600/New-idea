@@ -11,6 +11,7 @@ import { inWriteTransaction } from '@/db/transaction';
 import { refreshLaunchTotal } from '@/region/launch-total';
 import { autoTripExists, insertTripUnlocked, listClassificationHistory, type NewTrip } from '@/db/trips-repo';
 import { autoClassify } from '@/domain/auto-classify';
+import { withDroppedWalks } from '@/domain/motion';
 import { suggestClassification } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
 import { matchPlace } from '@/domain/places';
@@ -36,6 +37,7 @@ import { t } from '@/i18n/i18n';
 import { armDriveWatchdog, cancelHealthAlerts, queueHealthAlert } from './health-alerts';
 import { waitForPromptAnswer } from './prompt-answer';
 import { cancelEndShiftPrompt, scheduleEndShiftPrompt } from './shift-notifications';
+import { screenDetectedTrips } from './motion';
 import { loadTrackerRecord, saveTrackerRecord } from './tracker-store';
 
 /**
@@ -142,6 +144,14 @@ async function privateLabelFor(point: LatLng, region: RegionCode | null): Promis
   }
 }
 
+/*
+ * Before a detected drive is saved, `screenDetectedTrips` (./motion) reads
+ * what Motion & Fitness says the phone was doing meanwhile, capped at 3
+ * seconds and outside any write transaction. Only a clear walk (GPS drift
+ * or a stroll mistaken for a drive) is dropped, and noted in the tracker
+ * record. No motion data (not allowed, not available, too slow) saves every
+ * drive as before.
+ */
 async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise<void> {
   // If the app was killed after saving a trip but before saving the tracker
   // state, the same drive is detected again on the next wake-up.
@@ -275,8 +285,10 @@ async function handleLocations(samples: LocationSample[]): Promise<void> {
   const record = await loadTrackerRecord(db);
   const now = Date.now();
   const decision = onLocations(record, samples, now);
-  for (const trip of decision.completed) await saveDetectedTrip(db, trip);
-  await saveTrackerRecord(db, await afterWake(decision.record, now, decision.switchToGeofenceAt !== null));
+  const { keep, walks } = await screenDetectedTrips(decision.completed);
+  for (const trip of keep) await saveDetectedTrip(db, trip);
+  const next = withDroppedWalks(decision.record, walks);
+  await saveTrackerRecord(db, await afterWake(next, now, decision.switchToGeofenceAt !== null));
   if (decision.switchToGeofenceAt) {
     await stopTask(LOCATION_TASK, Location.hasStartedLocationUpdatesAsync, Location.stopLocationUpdatesAsync);
     await armGeofence(decision.switchToGeofenceAt);
@@ -407,8 +419,9 @@ export async function reconcileTracking(db: SQLiteDatabase): Promise<void> {
         new Promise<null>((resolve) => setTimeout(() => resolve(null), 8000)),
       ]);
       const decision = onReconcile(record, here, Date.now());
-      for (const trip of decision.completed) await saveDetectedTrip(db, trip);
-      await saveTrackerRecord(db, decision.record);
+      const { keep, walks } = await screenDetectedTrips(decision.completed);
+      for (const trip of keep) await saveDetectedTrip(db, trip);
+      await saveTrackerRecord(db, withDroppedWalks(decision.record, walks));
       if (decision.switchToGeofenceAt) {
         await stopTask(LOCATION_TASK, Location.hasStartedLocationUpdatesAsync, Location.stopLocationUpdatesAsync);
         await armGeofence(decision.switchToGeofenceAt);
