@@ -171,7 +171,7 @@ const MIGRATIONS: readonly string[] = [
   -- save), the home list's order, a shift's drives, and the edit log's
   -- user changes (read with every trip list).
   CREATE INDEX trips_started_at ON trips (started_at);
-  DROP INDEX trips_local_date;
+  DROP INDEX IF EXISTS trips_local_date;
   CREATE INDEX trips_local_date_started_at ON trips (local_date, started_at);
   CREATE INDEX trips_shift ON trips (shift_id);
   CREATE INDEX trip_edits_updates ON trip_edits (trip_id, field, old_value, at) WHERE action = 'update';
