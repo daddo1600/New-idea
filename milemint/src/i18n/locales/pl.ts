@@ -202,7 +202,6 @@ const dictionary: Dictionary = {
   "Add a missed drive": "Dodaj pominięty przejazd",
   "Add a missed trip": "Dodaj pominięty przejazd",
   "Add another time": "Dodaj kolejny przedział",
-  "Add business purpose": "Dodaj cel służbowy",
   "Add missed trip": "Dodaj pominięty przejazd",
   "Add missed trips by hand": "Ręczne dodawanie pominiętych przejazdów",
   "Added manually": "Dodany ręcznie",
@@ -1245,6 +1244,36 @@ const dictionary: Dictionary = {
   "New drives aren’t being logged. Tap to turn tracking back on.": "Nowe przejazdy nie są zapisywane. Stuknij, aby ponownie włączyć śledzenie.",
   "No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up.": "Brak lokalizacji od {{time}}, w trakcie przejazdu. Otwórz MileMint, aby wznowić śledzenie.",
   "Where your shift started": "Miejsce początku zmiany",
+  "Opens trip details": "Otwiera szczegóły przejazdu",
+  "Usual purpose · tap to change": "Zwykły cel · dotknij, aby zmienić",
+  "Purpose needed for your tax records": "Potrzebny cel do ewidencji podatkowej",
+  "Shows only the drives that need a purpose": "Pokazuje tylko przejazdy bez celu",
+  "{{count}} work drives need a purpose": {
+    "one": "{{count}} przejazd służbowy wymaga celu",
+    "few": "{{count}} przejazdy służbowe wymagają celu",
+    "many": "{{count}} przejazdów służbowych wymaga celu",
+    "other": "{{count}} przejazdu służbowego wymaga celu"
+  },
+  "{{authority}} expects a purpose for every business drive. One tap each.": "{{authority}} wymaga celu każdego przejazdu służbowego. Jedno dotknięcie na przejazd.",
+  "Add purposes ›": "Dodaj cele ›",
+  "Every work drive has a purpose ✓": "Każdy przejazd służbowy ma cel ✓",
+  "Show all drives": "Pokaż wszystkie przejazdy",
+  "{{count}} work drives have no purpose": {
+    "one": "{{count}} przejazd służbowy nie ma celu",
+    "few": "{{count}} przejazdy służbowe nie mają celu",
+    "many": "{{count}} przejazdów służbowych nie ma celu",
+    "other": "{{count}} przejazdu służbowego nie ma celu"
+  },
+  "{{authority}} expects a purpose for every business drive. Add them before you export?": "{{authority}} wymaga celu każdego przejazdu służbowego. Dodać je przed eksportem?",
+  "Export anyway": "Eksportuj mimo to",
+  "Add purposes": "Dodaj cele",
+  "Usual business purpose": "Zwykły cel służbowy",
+  "Clear": "Wyczyść",
+  "Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one.": "Wpisywany w przejazdach służbowych bez celu, żeby ewidencja podatkowa była kompletna. Przejazdy na zmianie mają „Dostawy”, chyba że wybierzesz inny.",
+  "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.": "Wpisywany w przejazdach służbowych bez celu, żeby ewidencja podatkowa była kompletna. Możesz go zmienić w każdym przejeździe.",
+  "None: ask me each time": "Brak: pytaj mnie za każdym razem",
+  "What are most of your work drives for?": "W jakim celu najczęściej jeździsz służbowo?",
+  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "Urząd skarbowy wymaga celu każdego przejazdu służbowego. Wpiszemy go za Ciebie, a zmienisz go w każdym przejeździe."
 };
 
 export default dictionary;

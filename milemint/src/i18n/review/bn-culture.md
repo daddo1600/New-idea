@@ -246,3 +246,28 @@ Tracking health: home card, Settings “ট্র্যাকিং যাচা
 | English | bn | Back-translation | Note |
 |---|---|---|---|
 | Where your shift started | যেখানে শিফট শুরু হয়েছে | Where the shift started | Mirrors the existing "Where your shift ended" line, same length and register. |
+
+## Round 8b: business purpose
+
+| English | bn | Back-translation | Note |
+|---|---|---|---|
+| Opens trip details | ট্রিপের বিস্তারিত খোলে | Opens the trip details | Matches the row’s existing hint. |
+| Usual purpose · tap to change | সাধারণ উদ্দেশ্য · বদলাতে ট্যাপ করুন | Usual purpose · tap to change | *উদ্দেশ্য* as in “ব্যবসায়িক উদ্দেশ্য”. |
+| Purpose needed for your tax records | ট্যাক্স রেকর্ডের জন্য উদ্দেশ্য দরকার | A purpose is needed for tax records | Natural, fits its place. |
+| Shows only the drives that need a purpose | শুধু যেসব ট্রিপে উদ্দেশ্য দরকার সেগুলো দেখায় | Shows only the trips that need a purpose | Natural, fits its place. |
+| {{count}} work drives need a purpose | one: {{count}}টি ব্যবসায়িক ট্রিপে উদ্দেশ্য দরকার / other: {{count}}টি ব্যবসায়িক ট্রিপে উদ্দেশ্য দরকার | {{count}} business trip(s) need a purpose | Classifier টি, as in the file. |
+| {{authority}} expects a purpose for every business drive. One tap each. | {{authority}} প্রতিটি ব্যবসায়িক ট্রিপের উদ্দেশ্য চায়। প্রতিটিতে একটি ট্যাপ। | {{authority}} wants each business trip’s purpose. One tap on each. | Natural, fits its place. |
+| Add purposes › | উদ্দেশ্য যোগ করুন › | Add purposes › | Natural, fits its place. |
+| Every work drive has a purpose ✓ | প্রতিটি ব্যবসায়িক ট্রিপের উদ্দেশ্য আছে ✓ | Every business trip has a purpose ✓ | Natural, fits its place. |
+| Show all drives | সব ট্রিপ দেখান | Show all trips | Natural, fits its place. |
+| {{count}} work drives have no purpose | one: {{count}}টি ব্যবসায়িক ট্রিপে কোনো উদ্দেশ্য নেই / other: {{count}}টি ব্যবসায়িক ট্রিপে কোনো উদ্দেশ্য নেই | {{count}} business trip(s) have no purpose | Natural, fits its place. |
+| {{authority}} expects a purpose for every business drive. Add them before you export? | {{authority}} প্রতিটি ব্যবসায়িক ট্রিপের উদ্দেশ্য চায়। এক্সপোর্টের আগে যোগ করবেন? | {{authority}} wants each business trip’s purpose. Add them before export? | Natural, fits its place. |
+| Export anyway | তবুও এক্সপোর্ট করুন | Export anyway | Natural, fits its place. |
+| Add purposes | উদ্দেশ্য যোগ করুন | Add purposes | Natural, fits its place. |
+| Usual business purpose | সাধারণ ব্যবসায়িক উদ্দেশ্য | Usual business purpose | Natural, fits its place. |
+| Clear | সরান | Remove | “মুছুন” is kept for deleting trips. |
+| Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one. | যেসব ব্যবসায়িক ট্রিপে উদ্দেশ্য নেই সেগুলোতে এটি বসানো হয়, যাতে আপনার ট্যাক্স রেকর্ড সম্পূর্ণ থাকে। শিফটের ট্রিপে “ডেলিভারি” থাকে, যদি না আপনি অন্য কিছু বেছে নেন। | It is put on business trips without a purpose, so your tax records stay complete. Shift trips have “Delivery” unless you choose something else. | *শিফট* as in “অটো: শিফটে”. |
+| Filled in for work drives that have none, so your tax records are complete. You can change it on any trip. | যেসব ব্যবসায়িক ট্রিপে উদ্দেশ্য নেই সেগুলোতে এটি বসানো হয়, যাতে আপনার ট্যাক্স রেকর্ড সম্পূর্ণ থাকে। আপনি যেকোনো ট্রিপে এটি বদলাতে পারেন। | It is put on business trips without a purpose, so your tax records stay complete. You can change it on any trip. | Natural, fits its place. |
+| None: ask me each time | কোনোটি নয়: প্রতিবার জিজ্ঞেস করুন | None: ask every time | Natural, fits its place. |
+| What are most of your work drives for? | আপনার বেশিরভাগ ব্যবসায়িক ট্রিপ কীসের জন্য? | What are most of your business trips for? | Natural, fits its place. |
+| Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip. | ট্যাক্স কর্তৃপক্ষ প্রতিটি ব্যবসায়িক ট্রিপের উদ্দেশ্য চায়। আমরা এটি আপনার হয়ে বসিয়ে দেব, আর আপনি যেকোনো ট্রিপে এটি বদলাতে পারবেন। | Tax authorities want each business trip’s purpose. We’ll put it in for you, and you can change it on any trip. | Natural, fits its place. |

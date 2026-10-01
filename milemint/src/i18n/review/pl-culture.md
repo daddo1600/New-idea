@@ -259,3 +259,28 @@ Tracking health: home card, Settings “Stan śledzenia” row and background no
 | English | pl | Back-translation | Note |
 |---|---|---|---|
 | Where your shift started | Miejsce początku zmiany | Place where the shift started | Mirrors the existing "Where your shift ended" line, same length and register. |
+
+## Round 8b: business purpose
+
+| English | pl | Back-translation | Note |
+|---|---|---|---|
+| Opens trip details | Otwiera szczegóły przejazdu | Opens the drive details | Matches the row’s existing hint. |
+| Usual purpose · tap to change | Zwykły cel · dotknij, aby zmienić | Usual purpose · tap to change | *Cel* as in “Cel służbowy”. |
+| Purpose needed for your tax records | Potrzebny cel do ewidencji podatkowej | Purpose needed for the tax records | *ewidencja* is the usual word for a mileage log (ewidencja przebiegu). |
+| Shows only the drives that need a purpose | Pokazuje tylko przejazdy bez celu | Shows only drives without a purpose | Natural, fits its place. |
+| {{count}} work drives need a purpose | one: {{count}} przejazd służbowy wymaga celu / few: {{count}} przejazdy służbowe wymagają celu / many: {{count}} przejazdów służbowych wymaga celu / other: {{count}} przejazdu służbowego wymaga celu | {{count}} business drive(s) need(s) a purpose | one/few/many/other. |
+| {{authority}} expects a purpose for every business drive. One tap each. | {{authority}} wymaga celu każdego przejazdu służbowego. Jedno dotknięcie na przejazd. | {{authority}} requires the purpose of every business drive. One tap per drive. | *wymaga* as in “{{authority}} wymaga celu służbowego”. |
+| Add purposes › | Dodaj cele › | Add purposes › | Natural, fits its place. |
+| Every work drive has a purpose ✓ | Każdy przejazd służbowy ma cel ✓ | Every business drive has a purpose ✓ | Natural, fits its place. |
+| Show all drives | Pokaż wszystkie przejazdy | Show all drives | Natural, fits its place. |
+| {{count}} work drives have no purpose | one: {{count}} przejazd służbowy nie ma celu / few: {{count}} przejazdy służbowe nie mają celu / many: {{count}} przejazdów służbowych nie ma celu / other: {{count}} przejazdu służbowego nie ma celu | {{count}} business drive(s) has/have no purpose | Natural, fits its place. |
+| {{authority}} expects a purpose for every business drive. Add them before you export? | {{authority}} wymaga celu każdego przejazdu służbowego. Dodać je przed eksportem? | {{authority}} requires the purpose of every business drive. Add them before export? | Infinitive question, the usual iOS-alert form. |
+| Export anyway | Eksportuj mimo to | Export anyway | Natural, fits its place. |
+| Add purposes | Dodaj cele | Add purposes | Natural, fits its place. |
+| Usual business purpose | Zwykły cel służbowy | Usual business purpose | Natural, fits its place. |
+| Clear | Wyczyść | Clear | Natural, fits its place. |
+| Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one. | Wpisywany w przejazdach służbowych bez celu, żeby ewidencja podatkowa była kompletna. Przejazdy na zmianie mają „Dostawy”, chyba że wybierzesz inny. | Entered on business drives without a purpose, so the tax records are complete. Drives on a shift get “Deliveries” unless you choose another. | *na zmianie* as in “Autom.: na zmianie”. |
+| Filled in for work drives that have none, so your tax records are complete. You can change it on any trip. | Wpisywany w przejazdach służbowych bez celu, żeby ewidencja podatkowa była kompletna. Możesz go zmienić w każdym przejeździe. | Entered on business drives without a purpose, so the tax records are complete. You can change it on any drive. | Natural, fits its place. |
+| None: ask me each time | Brak: pytaj mnie za każdym razem | None: ask me every time | Natural, fits its place. |
+| What are most of your work drives for? | W jakim celu najczęściej jeździsz służbowo? | For what purpose do you most often drive for work? | Rephrased for natural Polish. |
+| Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip. | Urząd skarbowy wymaga celu każdego przejazdu służbowego. Wpiszemy go za Ciebie, a zmienisz go w każdym przejeździe. | The tax office requires the purpose of every business drive. We’ll enter it for you, and you can change it on any drive. | *Ciebie* capitalised, as in the file’s direct address. |

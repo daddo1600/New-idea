@@ -6,7 +6,7 @@ import type { Place } from '@/domain/places';
 import type { Classification, Trip } from '@/domain/trip';
 
 import { listPlaces } from './places-repo';
-import { deleteTrip, listTrips, setClassification } from './trips-repo';
+import { deleteTrip, listTrips, setClassification, updateTripDetails } from './trips-repo';
 
 /**
  * Trips (and the named places they refer to) from the encrypted database,
@@ -47,6 +47,15 @@ export function useTrips() {
     [db, reload],
   );
 
+  /** One-tap business purpose from the trip list, logged like any purpose edit. */
+  const setPurpose = useCallback(
+    async (trip: Trip, purpose: string) => {
+      await updateTripDetails(db, trip, { purpose });
+      await reload();
+    },
+    [db, reload],
+  );
+
   const remove = useCallback(
     async (trip: Trip) => {
       await deleteTrip(db, trip);
@@ -55,5 +64,5 @@ export function useTrips() {
     [db, reload],
   );
 
-  return { trips, places, classify, classifyMany, remove, reload };
+  return { trips, places, classify, classifyMany, setPurpose, remove, reload };
 }

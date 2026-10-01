@@ -110,7 +110,10 @@ export default function TripScreen() {
 
   const classify = async (classification: Classification) => {
     await setClassification(db, trip, classification);
-    setTrip(await getTrip(db, trip.id));
+    const updated = await getTrip(db, trip.id);
+    setTrip(updated);
+    // Marked business with no purpose: the usual one was filled in, shown here to check.
+    if (updated && !purpose.trim()) setPurpose(updated.purpose);
   };
 
   const confirmDelete = () =>

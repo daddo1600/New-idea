@@ -234,3 +234,28 @@ Tracking health: home card, Settings “追踪检查” row and background notif
 | English | zh-Hans | Back-translation | Note |
 |---|---|---|---|
 | Where your shift started | 开工地点 | Place where work started | Mirrors the existing "Where your shift ended" line, same length and register. |
+
+## Round 8b: business purpose
+
+| English | zh-Hans | Back-translation | Note |
+|---|---|---|---|
+| Opens trip details | 打开行程详情 | Opens trip details | Matches the row’s existing hint. |
+| Usual purpose · tap to change | 常用事由 · 点按可更改 | Usual reason · tap to change | *事由* as in “工作事由”. |
+| Purpose needed for your tax records | 报税记录需要填写事由 | Tax records need a reason filled in | Natural, fits its place. |
+| Shows only the drives that need a purpose | 只显示需要填写事由的行程 | Shows only trips that need a reason | Natural, fits its place. |
+| {{count}} work drives need a purpose | other: {{count}} 次工作行程需要填写事由 | {{count}} work trips need a reason | Measure word 次 as in “{{count}} 次工作行程”. |
+| {{authority}} expects a purpose for every business drive. One tap each. | {{authority}} 要求每次工作行程都有事由。每次点一下就好。 | {{authority}} requires every work trip to have a reason. Just one tap each. | *要求* as in “{{authority}} 要求填写工作事由”. |
+| Add purposes › | 添加事由 › | Add reasons › | Natural, fits its place. |
+| Every work drive has a purpose ✓ | 每次工作行程都有事由了 ✓ | Every work trip has a reason now ✓ | Natural, fits its place. |
+| Show all drives | 显示全部行程 | Show all trips | Natural, fits its place. |
+| {{count}} work drives have no purpose | other: {{count}} 次工作行程没有事由 | {{count}} work trips have no reason | Natural, fits its place. |
+| {{authority}} expects a purpose for every business drive. Add them before you export? | {{authority}} 要求每次工作行程都有事由。导出前先补上吗？ | {{authority}} requires every work trip to have a reason. Fill them in before exporting? | 补上 = fill in what’s missing; natural and short. |
+| Export anyway | 仍然导出 | Export anyway | Natural, fits its place. |
+| Add purposes | 添加事由 | Add reasons | Natural, fits its place. |
+| Usual business purpose | 常用工作事由 | Usual work reason | Natural, fits its place. |
+| Clear | 清除 | Clear | Natural, fits its place. |
+| Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one. | 自动填入没有事由的工作行程，让报税记录完整。开工期间的行程使用“送货”，除非你另选一个。 | Filled in automatically on work trips without a reason, so tax records are complete. Trips while on shift use “Deliveries” unless you choose another. | *开工* as in “自动：开工中”. |
+| Filled in for work drives that have none, so your tax records are complete. You can change it on any trip. | 自动填入没有事由的工作行程，让报税记录完整。任何行程都可以单独修改。 | Filled in automatically on work trips without a reason, so tax records are complete. Any trip can be changed individually. | Natural, fits its place. |
+| None: ask me each time | 不设置：每次问我 | Don’t set: ask me each time | Natural, fits its place. |
+| What are most of your work drives for? | 你的工作行程大多是做什么？ | What are your work trips mostly for? | Natural, fits its place. |
+| Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip. | 税务机关要求每次工作行程都有事由。我们会帮你填好，任何行程都可以修改。 | Tax authorities require every work trip to have a reason. We’ll fill it in for you; any trip can be changed. | Natural, fits its place. |

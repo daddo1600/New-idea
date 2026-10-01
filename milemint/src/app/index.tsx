@@ -1,4 +1,4 @@
-import { type Href, Redirect, router, Stack } from 'expo-router';
+import { type Href, Redirect, router, Stack, useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming, ZoomIn } from 'react-native-reanimated';
@@ -16,7 +16,7 @@ import { LogbookNudge } from '@/components/logbook-nudge';
 import { PlanSheet } from '@/components/plan-rules';
 import { Celebration } from '@/components/celebration';
 import { ReminderAsk } from '@/components/reminder-ask';
-import { shownPurpose } from '@/components/purpose-picker';
+import { purposeIcon, quickPurposes, shownPurpose } from '@/components/purpose-picker';
 import { BackdateOffer, EndShiftPrompt, UndoEndBar } from '@/components/shift-prompts';
 import { shortTime, ShiftRow } from '@/components/shift-row';
 import { ShiftSwitch } from '@/components/shift-switch';
@@ -38,6 +38,7 @@ import type { Place } from '@/domain/places';
 import { homeItems, itemKey, offShiftKind, type HomeItem } from '@/domain/shift-rows';
 import { backdateStart } from '@/domain/shift-split';
 import { shownLabel } from '@/domain/privacy';
+import { frequentPurposes } from '@/domain/suggestions';
 import {
   computeDeductions,
   displayLocale,
@@ -53,6 +54,7 @@ import {
 } from '@/domain/regions';
 import { type Classification, toLocalIsoDate, type Trip, VEHICLE_ICONS } from '@/domain/trip';
 import { useMileagePay } from '@/hooks/use-mileage-pay';
+import { usePurposeSettings } from '@/hooks/use-purpose-settings';
 import { useTheme } from '@/hooks/use-theme';
 import { getLanguage, msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
@@ -83,7 +85,20 @@ const AUTO_NOTES: Record<AutoReason, string> = {
 const SWIPE_THRESHOLD = 80;
 
 export default function HomeScreen() {
-  const { trips, places, classify, classifyMany, remove, reload } = useTrips();
+  const { trips, places, classify, classifyMany, setPurpose, remove, reload } = useTrips();
+  const purposeSettings = usePurposeSettings();
+  /**
+   * The tax year whose work drives without a purpose are shown on their own,
+   * to fill in one after another (null: all drives are shown).
+   */
+  const [filling, setFilling] = useState<number | null>(null);
+  // The report screen sends the user here to fill in the purposes its year is missing.
+  const { fill, year: fillYear } = useLocalSearchParams<{ fill?: string; year?: string }>();
+  const fillAsked = fill === 'purpose' ? (fillYear ?? '') : null;
+  const [fillSeen, setFillSeen] = useState<string | null>(null);
+  useEffect(() => {
+    if (fill) router.setParams({ fill: undefined, year: undefined });
+  }, [fill]);
   const insets = useSafeAreaInsets();
   // Bulk sort: pick several trips, then mark them all at once.
   const [selecting, setSelecting] = useState(false);
@@ -93,6 +108,11 @@ export default function HomeScreen() {
   const allowance = useAllowance();
   const { region, loaded, onboarded } = useRegion();
   const taxYear = currentTaxYear(region);
+  // Opened from the report: show its year's drives without a purpose (once per visit).
+  if (fillAsked !== fillSeen) {
+    setFillSeen(fillAsked);
+    if (fillAsked !== null) setFilling(Number.isInteger(Number(fillAsked)) && fillAsked ? Number(fillAsked) : taxYear);
+  }
   useReminders(region);
   // Encrypted copy in the user's own iCloud, so a lost phone doesn't take the log with it.
   useAutoBackup(onboarded && !DEMO_MODE);
@@ -132,6 +152,22 @@ export default function HomeScreen() {
     [visible, region, taxYear, deductions],
   );
   const celebration = useMilestoneCelebration(trips ? visible : null, deductions, region);
+  // Tax offices want a purpose for every business drive: the one-tap choices, and the drives still missing one.
+  const purposeChoices = useMemo(
+    () =>
+      quickPurposes({
+        usual: purposeSettings.usual,
+        recent: frequentPurposes(trips ?? []),
+        shiftMode: purposeSettings.shiftMode,
+        clientPrivacy: purposeSettings.clientPrivacy,
+      }),
+    [trips, purposeSettings.usual, purposeSettings.shiftMode, purposeSettings.clientPrivacy],
+  );
+  // Drives past the free allowance are left out, as in the report's count: their value isn't claimed yet.
+  const needPurpose = useMemo(
+    () => visible.filter((trip) => needsPurpose(trip) && taxYearOf(trip.localDate, region) === (filling ?? taxYear)),
+    [visible, region, taxYear, filling],
+  );
   // UK employees don't deduct mileage: they claim Mileage Allowance Relief on what the employer didn't pay.
   const { pay } = useMileagePay();
   const employee = pay?.employee ?? false;
@@ -177,7 +213,9 @@ export default function HomeScreen() {
   // Selecting works on drives, so it lists them one by one as before.
   const items: HomeItem[] = selecting
     ? trips.map((trip) => ({ kind: 'trip', trip }))
-    : homeItems(trips, shiftMode.shifts, expanded);
+    : filling !== null
+      ? needPurpose.map((trip) => ({ kind: 'trip', trip }))
+      : homeItems(trips, shiftMode.shifts, expanded);
   const toggleShift = (shiftId: string) =>
     setExpanded((current) => {
       const next = new Set(current);
@@ -331,10 +369,14 @@ export default function HomeScreen() {
               foundMinor={launchTotal}
               unsortedCount={unsorted.length}
               onSortUnsorted={() => {
+                setFilling(null);
                 setSelecting(true);
                 setSelected(new Set(unsorted.map((trip) => trip.id)));
               }}
             />
+            {filling === null && needPurpose.length > 0 && (
+              <PurposeNudge count={needPurpose.length} onFill={() => setFilling(taxYear)} />
+            )}
             {/* Australia: past 5,000 km in a car, the logbook method usually claims more. */}
             <LogbookNudge trips={visible} vehicles={garage.vehicles} />
             {visible.length > 0 && <ReminderAsk />}
@@ -356,7 +398,8 @@ export default function HomeScreen() {
               </Pressable>
             )}
             {!isPro && <PlanCard trips={trips} locked={locked} />}
-            {visible.length > 0 && (
+            {filling !== null && <FillingBar count={needPurpose.length} onDone={() => setFilling(null)} />}
+            {visible.length > 0 && filling === null && (
               <SelectBar
                 selecting={selecting}
                 unsortedCount={unsorted.length}
@@ -368,15 +411,18 @@ export default function HomeScreen() {
           </View>
         }
         ListEmptyComponent={
-          <View style={styles.empty}>
-            <LeafMark size={72} />
-            <ThemedText type="smallBold">{status === 'on' ? t('Ready when you are') : t('No drives yet')}</ThemedText>
-            <ThemedText type="small" themeColor="textSecondary" style={styles.emptyBody}>
-              {status === 'on'
-                ? t('Just drive. Each trip appears here after you park, ready to swipe business or personal.')
-                : t('Turn on automatic tracking and your drives will appear here.')}
-            </ThemedText>
-          </View>
+          // Filling in purposes: the bar above says they're all done.
+          filling !== null ? null : (
+            <View style={styles.empty}>
+              <LeafMark size={72} />
+              <ThemedText type="smallBold">{status === 'on' ? t('Ready when you are') : t('No drives yet')}</ThemedText>
+              <ThemedText type="small" themeColor="textSecondary" style={styles.emptyBody}>
+                {status === 'on'
+                  ? t('Just drive. Each trip appears here after you park, ready to swipe business or personal.')
+                  : t('Turn on automatic tracking and your drives will appear here.')}
+              </ThemedText>
+            </View>
+          )
         }
         renderItem={({ item: row }) => {
           if (row.kind === 'shift') {
@@ -410,6 +456,9 @@ export default function HomeScreen() {
               offShift={offShiftKind(item, shiftMode.shifts)}
               onClassify={(c) => sort([item], c)}
               onLongPress={() => confirmDelete(item)}
+              usualPurpose={purposeSettings.usual}
+              purposeChoices={purposeChoices}
+              onPurpose={(purpose) => setPurpose(item, purpose).catch(() => {})}
             />
           );
           // A shift's drives, under its row while it's open.
@@ -761,9 +810,17 @@ function TripRow({
   offShift = null,
   onClassify,
   onLongPress,
+  usualPurpose,
+  purposeChoices,
+  onPurpose,
 }: {
   trip: Trip;
   deduction: number;
+  /** Filled in for business drives with none; a trip still showing it is marked to check. */
+  usualPurpose: string | null;
+  /** One-tap purposes for a business drive without one, most likely first. */
+  purposeChoices: readonly string[];
+  onPurpose: (purpose: string) => void;
   /** Cut off a shift: the part after it ended (the drive home), or in a pause. */
   offShift?: 'after' | 'pause' | null;
   /** What the trip would be worth as business: the nudge to classify it. */
@@ -786,6 +843,12 @@ function TripRow({
     deduction > 0 ? formatMoney(deduction, region) : '',
   ].filter(Boolean);
   const openDetails = () => router.push({ pathname: '/trip/[id]', params: { id: trip.id } });
+  // Filled in by the app with the usual purpose and not checked since: said quietly, so it can be.
+  const filledWithUsual =
+    !!trip.purposeFilled &&
+    !trip.shiftId &&
+    usualPurpose !== null &&
+    trip.purpose.trim().toLowerCase() === usualPurpose.trim().toLowerCase();
 
   // Swipe right = Business, left = Personal. The buttons below stay for
   // VoiceOver and anyone who doesn't discover the gesture.
@@ -854,13 +917,19 @@ function TripRow({
                 : t('Business or personal?')}
             </ThemedText>
           )}
-          {business && !trip.purpose.trim() && (
-            <Pressable accessibilityRole="button" onPress={openDetails} hitSlop={8}>
-              <ThemedText type="smallBold" style={{ color: theme.accent }}>
-                {t('Add business purpose')}
+          {business && filledWithUsual && (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityHint={t('Opens trip details')}
+              onPress={openDetails}
+              hitSlop={8}
+              style={styles.savedLine}>
+              <ThemedText type="small" themeColor="textSecondary">
+                {t('Usual purpose · tap to change')}
               </ThemedText>
             </Pressable>
           )}
+          {needsPurpose(trip) && <PurposeNeeded choices={purposeChoices} onPick={onPurpose} onOther={openDetails} />}
           <Segmented
             options={CLASSIFY_OPTIONS.map((option) => ({ ...option, label: t(option.label) }))}
             value={unclassified ? null : trip.classification}
@@ -874,6 +943,100 @@ function TripRow({
         </ThemedView>
       </Pressable>
     </ReanimatedSwipeable>
+  );
+}
+
+/** A business drive with no purpose (the report counts the same, see domain/report). */
+function needsPurpose(trip: Trip): boolean {
+  return trip.classification === 'business' && !trip.purpose.trim();
+}
+
+/**
+ * Under a business drive with no purpose: hard to miss, and one tap to fix.
+ * Tax offices (HMRC, the IRS, CRA, ATO) want a purpose for every business
+ * drive. "Other…" opens the trip, with the full purpose list.
+ */
+function PurposeNeeded({
+  choices,
+  onPick,
+  onOther,
+}: {
+  choices: readonly string[];
+  onPick: (purpose: string) => void;
+  onOther: () => void;
+}) {
+  const theme = useTheme();
+  const t = useT();
+  const chip = ({ pressed }: { pressed: boolean }) => [
+    styles.purposeChip,
+    { backgroundColor: pressed ? theme.backgroundSelected : theme.background, borderColor: theme.warning },
+  ];
+  return (
+    <View style={[styles.purposeNeeded, { borderColor: theme.warning, backgroundColor: theme.warning + '1A' }]}>
+      <ThemedText type="smallBold">⚠️ {t('Purpose needed for your tax records')}</ThemedText>
+      <View style={styles.purposeChips}>
+        {choices.map((purpose) => (
+          <Pressable
+            key={purpose}
+            accessibilityRole="button"
+            accessibilityLabel={t('Business purpose: {{purpose}}', { purpose: shownPurpose(purpose, t) })}
+            onPress={() => onPick(purpose)}
+            style={chip}>
+            <ThemedText type="smallBold" numberOfLines={1}>
+              {purposeIcon(purpose)} {shownPurpose(purpose, t)}
+            </ThemedText>
+          </Pressable>
+        ))}
+        <Pressable accessibilityRole="button" accessibilityHint={t('Opens trip details')} onPress={onOther} style={chip}>
+          <ThemedText type="smallBold" style={{ color: theme.accent }}>
+            {t('Other…')}
+          </ThemedText>
+        </Pressable>
+      </View>
+    </View>
+  );
+}
+
+/** On home while this tax year has work drives without a purpose; opens them one after another. */
+function PurposeNudge({ count, onFill }: { count: number; onFill: () => void }) {
+  const theme = useTheme();
+  const t = useT();
+  const { region } = useRegion();
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityHint={t('Shows only the drives that need a purpose')}
+      onPress={onFill}>
+      <ThemedView type="backgroundElement" style={[styles.purposeNudge, { borderColor: theme.warning }]}>
+        <ThemedText type="smallBold">{t('{{count}} work drives need a purpose', { count })}</ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          {t('{{authority}} expects a purpose for every business drive. One tap each.', {
+            authority: region.authority,
+          })}
+        </ThemedText>
+        <ThemedText type="smallBold" style={{ color: theme.accent }}>
+          {t('Add purposes ›')}
+        </ThemedText>
+      </ThemedView>
+    </Pressable>
+  );
+}
+
+/** Above the list while filling in purposes: how many are left, and the way back to all drives. */
+function FillingBar({ count, onDone }: { count: number; onDone: () => void }) {
+  const theme = useTheme();
+  const t = useT();
+  return (
+    <View style={styles.selectBar}>
+      <ThemedText type="smallBold" style={styles.flex}>
+        {count > 0 ? t('{{count}} work drives need a purpose', { count }) : t('Every work drive has a purpose ✓')}
+      </ThemedText>
+      <Pressable accessibilityRole="button" hitSlop={8} onPress={onDone}>
+        <ThemedText type="smallBold" style={{ color: theme.accent }}>
+          {count > 0 ? t('Show all drives') : t('Done')}
+        </ThemedText>
+      </Pressable>
+    </View>
   );
 }
 
@@ -1401,6 +1564,16 @@ const styles = StyleSheet.create({
   planCard: { borderRadius: 16, padding: Spacing.three, gap: Spacing.two },
   planMain: { gap: Spacing.two },
   savedLine: { alignSelf: 'flex-start' },
+  purposeNeeded: { borderWidth: 1, borderRadius: 10, padding: Spacing.two + 2, gap: Spacing.two },
+  purposeChips: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
+  purposeChip: {
+    borderWidth: 1,
+    borderRadius: 999,
+    paddingHorizontal: Spacing.three - 4,
+    paddingVertical: Spacing.one + 2,
+    maxWidth: '100%',
+  },
+  purposeNudge: { borderRadius: 16, borderWidth: 1, padding: Spacing.three, gap: Spacing.one },
   notice: {
     position: 'absolute',
     left: Spacing.three,

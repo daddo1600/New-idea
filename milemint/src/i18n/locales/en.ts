@@ -52,6 +52,14 @@ const en: Dictionary = {
     one: '{{count}} trip isn’t classified yet. Sort it first so the report is complete.',
     other: '{{count}} trips aren’t classified yet. Sort them first so the report is complete.',
   },
+  '{{count}} work drives need a purpose': {
+    one: '{{count}} work drive needs a purpose',
+    other: '{{count}} work drives need a purpose',
+  },
+  '{{count}} work drives have no purpose': {
+    one: '{{count}} work drive has no purpose',
+    other: '{{count}} work drives have no purpose',
+  },
   '{{count}}-day free trial': { one: '{{count}}-day free trial', other: '{{count}}-day free trial' },
   '{{count}}-month free trial': { one: '{{count}}-month free trial', other: '{{count}}-month free trial' },
   'Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.': {

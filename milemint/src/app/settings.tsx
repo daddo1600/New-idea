@@ -19,6 +19,7 @@ import { backedUpText, formatBackupDate, PROBLEM_TEXT } from '@/backup/copy';
 import { backupAge } from '@/backup/schedule';
 import { tripCount, type Snapshot } from '@/backup/snapshot';
 import { GoldButton } from '@/components/gold-button';
+import { PurposePicker } from '@/components/purpose-picker';
 import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { Segmented } from '@/components/segmented';
 import { TrackingCheckRow } from '@/components/tracking-health-card';
@@ -30,6 +31,8 @@ import { countPastTrips, scrubPastTrips } from '@/db/privacy-repo';
 import { AREA_EXAMPLES, clientVisitLabel } from '@/domain/privacy';
 import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, updateSettings, type AppSettings } from '@/db/settings-repo';
+import { listTrips } from '@/db/trips-repo';
+import { frequentPurposes } from '@/domain/suggestions';
 import { isValidShift, type WorkShift } from '@/domain/classify-rules';
 import { REFERRAL_BONUS_DRIVES } from '@/domain/plan';
 import { marApplies, parsePence, TAX_BAND_RATES, type TaxBand } from '@/domain/mar';
@@ -796,9 +799,11 @@ function DrivingSection() {
   const theme = useTheme();
   const t = useT();
   const [settings, setSettings] = useState<AppSettings | null>(null);
+  const [purposes, setPurposes] = useState<string[]>([]);
 
   useEffect(() => {
     loadSettings(db).then(setSettings, () => {});
+    listTrips(db).then((trips) => setPurposes(frequentPurposes(trips, 6)), () => {});
   }, [db]);
   if (!settings) return null;
 
@@ -826,6 +831,33 @@ function DrivingSection() {
             value={settings.defaultBusiness}
             onValueChange={(defaultBusiness) => change({ defaultBusiness })}
             trackColor={{ true: theme.accent }}
+          />
+        </View>
+        <View style={[styles.purposeSetting, styles.spaced]}>
+          <View style={styles.rowBetween}>
+            <ThemedText type="smallBold" style={styles.flex}>
+              {t('Usual business purpose')}
+            </ThemedText>
+            {settings.defaultPurpose && (
+              <Pressable accessibilityRole="button" hitSlop={8} onPress={() => change({ defaultPurpose: null })}>
+                <ThemedText type="small" style={{ color: theme.accent }}>
+                  {t('Clear')}
+                </ThemedText>
+              </Pressable>
+            )}
+          </View>
+          <ThemedText type="small" themeColor="textSecondary">
+            {settings.shiftMode && !settings.defaultPurpose
+              ? t('Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one.')
+              : t('Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.')}
+          </ThemedText>
+          <PurposePicker
+            value={settings.defaultPurpose ?? ''}
+            onChange={(purpose) => change({ defaultPurpose: purpose.trim() || null })}
+            recent={purposes}
+            clientPrivacy={settings.clientPrivacy}
+            shiftMode={settings.shiftMode}
+            placeholder={t('None: ask me each time')}
           />
         </View>
         <View style={[styles.rowBetween, styles.spaced]}>
@@ -1313,6 +1345,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1, gap: Spacing.half },
   // Stacked blocks in a card: not stretched, so the next one can't slide under it.
   stack: { gap: Spacing.half },
+  purposeSetting: { gap: Spacing.two },
   day: { gap: Spacing.two },
   shift: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
   time: {

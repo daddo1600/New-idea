@@ -267,3 +267,28 @@ Tracking health: home card, Settings “Status do rastreamento” row and backgr
 | English | pt-BR | Back-translation | Note |
 |---|---|---|---|
 | Where your shift started | Onde seu turno começou | Where your shift started | Mirrors the existing "Where your shift ended" line, same length and register. |
+
+## Round 8b: business purpose
+
+| English | pt-BR | Back-translation | Note |
+|---|---|---|---|
+| Opens trip details | Abre os detalhes do trajeto | Opens the trip details | Matches “Abre os detalhes do trajeto. Toque e segure…”. |
+| Usual purpose · tap to change | Finalidade habitual · toque para mudar | Usual purpose · tap to change | *Finalidade* as in “Finalidade profissional”. |
+| Purpose needed for your tax records | Falta a finalidade para seus registros fiscais | The purpose for your tax records is missing | Amber box title; wraps once at most. |
+| Shows only the drives that need a purpose | Mostra só os trajetos que precisam de finalidade | Shows only the trips that need a purpose | Accessibility hint. |
+| {{count}} work drives need a purpose | zero: {{count}} trajetos profissionais precisam de finalidade / one: {{count}} trajeto profissional precisa de finalidade / many: {{count}} trajetos profissionais precisam de finalidade / other: {{count}} trajetos profissionais precisam de finalidade | {{count}} work trip(s) need(s) a purpose | zero/one/many/other, like the file’s other plurals. |
+| {{authority}} expects a purpose for every business drive. One tap each. | O {{authority}} exige uma finalidade para cada trajeto profissional. Um toque em cada. | The {{authority}} requires a purpose for each work trip. One tap on each. | Article *O* before the authority, as in “O {{authority}} exige…”. |
+| Add purposes › | Adicionar finalidades › | Add purposes › | Natural, fits its place. |
+| Every work drive has a purpose ✓ | Todo trajeto profissional tem finalidade ✓ | Every work trip has a purpose ✓ | Natural, fits its place. |
+| Show all drives | Ver todos os trajetos | See all trips | Natural, fits its place. |
+| {{count}} work drives have no purpose | zero: {{count}} trajetos profissionais estão sem finalidade / one: {{count}} trajeto profissional está sem finalidade / many: {{count}} trajetos profissionais estão sem finalidade / other: {{count}} trajetos profissionais estão sem finalidade | {{count}} work trip(s) is/are without a purpose | Natural, fits its place. |
+| {{authority}} expects a purpose for every business drive. Add them before you export? | O {{authority}} exige uma finalidade para cada trajeto profissional. Adicionar antes de exportar? | The {{authority}} requires a purpose for each work trip. Add before exporting? | Infinitive question is the usual iOS-alert register in pt-BR. |
+| Export anyway | Exportar mesmo assim | Export anyway | Natural, fits its place. |
+| Add purposes | Adicionar finalidades | Add purposes | Natural, fits its place. |
+| Usual business purpose | Finalidade profissional habitual | Usual business purpose | Natural, fits its place. |
+| Clear | Limpar | Clear | Natural, fits its place. |
+| Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one. | Preenchida nos trajetos profissionais sem finalidade, para seus registros fiscais ficarem completos. Trajetos de turno usam “Entregas”, a menos que você escolha outra. | Filled in on work trips without a purpose, so your tax records are complete. Shift trips use “Deliveries” unless you choose another. | *turno* as in “Auto: em turno”. |
+| Filled in for work drives that have none, so your tax records are complete. You can change it on any trip. | Preenchida nos trajetos profissionais sem finalidade, para seus registros fiscais ficarem completos. Você pode mudar em qualquer trajeto. | Filled in on work trips without a purpose, so your tax records are complete. You can change it on any trip. | Natural, fits its place. |
+| None: ask me each time | Nenhuma: perguntar sempre | None: always ask | Shorter than “cada vez” and natural. |
+| What are most of your work drives for? | Qual a finalidade da maioria dos seus trajetos profissionais? | What is the purpose of most of your work trips? | Rephrased: “Para que são…” sounds clumsy in pt-BR. |
+| Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip. | O fisco exige uma finalidade para cada trajeto profissional. Vamos preencher para você, e dá para mudar em qualquer trajeto. | The tax office requires a purpose for each work trip. We’ll fill it in for you, and you can change it on any trip. | *O fisco* is the everyday word for the tax office. |

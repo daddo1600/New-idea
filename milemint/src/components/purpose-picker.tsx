@@ -23,13 +23,48 @@ export const COMMON_PURPOSES = [
 /** Listed first in client privacy mode: the usual purpose for care and support work. */
 const CLIENT_VISIT_PURPOSE = ['🩺', msg('Client visit')] as const;
 const KNOWN_PURPOSES = [CLIENT_VISIT_PURPOSE, ...COMMON_PURPOSES];
-/** What a shift files its drives under (see auto-classify); shown translated, not offered in the list. */
-const SHOWN_PURPOSES = [...KNOWN_PURPOSES, ['🛵', msg('Deliveries')] as const];
+/** What a shift files its drives under (see auto-classify); shown translated, offered to shift workers. */
+const DELIVERIES_PURPOSE = ['🛵', msg('Deliveries')] as const;
+const SHOWN_PURPOSES = [...KNOWN_PURPOSES, DELIVERIES_PURPOSE];
+
+const sameText = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
 
 /** A saved purpose as shown: the common ones in the app's language, anything typed as it was typed. */
 export function shownPurpose(purpose: string, translate: (key: string) => string): string {
-  const match = SHOWN_PURPOSES.find(([, text]) => text.toLowerCase() === purpose.trim().toLowerCase());
+  const match = SHOWN_PURPOSES.find(([, text]) => sameText(text, purpose));
   return match ? translate(match[1]) : purpose;
+}
+
+/** The emoji of a common purpose, or a pencil for one the user typed. */
+export function purposeIcon(purpose: string): string {
+  return SHOWN_PURPOSES.find(([, text]) => sameText(text, purpose))?.[0] ?? '✏️';
+}
+
+/**
+ * Purposes to offer as one-tap choices, most likely first: the user's usual
+ * one, the ones they use most, then the common ones for how they work
+ * ("Deliveries" for shift workers, "Client visit" for client privacy). Saved
+ * values (English for the common ones), no repeats.
+ */
+export function quickPurposes(
+  {
+    usual = null,
+    recent = [],
+    shiftMode = false,
+    clientPrivacy = false,
+  }: { usual?: string | null; recent?: readonly string[]; shiftMode?: boolean; clientPrivacy?: boolean },
+  limit = 3,
+): string[] {
+  const common = [
+    ...(shiftMode ? [DELIVERIES_PURPOSE] : []),
+    ...(clientPrivacy ? [CLIENT_VISIT_PURPOSE] : []),
+    ...COMMON_PURPOSES,
+  ].map(([, text]) => text);
+  const picked: string[] = [];
+  for (const text of [usual ?? '', ...recent, ...common]) {
+    if (text.trim() && !picked.some((other) => sameText(other, text))) picked.push(text.trim());
+  }
+  return picked.slice(0, limit);
 }
 
 /**
@@ -44,11 +79,17 @@ export function PurposePicker({
   onChange,
   recent = [],
   clientPrivacy = false,
+  shiftMode = false,
+  placeholder,
 }: {
   value: string;
   onChange: (purpose: string) => void;
   /** Purposes used before, most used first. */
   recent?: readonly string[];
+  /** Shift work: "Deliveries" comes first. */
+  shiftMode?: boolean;
+  /** Shown while nothing is chosen, instead of "Choose a purpose". */
+  placeholder?: string;
   /**
    * Client privacy mode: "Client visit" comes first, and typing your own
    * suggests a non-identifying client reference (initials or a client number),
@@ -63,10 +104,10 @@ export function PurposePicker({
   const [typing, setTyping] = useState(false);
   const [custom, setCustom] = useState('');
 
-  const listed = clientPrivacy ? KNOWN_PURPOSES : COMMON_PURPOSES;
-  const common = KNOWN_PURPOSES.map(([, text]) => text.toLowerCase());
+  const listed = [...(shiftMode ? [DELIVERIES_PURPOSE] : []), ...(clientPrivacy ? KNOWN_PURPOSES : COMMON_PURPOSES)];
+  const common = [...KNOWN_PURPOSES, ...listed].map(([, text]) => text.toLowerCase());
   const recentOnly = recent.filter((text) => !common.includes(text.toLowerCase())).slice(0, 4);
-  const match = KNOWN_PURPOSES.find(([, text]) => text.toLowerCase() === value.trim().toLowerCase());
+  const match = SHOWN_PURPOSES.find(([, text]) => text.toLowerCase() === value.trim().toLowerCase());
   const icon = match?.[0];
   const shown = match ? t(match[1]) : value;
 
@@ -121,7 +162,7 @@ export function PurposePicker({
           </ThemedText>
         ) : (
           <ThemedText themeColor="textSecondary" style={styles.flex}>
-            {t('Choose a purpose')}
+            {placeholder ?? t('Choose a purpose')}
           </ThemedText>
         )}
         <ThemedText style={{ color: theme.accent }}>▾</ThemedText>

@@ -255,3 +255,28 @@ Tracking health: home card, Settings “Starea înregistrării” row and backgr
 | English | ro | Back-translation | Note |
 |---|---|---|---|
 | Where your shift started | Unde a început tura | Where the shift started | Mirrors the existing "Where your shift ended" line, same length and register. |
+
+## Round 8b: business purpose
+
+| English | ro | Back-translation | Note |
+|---|---|---|---|
+| Opens trip details | Deschide detaliile cursei | Opens the drive’s details | Matches the row’s existing hint. |
+| Usual purpose · tap to change | Scop obișnuit · atinge ca să-l schimbi | Usual purpose · tap to change it | *Scop* as in “Scopul cursei”. |
+| Purpose needed for your tax records | Lipsește scopul pentru evidența fiscală | The purpose for the tax records is missing | *evidența fiscală* is the usual phrase for tax records. |
+| Shows only the drives that need a purpose | Arată doar cursele care au nevoie de un scop | Shows only the drives that need a purpose | Natural, fits its place. |
+| {{count}} work drives need a purpose | one: {{count}} cursă de lucru are nevoie de un scop / few: {{count}} curse de lucru au nevoie de un scop / other: {{count}} de curse de lucru au nevoie de un scop | {{count}} work drive(s) need(s) a purpose | one/few/other with “de” for 20+, as in the file. |
+| {{authority}} expects a purpose for every business drive. One tap each. | {{authority}} cere un scop pentru fiecare cursă de lucru. O atingere pentru fiecare. | {{authority}} asks for a purpose for each work drive. One tap for each. | *cere* as in “{{authority}} cere un scop de lucru”. |
+| Add purposes › | Adaugă scopurile › | Add the purposes › | Natural, fits its place. |
+| Every work drive has a purpose ✓ | Toate cursele de lucru au scop ✓ | All work drives have a purpose ✓ | Natural, fits its place. |
+| Show all drives | Arată toate cursele | Show all drives | Natural, fits its place. |
+| {{count}} work drives have no purpose | one: {{count}} cursă de lucru nu are scop / few: {{count}} curse de lucru nu au scop / other: {{count}} de curse de lucru nu au scop | {{count}} work drive(s) has/have no purpose | Natural, fits its place. |
+| {{authority}} expects a purpose for every business drive. Add them before you export? | {{authority}} cere un scop pentru fiecare cursă de lucru. Le adaugi înainte de export? | {{authority}} asks for a purpose for each work drive. Will you add them before export? | Informal *tu*, as in the rest of the app. |
+| Export anyway | Exportă oricum | Export anyway | Natural, fits its place. |
+| Add purposes | Adaugă scopurile | Add the purposes | Natural, fits its place. |
+| Usual business purpose | Scopul obișnuit al curselor de lucru | The usual purpose of work drives | Settings row title. |
+| Clear | Golește | Empty it | *Șterge* is kept for deleting trips. |
+| Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one. | Se completează la cursele de lucru care nu au unul, ca evidența fiscală să fie completă. Cursele din tură folosesc „Livrări”, dacă nu alegi altul. | It’s filled in on work drives that don’t have one, so the tax records are complete. Drives in a shift use “Deliveries” unless you choose another. | *tură* as in “Auto: în tură”. |
+| Filled in for work drives that have none, so your tax records are complete. You can change it on any trip. | Se completează la cursele de lucru care nu au unul, ca evidența fiscală să fie completă. Îl poți schimba la orice cursă. | It’s filled in on work drives that don’t have one, so the tax records are complete. You can change it on any drive. | Natural, fits its place. |
+| None: ask me each time | Niciunul: întreabă-mă de fiecare dată | None: ask me every time | Natural, fits its place. |
+| What are most of your work drives for? | Pentru ce sunt majoritatea curselor tale de lucru? | What are most of your work drives for? | Natural, fits its place. |
+| Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip. | Autoritățile fiscale cer un scop pentru fiecare cursă de lucru. Îl completăm noi, iar tu îl poți schimba la orice cursă. | Tax authorities ask for a purpose for each work drive. We fill it in, and you can change it on any drive. | Natural, fits its place. |

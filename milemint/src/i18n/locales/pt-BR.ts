@@ -158,7 +158,6 @@ const dictionary: Dictionary = {
   "Add a missed drive": "Adicionar trajeto",
   "Add a missed trip": "Adicionar trajeto que faltou",
   "Add another time": "Adicionar outro horário",
-  "Add business purpose": "Adicionar finalidade",
   "Add missed trip": "Adicionar trajeto",
   "Add missed trips by hand": "Adicione à mão os trajetos que faltaram",
   "Added manually": "Adicionado manualmente",
@@ -1188,6 +1187,36 @@ const dictionary: Dictionary = {
   "New drives aren’t being logged. Tap to turn tracking back on.": "Os novos trajetos não estão sendo registrados. Toque para reativar o rastreamento.",
   "No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up.": "Sem localização desde {{time}}, no meio de um trajeto. Abra o MileMint para retomar o rastreamento.",
   "Where your shift started": "Onde seu turno começou",
+  "Opens trip details": "Abre os detalhes do trajeto",
+  "Usual purpose · tap to change": "Finalidade habitual · toque para mudar",
+  "Purpose needed for your tax records": "Falta a finalidade para seus registros fiscais",
+  "Shows only the drives that need a purpose": "Mostra só os trajetos que precisam de finalidade",
+  "{{count}} work drives need a purpose": {
+    "zero": "{{count}} trajetos profissionais precisam de finalidade",
+    "one": "{{count}} trajeto profissional precisa de finalidade",
+    "many": "{{count}} trajetos profissionais precisam de finalidade",
+    "other": "{{count}} trajetos profissionais precisam de finalidade"
+  },
+  "{{authority}} expects a purpose for every business drive. One tap each.": "O {{authority}} exige uma finalidade para cada trajeto profissional. Um toque em cada.",
+  "Add purposes ›": "Adicionar finalidades ›",
+  "Every work drive has a purpose ✓": "Todo trajeto profissional tem finalidade ✓",
+  "Show all drives": "Ver todos os trajetos",
+  "{{count}} work drives have no purpose": {
+    "zero": "{{count}} trajetos profissionais estão sem finalidade",
+    "one": "{{count}} trajeto profissional está sem finalidade",
+    "many": "{{count}} trajetos profissionais estão sem finalidade",
+    "other": "{{count}} trajetos profissionais estão sem finalidade"
+  },
+  "{{authority}} expects a purpose for every business drive. Add them before you export?": "O {{authority}} exige uma finalidade para cada trajeto profissional. Adicionar antes de exportar?",
+  "Export anyway": "Exportar mesmo assim",
+  "Add purposes": "Adicionar finalidades",
+  "Usual business purpose": "Finalidade profissional habitual",
+  "Clear": "Limpar",
+  "Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one.": "Preenchida nos trajetos profissionais sem finalidade, para seus registros fiscais ficarem completos. Trajetos de turno usam “Entregas”, a menos que você escolha outra.",
+  "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.": "Preenchida nos trajetos profissionais sem finalidade, para seus registros fiscais ficarem completos. Você pode mudar em qualquer trajeto.",
+  "None: ask me each time": "Nenhuma: perguntar sempre",
+  "What are most of your work drives for?": "Qual a finalidade da maioria dos seus trajetos profissionais?",
+  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "O fisco exige uma finalidade para cada trajeto profissional. Vamos preencher para você, e dá para mudar em qualquer trajeto."
 };
 
 export default dictionary;

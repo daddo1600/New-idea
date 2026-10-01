@@ -113,7 +113,6 @@ const dictionary: Dictionary = {
   "Add a missed drive": "补记漏掉的行程",
   "Add a missed trip": "补记漏掉的行程",
   "Add another time": "再添加一个时段",
-  "Add business purpose": "添加工作事由",
   "Add missed trip": "补记行程",
   "Add missed trips by hand": "手动补记漏掉的行程",
   "Added manually": "手动添加",
@@ -1069,6 +1068,30 @@ const dictionary: Dictionary = {
   "New drives aren’t being logged. Tap to turn tracking back on.": "新行程没有被记录。轻点即可重新开启追踪。",
   "No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up.": "行程途中，自 {{time}} 起没有位置信息。打开 MileMint 即可继续追踪。",
   "Where your shift started": "开工地点",
+  "Opens trip details": "打开行程详情",
+  "Usual purpose · tap to change": "常用事由 · 点按可更改",
+  "Purpose needed for your tax records": "报税记录需要填写事由",
+  "Shows only the drives that need a purpose": "只显示需要填写事由的行程",
+  "{{count}} work drives need a purpose": {
+    "other": "{{count}} 次工作行程需要填写事由"
+  },
+  "{{authority}} expects a purpose for every business drive. One tap each.": "{{authority}} 要求每次工作行程都有事由。每次点一下就好。",
+  "Add purposes ›": "添加事由 ›",
+  "Every work drive has a purpose ✓": "每次工作行程都有事由了 ✓",
+  "Show all drives": "显示全部行程",
+  "{{count}} work drives have no purpose": {
+    "other": "{{count}} 次工作行程没有事由"
+  },
+  "{{authority}} expects a purpose for every business drive. Add them before you export?": "{{authority}} 要求每次工作行程都有事由。导出前先补上吗？",
+  "Export anyway": "仍然导出",
+  "Add purposes": "添加事由",
+  "Usual business purpose": "常用工作事由",
+  "Clear": "清除",
+  "Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one.": "自动填入没有事由的工作行程，让报税记录完整。开工期间的行程使用“送货”，除非你另选一个。",
+  "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.": "自动填入没有事由的工作行程，让报税记录完整。任何行程都可以单独修改。",
+  "None: ask me each time": "不设置：每次问我",
+  "What are most of your work drives for?": "你的工作行程大多是做什么？",
+  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "税务机关要求每次工作行程都有事由。我们会帮你填好，任何行程都可以修改。"
 };
 
 export default dictionary;
