@@ -67,6 +67,22 @@ The user is always **আপনি**, with polite verb forms (করুন, দ�
 | Change to Always Allow | সবসময় অনুমতি দিন-এ পরিবর্তন করুন | Unverified against a device (see Unsure). |
 | km / kilometres / miles | কিমি / কিলোমিটার / মাইল | |
 | Short weekdays | সোম, মঙ্গল, বুধ, বৃহঃ, শুক্র, শনি, রবি | The usual short forms. |
+| tax relief / relief (P87) | ট্যাক্স রিলিফ / রিলিফ; Relief to claim = দাবিযোগ্য রিলিফ | Kept apart from ট্যাক্স ছাড় (deduction). The relief is the shortfall, not money paid out. Only the tax on it is ট্যাক্স ফেরত, always with প্রায়/আনুমানিক. |
+| tax back (estimate) | ট্যাক্স ফেরত (with প্রায় / আনুমানিক) | This really is tax returned, via the tax code or a refund. It's never used without the estimate word. |
+| employer / mileage allowance | নিয়োগকর্তা / মাইলেজ ভাতা | Same as the existing employee lines. |
+| How you’re paid for mileage | মাইলেজের টাকা কীভাবে পান | Settings section. The welcome and claim-relief lines quote it. |
+| Basic / Higher / Additional (tax bands) | বেসিক / হায়ার / অ্যাডিশনাল | The HMRC band names that UK users see on payslips and letters, written in Bengali script. Short enough for the segmented control. |
+| logbook / logbook method (ATO) | লগবুক / লগবুক পদ্ধতি | "cents per km method" stays in English, as before. |
+| business-use percentage | ব্যবসায়িক ব্যবহারের শতাংশ | |
+| Client privacy | ক্লায়েন্টের গোপনীয়তা | Standard word for privacy. Reassuring, not secretive. |
+| Client visit (purpose) | ক্লায়েন্ট ভিজিট | The purpose button. The stored trip label “Client visit · area” stays in English in quotes, because that is what the app saves and shows. |
+| area (privacy) | এলাকা | |
+| route | রুট | Loanword. |
+| backup / back up | ব্যাকআপ / ব্যাকআপ নিন; Backed up = ব্যাকআপ হয়েছে | Loanword. |
+| restore | পুনরুদ্ধার (করুন) | Matches "Restore purchases". |
+| encrypted / key | এনক্রিপ্ট করা / চাবি | চাবি, not কী, because কী also means "what". |
+| iCloud, iCloud Drive, iCloud Keychain | kept in English | As instructed. "Sign in" is সাইন ইন করুন. The path is iPhone-এর সেটিংস → আপনার নাম → iCloud. |
+| initials | নামের আদ্যক্ষর (initials) | Gloss on first use in Settings. |
 
 ## Conventions
 
@@ -114,3 +130,8 @@ These need checking against an iPhone set to Bengali:
 14. **"Trades, sales, care, office"** became "কারিগরি কাজ, সেলস, কেয়ার, অফিস". "কেয়ার" is clear in the UK, but may be less clear to Indian readers.
 15. **"Autumn/Fall miles add up"** uses শরৎ for autumn. In Bengali seasons, শরৎ is early autumn. That's fine as a greeting.
 16. **Short weekday "বৃহঃ"** (Thursday) uses the visarga abbreviation. Some apps write "বৃহস্পতি" in full.
+17. **Basic / Higher / Additional** (tax bands, Round 3): transliterated as বেসিক / হায়ার / অ্যাডিশনাল. The Bangla alternative মৌলিক / উচ্চ / অতিরিক্ত is clearer to some readers, but it no longer matches HMRC's names. Check with UK users.
+18. **iCloud path "iPhone Settings → your name → iCloud"**: used "iPhone-এর সেটিংস → আপনার নাম → iCloud". Unverified against a Bengali iPhone.
+19. **“Client visit · area”** is quoted in English inside the add-trip alert, because the label is stored and shown in English. The purpose button says "ক্লায়েন্ট ভিজিট", so the same idea appears in two scripts. Consider translating the label at display time.
+20. **"Depreciation"** became "অবচয় (দাম কমা)". অবচয় is the accounting term, and the gloss is for everyday readers.
+21. **"Employed, in your own vehicle?"** became "কর্মচারী, আর নিজের যানবাহনে কাজ করেন?". It's a little longer than the English, but it's a heading.

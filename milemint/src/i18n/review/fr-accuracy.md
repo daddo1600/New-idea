@@ -68,3 +68,23 @@ Second of three checks. I back-translated every French value into English withou
 - **Generic "mile" lines:** these are rendered with "kilomètre" for all regions (Unsure #6). The product team needs to decide.
 - **Tile width** for "Royaume-Uni" and "États-Unis".
 - **Glossary out of date:** `glossary/fr.md` still lists "lors du partage" and "Meilleur prix" (Unsure #3 and #14). I did not edit it, as instructed.
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+- **Lines checked:** all 201 new keys (ATO 12-week logbook, P87 Mileage Allowance Relief helper, client privacy mode, encrypted iCloud backup), including every plural form (one / many / other). Each French line was back-translated to English cold, then compared with the key; short lines were checked against `app/logbook.tsx`, `app/claim-relief.tsx`, `app/settings.tsx`, `app/welcome.tsx`, `app/add-trip.tsx`, `domain/privacy.ts` and `backup/copy.ts`.
+- **Checked specifically:** every "estimated" / "about" kept (Environ, estimé, estimation); no line promises a refund beyond "tax back" on the relief; P87 route, 4-year limit, PAYE/P60/National Insurance details; ATO "12 weeks in a row", 5-year validity and odometer at start and end; backup lines say encrypted, in the user’s own iCloud, MileMint never sees the trips; placeholders and their order.
+- **Keys changed:** 4 (table below). `npx jest src/i18n/__tests__/completeness.test.ts -t "fr "` passes.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Worked out from the km MileMint logged. Add both odometer readings so any driving MileMint missed is counted too. | …pour que les trajets manqués par MileMint soient aussi comptés. | …pour que toute distance non enregistrée par MileMint soit aussi comptée. | Back-translated as "trips MileMint missed". The English means any distance, not only whole trips. |
+| Optional. Add what the car costs to run this income year… | Ajoutez ce que la voiture coûte à utiliser pendant cette année d’imposition… | Ajoutez les frais d’utilisation de la voiture pour cette année d’imposition… | "coûte à utiliser" is clumsy; now matches "frais d’utilisation" in the logbook explanation. |
+| Backs up by itself when something changes, at most once a day, and keeps the last four backups. | Se sauvegarde automatiquement quand quelque chose change… et conserve les quatre dernières sauvegardes. | Sauvegarde automatique dès que quelque chose change, au plus une fois par jour. Les quatre dernières sauvegardes sont conservées. | "Se sauvegarde" had no subject (the card heading is "Sauvegarde iCloud"), so it back-translated as "saves itself". |
+| No route or address was kept for this drive, only the area and the distance: {{distance}}. | Aucun itinéraire ni aucune adresse n’a été conservé… | Ni itinéraire ni adresse n’ont été conservés… | Agreement: "conservé" did not agree with "adresse". |
+
+Checked and kept:
+- **"Area" = "secteur"** throughout privacy lines. The stored label stays English ("Client visit · Leeds LS6", per `domain/privacy.ts`, because it goes into the reports for the tax office), so the add-trip line quotes it as « Client visit · secteur » to match what the user will see.
+- **"Replace what’s on this iPhone?"** is « Remplacer les données MileMint de cet iPhone ? ». It adds "MileMint" so nobody thinks the whole phone is wiped; the body text says the same.
+- **"Enter amounts as numbers, e.g. 2400 or 2,400.50."** is "p. ex. 2400 ou 2400.50": the "2,400.50" example was dropped because in French the comma is the decimal mark, and the parser (`parseNumber` in `app/logbook.tsx`) strips commas, so "2400,50" typed by a French user becomes 240050. The example now shows only forms that parse correctly. **Code issue for the dev team**, not fixed here (only the four French files were editable).
+- **"Claim mileage relief"** (menu / screen title) is "Demander l’allègement fiscal". "mileage" is not named, to keep the title short; the menu subtitle ("Employés : P87 ou Self Assessment") and the screen heading (Mileage Allowance Relief) give the context.
+- "income year" (ATO) uses "année d’imposition", the glossary term for tax year.

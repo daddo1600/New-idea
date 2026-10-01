@@ -53,3 +53,31 @@ I made 16 changes (13 keys plus 3 share messages that had the same plural proble
 - "{{distance}} km/miles logged for work…" uses "przejechane" (driven) rather than "zapisane" (logged). The meaning still holds in context.
 - "Autumn/Fall miles add up" → "Jesienne trasy też się liczą" ("count too") is an acceptable adaptation, though "add up" has a sense of accumulating money.
 - "Happy holidays" → "Wesołych świąt" is the standard secular-enough Polish seasonal greeting.
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+Scope: the 201 new lines for the ATO 12-week logbook, the P87 Mileage Allowance Relief helper, client privacy mode and the encrypted iCloud backup, plus 2 shift-switch lines that appeared in the source while this round was running ("Swipe back to end your shift." and the swipe-left accessibility hint). That's 203 keys, including every form of the 12 plural objects.
+
+What I checked:
+- I back-translated each new line into English without looking at the source, then compared it with the English and with the code in the files the line comes from (`claim-relief.tsx`, `logbook.tsx`, `settings.tsx`, `welcome.tsx`, `index.tsx`, `backup/copy.ts`, `domain/privacy.ts`, `domain/mar.ts`).
+- Placeholders and plural forms (one/few/many/other). Where a fractional `other` form would read badly ("1,5 przejazdu nie jest oznaczone"), I used a "label: {{count}}" pattern instead, as in round 2.
+- Caveats: every "about", "estimated", "usually" and "not tax advice" is kept ("ok.", "szacunkowy", "zwykle", "to nie jest porada podatkowa").
+- Relief vs refund: "relief to claim" is "ulga do rozliczenia" (the shortfall), and only "tax back" is "zwrot podatku", always with "ok." or "szacunkowy". Nothing says the user gets the whole relief amount back.
+- Number formats: `parseNumber` in `logbook.tsx` strips commas, so a Polish "2400,50" would be read as 240050. The hint for "Enter amounts as numbers, e.g. 2400 or 2,400.50." therefore says "z centami po kropce, np. 2400 lub 2400.50". This needs a code fix (see the note below).
+- Terms are consistent across the new lines: logbook = "rejestr (logbook)", logbook method = "metoda rejestru", reason = "cel" (as for business purpose), income year = "rok dochodowy", area = "okolica", backup = "kopia zapasowa" / "kopia".
+
+### Changes
+
+| English | Before | After | Why |
+|---|---|---|---|
+| I’ve claimed this year | Ten rok mam już rozliczony | Ulga za ten rok już rozliczona | "Ten rok mam rozliczony" reads as "I've done my tax return for this year". The line means the relief was claimed. |
+| I’ve claimed the {{year}} tax year | Rok podatkowy {{year}} mam już rozliczony | Ulga za rok podatkowy {{year}} już rozliczona | Same. |
+| Pick 12 weeks that are typical of how you use the car through the year. … | Wybierz 12 tygodni, w których używasz auta tak jak zwykle w ciągu roku. | Wybierz 12 tygodni, które dobrze oddają, jak używasz auta przez cały rok. | The first version back-translated as "weeks in which you use the car as usual". The ATO point is that the weeks must be representative of the whole year. |
+| Ended early | Przerwany | Zakończony wcześniej | "Przerwany" means "interrupted" and could read as paused. The status line has room for the full wording. |
+| Registration | Rejestracja | Rejestracja pojazdu | On its own, "Rejestracja" reads as signing up for an account. This is the car rego cost category. |
+
+### Not changed, noted
+
+- "How you’re paid for mileage" is "Jak rozliczasz przebieg" ("how you settle your mileage"). This isn't literal, but it works for both options. "Jak dostajesz zwrot za przebieg" would be wrong for the self-employed, who aren't paid for mileage. The line that points to it ("choose Employee under …") quotes the same words.
+- "Back up now" is "Utwórz kopię" without "teraz". It's an immediate-action button, so the meaning holds, and it's short.
+- Code issue (outside the translation): `parseNumber` in `src/app/logbook.tsx` drops commas, so a Polish "2400,50" is saved as 240050 dollars. `parsePence` in `src/domain/mar.ts` rejects "37,5" (it shows an error, so no data is lost).

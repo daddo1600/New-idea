@@ -59,3 +59,33 @@ There's also a clash: छूट is already used all over the file in the sense o
    The third reviewer should check these on an iPhone set to Hindi.
 2. **Glossary.** `glossary/hi.md` still says "deduction → टैक्स छूट". It needs updating to टैक्स कटौती.
 3. **"I’ll swipe each drive myself."** The translation, हर ट्रिप मुझे खुद स्वाइप करनी है, says "have to" rather than "will". The translator chose it to keep the line gender-neutral. A gender-neutral "will" form isn't possible without rewording, so I left it.
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+**Scope.** I back-translated all 201 new lines (12 of them plural objects with `one`/`other`) into English without looking at the source, then compared each one with its key. For short or unclear lines I checked the code: `app/claim-relief.tsx` (hero card, per-year rows), `app/index.tsx` (employee hero card and unclaimed-relief nudge), `app/logbook.tsx` (status badge, "End early" alert and link), `app/settings.tsx` (backup, privacy and mileage-pay sections), `app/welcome.tsx`, `domain/privacy.ts` and `backup/copy.ts`.
+
+**What I checked on every line:**
+- Placeholders, `{{count}}` plural objects and numbers (10,000 miles, 5,000 km, 12 weeks, 4 tax years, 5 years, four backups) are all present and unchanged.
+- P87 money honesty: "relief" (राहत, the shortfall) and "tax back" (टैक्स वापस / टैक्स वापसी, the 20%/40% of it) stay two different things everywhere; every "about"/"estimated" is kept (लगभग / अनुमानित / अनुमान); "Not tax advice" is kept.
+- Kept in English: ATO, HMRC, P87, PAYE, P60, Self Assessment, GOV.UK, Government Gateway, National Insurance, iCloud, iCloud Drive, iCloud Keychain, "cents per km method", and the new "logbook method" (same treatment as cents per km method, see glossary).
+- The privacy label “Client visit · area” stays English in the add-trip line, because `domain/privacy.ts` saves the label in English (“Client visit · Leeds LS6”), so that is what the user will see on the trip.
+- Lines about the user stay gender-neutral (e.g. "I visit clients…" → मेरे काम में … घर जाना होता है; "You drive your own vehicle…" → अपनी गाड़ी से ड्राइविंग).
+
+**Result.** 7 lines changed. `npx jest src/i18n/__tests__/completeness.test.ts -t "hi "` passes (3/3).
+
+| English | Before | After | Why |
+|---|---|---|---|
+| End the logbook early? | लॉगबुक पहले ही खत्म करें? | लॉगबुक समय से पहले खत्म करें? | पहले ही back-translates as "end it already?". समय से पहले is "before its time" = early. |
+| The ATO needs 12 weeks in a row. A logbook ended early can’t be used… | पहले खत्म की गई लॉगबुक … | समय से पहले खत्म की गई लॉगबुक … | Same ambiguity: पहले खत्म की गई can read "ended earlier/previously". |
+| End early | पहले खत्म करें | अभी खत्म करें | Button in the alert and a link on the logbook card. पहले खत्म करें can read "end it first". अभी खत्म करें ("end it now") is unambiguous and the alert explains the consequence. |
+| Ended early | पहले खत्म हुई | समय से पहले खत्म | Status badge; same ambiguity ("ended before"). |
+| Optional. Add what the car costs to run … (your best estimate is fine for now) … | (अभी के लिए अंदाज़ा भी चलेगा) | (अभी के लिए आपका सबसे अच्छा अंदाज़ा भी चलेगा) | अंदाज़ा alone reads as "a guess"; the English asks for the best estimate. |
+| Restore the backup from {{date}} with {{count}} trip(s). … replaced by the ones in the backup. | … बैकअप वाली से बदल जाएँगी। | … बैकअप वाली चीज़ों से बदल जाएँगी। | बैकअप वाली with no noun back-translated as "by the backup one" (singular, feminine). चीज़ों covers trips, places, vehicles and settings. |
+| This backup is locked with a key from your iCloud Keychain … wait a minute, then try again. | एक मिनट रुकें, फिर से कोशिश करें। | एक मिनट रुकें, और फिर से कोशिश करें। | The "then" (sequence) was lost; the steps read as alternatives. |
+
+**Checked and kept**
+- "Mileage Allowance Relief you can claim" / "Relief to claim" → क्लेम करने लायक …: "claimable", no refund promise; the amount below it is the relief, not money back.
+- "HMRC … refunds earlier years" → पिछले सालों के लिए टैक्स रिफ़ंड देता है: names the tax, so it doesn't read as refunding the whole relief.
+- "Your employer paid {{amount}} more … taxable pay" → टैक्स लगने वाली तनख्वाह: correct.
+- "{{amount}} of business mileage logged" (milestone): {{amount}} is money, so {{amount}} का बिज़नेस माइलेज ("business mileage worth {{amount}}") is right.
+- The share text says हर ट्रिप गिनी गई instead of "every mile", per the glossary rule for lines shown in every country.

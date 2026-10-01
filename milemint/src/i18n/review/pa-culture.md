@@ -129,3 +129,39 @@
 ## Sign-off
 
 **Approved for release.** Nothing left in the file is offensive, sexual, religious, political, about origin or nationality, gendered for the user, or a promise of refunds or savings. Lines shown in every country no longer name a unit. The only open item is the iOS-wording device check above, and it doesn't block release.
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+**Scope.** All 203 lines added this round (201 feature lines plus 2 shift-switch lines). I read each one as a Punjabi courier in Southall or Surrey BC, a care worker in Birmingham or Brampton, and an Uber driver in Melbourne. I checked tone, gender-neutral address, money honesty, privacy reassurance, backup precision, the glossary terms and button length (≤1.3× English).
+
+**What I checked.**
+- **Gender.** No gendered verb for the user. The lines use polite imperatives, the passive (ਕਲੇਮ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ, ਰੱਖਿਆ ਜਾਵੇਗਾ), the subjunctive (ਵਰਤੋ, ਜੋੜੋ, ਹੋਵੋ) or noun phrases. The care-worker toggle is first person, so it's worded as ਮੇਰਾ ਕੰਮ … ਜਾਣ ਦਾ ਹੈ, not ਜਾਂਦਾ/ਜਾਂਦੀ ਹਾਂ. The claimed switch is ਇਸ ਸਾਲ ਦਾ ਕਲੇਮ ਕਰ ਦਿੱਤਾ ਹੈ, where the verb agrees with ਕਲੇਮ. "We’ll keep only the area" is passive, so the app doesn't speak as a masculine ਅਸੀਂ.
+- **Country.** The logbook's wrong-country line says ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਦੇਸ਼ ਬਦਲੋ, never ਤੁਹਾਡਾ ਦੇਸ਼.
+- **Money.** "Relief" (ਰਾਹਤ) is never presented as cash. "Tax back" (ਟੈਕਸ ਵਾਪਸੀ) always has ਲਗਭਗ or ਅੰਦਾਜ਼ਨ. HMRC "refunds earlier years" is ਪਿਛਲੇ ਸਾਲਾਂ ਦਾ ਬਣਦਾ ਟੈਕਸ, meaning only what is due. None of ਪੈਸੇ ਵਾਪਸ, ਬੱਚਤ, ਮੁਫ਼ਤ is used.
+- **Privacy.** The lines are plain and calm: ਸਿਰਫ਼ ਇਲਾਕਾ ਰੱਖਿਆ ਜਾਵੇਗਾ, ਉਨ੍ਹਾਂ ਦਾ ਪਤਾ ਕਦੇ ਨਹੀਂ. The settings text says the area, distance and purpose are enough *for the tax office* (ਟੈਕਸ ਦਫ਼ਤਰ ਲਈ … ਕਾਫ਼ੀ ਹਨ). Nothing suggests hiding anything from it. Patients are ਮਰੀਜ਼, a neutral word.
+- **Backup.** The lines say it is encrypted, with a key only in the user's iCloud Keychain, and that MileMint never sees the trips. The restore warning says exactly what is replaced.
+- **Units.** Logbook lines are Australia-only and use ਕਿ.ਮੀ.; P87 lines are UK-only and use ਮੀਲ. The new employee share text ("Every mile counted") follows its existing sibling and says ਹਰ ਟ੍ਰਿਪ.
+
+**Changes.**
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Ended early | ਸਮੇਂ ਤੋਂ ਪਹਿਲਾਂ ਖ਼ਤਮ | ਵਿਚਾਲੇ ਖ਼ਤਮ | Status label was almost 2× the English. ਵਿਚਾਲੇ ਖ਼ਤਮ ("ended midway") is short and everyday. |
+| Start fresh instead | ਇਸ ਦੀ ਥਾਂ ਨਵੇਂ ਸਿਰਿਓਂ ਸ਼ੁਰੂ ਕਰੋ | ਨਵੇਂ ਸਿਰਿਓਂ ਸ਼ੁਰੂ ਕਰੋ | Button was too long. It sits under "Restore my trips", so "instead" is already clear. |
+| See how to claim › | ਕਲੇਮ ਕਿਵੇਂ ਕਰੀਏ, ਦੇਖੋ › | ਕਲੇਮ ਦਾ ਤਰੀਕਾ ਦੇਖੋ › | The comma construction was awkward for a link. |
+| Add initials or a client number if you like. Never a name or address. | …ਕਲਾਇੰਟ ਨੰਬਰ ਜੋੜੋ। ਨਾਂ ਜਾਂ ਪਤਾ ਕਦੇ ਨਹੀਂ। | …ਕਲਾਇੰਟ ਨੰਬਰ ਜੋੜੋ, ਪਰ ਨਾਂ ਜਾਂ ਪਤਾ ਕਦੇ ਨਹੀਂ। | The bare fragment read as abrupt. With ਪਰ it reads as friendly guidance. |
+| Encrypted with a key only your iCloud Keychain holds. MileMint never sees your trips. | ਬੈਕਅੱਪ ਇੱਕ ਅਜਿਹੀ ਕੁੰਜੀ ਨਾਲ ਇਨਕ੍ਰਿਪਟ ਹੁੰਦਾ ਹੈ… | ਬੈਕਅੱਪ ਇਨਕ੍ਰਿਪਟ (ਤਾਲਾਬੰਦ) ਹੁੰਦਾ ਹੈ, ਇੱਕ ਅਜਿਹੀ ਕੁੰਜੀ ਨਾਲ… | Not every user knows ਇਨਕ੍ਰਿਪਟ. The gloss ਤਾਲਾਬੰਦ ("locked") keeps it precise and reassuring. |
+
+**Checked and kept.** ਬੇਸਿਕ / ਹਾਇਰ / ਐਡੀਸ਼ਨਲ match the words on HMRC letters. ਇੰਸ਼ੋਰੈਂਸ, ਰਜਿਸਟ੍ਰੇਸ਼ਨ, ਸਰਵਿਸ ਅਤੇ ਮੁਰੰਮਤ and ਲੋਨ ਦਾ ਵਿਆਜ are what drivers say. ਡੈਪ੍ਰੀਸੀਏਸ਼ਨ keeps a gloss (ਕੀਮਤ ਵਿੱਚ ਕਮੀ); it is a list label, not a button, so the length is fine. "Scottish rates" = ਸਕਾਟਲੈਂਡ ਦੀਆਂ ਦਰਾਂ, a plain tax fact.
+
+**Not blocking.** iOS and iCloud wording is unverified on a Punjabi iPhone; see the glossary's Unsure list.
+
+## Round 3b: shift switch and number format
+
+Each line was translated, back-translated cold, then checked for culture and length (the shift hint is a wrapping caption under the shift bar; target ≤1.3× English). The logbook parser now accepts both decimal points and decimal commas. `npx jest src/i18n` passes.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Swipe back to end your shift. | ਸ਼ਿਫਟ ਖ਼ਤਮ ਕਰਨ ਲਈ ਵਾਪਸ ਸਵਾਈਪ ਕਰੋ। | (unchanged) | Checked. Back-translation: "Swipe back to end the shift." Matches "ਸ਼ਿਫਟ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਸਵਾਈਪ" and "ਸ਼ਿਫਟ ਖ਼ਤਮ ਕਰੋ" (ਤੁਸੀਂ). Shorter than English on screen. |
+| {{hint}}. Swipe the button to the left, or double-tap. | {{hint}}। ਬਟਨ ਨੂੰ ਖੱਬੇ ਪਾਸੇ ਸਵਾਈਪ ਕਰੋ, ਜਾਂ ਦੋ ਵਾਰ ਟੈਪ ਕਰੋ। | (unchanged) | Checked: mirrors the "ਸੱਜੇ ਪਾਸੇ" line exactly. |
+| Enter amounts as numbers, e.g. 2400 or 2,400.50. | ਰਕਮਾਂ ਅੰਕਾਂ ਵਿੱਚ ਭਰੋ, ਜਿਵੇਂ 2400 ਜਾਂ 2,400.50। | (unchanged) | Checked: English-style example is what Punjabi speakers use; no dot instruction. |

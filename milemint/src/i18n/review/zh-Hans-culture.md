@@ -56,3 +56,38 @@ Nothing was offensive, political or about nationality. Country names are neutral
 ## Sign-off
 
 **Approved for release.**
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+All 201 new lines were read as a Chinese-speaking carer in the UK and a courier in Australia would read them: tone, money honesty, privacy reassurance, glossary consistency, iOS wording and button/label length (≤1.3× English).
+
+- **Money:** relief (减免) is never presented as a refund. Every tax-back figure has 约 or 估算, and the "depends on your income and tax rate" and "not tax advice" lines are kept. 看起来更有利 compares methods without promising savings.
+- **Privacy:** lines are calm and plain (我们只保存所在区域，绝不保存他们的地址). Nothing suggests hiding anything from the tax office; 对税务局来说，有区域、距离和事由就够了 says what the tax office needs.
+- **Backup:** says it is encrypted (加密), stored in the user's own iCloud, and that MileMint never sees the trips.
+- **iOS wording:** iCloud Drive → iCloud 云盘 and iCloud Keychain → iCloud 钥匙串, Apple's zh-Hans names, following the precedent of Apple Account → Apple 账户. Paths quote iOS as before (iPhone 的“设置”→你的姓名→“iCloud”).
+- **Terms:** logbook = 行车日志 (glossary); logbook method = 行车日志法; cents per km method kept in English; reason = 事由; personal/private = 私人; employee = 雇员; claim (to HMRC) = 申请/申报 and expense claims = 报销.
+- No offensive or slang double meanings were found. 开车 is avoided in headings (汽车工作里程超过 5,000 公里？).
+
+| English | Before | After | Why |
+|---|---|---|---|
+| I visit clients or patients at home (care, nursing, support work) | 我会上门探访客户或病人（护理、照护、支援服务） | 我会上门探访客户或患者（照护、护理、支援服务） | 患者 is the respectful healthcare word; 病人 is blunt. The order now follows the English. |
+| Area only | 只存区域 | 只保存区域 | 存 alone is clipped. This now matches the 只保存所在区域？ title of the same alert. |
+| Relief to claim | 可申请减免 | 可申请减免额 | Row label next to an amount; 额 makes it read as a figure. |
+| Estimated tax back | 估算退税 | 估算退税额 | Same as above. |
+| Backed up just now | 刚刚已备份 | 上次备份：刚刚 | This is the status line in the Backup section. 上次备份：… is the familiar iOS pattern. |
+| Backed up {{count}} minutes ago | {{count}} 分钟前已备份 | 上次备份：{{count}} 分钟前 | Same as above. |
+| Backed up {{count}} hours ago | {{count}} 小时前已备份 | 上次备份：{{count}} 小时前 | Same as above. |
+| Backed up {{count}} days ago | {{count}} 天前已备份 | 上次备份：{{count}} 天前 | Same as above. |
+| The logbook method looks better: about {{amount}} more. | …约多 {{amount}}。 | …约多出 {{amount}}。 | 约多 + number is ambiguous ("about how many"). 多出 makes it read as "more by". |
+| Cents per km looks better: about {{amount}} more. | …约多 {{amount}}。 | …约多出 {{amount}}。 | Same as above. |
+| Spreadsheet (CSV) | 表格（CSV） | 电子表格（CSV） | 表格 alone also means a paper form, which is confusing next to "P87 form". |
+
+## Round 3b: shift switch and number format
+
+Each line was translated, back-translated cold, then checked for culture and length (the shift hint is a wrapping caption under the shift bar; target ≤1.3× English). The logbook parser now accepts both decimal points and decimal commas. `npx jest src/i18n` passes.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Swipe back to end your shift. | (missing) | 往回滑动即可收工。 | New line. Back-translation: "Swipe back to clock off." Mirrors "滑动开工" and uses 收工 for End shift (你 implied). |
+| {{hint}}. Swipe the button to the left, or double-tap. | (missing) | {{hint}}。向左滑动按钮，或连按两下。 | New VoiceOver hint; mirrors the "向右滑动按钮" line exactly. |
+| Enter amounts as numbers, e.g. 2400 or 2,400.50. | 请用数字输入金额，例如 2400 或 2,400.50。 | (unchanged) | Checked: English-style example is standard in Chinese; no dot instruction. |

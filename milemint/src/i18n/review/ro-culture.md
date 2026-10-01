@@ -75,3 +75,40 @@ Note for that check: Apple's Romanian UI has traditionally used the polite plura
 ## Sign-off
 
 **Approved for release** on culture, tone, money honesty, UI fit and naturalness. Before shipping, confirm the iOS-quoted strings on a Romanian-language iPhone, as already flagged in `ro-accuracy.md`.
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+Reviewer profile as above, reading the 201 new lines as a Romanian courier or care worker in the UK (and in Australia for the logbook lines).
+
+Checks:
+1. Offence, double meanings and regional words: none found. *Dubă*, *bonuri*, *fluturaș de salariu*, *pence*, *p* are what Romanians in the UK say.
+2. Tone: warm and plain, *tu* throughout, *Te rugăm să…* after errors as before.
+3. Money honesty: relief = *deducere*, tax back = *impozit înapoi* (always *aprox.* / *estimat* where the English has it); *Nu e consultanță fiscală* kept; nothing promises a refund.
+4. Privacy lines: reassuring and plain (*Se salvează doar zona, niciodată adresa lor*; *Niciodată un nume sau o adresă*). Nothing suggests hiding anything from the tax office: *Pentru autoritatea fiscală sunt de ajuns zona, distanța și scopul* says the opposite.
+5. Backup lines: say it is encrypted (*Criptat*), the key is in iCloud Keychain (*Portchei iCloud*), it lives in the user's own iCloud, and *MileMint nu vede niciodată cursele tale*. No "we store your data" wording; *Se salvează* rather than *Păstrăm* avoids implying MileMint servers.
+6. iOS wording: *Configurări* (iOS Settings), *iCloud Drive*, *Portchei iCloud*, *Configurări → numele tău → iCloud*, *Backup iCloud* follow Apple's Romanian naming.
+7. UI fit (≤1.3×): tax-band segments *De bază / Ridicată / Suplimentară / Nu știu*, *Pe cont propriu / Angajat*, *Pe milă / Nimic*, *Doar zona*, *Păstrează adresa*, *Șterge adresele*, *Păstrează-le*, *Începe jurnalul*, *Fă backup acum*, *Începe de la zero*, *Cere pe GOV.UK (P87)* all fit.
+
+Result: **3 strings changed** in this pass.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Restore my trips | Restaurează-mi cursele | Restaurează cursele | Main welcome button: 22 chars against 16 (1.4×). Now 19 (1.2×), same meaning. |
+| Save costs | Salvează costurile | Salvează | Button: 18 chars against 10 (1.8×). It sits directly under the cost fields, so the object is clear. |
+| HMRC usually changes your tax code … They may ask to see your mileage log … | …Pot cere să vadă jurnalul… | …HMRC poate cere să vadă jurnalul… | *Pot* can read as "I can" as well as "they can". Naming HMRC removes the doubt. |
+
+## Checked and left as is (Round 3)
+
+- *Confidențialitate clienți* ("Client privacy", 25 chars against 14): a full-width section header and a switch's spoken label, not a button. *Discreție* is shorter but sounds like secrecy; *confidențialitate* is the word care agencies use.
+- *Ridicată* for "Higher" (rate band) instead of the more formal *Superioară*, to keep the four-way segment short.
+- *Vizitez clienți sau pacienți la domiciliu (îngrijire, asistență medicală, sprijin)*: standard Romanian care-sector words.
+
+## Round 3b: shift switch and number format
+
+Each line was translated, back-translated cold, then checked for culture and length (the shift hint is a wrapping caption under the shift bar; target ≤1.3× English). The logbook parser now accepts both decimal points and decimal commas. `npx jest src/i18n` passes.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Swipe back to end your shift. | (missing) | Glisează înapoi ca să închei tura. | New line. Back-translation: "Swipe back to end the shift." Mirrors "Glisează ca să începi tura" and "Încheie tura" (tu). 1.17× English. |
+| {{hint}}. Swipe the button to the left, or double-tap. | (missing) | {{hint}}. Glisează butonul spre stânga sau atinge de două ori. | New VoiceOver hint; mirrors the "spre dreapta" line exactly. |
+| Enter amounts as numbers, e.g. 2400 or 2,400.50. | Introdu sumele ca numere, cu punct la zecimale, de ex. 2400 sau 2,400.50. | Introdu sumele ca numere, de ex. 2400 sau 2400,50. | The parser now accepts a decimal comma: dropped "cu punct la zecimale" and used the Romanian decimal comma. |

@@ -15,7 +15,7 @@ import { LeafMark } from '@/components/leaf-mark';
 import { LogbookNudge } from '@/components/logbook-nudge';
 import { Celebration } from '@/components/celebration';
 import { ReminderAsk } from '@/components/reminder-ask';
-import { SwipeToStart } from '@/components/swipe-to-start';
+import { ShiftSwitch } from '@/components/shift-switch';
 import { TaxCountdown } from '@/components/tax-countdown';
 import { Segmented } from '@/components/segmented';
 import { VehicleSheet } from '@/components/vehicle-sheet';
@@ -866,7 +866,7 @@ function LiveDriveBanner({ drive }: { drive: LiveDrive }) {
   );
 }
 
-/** Shift mode: one tap to start, and everything until "End shift" is work. */
+/** Shift mode: swipe to start, swipe back to end; every drive in between is work. */
 function ShiftBar({
   shift,
   drives,
@@ -893,57 +893,56 @@ function ShiftBar({
     return () => clearInterval(timer);
   }, [shift]);
 
-  if (!shift) {
-    return (
-      <View style={styles.shiftStart}>
-        <SwipeToStart
-          label={t('Swipe to start shift')}
-          hint={t('Every drive until you end it counts as business')}
-          onComplete={() => {
-            setCheer(shiftCheer(region.code, Math.floor(Date.now() / 1000), getLanguage()));
-            setTimeout(() => setCheer(null), 3500);
-            onStart();
-          }}
-        />
-        <ThemedText type="small" themeColor="textSecondary" style={styles.shiftHint}>
-          {t('Every drive until you end it counts as business.')}
-        </ThemedText>
-      </View>
-    );
-  }
-
-  const minutes = Math.max(0, Math.floor((now - Date.parse(shift.startedAt)) / 60_000));
+  const minutes = shift ? Math.max(0, Math.floor((now - Date.parse(shift.startedAt)) / 60_000)) : 0;
   const elapsed = t('{{hours}}h {{minutes}}m', {
     hours: Math.floor(minutes / 60),
     minutes: String(minutes % 60).padStart(2, '0'),
   });
   return (
-    <View
-      style={styles.shiftOn}
-      accessibilityLabel={t('On shift for {{elapsed}}, {{count}} drives', { elapsed, count: drives })}>
-      <BrandGradient />
-      <LiveDot color="#FACC15" />
-      <View style={styles.flex}>
-        {cheer ? (
-          <Animated.Text
-            entering={ZoomIn.springify().damping(12)}
-            style={styles.cheer}
-            numberOfLines={1}
-            adjustsFontSizeToFit>
-            {cheer}
-          </Animated.Text>
-        ) : (
-          <Text style={styles.shiftTitle}>{t('On shift · {{elapsed}}', { elapsed })}</Text>
+    <View style={styles.shiftStart}>
+      <ShiftSwitch
+        on={!!shift}
+        startLabel={t('Swipe to start shift')}
+        startHint={t('Every drive until you end it counts as business')}
+        endLabel={t('On shift for {{elapsed}}, {{count}} drives', { elapsed, count: drives })}
+        onStart={() => {
+          setCheer(shiftCheer(region.code, Math.floor(Date.now() / 1000), getLanguage()));
+          setTimeout(() => setCheer(null), 3500);
+          onStart();
+        }}
+        onEnd={() => {
+          setCheer(null);
+          onEnd();
+        }}>
+        {shift && (
+          <>
+            <LiveDot color="#FDE68A" />
+            <View style={styles.flex}>
+              {cheer ? (
+                <Animated.Text
+                  entering={ZoomIn.springify().damping(12)}
+                  style={styles.cheer}
+                  numberOfLines={1}
+                  adjustsFontSizeToFit>
+                  {cheer}
+                </Animated.Text>
+              ) : (
+                <Text style={styles.shiftTitle} numberOfLines={1}>
+                  {t('On shift · {{elapsed}}', { elapsed })}
+                </Text>
+              )}
+              <Text style={styles.shiftSub} numberOfLines={1}>
+                {drives > 0
+                  ? t('{{distance}} · {{value}} · {{count}} drives', { distance, value, count: drives })
+                  : t('Every drive counts as business')}
+              </Text>
+            </View>
+          </>
         )}
-        <Text style={styles.shiftSub}>
-          {drives > 0
-            ? t('{{distance}} · {{value}} · {{count}} drives', { distance, value, count: drives })
-            : t('Every drive counts as business')}
-        </Text>
-      </View>
-      <Pressable accessibilityRole="button" onPress={onEnd} style={styles.shiftEnd}>
-        <Text style={styles.shiftEndText}>{t('End shift')}</Text>
-      </Pressable>
+      </ShiftSwitch>
+      <ThemedText type="small" themeColor="textSecondary" style={styles.shiftHint}>
+        {shift ? t('Swipe back to end your shift.') : t('Every drive until you end it counts as business.')}
+      </ThemedText>
     </View>
   );
 }
@@ -1090,19 +1089,9 @@ const styles = StyleSheet.create({
   goProText: { color: '#064E3B', fontSize: 13, fontWeight: '800' },
   shiftStart: { gap: Spacing.one + 2 },
   shiftHint: { textAlign: 'center' },
-  cheer: { color: '#FACC15', fontSize: 20, fontWeight: '800' },
-  shiftOn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.three,
-    borderRadius: 16,
-    padding: Spacing.three,
-    overflow: 'hidden',
-  },
-  shiftTitle: { color: '#FFFFFF', fontSize: 16, fontWeight: '800' },
-  shiftSub: { color: '#D1FAE5', fontSize: 13 },
-  shiftEnd: { backgroundColor: '#FFFFFF', borderRadius: 999, paddingHorizontal: Spacing.three, paddingVertical: Spacing.two },
-  shiftEndText: { color: '#064E3B', fontSize: 14, fontWeight: '700' },
+  cheer: { color: '#FEF3C7', fontSize: 19, fontWeight: '800' },
+  shiftTitle: { color: '#FFFFFF', fontSize: 15, fontWeight: '800' },
+  shiftSub: { color: '#FEF3C7', fontSize: 12 },
   row: { borderRadius: 12, padding: Spacing.three, gap: Spacing.two },
   rowHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: Spacing.two },
   route: { flex: 1 },

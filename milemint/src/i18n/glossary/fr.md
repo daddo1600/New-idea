@@ -59,6 +59,25 @@ The app speaks to the user as **vous** throughout. Two exceptions:
 | Car or van / Motorbike / Moped or motorbike / Bicycle | Auto ou van / Moto / Scooter ou moto / Vélo | Short names that fit a third of the screen width (the vehicle picker shows one line only). "Auto" and "van" are everyday words in Québec and France. In full sentences "van" stays "camionnette". |
 | UK / USA (half-width tiles) | R.-U. / É.-U. | Standard French abbreviations, shown beside the flag. The full names (Royaume-Uni / États-Unis) are used everywhere else and are what VoiceOver reads on the tiles. |
 | CRA, IRS, ATO, HMRC | kept in English | Following the brief. Fixed sentences use "la CRA", "l’IRS", "l’ATO". |
+| ATO logbook / logbook method | registre ATO / méthode du registre | "Registre" is already the glossary word for a logbook. "(logbook method)" is glossed once, on the screen shown outside Australia. |
+| income year (ATO) | année d’imposition | Same concept as tax year; one term everywhere. |
+| business-use percentage | pourcentage d’usage professionnel | Matches the existing "part d’usage professionnel". |
+| running costs | frais d’utilisation | Plain term. |
+| odometer reading | relevé d’odomètre | As before. |
+| Mileage Allowance Relief / P87 | kept in English ("la Mileage Allowance Relief") | Official name, per the brief. |
+| (tax) relief | allègement (fiscal) | Standard in Québec and France. Never "remboursement" for the relief itself. |
+| tax back | impôt récupéré | Always with "Environ" or "estimé". |
+| Self-employed / Employee (pay picker) | Autonome / Employé | Short for the two-way picker; "Autonome" is gender-neutral. |
+| Basic / Higher / Additional / Not sure (tax rate) | De base / Supérieur / Additionnel / Ne sais pas | Short labels for a four-way picker. |
+| tax code (HMRC) | code fiscal (tax code) | Glossed so users recognise it on HMRC letters. |
+| tax agent | conseiller fiscal | Neutral in both regions. |
+| Client privacy | Confidentialité client; badge "🔒 Confidentiel" | Plain and reassuring. |
+| area (privacy mode) | secteur | Works in Québec and France. |
+| Client visit (purpose) | Visite client | The stored place label stays English ("Client visit · …"), as the code stores it for tax reports. |
+| backup / back up / restore | sauvegarde / sauvegarder / restaurer | Apple French wording. |
+| iCloud Keychain | trousseau iCloud | Apple’s French name, which is what the iPhone shows (see Unsure). |
+| encrypted | chiffré | As before. |
+| expense claim | note de frais | As before. |
 
 ## iOS wording used
 
@@ -117,3 +136,8 @@ Nothing says money comes "back" or is "saved": amounts are "trouvés", lines say
 13. **"Self Assessment return is due" (returnIsDue)**: rendered as "Date limite de votre déclaration … {{year}}", so it works both as a heading above a date and before ": aujourd’hui" or ": encore N jours".
 14. ~~"Best value"~~: **resolved**: "Meilleure offre".
 15. **"Shifts & rounds (delivery apps)"**: rendered as "Quarts et tournées (apps de livraison)".
+16. **"iCloud Keychain" as "trousseau iCloud"**: the round-3 notes said to keep "iCloud Keychain" in English, but also that Apple’s own wording must match iOS. A French iPhone shows "Trousseau iCloud" (Réglages → votre nom → iCloud → Mots de passe et trousseau), so I used Apple’s French term. Switch to "iCloud Keychain" if the team prefers the English name.
+17. **"Not sure" as "Ne sais pas"** (tax-rate picker): 1.4× the English; check it fits beside "De base", "Supérieur" and "Additionnel" on a small iPhone.
+18. **"Claim mileage relief" as "Demander l’allègement fiscal"**: drops "mileage" to stay short; "Allègement fiscal pour déplacements" is the longer alternative.
+19. **"Employed, in your own vehicle?" as "Employé, avec votre propre véhicule ?"**: masculine generic, as elsewhere in the glossary.
+20. **Resolved (round 3b):** the amount example is now "2400 ou 2400,50". The logbook parser accepts a decimal comma, so the example uses the French format.

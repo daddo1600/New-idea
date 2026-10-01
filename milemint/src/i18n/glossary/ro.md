@@ -41,6 +41,22 @@ Informal **tu** throughout (imperatives like *Glisează*, *Atinge*, *Sortează*;
 | reminder | **memento** (pl. *mementouri*) | Standard. |
 | estimated / estimate | **estimat / estimare** | Kept wherever the English says it. No line promises a saving. |
 | Not tax advice | **Nu e consultanță fiscală** | Standard disclaimer wording. |
+| tax relief (Mileage Allowance Relief) | **deducere** / **deducere fiscală**; concept: *facilitate fiscală*; the scheme name stays *Mileage Allowance Relief* | Honest: a reduction of taxable pay, not a payout. “Relief to claim” = *Deducere de cerut*. |
+| tax back | **impozit înapoi** (with *aprox.* / *estimat*) | Only the tax on the relief comes back. |
+| employee / self-employed | **angajat** / **pe cont propriu** | Matches existing lines. |
+| employer / mileage allowance paid | **angajator** / **decontare de kilometraj** | Matches existing lines. |
+| tax rate band: Basic / Higher / Additional | **De bază / Ridicată / Suplimentară** | Short for a four-way segment. |
+| logbook method (ATO) | **metoda jurnalului de bord** | “logbook” was already *jurnal de bord*. “cents per km” stays in English as before. |
+| income year (ATO) | **an de venit** | Matches existing ATO lines. |
+| business-use percentage | **procent de folosire pentru lucru** | Plain. |
+| journey / reason (ATO logbook) | **cursă** / **scop** | Same words as the app’s purpose field. |
+| client privacy | **Confidențialitate clienți** | Care-sector word. |
+| area (instead of address) | **zonă** (*Doar zona*) | Everyday. |
+| Client visit (purpose) | **Vizită la client**; but the stored label quoted in alerts stays *Client visit · …* | The stored label (`domain/privacy.ts`) is English. |
+| backup / back up / restore | **backup** (pl. *backupuri*), *Fă backup*, **a restaura** (*Restaurează*) | Apple’s Romanian uses *backup* and *Restaurați*. |
+| iCloud Keychain | **iCloud Keychain (Portchei iCloud)** | Kept in English per the brief, glossed with Apple’s Romanian name. |
+| Sign in to iCloud | **Conectează-te la iCloud** | Apple wording in *tu* form. |
+| encrypted | **criptat** | Standard. |
 
 Plurals use the CLDR categories one / few / other. *other* (20 and up, e.g. 20, 21, 100) adds **de**: *1 cursă, 5 curse, 20 de curse*; *1 milă, 3 mile, 100 de mile*. The abbreviation “km” takes no “de”. The small countdown-box unit (`days`) uses *zile* for both few and other, because “de zile” under a number looks odd.
 
@@ -69,3 +85,8 @@ Jokes were adapted. Examples: “Knock knock” became *Cioc, cioc* / *Cine-i ac
 - “found this tax year” under a money figure is *suma găsită în acest an fiscal*, chosen to avoid gender agreement with £/$.
 - “Shifts & rounds (delivery apps)” as *Ture și livrări (aplicații de livrări)*: “rounds” has no exact courier term.
 - Shift cheers (*Să înceapă jocul!*, *Hai că pornim!*, *Pornim la drum!*): these are adaptations, not literal translations.
+- Round 3: *Portchei iCloud* as Apple’s Romanian name for iCloud Keychain, and *Configurări → numele tău → iCloud* as the path. Check on a Romanian iPhone.
+- Round 3: *Ridicată* for the “Higher” tax band (HMRC guidance in Romanian sometimes uses *cota superioară*).
+- Round 3b: “Enter amounts as numbers, e.g. 2400 or 2,400.50.” is now *Introdu sumele ca numere, de ex. 2400 sau 2400,50.* The logbook parser accepts a decimal comma, so the *cu punct la zecimale* instruction was dropped.
+- Round 3: “Client visit · area” is quoted in English (*„Client visit · zona”*) because the stored label isn’t translated. If the app starts translating stored labels, change it to *Vizită la client · zona*.
+- Round 3: “End early” as *Încheie acum* (the alert’s question already says *mai devreme*).

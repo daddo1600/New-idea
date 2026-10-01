@@ -55,6 +55,29 @@ Neutral international Spanish, written mainly for Latin American speakers in the
 | money back (milestones) | Dinero encontrado | "Dinero de vuelta" / "recuperado" reads as a promised tax refund. Never "saldo a favor" (a refund in Mexican tax language). |
 | cheeky (reminders) | con un toque de humor | "travieso"/"pícaro" can carry a flirty double meaning in some countries. |
 | unit-neutral taglines | viaje | Lines shown in every country ("Never miss a mile", "Every business mile, counted", share lines) say "viaje", not millas/km. |
+| logbook (ATO 12-week) | bitácora; "logbook method" = método de bitácora (logbook method on first mention) | Latin American word for a vehicle log; kept separate from "registro de kilometraje" (the everyday trip log). |
+| Mileage Allowance Relief / relief (P87) | Mileage Allowance Relief (name kept, feminine: "la"); relief amount = beneficio fiscal / beneficio a reclamar | Not "reembolso" or "devolución": the relief is not paid out; only the tax on it comes back. |
+| tax back (P87) | recuperar impuestos; "About {{amount}} tax back" = "Recuperarías alrededor de {{amount}} en impuestos" | Conditional + "alrededor de" keeps it an estimate and covers a tax-code change as well as a refund. |
+| HMRC approved amount | monto aprobado por HMRC | |
+| employment expenses | gastos de empleo | |
+| payslip | recibo de pago | Neutral ("nómina" is Spain/Mexico-specific). |
+| tax code (UK) | código fiscal (tax code) | |
+| income tax rate: Basic / Higher / Additional | tasa: Básica / Alta / Adicional | Feminine to agree with "tasa". |
+| pence a mile / p a mile | peniques por milla / p por milla | |
+| odometer reading | lectura del odómetro | As in existing lines. |
+| business-use percentage | porcentaje de uso de trabajo | |
+| tax agent (AU) | agente fiscal | As in existing lines. |
+| running costs (car) | lo que cuesta mantener el auto; costs = gastos | |
+| Registration (AU car cost) | Registro vehicular | |
+| tyres | neumáticos | "llantas" is regional. |
+| client privacy | privacidad de clientes | |
+| area (town + postcode) | zona | |
+| Client visit (purpose) | Visita a cliente; the saved label "Client visit · area" stays in English (it goes into English reports) | |
+| backup / back up / restore | respaldo / respaldar / restaurar | Apple es-419 wording ("Respaldo de iCloud", "Respaldar ahora"). |
+| iCloud Keychain | Llavero de iCloud | Apple's Spanish name, shown in iOS (same reasoning as "Cuenta de Apple"). |
+| Sign in to iCloud | Inicia sesión en iCloud | Apple wording. |
+| encrypted | cifrado | Apple es-419 wording. |
+| Start fresh | empezar de cero | |
 
 Kept in English as the brief requires: MileMint, Pro, HMRC, IRS, CRA, ATO, Self Assessment, Making Tax Digital/MTD, Mileage Allowance Relief, Car, van and travel expenses, Schedule C (Part IV), Car and truck expenses, Form 1040/1040-ES, T2125, T2200, T777, P87, BAS, PAYG, GST, D1 / Work-related car expenses, cents per km method, simplified expenses, delivery-app names and car models. Numbers keep the English format (5,000; 12.5).
 
@@ -99,3 +122,9 @@ es categories: one, many, other. Every plural entry gives `one`, plus `many` equ
 9. Lines with "antes del {{date}}" / "Vence el {{date}}" assume the date is formatted day-first in Spanish (e.g. "5 de abril").
 10. "{{day}} shift {{number}} start/end" and "Remove {{day}} shift {{number}}" → "{{day}}: inicio/fin del turno {{number}}", "{{day}}: quitar turno {{number}}" (screen-reader wording).
 11. "Site visit" → "Visita a obra" (fits tradespeople; less natural for sales reps).
+12. **Round 3: "bitácora"** for the ATO logbook — common in Mexico/Central America for vehicle logs; Spanish speakers from Spain may find it nautical. Alternative: "libro de registro".
+13. **Round 3: Apple wording** — "Llavero de iCloud", "Configuración del iPhone → tu nombre → iCloud", "Inicia sesión en iCloud", "activa iCloud Drive", "Respaldar ahora", "respaldo". Please confirm on an iPhone set to Español (Latinoamérica). (The brief listed "iCloud Keychain" as English-only; it was translated because iOS shows "Llavero de iCloud" and the steps must match the screen.)
+14. **Round 3: "Empleado"** (Settings segment) is masculine; "Con empleador" would be neutral but 1.6× English.
+15. **Round 3: "{{example}}"** in the privacy explanation is the English label (e.g. “Client visit · Leeds LS6”) inside a Spanish sentence; correct because that is what the trip shows, but it may look odd.
+16. **Round 3: "beneficio fiscal"** for P87 "relief" — clear and honest, though not an HMRC term; "desgravación" is Spain-only.
+17. **Round 3: "Registro vehicular"** for the AU "Registration" (rego) cost could be confused with "registro" (log) out of context; it sits in a list of car costs.

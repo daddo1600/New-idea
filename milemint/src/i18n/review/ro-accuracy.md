@@ -57,3 +57,26 @@ I couldn't confirm Apple's exact Romanian iOS strings: apple.com and applelocali
 - Apple may label the Privacy section *Intimitate* in older iOS. That doesn't affect any string here.
 
 If the on-device wording differs, update every line that quotes it: the standalone iOS keys, the `Tap “…”` lines, both `<b>` lines, "In Settings, under Allow Location Access…" and "Location is set to “While Using”…".
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+Scope: the 201 new keys (ATO 12-week logbook, P87 / Mileage Allowance Relief, client privacy mode, encrypted iCloud backup), including every form of the 13 plural objects (one / few / other, with "de" from 20). Each line was back-translated cold and compared with the English. Short or unclear lines were checked in `app/claim-relief.tsx`, `app/logbook.tsx`, `app/settings.tsx`, `app/welcome.tsx`, `app/add-trip.tsx`, `app/index.tsx`, `domain/privacy.ts`, `domain/logbook.ts`, `components/purpose-picker.tsx` and `backup/copy.ts`.
+
+Also checked:
+- Placeholders: same names and count in every form (`npx jest src/i18n/__tests__/completeness.test.ts -t "ro "` passes).
+- Kept in English: ATO, HMRC, P87, Self Assessment, PAYE, P60, National Insurance, GOV.UK, Government Gateway, iCloud, iCloud Drive, iCloud Keychain (glossed once per line as *Portchei iCloud*), Mileage Allowance Relief, "cents per km".
+- Money honesty: "relief" is *deducere* (a reduction of taxable pay), never a refund of the whole amount; "tax back" is always *impozit înapoi* with *aprox.* / *estimat* wherever the English has About / Estimated. No line promises a refund.
+- `Client visit · area` (add-trip alert) and `{{example}}` (settings): the stored label is English (`CLIENT_VISIT` in `domain/privacy.ts` is not translated), so the alert quotes *„Client visit · zona”* to match what the trip list will actually show.
+- `Enter amounts as numbers, e.g. 2400 or 2,400.50.`: `parseNumber` in `app/logbook.tsx` strips commas and only accepts a dot as the decimal mark. A Romanian user typing *2400,50* would get 240050. The translation keeps the English example and adds *cu punct la zecimale* ("with a dot for decimals") so it states the real rule.
+- `Claim it before {{date}}. {{total}} unclaimed across {{count}} earlier tax years.`: rebuilt as *Total necerut: {{total}}, din {{count}} … ani fiscali anteriori* to avoid agreement with a money amount; only shown when count > 1.
+- `End early` as *Încheie acum*: slightly looser than "early", but it follows the question *Închei jurnalul mai devreme?* and *Încheie mai devreme* is twice the English length. Accepted.
+
+Result: **5 strings changed** in this pass.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Choose the route. Use form P87 if your employment expenses for the year are {{limit}} or less… | …cheltuielile tale legate de job din acel an… | …cheltuielile tale cu munca din anul respectiv… | *Legate de job* is an anglicism and *acel an* had no clear referent. |
+| HMRC usually changes your tax code for this year and refunds earlier years. … | …și îți dă banii înapoi pentru anii anteriori. | …și îți returnează impozitul plătit în plus pentru anii anteriori. | Back-translated as "gives you the money back", which suggests the whole relief is paid out. HMRC refunds overpaid tax only. |
+| I’ve claimed this year | Am cerut pentru anul acesta | Am depus cererea pentru anul acesta | Back-translated as "I asked for this year": the object was missing. |
+| I’ve claimed the {{year}} tax year | Am cerut pentru anul fiscal {{year}} | Am depus cererea pentru anul fiscal {{year}} | Same. |
+| Over 5,000 business km in a car? Keep a 12-week logbook and claim the business share… | …Ține un jurnal… și deduci partea de lucru… | …Ține un jurnal… și deduce partea de lucru… | Imperative + indicative mix; both verbs are now instructions like the English. |

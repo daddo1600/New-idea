@@ -2,6 +2,7 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 import { Platform } from 'react-native';
 
 import { insertPlace } from '@/db/places-repo';
+import { loadSettings, saveSettings } from '@/db/settings-repo';
 import { insertTrip } from '@/db/trips-repo';
 import type { AutoReason } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
@@ -15,6 +16,7 @@ import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/tri
  *   ?demo        tracking shown as on
  *   ?demo=setup  tracking shown as not yet allowed (first launch)
  *   ?demo=free   a free-plan user, with sample App Store prices on the paywall
+ *   ?demo=courier shift mode on (the swipe-to-start shift bar)
  *   &region=GB   preview another country's currency, units and rules
  */
 const demoParam =
@@ -35,6 +37,9 @@ export const DEMO_TRACKING_STATUS =
 
 /** `?demo=celebrate`: shows the milestone celebration for the demo trips. */
 export const DEMO_CELEBRATE = demoParam === 'celebrate';
+
+/** `?demo=courier`: shift mode is on, so the home screen leads with the shift bar. */
+export const DEMO_COURIER = demoParam === 'courier';
 
 /** `?demo=driving`: the home screen shows a drive being recorded. */
 export const DEMO_DRIVING = demoParam === 'driving';
@@ -111,6 +116,7 @@ function historyTrips(): DemoTrip[] {
 export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
   const existing = await db.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM trips;');
   if ((existing?.n ?? 0) > 0) return;
+  if (DEMO_COURIER) await saveSettings(db, { ...(await loadSettings(db)), shiftMode: true });
   const placeIds = new Map<string, string>();
   for (const place of PLACES) placeIds.set(place.name, (await insertPlace(db, place)).id);
   for (const [daysAgo, hour, from, to, miles, classification, purpose, autoReason] of [

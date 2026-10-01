@@ -84,3 +84,36 @@
 ## Sign-off
 
 **Approved for release.** Nothing left in the file is offensive, religious, political, gender-marking for the user or refund-promising. The only open item is the iOS-wording check above, which doesn't block release.
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+**Scope.** I read all 201 new lines as a Hindi-speaking courier, care worker or employed driver in the UK, US, Canada or Australia would: tone, offence, money honesty, privacy reassurance, glossary consistency, iOS/iCloud wording and button length (≤1.3× English).
+
+**What I checked**
+- **Money honesty (P87, logbook).** No line promises a refund or a saving. Relief (राहत) is kept apart from the tax actually returned (टैक्स वापस, always with लगभग or अनुमानित). Logbook comparisons say "looks better", "could claim more", "usually" (बेहतर लग रहा है, हो सकता है, आम तौर पर).
+- **Privacy for care workers.** The lines are plain and calm: सिर्फ़ इलाका, नाम या पता कभी नहीं, हम सिर्फ़ इलाका रखेंगे. मरीज़ (patients) and क्लाइंट are respectful, everyday words. Nothing suggests hiding anything from the tax office: the settings line still says the area, distance and purpose are enough for the टैक्स ऑफ़िस.
+- **Backup.** Every line keeps "encrypted", "your iCloud Keychain", "MileMint never sees your trips". चाबी is used for "key" (की would be confused with the grammatical की).
+- **Gender.** No new line genders the user. First-person lines (मेरे काम में … जाना होता है, मैंने … लॉग किया, इस साल का क्लेम हो गया) are gender-free.
+- **Glossary consistency.** ट्रिप, बिज़नेस, पर्सनल (for "private" in the unsorted-drives line), सॉर्ट, टैक्स वर्ष, आय वर्ष, एम्प्लॉयर, कर्मचारी, सेल्फ़-एम्प्लॉयड, मकसद (for the ATO "reason", since the user fills it in the purpose field), सेटिंग्ज़, सेव, डिलीट करें, वैकल्पिक, ओडोमीटर रीडिंग, किमी.
+- **Length.** Segmented controls (बेसिक / हायर / एडिशनल / पता नहीं, प्रति मील / कुछ नहीं, सेल्फ़-एम्प्लॉयड / कर्मचारी), alert buttons (रीस्टोर करें, पते हटाएँ, रहने दें, बदलें…, अभी खत्म करें) and chips (सिर्फ़ इलाका, पता रहने दें) all fit.
+- **Mixed script.** “Client visit · इलाका” keeps the English label because that is what the app saves and shows. "logbook method" is in Latin like "cents per km method", the ATO name the user will see in myTax.
+
+**Result.** 2 lines changed.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| See how to claim › | क्लेम कैसे करें, देखें › | क्लेम का तरीका देखें › | The comma version reads like two commands stuck together. This is one natural link phrase. |
+| Start fresh instead | इसके बजाय नई शुरुआत करें | नए सिरे से शुरू करें | Shorter (button next to "Restore my trips") and more natural. "Instead" is clear from the two buttons side by side. |
+
+**Not blocking**
+- iOS Hindi wording for "Restore" (रीस्टोर करें), "Sign in" (साइन इन करें) and the "Settings → your name → iCloud" path couldn't be checked on a device. They're listed in the glossary's Unsure list.
+
+## Round 3b: shift switch and number format
+
+Each line was translated, back-translated cold, then checked for culture and length (the shift hint is a wrapping caption under the shift bar; target ≤1.3× English). The logbook parser now accepts both decimal points and decimal commas. `npx jest src/i18n` passes.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Swipe back to end your shift. | (missing) | वापस स्वाइप करके शिफ्ट खत्म करें। | New line. Back-translation: "End the shift by swiping back." Mirrors "स्वाइप करके शिफ्ट शुरू करें" and "शिफ्ट खत्म करें" (आप, gender-free imperative). Shorter than English on screen. |
+| {{hint}}. Swipe the button to the left, or double-tap. | (missing) | {{hint}}। बटन को बाईं ओर स्वाइप करें, या दो बार टैप करें। | New VoiceOver hint; mirrors the "दाईं ओर" line exactly. |
+| Enter amounts as numbers, e.g. 2400 or 2,400.50. | रकम नंबर में लिखें, जैसे 2400 या 2,400.50। | (unchanged) | Checked: English-style example is natural; no dot instruction. |

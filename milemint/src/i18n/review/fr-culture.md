@@ -57,3 +57,37 @@ Third and final check, after translation and the back-translation accuracy revie
 ## Sign-off
 
 **Approved for release** for culture, tone, money honesty, units and UI fit. The only remaining item is the device check of the two iOS strings above, which is a verification task, not a cultural blocker.
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+- **Lines checked:** all 201 new keys, read as a French-speaking courier or home-care worker in Montréal, London or Sydney: tone, regional words, money honesty, privacy reassurance, iOS wording and button/label length (≤1.3× English).
+- **Keys changed:** 4 (table below). `npx jest src/i18n/__tests__/completeness.test.ts -t "fr "` passes.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| 🔒 Client privacy | 🔒 Confidentialité client | 🔒 Confidentiel | UI fit: badge on the trip screen, was 1.6× the English. "Confidentiel" is short, plain and reassuring. The Settings heading keeps "Confidentialité client". |
+| I’ve claimed this year | J’ai fait la demande pour cette année | Demande faite pour cette année | UI fit: label beside a switch, was 1.7× the English. |
+| See how to claim › | Voir comment faire la demande › | Voir comment demander › | UI fit: link on the home card (now 1.2×). |
+| How to claim | Comment faire la demande | Comment demander | UI fit and consistency with the two links above and "Comment demander la Mileage Allowance Relief ›". |
+
+Checked and kept:
+- **Privacy lines** ("Je me rends chez des clients ou des patients (aide à domicile, soins infirmiers, accompagnement)", "Nous ne garderons que le secteur, jamais leur adresse.") are plain and reassuring. The explanation says the area, distance and purpose are enough "pour l’administration fiscale"; nothing suggests hiding anything from the tax office.
+- **Money honesty:** "tax back" is "impôt récupéré" and always comes with "Environ" or "estimé"; the relief is "allègement fiscal" / "allègement à demander", never a refund of the whole amount. The disclaimer says the tax recovered depends on income and tax rate. Comparisons use "semble plus avantageuse" and "pourrait permettre de demander plus".
+- **Backup lines** say "chiffrée", "dans iCloud", "MileMint ne voit jamais vos trajets", and use Apple French wording: Réglages, Connectez-vous à iCloud, iCloud Drive, trousseau iCloud, "Réglages → votre nom → iCloud".
+- **Regional words:** "fiche de paie" (understood in Québec and France), "conseiller fiscal" (neutral; avoids France-only "expert-comptable" and Québec-only "fiscaliste"), "Repartir de zéro", "Carburant", "Immatriculation" all work in both regions.
+- **Length kept over 1.3× where there is room:** "Terminer plus tôt" (End early: a red text link and an alert button, both wrap), "Sauvegarde en cours…" (Backing up…: "Sauvegarde…" alone would read as the noun), "Confidentialité client" (Settings heading/toggle row, full width), "Ne sais pas" (Not sure, 1.4×: shortest natural gender-neutral option in the 4-way tax-rate picker).
+- **Gender:** "Employé, avec votre propre véhicule ?" and "Employé" (segmented option) use the masculine generic, as in the existing glossary ("Employés", "travailleur autonome"). "Self-employed" became "Autonome", which is short and gender-neutral.
+
+## Sign-off (round 3)
+
+**Approved** for culture, tone, privacy reassurance, money honesty and UI fit, with the device checks listed in the glossary’s Unsure list (Apple wording for iCloud Keychain, tax-rate picker width).
+
+## Round 3b: shift switch and number format
+
+Each line was translated, back-translated cold, then checked for culture and length (the shift hint is a wrapping caption under the shift bar; target ≤1.3× English). The logbook parser now accepts both decimal points and decimal commas. `npx jest src/i18n` passes.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Swipe back to end your shift. | (missing) | Glissez à gauche pour terminer le quart. | New line. Back-translation: "Slide left to end the shift." Uses "Glissez" (slide button, as "Glissez pour commencer le quart") and "terminer le quart". 1.38× English: kept, because "en arrière" is longer and "finir" would break the glossary term; the caption has no line limit and wraps. |
+| {{hint}}. Swipe the button to the left, or double-tap. | (missing) | {{hint}}. Faites glisser le bouton vers la gauche ou touchez deux fois. | New VoiceOver hint; mirrors the "vers la droite" line exactly. |
+| Enter amounts as numbers, e.g. 2400 or 2,400.50. | Entrez les montants en chiffres, p. ex. 2400 ou 2400.50. | Entrez les montants en chiffres, p. ex. 2400 ou 2400,50. | The parser now accepts a decimal comma, so the example uses the French decimal comma. |

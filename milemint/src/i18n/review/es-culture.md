@@ -68,3 +68,38 @@
 ## Sign-off
 
 **Approved for release**, provided the iOS strings check 2 flagged ("ALLOW LOCATION ACCESS" header, "Localización") get a quick on-device confirmation. That is a wording-match item, not a cultural or tone blocker.
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+**Scope:** the 201 new keys, read as a Spanish-speaking courier or care worker in the UK, US, Canada or Australia. Checked: regional or offensive words; tone; money honesty (P87 relief is tax relief on the shortfall, not a refund of the whole amount); privacy lines reassuring and never suggesting anything is hidden from the tax office; backup lines precise (encrypted, in the user's own iCloud, no MileMint account or servers); Apple es-419 wording ("Configuración", "Llavero de iCloud", "respaldo/respaldar", "Respaldar ahora", "Inicia sesión", "cifrado"); glossary consistency (viaje, de trabajo, año fiscal, reclamar, motivo, registro de kilometraje, Configuración, agregar, auto); and length of buttons/labels against the 1.3× guide.
+
+**Found:** no rude, regional-slang, religious or political words; "llantas" (regional) avoided in favour of "neumáticos"; "manejar" avoided ("conducir"/"viajes de trabajo" per glossary). Money lines keep "alrededor de"/"estimado" and conditional "recuperarías"; "relief" is "beneficio fiscal", never "reembolso" or "dinero de vuelta". Privacy lines ("Guardaremos solo la zona, nunca su dirección", "Para la oficina de impuestos bastan la zona, la distancia y el motivo") are plain and honest.
+
+**Result:** 4 lines changed.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Claim mileage relief | Reclamar beneficio por kilometraje | Reclamar por kilometraje | Menu item at 1.7× English; now 1.2×. The subtitle ("Para empleados: P87 o Self Assessment") gives the context. |
+| Keep the address | Conservar la dirección | Conservar dirección | Alert button over 1.3×. |
+| Ended early | Terminada antes | Terminada antes de tiempo | "Terminada antes" reads as unfinished ("ended before…?"). It is a status line with room, not a button. |
+| Employed, in your own vehicle? | ¿Eres empleado y usas tu propio vehículo? | ¿Trabajas para un empleador con tu propio vehículo? | Gender-neutral: many care workers are women, and "empleado" assumed a man. |
+
+**Reviewed and kept:**
+- **"Empleado"** as the Settings segment label (next to "Por cuenta propia"). A neutral option ("Con empleador") is 1.6× English; kept as a form-style category label, matching the existing "Si eres empleado". Listed under Unsure.
+- **"bitácora"** for the ATO logbook. Common in Latin America for vehicle logbooks; understood (if nautical-sounding) in Spain. First mention glossed "(logbook method)".
+- **"Respaldar ahora"** (1.36×) is Apple es-419's own button text for iCloud Backup, so it matches what users see in iOS.
+- **"Privacidad de clientes"** (1.57×) is a section header/toggle title that wraps; shorter options lose "clients".
+- **"Client visit · zona"** in the add-trip alert keeps "Client visit" in English because the saved label (`domain/privacy.ts`) is English for the tax-office reports, so that is what the user will see on the trip.
+- Cost categories ("Combustible y aceite", "Intereses del préstamo", …) are longer than English but sit in a full-width form list.
+
+**Sign-off:** approved, pending an on-device check of the Unsure items in the glossary.
+
+## Round 3b: shift switch and number format
+
+Each line was translated, back-translated cold, then checked for culture and length (the shift hint is a wrapping caption under the shift bar; target ≤1.3× English). The logbook parser now accepts both decimal points and decimal commas. `npx jest src/i18n` passes.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Swipe back to end your shift. | (missing) | Desliza atrás para terminar el turno. | New line. Back-translation: "Swipe back to end the shift." Uses Desliza (tú) and "terminar turno" as in "Terminar turno". 1.28× English. |
+| {{hint}}. Swipe the button to the left, or double-tap. | (missing) | {{hint}}. Desliza el botón hacia la izquierda o toca dos veces. | New VoiceOver hint; mirrors the "hacia la derecha" line word for word. Back-translation: "Slide the button to the left or tap twice." |
+| Enter amounts as numbers, e.g. 2400 or 2,400.50. | Escribe los montos como números, p. ej., 2400 o 2,400.50. | (unchanged) | Checked: no dot instruction; the English-style example matches the glossary (numbers keep English format) and Latin American usage. |

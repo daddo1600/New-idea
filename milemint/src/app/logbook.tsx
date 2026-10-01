@@ -39,6 +39,7 @@ import {
   type Logbook,
   type LogbookSummary,
 } from '@/domain/logbook';
+import { parseNumber } from '@/domain/parse-number';
 import { lockedTripIds } from '@/domain/plan';
 import {
   currentTaxYear,
@@ -57,13 +58,6 @@ import { usePro } from '@/purchases/pro';
 import { useRegion } from '@/region/region';
 import { shareLogbookCsv } from '@/reports/export';
 import { useVehicles } from '@/vehicles/use-vehicles';
-
-/** Odometer readings and money as typed: "48,210" or "1,234.50". Empty → null, not a number → undefined. */
-function parseNumber(text: string): number | null | undefined {
-  const trimmed = text.trim().replace(/[,\s$]/g, '');
-  if (!trimmed) return null;
-  return /^\d+(\.\d+)?$/.test(trimmed) ? Number(trimmed) : undefined;
-}
 
 /**
  * The ATO logbook method (Australia only): keep a 12-week logbook for a car,

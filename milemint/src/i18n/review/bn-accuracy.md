@@ -63,3 +63,16 @@ Overall the translation is accurate and natural. No placeholder, number or unit 
 - **Optional wording, not changed:**
   - "Swipe this week’s trips … see what you’ve earned back" (দেখুন কত টাকা ফেরত পেলেন) states the money as already received. That's close to the English "earned back", so I left it.
   - "Employees reimbursed at CRA’s per-km rate: …" mixes third person and আপনি. It's accurate but slightly stiff.
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+- **Lines added:** 201 new keys in `src/i18n/locales/bn.ts` (189 plain lines, 12 plural objects with `one`/`other`).
+- **Method:** each new line was back-translated into English cold, then compared with the key. Short or unclear lines were checked in their source files (`app/claim-relief.tsx`, `app/logbook.tsx`, `app/settings.tsx`, `app/welcome.tsx`, `app/index.tsx`, `domain/privacy.ts`, `milestones/copy.ts`, `backup/copy.ts`).
+- **Checked:** placeholders (including `{{employerRate}}`, `{{limit}}`, `{{first}}`/`{{last}}`, `{{week}}`/`{{weeks}}`), numbers and units (10,000 miles, 5,000 km, 12 weeks, 4 earlier years, 5 years, 20%/40% bands via `{{percent}}`), caveats (প্রায়/আনুমানিক and "ট্যাক্স পরামর্শ নয়" kept wherever the English has them), and that P87 "relief" is never presented as a refund of the whole amount. Only the tax on it is "ফেরত", and always with প্রায়/আনুমানিক.
+- **Kept in English:** ATO, HMRC, P87, P60, PAYE, Self Assessment, National Insurance, GOV.UK, Government Gateway, iCloud, iCloud Drive, iCloud Keychain, Mileage Allowance Relief, cents per km method, and the stored trip label “Client visit · …” (it's saved and exported in English, so the quote in the add-trip alert matches what the user sees).
+- **Tests:** `npx jest src/i18n/__tests__/completeness.test.ts -t "bn "` passes (3/3).
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Paid by your employer | নিয়োগকর্তা দিয়েছেন | নিয়োগকর্তার দেওয়া | It's a row label above an amount in the P87 summary. The first draft was a full clause ("the employer gave"). The noun phrase ("paid by the employer") reads as a label. |
+| Keep a logbook for 12 weeks in a row. … One logbook lasts 5 years. | একটি লগবুক 5 বছর চলে। | একটি লগবুক 5 বছর কাজে লাগে। | "চলে" can be read as "the logbook runs for 5 years", which contradicts the 12 weeks in the same paragraph. "কাজে লাগে" ("is usable for") is the intended meaning. |

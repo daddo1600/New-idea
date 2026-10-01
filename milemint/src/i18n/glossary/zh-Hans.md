@@ -55,6 +55,25 @@ The user is always **你** (never 您), as Apple's Simplified Chinese iOS does. 
 | miles / km | 英里 / 公里 | |
 | Apple Account | Apple 账户 | Apple's zh-Hans name. |
 | Apple Maps | Apple 地图 | Apple's zh-Hans name. |
+| logbook method (ATO) | 行车日志法 | Built on the glossary's 行车日志. The cents per km method stays in English. |
+| business-use percentage | 工作用途占比 | Matches the CRA line already in use. |
+| income year (AU) | 收入年度 | Already used. |
+| odometer reading | 里程表读数 | Already used. |
+| reason (for a logbook journey) | 事由 | Same as business purpose. |
+| Mileage Allowance Relief | kept in English, glossed 里程补贴减免 | Scheme name. "Relief" alone is 减免 and "tax back" is 退税, never mixed up. |
+| tax relief | 税收减免 | |
+| employee / self-employed | 雇员 / 自雇 (自雇者 in sentences) | |
+| tax code | 税码（tax code） | |
+| National Insurance number, PAYE reference | 国民保险号（National Insurance number）, PAYE 编号（PAYE reference） | The English is kept so it matches the payslip. |
+| Basic / Higher / Additional (UK tax bands) | 基本 / 较高 / 附加 (基本税率 etc. in sentences) | Short labels in a four-way segmented control. |
+| pence a mile | 便士/英里 | |
+| Client privacy | 客户隐私 | |
+| Client visit (purpose chip) | 客户探访 | The stored trip label `Client visit · area` stays English, because the app writes it in English. |
+| area (town + postcode district) | 区域 | |
+| past trips | 过往行程 | |
+| backup / back up / restore | 备份 / 备份 / 恢复 | Apple's zh-Hans verbs. |
+| iCloud Drive / iCloud Keychain | iCloud 云盘 / iCloud 钥匙串 | Apple's zh-Hans names, like Apple 账户. |
+| Fuel and oil, Registration, Insurance, Servicing and repairs, Loan interest, Depreciation | 燃油和机油、车辆注册费、保险、保养和维修、贷款利息、折旧 | ATO car-expense categories. |
 | tax offices, forms, schemes | kept in English (HMRC, IRS, CRA, ATO, Schedule C, T2125, D1, BAS, PAYG, GST, MTD, simplified expenses, cents per km method, Mileage Allowance Relief, Car, van and travel expenses, Car and truck expenses) | Required by the brief. A short Chinese gloss in brackets where it helps. |
 
 ## iOS wording used
@@ -96,3 +115,7 @@ The user is always **你** (never 您), as Apple's Simplified Chinese iOS does. 
 9. **Shifts & rounds (delivery apps) → 班次和派送（配送 App）**. "Rounds" has no exact equivalent. 派送 (delivery runs) is the closest.
 10. **Plot twist: driving pays → 剧情反转：开车也有回报**. I softened it so it doesn't read as a promise of money.
 11. **{{used}} of {{limit}} free drives in {{month}}** → `{{month}}免费行程已用 …`. This assumes {{month}} is a month name formatted for Chinese, such as 10月.
+12. **iCloud 钥匙串 / iCloud 云盘** (Round 3). The brief listed "iCloud Keychain" as kept in English, but it also says iOS items must match Apple's wording, and zh-Hans iOS shows 钥匙串 / iCloud云盘. I used Apple's names (with Apple's support-site spacing). In the path line (iPhone 的“设置”→你的姓名→“iCloud”), newer iOS puts Keychain under 密码 / 密码和钥匙串. Please check on a device.
+13. **“Client visit · 区域”** in the add-trip privacy alert. "Client visit" is kept in English because the app stores that English label on the trip. Chinese readers might want a gloss, but adding 客户探访 would no longer match what they see.
+14. **里程费用的结算方式** (How you’re paid for mileage). This is a little formal for a Settings header. It is quoted in the claim-relief notice, so both lines must stay the same.
+15. **基本 / 较高 / 附加** as standalone tax-band options. These are clear next to the 你的所得税税率 header, but terse.

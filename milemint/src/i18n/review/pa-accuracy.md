@@ -85,3 +85,24 @@ Reviewer: independent native Punjabi (Gurmukhi) / English reviewer, doing the me
 2. **The glossary is now out of date on two points:** employer (ਮਾਲਕ → ਇੰਪਲਾਇਰ) and "optional" (ਜ਼ਰੂਰੀ ਨਹੀਂ, a term not listed). Unsure items 2–4 can now be closed. I did not edit `glossary/pa.md` because my brief limits me to `pa.ts` and this report.
 3. **Plural `one` covers 0 in pa.** For example, "0 ਟ੍ਰਿਪ ਲੌਕ ਹੈ" uses the singular verb. That is grammatical in Punjabi, so nothing changed.
 4. **Minor wording left as is:** "Business errand" = ਬਿਜ਼ਨਸ ਦਾ ਕੰਮ and "Set up auto-logging" = ਆਟੋ-ਦਰਜ ਸੈੱਟ ਕਰੋ are both understandable. The third check could polish them.
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+**Scope.** 201 new keys (ATO 12-week logbook, P87 Mileage Allowance Relief helper, client privacy mode, encrypted iCloud backup), plus 2 shift-switch keys that appeared in the source during the round ("Swipe back to end your shift.", "{{hint}}. Swipe the button to the left, or double-tap."). I back-translated every new line, every plural form included, into English without looking at the key, then compared. I read `app/claim-relief.tsx`, `app/logbook.tsx`, `app/settings.tsx`, `app/add-trip.tsx`, `components/logbook-nudge.tsx`, `domain/privacy.ts` and `milestones/copy.ts` for context.
+
+**What I checked.**
+- Placeholders, plural objects (`one`/`other`) and numbers (10,000 miles; 5,000 km; 12 weeks; 5 years; 4 earlier tax years; 20/40/45%): all match. `npx jest src/i18n/__tests__/completeness.test.ts -t "pa "` passes.
+- Money: "relief" is ਰਾਹਤ (the amount the relief applies to), kept separate from "tax back" = ਟੈਕਸ ਵਾਪਸੀ, which always carries ਲਗਭਗ or ਅੰਦਾਜ਼ਨ as the English does. "Not tax advice" and "Estimates only" are kept. Nothing says the whole amount comes back.
+- Kept in English: ATO, HMRC, P87, Self Assessment, PAYE, P60, National Insurance, Government Gateway, GOV.UK, iCloud, iCloud Drive, iCloud Keychain, cents per km method, Mileage Allowance Relief.
+- "Client visit · area": the stored label is English (`domain/privacy.ts` `CLIENT_VISIT`), and the `{{example}}` is English too, so the add-trip line quotes “Client visit · ਇਲਾਕਾ” to match what appears on the trip.
+- "reason" for each journey (ATO) is ਮਕਸਦ, the same word as "business purpose", because it is the same field.
+
+**Changes.**
+
+| English | Before | After | Why |
+|---|---|---|---|
+| End early | ਪਹਿਲਾਂ ਖ਼ਤਮ ਕਰੋ | ਹੁਣੇ ਖ਼ਤਮ ਕਰੋ | Back-translated as "end first", which is ambiguous. In the alert, the button ends the logbook now. |
+| Worked out from the km MileMint logged. Add both odometer readings so any driving MileMint missed is counted too. | …ਤਾਂ ਜੋ MileMint ਤੋਂ ਛੁੱਟੀ ਡਰਾਈਵਿੰਗ ਵੀ ਗਿਣੀ ਜਾਵੇ। | …ਤਾਂ ਜੋ MileMint ਤੋਂ ਰਹਿ ਗਈ ਡਰਾਈਵਿੰਗ ਵੀ ਗਿਣੀ ਜਾਵੇ। | ਛੁੱਟੀ ਡਰਾਈਵਿੰਗ can read as "holiday driving". ਰਹਿ ਗਈ matches "Missed miles check" (ਰਹਿ ਗਈ ਦੂਰੀ). |
+| Employed, in your own vehicle? | ਮੁਲਾਜ਼ਮ ਹੋ, ਅਤੇ ਗੱਡੀ ਆਪਣੀ ਹੈ? | ਮੁਲਾਜ਼ਮ ਹੋ, ਅਤੇ ਕੰਮ ਲਈ ਗੱਡੀ ਆਪਣੀ ਹੈ? | Back-translated as "is the car yours?", which lost "for work". Owning a car is not the point; using it for the job is. |
+
+**Unsure (accuracy).** "Basic / Higher / Additional" are loanwords (ਬੇਸਿਕ / ਹਾਇਰ / ਐਡੀਸ਼ਨਲ) as on HMRC letters and payslips, rather than ਮੁੱਢਲੀ / ਉੱਚੀ / ਵਾਧੂ ਦਰ. Reviewers may prefer the Punjabi words.

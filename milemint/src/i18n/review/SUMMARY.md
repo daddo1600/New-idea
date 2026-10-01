@@ -38,3 +38,7 @@ The tables of every change are in `<code>-accuracy.md` and `<code>-culture.md`.
 
 - **iOS wording on a real iPhone, per language.** Check what the device actually shows: "Allow While Using App", "Change to Always Allow", "Always", "Location", "Ask Next Time Or When I Share" and the "ALLOW LOCATION ACCESS" header. Romanian iOS may use the polite form.
 - **Native-speaker read-through, per language,** before marketing in that language, ideally by a driver from that community.
+
+## Round 3 (October 2026): logbook, P87, privacy, backup and the shift switch
+
+All nine languages gained 201 lines for the four new features, plus the two shift-switch lines. Each went through the same three checks (translate, cold back-translation, culture and length); every change is listed in each language's `-accuracy.md` and `-culture.md` under "Round 3". The translators found one code bug, now fixed: logbook amounts typed with a decimal comma ("2400,50") were read as 240050. Open questions for native reviewers on a real iPhone are mainly Apple's own names for iCloud Keychain and the Settings path; see each glossary's Unsure list.

@@ -61,6 +61,27 @@ The app always calls the user **आप** and uses polite imperatives (करे�
 | odometer reading | ओडोमीटर रीडिंग | Standard. |
 | Weekdays | सोम मंगल बुध गुरु शुक्र शनि रवि | Normal short forms. |
 | Kept in English | MileMint, Pro, HMRC, IRS, CRA, ATO, Self Assessment, Making Tax Digital/MTD, Schedule C, Form 1040, 1040-ES, T2125, T2200, T777, P87, BAS, PAYG, GST, D1, simplified expenses, cents per km method, Mileage Allowance Relief, Car, van and travel expenses, Car and truck expenses, Work-related car expenses, Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber, Golf, Honda PCX, Acme | As the brief requires. Some have a short Hindi gloss, for example जमा (lodge). |
+| relief (P87 tax relief) | राहत; tax relief = टैक्स राहत; Relief to claim = क्लेम करने लायक राहत | Everyday Hindi for tax relief. Kept apart from "tax back". Mileage Allowance Relief stays English. |
+| tax back | टैक्स वापस / टैक्स वापसी (always with लगभग or अनुमानित) | What HMRC actually returns (20%/40% of the relief). |
+| mileage allowance (employer pay) | माइलेज भत्ता; How you’re paid for mileage = माइलेज का पैसा कैसे मिलता है | भत्ता is the standard word for an allowance. |
+| HMRC approved amount | HMRC की मंज़ूर रकम | Plain. |
+| taxable pay | टैक्स लगने वाली तनख्वाह | Plain. |
+| income tax bands | बेसिक / हायर / एडिशनल; Not sure = पता नहीं | UK band names as people say them. |
+| logbook (ATO) | लॉगबुक (feminine) | Already used for the CRA logbook. |
+| logbook method (ATO) | logbook method (Latin) | ATO method name, treated like "cents per km method". |
+| reason (logbook journey) | मकसद | It's the trip's purpose field. |
+| End early / Ended early | अभी खत्म करें / समय से पहले खत्म | पहले खत्म can read "end first / ended before". |
+| business-use percentage | बिज़नेस इस्तेमाल (का प्रतिशत) | Plain. |
+| car costs (ATO categories) | फ़्यूल और ऑयल, रजिस्ट्रेशन, बीमा, सर्विसिंग और मरम्मत, लोन का ब्याज, डेप्रिसिएशन, अन्य | Everyday words; डेप्रिसिएशन as accountants say it. |
+| backup / back up | बैकअप; Back up now = अभी बैकअप लें; Backed up = बैकअप हो गया | Standard. |
+| restore | रीस्टोर करें | See Unsure. |
+| key (encryption) | चाबी | की would clash with the postposition की. |
+| Client privacy | क्लाइंट प्राइवेसी | Everyday for care workers. |
+| Client visit | क्लाइंट विज़िट (purpose chip); the saved label “Client visit · area” stays English | The app saves the label in English. |
+| area (town + postcode) | इलाका | Everyday. |
+| patients | मरीज़ | Respectful, everyday. |
+| initials | initials (नाम के पहले अक्षर) | Gloss helps. |
+| Kept in English (round 3) | ATO, HMRC, P87, P60, PAYE, Self Assessment, GOV.UK, Government Gateway, National Insurance, iCloud, iCloud Drive, iCloud Keychain, Apple Account (Apple खाता) | As the brief requires. |
 
 ## Jokes and adaptations
 
@@ -104,3 +125,7 @@ These need a check by a reviewer, ideally against an iPhone set to Hindi:
 8. ~~"Driving:" / "Driving now"~~ Resolved in review: गाड़ी: / अभी चल रही (gender-neutral, shorter).
 9. **"Trades, sales, care, office"** → कारीगर, सेल्स, केयर, ऑफ़िस. "Trades" has no exact everyday equivalent.
 10. **Plural forms.** In Hindi, `one` also covers 0. The `one` forms use singular verbs (है), which read fine for 0 and 1.
+11. **Round 3 iOS / iCloud wording** (not checked on a device): "Restore" → रीस्टोर करें (Apple may use पुनर्स्थापित करें); "Sign in to iCloud" → iCloud में साइन इन करें; "iPhone Settings → your name → iCloud" → iPhone की सेटिंग्ज़ → आपका नाम → iCloud.
+12. **"logbook method" in Latin.** Chosen to match "cents per km method". A reviewer may prefer लॉगबुक तरीका.
+13. **"End early" → अभी खत्म करें.** Drops the word "early"; the alert around it explains.
+14. **“Client visit · इलाका”** in the add-trip privacy line mixes scripts on purpose (the saved label is English). If the label is ever translated, this line must change too.

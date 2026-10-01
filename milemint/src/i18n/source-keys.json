@@ -315,9 +315,15 @@
     ]
   },
   {
+    "key": "{{hint}}. Swipe the button to the left, or double-tap.",
+    "files": [
+      "components/shift-switch.tsx"
+    ]
+  },
+  {
     "key": "{{hint}}. Swipe the button to the right, or double-tap.",
     "files": [
-      "components/swipe-to-start.tsx"
+      "components/shift-switch.tsx"
     ]
   },
   {
@@ -1768,7 +1774,7 @@
   {
     "key": "End shift",
     "files": [
-      "app/index.tsx"
+      "components/shift-switch.tsx"
     ]
   },
   {
@@ -4296,6 +4302,12 @@
     "key": "Swipe a trip right for business, left for personal.",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Swipe back to end your shift.",
+    "files": [
+      "app/index.tsx"
     ]
   },
   {

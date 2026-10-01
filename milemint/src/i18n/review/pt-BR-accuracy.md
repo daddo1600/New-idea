@@ -77,3 +77,28 @@ I couldn't check these on a real device. The third check should compare them wit
 1. **A count of 0 takes the `one` form.** CLDR pt puts 0 (and 0.x after `Math.round` gives 0) in `one`, so `{{distance}} miles` in `app/compare.tsx` would show "0 milha". Standard Brazilian usage is "0 milhas" for zero. Most other plural keys never get 0 (`{{count}} selected`, the countdowns and "Sort {{count}} drives" all check for it first). Fixing this needs a code change (for example an explicit `zero` / `=0` case) and can't be done in the dictionary.
 2. The iOS wording needs a check on a device (see above).
 3. "Apple Maps" stays as "Apple Maps". On a pt-BR iPhone the app is called "Mapas", but Brazilians commonly say "Apple Maps". I left it for the third check.
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+Scope: the 201 new keys (ATO 12-week logbook, P87 Mileage Allowance Relief helper, client privacy mode, encrypted iCloud backup), including every form of the 13 plural objects. I back-translated each line cold and compared it with the English. Context checked in `app/claim-relief.tsx`, `app/logbook.tsx`, `app/settings.tsx`, `app/welcome.tsx`, `app/add-trip.tsx`, `app/trip/[id].tsx`, `components/logbook-nudge.tsx`, `components/purpose-picker.tsx`, `domain/privacy.ts`, `backup/copy.ts` and `milestones/copy.ts`.
+
+Also checked:
+- Placeholders and plural objects (`one`/`many`/`other`, plus `zero` wherever `one` differs); `npx jest src/i18n/__tests__/completeness.test.ts -t "pt-BR "` passes.
+- Kept in English: ATO, HMRC, P87, Self Assessment, PAYE (reference), P60, National Insurance number, Government Gateway, GOV.UK, iCloud, iCloud Drive, cents per km method, logbook method.
+- Money honesty: every "about"/"estimated" is kept ("cerca de", "estimativa/estimado"). "Relief" is **abatimento** (de imposto), never a refund of the whole amount; "tax back" is "imposto de volta", always with "cerca de" or "estimado".
+- Backup lines say it is encrypted, in the user's own iCloud, and that MileMint never sees the trips.
+
+Result: **10 strings changed.**
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Choose the route. … Otherwise, claim on your Self Assessment return. | Se não, peça… | Caso contrário, peça… | "Se não" read as "if not (you don't file)", which blurred the condition. |
+| Your employer paid {{amount}} more than HMRC’s approved amount. The extra is taxable pay. | Esse excedente é tributável. | Esse valor a mais conta como salário e é tributável. | "Pay" was dropped; the point is that the extra is taxed as salary. |
+| I’ve claimed this year | Já pedi deste ano | Já pedi o deste ano | Back-translated as "I already asked from this year". The article makes it "I've claimed this year's". |
+| I’ve claimed the {{year}} tax year | Já pedi do ano fiscal {{year}} | Já pedi o do ano fiscal {{year}} | Same. |
+| {{amount}} relief unclaimed from {{year}} | {{amount}} de abatimento sem pedir de {{year}} | {{amount}} de abatimento de {{year}} ainda sem pedir | "de {{year}}" sat after "sem pedir" and read as "not claimed from (since) {{year}}". |
+| Worked out from the km MileMint logged. Add both odometer readings so any driving MileMint missed is counted too. | …algum trajeto que o MileMint não pegou. | …os km que o MileMint não registrou. | "Algum trajeto" narrowed "any driving" to a whole trip; "não pegou" was too colloquial. |
+| These 12 weeks run into the next income year. … | passam para o próximo ano fiscal | entram no próximo ano fiscal | "Passam para" can read as "move to"; the weeks overlap into the next year. |
+| Enter amounts as numbers, e.g. 2400 or 2,400.50. | ex.: 2400 ou 2.400,50. | ex.: 2400 ou 2400.50 (com ponto antes dos centavos). | `parseNumber` in `app/logbook.tsx` strips commas and only takes a dot as the decimal, so "2.400,50" would be saved as 2.4005 and "2400,50" as 240050. The example must show what the parser accepts. (Code fix suggested: accept a decimal comma here, as `parseMiles` does.) |
+| Over 5,000 business km in a car? Keep a 12-week logbook and claim the business share of its running costs. | …dos custos do carro. | …do que o carro custa para rodar. | "Running costs" was flattened to "costs"; now matches the logbook intro line. |
+| {{vehicle}} is on track for about {{distance}} of business driving this year. … | está a caminho de rodar cerca de… | deve chegar a cerca de… | "A caminho de" is a calque of "on track". "Deve chegar a" is the natural projection wording and keeps "about". |

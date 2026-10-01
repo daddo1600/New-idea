@@ -46,3 +46,21 @@ Overall the meaning holds well. Tax figures, dates, thresholds and form names we
 - **Moped → 助力车** (Unsure #8). In mainland usage 助力车 often means an electric-assist bicycle or e-bike rather than a 50cc scooter. 轻便摩托车 is the dictionary term, but "Moped or motorbike" would then become 轻便摩托车或摩托车. It is left as 助力车 because it is understood. Check 3 may prefer 踏板车/轻便摩托车 (note that 踏板车 is already used for "scooter").
 - iOS strings were checked from knowledge of zh-Hans iOS 17/18, not on a physical device. A device screenshot check of the two location alerts is still worthwhile.
 - `+{{amount}} since you last looked` → 比上次查看时 +{{amount}} is understandable but a little stiff. It is left as is.
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+All 201 new lines were back-translated cold and compared with the English. I checked placeholders, the 5 years / 12 weeks / 10,000 miles / 5,000 km figures, units (英里 only in the UK-only P87 lines, 公里 only in the AU-only logbook lines), and that every "about" / "estimated" / "not tax advice" caveat is still there. Context was checked in `app/claim-relief.tsx`, `app/index.tsx`, `app/logbook.tsx`, `app/settings.tsx`, `app/welcome.tsx`, `app/add-trip.tsx`, `domain/privacy.ts`, `backup/copy.ts` and `milestones/copy.ts`.
+
+Things confirmed in the code:
+- The stored privacy label is always the English `Client visit · <area>` (`domain/privacy.ts`, `CLIENT_VISIT`), and it is what goes in the HMRC/ATO report. So the add-trip alert keeps “Client visit · 区域” in English, because that is what the user will see on the trip. Only the purpose-picker chip "Client visit" (客户探访) is translated.
+- `{{year}}` in the logbook cost lines is an income-year label such as 2026–27. `{{distance}}` in the logbook nudge already has its unit.
+- `{{limit}}` in the P87 route lines is a money amount (£2,500), not a distance.
+- P87 relief lines say 减免 (relief) and 退税 (tax back) separately and never call the relief itself a refund. 约 and 估算 are kept.
+- `npx jest src/i18n/__tests__/completeness.test.ts -t "zh-Hans "` passes.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Pick 12 weeks that are typical… you add the reason for each work trip. | …你只需为每次工作行程填写事由。 | …你来为每次工作行程填写事由。 | 只需 ("you only need to") added a reassurance the English doesn't make. |
+| Start logbook | 开始记录 | 开始行车日志 | Back-translated as just "Start recording". The button starts the logbook period. |
+| {{vehicle}}’s costs in {{year}} | {{vehicle}} 在 {{year}} 的用车费用 | {{vehicle}} 在 {{year}} 收入年度的用车费用 | `{{year}}` is "2026–27"; 在 2026–27 的 reads as a bare number. |
+| {{category}} in {{year}}, in dollars | {{year}} {{category}}（澳元） | {{year}} 收入年度的 {{category}}（澳元） | Same. Screen-reader label for each cost box. |

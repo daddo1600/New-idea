@@ -60,3 +60,21 @@ Main issue types:
 - **Gender with money amounts.** "{{amount}} found" ("encontrados") and "found this tax year" ("encontrados este año fiscal") use the masculine plural. That fits dólares but not libras (£). It is minor and acceptable, but a neutral wording would be better if one fits.
 - **"After the {{trial}}, …"**, written as "Al terminar el periodo de prueba ({{trial}}), …". Because {{trial}} is "Prueba gratis de 30 días", the result is accurate but repetitive. I kept it as the safest grammar.
 - **"Your {{year}} … return is due"**, written as "… vence". It reads as a heading and works with ": faltan N días". Elsewhere the sentence ends a little abruptly. Acceptable.
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+**Scope:** the 201 new keys for the ATO 12-week logbook, the P87 Mileage Allowance Relief helper, client privacy mode and the encrypted iCloud backup. Each line was back-translated into English without looking at the source, then compared with the English key (plural objects: every form). Context was checked in `app/claim-relief.tsx`, `app/logbook.tsx`, `app/index.tsx`, `app/settings.tsx`, `app/add-trip.tsx`, `app/welcome.tsx`, `domain/privacy.ts` and `components/purpose-picker.tsx`.
+
+**Checked specifically:** placeholders and their position (including `{{employerRate}}`, `{{first}}`/`{{last}}`, `{{week}}`/`{{weeks}}`); every "about"/"estimated"/"Not tax advice" caveat kept; numbers and units (10,000 miles, 5,000 km, 12 weeks, 5 years, 4 earlier tax years, 20%/40%); "by {{date}}" = "a más tardar el {{date}}" and "before {{date}}" = "antes del {{date}}", following round 2; P87 "relief" never rendered as money paid out ("beneficio fiscal"), and "tax back" always conditional ("Recuperarías alrededor de…"); English-only terms (ATO, HMRC, P87, PAYE, P60, Self Assessment, National Insurance, Government Gateway, GOV.UK, iCloud, iCloud Drive) left as they are.
+
+**Result:** 5 lines changed. `npx jest src/i18n/__tests__/completeness.test.ts -t "translations es "` passes (3/3).
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Claim online on GOV.UK with your Government Gateway login, … | …con tu acceso de Government Gateway… | …con tus datos de acceso de Government Gateway… | "tu acceso" back-translated as "your access"; "login" means the sign-in details. |
+| HMRC usually changes your tax code for this year and refunds earlier years. … | …y devolverte lo de años anteriores. | …y devolverte el impuesto de años anteriores. | "lo de años anteriores" was vague ("what's from earlier years"); now says what is refunded. |
+| Estimated tax back | Impuestos a recuperar (estimado) | Impuesto estimado a recuperar | "(estimado)" did not agree with the plural "impuestos" and read as a stray note. |
+| Your drives stay. Only the logbook period and its odometer readings are deleted. | Tus viajes se quedan. … | Tus viajes se conservan. … | "se quedan" back-translated as "your trips remain (somewhere)"; "se conservan" = they are kept. |
+| These 12 weeks run into the next income year. MileMint counts the logbook as kept in the year it started; … | MileMint cuenta la bitácora en el año en que empezó; … | MileMint toma la bitácora como llevada en el año en que empezó; … | "as kept" had been lost; the line is about which year the logbook belongs to. |
+
+**Reviewed and kept:** "Recuperarías alrededor de {{amount}} en impuestos (al {{percent}}%)" (conditional + "alrededor de" keeps the estimate and covers both a tax-code change and a refund); "Reclámalo antes del {{date}}" (English says "before"); "Se restaurará el respaldo del {{date}}, con {{count}} viaje(s)…" (alert body describing what Restore will do); the share line "Cada viaje, contado automáticamente" for "Every mile counted" (unit-neutral, per the glossary's rule for lines shown in every country).

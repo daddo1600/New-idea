@@ -73,3 +73,33 @@ Check 2 asked for a check against a Bengali iPhone. The exact iOS 18 Bengali str
 ## Sign-off
 
 **Approved for release.**
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+- **Lines read:** all 201 new entries, as a UK care worker, a UK employee driving their own car and an Australian courier would see them.
+- **Checked:**
+  - **Glossary terms:** ট্রিপ, ব্যবসায়িক, বাছাই, আয়-বছর, ওডোমিটার, সেভ, এক্সপোর্ট, কর্মচারী/স্বনিযুক্ত, সম্পন্ন.
+  - **Restore wording:** "Restore" uses পুনরুদ্ধার, matching "Restore purchases".
+  - **Formatting:** Latin digits and the dari.
+  - **Address:** আপনি throughout. Clients and patients are তাঁদের (respectful).
+  - **Privacy lines:** they sound plain and reassuring for a care worker. They say what's kept (area, distance, purpose) and what's not (address, route). They never suggest hiding anything from the tax office ("ট্যাক্স অফিসের জন্য এলাকা, দূরত্ব আর উদ্দেশ্যই যথেষ্ট").
+  - **Backup lines:** they say the backup is encrypted (এনক্রিপ্ট করা), the key is only in the user's iCloud Keychain, and MileMint never sees the trips. Nothing about servers or accounts is added beyond the English.
+  - **Money honesty:** P87 amounts are রিলিফ (the relief), and only the tax on it is ট্যাক্স ফেরত, always with প্রায়/আনুমানিক. "Usually" (সাধারণত) and "could claim more" (বেশি দাবি করা যেতে পারে) stay conditional.
+  - **Length:** button and label lengths are within about 1.3× in visible glyphs. This covers Keep the address, Area only, End early, Back up now, Restore, Keep them, Replace…, Open, Per mile, Nothing, and the Basic/Higher/Additional/Not sure tax-band segments.
+- **Tests:** `npx jest src/i18n/__tests__/completeness.test.ts -t "bn "` passes.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| The ATO needs 12 weeks in a row. A logbook ended early can’t be used for the logbook method, so you’d need to start a new one. | আগে শেষ করা লগবুক লগবুক পদ্ধতিতে ব্যবহার করা যায় না | আগেভাগে শেষ করা লগবুক এই পদ্ধতিতে ব্যবহার করা যায় না | "লগবুক লগবুক" back to back reads like a typo. "এই পদ্ধতিতে" refers back clearly, and "আগেভাগে" is the natural word for "early" here. |
+| Restore the backup from {{date}} with {{count}} trip(s). The trips, places, vehicles and settings on this iPhone are replaced by the ones in the backup. (one/other) | …সেটিংস সরিয়ে ব্যাকআপেরগুলো বসানো হবে। | …সেটিংসের বদলে ব্যাকআপে থাকা সবকিছু বসবে। | "ব্যাকআপেরগুলো" is awkward spoken slang in a warning alert. The new wording, "everything in the backup goes in their place", is plain and clear. |
+| Pick 12 weeks that are typical … you add the reason for each work trip. | প্রতিটি কাজের ট্রিপের কারণ | প্রতিটি ব্যবসায়িক ট্রিপের কারণ | Consistency. The rest of the logbook screen and the glossary use ব্যবসায়িক ট্রিপ for business/work trips, and the warning below asks for a reason for each "ব্যবসায়িক ট্রিপ". |
+
+## Round 3b: shift switch and number format
+
+Each line was translated, back-translated cold, then checked for culture and length (the shift hint is a wrapping caption under the shift bar; target ≤1.3× English). The logbook parser now accepts both decimal points and decimal commas. `npx jest src/i18n` passes.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Swipe back to end your shift. | (missing) | শিফট শেষ করতে উল্টো দিকে সোয়াইপ করুন। | New line. Back-translation: "Swipe the opposite way to end the shift." Mirrors "শিফট শুরু করতে সোয়াইপ করুন" and "শিফট শেষ করুন" (আপনি). Shorter than English on screen. |
+| {{hint}}. Swipe the button to the left, or double-tap. | (missing) | {{hint}}। বোতামটি বাঁয়ে সোয়াইপ করুন, বা দুবার ট্যাপ করুন। | New VoiceOver hint; mirrors the "ডানে" line exactly. |
+| Enter amounts as numbers, e.g. 2400 or 2,400.50. | পরিমাণ সংখ্যায় লিখুন, যেমন 2400 বা 2,400.50। | (unchanged) | Checked: English-style example with Latin digits, as the glossary says; no dot instruction. |

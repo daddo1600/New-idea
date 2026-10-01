@@ -62,6 +62,22 @@ Written for Brazilian delivery riders, drivers and other workers living in the U
 | odometer | **hodômetro** | |
 | tax office (generic) | **fisco** | |
 | delivery app | **app de entrega** | |
+| tax relief / relief (P87) | **abatimento (de imposto)**; "Relief to claim" = **Abatimento a pedir** | Not "restituição" or "dedução": the user gets back only the tax on the shortfall. Mileage Allowance Relief itself stays in English. |
+| tax back (P87 estimate) | **imposto de volta**, always with "cerca de" or "estimado" | Here it is genuinely tax returned, but always an estimate. |
+| income tax rate / Basic / Higher / Additional | **alíquota de imposto de renda**; **Básica / Alta / Adicional / Não sei** | UK bands. |
+| logbook (ATO) / logbook method | **logbook** (o logbook) / **logbook method** | Kept in English like "cents per km method". |
+| odometer reading | **leitura do hodômetro** | |
+| business use percentage | **porcentagem de uso profissional** | |
+| reason for a journey (ATO) | **finalidade** | Same word as the app's purpose field. |
+| Registration (car cost) | **Licenciamento** | |
+| client privacy | **privacidade de clientes** | |
+| area (town + postcode area) | **região** | |
+| Client visit (purpose) | **Visita a cliente**; the saved label "Client visit · area" stays English | The label is stored in English by `domain/privacy.ts`. |
+| backup / back up / restore | **backup / fazer backup / restaurar** | Apple's pt-BR words. |
+| iCloud Keychain | **Chaves do iCloud** (gloss "iCloud Keychain" once) | Apple's pt-BR name, so it matches the Settings screen. |
+| iPhone Settings / Sign in to iCloud | **Ajustes do iPhone / Iniciar sessão no iCloud** | Apple's pt-BR wording. |
+| payslip | **holerite (payslip)** | |
+| employer pays (pence) | **pence por milha** / **p por milha** | Brazilians in the UK say "pence". |
 | Mon…Sun | Seg, Ter, Qua, Qui, Sex, Sáb, Dom | |
 
 Kept in English as the brief asks: MileMint, Pro, HMRC, IRS, CRA, ATO, Self Assessment, Making Tax Digital / MTD, Mileage Allowance Relief, Car, van and travel expenses, Schedule C (Part IV), Car and truck expenses, Form 1040, 1040-ES, T2125, T2200, T777, P87, BAS, PAYG, GST, D1 / Work-related car expenses, cents per km method, simplified expenses, sole traders (with "autônomos" in brackets), registered tax agent (with "contador registrado"), delivery apps, Golf, Honda PCX.
@@ -107,3 +123,11 @@ pt-BR categories are `one`, `many`, `other`. `many` is always the same as `other
 10. **"Tax-ready PDF report"** → "Relatório PDF para o fisco", shortened to fit the feature list.
 11. **"UK"** → now "UK" in the tile; "Reino Unido" for "United Kingdom".
 12. **Lines longer than 1.3× the English.** Kept after checking the layouts: "Profissional" (half-width controls), "Selecionar" (Apple's word; alone in the row with "Trajetos"), "Compartilhar" (Apple's word; the only text on a full-width button), "Observação" (screen-reader label and a full-width field label) and "Nenhum dos dois" (title of a full-width option card). Shortened: "Best value", "Use now", "UK", "Select {{count}} unsorted".
+
+## Unsure (Round 3, October 2026)
+
+1. **"Chaves do iCloud"** for iCloud Keychain, and the path **"Ajustes → seu nome → iCloud"**: from memory of iOS pt-BR. Recent iOS versions may show "Senhas e Chaves" in the iCloud pane; please check on a device.
+2. **"Client visit · região"** (add-trip alert) keeps the English label because the app saves it in English. If the code ever localizes the saved label, change it to "Visita a cliente · região".
+3. **Resolved (round 3b):** "Enter amounts as numbers, e.g. 2400 or 2,400.50." is now "Digite os valores em números, ex.: 2400 ou 2.400,50." The logbook parser accepts a decimal comma, so the "com ponto" note was dropped.
+4. **"abatimento"** for "relief": clear and honest, but less formal than "dedução". Reviewers may prefer "alívio fiscal" (a calque) or "isenção" (wrong: it isn't an exemption). I'd keep "abatimento".
+5. **"Encerrar antes"** (End early) and **"Imposto de volta estimado"** (Estimated tax back) are 1.4–1.55× the English; both sit in places with room (see `review/pt-BR-culture.md`, Round 3).

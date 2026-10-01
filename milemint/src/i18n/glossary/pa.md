@@ -65,6 +65,28 @@ The user is always addressed as **ਤੁਸੀਂ**, with polite imperatives (�
 | Location (iOS) | ਟਿਕਾਣਾ | See Unsure. |
 | Notifications (iOS) | ਸੂਚਨਾਵਾਂ | See Unsure. |
 | Weekdays (short) | ਸੋਮ, ਮੰਗਲ, ਬੁੱਧ, ਵੀਰ, ਸ਼ੁੱਕਰ, ਸ਼ਨਿੱਚਰ, ਐਤ | CLDR Punjabi abbreviations. |
+| tax relief / relief (P87) | ਟੈਕਸ ਰਾਹਤ / ਰਾਹਤ (f.) | The amount the relief applies to. Kept separate from the tax that comes back. "Claim mileage relief" = ਮਾਈਲੇਜ ਰਾਹਤ ਕਲੇਮ ਕਰੋ. Mileage Allowance Relief itself stays in English. |
+| tax back (estimated) | ਟੈਕਸ ਵਾਪਸੀ (f.) | Always with ਲਗਭਗ / ਅੰਦਾਜ਼ਨ. "Estimated tax back" = ਅੰਦਾਜ਼ਨ ਟੈਕਸ ਵਾਪਸੀ. |
+| income tax rate / Basic, Higher, Additional | ਇਨਕਮ ਟੈਕਸ ਦਰ / ਬੇਸਿਕ, ਹਾਇਰ, ਐਡੀਸ਼ਨਲ | ਦਰ is used for income tax rates; ਰੇਟ stays for mileage rates. The bands are the words on HMRC letters. See Unsure. |
+| HMRC approved amount | HMRC ਦੀ ਮਨਜ਼ੂਰ ਰਕਮ | |
+| mileage allowance (employer) | ਮਾਈਲੇਜ ਭੱਤਾ | As in the existing employee lines. |
+| P87 summary / summary | P87 ਸੰਖੇਪ (m.) | |
+| logbook method | ਲੌਗਬੁੱਕ ਤਰੀਕਾ | "cents per km method" stays in English. |
+| business-use percentage | ਬਿਜ਼ਨਸ-ਵਰਤੋਂ ਪ੍ਰਤੀਸ਼ਤ (m.) | "{{percent}}% business use" = {{percent}}% ਬਿਜ਼ਨਸ ਵਰਤੋਂ. |
+| reason (for each journey, ATO) | ਮਕਸਦ | Same field as "business purpose". |
+| period (logbook) | ਮਿਆਦ (f.) | |
+| End early / Ended early | ਹੁਣੇ ਖ਼ਤਮ ਕਰੋ / ਵਿਚਾਲੇ ਖ਼ਤਮ | Short for the button and the badge. |
+| running costs (car) | ਕਾਰ ਚਲਾਉਣ ਦੇ ਖ਼ਰਚੇ | Categories: ਫ਼ਿਊਲ ਅਤੇ ਆਇਲ, ਰਜਿਸਟ੍ਰੇਸ਼ਨ, ਇੰਸ਼ੋਰੈਂਸ, ਸਰਵਿਸ ਅਤੇ ਮੁਰੰਮਤ, ਲੋਨ ਦਾ ਵਿਆਜ, ਡੈਪ੍ਰੀਸੀਏਸ਼ਨ (ਕੀਮਤ ਵਿੱਚ ਕਮੀ). |
+| tax agent | ਟੈਕਸ ਏਜੰਟ | |
+| client privacy | ਕਲਾਇੰਟ ਪ੍ਰਾਈਵੇਸੀ | Matches ਪ੍ਰਾਈਵੇਟ. Not ਗੁਪਤਤਾ, which sounds like secrecy. |
+| area (town + postcode) | ਇਲਾਕਾ | "Area only" = ਸਿਰਫ਼ ਇਲਾਕਾ. |
+| Client visit | ਕਲਾਇੰਟ ਵਿਜ਼ਿਟ | The purpose chip. The saved trip label stays English (“Client visit · Leeds LS6”), so lines that quote the label quote it in English. |
+| client / patient | ਕਲਾਇੰਟ / ਮਰੀਜ਼ | Care, nursing, support work = ਕੇਅਰ, ਨਰਸਿੰਗ, ਸਪੋਰਟ ਵਰਕ. |
+| initials | ਨਾਂ ਦੇ ਪਹਿਲੇ ਅੱਖਰ | |
+| backup / back up / restore | ਬੈਕਅੱਪ / ਬੈਕਅੱਪ ਕਰਨਾ / ਰੀਸਟੋਰ ਕਰਨਾ | Phone loanwords. ਬਹਾਲ ਕਰਨਾ is too formal. |
+| encrypted / key | ਇਨਕ੍ਰਿਪਟ (ਤਾਲਾਬੰਦ) / ਕੁੰਜੀ | The gloss is given once, in the Backup section text. |
+| iCloud, iCloud Drive, iCloud Keychain, Apple Account | kept in English | |
+| Start fresh | ਨਵੇਂ ਸਿਰਿਓਂ ਸ਼ੁਰੂ ਕਰੋ | |
 
 Kept in English, as the brief requires: MileMint, Pro, HMRC, IRS, CRA, ATO, Self Assessment, Making Tax Digital/MTD, Mileage Allowance Relief, Car, van and travel expenses, Schedule C (Part IV), Car and truck expenses, Form 1040, 1040-ES, T2125, T2200, T777, P87, BAS, PAYG, GST, D1, Work-related car expenses, cents per km method, simplified expenses, Estimated tax (with a Punjabi gloss), Sole traders (with a gloss), the delivery-app names, Golf and Honda PCX, Acme.
 
@@ -109,3 +131,8 @@ Status after checks 2 and 3: only item 1 (Apple's iOS wording) is still open. It
 8. **Resolved:** "Worth money" is now ਹਰ ਟ੍ਰਿਪ ਦੀ ਕੀਮਤ (ਪੈਸੇ ਬਣਦੇ sounded like an earn-money pitch); ਪ੍ਰਾਈਵੇਟ kept. Original: **"Worth money" (feature heading) = ਪੈਸੇ ਬਣਦੇ and "Private" = ਪ੍ਰਾਈਵੇਟ.** These are short headings and may want polishing.
 9. **Resolved: kept.** **"to" between times = ਤੋਂ.** Fully natural Punjabi would be "09:00 ਤੋਂ 17:00 ਤੱਕ", but the code only places one word between the two times.
 10. **Resolved: kept ਟਰੇਡ** (no caste link; ਮਿਸਤਰੀ is narrower). **"Trades" (welcome screen) = ਟਰੇਡ.** ਮਿਸਤਰੀ ਦਾ ਕੰਮ is the alternative.
+11. **Round 3 (October 2026), still open:**
+    - **iCloud and Settings wording.** iCloud ਵਿੱਚ ਸਾਈਨ ਇਨ ਕਰੋ, iCloud Drive ਚਾਲੂ ਕਰੋ, and the path “iPhone ਦੀਆਂ ਸੈਟਿੰਗਾਂ → ਤੁਹਾਡਾ ਨਾਂ → iCloud” are my best guesses. I could not check them against a Punjabi iPhone, and iOS may not offer Punjabi as a system language. In that case users see English Settings, and these lines should perhaps quote the English names (Settings → [your name] → iCloud).
+    - **Basic / Higher / Additional = ਬੇਸਿਕ / ਹਾਇਰ / ਐਡੀਸ਼ਨਲ.** These are loanwords, as on HMRC letters. ਮੁੱਢਲੀ / ਉੱਚੀ / ਵਾਧੂ ਦਰ is the Punjabi alternative.
+    - **Depreciation = ਡੈਪ੍ਰੀਸੀਏਸ਼ਨ (ਕੀਮਤ ਵਿੱਚ ਕਮੀ).** It's long for a field label. Drop the gloss if space is tight.
+    - **"Ended early" = ਵਿਚਾਲੇ ਖ਼ਤਮ.** This is colloquial. ਸਮੇਂ ਤੋਂ ਪਹਿਲਾਂ ਖ਼ਤਮ is more exact but longer.

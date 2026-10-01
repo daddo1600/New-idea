@@ -88,3 +88,39 @@ The objects whose forms are all the same ("{{count}} por mês", "{{distance}} km
 - The iOS system wording (Permitir Durante o Uso do App, Alterar para Sempre Permitir, etc.) was accepted by check 2 from memory. A glance at a pt-BR iPhone before the App Store screenshots would be good practice. The strings are standard, and I see no reason to doubt them.
 
 **Sign-off: Approved for release.**
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+Read as a Brazilian courier or care worker in the UK, Australia, the US or Canada. Checked: offence and double meanings (no *dar* constructions), gendered wording (most care workers are women, and *empregada* means "maid" in Brazil), reassuring privacy wording that never suggests hiding anything from the tax office, money honesty on P87 lines, Apple's pt-BR iCloud and Ajustes wording, glossary consistency, and length of buttons and labels against the layouts in `app/settings.tsx`, `app/claim-relief.tsx`, `app/logbook.tsx`, `app/add-trip.tsx` and `components/header-menu.tsx`.
+
+Result: **7 strings changed.** Completeness test for pt-BR passes.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Claim mileage relief (menu item) | Pedir abatimento por quilometragem | Pedir abatimento (milhas) | 1.7× the English. The feature is UK-only, so "milhas" is right, and the detail line below says P87 / Self Assessment. |
+| Estimated tax back (summary row) | Imposto de volta (estimativa) | Imposto de volta estimado | 1.6× in a label/value row; now 1.4× and more natural. "Estimado" kept. |
+| Back up now (small button) | Fazer backup agora | Fazer backup | The small button shares a row with "Restaurar do backup no iCloud"; "agora" adds nothing on a button. |
+| Employed, in your own vehicle? (welcome) | Empregado, com seu próprio veículo? | Tem empregador e usa seu veículo? | Addressing the user as "Empregado" is masculine, and the feminine "Empregada" reads as "housemaid". The new wording has no gender. |
+| I visit clients or patients at home (care, nursing, support work) | …(cuidador, enfermagem, apoio) | …(cuidados, enfermagem, apoio) | "Cuidador" is masculine; "cuidados" names the kind of work, like the English. |
+| New drives read like “{{example}}”… Places you saved yourself… | que você mesmo salvou | que você salvou | "Você mesmo" is masculine; "yourself" is implied. |
+| Have to hand: your employer’s name and PAYE reference (on your payslip or P60)… | no seu holerite | no seu holerite, o payslip, | "Holerite" is Brazilian (and less familiar in Rio than "contracheque"); naming the English document helps the user find it in their papers. |
+
+Checked and left as is:
+- **Privacy lines** ("Vamos guardar só a região, nunca o endereço deles", "Para o fisco, a região, a distância e a finalidade bastam") are calm and plain, and say clearly what is kept; nothing hints at hiding trips.
+- **"Client visit · região"** in the add-trip alert keeps "Client visit" in English, because the label MileMint saves (`domain/privacy.ts`) is always English and that is what the user will see on the trip.
+- **Backup lines** say "criptografado", "Chaves do iCloud" and "O MileMint nunca vê seus trajetos"; none suggests MileMint servers or an account.
+- **"Autônomo" / "Empregado"** as option labels: kept, as the standard generic category names on Brazilian forms (glossary).
+- **"Encerrar antes"** (End early, 1.55×): a text link alone under the logbook card and an alert button, with room. "Encerrar" alone would hide that it ends the logbook early.
+- **"Substituir…"** (Replace…, 1.4×) and **"Restaurar"** (Restore): Apple's own pt-BR words in alert buttons.
+- **"Licenciamento"** for Registration (rego) and **"Juros do financiamento"** for loan interest are what a Brazilian calls these costs.
+- **"logbook"**: kept, like "cents per km method". Brazilians in Australia use the word, and it matches the ATO's forms.
+
+## Round 3b: shift switch and number format
+
+Each line was translated, back-translated cold, then checked for culture and length (the shift hint is a wrapping caption under the shift bar; target ≤1.3× English). The logbook parser now accepts both decimal points and decimal commas. `npx jest src/i18n` passes.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Swipe back to end your shift. | (missing) | Deslize de volta e encerre o turno. | New line. Back-translation: "Swipe back and end the shift." Uses Deslize (você) and "encerrar turno" as in "Encerrar turno". 1.21× English. |
+| {{hint}}. Swipe the button to the left, or double-tap. | (missing) | {{hint}}. Deslize o botão para a esquerda ou toque duas vezes. | New VoiceOver hint; mirrors the "para a direita" line exactly. |
+| Enter amounts as numbers, e.g. 2400 or 2,400.50. | Digite os valores só com números, ex.: 2400 ou 2400.50 (com ponto antes dos centavos). | Digite os valores em números, ex.: 2400 ou 2.400,50. | The parser now accepts a decimal comma, so the example uses Brazilian format and the "com ponto" instruction is gone. Back-translation: "Type the amounts as numbers, e.g. 2400 or 2.400,50." |

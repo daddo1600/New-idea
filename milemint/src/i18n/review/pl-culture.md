@@ -73,3 +73,46 @@ Result: **36 strings changed.** Keys, placeholders, `<b>` tags and plural object
 ## Sign-off
 
 **Approved for release.** One non-blocking item remains: when someone next has a Polish-language iPhone to hand, confirm the exact punctuation of "Zmień na: Zawsze pozwalaj" and the header "POZWALAJ NA DOSTĘP DO LOKALIZACJI". Either way, users will still match the screen.
+
+## Round 3: logbook, P87, privacy and backup (October 2026)
+
+Reviewer profile: as before, a native Polish speaker who knows the Polish driver, courier and care-worker community in the UK. For the logbook lines, I also read them as a Polish courier in Australia would.
+
+What I checked, for all 203 new keys:
+1. Offence and double meanings: none found. "Okolica" (area) is neutral. "Pacjentów" and "asystencja" are the standard words in Polish care work.
+2. Privacy tone for care workers: plain and reassuring. The lines say what is kept ("tylko okolicę i odległość") and that the tax office still gets what it needs ("Dla urzędu skarbowego wystarczą okolica, odległość i cel"). Nothing suggests hiding anything from the tax office.
+3. Money honesty: P87 lines say "ulga do rozliczenia" and "ok. … zwrotu podatku", "zwykle" stays on the HMRC line, and logbook comparisons say "może pozwolić odliczyć więcej" and "ok. … więcej". There's no "odzyskaj", "zgarnij" or "pieniądze z powrotem".
+4. Backup: the lines say clearly that the backup is encrypted ("Zaszyfrowana kluczem…"), stored in the user's iCloud, and that MileMint never sees the trips.
+5. iOS wording: "Ustawienia → Twoje imię i nazwisko → iCloud", "iCloud Drive" and "pęk kluczy iCloud" (Apple's Polish name for iCloud Keychain). See Unsure in the glossary.
+6. Gender: everything stays gender-neutral. "Samozatrudnienie" and "Na etacie" are used instead of "Samozatrudniony" and "Pracownik", and the claimed lines use an impersonal form ("Ulga … już rozliczona").
+7. Length: I compared every button and label with the English (≤1.3×).
+
+### Changes
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Keep a logbook for 12 weeks in a row. It gives your car’s business-use percentage… | …Pokazuje on, jaki procent… | …Rejestr pokazuje, jaki procent… | "Pokazuje on" sounds stiff and translated. Repeating the noun is how Polish would say it. |
+| Backed up just now | Kopia utworzona przed chwilą | Kopia sprzed chwili | Length (28 → 19 characters; English is 18). It's a small status line in Settings. |
+| Backed up {{count}} minutes ago | Ostatnia kopia {{count}} minut(ę/y) temu | Kopia sprzed {{count}} minuty / minut | Shorter, and consistent with "Kopia sprzed chwili". It also avoids the odd "1 minutę temu". |
+| Backed up {{count}} hours ago | Ostatnia kopia {{count}} godzin(ę/y) temu | Kopia sprzed {{count}} godziny / godzin | Same. |
+| Backed up {{count}} days ago | Ostatnia kopia {{count}} dzień/dni temu | Kopia sprzed {{count}} dnia / dni | Same. |
+| Add initials or a client number if you like. Never a name or address. | …Nigdy nie wpisuj imienia i nazwiska ani adresu. | …Bez imienia, nazwiska i adresu. | The imperative "Nigdy nie wpisuj" sounded like a telling-off to a carer. The short form is friendlier and says the same thing. |
+
+### Length, checked and left as is
+
+- "Zakończ wcześniej" (End early, 17 vs 9) is a red text link and alert button. "Zakończ" alone would hide that the logbook becomes unusable, so precision wins for a destructive action. "Zakończony wcześniej" (Ended early) is a card heading with room.
+- "Podstawowa" (Basic, 10 vs 5) is one of four equal segments, and the English "Additional" is already 10 characters, so it fits the same width.
+- "Tylko okolica" (Area only, 13 vs 9) and "Prywatność klientów" (14 → 19) are an alert button and a section header, both with room. Shorter versions lose meaning.
+- "Kopia zapasowa" (Backup) is a section header, in line with the other headers.
+
+**Approved for release**, with the iOS items under Unsure in `glossary/pl.md` to confirm on a Polish iPhone.
+
+## Round 3b: shift switch and number format
+
+Each line was translated, back-translated cold, then checked for culture and length (the shift hint is a wrapping caption under the shift bar; target ≤1.3× English). The logbook parser now accepts both decimal points and decimal commas. `npx jest src/i18n` passes.
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Swipe back to end your shift. | Przesuń z powrotem, aby zakończyć zmianę. | Przesuń w lewo, aby zakończyć zmianę. | Was 1.41× English. "W lewo" is shorter (1.28×), clearer, and matches the VoiceOver hint and "Przesuń, aby zacząć zmianę". Back-translation: "Swipe left to end the shift." |
+| {{hint}}. Swipe the button to the left, or double-tap. | {{hint}}. Przesuń przycisk w lewo albo stuknij dwukrotnie. | (unchanged) | Checked: mirrors the "w prawo" line exactly. |
+| Enter amounts as numbers, e.g. 2400 or 2,400.50. | Wpisz kwoty jako liczby, z centami po kropce, np. 2400 lub 2400.50. | Wpisz kwoty jako liczby, np. 2400 lub 2400,50. | The parser now accepts a decimal comma: dropped "z centami po kropce" and used the Polish decimal comma. |

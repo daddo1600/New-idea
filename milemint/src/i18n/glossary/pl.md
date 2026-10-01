@@ -64,6 +64,28 @@ Audience: Polish drivers, couriers and tradespeople living in the UK. The text i
 | Places / Home / Work / Client / Other | Miejsca / Dom / Praca / Klient / Inne | Short, standard. |
 | self-employed | samozatrudnieni / prowadzisz własną działalność | Both forms are understood; "samozatrudniony" is common among Poles in the UK. |
 | employee / employed | pracownicy / pracujesz na etacie | Everyday wording, gender-neutral. |
+| ATO logbook / logbook | rejestr (logbook); screen title "Rejestr ATO" | Same word as the CRA logbook line. The English gloss appears once on the logbook screens. |
+| logbook method | metoda rejestru | Read as a method name; "cents per km method" stays as "metoda cents per km". |
+| reason (for a logbook journey) | cel | The same word as "business purpose" (cel służbowy), which is what the user fills in. |
+| business-use percentage | procent jazdy służbowej | Plain words; matches "udział jazdy służbowej". |
+| income year (AU) | rok dochodowy | Already used in the AU lines. |
+| Mileage Allowance Relief / relief | Mileage Allowance Relief (kept); "ulga", "ulga za przebieg", "ulga do rozliczenia" | Relief is the shortfall you claim against, not money back. |
+| claim (relief) | rozliczyć / ubiegać się o ulgę | Never "odzyskać". |
+| tax back | zwrot podatku (always with "ok." or "szacunkowy") | It's an estimate of tax only. |
+| HMRC approved amount | zatwierdzona kwota HMRC | Short table label. |
+| Self-employed / Employee (setting) | Samozatrudnienie / Na etacie | Gender-neutral nouns and phrases instead of "samozatrudniony / pracownik". |
+| How you’re paid for mileage | Jak rozliczasz przebieg | Works for both options. |
+| Basic / Higher / Additional (tax rate) | Podstawowa / Wyższa / Dodatkowa | Agrees with "stawka". |
+| pence a mile | p za milę | Matches "55p za milę"; avoids number agreement with "pensy". |
+| payslip | pasek wypłaty (payslip) | Poles in the UK use both. |
+| Client privacy | Prywatność klientów | Plain. |
+| area (town + postcode district) | okolica | Everyday word for a care worker; "Wizyta u klienta · okolica". |
+| Client visit | Wizyta u klienta | Purpose and label. |
+| backup / Back up now / iCloud backup | kopia zapasowa / Utwórz kopię / Kopia w iCloud | "Kopia w iCloud" avoids confusion with Apple's own "Kopia zapasowa iCloud". |
+| Backed up N minutes ago | Kopia sprzed N minut | Short status line. |
+| Restore | Przywróć | Apple's verb. |
+| iCloud Keychain | pęk kluczy iCloud | Apple's Polish name (see Unsure). |
+| tax office (privacy lines) | urząd skarbowy | Generic, works in every country. |
 
 Tax offices, forms and scheme names (HMRC, IRS, CRA, ATO, Self Assessment, Making Tax Digital/MTD, Schedule C, Form 1040, 1040-ES, T2125, T2200, T777, P87, BAS, PAYG, GST, D1, simplified expenses, cents per km method, Mileage Allowance Relief, Car, van and travel expenses, Car and truck expenses) stay in English. A short Polish gloss is added in brackets where it helps (e.g. "Mileage Allowance Relief (ulgę za przebieg)", "logbook" after "rejestr").
 
@@ -104,3 +126,12 @@ Resolved in checks 2 and 3: decimal comma ("12,5"), "{{counted}} mil" agreement,
 Still open, not blocking release:
 
 1. **Two iOS strings to confirm on a Polish iPhone (iOS 17/18).** "Zmień na: Zawsze pozwalaj" (the button may have no colon or use quotes) and the Settings header "POZWALAJ NA DOSTĘP DO LOKALIZACJI" (chosen because Polish iOS uses imperfective "Pozwalaj" for standing settings, as in "Pozwalaj na powiadomienia"). If the header differs, also update "W Ustawieniach, w sekcji … wybierz Zawsze". The difference is small enough that a user can still match the screen.
+
+### Added in round 3 (October 2026)
+
+2. **"pęk kluczy iCloud" vs "iCloud Keychain".** The round brief listed iCloud Keychain as a term to keep in English, but it also asked for Apple's own wording. Polish iOS calls it "Pęk kluczy iCloud", and the restore error tells the user to look for it in Settings, so I used the Polish name. In iOS 18 the iCloud row may read "Hasła i pęk kluczy". Please confirm on a Polish iPhone.
+3. **"Ustawienia → Twoje imię i nazwisko → iCloud"** follows Apple's Polish help pages ("[Twoje imię i nazwisko]"). Confirm the wording.
+4. **"Zaloguj się do iCloud"**: Polish iOS's Settings banner says "Zaloguj się na iPhonie". The meaning is clear either way.
+5. **"Jak rozliczasz przebieg"** for "How you’re paid for mileage" isn't literal (see `review/pl-accuracy.md`, round 3).
+6. **Resolved (round 3b):** the amount hint is now "np. 2400 lub 2400,50"; the logbook parser accepts a decimal comma, so the "z centami po kropce" instruction was dropped.
+7. **Two shift-switch lines** ("Swipe back to end your shift.", the swipe-left hint) appeared in the source during this round and were translated to keep the test green. They weren't in the 201-line brief.
