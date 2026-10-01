@@ -4,12 +4,17 @@ import {
   areaFromLabel,
   areaLabel,
   clientVisitLabel,
+  isAreaOnly,
+  isNamedPlace,
   isPrivateLabel,
+  looksLikeTown,
+  placeNameSet,
   postcodeArea,
   privateLabel,
   redactLabel,
   type GeocodedArea,
 } from '../privacy';
+import type { RegionCode } from '../regions';
 
 /** What iOS's reverse geocoder returns for a house, with every field the app could leak. */
 const geocoded = (fields: GeocodedArea) => ({
@@ -150,9 +155,75 @@ describe('privateLabel and redactLabel', () => {
   });
 
   it('keeps the names of places the user saved', () => {
-    expect(redactLabel('Home', null, places, 'GB')).toBe('Home');
-    expect(redactLabel('Day Centre ', null, places, 'GB')).toBe('Day Centre ');
-    expect(redactLabel('Acme HQ', 'place-1', places, 'GB')).toBe('Acme HQ');
-    expect(redactLabel('14 Otley Road, Leeds', null, places, 'GB')).toBe('Client visit · Leeds');
+    expect(redactLabel('Home', places, 'GB')).toBe('Home');
+    expect(redactLabel('Day Centre ', places, 'GB')).toBe('Day Centre ');
+    expect(redactLabel('14 Otley Road, Leeds', places, 'GB')).toBe('Client visit · Leeds');
+  });
+
+  it('reduces an address even when the trip is linked to a saved place', () => {
+    // The label was edited after linking, or a typed address landed on a saved place: the text is what's kept.
+    expect(redactLabel('3 Kirkstall Lane, Leeds LS5 3BB', places, 'GB')).toBe('Client visit · Leeds LS5');
+    expect(isNamedPlace('3 Kirkstall Lane, Leeds LS5 3BB', places)).toBe(false);
+  });
+});
+
+describe('isAreaOnly', () => {
+  const places = placeNameSet([{ name: 'Home' }, { name: ' Day centre' }]);
+
+  it('is true for saved place names and area-only labels', () => {
+    expect(isAreaOnly('home', places)).toBe(true);
+    expect(isAreaOnly('Day Centre', places)).toBe(true);
+    expect(isAreaOnly('Client visit · Leeds LS6', places)).toBe(true);
+    expect(isAreaOnly('Client visit', places)).toBe(true);
+  });
+
+  it('is false for anything that may still be an address', () => {
+    expect(isAreaOnly('14 Otley Road, Leeds', places)).toBe(false);
+    expect(isAreaOnly('Mrs Smith', places)).toBe(false);
+  });
+});
+
+describe('areaFromLabel never keeps a street or a name', () => {
+  it.each([
+    ['Mrs Smith, Otley Road', 'GB', null],
+    ['Elm Grove LS6 2AA', 'GB', 'LS6'],
+    ['9 Elm Grove', 'GB', null],
+    ['Otley Road, Leeds', 'GB', 'Leeds'],
+    ['14 Otley Road, Leeds, LS6 3AA, England', 'GB', 'Leeds LS6'],
+    ['Flat 2, 9 Elm Grove, Headingley, Leeds LS6 2AA', 'GB', 'Leeds LS6'],
+    ['Rose Cottage, Church Lane, Bramhope, LS16 9AA', 'GB', 'Bramhope LS16'],
+    ['Rose Cottage, Church Lane, LS16 9AA', 'GB', 'LS16'],
+    ['Patel Residence, 22 Cardigan Rd, Leeds', 'GB', 'Leeds'],
+    ['John Smith, 4 The Avenue, Leeds', 'GB', 'Leeds'],
+    ['Apartment 4B, Marlborough House, Leeds', 'GB', 'Leeds'],
+    ['Mr Patel, Mrs Patel', 'GB', null],
+    ['Acme Ltd, Mrs Patel LS6 2AA', 'GB', 'LS6'],
+    ['22B Baker Street, London NW1 6XE', 'GB', 'London NW1'],
+    ['Smith, Hyde Park', 'GB', null],
+    ['Smith, Kirkstall Lane', 'GB', null],
+    ['Smith, The Avenue', 'GB', null],
+    ['Smith, Dr Jones', 'GB', null],
+    ['123 Main St, Apt 4, Austin, TX 78701-1234', 'US', 'Austin 78701'],
+    ['Jane Doe, 500 Oak Ave, Springfield, IL 62704', 'US', 'Springfield 62704'],
+    ['Jane Doe, Oak Ave 62704', 'US', '62704'],
+    ['100 King St W, Toronto, ON M5X 1A9', 'CA', 'Toronto M5X'],
+    ['Jane Doe, King St W M5X 1A9', 'CA', 'M5X'],
+    ['12 Smith St, Parramatta NSW 2150', 'AU', 'Parramatta 2150'],
+    ['Unit 3/45 George St, Parramatta, NSW 2150, Australia', 'AU', 'Parramatta 2150'],
+    ['Jane Doe, George St NSW 2150', 'AU', '2150'],
+  ] satisfies [string, RegionCode, string | null][])('%s (%s) → %s', (label, region, area) => {
+    expect(areaFromLabel(label, region)).toBe(area);
+  });
+
+  it('only lets through a part that could be a town', () => {
+    expect(looksLikeTown('Leeds')).toBe(true);
+    expect(looksLikeTown('Headingley')).toBe(true);
+    expect(looksLikeTown('Saint-Laurent')).toBe(true);
+    expect(looksLikeTown('Otley Road')).toBe(false);
+    expect(looksLikeTown('King St W')).toBe(false);
+    expect(looksLikeTown('Mrs Smith')).toBe(false);
+    expect(looksLikeTown('Rose Cottage')).toBe(false);
+    expect(looksLikeTown('Flat 2')).toBe(false);
+    expect(looksLikeTown('')).toBe(false);
   });
 });

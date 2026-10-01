@@ -90,6 +90,9 @@ describe('input parsing', () => {
     expect(parseMiles('0')).toBeNull();
     expect(parseMiles('-3')).toBeNull();
     expect(parseMiles('abc')).toBeNull();
+    // Thousands, not 1.24.
+    expect(parseMiles('1,240')).toBe(1240);
+    expect(parseMiles('1..2')).toBeNull();
   });
 
   it('rejects impossible dates', () => {

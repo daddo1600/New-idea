@@ -21,7 +21,7 @@ import {
 } from '@/db/trips-repo';
 import type { LatLng } from '@/domain/geo';
 import type { PlaceKind } from '@/domain/places';
-import { isPrivateLabel } from '@/domain/privacy';
+import { isAreaOnly, isPrivateLabel, placeNameSet } from '@/domain/privacy';
 import { loadSettings } from '@/db/settings-repo';
 import { formatDistance } from '@/domain/regions';
 import { frequentPurposes } from '@/domain/suggestions';
@@ -64,10 +64,13 @@ export default function TripScreen() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [purposes, setPurposes] = useState<string[]>([]);
   const [clientPrivacy, setClientPrivacy] = useState(false);
+  // Null until loaded: the privacy note waits for it rather than guess.
+  const [placeNames, setPlaceNames] = useState<ReadonlySet<string> | null>(null);
   useEffect(() => {
     listTrips(db).then((trips) => setPurposes(frequentPurposes(trips, 6)), () => {});
     listVehicles(db).then(setVehicles, () => {});
     loadSettings(db).then((settings) => setClientPrivacy(settings.clientPrivacy), () => {});
+    listPlaces(db).then((places) => setPlaceNames(placeNameSet(places)), () => {});
   }, [db]);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -225,10 +228,14 @@ export default function TripScreen() {
           </ThemedText>
         </Pressable>
 
-        {/* Client privacy keeps no route: the record is the date, the areas, the distance and the purpose. */}
+        {/* Client privacy keeps no route: the record is the date, the areas, the distance and the purpose.
+            Only said when it's true: a drive from before privacy was on can still show its addresses. */}
         {route.length === 0 &&
           trip.source === 'auto' &&
-          (clientPrivacy || isPrivateLabel(trip.startLabel) || isPrivateLabel(trip.endLabel)) && (
+          (clientPrivacy || isPrivateLabel(trip.startLabel) || isPrivateLabel(trip.endLabel)) &&
+          placeNames !== null &&
+          isAreaOnly(trip.startLabel, placeNames) &&
+          isAreaOnly(trip.endLabel, placeNames) && (
             <ThemedView type="backgroundElement" style={styles.placeCard}>
               <ThemedText type="smallBold">{t('🔒 Client privacy')}</ThemedText>
               <ThemedText type="small" themeColor="textSecondary">

@@ -5,9 +5,10 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 import { Platform } from 'react-native';
 
 import { SCHEMA_VERSION } from '@/db/migrations';
-import { inWriteTransaction } from '@/db/transaction';
+import { inReadTransaction, inWriteTransaction } from '@/db/transaction';
 
 import { ICloudBackup } from '../../modules/icloud-backup';
+import { clearScrub, pendingScrub } from './after-scrub';
 import { base64ToUtf8, utf8ToBase64 } from './base64';
 import {
   BACKUPS_KEPT,
@@ -65,11 +66,17 @@ async function readTable(db: SQLiteDatabase, table: BackupTable): Promise<Row[]>
   return db.getAllAsync<Row>(`SELECT * FROM ${table} ORDER BY rowid;`);
 }
 
-/** Every table a backup holds, rows exactly as stored. */
+/**
+ * Every table a backup holds, rows exactly as stored, all read in one
+ * transaction: a trip saved by the background tracker halfway through can't
+ * leave the backup with its edit history but not the trip, or the other way round.
+ */
 async function readTables(db: SQLiteDatabase) {
-  const tables = emptyTables();
-  for (const table of BACKUP_TABLES) tables[table] = await readTable(db, table);
-  return tables;
+  return inReadTransaction(db, async () => {
+    const tables = emptyTables();
+    for (const table of BACKUP_TABLES) tables[table] = await readTable(db, table);
+    return tables;
+  });
 }
 
 /** A cheap hash of the data, to tell whether anything changed since the last backup. */
@@ -98,27 +105,35 @@ async function fingerprint(db: SQLiteDatabase): Promise<{ fingerprint: string; t
 
 export type BackupOutcome = 'written' | 'unchanged' | 'not-due' | 'empty' | 'unavailable';
 
-let running: Promise<BackupOutcome> | null = null;
+/**
+ * Backing up and restoring take turns: a backup read halfway through a
+ * restore would save half of each, and a restore must not start while a
+ * backup is still reading.
+ */
+let queue: Promise<unknown> = Promise.resolve();
+
+function exclusive<T>(task: () => Promise<T>): Promise<T> {
+  const result = queue.then(task, task);
+  queue = result.catch(() => {});
+  return result;
+}
 
 /**
  * Backs up if one is due (see schedule.ts), or now when `force`d (Settings →
- * Back up now). One at a time: a second call waits for the first.
+ * Back up now), or after past trips were scrubbed of addresses (then the
+ * older backups are replaced too). One at a time: a second call waits for the
+ * first.
  */
-export async function backUp(db: SQLiteDatabase, { force = false } = {}): Promise<BackupOutcome> {
-  while (running) await running.catch(() => {});
-  running = run(db, force);
-  try {
-    return await running;
-  } finally {
-    running = null;
-  }
+export function backUp(db: SQLiteDatabase, { force = false } = {}): Promise<BackupOutcome> {
+  return exclusive(() => run(db, force));
 }
 
 async function run(db: SQLiteDatabase, force: boolean): Promise<BackupOutcome> {
   if (!(await ICloudBackup.isAvailable())) return 'unavailable';
   const last = await loadBackupState();
+  const scrubbedAt = await pendingScrub();
   const now = new Date();
-  const decision = force ? 'always' : backupDecision(now, last);
+  const decision = force || scrubbedAt !== null ? 'always' : backupDecision(now, last);
   if (decision === 'skip') return 'not-due';
   const current = await fingerprint(db);
   if (!shouldWrite({ decision, last, ...current })) return current.trips === 0 ? 'empty' : 'unchanged';
@@ -126,7 +141,15 @@ async function run(db: SQLiteDatabase, force: boolean): Promise<BackupOutcome> {
   const snapshot = makeSnapshot(await readTables(db), { appVersion: appVersion(), createdAt: now });
   // Plaintext goes only as far as the native module, which encrypts it before anything is written.
   const sealed = await ICloudBackup.seal(utf8ToBase64(JSON.stringify(snapshot)));
-  await ICloudBackup.write(backupFileName(now), sealed, BACKUPS_KEPT);
+  if (scrubbedAt === null) {
+    await ICloudBackup.write(backupFileName(now), sealed, BACKUPS_KEPT);
+  } else {
+    // Every older backup still has the addresses. The native side always keeps the newest two, so the
+    // same backup goes in twice, a second apart: together the two copies push all the older ones out.
+    await ICloudBackup.write(backupFileName(now), sealed, 1);
+    await ICloudBackup.write(backupFileName(new Date(now.getTime() + 1000)), sealed, 1);
+    await clearScrub(scrubbedAt);
+  }
   await saveBackupState({ at: snapshot.createdAt, fingerprint: current.fingerprint });
   return 'written';
 }
@@ -186,7 +209,11 @@ export async function isDatabaseEmpty(db: SQLiteDatabase): Promise<boolean> {
  * Replaces everything on this iPhone with the backup, in one transaction:
  * if any row fails, nothing changes.
  */
-export async function restoreSnapshot(db: SQLiteDatabase, snapshot: Snapshot): Promise<void> {
+export function restoreSnapshot(db: SQLiteDatabase, snapshot: Snapshot): Promise<void> {
+  return exclusive(() => restore(db, snapshot));
+}
+
+async function restore(db: SQLiteDatabase, snapshot: Snapshot): Promise<void> {
   const columns = {} as Record<BackupTable, string[]>;
   for (const table of BACKUP_TABLES) {
     const info = await db.getAllAsync<{ name: string }>(`PRAGMA table_info(${table});`);

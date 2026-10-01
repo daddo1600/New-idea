@@ -18,7 +18,7 @@ import { insertTrip, listTrips } from '@/db/trips-repo';
 import { parseMiles } from '@/domain/format';
 import type { LatLng } from '@/domain/geo';
 import { matchPlace, type Place } from '@/domain/places';
-import { areaLabel, clientVisitLabel, isNamedPlace, isPrivateLabel, privateLabel } from '@/domain/privacy';
+import { areaLabel, clientVisitLabel, isAreaOnly, placeNameSet, privateLabel } from '@/domain/privacy';
 import { loadSettings } from '@/db/settings-repo';
 import { displayLocale, earliestDate, formatDistance, formatLongDate, fromUnits, toUnits } from '@/domain/regions';
 import { frequentPurposes, frequentSpots } from '@/domain/suggestions';
@@ -151,9 +151,9 @@ export default function AddTripScreen() {
       return setError(t('{{authority}} needs a business purpose, e.g. "Client meeting".', { authority: region.authority }));
     }
     // Client privacy: address search still works, but offer to store just the area.
-    const placeNames = new Set(places.map((place) => place.name.trim().toLowerCase()));
+    const placeNames = placeNameSet(places);
     const needsArea = (draft: PlaceDraft) =>
-      !draft.placeId && !isNamedPlace(draft.text, null, placeNames) && !isPrivateLabel(draft.text);
+      !draft.placeId && !isAreaOnly(draft.text, placeNames);
     const areaOnly = clientPrivacy && (needsArea(from) || needsArea(to)) ? await askAreaOnly() : false;
     if (areaOnly === null) return;
     /** "Client visit · area" for an end the user didn't pick from their own places. */

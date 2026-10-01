@@ -5,6 +5,8 @@ import type { AutoReason, ClassifiedTrip } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
 import type { Classification, Trip, TripSource, VehicleType } from '@/domain/trip';
 
+import { inWriteTransaction } from './transaction';
+
 type TripRow = {
   id: string;
   started_at: string;
@@ -156,7 +158,7 @@ export async function insertTrip(
     id: Crypto.randomUUID(),
     createdAt: new Date().toISOString(),
   };
-  await db.withTransactionAsync(async () => {
+  await inWriteTransaction(db, async () => {
     await db.runAsync(
       `INSERT INTO trips (id, started_at, local_date, ended_at, start_label, end_label,
          distance_meters, classification, purpose, source, created_at,
@@ -207,7 +209,7 @@ export async function setClassification(
   if (trip.classification === classification && !trip.autoReason) return;
   // Any choice by the user, even re-tapping an automatic one, makes it theirs:
   // the auto note disappears and the trip starts counting towards learned routes.
-  await db.withTransactionAsync(async () => {
+  await inWriteTransaction(db, async () => {
     await db.runAsync(
       'UPDATE trips SET classification = ?, auto_reason = NULL, auto_default = 0 WHERE id = ?;',
       classification,
@@ -239,7 +241,7 @@ export async function updateTripDetails(
     (key) => changes[key] !== undefined && changes[key] !== trip[key],
   );
   if (changed.length === 0) return;
-  await db.withTransactionAsync(async () => {
+  await inWriteTransaction(db, async () => {
     for (const key of changed) {
       const value = changes[key] as string;
       await db.runAsync(`UPDATE trips SET ${columns[key]} = ? WHERE id = ?;`, value, trip.id);
@@ -263,7 +265,7 @@ export async function setTripPlace(
 }
 
 export async function deleteTrip(db: SQLiteDatabase, trip: Trip): Promise<void> {
-  await db.withTransactionAsync(async () => {
+  await inWriteTransaction(db, async () => {
     await db.runAsync('DELETE FROM trips WHERE id = ?;', trip.id);
     await logEdit(db, trip.id, 'delete', null, JSON.stringify(trip), null);
   });

@@ -118,6 +118,34 @@ describe('snapshots', () => {
     expect(codeOf(() => validateSnapshot(noId, CURRENT))).toBe('not-a-backup');
   });
 
+  it('refuse numbers that are not numbers, so they are never restored as text', () => {
+    const withTrip = (extra: Record<string, unknown>) => {
+      const snapshot = sample();
+      snapshot.tables.trips[0] = { ...snapshot.tables.trips[0], ...extra } as never;
+      return snapshot;
+    };
+    expect(codeOf(() => validateSnapshot(withTrip({ distance_meters: 'lots' }), CURRENT))).toBe('not-a-backup');
+    expect(codeOf(() => validateSnapshot(withTrip({ distance_meters: '12400' }), CURRENT))).toBe('not-a-backup');
+    expect(codeOf(() => validateSnapshot(withTrip({ distance_meters: null }), CURRENT))).toBe('not-a-backup');
+    expect(codeOf(() => validateSnapshot(withTrip({ distance_meters: -5 }), CURRENT))).toBe('not-a-backup');
+
+    const place = sample();
+    place.tables.places[0] = { ...place.tables.places[0], latitude: 'north' };
+    expect(codeOf(() => validateSnapshot(place, CURRENT))).toBe('not-a-backup');
+
+    // Null where the column allows it, and a column an older backup doesn't have, are fine.
+    const nullable = sample();
+    nullable.tables.odometer_readings[0] = { region: 'GB', tax_year: 2026, start_reading: null, end_reading: null };
+    nullable.tables.trips[1] = { id: 't2', start_label: 'A' };
+    expect(codeOf(() => validateSnapshot(nullable, CURRENT))).toBeNull();
+  });
+
+  it('refuse a snapshot version that is not a whole number from 1', () => {
+    for (const version of [0, -1, 0.5, '1']) {
+      expect(codeOf(() => validateSnapshot({ ...sample(), version }, CURRENT))).toBe('not-a-backup');
+    }
+  });
+
   it('ask for an app update when the backup is from a newer schema', () => {
     const newer = { ...sample(), schemaVersion: CURRENT + 1 };
     expect(codeOf(() => validateSnapshot(newer, CURRENT))).toBe('newer-app');
@@ -158,6 +186,21 @@ describe('consistentTables', () => {
     expect(t3).toMatchObject({ start_place_id: null, vehicle_id: null });
     // Valid links are kept.
     expect(fixed.trips[0]).toMatchObject({ start_place_id: 'p1', vehicle_id: 'v1' });
+  });
+
+  it('drops logbooks and car costs of vehicles that are gone, which would otherwise fail the restore', () => {
+    const tables = sampleTables();
+    tables.logbooks = [
+      { id: 'l1', vehicle_id: 'v1', start_date: '2026-05-15', end_date: '2026-08-06', odometer_start: 1, odometer_end: 2, created_at: 'x' },
+      { id: 'l2', vehicle_id: 'sold', start_date: '2026-05-15', end_date: '2026-08-06', odometer_start: null, odometer_end: null, created_at: 'x' },
+    ];
+    tables.car_expenses = [
+      { vehicle_id: 'v1', tax_year: 2026, json: '{}' },
+      { vehicle_id: 'sold', tax_year: 2026, json: '{}' },
+    ];
+    const fixed = consistentTables(tables);
+    expect(fixed.logbooks.map((logbook) => logbook.id)).toEqual(['l1']);
+    expect(fixed.car_expenses.map((expenses) => expenses.vehicle_id)).toEqual(['v1']);
   });
 
   it('leaves trips from before vehicles existed without a vehicle_id column', () => {
