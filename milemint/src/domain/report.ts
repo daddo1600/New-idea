@@ -31,7 +31,7 @@ import {
   type DeductionPart,
   type Region,
 } from './regions';
-import { type Trip, VEHICLE_LABELS } from './trip';
+import { toLocalIsoDate, type Trip, VEHICLE_LABELS } from './trip';
 import { type Vehicle, vehicleLabel } from './vehicles';
 
 /**
@@ -139,7 +139,7 @@ export function buildReport(
         distance: toUnits(trip.distanceMeters, region),
         commute: isCommute(kindOf(trip.startPlaceId), kindOf(trip.endPlaceId)),
         parts,
-        deduction: Math.round(parts.reduce((sum, part) => sum + part.units * part.rate, 0) / 10),
+        deduction: parts.reduce((sum, part) => sum + part.amount, 0),
         edited: options.editedIds?.has(trip.id) ?? false,
         vehicle: vehicleOf(trip),
         showVehicle: (options.vehicles?.length ?? 0) > 1 || (trip.vehicle ?? 'car') !== 'car',
@@ -178,7 +178,7 @@ export function buildReport(
   }
   const { start, end } = report.odometer;
   if (start !== null && end !== null && end >= start) report.drivenDistance = end - start;
-  const byRate = new Map<string, RateTotal & { tenths: number }>();
+  const byRate = new Map<string, RateTotal>();
   for (const row of rows) {
     report.totalDistance += row.distance;
     if (row.trip.classification === 'unclassified') report.unclassifiedCount += 1;
@@ -195,10 +195,10 @@ export function buildReport(
           label: range ? `${range}: ${what}` : what,
           distance: 0,
           deduction: 0,
-          tenths: 0,
         };
         total.distance += part.units;
-        total.tenths += part.units * part.rate;
+        // The same shared-out amounts as the rows, so the rate rows add up to the Total row.
+        total.deduction += part.amount;
         byRate.set(key, total);
       }
     } else if (row.commute) {
@@ -209,7 +209,7 @@ export function buildReport(
   }
   report.byRate = [...byRate.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([, total]) => ({ label: total.label, distance: total.distance, deduction: Math.round(total.tenths / 10) }));
+    .map(([, total]) => total);
   return report;
 }
 
@@ -395,7 +395,7 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
   tr { page-break-inside: avoid; }
 </style></head><body>
   <h1>Vehicle mileage log · ${escapeHtml(yearName)}</h1>
-  <p class="sub">${escapeHtml(region.name)} · ${period} · ${escapeHtml(region.authority)} rates · prepared with MileMint on ${formatDate(generatedAt.toISOString().slice(0, 10), region)}</p>
+  <p class="sub">${escapeHtml(region.name)} · ${period} · ${escapeHtml(region.authority)} rates · prepared with MileMint on ${formatDate(toLocalIsoDate(generatedAt), region)}</p>
 
   <h2>${summaryHeading}</h2>
   <table class="summary">

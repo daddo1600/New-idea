@@ -313,7 +313,7 @@ export function toP87Html(summary: MarSummary, region: Region, options: MarOptio
 </style></head>
 <body>
   <h1>Mileage Allowance Relief · P87 summary</h1>
-  <p class="sub">Business mileage in your own vehicle as an employee · employer mileage allowance: ${escapeHtml(employerRate)} · prepared with MileMint on ${date(generatedAt.toISOString().slice(0, 10))}</p>
+  <p class="sub">Business mileage in your own vehicle as an employee · employer mileage allowance: ${escapeHtml(employerRate)} · prepared with MileMint on ${date(toLocalIsoDate(generatedAt))}</p>
   <table>
     <thead><tr><th>Tax year</th><th class="num">Business miles</th><th class="num">HMRC approved amount</th><th class="num">Allowance received</th><th class="num">Relief claimable</th><th>How to claim</th><th>Claim by</th></tr></thead>
     <tbody>${rows}</tbody>
