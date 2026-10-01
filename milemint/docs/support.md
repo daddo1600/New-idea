@@ -14,7 +14,10 @@ MileMint uses low-power geofencing while you're parked and switches GPS on only 
 Only on your iPhone, encrypted. We never receive your trips or location. See the [privacy policy](privacy-policy.md).
 
 **How do I move to a new iPhone?**
-Your trips are included in your iPhone's iCloud or computer backup. Restore that backup on the new phone.
+If you're signed in to iCloud, MileMint backs up your trips to your own iCloud, encrypted, by itself (check **Settings → Backup** in the app). Install MileMint on the new iPhone, signed in to the same Apple Account with **iCloud Keychain** on, and the first screen offers to restore your trips. Restoring your whole iPhone from an iCloud or computer backup works too.
+
+**I lost my phone. Are my trips gone?**
+Not if MileMint's iCloud backup was on: the backup is in your iCloud and its key is in your iCloud Keychain. Install MileMint on your new phone and choose **Restore my trips**.
 
 **Is this tax advice?**
 No. MileMint estimates deductions using the IRS standard mileage rate. Check with a tax professional for your situation.

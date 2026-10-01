@@ -1,5 +1,6 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
-import { Platform } from 'react-native';
+
+import { inWriteTransaction } from './transaction';
 
 /**
  * Ordered schema migrations; the array index + 1 is the schema version stored
@@ -143,31 +144,20 @@ const MIGRATIONS: readonly string[] = [
   `,
 ];
 
+/** The schema this build creates: stored in PRAGMA user_version, and in iCloud backups. */
+export const SCHEMA_VERSION = MIGRATIONS.length;
+
 export async function migrate(db: SQLiteDatabase): Promise<void> {
-  const run = async (txn: Pick<SQLiteDatabase, 'getFirstAsync' | 'execAsync'>) => {
-    const row = await txn.getFirstAsync<{ user_version: number }>('PRAGMA user_version;');
+  // One write transaction on this (keyed) connection; see inWriteTransaction.
+  // The version is re-read inside, in case a background wake-up migrated first.
+  await inWriteTransaction(db, async () => {
+    const row = await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version;');
     const current = row?.user_version ?? 0;
     for (let version = current; version < MIGRATIONS.length; version++) {
-      await txn.execAsync(MIGRATIONS[version]);
+      await db.execAsync(MIGRATIONS[version]);
     }
     if (current < MIGRATIONS.length) {
-      await txn.execAsync(`PRAGMA user_version = ${MIGRATIONS.length};`);
+      await db.execAsync(`PRAGMA user_version = ${MIGRATIONS.length};`);
     }
-  };
-  // The web preview has a single connection and no locking to worry about.
-  if (Platform.OS === 'web') return db.withTransactionAsync(() => run(db));
-  // On devices the app and a background location wake-up can open the database
-  // at the same moment. BEGIN IMMEDIATE takes the write lock up front (waiting
-  // out the other side via busy_timeout), and the version is re-read inside.
-  // Not withExclusiveTransactionAsync: that opens a second connection which
-  // never received the SQLCipher key, so it can't read the encrypted file
-  // ("file is not a database") and the app failed on launch.
-  await db.execAsync('BEGIN IMMEDIATE;');
-  try {
-    await run(db);
-    await db.execAsync('COMMIT;');
-  } catch (error) {
-    await db.execAsync('ROLLBACK;').catch(() => {});
-    throw error;
-  }
+  });
 }
