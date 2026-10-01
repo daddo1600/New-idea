@@ -4,7 +4,7 @@ Written for Brazilian delivery riders, drivers and other workers living in the U
 
 ## Form of address
 
-**você**, with friendly imperatives in the third person ("Toque", "Deslize", "Classifique"). The app talks about itself as **o MileMint** (masculine, like "o app"). Tax offices given as a placeholder (`{{authority}}`) always take a masculine article ("o {{authority}}", "do {{authority}}", "pelas taxas do {{authority}}") so one form works for HMRC, IRS, CRA and ATO. Where CRA is written out in a sentence, it is "a CRA" (Agência).
+**você**, with friendly imperatives in the third person ("Toque", "Deslize", "Classifique"). The app talks about itself as **o MileMint** (masculine, like "o app"). Tax offices given as a placeholder (`{{authority}}`) always take a masculine article ("o {{authority}}", "do {{authority}}", "pelas taxas do {{authority}}") so one form works for HMRC, IRS, CRA and ATO. Where CRA is written out in a sentence it is also masculine, "o CRA" (read as "o órgão"), so a Canadian user never sees "o CRA" and "a CRA" side by side.
 
 ## Term choices
 
@@ -48,6 +48,14 @@ Written for Brazilian delivery riders, drivers and other workers living in the U
 | Delete | **Apagar** | Apple's pt-BR wording. |
 | Done | **OK** | Apple's pt-BR wording for "Done". |
 | Milestones / badges | **Conquistas** | |
+| Money back (milestones section) / money milestone title | **Valores encontrados**; "{{amount}} back in your pocket" = **Já são {{amount}} encontrados** | No "dinheiro de volta" or "recuperar": a deduction is not a refund. |
+| Apple Maps | **Apple Maps** | Kept as the brand name. The iPhone app is labelled "Mapas", but that reads as generic "maps" (most couriers use Waze or Google Maps), and Brazilians say "Apple Maps". |
+| UK (half-width country tile) | **UK** | "Reino Unido" stays for "United Kingdom" (also the screen-reader name). Brazilians in Britain say "UK" every day. |
+| Best value (plan badge) | **Compensa mais** | |
+| Use now (vehicle) | **Usar** | The status beside it already says "Em uso agora". |
+| Your driving (Settings section) | **Veículos e trajetos** | Works for cyclists too. |
+| "Select {{count}} unsorted" | **Selecionar {{count}} pendentes** | Short form for the crowded select bar; "sem classificar" everywhere else. |
+| Taglines that say "mile" but show in every country | **trajeto** ("Nenhum trajeto fica de fora.", "Cada trajeto profissional, contado.") | Never hard-code milhas or km where km users also see the line. |
 | self-employed | **autônomo(s)** | |
 | employee(s) / employer | **empregado(s) / empregador** | |
 | accountant | **contador** | |
@@ -63,8 +71,12 @@ Numbers inside sentences use Brazilian separators (5.000 km, £50.000, $1.000). 
 ## Jokes and greetings (adapted)
 
 - "Knock knock" → "Toc, toc" / "Quem é? …", which works the same way in Brazil.
-- "Sunday scaries" → "Bateu a deprê de domingo? Que não seja pelos impostos".
-- "Swipe right on savings" / "Easiest date of the week" → "Dê match no seu dinheiro" / "O match mais fácil da semana".
+- "Sunday scaries" → "Bateu o desânimo de domingo? Que não seja pelos impostos" ("deprê" dropped: it makes light of depression).
+- "Swipe right on savings" / "Easiest date of the week" → "Hora do match" / "O match mais fácil da semana" (no "dar", no saving promised).
+- "Free money alert" / "technically it’s your money" → "Deixou algo pelo caminho? 💸" / "Você rodou, você trabalhou. Classifique… para nenhuma dedução ficar de fora." ("dinheiro grátis" reads like a scam).
+- "Plot twist: driving pays" → "Reviravolta: dirigir conta a seu favor"; "Low effort, high reward" → "Pouco esforço, muito resultado".
+- "Your car did the hard part" body → "Agora é com você: um minutinho para classificar os trajetos da semana." ("levar o crédito" could read as a tax credit).
+- Avoid "dar uma ___ada" (e.g. "dê uma classificada rápida"): the pattern carries innuendo in Brazil.
 - Shoebox of receipts → "caixa de sapato cheia de notinhas".
 - "Your miles called" body → "Querem uma classificação antes de segunda", which has no gender, so it works after both "Suas milhas" and "Seus quilômetros".
 - Cheers: Valendo!, Vamos lá!, Vamos nessa!, Partiu!, Lá vamos nós!, Hora de rodar!
@@ -73,9 +85,9 @@ Numbers inside sentences use Brazilian separators (5.000 km, £50.000, $1.000). 
 
 ## Plurals
 
-pt-BR categories are `one`, `many`, `other`. `many` is always the same as `other`. Note: CLDR puts **0** (and 0–1.x decimals) in `one` for Portuguese, so a count of 0 would show the singular (for example "0 selecionado"). The app seems never to show these lines with 0, but reviewers may want to check.
+pt-BR categories are `one`, `many`, `other`. `many` is always the same as `other`. CLDR puts **0** in `one` for Portuguese, so every plural object whose `one` differs from `other` also has a **`zero`** form with the plural wording ("0 milhas", "0 trajetos", "Faltam 0 dias"). `translate()` uses `zero` when count is exactly 0.
 
-## Unsure
+## Unsure (resolved in the cultural review, see `review/pt-BR-culture.md`)
 
 1. **iOS wording.** These are from memory of iOS in pt-BR, so please check them on a device:
    - "Allow While Using App" → **Permitir Durante o Uso do App**
@@ -85,13 +97,13 @@ pt-BR categories are `one`, `many`, `other`. `many` is always the same as `other
    - "ALLOW LOCATION ACCESS" → **PERMITIR ACESSO À LOCALIZAÇÃO**
    - "Always" → **Sempre**, "Never" → **Nunca**, "Location" → **Localização**, "Open Settings" → **Abrir Ajustes**, "Settings → Notifications" → **Ajustes → Notificações**
 2. **"Enter the miles/kilometres driven, e.g. 12.5."** I kept "12.5" with a dot because the app's number check (`parseMiles` in `src/domain/format.ts`) only accepts a dot. Brazilians normally type a comma (12,5), which the app will reject. This is worth fixing in code.
-3. **"Business" = "Profissional"**: chosen so it is not confused with the place "Trabalho" (Work). "A trabalho" would be shorter and more colloquial if reviewers prefer it and accept the clash.
-4. **Articles before `{{authority}}`**: always masculine ("o HMRC", "a taxa do {{authority}}"). For CRA, written out, it is "a CRA". Please check that this reads naturally.
+3. **"Business" = "Profissional"**: kept. Every place it appears as a label (segmented control, bulk buttons, swipe action) is half the screen wide, so the extra length fits.
+4. **Articles before `{{authority}}`**: always masculine, including the written-out CRA lines ("o CRA").
 5. **"Missed miles check" → "Conferir distância perdida"**: I used a unit-neutral wording because the screen also serves km regions.
 6. **"{{label}}: earned / not yet"** (screen reader) → "conquista obtida / ainda não obtida". I used the noun "conquista" so it works whatever the gender of the milestone title.
-7. **"Your driving"** (Settings section with vehicles and shift mode) → "Ao volante".
+7. **"Your driving"** → now "Veículos e trajetos".
 8. **"Moped or motorbike"** and **"Motorbike or scooter"** are both "Moto ou scooter". "Mobilete" is regional.
 9. **"Sort this week’s drives and bank the deduction"** → "…deixe a dedução anotada", which avoids sounding like a promised saving.
 10. **"Tax-ready PDF report"** → "Relatório PDF para o fisco", shortened to fit the feature list.
-11. **"UK" → "Reino Unido"** (11 characters) in a half-width tile. "RU" is not understood, so please check that it fits.
-12. **Lines longer than 1.3× the English.** Portuguese runs longer. Some small labels are over the limit, for example "Profissional" (Business), "Selecionar" (Select, Apple's word), "Compartilhar" (Share it, Apple's word), "Observação" (Note) and "Nenhum dos dois" (Neither). Please check them on screen.
+11. **"UK"** → now "UK" in the tile; "Reino Unido" for "United Kingdom".
+12. **Lines longer than 1.3× the English.** Kept after checking the layouts: "Profissional" (half-width controls), "Selecionar" (Apple's word; alone in the row with "Trajetos"), "Compartilhar" (Apple's word; the only text on a full-width button), "Observação" (screen-reader label and a full-width field label) and "Nenhum dos dois" (title of a full-width option card). Shortened: "Best value", "Use now", "UK", "Select {{count}} unsorted".
