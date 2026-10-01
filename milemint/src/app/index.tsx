@@ -491,8 +491,14 @@ export default function HomeScreen() {
       {/* Once after setup (or replayed from Settings): sort two sample drives, nothing saved. */}
       <PracticeTutorial
         TripRow={TripRow}
-        // Never over a drive being recorded, a running shift, or another overlay.
-        hold={liveDrive !== null || shiftMode.shift !== null || celebration.content !== null || picking !== null}
+        // Never over a drive being recorded, a running shift (or its Undo), or another overlay.
+        hold={
+          liveDrive !== null ||
+          shiftMode.shift !== null ||
+          shiftMode.ended !== null ||
+          celebration.content !== null ||
+          picking !== null
+        }
       />
       <VehicleSheet
         visible={picking !== null}
