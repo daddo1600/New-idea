@@ -81,6 +81,18 @@ export function trialReminderDate(start: Date, trial: TrialLength): Date | null 
   return at.getTime() > start.getTime() ? at : null;
 }
 
+/**
+ * When a purchase's free trial (if it had one) began, in ms: the first
+ * purchase of the subscription. A renewal, a plan change or a
+ * resubscription after it lapsed shares that first purchase's original
+ * transaction, so it never looks like a trial starting now.
+ */
+export function trialStartOf(purchase: { transactionDate: number; originalTransactionDateIOS?: number | null }): number {
+  const original = purchase.originalTransactionDateIOS;
+  if (typeof original === 'number' && Number.isFinite(original) && original > 0) return original;
+  return purchase.transactionDate;
+}
+
 /** Whether an offer's trial is long enough to be reminded about before it ends. */
 export function remindsBeforeTrialEnds(offer: Offer): boolean {
   return !!offer.trial && trialReminderDate(new Date(2026, 0, 1), offer.trial) !== null;

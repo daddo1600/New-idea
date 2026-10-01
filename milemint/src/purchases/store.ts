@@ -64,19 +64,36 @@ function trialOf(product: ProductSubscription): ProTrial | null {
   return { count, unit: null };
 }
 
+/**
+ * Whether this Apple Account can still have the subscription group's free
+ * trial: someone who had one already (or subscribed before) is charged from
+ * day one, so the paywall mustn't promise them a trial. Unknown counts as yes,
+ * as before the check.
+ */
+async function trialEligible(product: ProductSubscription): Promise<boolean> {
+  const group = product.platform === 'ios' ? product.subscriptionGroupIdIOS : null;
+  if (!group) return true;
+  try {
+    return await iap().isEligibleForIntroOfferIOS(group);
+  } catch {
+    return true;
+  }
+}
+
 export async function loadPlans(): Promise<ProPlan[]> {
   if (!STORE_AVAILABLE) return [];
   await connect();
   const products = ((await iap().fetchProducts({ skus: PRO_PRODUCT_IDS, type: 'subs' })) ??
     []) as ProductSubscription[];
+  const eligible = await Promise.all(products.map(trialEligible));
   return products
-    .map((product) => ({
+    .map((product, index) => ({
       id: product.id,
       price: product.displayPrice,
       amount: typeof product.price === 'number' && Number.isFinite(product.price) ? product.price : null,
       currency: product.currency || null,
       period: product.id === PRO_YEARLY ? ('year' as const) : ('month' as const),
-      trial: trialOf(product),
+      trial: eligible[index] ? trialOf(product) : null,
     }))
     .sort((a, b) => PRO_PRODUCT_IDS.indexOf(a.id) - PRO_PRODUCT_IDS.indexOf(b.id));
 }

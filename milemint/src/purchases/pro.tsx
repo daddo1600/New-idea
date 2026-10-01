@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { AppState, Platform } from 'react-native';
 
 import { DEMO_MODE, DEMO_PRO, DEMO_REGION } from '@/dev/demo';
-import { formatPrice } from '@/domain/pro-offer';
+import { formatPrice, trialStartOf } from '@/domain/pro-offer';
 import { displayLocale, REGIONS, type RegionCode } from '@/domain/regions';
 import { msg } from '@/i18n/i18n';
 import { useRegion } from '@/region/region';
@@ -122,11 +122,12 @@ export function ProProvider({ children }: { children: ReactNode }) {
           setBusy(false);
           setError(null);
           remember(true);
-          // The plan's trial is the intro offer the user was eligible for when they bought.
+          // The plan's trial is the intro offer the user was eligible for when they bought. Counted from
+          // the subscription's first purchase: a renewal or a resubscription is no new trial.
           const { plans: offered, locale } = latest.current;
           const plan = offered.find((option) => option.id === purchase.productId);
           if (plan?.trial) {
-            scheduleTrialReminder(db, plan, purchase.transactionDate || Date.now(), locale).catch((reminderError) =>
+            scheduleTrialReminder(db, plan, trialStartOf(purchase) || Date.now(), locale).catch((reminderError) =>
               console.warn('[pro] trial reminder not scheduled', reminderError),
             );
           }

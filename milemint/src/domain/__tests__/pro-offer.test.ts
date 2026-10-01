@@ -8,6 +8,7 @@ import {
   remindsBeforeTrialEnds,
   trialEnd,
   trialReminderDate,
+  trialStartOf,
 } from '../pro-offer';
 
 describe('per-month price of the yearly plan', () => {
@@ -89,5 +90,23 @@ describe('plain offer wording', () => {
   it('is just the price without a trial, never "due today"', () => {
     expect(offerTermsKey({ period: 'year', trial: null })).toBe('{{price}} a year. Cancel any time in Settings.');
     expect(offerTermsKey({ period: 'month', trial: null })).toBe('{{price}} a month. Cancel any time in Settings.');
+  });
+});
+
+describe('when a purchase’s trial began', () => {
+  const first = Date.UTC(2026, 9, 1, 9);
+  const renewal = Date.UTC(2026, 10, 1, 9);
+
+  it('is the first purchase, so a renewal or a resubscription never starts a new trial', () => {
+    const start = trialStartOf({ transactionDate: renewal, originalTransactionDateIOS: first });
+    expect(start).toBe(first);
+    // Its reminder would already be past: none is queued.
+    expect(trialReminderDate(new Date(start), { count: 1, unit: 'month' })!.getTime()).toBeLessThan(renewal);
+  });
+
+  it('is the purchase itself when the App Store gives no original date', () => {
+    expect(trialStartOf({ transactionDate: first })).toBe(first);
+    expect(trialStartOf({ transactionDate: first, originalTransactionDateIOS: null })).toBe(first);
+    expect(trialStartOf({ transactionDate: first, originalTransactionDateIOS: 0 })).toBe(first);
   });
 });
