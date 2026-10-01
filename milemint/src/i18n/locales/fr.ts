@@ -1223,6 +1223,10 @@ const dictionary: Dictionary = {
   "Pick all that apply. The first one you pick is filled in for you.": "Choisissez tout ce qui s’applique. Le premier choisi est rempli pour vous.",
   "Filled in for you": "Rempli pour vous",
   "Default": "Habituel",
+  "Allow While Using App": "Autoriser lorsque l’app est active",
+  "Change to Always Allow": "Passer à Toujours autoriser",
+  "Tap “{{button}}”": "Touchez « {{button}} »",
+  "{{step}} OF 2": "{{step}} SUR 2",
 };
 
 export default dictionary;

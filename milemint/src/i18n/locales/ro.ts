@@ -1223,6 +1223,10 @@ const dictionary: Dictionary = {
   "Pick all that apply. The first one you pick is filled in for you.": "Alege tot ce se potrivește. Primul ales îl completăm noi.",
   "Filled in for you": "Îl completăm noi",
   "Default": "Obișnuit",
+  "Allow While Using App": "Permite când se folosește aplicația",
+  "Change to Always Allow": "Schimbă la Permite întotdeauna",
+  "Tap “{{button}}”": "Atinge „{{button}}”",
+  "{{step}} OF 2": "PASUL {{step}} DIN 2",
 };
 
 export default dictionary;

@@ -1133,6 +1133,10 @@ const dictionary: Dictionary = {
   "Pick all that apply. The first one you pick is filled in for you.": "जो भी लागू हों, सब चुनें। जो पहले चुनेंगे, वह हम आपके लिए भर देंगे।",
   "Filled in for you": "आपके लिए भरा जाएगा",
   "Default": "आम",
+  "Allow While Using App": "ऐप का उपयोग करते समय अनुमति दें",
+  "Change to Always Allow": "हमेशा अनुमति दें में बदलें",
+  "Tap “{{button}}”": "“{{button}}” पर टैप करें",
+  "{{step}} OF 2": "2 में से {{step}}",
 };
 
 export default dictionary;

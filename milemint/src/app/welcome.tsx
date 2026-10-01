@@ -23,6 +23,7 @@ import { AlwaysGuide } from '@/components/always-guide';
 import { BrandGradient } from '@/components/brand-gradient';
 import { CountryOptions, phoneRegion } from '@/components/country-options';
 import { LeafMark } from '@/components/leaf-mark';
+import { PermissionPreview } from '@/components/permission-preview';
 import { purposeIcon, quickPurposes, shownPurpose } from '@/components/purpose-picker';
 import { MintWash, StepHeader, StepIcon } from '@/components/step-header';
 import { VehiclePicker } from '@/components/vehicle-picker';
@@ -576,6 +577,7 @@ export default function WelcomeScreen() {
                   </Text>
                 ) : (
                   <>
+                    <PermissionPreview />
                     <View style={styles.glass}>
                       <Rich
                         text={t(

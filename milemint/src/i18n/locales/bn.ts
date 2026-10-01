@@ -1133,6 +1133,10 @@ const dictionary: Dictionary = {
   "Pick all that apply. The first one you pick is filled in for you.": "যেগুলো খাটে সবগুলো বেছে নিন। প্রথমটি আমরা আপনার হয়ে বসিয়ে দেব।",
   "Filled in for you": "আপনার হয়ে বসানো হবে",
   "Default": "সাধারণ",
+  "Allow While Using App": "অ্যাপ ব্যবহার করার সময় অনুমতি দিন",
+  "Change to Always Allow": "সবসময় অনুমতি দিন-এ পরিবর্তন করুন",
+  "Tap “{{button}}”": "“{{button}}” ট্যাপ করুন",
+  "{{step}} OF 2": "ধাপ {{step}}/2",
 };
 
 export default dictionary;

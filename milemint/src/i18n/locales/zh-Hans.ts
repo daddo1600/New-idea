@@ -1095,6 +1095,10 @@ const dictionary: Dictionary = {
   "Pick all that apply. The first one you pick is filled in for you.": "可多选。第一个选中的会自动帮你填好。",
   "Filled in for you": "自动帮你填好",
   "Default": "常用",
+  "Allow While Using App": "使用App时允许",
+  "Change to Always Allow": "更改为始终允许",
+  "Tap “{{button}}”": "轻点“{{button}}”",
+  "{{step}} OF 2": "第 {{step}} 步（共 2 步）",
 };
 
 export default dictionary;

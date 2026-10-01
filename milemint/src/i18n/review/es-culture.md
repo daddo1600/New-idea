@@ -277,3 +277,8 @@ Tracking health: the home card that says when tracking stopped (and offers to ad
 ## Round 8c: work purpose tiles
 
 Back-translations: Choose all that apply. The first you choose is filled in for you. / Filled in for you / Usual. "Default" is rendered with the same word as the existing "Usual purpose" line, so the badge and the trip note match.
+
+
+## Round 8d: permission preview
+
+The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.

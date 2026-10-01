@@ -479,6 +479,12 @@
     ]
   },
   {
+    "key": "{{step}} OF 2",
+    "files": [
+      "components/permission-preview.tsx"
+    ]
+  },
+  {
     "key": "{{trial}}, then {{price}}/month",
     "files": [
       "app/pro.tsx"
@@ -864,6 +870,12 @@
     "key": "Allow location access and MileMint logs every drive for you.",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Allow While Using App",
+    "files": [
+      "components/permission-preview.tsx"
     ]
   },
   {
@@ -1327,6 +1339,12 @@
     "key": "Change language",
     "files": [
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Change to Always Allow",
+    "files": [
+      "components/permission-preview.tsx"
     ]
   },
   {
@@ -2922,6 +2940,7 @@
     "key": "Language",
     "files": [
       "app/_layout.tsx",
+      "app/language.tsx",
       "app/settings.tsx"
     ]
   },
@@ -4562,6 +4581,7 @@
     "key": "Settings",
     "files": [
       "app/_layout.tsx",
+      "app/settings.tsx",
       "components/header-menu.tsx"
     ]
   },
@@ -4967,6 +4987,12 @@
     "key": "Swipe to start shift",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Tap “{{button}}”",
+    "files": [
+      "components/permission-preview.tsx"
     ]
   },
   {
