@@ -4,10 +4,12 @@ import { Platform } from 'react-native';
 import { countdownReminders } from '@/domain/deadlines';
 import type { DistanceUnit, Region } from '@/domain/regions';
 import { tomorrowAt, upcomingSundays, weeklyMessage } from '@/domain/reminders';
+import { t } from '@/i18n/i18n';
 
 /**
  * Local reminders, scheduled on the phone itself: no push service, no
- * server, nothing sent anywhere.
+ * server, nothing sent anywhere. Their text is written in the current
+ * language when they're scheduled.
  *
  * The Sunday nudge is a different message each week, so the next few Sundays
  * are scheduled one by one and topped up whenever the app opens.
@@ -77,8 +79,8 @@ export async function scheduleWorkHoursNudge(): Promise<void> {
   await Notifications.scheduleNotificationAsync({
     identifier: WORK_HOURS_NUDGE_ID,
     content: {
-      title: 'Set it and forget it ⏱️',
-      body: 'Tell MileMint your work hours once and it sorts most drives for you. Takes 30 seconds.',
+      title: t('Set it and forget it ⏱️'),
+      body: t('Tell MileMint your work hours once and it sorts most drives for you. Takes 30 seconds.'),
       data: { url: '/settings' },
     },
     trigger: {

@@ -39,6 +39,7 @@ import {
 } from '@/domain/regions';
 import { type Classification, toLocalIsoDate, type Trip, VEHICLE_ICONS } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
+import { getLanguage, msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
 import { useRegion } from '@/region/region';
 import { rememberTotal } from '@/region/remembered-region';
@@ -51,15 +52,15 @@ import { useVehicles } from '@/vehicles/use-vehicles';
 import { useMilestoneCelebration } from '@/milestones/use-milestones';
 
 const CLASSIFY_OPTIONS = [
-  { value: 'business', label: 'Business' },
-  { value: 'personal', label: 'Personal' },
+  { value: 'business', label: msg('Business') },
+  { value: 'personal', label: msg('Personal') },
 ] as const satisfies readonly { value: Classification; label: string }[];
 
 const AUTO_NOTES: Record<AutoReason, string> = {
-  'learned-route': 'Auto: usual route',
-  'work-hours': 'Auto: work hours',
-  commute: 'Auto: commute',
-  default: 'Auto: business by default · swipe left if personal',
+  'learned-route': msg('Auto: usual route'),
+  'work-hours': msg('Auto: work hours'),
+  commute: msg('Auto: commute'),
+  default: msg('Auto: business by default · swipe left if personal'),
 };
 
 /** How far a row must be dragged before letting go classifies it. */
@@ -80,6 +81,7 @@ export default function HomeScreen() {
   const liveDrive = useLiveDrive();
   const garage = useVehicles();
   const theme = useTheme();
+  const t = useT();
   /** Choosing a vehicle: before starting a shift, or switching from the chip on home. */
   const [picking, setPicking] = useState<'shift' | 'switch' | null>(null);
   const locked = useMemo(() => lockedTripIds(trips ?? [], isPro), [trips, isPro]);
@@ -87,7 +89,7 @@ export default function HomeScreen() {
   const visible = useMemo(() => (trips ?? []).filter((trip) => !locked.has(trip.id)), [trips, locked]);
   const deductions = useMemo(() => computeDeductions(visible, region), [visible, region]);
   const shiftTrips = useMemo(
-    () => (shiftMode.shift ? visible.filter((t) => t.shiftId === shiftMode.shift?.id) : []),
+    () => (shiftMode.shift ? visible.filter((trip) => trip.shiftId === shiftMode.shift?.id) : []),
     [visible, shiftMode.shift],
   );
   const summary = useMemo(
@@ -139,9 +141,9 @@ export default function HomeScreen() {
   };
 
   const confirmDelete = (trip: Trip) =>
-    Alert.alert('Delete trip?', `${trip.startLabel} → ${trip.endLabel}`, [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', style: 'destructive', onPress: () => remove(trip) },
+    Alert.alert(t('Delete trip?'), `${trip.startLabel} → ${trip.endLabel}`, [
+      { text: t('Cancel'), style: 'cancel' },
+      { text: t('Delete'), style: 'destructive', onPress: () => remove(trip) },
     ]);
 
   return (
@@ -164,9 +166,9 @@ export default function HomeScreen() {
               <ShiftBar
                 shift={shiftMode.shift}
                 drives={shiftTrips.length}
-                distance={formatDistance(shiftTrips.reduce((sum, t) => sum + t.distanceMeters, 0), region)}
+                distance={formatDistance(shiftTrips.reduce((sum, trip) => sum + trip.distanceMeters, 0), region)}
                 value={formatMoney(
-                  shiftTrips.reduce((sum, t) => sum + (deductions.get(t.id) ?? 0), 0),
+                  shiftTrips.reduce((sum, trip) => sum + (deductions.get(trip.id) ?? 0), 0),
                   region,
                 )}
                 onStart={() => (garage.vehicles.length > 1 ? setPicking('shift') : shiftMode.start())}
@@ -188,11 +190,11 @@ export default function HomeScreen() {
             {garage.vehicles.length > 1 && garage.current && (
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={`Driving ${garage.current.name}. Change vehicle`}
+                accessibilityLabel={t('Driving {{vehicle}}. Change vehicle', { vehicle: garage.current.name })}
                 onPress={() => setPicking('switch')}
                 style={[styles.vehicleChip, { backgroundColor: theme.backgroundElement }]}>
                 <ThemedText type="small" themeColor="textSecondary">
-                  Driving:
+                  {t('Driving:')}
                 </ThemedText>
                 <ThemedText type="smallBold">
                   {VEHICLE_ICONS[garage.current.type]} {garage.current.name}
@@ -217,11 +219,11 @@ export default function HomeScreen() {
         ListEmptyComponent={
           <View style={styles.empty}>
             <LeafMark size={72} />
-            <ThemedText type="smallBold">{status === 'on' ? 'Ready when you are' : 'No drives yet'}</ThemedText>
+            <ThemedText type="smallBold">{status === 'on' ? t('Ready when you are') : t('No drives yet')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary" style={styles.emptyBody}>
               {status === 'on'
-                ? 'Just drive. Each trip appears here after you park, ready to swipe business or personal.'
-                : 'Turn on automatic tracking and your drives will appear here.'}
+                ? t('Just drive. Each trip appears here after you park, ready to swipe business or personal.')
+                : t('Turn on automatic tracking and your drives will appear here.')}
             </ThemedText>
           </View>
         }
@@ -248,7 +250,7 @@ export default function HomeScreen() {
       <Celebration content={celebration.content} onClose={celebration.close} />
       <VehicleSheet
         visible={picking !== null}
-        title={picking === 'shift' ? 'Which vehicle today?' : 'What are you driving?'}
+        title={picking === 'shift' ? t('Which vehicle today?') : t('What are you driving?')}
         vehicles={garage.vehicles}
         currentId={garage.current?.id ?? null}
         onClose={() => setPicking(null)}
@@ -286,26 +288,27 @@ function SelectBar({
   onCancel: () => void;
 }) {
   const theme = useTheme();
+  const t = useT();
   return (
     <View style={styles.selectBar}>
       <ThemedText type="smallBold" themeColor="textSecondary">
-        Trips
+        {t('Trips')}
       </ThemedText>
       <View style={styles.selectActions}>
         {selecting && unsortedCount > 0 && (
           <Pressable accessibilityRole="button" hitSlop={8} onPress={onSelectUnsorted}>
             <ThemedText type="small" style={{ color: theme.accent }}>
-              Select {unsortedCount} unsorted
+              {t('Select {{count}} unsorted', { count: unsortedCount })}
             </ThemedText>
           </Pressable>
         )}
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={selecting ? 'Stop selecting trips' : 'Select several trips to sort at once'}
+          accessibilityLabel={selecting ? t('Stop selecting trips') : t('Select several trips to sort at once')}
           hitSlop={8}
           onPress={selecting ? onCancel : onStart}>
           <ThemedText type="smallBold" style={{ color: theme.accent }}>
-            {selecting ? 'Cancel' : 'Select'}
+            {selecting ? t('Cancel') : t('Select')}
           </ThemedText>
         </Pressable>
       </View>
@@ -324,14 +327,24 @@ function SelectableTripRow({
   onToggle: () => void;
 }) {
   const theme = useTheme();
+  const t = useT();
   const { region } = useRegion();
   const status =
-    trip.classification === 'unclassified' ? 'Not sorted' : trip.classification === 'business' ? 'Business' : 'Personal';
+    trip.classification === 'unclassified'
+      ? t('Not sorted')
+      : trip.classification === 'business'
+        ? t('Business')
+        : t('Personal');
   return (
     <Pressable
       accessibilityRole="checkbox"
       accessibilityState={{ checked: selected }}
-      accessibilityLabel={`${trip.startLabel} to ${trip.endLabel}, ${trip.localDate}, ${status}`}
+      accessibilityLabel={t('{{from}} to {{to}}, {{date}}, {{status}}', {
+        from: trip.startLabel,
+        to: trip.endLabel,
+        date: trip.localDate,
+        status,
+      })}
       onPress={onToggle}>
       <ThemedView
         type="backgroundElement"
@@ -377,13 +390,14 @@ function BulkActions({
   onPersonal: () => void;
 }) {
   const theme = useTheme();
+  const t = useT();
   const disabled = count === 0;
   return (
     <ThemedView
       type="backgroundElement"
       style={[styles.bulkBar, { paddingBottom: Spacing.three + bottom, borderTopColor: theme.backgroundSelected }]}>
       <ThemedText type="small" themeColor="textSecondary" style={styles.bulkCount}>
-        {count === 0 ? 'Tap trips to select them' : `${count} selected`}
+        {count === 0 ? t('Tap trips to select them') : t('{{count}} selected', { count })}
       </ThemedText>
       <View style={styles.bulkButtons}>
         <Pressable
@@ -392,7 +406,7 @@ function BulkActions({
           onPress={onBusiness}
           style={[styles.bulkButton, { backgroundColor: theme.accent, opacity: disabled ? 0.5 : 1 }]}>
           <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-            Business
+            {t('Business')}
           </ThemedText>
         </Pressable>
         <Pressable
@@ -400,7 +414,7 @@ function BulkActions({
           disabled={disabled}
           onPress={onPersonal}
           style={[styles.bulkButton, { backgroundColor: theme.backgroundSelected, opacity: disabled ? 0.5 : 1 }]}>
-          <ThemedText type="smallBold">Personal</ThemedText>
+          <ThemedText type="smallBold">{t('Personal')}</ThemedText>
         </Pressable>
       </View>
     </ThemedView>
@@ -408,8 +422,10 @@ function BulkActions({
 }
 
 function SummaryCard({ summary, commuteCents }: { summary: TaxYearSummary; commuteCents: number }) {
+  const t = useT();
   const { region } = useRegion();
   const total = formatMoney(summary.deduction, region);
+  const distance = formatDistance(summary.businessMeters, region);
   return (
     <View style={styles.card}>
       {/* The app icon's gradient, with the leaf growing out of the corner. */}
@@ -418,28 +434,31 @@ function SummaryCard({ summary, commuteCents }: { summary: TaxYearSummary; commu
         <LeafMark size={190} opacity={0.22} />
       </View>
       <Text style={styles.heroLabel}>
-        Deductions found in {summary.label}
-        {summary.label.length > 4 ? ' tax year' : ''}
+        {summary.label.length > 4
+          ? t('Deductions found in {{year}} tax year', { year: summary.label })
+          : t('Deductions found in {{year}}', { year: summary.label })}
       </Text>
-      <Text style={styles.heroTotal} accessibilityLabel={`${total} found`}>
+      <Text style={styles.heroTotal} accessibilityLabel={t('{{amount}} found', { amount: total })}>
         {total}
       </Text>
       <Text style={styles.heroLabel}>
-        {formatDistance(summary.businessMeters, region)} business
-        {summary.unclassifiedCount > 0 && ` · ${summary.unclassifiedCount} to review`}
+        {summary.unclassifiedCount > 0
+          ? t('{{distance}} business · {{count}} to review', { distance, count: summary.unclassifiedCount })
+          : t('{{distance}} business', { distance })}
       </Text>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Reports: export your mileage log"
+        accessibilityLabel={t('Reports: export your mileage log')}
         hitSlop={8}
         onPress={() => router.push('/report')}
         style={styles.reportLink}>
-        <Text style={styles.reportLinkText}>Export report</Text>
+        <Text style={styles.reportLinkText}>{t('Export report')}</Text>
       </Pressable>
       {commuteCents > 0 && (
         <Text style={styles.heroWarning}>
-          Includes {formatMoney(commuteCents, region)} from home ↔ work commutes, which usually aren’t
-          deductible.
+          {t('Includes {{amount}} from home ↔ work commutes, which usually aren’t deductible.', {
+            amount: formatMoney(commuteCents, region),
+          })}
         </Text>
       )}
     </View>
@@ -464,13 +483,14 @@ function TripRow({
   onLongPress: () => void;
 }) {
   const theme = useTheme();
+  const t = useT();
   const { region } = useRegion();
   const swipeable = useRef<SwipeableMethods>(null);
   const unclassified = trip.classification === 'unclassified';
   const business = trip.classification === 'business';
   const details = [
     trip.localDate,
-    trip.source === 'auto' ? formatTime(trip.startedAt) : 'Added manually',
+    trip.source === 'auto' ? formatTime(trip.startedAt) : t('Added manually'),
     trip.purpose,
     deduction > 0 ? formatMoney(deduction, region) : '',
   ].filter(Boolean);
@@ -485,11 +505,11 @@ function TripRow({
       leftThreshold={SWIPE_THRESHOLD}
       rightThreshold={SWIPE_THRESHOLD}
       renderLeftActions={() => (
-        <SwipeAction label="Business" color={theme.accent} textColor={theme.onAccent} side="left" />
+        <SwipeAction label={t('Business')} color={theme.accent} textColor={theme.onAccent} side="left" />
       )}
       renderRightActions={() => (
         <SwipeAction
-          label="Personal"
+          label={t('Personal')}
           color={theme.backgroundSelected}
           textColor={theme.text}
           side="right"
@@ -502,7 +522,7 @@ function TripRow({
       <Pressable
         onPress={openDetails}
         onLongPress={onLongPress}
-        accessibilityHint="Opens trip details. Long press to delete">
+        accessibilityHint={t('Opens trip details. Long press to delete')}>
         <ThemedView type="backgroundElement" style={styles.row}>
           <View style={styles.rowHeader}>
             <ThemedText type="smallBold" style={styles.route} numberOfLines={1}>
@@ -516,36 +536,42 @@ function TripRow({
           {trip.autoReason && (
             <ThemedText type="small" themeColor="textSecondary">
               {trip.shiftId
-                ? 'Auto: on shift'
+                ? t('Auto: on shift')
                 : trip.autoReason === 'work-hours'
                   ? trip.classification === 'business'
-                    ? 'Auto: in your work hours'
-                    : 'Auto: outside your work hours · swipe right if it was work'
-                  : AUTO_NOTES[trip.autoReason]}
+                    ? t('Auto: in your work hours')
+                    : t('Auto: outside your work hours · swipe right if it was work')
+                  : t(AUTO_NOTES[trip.autoReason])}
             </ThemedText>
           )}
           {business && commute && (
             <ThemedText type="small" themeColor="danger">
-              Commute between home and work isn’t deductible.
+              {t('Commute between home and work isn’t deductible.')}
             </ThemedText>
           )}
           {unclassified && (
             <ThemedText type="smallBold" style={{ color: theme.accent }}>
-              Business or personal?{potential > 0 ? ` Worth ${formatMoney(potential, region)} if business.` : ''}
+              {potential > 0
+                ? t('Business or personal? Worth {{amount}} if business.', { amount: formatMoney(potential, region) })
+                : t('Business or personal?')}
             </ThemedText>
           )}
           {business && !trip.purpose.trim() && (
             <Pressable accessibilityRole="button" onPress={openDetails} hitSlop={8}>
               <ThemedText type="smallBold" style={{ color: theme.accent }}>
-                Add business purpose
+                {t('Add business purpose')}
               </ThemedText>
             </Pressable>
           )}
           <Segmented
-            options={CLASSIFY_OPTIONS}
+            options={CLASSIFY_OPTIONS.map((option) => ({ ...option, label: t(option.label) }))}
             value={unclassified ? null : trip.classification}
             onChange={onClassify}
-            accessibilityLabelFor={(option) => `Mark ${trip.startLabel} to ${trip.endLabel} as ${option.label.toLowerCase()}`}
+            accessibilityLabelFor={(option) =>
+              option.value === 'business'
+                ? t('Mark {{from}} to {{to}} as business', { from: trip.startLabel, to: trip.endLabel })
+                : t('Mark {{from}} to {{to}} as personal', { from: trip.startLabel, to: trip.endLabel })
+            }
           />
         </ThemedView>
       </Pressable>
@@ -560,28 +586,33 @@ function TripRow({
  */
 function LockedTripRow({ trip, worth }: { trip: Trip; worth: number }) {
   const theme = useTheme();
+  const t = useT();
   const { region } = useRegion();
   const distance = formatDistance(trip.distanceMeters, region);
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`Locked drive on ${trip.localDate}, ${distance}`}
-      accessibilityHint="Opens MileMint Pro to unlock it"
+      accessibilityLabel={t('Locked drive on {{date}}, {{distance}}', { date: trip.localDate, distance })}
+      accessibilityHint={t('Opens MileMint Pro to unlock it')}
       onPress={() => router.push('/pro')}>
       <ThemedView type="backgroundElement" style={styles.row}>
         <View style={styles.rowHeader}>
           <ThemedText type="smallBold" themeColor="textSecondary" style={styles.route}>
-            🔒 Locked drive
+            🔒 {t('Locked drive')}
           </ThemedText>
           <ThemedText type="smallBold">{distance}</ThemedText>
         </View>
         <ThemedText type="small" themeColor="textSecondary">
-          {[trip.localDate, formatTime(trip.startedAt), worth > 0 ? `worth up to ${formatMoney(worth, region)}` : '']
+          {[
+            trip.localDate,
+            formatTime(trip.startedAt),
+            worth > 0 ? t('worth up to {{amount}}', { amount: formatMoney(worth, region) }) : '',
+          ]
             .filter(Boolean)
             .join(' · ')}
         </ThemedText>
         <ThemedText type="smallBold" style={{ color: theme.accent }}>
-          Unlock with MileMint Pro
+          {t('Unlock with MileMint Pro')}
         </ThemedText>
       </ThemedView>
     </Pressable>
@@ -591,6 +622,7 @@ function LockedTripRow({ trip, worth }: { trip: Trip; worth: number }) {
 /** Free plan meter: how much of this month's allowance is used. */
 function PlanCard({ trips, lockedCount }: { trips: readonly Trip[]; lockedCount: number }) {
   const theme = useTheme();
+  const t = useT();
   const now = new Date();
   const used = Math.min(
     autoDrivesInMonth(trips, toLocalIsoDate(now).slice(0, 7)),
@@ -605,10 +637,10 @@ function PlanCard({ trips, lockedCount }: { trips: readonly Trip[]; lockedCount:
         style={[styles.planCard, lockedCount > 0 && { borderColor: theme.accent, borderWidth: 1 }]}>
         <View style={styles.rowHeader}>
           <ThemedText type="smallBold">
-            {used} of {FREE_AUTO_DRIVES_PER_MONTH} free drives in {month}
+            {t('{{used}} of {{limit}} free drives in {{month}}', { used, limit: FREE_AUTO_DRIVES_PER_MONTH, month })}
           </ThemedText>
           <View style={styles.goPro}>
-            <Text style={styles.goProText}>★ Go Pro</Text>
+            <Text style={styles.goProText}>★ {t('Go Pro')}</Text>
           </View>
         </View>
         <View style={[styles.meter, { backgroundColor: theme.backgroundSelected }]}>
@@ -624,13 +656,12 @@ function PlanCard({ trips, lockedCount }: { trips: readonly Trip[]; lockedCount:
         </View>
         {lockedCount > 0 ? (
           <ThemedText type="small" themeColor="textSecondary">
-            {lockedCount} {lockedCount === 1 ? 'drive is' : 'drives are'} locked. Upgrade for unlimited
-            drives.
+            {t('{{count}} drives are locked. Upgrade for unlimited drives.', { count: lockedCount })}
           </ThemedText>
         ) : (
           full && (
             <ThemedText type="small" themeColor="textSecondary">
-              New drives this month are saved but locked until you upgrade.
+              {t('New drives this month are saved but locked until you upgrade.')}
             </ThemedText>
           )
         )}
@@ -670,7 +701,9 @@ function formatTime(iso: string): string {
 /** A drive being recorded right now, so nobody has to wait until parking to know it's working. */
 function LiveDriveBanner({ drive }: { drive: LiveDrive }) {
   const theme = useTheme();
+  const t = useT();
   const { region } = useRegion();
+  const distance = formatDistance(drive.distanceMeters, region);
   const since = new Date(drive.startedAt).toLocaleTimeString(region.locale, { hour: 'numeric', minute: '2-digit' });
   return (
     <View
@@ -680,12 +713,14 @@ function LiveDriveBanner({ drive }: { drive: LiveDrive }) {
       <LiveDot color={drive.stopped ? '#FACC15' : theme.accent} />
       <View style={styles.flex}>
         <ThemedText type="smallBold" style={{ color: theme.accent }}>
-          {drive.stopped ? 'Stopped' : 'Recording a drive'} · {formatDistance(drive.distanceMeters, region)}
+          {drive.stopped
+            ? t('Stopped · {{distance}}', { distance })
+            : t('Recording a drive · {{distance}}', { distance })}
         </ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
           {drive.stopped
-            ? 'If you’ve parked, the trip is saved after 5 minutes.'
-            : `Since ${since}. It’s saved as a trip once you park.`}
+            ? t('If you’ve parked, the trip is saved after 5 minutes.')
+            : t('Since {{time}}. It’s saved as a trip once you park.', { time: since })}
         </ThemedText>
       </View>
     </View>
@@ -708,6 +743,7 @@ function ShiftBar({
   onStart: () => void;
   onEnd: () => void;
 }) {
+  const t = useT();
   const { region } = useRegion();
   const [now, setNow] = useState(() => Date.now());
   /** A send-off shown for a few seconds after swiping to start. */
@@ -722,25 +758,28 @@ function ShiftBar({
     return (
       <View style={styles.shiftStart}>
         <SwipeToStart
-          label="Swipe to start shift"
-          hint="Every drive until you end it counts as business"
+          label={t('Swipe to start shift')}
+          hint={t('Every drive until you end it counts as business')}
           onComplete={() => {
-            setCheer(shiftCheer(region.code, Math.floor(Date.now() / 1000)));
+            setCheer(shiftCheer(region.code, Math.floor(Date.now() / 1000), getLanguage()));
             setTimeout(() => setCheer(null), 3500);
             onStart();
           }}
         />
         <ThemedText type="small" themeColor="textSecondary" style={styles.shiftHint}>
-          Every drive until you end it counts as business.
+          {t('Every drive until you end it counts as business.')}
         </ThemedText>
       </View>
     );
   }
 
   const minutes = Math.max(0, Math.floor((now - Date.parse(shift.startedAt)) / 60_000));
-  const elapsed = `${Math.floor(minutes / 60)}h ${String(minutes % 60).padStart(2, '0')}m`;
+  const elapsed = t('{{hours}}h {{minutes}}m', {
+    hours: Math.floor(minutes / 60),
+    minutes: String(minutes % 60).padStart(2, '0'),
+  });
   return (
-    <View style={styles.shiftOn} accessibilityLabel={`On shift for ${elapsed}, ${drives} drives`}>
+    <View style={styles.shiftOn} accessibilityLabel={t('On shift for {{elapsed}}, {{count}} drives', { elapsed, count: drives })}>
       <BrandGradient />
       <LiveDot color="#FACC15" />
       <View style={styles.flex}>
@@ -753,14 +792,16 @@ function ShiftBar({
             {cheer}
           </Animated.Text>
         ) : (
-          <Text style={styles.shiftTitle}>On shift · {elapsed}</Text>
+          <Text style={styles.shiftTitle}>{t('On shift · {{elapsed}}', { elapsed })}</Text>
         )}
         <Text style={styles.shiftSub}>
-          {drives > 0 ? `${distance} · ${value} · ${drives} ${drives === 1 ? 'drive' : 'drives'}` : 'Every drive counts as business'}
+          {drives > 0
+            ? t('{{distance}} · {{value}} · {{count}} drives', { distance, value, count: drives })
+            : t('Every drive counts as business')}
         </Text>
       </View>
       <Pressable accessibilityRole="button" onPress={onEnd} style={styles.shiftEnd}>
-        <Text style={styles.shiftEndText}>End shift</Text>
+        <Text style={styles.shiftEndText}>{t('End shift')}</Text>
       </Pressable>
     </View>
   );
@@ -794,22 +835,23 @@ function LiveDot({ color }: { color: string }) {
 
 const TRACKING_MESSAGES: Record<Exclude<TrackingStatus, 'on'>, { title: string; body: string }> = {
   'needs-permission': {
-    title: 'Automatic tracking is off',
-    body: 'Allow location access and MileMint logs every drive for you.',
+    title: msg('Automatic tracking is off'),
+    body: msg('Allow location access and MileMint logs every drive for you.'),
   },
   'needs-always': {
-    title: 'Drives may be missed',
-    body: 'Location is set to “While Using”. Switch it to “Always” so drives are logged when the app is closed.',
+    title: msg('Drives may be missed'),
+    body: msg('Location is set to “While Using”. Switch it to “Always” so drives are logged when the app is closed.'),
   },
-  off: { title: 'Automatic tracking is paused', body: 'Turn it back on to keep logging drives.' },
+  off: { title: msg('Automatic tracking is paused'), body: msg('Turn it back on to keep logging drives.') },
   unsupported: {
-    title: 'Preview mode',
-    body: 'Automatic tracking runs on your iPhone. Tap + to add a trip and try the app here.',
+    title: msg('Preview mode'),
+    body: msg('Automatic tracking runs on your iPhone. Tap + to add a trip and try the app here.'),
   },
 };
 
 function TrackingCard({ status }: { status: TrackingStatus | null }) {
   const theme = useTheme();
+  const t = useT();
   if (!status) return null;
   if (status === 'on') {
     return (
@@ -817,11 +859,11 @@ function TrackingCard({ status }: { status: TrackingStatus | null }) {
         <View style={[styles.livePill, { backgroundColor: theme.accent + '1F' }]}>
           <LiveDot color={theme.accent} />
           <ThemedText type="smallBold" style={{ color: theme.accent }}>
-            Tracking on
+            {t('Tracking on')}
           </ThemedText>
         </View>
         <ThemedText type="small" themeColor="textSecondary" style={styles.flex}>
-          Drives are logged when you park.
+          {t('Drives are logged when you park.')}
         </ThemedText>
       </View>
     );
@@ -829,9 +871,9 @@ function TrackingCard({ status }: { status: TrackingStatus | null }) {
   const message = TRACKING_MESSAGES[status];
   return (
     <ThemedView type="backgroundElement" style={[styles.trackingCard, { borderColor: theme.accent }]}>
-      <ThemedText type="smallBold">{message.title}</ThemedText>
+      <ThemedText type="smallBold">{t(message.title)}</ThemedText>
       <ThemedText type="small" themeColor="textSecondary">
-        {message.body}
+        {t(message.body)}
       </ThemedText>
       {status !== 'unsupported' && (
         <Pressable
@@ -839,7 +881,7 @@ function TrackingCard({ status }: { status: TrackingStatus | null }) {
           onPress={() => router.push('/setup-tracking')}
           style={[styles.trackingButton, { backgroundColor: theme.accent }]}>
           <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-            Turn on
+            {t('Turn on')}
           </ThemedText>
         </Pressable>
       )}

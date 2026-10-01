@@ -21,6 +21,7 @@ import {
 } from '@/domain/tracker-policy';
 import { toLocalIsoDate } from '@/domain/trip';
 import type { DetectedTrip, LocationSample } from '@/domain/trip-detector';
+import { t } from '@/i18n/i18n';
 
 import { loadTrackerRecord, saveTrackerRecord } from './tracker-store';
 
@@ -81,8 +82,8 @@ async function startGps(): Promise<void> {
     // Shows the blue location pill while driving: honest, and keeps iOS from suspending us.
     showsBackgroundLocationIndicator: true,
     foregroundService: {
-      notificationTitle: 'MileMint is logging this drive',
-      notificationBody: 'Tracking stops automatically when you park.',
+      notificationTitle: t('MileMint is logging this drive'),
+      notificationBody: t('Tracking stops automatically when you park.'),
     },
   });
 }

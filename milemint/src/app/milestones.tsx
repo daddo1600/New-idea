@@ -15,6 +15,7 @@ import { lockedTripIds } from '@/domain/plan';
 import { computeDeductions, formatDistance, formatMoney, fromUnits } from '@/domain/regions';
 import type { Trip } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/i18n/i18n';
 import { milestoneProgress } from '@/milestones/use-milestones';
 import { usePro } from '@/purchases/pro';
 import { useRegion } from '@/region/region';
@@ -23,6 +24,7 @@ import { useRegion } from '@/region/region';
 export default function MilestonesScreen() {
   const db = useSQLiteContext();
   const theme = useTheme();
+  const t = useT();
   const { region } = useRegion();
   const { isPro } = usePro();
   const [trips, setTrips] = useState<Trip[]>([]);
@@ -45,14 +47,21 @@ export default function MilestonesScreen() {
   );
   const earned = useMemo(() => new Set(reachedMilestones(progress).map((m) => m.id)), [progress]);
   const nextMoney = nextMilestone('money', progress.moneyMinor);
-  const unit = region.unit === 'mi' ? 'miles' : 'km';
+  const miles = region.unit === 'mi';
+  const distanceLabel = (threshold: number) => {
+    const distance = new Intl.NumberFormat(region.locale).format(threshold);
+    // `count` lets a translation pick a plural form for the unit.
+    return miles
+      ? t('{{distance}} miles', { distance, count: threshold })
+      : t('{{distance}} km', { distance, count: threshold });
+  };
 
   const label = (m: Milestone) =>
     m.kind === 'money'
       ? formatMoney(m.threshold * 100, region).replace(/[.,]00$/, '')
       : m.kind === 'distance'
-        ? `${new Intl.NumberFormat(region.locale).format(m.threshold)} ${unit}`
-        : HABITS[m.id as HabitId].title;
+        ? distanceLabel(m.threshold)
+        : t(HABITS[m.id as HabitId].title);
 
   const section = (title: string, kind: Milestone['kind']) => (
     <View style={styles.section}>
@@ -65,7 +74,9 @@ export default function MilestonesScreen() {
               key={m.id}
               type="backgroundElement"
               style={[styles.badge, got && { borderColor: '#FACC15', borderWidth: 2 }]}
-              accessibilityLabel={`${label(m)}: ${got ? 'earned' : 'not yet'}`}>
+              accessibilityLabel={
+                got ? t('{{label}}: earned', { label: label(m) }) : t('{{label}}: not yet', { label: label(m) })
+              }>
               <View style={[styles.coin, got ? styles.coinGot : { backgroundColor: theme.backgroundSelected }]}>
                 <Text style={[styles.coinEmoji, !got && styles.dim]}>{got ? m.emoji : '🔒'}</Text>
               </View>
@@ -90,10 +101,12 @@ export default function MilestonesScreen() {
           <View style={styles.heroLeaf} pointerEvents="none">
             <LeafMark size={160} opacity={0.2} />
           </View>
-          <Text style={styles.heroLabel}>Found for you so far</Text>
+          <Text style={styles.heroLabel}>{t('Found for you so far')}</Text>
           <Text style={styles.heroTotal}>{formatMoney(progress.moneyMinor, region)}</Text>
           <Text style={styles.heroLabel}>
-            {formatDistance(fromUnits(progress.distance, region), region)} of business driving
+            {t('{{distance}} of business driving', {
+              distance: formatDistance(fromUnits(progress.distance, region), region),
+            })}
           </Text>
           {nextMoney && (
             <View style={styles.next}>
@@ -101,15 +114,17 @@ export default function MilestonesScreen() {
                 <View style={[styles.meterFill, { width: `${Math.round(nextMoney.progress * 100)}%` }]} />
               </View>
               <Text style={styles.nextText}>
-                {formatMoney(nextMoney.threshold * 100 - progress.moneyMinor, region)} to go to{' '}
-                {formatMoney(nextMoney.threshold * 100, region).replace(/[.,]00$/, '')}
+                {t('{{remaining}} to go to {{goal}}', {
+                  remaining: formatMoney(nextMoney.threshold * 100 - progress.moneyMinor, region),
+                  goal: formatMoney(nextMoney.threshold * 100, region).replace(/[.,]00$/, ''),
+                })}
               </Text>
             </View>
           )}
         </View>
-        {section('Money back', 'money')}
-        {section(`Business ${unit}`, 'distance')}
-        {section('Good habits', 'habit')}
+        {section(t('Money back'), 'money')}
+        {section(miles ? t('Business miles') : t('Business km'), 'distance')}
+        {section(t('Good habits'), 'habit')}
       </ScrollView>
     </ThemedView>
   );
