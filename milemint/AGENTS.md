@@ -34,17 +34,6 @@ Run lint and typecheck before declaring any task done.
 Use EAS to build, sign, and submit the app in the cloud (`eas build`, `eas submit`) and to ship over-the-air updates (`eas update`) — no local Xcode or Android Studio required. Run EAS CLI as `bunx eas-cli <command>` in Bun projects, or `npx eas-cli@latest <command>` otherwise; substitute that for bare `eas` in docs examples.
 Docs: https://docs.expo.dev/eas/index.md
 
-## Builds are scarce: update over the air first
-
-The Expo free plan allows **15 iOS builds a month, shared by every session**. A build is only needed when the app's native code changes; everything else ships as an over-the-air update.
-
-- **JS, text, styling, images, translations → no build.** Publish an update instead:
-  `npx eas-cli@latest update --channel production --environment production --message "<what changed>" --non-interactive`
-  Installed apps download it in the background and switch to it the next time they're opened (`src/updates/use-ota-updates.ts`).
-- **A new build is needed only when the fingerprint changes:** a new or upgraded package with native code, a new config plugin, or native settings in `app.json`/`app.config.js` (permissions, entitlements, `extra.icloudBackup`, icon, splash, version), or an Expo SDK upgrade. Check with `npx eas-cli@latest fingerprint:compare` against the last build.
-- **Batch native changes into one build, and ask the user before starting any build.** Always build with `--auto-submit` so it goes to TestFlight.
-- `runtimeVersion` uses the `fingerprint` policy, so an update is only delivered to builds with matching native code. Never change that policy.
-
 ## Rules
 
 - If `ios/` and `android/` directories do not exist, they are generated (Continuous Native Generation). Never create or edit them by hand — configure native behavior in `app.json` and config plugins.
