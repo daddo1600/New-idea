@@ -67,9 +67,21 @@
     ]
   },
   {
+    "key": "{{category}} in {{year}}, in dollars",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "{{count}} a month",
     "files": [
       "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} business drives have no reason yet. The ATO asks for the reason for each journey.",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -91,6 +103,12 @@
     ]
   },
   {
+    "key": "{{count}} days to go",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "{{count}} drives are locked. Upgrade for unlimited drives.",
     "files": [
       "app/index.tsx"
@@ -100,6 +118,12 @@
     "key": "{{count}} drives are waiting to be unlocked",
     "files": [
       "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} drives in this period aren’t sorted yet. They count as private until you sort them.",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -297,6 +321,18 @@
     ]
   },
   {
+    "key": "{{percent}}% business use",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "{{percent}}% business use so far",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "{{price}} per month is charged to your Apple Account and renews automatically unless cancelled at least 24 hours before the end of the period.",
     "files": [
       "app/pro.tsx"
@@ -360,6 +396,24 @@
     "key": "{{used}} of {{limit}} free drives in {{month}}",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "{{vehicle}} has done {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.",
+    "files": [
+      "components/logbook-nudge.tsx"
+    ]
+  },
+  {
+    "key": "{{vehicle}} is on track for about {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.",
+    "files": [
+      "components/logbook-nudge.tsx"
+    ]
+  },
+  {
+    "key": "{{vehicle}}’s costs in {{year}}",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -444,6 +498,12 @@
     "key": "1 month left in the {{year}} tax year",
     "files": [
       "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "12 weeks complete",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -585,6 +645,18 @@
     ]
   },
   {
+    "key": "Add the odometer reading from the last day to finish the logbook.",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Add this year’s costs to compare the two methods.",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "Added manually",
     "files": [
       "app/index.tsx"
@@ -660,6 +732,19 @@
     "key": "ATO cents per km method: 91c a km, up to 5,000 km per car a year",
     "files": [
       "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "ATO logbook",
+    "files": [
+      "app/_layout.tsx",
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "ATO logbook (CSV)",
+    "files": [
+      "app/report.tsx"
     ]
   },
   {
@@ -785,6 +870,12 @@
     ]
   },
   {
+    "key": "Based on the logbook so far. You can only use the logbook method once the 12 weeks are complete.",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "Before Monday shows up, give this week’s drives a quick sort.",
     "files": [
       "domain/reminders.ts"
@@ -811,6 +902,12 @@
     ]
   },
   {
+    "key": "Both methods come out the same.",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "Business",
     "files": [
       "app/add-trip.tsx",
@@ -831,8 +928,15 @@
     ]
   },
   {
+    "key": "Business journeys",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "Business km",
     "files": [
+      "app/logbook.tsx",
       "app/milestones.tsx",
       "app/report.tsx"
     ]
@@ -911,6 +1015,7 @@
     "key": "Cancel",
     "files": [
       "app/index.tsx",
+      "app/logbook.tsx",
       "app/settings.tsx",
       "app/trip/[id].tsx"
     ]
@@ -921,6 +1026,18 @@
       "app/welcome.tsx",
       "components/vehicle-picker.tsx",
       "domain/trip.ts"
+    ]
+  },
+  {
+    "key": "Cents per km looks better: about {{amount}} more.",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Cents per km method (up to {{limit}} km)",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -1062,12 +1179,14 @@
   {
     "key": "Could not save. Please try again.",
     "files": [
+      "app/logbook.tsx",
       "app/settings.tsx"
     ]
   },
   {
     "key": "Couldn’t create the file. Please try again.",
     "files": [
+      "app/logbook.tsx",
       "app/report.tsx"
     ]
   },
@@ -1177,6 +1296,7 @@
     "key": "Delete",
     "files": [
       "app/index.tsx",
+      "app/logbook.tsx",
       "app/settings.tsx",
       "app/trip/[id].tsx"
     ]
@@ -1191,6 +1311,12 @@
     "key": "Delete {{name}}",
     "files": [
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Delete this logbook?",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -1222,6 +1348,12 @@
     "key": "Delivery or collection",
     "files": [
       "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Depreciation",
+    "files": [
+      "domain/logbook.ts"
     ]
   },
   {
@@ -1265,6 +1397,12 @@
     "key": "Driving {{vehicle}}. Change vehicle",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Driving more than 5,000 business km in a car? A 12-week logbook could claim more than cents per km.",
+    "files": [
+      "app/report.tsx"
     ]
   },
   {
@@ -1340,6 +1478,12 @@
     ]
   },
   {
+    "key": "End early",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "End is a saved place.",
     "files": [
       "app/trip/[id].tsx"
@@ -1358,14 +1502,34 @@
     ]
   },
   {
+    "key": "End the logbook early?",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Ended early",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "Ends {{date}}",
     "files": [
+      "app/logbook.tsx",
       "app/tax-dates.tsx"
+    ]
+  },
+  {
+    "key": "Enter amounts as numbers, e.g. 2400 or 2,400.50.",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
     "key": "Enter odometer readings as numbers, e.g. 48210.",
     "files": [
+      "app/logbook.tsx",
       "app/report.tsx"
     ]
   },
@@ -1397,6 +1561,12 @@
     "key": "Estimated tax: if you expect to owe $1,000 or more, pay quarterly with Form 1040-ES by April 15, June 15, September 15 and January 15. Your mileage lowers your profit, so keep it up to date to avoid overpaying.",
     "files": [
       "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Estimates only, not tax advice. Keep receipts for your car expenses, and odometer readings at the start and end of each income year you use the logbook method.",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -1502,6 +1672,18 @@
     ]
   },
   {
+    "key": "Export ATO logbook (CSV)",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Export logbook: {{vehicle}}",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
     "key": "Export report",
     "files": [
       "app/index.tsx"
@@ -1547,6 +1729,24 @@
     "key": "Finish later",
     "files": [
       "components/work-hours-quick.tsx"
+    ]
+  },
+  {
+    "key": "First day",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "First day (km)",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "First day: {{date}}. Change",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -1638,6 +1838,12 @@
     "key": "From its weekly or monthly summary",
     "files": [
       "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "Fuel and oil",
+    "files": [
+      "domain/logbook.ts"
     ]
   },
   {
@@ -1830,6 +2036,12 @@
     ]
   },
   {
+    "key": "Insurance",
+    "files": [
+      "domain/logbook.ts"
+    ]
+  },
+  {
     "key": "Invite a friend",
     "files": [
       "components/header-menu.tsx"
@@ -1866,8 +2078,15 @@
     ]
   },
   {
+    "key": "Keep a logbook for 12 weeks in a row. It gives your car’s business-use percentage, and you claim that share of what the car cost to run. One logbook lasts 5 years.",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "Keep going",
     "files": [
+      "app/logbook.tsx",
       "components/celebration.tsx"
     ]
   },
@@ -1939,6 +2158,12 @@
     ]
   },
   {
+    "key": "Last day (km)",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "Last day of the {{year}} tax year",
     "files": [
       "components/tax-countdown.tsx"
@@ -1987,6 +2212,12 @@
     ]
   },
   {
+    "key": "Loan interest",
+    "files": [
+      "domain/logbook.ts"
+    ]
+  },
+  {
     "key": "Location is off for MileMint, so type the address instead.",
     "files": [
       "components/place-field.tsx"
@@ -2020,6 +2251,24 @@
     "key": "Log every drive with MileMint Pro",
     "files": [
       "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Logbook method",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Logbook method ({{percent}}% of costs)",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Logbook method ({{percent}}% so far)",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -2383,7 +2632,8 @@
   {
     "key": "No drives yet",
     "files": [
-      "app/index.tsx"
+      "app/index.tsx",
+      "app/logbook.tsx"
     ]
   },
   {
@@ -2475,8 +2725,21 @@
     ]
   },
   {
+    "key": "Odometer on the first day (km)",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Odometer on the last day (km)",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "Odometer readings",
     "files": [
+      "app/logbook.tsx",
       "app/report.tsx"
     ]
   },
@@ -2529,6 +2792,12 @@
     ]
   },
   {
+    "key": "Once the logbook has some drives, MileMint compares the two methods here.",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "One quick switch in Settings",
     "files": [
       "components/always-guide.tsx"
@@ -2541,10 +2810,24 @@
     ]
   },
   {
+    "key": "Open",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "Open Settings",
     "files": [
+      "app/logbook.tsx",
       "app/setup-tracking.tsx",
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Open the ATO logbook",
+    "files": [
+      "app/report.tsx",
+      "app/settings.tsx"
     ]
   },
   {
@@ -2566,6 +2849,12 @@
     ]
   },
   {
+    "key": "Opens the logbook method",
+    "files": [
+      "components/logbook-nudge.tsx"
+    ]
+  },
+  {
     "key": "Opens trip details. Long press to delete",
     "files": [
       "app/index.tsx"
@@ -2576,6 +2865,12 @@
     "files": [
       "app/add-trip.tsx",
       "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Optional. Add what the car costs to run this income year (your best estimate is fine for now) to compare the two methods. Keep the receipts.",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -2598,6 +2893,12 @@
     ]
   },
   {
+    "key": "Other (lease, tyres, roadside assistance)",
+    "files": [
+      "domain/logbook.ts"
+    ]
+  },
+  {
     "key": "Other personal km",
     "files": [
       "app/report.tsx"
@@ -2613,6 +2914,18 @@
     "key": "Other…",
     "files": [
       "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Over 5,000 business km in a car? Keep a 12-week logbook and claim the business share of its running costs.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Over 5,000 km? The logbook method could claim more",
+    "files": [
+      "components/logbook-nudge.tsx"
     ]
   },
   {
@@ -2639,6 +2952,12 @@
       "app/add-trip.tsx",
       "app/index.tsx",
       "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Pick 12 weeks that are typical of how you use the car through the year. MileMint logs each drive; you add the reason for each work trip.",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -2674,6 +2993,7 @@
   {
     "key": "Preparing…",
     "files": [
+      "app/logbook.tsx",
       "app/report.tsx"
     ]
   },
@@ -2718,6 +3038,12 @@
     "key": "Recording a drive · {{distance}}",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Registration",
+    "files": [
+      "domain/logbook.ts"
     ]
   },
   {
@@ -2801,6 +3127,12 @@
     ]
   },
   {
+    "key": "Save costs",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "Save end as a place",
     "files": [
       "app/trip/[id].tsx"
@@ -2833,6 +3165,7 @@
   {
     "key": "Save readings",
     "files": [
+      "app/logbook.tsx",
       "app/report.tsx"
     ]
   },
@@ -2864,6 +3197,12 @@
     "key": "Save work hours",
     "files": [
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Saved.",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -2964,6 +3303,12 @@
     "key": "Self-employed: this total is your simplified expenses figure for business mileage. Include it in Car, van and travel expenses on your Self Assessment return.",
     "files": [
       "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Servicing and repairs",
+    "files": [
+      "domain/logbook.ts"
     ]
   },
   {
@@ -3124,6 +3469,25 @@
     ]
   },
   {
+    "key": "Start a 12-week logbook",
+    "files": [
+      "app/report.tsx",
+      "components/logbook-nudge.tsx"
+    ]
+  },
+  {
+    "key": "Start a 12-week logbook for {{vehicle}}",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Start a new logbook",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "Start earlier",
     "files": [
       "components/work-hours-quick.tsx"
@@ -3148,6 +3512,12 @@
     ]
   },
   {
+    "key": "Start logbook",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "Start of {{year}}",
     "files": [
       "app/report.tsx"
@@ -3163,6 +3533,12 @@
     "key": "Start using MileMint",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Starts {{date}}",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -3395,9 +3771,27 @@
     ]
   },
   {
+    "key": "The ATO asks for the odometer at the start and end of the logbook. You can add it later.",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "The ATO cents per km method is for cars only. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.",
     "files": [
       "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "The ATO needs 12 weeks in a row. A logbook ended early can’t be used for the logbook method, so you’d need to start a new one.",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "The cents per km method stops at {{limit}} km per car a year. If you drive more for work, a logbook usually claims more.",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -3409,6 +3803,7 @@
   {
     "key": "The end reading must be higher than the start reading.",
     "files": [
+      "app/logbook.tsx",
       "app/report.tsx"
     ]
   },
@@ -3425,6 +3820,31 @@
     ]
   },
   {
+    "key": "The logbook method",
+    "files": [
+      "app/logbook.tsx",
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "The logbook method is for Australian tax returns. Change your country in Settings to use it.",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "The logbook method is for cars. Add your car in Settings first.",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "The logbook method looks better: about {{amount}} more.",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "The purchase didn’t go through. Please try again.",
     "files": [
       "purchases/pro.tsx"
@@ -3434,6 +3854,12 @@
     "key": "The weekend’s nearly over 🛋️",
     "files": [
       "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "These 12 weeks run into the next income year. MileMint counts the logbook as kept in the year it started; check with your tax agent if unsure.",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -3453,6 +3879,12 @@
     "key": "This is CRA’s reimbursement rate for employees. If you’re self-employed, CRA usually wants your actual car costs, so treat the figure as an estimate.",
     "files": [
       "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "This logbook ended before 12 weeks, so it can’t be used for the logbook method. Start a new one.",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -3527,6 +3959,18 @@
     "key": "Total km",
     "files": [
       "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Total km (logged by MileMint)",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Total km (odometer)",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -3722,6 +4166,12 @@
     ]
   },
   {
+    "key": "Valid for the {{first}} to {{last}} income years, unless your work or your car changes.",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "Vehicle",
     "files": [
       "app/trip/[id].tsx",
@@ -3757,6 +4207,12 @@
     "key": "Wed",
     "files": [
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Week {{week}} of {{weeks}}",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -3882,6 +4338,12 @@
     ]
   },
   {
+    "key": "Worked out from the km MileMint logged. Add both odometer readings so any driving MileMint missed is counted too.",
+    "files": [
+      "app/logbook.tsx"
+    ]
+  },
+  {
     "key": "worth about {{amount}}",
     "files": [
       "app/compare.tsx"
@@ -3990,6 +4452,12 @@
     ]
   },
   {
+    "key": "Your 12-week logbook with everything the ATO asks for: the period, odometer readings, total and business km, each business journey with its reason, and the business-use percentage. The PDF report includes a summary.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
     "key": "Your app counted as much as MileMint logged. Check your trips are sorted as business.",
     "files": [
       "app/compare.tsx"
@@ -4011,6 +4479,12 @@
     "key": "Your country",
     "files": [
       "app/_layout.tsx"
+    ]
+  },
+  {
+    "key": "Your drives stay. Only the logbook period and its odometer readings are deleted.",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {
@@ -4053,6 +4527,12 @@
     "key": "Your money back and badges",
     "files": [
       "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Your odometer readings show less driving than the business drives logged. Please check them.",
+    "files": [
+      "app/logbook.tsx"
     ]
   },
   {

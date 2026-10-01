@@ -3,7 +3,8 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { Platform } from 'react-native';
 
-import { exportFile, type ExportFormat } from '@/domain/accounting-export';
+import { exportFile, logbookFileName, toLogbookCsv, type ExportFormat } from '@/domain/accounting-export';
+import type { LogbookSummary } from '@/domain/logbook';
 import { pageSize, toReportHtml, type MileageReport } from '@/domain/report';
 
 /**
@@ -32,7 +33,16 @@ function download(name: string, text: string, type: string) {
 
 /** The trip log as a spreadsheet, or laid out for accounting software or an expense claim. */
 export async function shareCsv(report: MileageReport, format: ExportFormat = 'spreadsheet'): Promise<void> {
-  const { name, text: csv } = exportFile(report, format);
+  const { name, text } = exportFile(report, format);
+  await shareCsvText(name, text);
+}
+
+/** Australia: the ATO logbook for one car, with every field the ATO asks for. */
+export async function shareLogbookCsv(summary: LogbookSummary, vehicle: string): Promise<void> {
+  await shareCsvText(logbookFileName(summary), toLogbookCsv(summary, vehicle));
+}
+
+async function shareCsvText(name: string, csv: string): Promise<void> {
   if (Platform.OS === 'web') return download(name, csv, 'text/csv');
   const file = cacheFile(name);
   file.write(csv);

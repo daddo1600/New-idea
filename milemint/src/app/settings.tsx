@@ -133,6 +133,8 @@ export default function SettingsScreen() {
 
         <CountrySection />
 
+        <LogbookSection />
+
         <LanguageSection />
 
         <DrivingSection />
@@ -671,6 +673,38 @@ function CountrySection() {
             onPress={() => router.push('/region')}>
             <ThemedText type="small" style={{ color: theme.accent }}>
               {t('Change')}
+            </ThemedText>
+          </Pressable>
+        </View>
+      </ThemedView>
+    </>
+  );
+}
+
+/** Australia only: the ATO logbook method, for cars past the 5,000 km cents per km limit. */
+function LogbookSection() {
+  const theme = useTheme();
+  const t = useT();
+  const { region } = useRegion();
+  if (region.code !== 'AU') return null;
+  return (
+    <>
+      <ThemedText type="smallBold">{t('ATO logbook')}</ThemedText>
+      <ThemedView type="backgroundElement" style={styles.card}>
+        <View style={styles.rowBetween}>
+          <View style={styles.flex}>
+            <ThemedText type="smallBold">{t('The logbook method')}</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">
+              {t('Over 5,000 business km in a car? Keep a 12-week logbook and claim the business share of its running costs.')}
+            </ThemedText>
+          </View>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('Open the ATO logbook')}
+            hitSlop={8}
+            onPress={() => router.push('/logbook' as Href)}>
+            <ThemedText type="small" style={{ color: theme.accent }}>
+              {t('Open')}
             </ThemedText>
           </Pressable>
         </View>

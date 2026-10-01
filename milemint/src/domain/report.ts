@@ -1,4 +1,18 @@
 import { isCommute } from './classify-rules';
+import {
+  centsPerKmForVehicle,
+  compareMethods,
+  EXPENSE_CATEGORIES,
+  EXPENSE_LABELS,
+  logbookDeduction,
+  logbookValidFor,
+  percentBasisText,
+  statusText,
+  totalExpenses,
+  validYearsText,
+  type CarExpenses,
+  type LogbookSummary,
+} from './logbook';
 import type { Place } from './places';
 import {
   computeDeductionParts,
@@ -46,6 +60,21 @@ export type ReportRow = {
 
 export type RateTotal = { label: string; distance: number; deduction: number };
 
+/** An ATO logbook shown in an Australian report. */
+export type ReportLogbook = {
+  summary: LogbookSummary;
+  /** e.g. "Golf (ABC123)". */
+  vehicle: string;
+  /** The car's running costs for the report's income year, when entered. */
+  expenses: CarExpenses | null;
+  /** Whether the logbook can be used for the report's income year. */
+  valid: boolean;
+  /** Cents per km for this car in the year (5,000 km limit applied), in cents. */
+  centsPerKm: number;
+  /** Expenses × business-use %, in cents; null without expenses or when the logbook isn't valid. */
+  logbookEstimate: number | null;
+};
+
 export type MileageReport = {
   region: Region;
   taxYear: number;
@@ -64,6 +93,8 @@ export type MileageReport = {
   odometer: { start: number | null; end: number | null };
   /** End minus start, when both readings make sense. */
   drivenDistance: number | null;
+  /** Australia: the ATO logbook for each car, when there is one. */
+  logbooks: ReportLogbook[];
 };
 
 /** Tax years that have trips, newest first. */
@@ -82,6 +113,8 @@ export function buildReport(
     odometer?: { start: number | null; end: number | null };
     /** The garage (removed vehicles included), to name each trip's vehicle. */
     vehicles?: readonly Vehicle[];
+    /** Australia: logbooks to summarise (see `logbooksForReport`) with each car's expenses for the year. */
+    logbooks?: readonly { summary: LogbookSummary; expenses: CarExpenses | null }[];
   } = {},
 ): MileageReport {
   const kindOf = (id: string | null) => options.places?.find((place) => place.id === id)?.kind ?? null;
@@ -122,7 +155,22 @@ export function buildReport(
     byRate: [],
     odometer: options.odometer ?? { start: null, end: null },
     drivenDistance: null,
+    logbooks: [],
   };
+  if (region.code === 'AU') {
+    report.logbooks = (options.logbooks ?? []).map(({ summary, expenses }) => {
+      const car = options.vehicles?.find((v) => v.id === summary.logbook.vehicleId);
+      const valid = logbookValidFor(summary, taxYear);
+      return {
+        summary,
+        vehicle: car ? vehicleLabel(car) : 'Car',
+        expenses,
+        valid,
+        centsPerKm: centsPerKmForVehicle(trips, summary.logbook.vehicleId, taxYear, region).deduction,
+        logbookEstimate: valid ? logbookDeduction(expenses, summary.businessPercent) : null,
+      };
+    });
+  }
   const { start, end } = report.odometer;
   if (start !== null && end !== null && end >= start) report.drivenDistance = end - start;
   const byRate = new Map<string, RateTotal & { tenths: number }>();
@@ -285,6 +333,7 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
       : `Business share of the ${units} MileMint logged: ${loggedShare}. Use your odometer total for the claim, since it includes any driving MileMint didn’t log.`
   }</p>`
       : '';
+  const logbooks = report.logbooks.map((entry) => logbookHtml(entry, report, distance, money)).join('');
   const guidance = region.report.guidance.map((line) => `<li>${escapeHtml(line)}</li>`).join('');
 
   const rateRows = report.byRate
@@ -353,6 +402,8 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
   ${warning}
   ${odometer}
 
+  ${logbooks}
+
   <h2>Deduction at ${escapeHtml(region.authority)} rates</h2>
   <table>
     <thead><tr><th>Rate</th><th class="num">Business ${units}</th><th class="num">Deduction</th></tr></thead>
@@ -370,4 +421,69 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
 
   <p class="note">“Auto” trips were recorded by the phone while driving; “Manual” trips were added by hand. MileMint keeps a history of every change to a trip, and trips changed after they were recorded are marked “edited”. Deductions are estimates at ${escapeHtml(region.authority)} rates and are not tax advice.${caveat}</p>
 </body></html>`;
+}
+
+/** Australia: the ATO logbook summary for one car, with the logbook method estimate when expenses were entered. */
+function logbookHtml(
+  entry: ReportLogbook,
+  report: MileageReport,
+  distance: (value: number) => string,
+  money: (minor: number) => string,
+): string {
+  const { region } = report;
+  const { summary } = entry;
+  const { logbook } = summary;
+  const reading = (value: number | null) =>
+    value === null
+      ? '<td class="blank"></td>'
+      : `<td class="num">${escapeHtml(new Intl.NumberFormat(region.locale, { maximumFractionDigits: 1 }).format(value))} km</td>`;
+  const row = (label: string, cell: string) => `<tr><td>${label}</td>${cell}</tr>`;
+  const num = (text: string) => `<td class="num">${text}</td>`;
+  const percent = summary.businessPercent === null ? '<td class="blank"></td>' : num(`${summary.businessPercent}%`);
+  const rows = [
+    row('Vehicle', `<td>${escapeHtml(entry.vehicle)}</td>`),
+    row('Logbook period', num(`${formatDate(logbook.startDate, region)} to ${formatDate(logbook.endDate, region)}`)),
+    row('Status', `<td>${escapeHtml(statusText(summary))}</td>`),
+    row('Odometer at start of period', reading(logbook.odometerStart)),
+    row('Odometer at end of period', reading(logbook.odometerEnd)),
+    row(
+      summary.basis === 'odometer' ? 'Total km travelled in the period' : 'Total km logged in the period (no odometer readings)',
+      num(distance(summary.totalKm)),
+    ),
+    row('Business km travelled in the period', num(distance(summary.businessKm))),
+    `<tr class="total"><td>Business-use percentage</td>${percent}</tr>`,
+  ];
+  if (summary.status === 'complete') rows.push(row('Can be used for income years', num(escapeHtml(validYearsText(logbook)))));
+
+  let estimate = '';
+  if (entry.valid && entry.expenses && entry.logbookEstimate !== null) {
+    const costs = EXPENSE_CATEGORIES.filter((category) => (entry.expenses?.[category] ?? 0) > 0)
+      .map((category) => row(escapeHtml(EXPENSE_LABELS[category]), num(money(entry.expenses?.[category] ?? 0))))
+      .join('');
+    const comparison = compareMethods(entry.centsPerKm, entry.logbookEstimate);
+    const better =
+      comparison.better === 'logbook'
+        ? `The logbook method gives ${money(comparison.difference)} more for this car.`
+        : comparison.better === 'cents-per-km'
+          ? `The cents per km method gives ${money(comparison.difference)} more for this car.`
+          : 'Both methods give the same for this car.';
+    estimate = `<h2>Logbook method estimate · ${escapeHtml(entry.vehicle)} · ${escapeHtml(report.label)}</h2>
+  <table class="summary">
+    ${costs}
+    <tr class="total"><td>Total car expenses</td>${num(money(totalExpenses(entry.expenses)))}</tr>
+    <tr class="total"><td>Logbook method: expenses × ${summary.businessPercent}% business use</td>${num(money(entry.logbookEstimate))}</tr>
+    <tr><td>Cents per km method (up to 5,000 km)</td>${num(money(entry.centsPerKm))}</tr>
+  </table>
+  <p class="hint">${better} Estimates only. Keep receipts for every expense (fuel can be estimated from your records), and use one method per car for the year.</p>`;
+  }
+  const note = entry.valid
+    ? 'Claim this share of the car’s actual expenses with the logbook method. Journey details, with dates, odometer readings and reasons, are in MileMint’s ATO logbook export.'
+    : summary.status === 'closed-early'
+      ? 'This logbook was closed before 12 weeks, so it can’t be used for the logbook method.'
+      : `This logbook can’t be used for ${escapeHtml(report.label)} yet: the ATO needs 12 continuous weeks and the odometer readings at the start and end of the period.`;
+
+  return `<h2>ATO logbook · ${escapeHtml(entry.vehicle)}</h2>
+  <table class="summary">${rows.join('')}</table>
+  <p class="hint">${escapeHtml(percentBasisText(summary))}. ${note}</p>
+  ${estimate}`;
 }

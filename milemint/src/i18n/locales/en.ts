@@ -54,6 +54,15 @@ const en: Dictionary = {
     one: '{{distance}} · {{value}} · {{count}} drive',
     other: '{{distance}} · {{value}} · {{count}} drives',
   },
+  '{{count}} days to go': { one: '{{count}} day to go', other: '{{count}} days to go' },
+  '{{count}} drives in this period aren’t sorted yet. They count as private until you sort them.': {
+    one: '{{count}} drive in this period isn’t sorted yet. It counts as private until you sort it.',
+    other: '{{count}} drives in this period aren’t sorted yet. They count as private until you sort them.',
+  },
+  '{{count}} business drives have no reason yet. The ATO asks for the reason for each journey.': {
+    one: '{{count}} business drive has no reason yet. The ATO asks for the reason for each journey.',
+    other: '{{count}} business drives have no reason yet. The ATO asks for the reason for each journey.',
+  },
 };
 
 export default en;

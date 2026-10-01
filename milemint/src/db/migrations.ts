@@ -116,6 +116,31 @@ const MIGRATIONS: readonly string[] = [
   );
   ALTER TABLE trips ADD COLUMN vehicle_id TEXT REFERENCES vehicles (id) ON DELETE SET NULL;
   `,
+  `
+  -- ATO logbook method (Australia): a 12-week period per car that gives its
+  -- business-use percentage. end_date is planned 12 weeks after start_date and
+  -- only moves earlier if the user closes it early (then it isn't valid).
+  -- Odometer readings are in km, null until entered.
+  CREATE TABLE logbooks (
+    id TEXT PRIMARY KEY NOT NULL,
+    vehicle_id TEXT NOT NULL REFERENCES vehicles (id),
+    start_date TEXT NOT NULL,
+    end_date TEXT NOT NULL CHECK (end_date >= start_date),
+    odometer_start REAL CHECK (odometer_start IS NULL OR odometer_start >= 0),
+    odometer_end REAL CHECK (odometer_end IS NULL OR odometer_end >= 0),
+    created_at TEXT NOT NULL
+  );
+  CREATE INDEX logbooks_vehicle ON logbooks (vehicle_id);
+
+  -- A car's running costs for an income year (JSON of cents per category),
+  -- for the logbook method's deduction estimate.
+  CREATE TABLE car_expenses (
+    vehicle_id TEXT NOT NULL REFERENCES vehicles (id),
+    tax_year INTEGER NOT NULL,
+    json TEXT NOT NULL,
+    PRIMARY KEY (vehicle_id, tax_year)
+  );
+  `,
 ];
 
 export async function migrate(db: SQLiteDatabase): Promise<void> {
