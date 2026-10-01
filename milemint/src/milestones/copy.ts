@@ -1,6 +1,7 @@
 import type { CelebrationContent } from '@/components/celebration';
 import { HABITS, type HabitId, type Milestone } from '@/domain/milestones';
 import { formatMoney, type Region } from '@/domain/regions';
+import { withInvite } from '@/referral/links';
 
 /** A few warm lines, picked by the milestone so the same one always reads the same. */
 const MONEY_LINES = [
@@ -22,7 +23,7 @@ export function celebrationFor(milestone: Milestone, region: Region): Celebratio
       emoji: '💰',
       title: `${amount} back in your pocket`,
       message: `MileMint has now found ${amount} in business mileage for you. ${line}`,
-      share: `I’ve found ${amount} in business mileage with MileMint 🚗💸 Every mile counted, automatically.`,
+      share: withInvite(`I’ve found ${amount} in business mileage with MileMint 🚗💸 Every mile counted, automatically.`),
     };
   }
   if (milestone.kind === 'distance') {
@@ -31,7 +32,7 @@ export function celebrationFor(milestone: Milestone, region: Region): Celebratio
       emoji: '🛣️',
       title: `${distance} business ${unit}`,
       message: `${distance} ${unit} logged for work, every one counted. That’s a lot of road.`,
-      share: `${distance} business ${unit} logged with MileMint 🛣️ Every one counted.`,
+      share: withInvite(`${distance} business ${unit} logged with MileMint 🛣️ Every one counted.`),
     };
   }
   const habit = HABITS[milestone.id as HabitId];
@@ -39,6 +40,6 @@ export function celebrationFor(milestone: Milestone, region: Region): Celebratio
     emoji: habit.emoji,
     title: habit.title,
     message: habit.message,
-    share: `${habit.title} on MileMint ${habit.emoji} The mileage app that counts every mile.`,
+    share: withInvite(`${habit.title} on MileMint ${habit.emoji} The mileage app that counts every mile.`),
   };
 }

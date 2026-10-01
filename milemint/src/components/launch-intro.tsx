@@ -18,9 +18,7 @@ import { phoneRegion } from '@/components/country-options';
 import { IntroScenery } from '@/components/intro-scenery';
 import { LeafMark } from '@/components/leaf-mark';
 import {
-  formatDistance,
   formatMoney,
-  fromUnits,
   ratePeriodFor,
   REGIONS,
   type RegionCode,
@@ -48,7 +46,13 @@ const QUICK_DRIVE_MS = 850;
 const QUICK_HOLD_MS = 550;
 const FADE_MS = 300;
 /** The drive the counter shows. */
-const DEMO_UNITS = 12.4;
+/**
+ * The demo counts up a typical month of business driving (about 400 miles or
+ * 650 km): big enough to show what's at stake, labelled so it promises nothing.
+ */
+const DEMO_MONTH = { mi: 400, km: 650 } as const;
+/** The demo counter moves in 1% steps: smooth to the eye without hundreds of re-renders. */
+const STEPS = 100;
 
 /** The road as a cubic Bézier (see ROAD_PATH), sampled evenly by distance travelled. */
 const ROAD = { p0: [0, 420], p1: [-20, 200], p2: [25, 0], p3: [0, -330] } as const;
@@ -275,9 +279,9 @@ function FullIntro({ code, skip, onDone }: { code: RegionCode; skip: boolean; on
 
   // The counter ticks in tenths, so only re-render when the shown value changes.
   useAnimatedReaction(
-    () => Math.round(drive.value * DEMO_UNITS * 10),
-    (tenths, previous) => {
-      if (tenths !== previous) scheduleOnRN(setShown, tenths / (DEMO_UNITS * 10));
+    () => Math.round(drive.value * STEPS),
+    (step, previous) => {
+      if (step !== previous) scheduleOnRN(setShown, step / STEPS);
     },
   );
 
@@ -301,7 +305,7 @@ function FullIntro({ code, skip, onDone }: { code: RegionCode; skip: boolean; on
   }));
   const fadeStyle = useAnimatedStyle(() => ({ opacity: fade.value }));
 
-  const units = shown * DEMO_UNITS;
+  const units = Math.round(shown * DEMO_MONTH[region.unit]);
   return (
     <Animated.View style={[StyleSheet.absoluteFill, styles.container, fadeStyle]}>
       <Animated.View style={logoStyle}>
@@ -320,7 +324,10 @@ function FullIntro({ code, skip, onDone }: { code: RegionCode; skip: boolean; on
       </Animated.View>
       <Animated.View style={[styles.counter, counterStyle]}>
         <Text style={styles.money}>{formatMoney(Math.round(units * ratePerUnit), region)}</Text>
-        <Text style={styles.distance}>{formatDistance(fromUnits(units, region), region)} logged</Text>
+        <Text style={styles.distance}>
+          {new Intl.NumberFormat(region.locale).format(units)} {region.unit === 'mi' ? 'miles' : 'km'} · a typical month
+          of business driving
+        </Text>
       </Animated.View>
     </Animated.View>
   );
@@ -337,5 +344,5 @@ const styles = StyleSheet.create({
   },
   counter: { position: 'absolute', top: '50%', marginTop: 88, alignItems: 'center', gap: 2 },
   money: { color: '#FFFFFF', fontSize: 34, fontWeight: '700', fontVariant: ['tabular-nums'] },
-  distance: { color: '#D1FAE5', fontSize: 15, fontWeight: '500', fontVariant: ['tabular-nums'] },
+  distance: { color: '#D1FAE5', fontSize: 15, fontWeight: '500', fontVariant: ['tabular-nums'], textAlign: 'center', maxWidth: 300 },
 });

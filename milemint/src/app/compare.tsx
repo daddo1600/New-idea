@@ -24,6 +24,7 @@ import { missedMiles, PERIOD_LABELS, periodBounds, type Period } from '@/domain/
 import { computeDeductions, formatMoney, toUnits } from '@/domain/regions';
 import type { Trip } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
+import { withInvite } from '@/referral/links';
 import { useRegion } from '@/region/region';
 
 /**
@@ -55,10 +56,11 @@ export default function CompareScreen() {
   const share = () => {
     const when = PERIOD_LABELS[period].toLowerCase();
     Share.share({
-      message:
+      message: withInvite(
         `My delivery app counted ${number(result.counted)} ${units} ${when}. MileMint logged ${number(result.logged)} ` +
         `business ${units}: that's ${number(result.extra)} ${units} (about ${formatMoney(result.extraValue, region)}) ` +
-        `I'd have missed claiming. 🚗💸 MileMint for iPhone logs every mile automatically.`,
+        `I'd have missed claiming. 🚗💸 MileMint logs every mile automatically.`,
+      ),
     }).catch(() => {});
   };
 

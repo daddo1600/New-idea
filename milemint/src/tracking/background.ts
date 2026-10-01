@@ -7,6 +7,7 @@ import { getBackgroundDatabase } from '@/db/database';
 import { listPlaces } from '@/db/places-repo';
 import { loadSettings } from '@/db/settings-repo';
 import { shiftAt } from '@/db/shifts-repo';
+import { refreshLaunchTotal } from '@/region/launch-total';
 import { autoTripExists, insertTrip, listClassificationHistory } from '@/db/trips-repo';
 import { suggestClassification } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
@@ -160,6 +161,8 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
     },
     trip.route,
   );
+  // Keep the opening animation's total current for the next launch.
+  await refreshLaunchTotal(db).catch(() => {});
 }
 
 async function handleLocations(samples: LocationSample[]): Promise<void> {

@@ -1,7 +1,7 @@
 import { router, type Href } from 'expo-router';
 import { SymbolView, type SFSymbol } from 'expo-symbols';
 import { useEffect, useState } from 'react';
-import { Linking, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Linking, Modal, Pressable, Share, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -11,6 +11,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { usePro } from '@/purchases/pro';
+import { INVITE_MESSAGE } from '@/referral/links';
 import { useRegion } from '@/region/region';
 
 const SUPPORT_EMAIL = 'milemint.support@gmail.com';
@@ -102,6 +103,16 @@ function Menu({ onClose }: { onClose: () => void }) {
       detail: isPro ? 'Active · thank you!' : 'Unlimited drives and PDF reports',
       highlight: !isPro,
       onPress: () => go('/pro'),
+    },
+    {
+      icon: 'gift.fill',
+      glyph: '🎁',
+      title: 'Invite a friend',
+      detail: 'Share MileMint on WhatsApp and more',
+      onPress: () => {
+        onClose();
+        Share.share({ message: INVITE_MESSAGE }).catch(() => {});
+      },
     },
     {
       icon: 'trophy.fill',

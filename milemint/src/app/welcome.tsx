@@ -18,7 +18,8 @@ import { AlwaysGuide } from '@/components/always-guide';
 import { BrandGradient } from '@/components/brand-gradient';
 import { CountryOptions, phoneRegion } from '@/components/country-options';
 import { LeafMark } from '@/components/leaf-mark';
-import { MintWash, NumberedSteps, StepHeader } from '@/components/step-header';
+import { IosPromptMock } from '@/components/ios-prompt-mock';
+import { MintWash, StepHeader } from '@/components/step-header';
 import { VehiclePicker } from '@/components/vehicle-picker';
 import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { ThemedText } from '@/components/themed-text';
@@ -343,23 +344,31 @@ export default function WelcomeScreen() {
 
           {step === 2 && (
             <>
-              <StepHeader glyph="location" eyebrow="Step 2 · Tracking" title="Log every drive automatically">
-                To notice you’re driving even when MileMint is closed, it needs location set to “Always”. GPS
-                only runs while you drive, and trips never leave your iPhone.
+              <StepHeader glyph="location" eyebrow="Step 2 · Tracking" title="Never miss a mile">
+                To log drives while MileMint is closed, it needs location set to “Always”. Miss that and you miss
+                miles, which is money. iOS asks twice; here’s what to tap.
               </StepHeader>
               {status === 'needs-always' || (status === 'needs-permission' && asked) ? (
                 <AlwaysGuide current={status === 'needs-always' ? 'While Using the App' : 'Never'} />
               ) : (
                 status !== 'unsupported' && (
-                  <ThemedView type="backgroundElement" style={styles.card}>
-                    <ThemedText type="smallBold">What you’ll see next</ThemedText>
-                    <NumberedSteps
-                      steps={[
-                        'Tap “Allow While Using App”.',
-                        'If iOS offers “Change to Always Allow”, tap it. If not, we’ll show you the quick switch in Settings.',
-                      ]}
+                  <View style={styles.mocks}>
+                    <IosPromptMock
+                      step="1"
+                      title="Allow “MileMint” to use your location?"
+                      buttons={['Allow Once', 'Allow While Using App', 'Don’t Allow']}
+                      tap={1}
                     />
-                  </ThemedView>
+                    <IosPromptMock
+                      step="2"
+                      title="Allow “MileMint” to also use your location even when you are not using the app?"
+                      buttons={['Keep Only While Using', 'Change to Always Allow']}
+                      tap={1}
+                    />
+                    <ThemedText type="small" themeColor="textSecondary">
+                      🔒 GPS only runs while you drive. Your trips never leave your iPhone.
+                    </ThemedText>
+                  </View>
                 )
               )}
               {status === 'unsupported' && (
@@ -684,6 +693,7 @@ const styles = StyleSheet.create({
   flexFill: { flex: 1 },
   vehicles: { gap: Spacing.two },
   roomToScroll: { paddingBottom: 420 },
+  mocks: { gap: Spacing.three },
   extraRow: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
   extraChip: {
     borderWidth: 1.5,
