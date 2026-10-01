@@ -29,7 +29,7 @@ export const PRO_FORMATS: ReadonlySet<ExportFormat> = new Set(['xero', 'quickboo
 type Month = { key: string; lastDay: string; distance: number; deduction: number };
 
 const businessRows = (report: MileageReport) =>
-  report.rows.filter((row) => row.trip.classification === 'business' && row.deduction > 0);
+  report.rows.filter((row) => row.trip.classification === 'business' && !row.locked && row.deduction > 0);
 
 /** Business mileage per calendar month, oldest first. */
 function months(report: MileageReport): Month[] {

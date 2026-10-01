@@ -21,13 +21,32 @@ const en: Dictionary = {
     other: '{{dueLine}}: {{count}} days to go',
   },
   '{{count}} a month': { one: '{{count}} a month', other: '{{count}} a month' },
-  '{{count}} drives are waiting to be unlocked': {
-    one: '{{count}} drive is waiting to be unlocked',
-    other: '{{count}} drives are waiting to be unlocked',
+  '{{count}} saved drives have their value waiting for Pro': {
+    one: '{{count}} saved drive has its value waiting for Pro',
+    other: '{{count}} saved drives have their value waiting for Pro',
   },
-  '{{count}} drives are locked. Upgrade for unlimited drives.': {
-    one: '{{count}} drive is locked. Upgrade for unlimited drives.',
-    other: '{{count}} drives are locked. Upgrade for unlimited drives.',
+  '{{count}} drives are saved and shown in full. Their value unlocks with Pro.': {
+    one: '{{count}} drive is saved and shown in full. Its value unlocks with Pro.',
+    other: '{{count}} drives are saved and shown in full. Their value unlocks with Pro.',
+  },
+  '{{count}} drives past the free plan’s monthly limit aren’t in these totals. They’re in the spreadsheet; their value unlocks with Pro.': {
+    one: '{{count}} drive past the free plan’s monthly limit isn’t in these totals. It’s in the spreadsheet; its value unlocks with Pro.',
+    other:
+      '{{count}} drives past the free plan’s monthly limit aren’t in these totals. They’re in the spreadsheet; their value unlocks with Pro.',
+  },
+  'Free: {{count}} work drives a month. Pro: unlimited.': {
+    one: 'Free: {{count}} work drive a month. Pro: unlimited.',
+    other: 'Free: {{count}} work drives a month. Pro: unlimited.',
+  },
+  'Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.': {
+    one: 'Free: {{count}} work drive a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.',
+    other:
+      'Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.',
+  },
+  'Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.': {
+    one: 'Free: {{count}} work drive a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.',
+    other:
+      'Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.',
   },
   '{{count}} trips aren’t classified yet. Sort them first so the report is complete.': {
     one: '{{count}} trip isn’t classified yet. Sort it first so the report is complete.',
@@ -35,9 +54,10 @@ const en: Dictionary = {
   },
   '{{count}}-day free trial': { one: '{{count}}-day free trial', other: '{{count}}-day free trial' },
   '{{count}}-month free trial': { one: '{{count}}-month free trial', other: '{{count}}-month free trial' },
-  'Free plan: {{count}} automatic drives a month, unlimited manual trips and CSV export.': {
-    one: 'Free plan: {{count}} automatic drive a month, unlimited manual trips and CSV export.',
-    other: 'Free plan: {{count}} automatic drives a month, unlimited manual trips and CSV export.',
+  'Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.': {
+    one: 'Free plan: {{count}} work drive a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.',
+    other:
+      'Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.',
   },
   'Sort {{count}} drives': { one: 'Sort {{count}} drive', other: 'Sort {{count}} drives' },
   'Select {{count}} unsorted': { one: 'Select {{count}} unsorted', other: 'Select {{count}} unsorted' },

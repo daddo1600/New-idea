@@ -39,6 +39,7 @@ import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, updateSettings } from '@/db/settings-repo';
 import { marApplies, parsePence } from '@/domain/mar';
+import { FREE_AUTO_DRIVES_PER_MONTH } from '@/domain/plan';
 import { displayLocale, formatRate, REGIONS, vehicleRule, type RegionCode } from '@/domain/regions';
 import { useKeyboardOpen } from '@/hooks/use-keyboard-open';
 import { useTheme } from '@/hooks/use-theme';
@@ -786,11 +787,16 @@ export default function WelcomeScreen() {
                 <View style={styles.flex}>
                   <Text style={styles.pointTitle}>{t('Free to start')}</Text>
                   <Text style={styles.pointBody}>
+                    {/* The limit up front, in the same words as the plan meter's "What counts?" (domain/plan). */}
                     {shifts
                       ? t(
-                          '40 automatic drives a month (a whole shift counts as one), plus unlimited trips by hand. Go Pro any time for unlimited.',
+                          'Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.',
+                          { count: FREE_AUTO_DRIVES_PER_MONTH },
                         )
-                      : t('40 automatic drives a month, plus unlimited trips by hand. Go Pro any time for unlimited.')}
+                      : t(
+                          'Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.',
+                          { count: FREE_AUTO_DRIVES_PER_MONTH },
+                        )}
                   </Text>
                 </View>
               </View>

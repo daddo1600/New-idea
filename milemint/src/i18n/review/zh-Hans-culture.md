@@ -128,3 +128,19 @@ Referrals now use single-use invites: every share makes a new code that works fo
 | Your friend’s invite couldn’t be used | 无法使用朋友的邀请 | “Can’t use the friend’s invitation” |
 
 **Sign-off:** approved, pending an on-device check of the new alert titles.
+
+## Round 8: fair free plan
+
+The free plan is made fair, with no surprise paywall. Personal drives no longer use the 40 free drives. Drives past the limit stay fully visible and sortable, and they are in the spreadsheet; only their value (money) waits for Pro. The limit is stated up front on the welcome screen, on the home meter ("What counts?" sheet) and on the paywall. 26 new lines, 13 removed (the old “locked drive” row, “Kept, locked”/“Unlocked”, the old meter and welcome lines, the old Settings plan line). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: nothing says a drive is *locked* or *hidden* any more. A drive past the limit is *saved and shown*, and only its **value** waits for Pro. “Work drives” uses the glossary’s business term. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Saved · value unlocks with Pro | 已保存 · 升级 Pro 解锁金额 | “Saved · upgrade to Pro to unlock the amount.” *金额* (amount) instead of *价值* (value): in Chinese “value” of a trip reads abstract; the amount is what waits. |
+| Saved. This month’s free drives are used, so a drive sorted back from personal waits for Pro to show its value. Drives already showing their value keep it. | 已保存。本月免费次数已用完，所以从私人改回工作的行程要升级 Pro 才会显示金额。已经显示金额的行程会一直保留。 | “Saved. This month’s free count is used up, so a trip changed back from personal to work only shows its amount after upgrading to Pro. Trips already showing an amount keep it.” |
+| {{used}} of {{limit}} free work drives in {{month}} | {{month}}免费工作行程已用 {{used}}/{{limit}} 次 | “{{month}} free work trips used {{used}}/{{limit}} times”. Same pattern as the old meter line. |
+| Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited. | 免费：每月 {{count}} 次工作行程。私人行程不计数，一个班次每天只算一次。手动添加的行程永远免费。Pro：不限次数。 | “Free: 40 work trips a month. Personal trips aren’t counted; a shift only counts once a day. Trips added by hand are always free. Pro: no limit.” 班次 for shift (glossary). |
+| Personal drives don’t count. Sort one personal and the next drive gets its place. | 私人行程不计数。把一次行程分类为私人，下一次行程就补上它的名额。 | “Personal trips aren’t counted. Classify a trip as personal and the next trip fills its slot.” 名额 (“slot”) is the everyday word for a quota place. |
+| Past the limit nothing is hidden or lost: every drive is saved, shown in full, can be sorted and is in your spreadsheet export. Only its value waits for Pro. | 超出限额也不会隐藏或丢失任何内容：每次行程都会保存、完整显示、可以分类，也会出现在电子表格导出里。只有金额要等 Pro 解锁。 | “Even past the limit nothing is hidden or lost: every trip is saved, shown in full, can be classified and appears in the spreadsheet export. Only the amount waits for Pro.” |
+| The month’s earliest drives go first, so a drive showing its value keeps it. The count starts again on the 1st. | 每月最早的行程优先计入，所以已显示金额的行程会一直保留。每月 1 日重新计数。 | “Each month’s earliest trips count first, so a trip already showing its amount keeps it. The count restarts on the 1st of each month.” |
+
+**Sign-off:** approved, pending an on-device check of the “What counts?” sheet and the long welcome line on a small iPhone.

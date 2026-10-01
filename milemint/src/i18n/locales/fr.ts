@@ -32,16 +32,6 @@ const dictionary: Dictionary = {
     "many": "{{count}} jours restants dans l’année d’imposition {{year}}",
     "other": "{{count}} jours restants dans l’année d’imposition {{year}}"
   },
-  "{{count}} drives are locked. Upgrade for unlimited drives.": {
-    "one": "{{count}} trajet est verrouillé. Passez à Pro pour des trajets illimités.",
-    "many": "{{count}} trajets sont verrouillés. Passez à Pro pour des trajets illimités.",
-    "other": "{{count}} trajets sont verrouillés. Passez à Pro pour des trajets illimités."
-  },
-  "{{count}} drives are waiting to be unlocked": {
-    "one": "{{count}} trajet attend d’être débloqué",
-    "many": "{{count}} trajets attendent d’être débloqués",
-    "other": "{{count}} trajets attendent d’être débloqués"
-  },
   "{{count}} selected": {
     "one": "{{count}} sélectionné",
     "many": "{{count}} sélectionnés",
@@ -152,7 +142,6 @@ const dictionary: Dictionary = {
   "{{rule}}. Petrol, diesel, hybrid or electric: same rate.": "{{rule}}. Essence, diesel, hybride ou électrique : même taux.",
   "{{trial}}, then {{price}}/month": "{{trial}}, puis {{price}}/mois",
   "{{trial}}, then {{price}}/year": "{{trial}}, puis {{price}}/an",
-  "{{used}} of {{limit}} free drives in {{month}}": "Trajets gratuits en {{month}} : {{used}} sur {{limit}}",
   "{{year}} at {{authority}} rates": "{{year}} aux taux de {{authority}}",
   "{{year}} tax year": "Année d’imposition {{year}}",
   "{{year}} tax year at {{authority}} rates": "Année d’imposition {{year}} aux taux de {{authority}}",
@@ -179,8 +168,6 @@ const dictionary: Dictionary = {
   "24-hour times. A shift like 22:00 to 02:00 runs past midnight.": "Format 24 heures. Un quart de 22:00 à 02:00 se termine après minuit.",
   "31 January": "31 janvier",
   "31 October": "31 octobre",
-  "40 automatic drives a month (a whole shift counts as one), plus unlimited trips by hand. Go Pro any time for unlimited.": "40 trajets automatiques par mois (un quart complet compte pour un), plus des trajets illimités ajoutés à la main. Passez à Pro quand vous voulez pour l’illimité.",
-  "40 automatic drives a month, plus unlimited trips by hand. Go Pro any time for unlimited.": "40 trajets automatiques par mois, plus des trajets illimités ajoutés à la main. Passez à Pro quand vous voulez pour l’illimité.",
   "A (slightly cheeky) nudge on Sunday evening to sort the week’s drives.": "Un petit rappel (un brin taquin) le dimanche soir pour classer les trajets de la semaine.",
   "A few swipes tonight beats a shoebox of receipts at tax time.": "Quelques gestes ce soir valent mieux qu’une boîte à chaussures pleine de reçus au moment des impôts.",
   "A fully sorted week": "Une semaine entièrement classée",
@@ -306,7 +293,6 @@ const dictionary: Dictionary = {
   "Drives are logged in the background. No buttons to press.": "Les trajets sont enregistrés en arrière-plan. Aucun bouton à toucher.",
   "Drives are logged when you park.": "Les trajets sont enregistrés quand vous vous garez.",
   "Drives may be missed": "Des trajets pourraient être manqués",
-  "Drives over the limit": "Trajets au-delà de la limite",
   "Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.": "Les trajets qui commencent pendant vos heures sont classés affaires, les autres personnels. Vos trajets habituels et vos trajets domicile-travail ont priorité.",
   "Driving {{vehicle}}. Change vehicle": "Vous conduisez : {{vehicle}}. Changer de véhicule",
   "Driving now": "En service",
@@ -362,11 +348,6 @@ const dictionary: Dictionary = {
   "Free": "Gratuit",
   "Free money alert 💸": "De l’argent qui dort ? 💸",
   "Free plan": "Forfait gratuit",
-  "Free plan: {{count}} automatic drives a month, unlimited manual trips and CSV export.": {
-    "one": "Forfait gratuit : {{count}} trajet automatique par mois, trajets manuels illimités et export CSV.",
-    "many": "Forfait gratuit : {{count}} trajets automatiques par mois, trajets manuels illimités et export CSV.",
-    "other": "Forfait gratuit : {{count}} trajets automatiques par mois, trajets manuels illimités et export CSV."
-  },
   "Free to start": "Gratuit pour commencer",
   "Free trial": "Essai gratuit",
   "Fri": "Ven",
@@ -409,7 +390,6 @@ const dictionary: Dictionary = {
   "Just drive. Each trip appears after you park, and business drives count at {{authority}}’s {{rate}} rate.": "Conduisez, tout simplement. Chaque trajet apparaît dès que vous vous garez, et les trajets d’affaires comptent au taux de {{rate}} de {{authority}}.",
   "Just drive. Each trip appears here after you park, ready to swipe business or personal.": "Conduisez, tout simplement. Chaque trajet apparaît ici dès que vous vous garez, prêt à être classé d’un balayage : affaires ou personnel.",
   "Keep going": "Continuer",
-  "Kept, locked": "Gardés, verrouillés",
   "kilometres": "kilomètres",
   "Kilometres": "Kilomètres",
   "Kilometres don’t sort themselves…": "Les kilomètres ne se classent pas tout seuls…",
@@ -430,8 +410,6 @@ const dictionary: Dictionary = {
   "Literally. We counted them. Come and sort this week’s.": "Littéralement. On les a comptés. Venez classer ceux de cette semaine.",
   "Location is off for MileMint, so type the address instead.": "La position est désactivée pour MileMint. Tapez plutôt l’adresse.",
   "Location is set to “While Using”. Switch it to “Always” so drives are logged when the app is closed.": "La position est réglée sur « Lorsque l’app est active ». Passez à « Toujours » pour que les trajets soient enregistrés quand l’app est fermée.",
-  "Locked drive": "Trajet verrouillé",
-  "Locked drive on {{date}}, {{distance}}": "Trajet verrouillé le {{date}}, {{distance}}",
   "Log every drive automatically": "Enregistrez chaque trajet automatiquement",
   "Log every drive with MileMint Pro": "Enregistrez chaque trajet avec MileMint Pro",
   "Low effort, high reward": "Petit effort, grosse récompense",
@@ -489,7 +467,6 @@ const dictionary: Dictionary = {
   "Never": "Jamais",
   "Never miss a mile.": "Ne manquez plus aucun trajet.",
   "New drives start as business": "Les nouveaux trajets sont classés affaires",
-  "New drives this month are saved but locked until you upgrade.": "Les nouveaux trajets de ce mois sont enregistrés, mais verrouillés jusqu’à ce que vous passiez à Pro.",
   "New to Pro? Your first month is on me: {{url}}": "Nouveau sur Pro ? Je t’offre ton premier mois : {{url}}",
   "Next month": "Mois suivant",
   "No account. Your trips stay encrypted on your iPhone.": "Aucun compte. Vos trajets restent chiffrés sur votre iPhone.",
@@ -526,7 +503,6 @@ const dictionary: Dictionary = {
   "Open Settings": "Ouvrir Réglages",
   "Opening the App Store…": "Ouverture de l’App Store…",
   "Opens a list of purposes": "Ouvre une liste de motifs",
-  "Opens MileMint Pro to unlock it": "Ouvre MileMint Pro pour le débloquer",
   "Opens trip details. Long press to delete": "Ouvre les détails du trajet. Touchez longuement pour supprimer",
   "Optional": "Facultatif",
   "Optional. Shows your total driving and the business share on the report.": "Facultatif. Affiche votre distance totale et la part d’affaires dans le rapport.",
@@ -712,9 +688,7 @@ const dictionary: Dictionary = {
   "United States": "États-Unis",
   "Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.": "Sauf si une règle dit autre chose (heures de travail, trajet domicile-travail, itinéraire que vous lui avez appris). Balayez vers la gauche ceux qui étaient personnels ; seuls les trajets d’affaires doivent être déduits.",
   "Unlimited": "Illimité",
-  "Unlock with MileMint Pro": "Débloquer avec MileMint Pro",
   "Unlock with Pro": "Débloquer avec Pro",
-  "Unlocked": "Débloqués",
   "Upgrade to Pro": "Passer à Pro",
   "USA": "É.-U.",
   "Use": "Utiliser",
@@ -748,7 +722,6 @@ const dictionary: Dictionary = {
   "Work-related car use (cents per km method)": "Usage de la voiture pour le travail (cents per km method)",
   "worth about {{amount}}": "soit environ {{amount}}",
   "Worth money": "Ça rapporte",
-  "worth up to {{amount}}": "vaut jusqu’à {{amount}}",
   "Worth up to {{amount}} in deductions if they were for business.": "Jusqu’à {{amount}} en déductions, s’ils étaient pour affaires.",
   "Wrap up warm out there ❄️": "Couvrez-vous bien ❄️",
   "Yearly": "Annuel",
@@ -1075,7 +1048,7 @@ const dictionary: Dictionary = {
   "Invites sent: {{count}}": {
     "one": "Invitations envoyées : {{count}}",
     "many": "Invitations envoyées : {{count}}",
-    "other": "Invitations envoyées : {{count}}",
+    "other": "Invitations envoyées : {{count}}"
   },
   "Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you.": "Les invitations sont confirmées via iCloud, qui arrive dans une prochaine mise à jour. Les amis qui vous rejoignent d’ici là recevront leurs trajets en plus dès son activation, et vous aussi.",
   "You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed.": "Vous avez saisi {{code}}. Vos 10 trajets en plus arriveront dès que l’invitation sera confirmée.",
@@ -1088,6 +1061,60 @@ const dictionary: Dictionary = {
   "This Apple Account has already joined with a friend’s invite.": "Ce compte Apple a déjà rejoint MileMint avec l’invitation d’un ami.",
   "🎉 Your friend’s invite is confirmed": "🎉 L’invitation de votre ami est confirmée",
   "Your friend’s invite couldn’t be used": "L’invitation de votre ami n’a pas pu être utilisée",
+  "Opens MileMint Pro": "Ouvre MileMint Pro",
+  "Saved · value unlocks with Pro": "Enregistré · valeur débloquée avec Pro",
+  "Business or personal? Personal drives don’t use your free drives.": "Affaires ou personnel ? Les trajets personnels n’utilisent pas vos trajets gratuits.",
+  "Closes this message": "Ferme ce message",
+  "Saved. This month’s free drives are used, so a drive sorted back from personal waits for Pro to show its value. Drives already showing their value keep it.": "Enregistré. Les trajets gratuits de ce mois sont utilisés, donc un trajet reclassé de personnel à affaires attend Pro pour afficher sa valeur. Les trajets qui affichent déjà leur valeur la gardent.",
+  "{{used}} of {{limit}} free work drives in {{month}}": "Trajets d’affaires gratuits en {{month}} : {{used}} sur {{limit}}",
+  "{{count}} drives are saved and shown in full. Their value unlocks with Pro.": {
+    "one": "{{count}} trajet est enregistré et affiché en entier. Sa valeur se débloque avec Pro.",
+    "many": "{{count}} trajets sont enregistrés et affichés en entier. Leur valeur se débloque avec Pro.",
+    "other": "{{count}} trajets sont enregistrés et affichés en entier. Leur valeur se débloque avec Pro."
+  },
+  "New work drives are still saved and shown in full. Their value unlocks with Pro.": "Les nouveaux trajets d’affaires sont toujours enregistrés et affichés en entier. Leur valeur se débloque avec Pro.",
+  "Personal drives don’t count.": "Les trajets personnels ne comptent pas.",
+  "What counts?": "Qu’est-ce qui compte ?",
+  "Drives past the limit, saved and shown in full": "Trajets au-delà de la limite, enregistrés et affichés",
+  "The value of drives past the limit": "La valeur des trajets au-delà de la limite",
+  "{{count}} saved drives have their value waiting for Pro": {
+    "one": "{{count}} trajet enregistré attend Pro pour afficher sa valeur",
+    "many": "{{count}} trajets enregistrés attendent Pro pour afficher leur valeur",
+    "other": "{{count}} trajets enregistrés attendent Pro pour afficher leur valeur"
+  },
+  "{{count}} drives past the free plan’s monthly limit aren’t in these totals. They’re in the spreadsheet; their value unlocks with Pro.": {
+    "one": "{{count}} trajet au-delà de la limite mensuelle du forfait gratuit n’est pas dans ces totaux. Il est dans le tableur ; sa valeur se débloque avec Pro.",
+    "many": "{{count}} trajets au-delà de la limite mensuelle du forfait gratuit ne sont pas dans ces totaux. Ils sont dans le tableur ; leur valeur se débloque avec Pro.",
+    "other": "{{count}} trajets au-delà de la limite mensuelle du forfait gratuit ne sont pas dans ces totaux. Ils sont dans le tableur ; leur valeur se débloque avec Pro."
+  },
+  "Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.": {
+    "one": "Forfait gratuit : {{count}} trajet d’affaires par mois (les trajets personnels ne comptent pas), trajets ajoutés à la main illimités et export en tableur.",
+    "many": "Forfait gratuit : {{count}} trajets d’affaires par mois (les trajets personnels ne comptent pas), trajets ajoutés à la main illimités et export en tableur.",
+    "other": "Forfait gratuit : {{count}} trajets d’affaires par mois (les trajets personnels ne comptent pas), trajets ajoutés à la main illimités et export en tableur."
+  },
+  "Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.": {
+    "one": "Gratuit : {{count}} trajet d’affaires par mois. Les trajets personnels ne comptent pas, et un quart compte une fois par jour. Les trajets ajoutés à la main sont toujours gratuits. Pro : illimité.",
+    "many": "Gratuit : {{count}} trajets d’affaires par mois. Les trajets personnels ne comptent pas, et un quart compte une fois par jour. Les trajets ajoutés à la main sont toujours gratuits. Pro : illimité.",
+    "other": "Gratuit : {{count}} trajets d’affaires par mois. Les trajets personnels ne comptent pas, et un quart compte une fois par jour. Les trajets ajoutés à la main sont toujours gratuits. Pro : illimité."
+  },
+  "Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.": {
+    "one": "Gratuit : {{count}} trajet d’affaires par mois. Les trajets personnels ne comptent pas, et ceux ajoutés à la main sont toujours gratuits. Pro : illimité.",
+    "many": "Gratuit : {{count}} trajets d’affaires par mois. Les trajets personnels ne comptent pas, et ceux ajoutés à la main sont toujours gratuits. Pro : illimité.",
+    "other": "Gratuit : {{count}} trajets d’affaires par mois. Les trajets personnels ne comptent pas, et ceux ajoutés à la main sont toujours gratuits. Pro : illimité."
+  },
+  "Each automatic work drive counts once. Unsorted drives count until you sort them.": "Chaque trajet d’affaires automatique compte une fois. Les trajets non classés comptent jusqu’à ce que vous les classiez.",
+  "Personal drives don’t count. Sort one personal and the next drive gets its place.": "Les trajets personnels ne comptent pas. Classez-en un en personnel et le trajet suivant prend sa place.",
+  "On shift, a whole shift counts as one drive a day.": "Pendant un quart, le quart entier compte comme un seul trajet par jour.",
+  "Trips you add by hand never count.": "Les trajets ajoutés à la main ne comptent jamais.",
+  "Past the limit nothing is hidden or lost: every drive is saved, shown in full, can be sorted and is in your spreadsheet export. Only its value waits for Pro.": "Au-delà de la limite, rien n’est caché ni perdu : chaque trajet est enregistré, affiché en entier, peut être classé et figure dans votre export en tableur. Seule sa valeur attend Pro.",
+  "The month’s earliest drives go first, so a drive showing its value keeps it. The count starts again on the 1st.": "Les premiers trajets du mois passent en premier, donc un trajet qui affiche sa valeur la garde. Le compte repart à zéro le 1er du mois.",
+  "Free: {{count}} work drives a month. Pro: unlimited.": {
+    "one": "Gratuit : {{count}} trajet d’affaires par mois. Pro : illimité.",
+    "many": "Gratuit : {{count}} trajets d’affaires par mois. Pro : illimité.",
+    "other": "Gratuit : {{count}} trajets d’affaires par mois. Pro : illimité."
+  },
+  "Got it": "Compris",
+  "See Pro": "Voir Pro",
 };
 
 export default dictionary;

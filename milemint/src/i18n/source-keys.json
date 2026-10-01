@@ -127,15 +127,9 @@
     ]
   },
   {
-    "key": "{{count}} drives are locked. Upgrade for unlimited drives.",
+    "key": "{{count}} drives are saved and shown in full. Their value unlocks with Pro.",
     "files": [
       "app/index.tsx"
-    ]
-  },
-  {
-    "key": "{{count}} drives are waiting to be unlocked",
-    "files": [
-      "app/pro.tsx"
     ]
   },
   {
@@ -145,9 +139,21 @@
     ]
   },
   {
+    "key": "{{count}} drives past the free plan’s monthly limit aren’t in these totals. They’re in the spreadsheet; their value unlocks with Pro.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
     "key": "{{count}} past trips may still have addresses and routes. Replace them with the area only and delete the routes?",
     "files": [
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} saved drives have their value waiting for Pro",
+    "files": [
+      "app/pro.tsx"
     ]
   },
   {
@@ -423,7 +429,7 @@
     ]
   },
   {
-    "key": "{{used}} of {{limit}} free drives in {{month}}",
+    "key": "{{used}} of {{limit}} free work drives in {{month}}",
     "files": [
       "app/index.tsx"
     ]
@@ -572,18 +578,6 @@
     "key": "31 October",
     "files": [
       "domain/deadlines.ts"
-    ]
-  },
-  {
-    "key": "40 automatic drives a month (a whole shift counts as one), plus unlimited trips by hand. Go Pro any time for unlimited.",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "40 automatic drives a month, plus unlimited trips by hand. Go Pro any time for unlimited.",
-    "files": [
-      "app/welcome.tsx"
     ]
   },
   {
@@ -1126,6 +1120,12 @@
     ]
   },
   {
+    "key": "Business or personal? Personal drives don’t use your free drives.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
     "key": "Business or personal? Worth {{amount}} if business.",
     "files": [
       "app/index.tsx"
@@ -1350,6 +1350,7 @@
   {
     "key": "Close",
     "files": [
+      "components/plan-rules.tsx",
       "components/purpose-picker.tsx",
       "components/vehicle-sheet.tsx"
     ]
@@ -1358,6 +1359,12 @@
     "key": "Close menu",
     "files": [
       "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Closes this message",
+    "files": [
+      "app/index.tsx"
     ]
   },
   {
@@ -1659,7 +1666,7 @@
     ]
   },
   {
-    "key": "Drives over the limit",
+    "key": "Drives past the limit, saved and shown in full",
     "files": [
       "app/pro.tsx"
     ]
@@ -1710,6 +1717,12 @@
     "key": "e.g. Quote for Acme Ltd",
     "files": [
       "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Each automatic work drive counts once. Unsorted drives count until you sort them.",
+    "files": [
+      "components/plan-rules.tsx"
     ]
   },
   {
@@ -2167,7 +2180,7 @@
     ]
   },
   {
-    "key": "Free plan: {{count}} automatic drives a month, unlimited manual trips and CSV export.",
+    "key": "Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.",
     "files": [
       "app/settings.tsx"
     ]
@@ -2182,6 +2195,24 @@
     "key": "Free trial",
     "files": [
       "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Free: {{count}} work drives a month. Pro: unlimited.",
+    "files": [
+      "components/plan-rules.tsx"
     ]
   },
   {
@@ -2312,6 +2343,12 @@
     "files": [
       "app/index.tsx",
       "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Got it",
+    "files": [
+      "components/plan-rules.tsx"
     ]
   },
   {
@@ -2611,12 +2648,6 @@
     ]
   },
   {
-    "key": "Kept, locked",
-    "files": [
-      "app/pro.tsx"
-    ]
-  },
-  {
     "key": "kilometres",
     "files": [
       "app/add-trip.tsx"
@@ -2745,18 +2776,6 @@
   },
   {
     "key": "Location is set to “While Using”. Switch it to “Always” so drives are logged when the app is closed.",
-    "files": [
-      "app/index.tsx"
-    ]
-  },
-  {
-    "key": "Locked drive",
-    "files": [
-      "app/index.tsx"
-    ]
-  },
-  {
-    "key": "Locked drive on {{date}}, {{distance}}",
     "files": [
       "app/index.tsx"
     ]
@@ -3180,15 +3199,15 @@
     ]
   },
   {
-    "key": "New drives this month are saved but locked until you upgrade.",
-    "files": [
-      "app/index.tsx"
-    ]
-  },
-  {
     "key": "New to Pro? Your first month is on me: {{url}}",
     "files": [
       "referral/links.ts"
+    ]
+  },
+  {
+    "key": "New work drives are still saved and shown in full. Their value unlocks with Pro.",
+    "files": [
+      "app/index.tsx"
     ]
   },
   {
@@ -3385,6 +3404,12 @@
     ]
   },
   {
+    "key": "On shift, a whole shift counts as one drive a day.",
+    "files": [
+      "components/plan-rules.tsx"
+    ]
+  },
+  {
     "key": "Once a year: by April 30, or June 15 if you’re self-employed (any tax owing is still due April 30). Self-employed claim vehicle costs on form T2125.",
     "files": [
       "domain/deadlines.ts"
@@ -3455,7 +3480,7 @@
     ]
   },
   {
-    "key": "Opens MileMint Pro to unlock it",
+    "key": "Opens MileMint Pro",
     "files": [
       "app/index.tsx"
     ]
@@ -3578,6 +3603,12 @@
     ]
   },
   {
+    "key": "Past the limit nothing is hidden or lost: every drive is saved, shown in full, can be sorted and is in your spreadsheet export. Only its value waits for Pro.",
+    "files": [
+      "components/plan-rules.tsx"
+    ]
+  },
+  {
     "key": "Past trips keep their names.",
     "files": [
       "app/settings.tsx"
@@ -3626,6 +3657,18 @@
       "app/add-trip.tsx",
       "app/index.tsx",
       "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Personal drives don’t count.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Personal drives don’t count. Sort one personal and the next drive gets its place.",
+    "files": [
+      "components/plan-rules.tsx"
     ]
   },
   {
@@ -3966,6 +4009,12 @@
     ]
   },
   {
+    "key": "Saved · value unlocks with Pro",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
     "key": "Saved.",
     "files": [
       "app/logbook.tsx"
@@ -3981,6 +4030,12 @@
     "key": "Saved. The PDF report includes these readings.",
     "files": [
       "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Saved. This month’s free drives are used, so a drive sorted back from personal waits for Pro to show its value. Drives already showing their value keep it.",
+    "files": [
+      "app/index.tsx"
     ]
   },
   {
@@ -4009,6 +4064,12 @@
     "key": "See how to claim ›",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "See Pro",
+    "files": [
+      "components/plan-rules.tsx"
     ]
   },
   {
@@ -4677,9 +4738,21 @@
     ]
   },
   {
+    "key": "The month’s earliest drives go first, so a drive showing its value keeps it. The count starts again on the 1st.",
+    "files": [
+      "components/plan-rules.tsx"
+    ]
+  },
+  {
     "key": "The purchase didn’t go through. Please try again.",
     "files": [
       "purchases/pro.tsx"
+    ]
+  },
+  {
+    "key": "The value of drives past the limit",
+    "files": [
+      "app/pro.tsx"
     ]
   },
   {
@@ -4896,6 +4969,12 @@
     ]
   },
   {
+    "key": "Trips you add by hand never count.",
+    "files": [
+      "components/plan-rules.tsx"
+    ]
+  },
+  {
     "key": "Try again",
     "files": [
       "app/_layout.tsx"
@@ -4980,21 +5059,9 @@
     ]
   },
   {
-    "key": "Unlock with MileMint Pro",
-    "files": [
-      "app/index.tsx"
-    ]
-  },
-  {
     "key": "Unlock with Pro",
     "files": [
       "app/report.tsx"
-    ]
-  },
-  {
-    "key": "Unlocked",
-    "files": [
-      "app/pro.tsx"
     ]
   },
   {
@@ -5112,6 +5179,13 @@
     "key": "What are you driving?",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "What counts?",
+    "files": [
+      "app/index.tsx",
+      "components/plan-rules.tsx"
     ]
   },
   {
@@ -5240,12 +5314,6 @@
     "key": "Worth money",
     "files": [
       "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "worth up to {{amount}}",
-    "files": [
-      "app/index.tsx"
     ]
   },
   {

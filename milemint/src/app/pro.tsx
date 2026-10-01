@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { GoldButton } from '@/components/gold-button';
+import { PlanRules } from '@/components/plan-rules';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
@@ -27,7 +28,8 @@ const PRIVACY_URL =
  */
 const COMPARISON: readonly [feature: string, free: string | boolean | null, pro: string | boolean][] = [
   [msg('Automatic drive logging'), null, msg('Unlimited')],
-  [msg('Drives over the limit'), msg('Kept, locked'), msg('Unlocked')],
+  [msg('Drives past the limit, saved and shown in full'), true, true],
+  [msg('The value of drives past the limit'), false, true],
   [msg('Add missed trips by hand'), true, true],
   [msg('Swipe to sort business trips'), true, true],
   [msg('Work hours, places, learned routes'), true, true],
@@ -154,7 +156,7 @@ export default function ProScreen() {
         {locked.count > 0 && (
           <ThemedView type="backgroundElement" style={[styles.locked, { borderColor: theme.accent }]}>
             <ThemedText type="smallBold">
-              {t('{{count}} drives are waiting to be unlocked', { count: locked.count })}
+              {t('{{count}} saved drives have their value waiting for Pro', { count: locked.count })}
             </ThemedText>
             {locked.value > 0 && (
               <ThemedText type="small" themeColor="textSecondary">
@@ -165,6 +167,11 @@ export default function ProScreen() {
             )}
           </ThemedView>
         )}
+
+        {/* The free plan's rules, the same words as home's "What counts?", so the paywall holds no surprises. */}
+        <ThemedView type="backgroundElement" style={styles.rules}>
+          <PlanRules allowance={allowance} />
+        </ThemedView>
 
         <Comparison allowance={allowance} />
 
@@ -332,6 +339,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   locked: { borderRadius: 12, borderWidth: 1, padding: Spacing.three, gap: Spacing.half },
+  rules: { borderRadius: 12, padding: Spacing.three },
   flex: { flex: 1, gap: Spacing.half },
   plan: {
     flexDirection: 'row',

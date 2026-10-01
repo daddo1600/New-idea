@@ -140,3 +140,19 @@ Referrals now use single-use invites: every share makes a new code that works fo
 | Your friend’s invite couldn’t be used | আপনার বন্ধুর আমন্ত্রণটি ব্যবহার করা যায়নি | “Your friend’s invitation couldn’t be used” |
 
 **Sign-off:** approved, pending an on-device check of the new alert titles.
+
+## Round 8: fair free plan
+
+The free plan is made fair, with no surprise paywall. Personal drives no longer use the 40 free drives. Drives past the limit stay fully visible and sortable, and they are in the spreadsheet; only their value (money) waits for Pro. The limit is stated up front on the welcome screen, on the home meter ("What counts?" sheet) and on the paywall. 26 new lines, 13 removed (the old “locked drive” row, “Kept, locked”/“Unlocked”, the old meter and welcome lines, the old Settings plan line). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: nothing says a drive is *locked* or *hidden* any more. A drive past the limit is *saved and shown*, and only its **value** waits for Pro. “Work drives” uses the glossary’s business term. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Saved · value unlocks with Pro | সেভ হয়েছে · মূল্য Pro-তে আনলক হবে | “Saved · the value will unlock in Pro.” |
+| Saved. This month’s free drives are used, so a drive sorted back from personal waits for Pro to show its value. Drives already showing their value keep it. | সেভ হয়েছে। এই মাসের ফ্রি ট্রিপ শেষ, তাই ব্যক্তিগত থেকে আবার ব্যবসায়িক করা ট্রিপের মূল্য Pro-তে দেখা যাবে। যেসব ট্রিপের মূল্য আগে থেকেই দেখা যাচ্ছে, সেগুলো তা রাখবে। | “Saved. This month’s free trips are finished, so a trip made business again from personal will show its value in Pro. Trips whose value already shows will keep it.” |
+| {{used}} of {{limit}} free work drives in {{month}} | {{month}}-এ {{limit}}টির মধ্যে {{used}}টি ফ্রি ব্যবসায়িক ট্রিপ | “{{used}} of {{limit}} free business trips in {{month}}”. *টি* classifier as in the old line; Latin digits as elsewhere in the app. |
+| Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited. | ফ্রি: মাসে {{count}}টি ব্যবসায়িক ট্রিপ। ব্যক্তিগত ট্রিপ গোনা হয় না, আর একটি শিফট দিনে একবার গোনা হয়। নিজে যোগ করা ট্রিপ সবসময় ফ্রি। Pro: আনলিমিটেড। | “Free: 40 business trips a month. Personal trips aren’t counted, and one shift is counted once a day. Trips you add yourself are always free. Pro: unlimited.” |
+| Personal drives don’t count. Sort one personal and the next drive gets its place. | ব্যক্তিগত ট্রিপ গোনা হয় না। একটিকে ব্যক্তিগত বাছাই করলে তার জায়গা পরের ট্রিপ পায়। | “Personal trips aren’t counted. If you sort one as personal, the next trip gets its place.” *বাছাই* (glossary), kept apart from *নির্বাচন*. |
+| Past the limit nothing is hidden or lost: every drive is saved, shown in full, can be sorted and is in your spreadsheet export. Only its value waits for Pro. | লিমিটের পরেও কিছু লুকানো হয় না বা হারায় না: প্রতিটি ট্রিপ সেভ হয়, পুরোটা দেখা যায়, বাছাই করা যায় এবং আপনার স্প্রেডশিট এক্সপোর্টে থাকে। শুধু এর মূল্য Pro-র অপেক্ষায় থাকে। | “Even after the limit nothing is hidden or lost: every trip is saved, shows in full, can be sorted and stays in your spreadsheet export. Only its value waits for Pro.” |
+| The month’s earliest drives go first, so a drive showing its value keeps it. The count starts again on the 1st. | মাসের সবচেয়ে আগের ট্রিপগুলো আগে গোনা হয়, তাই যে ট্রিপের মূল্য দেখা যাচ্ছে, সেটি তা রাখে। প্রতি মাসের 1 তারিখে গোনা আবার শুরু হয়। | “The month’s earliest trips are counted first, so a trip whose value shows keeps it. Counting starts again on the 1st of every month.” |
+
+**Sign-off:** approved, pending an on-device check of the “What counts?” sheet and the long welcome line on a small iPhone.
