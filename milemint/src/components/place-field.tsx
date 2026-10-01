@@ -15,11 +15,7 @@ import { locateAddress, suggestAddresses, type AddressSuggestion } from '@/place
  * Where a trip started or ended, or a place being saved: picked from saved
  * places, chosen from Apple Maps suggestions while typing, or "I'm here now".
  */
-export type PlaceDraft = {
-  text: string;
-  at: LatLng | null;
-  placeId: string | null;
-};
+export type PlaceDraft = { text: string; at: LatLng | null; placeId: string | null };
 
 export const EMPTY_PLACE: PlaceDraft = { text: '', at: null, placeId: null };
 
@@ -27,8 +23,7 @@ export const EMPTY_PLACE: PlaceDraft = { text: '', at: null, placeId: null };
 export async function resolvePlace(draft: PlaceDraft): Promise<LatLng> {
   if (draft.at) return draft.at;
   const found = await locateAddress(draft.text.trim());
-  if (!found)
-    throw new Error(
+  if (!found) throw new Error(
       translateNow('Couldn’t find “{{address}}”. Pick a suggestion, or add the town or postcode.', {
         address: draft.text.trim(),
       }),
@@ -36,12 +31,7 @@ export async function resolvePlace(draft: PlaceDraft): Promise<LatLng> {
   return found;
 }
 
-export const PLACE_ICONS: Record<PlaceKind, string> = {
-  home: '🏠',
-  work: '💼',
-  client: '🤝',
-  other: '📍',
-};
+export const PLACE_ICONS: Record<PlaceKind, string> = { home: '🏠', work: '💼', client: '🤝', other: '📍' };
 
 /** A short, readable label for where the phone is, e.g. "12 High Street, Bristol". */
 function describe(address: Location.LocationGeocodedAddress | undefined): string {
@@ -123,11 +113,7 @@ export function PlaceField({
     setSuggestions([]);
     setNote(null);
     Keyboard.dismiss();
-    onChange({
-      text: place.name,
-      at: { latitude: place.latitude, longitude: place.longitude },
-      placeId: place.id,
-    });
+    onChange({ text: place.name, at: { latitude: place.latitude, longitude: place.longitude }, placeId: place.id });
   };
 
   const pickRecent = (text: string) => {
@@ -147,9 +133,7 @@ export function PlaceField({
         setNote(t('Location is off for MileMint, so type the address instead.'));
         return;
       }
-      const { coords } = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Balanced,
-      });
+      const { coords } = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
       const at = { latitude: coords.latitude, longitude: coords.longitude };
       const [address] = await Location.reverseGeocodeAsync(at).catch(() => []);
       onChange({ text: describe(address), at, placeId: null });
@@ -230,13 +214,7 @@ export function PlaceField({
       {focused && suggestions.length > 0 && (
         <View
           accessibilityRole="list"
-          style={[
-            styles.suggestions,
-            {
-              backgroundColor: theme.background,
-              borderColor: theme.backgroundSelected,
-            },
-          ]}>
+          style={[styles.suggestions, { backgroundColor: theme.background, borderColor: theme.backgroundSelected }]}>
           {suggestions.slice(0, 6).map((suggestion, index) => (
             <Pressable
               key={`${suggestion.title}\n${suggestion.subtitle}`}
@@ -245,10 +223,7 @@ export function PlaceField({
               onPress={() => choose(suggestion)}
               style={({ pressed }) => [
                 styles.suggestion,
-                index > 0 && {
-                  borderTopColor: theme.backgroundSelected,
-                  borderTopWidth: StyleSheet.hairlineWidth,
-                },
+                index > 0 && { borderTopColor: theme.backgroundSelected, borderTopWidth: StyleSheet.hairlineWidth },
                 pressed && { backgroundColor: theme.backgroundSelected },
               ]}>
               <ThemedText type="smallBold" numberOfLines={1}>
@@ -290,10 +265,7 @@ export function Chip({ label, selected, onPress }: { label: string; selected: bo
       onPress={onPress}
       style={[
         styles.chip,
-        {
-          backgroundColor: selected ? theme.accent : theme.background,
-          borderColor: theme.backgroundSelected,
-        },
+        { backgroundColor: selected ? theme.accent : theme.background, borderColor: theme.backgroundSelected },
       ]}>
       <ThemedText type="small" numberOfLines={1} style={{ color: selected ? theme.onAccent : theme.text }}>
         {label}
@@ -304,21 +276,10 @@ export function Chip({ label, selected, onPress }: { label: string; selected: bo
 
 const styles = StyleSheet.create({
   card: { borderRadius: 12, padding: Spacing.three, gap: Spacing.two },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    minHeight: 20,
-  },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', minHeight: 20 },
   chips: { gap: Spacing.two },
   labelRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
-  iconTile: {
-    width: 30,
-    height: 30,
-    borderRadius: 9,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  iconTile: { width: 30, height: 30, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
   iconText: { fontSize: 16, lineHeight: 20 },
   chip: {
     borderRadius: 999,
@@ -327,17 +288,8 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     maxWidth: 220,
   },
-  input: {
-    borderRadius: 8,
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.two,
-    fontSize: 16,
-  },
-  suggestions: {
-    borderRadius: 8,
-    borderWidth: StyleSheet.hairlineWidth,
-    overflow: 'hidden',
-  },
+  input: { borderRadius: 8, paddingHorizontal: Spacing.three, paddingVertical: Spacing.two, fontSize: 16 },
+  suggestions: { borderRadius: 8, borderWidth: StyleSheet.hairlineWidth, overflow: 'hidden' },
   suggestion: { paddingHorizontal: Spacing.three, paddingVertical: 10, gap: 2 },
   here: { alignSelf: 'flex-start', minHeight: 20, justifyContent: 'center' },
 });

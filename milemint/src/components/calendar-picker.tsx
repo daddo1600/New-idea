@@ -7,7 +7,8 @@ import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
 
 /** Dates are local calendar days as YYYY-MM-DD, like Trip#localDate. */
-const iso = (y: number, m: number, d: number) => `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+const iso = (y: number, m: number, d: number) =>
+  `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 
 /** A month grid: tap a day to pick it. Days outside `min`…`max` can't be picked. */
 export function CalendarPicker({
@@ -49,14 +50,9 @@ export function CalendarPicker({
 
   const weekdays = Array.from({ length: 7 }, (_, i) =>
     // 2023-01-01 was a Sunday.
-    new Date(2023, 0, 1 + ((i + weekStartsOn) % 7)).toLocaleDateString(locale, {
-      weekday: 'narrow',
-    }),
+    new Date(2023, 0, 1 + ((i + weekStartsOn) % 7)).toLocaleDateString(locale, { weekday: 'narrow' }),
   );
-  const title = first.toLocaleDateString(locale, {
-    month: 'long',
-    year: 'numeric',
-  });
+  const title = first.toLocaleDateString(locale, { month: 'long', year: 'numeric' });
 
   const arrow = (by: number, enabled: boolean) => (
     <Pressable
@@ -135,21 +131,10 @@ export function CalendarPicker({
 
 const styles = StyleSheet.create({
   container: { gap: Spacing.one },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: Spacing.one,
-  },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: Spacing.one },
   arrow: { paddingHorizontal: Spacing.two },
   row: { flexDirection: 'row' },
   weekday: { flex: 1, textAlign: 'center' },
   cell: { flex: 1, alignItems: 'center', paddingVertical: 2 },
-  day: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  day: { width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center' },
 });

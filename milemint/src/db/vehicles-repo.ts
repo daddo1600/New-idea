@@ -1,12 +1,17 @@
-import * as Crypto from 'expo-crypto';
-import type { SQLiteDatabase } from 'expo-sqlite';
+import * as Crypto from "expo-crypto";
+import type { SQLiteDatabase } from "expo-sqlite";
 
-import type { VehicleType } from '@/domain/trip';
-import { defaultVehicleName, type Vehicle } from '@/domain/vehicles';
+import type { VehicleType } from "@/domain/trip";
+import { defaultVehicleName, type Vehicle } from "@/domain/vehicles";
 
-import { loadSettings, saveSettings } from './settings-repo';
+import { loadSettings, saveSettings } from "./settings-repo";
 
-type VehicleRow = { id: string; name: string; type: VehicleType; registration: string | null };
+type VehicleRow = {
+  id: string;
+  name: string;
+  type: VehicleType;
+  registration: string | null;
+};
 
 const fromRow = (row: VehicleRow): Vehicle => ({
   id: row.id,
@@ -18,14 +23,16 @@ const fromRow = (row: VehicleRow): Vehicle => ({
 /** The garage, oldest first, without removed vehicles. */
 export async function listVehicles(db: SQLiteDatabase): Promise<Vehicle[]> {
   const rows = await db.getAllAsync<VehicleRow>(
-    'SELECT id, name, type, registration FROM vehicles WHERE archived = 0 ORDER BY created_at;',
+    "SELECT id, name, type, registration FROM vehicles WHERE archived = 0 ORDER BY created_at;",
   );
   return rows.map(fromRow);
 }
 
 /** Every vehicle ever added, removed ones included, for naming old trips in reports. */
 export async function listAllVehicles(db: SQLiteDatabase): Promise<Vehicle[]> {
-  const rows = await db.getAllAsync<VehicleRow>('SELECT id, name, type, registration FROM vehicles;');
+  const rows = await db.getAllAsync<VehicleRow>(
+    "SELECT id, name, type, registration FROM vehicles;",
+  );
   return rows.map(fromRow);
 }
 
@@ -40,7 +47,7 @@ export async function addVehicle(
     registration: input.registration ?? null,
   };
   await db.runAsync(
-    'INSERT INTO vehicles (id, name, type, registration, archived, created_at) VALUES (?, ?, ?, ?, 0, ?);',
+    "INSERT INTO vehicles (id, name, type, registration, archived, created_at) VALUES (?, ?, ?, ?, 0, ?);",
     vehicle.id,
     vehicle.name,
     vehicle.type,
@@ -50,9 +57,12 @@ export async function addVehicle(
   return vehicle;
 }
 
-export async function updateVehicle(db: SQLiteDatabase, vehicle: Vehicle): Promise<void> {
+export async function updateVehicle(
+  db: SQLiteDatabase,
+  vehicle: Vehicle,
+): Promise<void> {
   await db.runAsync(
-    'UPDATE vehicles SET name = ?, type = ?, registration = ? WHERE id = ?;',
+    "UPDATE vehicles SET name = ?, type = ?, registration = ? WHERE id = ?;",
     vehicle.name,
     vehicle.type,
     vehicle.registration,
@@ -60,21 +70,36 @@ export async function updateVehicle(db: SQLiteDatabase, vehicle: Vehicle): Promi
   );
   // Keep the current vehicle's type mirrored in settings (new drives are priced by it).
   const settings = await loadSettings(db);
-  if (settings.currentVehicleId === vehicle.id) await saveSettings(db, { ...settings, vehicle: vehicle.type });
+  if (settings.currentVehicleId === vehicle.id)
+    await saveSettings(db, { ...settings, vehicle: vehicle.type });
 }
 
 /** Hides a vehicle from the garage; its trips keep their record of it. */
-export async function removeVehicle(db: SQLiteDatabase, id: string): Promise<void> {
-  await db.runAsync('UPDATE vehicles SET archived = 1 WHERE id = ?;', id);
+export async function removeVehicle(
+  db: SQLiteDatabase,
+  id: string,
+): Promise<void> {
+  await db.runAsync("UPDATE vehicles SET archived = 1 WHERE id = ?;", id);
   const settings = await loadSettings(db);
   if (settings.currentVehicleId === id) {
     const [next] = await listVehicles(db);
-    await saveSettings(db, { ...settings, currentVehicleId: next?.id ?? null, vehicle: next?.type ?? 'car' });
+    await saveSettings(db, {
+      ...settings,
+      currentVehicleId: next?.id ?? null,
+      vehicle: next?.type ?? "car",
+    });
   }
 }
 
-export async function setCurrentVehicle(db: SQLiteDatabase, vehicle: Vehicle): Promise<void> {
-  await saveSettings(db, { ...(await loadSettings(db)), currentVehicleId: vehicle.id, vehicle: vehicle.type });
+export async function setCurrentVehicle(
+  db: SQLiteDatabase,
+  vehicle: Vehicle,
+): Promise<void> {
+  await saveSettings(db, {
+    ...(await loadSettings(db)),
+    currentVehicleId: vehicle.id,
+    vehicle: vehicle.type,
+  });
 }
 
 /**
@@ -82,18 +107,30 @@ export async function setCurrentVehicle(db: SQLiteDatabase, vehicle: Vehicle): P
  * empty (and filing older trips of that type under it), and making sure one
  * vehicle is current.
  */
-export async function ensureVehicles(db: SQLiteDatabase): Promise<{ vehicles: Vehicle[]; current: Vehicle }> {
+export async function ensureVehicles(
+  db: SQLiteDatabase,
+): Promise<{ vehicles: Vehicle[]; current: Vehicle }> {
   let vehicles = await listVehicles(db);
   const settings = await loadSettings(db);
   if (vehicles.length === 0) {
     const first = await addVehicle(db, { type: settings.vehicle });
-    await db.runAsync('UPDATE trips SET vehicle_id = ? WHERE vehicle_id IS NULL AND vehicle = ?;', first.id, first.type);
+    await db.runAsync(
+      "UPDATE trips SET vehicle_id = ? WHERE vehicle_id IS NULL AND vehicle = ?;",
+      first.id,
+      first.type,
+    );
     vehicles = [first];
   }
-  let current = vehicles.find((vehicle) => vehicle.id === settings.currentVehicleId);
+  let current = vehicles.find(
+    (vehicle) => vehicle.id === settings.currentVehicleId,
+  );
   if (!current) {
     current = vehicles[0];
-    await saveSettings(db, { ...settings, currentVehicleId: current.id, vehicle: current.type });
+    await saveSettings(db, {
+      ...settings,
+      currentVehicleId: current.id,
+      vehicle: current.type,
+    });
   }
   return { vehicles, current };
 }

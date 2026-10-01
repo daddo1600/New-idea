@@ -8,11 +8,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { useLanguage, useT } from '@/i18n/i18n';
 
 /** One shift, the same on each chosen day: the quick version of Settings → Work hours. */
-export type SimpleWeek = {
-  days: readonly boolean[];
-  start: number;
-  end: number;
-};
+export type SimpleWeek = { days: readonly boolean[]; start: number; end: number };
 
 /** Monday to Friday, 9 to 5. Days are indexed like Date#getDay (0 = Sunday). */
 export const DEFAULT_SIMPLE_WEEK: SimpleWeek = {
@@ -68,10 +64,7 @@ export function WorkHoursQuick({
     const next = (value[key] + by + DAY_MINUTES) % DAY_MINUTES;
     const other = key === 'start' ? value.end : value.start;
     // A shift has to last some time; skip over the other end.
-    onChange({
-      ...value,
-      [key]: next === other ? (next + by + DAY_MINUTES) % DAY_MINUTES : next,
-    });
+    onChange({ ...value, [key]: next === other ? (next + by + DAY_MINUTES) % DAY_MINUTES : next });
   };
 
   const stepButton = (key: 'start' | 'end', accessibilityLabel: string, by: number) => (
@@ -113,20 +106,12 @@ export function WorkHoursQuick({
               accessibilityRole="checkbox"
               accessibilityLabel={weekdayName(day, lang, 'long')}
               accessibilityState={{ checked: on }}
-              onPress={() =>
-                onChange({
-                  ...value,
-                  days: value.days.map((d, i) => (i === day ? !d : d)),
-                })
-              }
+              onPress={() => onChange({ ...value, days: value.days.map((d, i) => (i === day ? !d : d)) })}
               style={[
                 styles.day,
                 on
                   ? { backgroundColor: theme.accent, borderColor: theme.accent }
-                  : {
-                      backgroundColor: 'transparent',
-                      borderColor: theme.backgroundSelected,
-                    },
+                  : { backgroundColor: 'transparent', borderColor: theme.backgroundSelected },
               ]}>
               <ThemedText type="smallBold" style={{ color: on ? theme.onAccent : theme.textSecondary }}>
                 {weekdayName(day, lang, 'narrow')}
@@ -152,19 +137,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  stepperRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+  stepperRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   stepperLabel: { width: 56 },
   stepper: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
-  stepButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  stepButton: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
   time: { minWidth: 84, textAlign: 'center' },
 });

@@ -1,14 +1,5 @@
 import { useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  View,
-} from 'react-native';
+import { KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
@@ -141,25 +132,13 @@ export function PurposePicker({
                     placeholderTextColor={theme.textSecondary}
                     returnKeyType="done"
                     onSubmitEditing={() => custom.trim() && pick(custom.trim())}
-                    style={[
-                      styles.input,
-                      {
-                        color: theme.text,
-                        backgroundColor: theme.backgroundElement,
-                      },
-                    ]}
+                    style={[styles.input, { color: theme.text, backgroundColor: theme.backgroundElement }]}
                   />
                   <Pressable
                     accessibilityRole="button"
                     disabled={!custom.trim()}
                     onPress={() => pick(custom.trim())}
-                    style={[
-                      styles.use,
-                      {
-                        backgroundColor: theme.accent,
-                        opacity: custom.trim() ? 1 : 0.4,
-                      },
-                    ]}>
+                    style={[styles.use, { backgroundColor: theme.accent, opacity: custom.trim() ? 1 : 0.4 }]}>
                     <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
                       {t('Use')}
                     </ThemedText>
@@ -202,13 +181,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     maxHeight: 560,
   },
-  grabber: {
-    alignSelf: 'center',
-    width: 40,
-    height: 5,
-    borderRadius: 3,
-    marginBottom: Spacing.two,
-  },
+  grabber: { alignSelf: 'center', width: 40, height: 5, borderRadius: 3, marginBottom: Spacing.two },
   title: { textAlign: 'center', marginBottom: Spacing.two },
   list: { flexGrow: 0 },
   option: {
@@ -221,22 +194,7 @@ const styles = StyleSheet.create({
   },
   emoji: { fontSize: 18, lineHeight: 24, width: 26, textAlign: 'center' },
   divider: { height: StyleSheet.hairlineWidth, marginVertical: Spacing.one },
-  customRow: {
-    flexDirection: 'row',
-    gap: Spacing.two,
-    paddingVertical: Spacing.two,
-    alignItems: 'center',
-  },
-  input: {
-    flex: 1,
-    borderRadius: 10,
-    paddingHorizontal: Spacing.three,
-    paddingVertical: 10,
-    fontSize: 16,
-  },
-  use: {
-    paddingHorizontal: Spacing.three,
-    paddingVertical: 10,
-    borderRadius: 10,
-  },
+  customRow: { flexDirection: 'row', gap: Spacing.two, paddingVertical: Spacing.two, alignItems: 'center' },
+  input: { flex: 1, borderRadius: 10, paddingHorizontal: Spacing.three, paddingVertical: 10, fontSize: 16 },
+  use: { paddingHorizontal: Spacing.three, paddingVertical: 10, borderRadius: 10 },
 });

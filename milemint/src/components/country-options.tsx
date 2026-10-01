@@ -6,7 +6,14 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { detectRegion } from '@/domain/detect-region';
 import { Spacing } from '@/constants/theme';
-import { DEFAULT_REGION, REGION_LIST, REGIONS, regionFromLocale, vehicleRule, type RegionCode } from '@/domain/regions';
+import {
+  DEFAULT_REGION,
+  REGION_LIST,
+  REGIONS,
+  regionFromLocale,
+  vehicleRule,
+  type RegionCode,
+} from '@/domain/regions';
 import type { VehicleType } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
@@ -27,11 +34,8 @@ export function phoneRegion(): RegionCode {
     const [locale] = getLocales();
     const [calendar] = getCalendars();
     return (
-      detectRegion({
-        regionCode: locale?.regionCode,
-        timeZone: calendar?.timeZone,
-        locale: locale?.languageTag,
-      }) ?? DEFAULT_REGION
+      detectRegion({ regionCode: locale?.regionCode, timeZone: calendar?.timeZone, locale: locale?.languageTag }) ??
+      DEFAULT_REGION
     );
   } catch {
     try {
@@ -73,17 +77,11 @@ export function CountryOptions({
               key={option.code}
               accessibilityRole="radio"
               accessibilityState={{ selected: active }}
-              accessibilityLabel={t('{{country}}. {{rule}}', {
-                country: t(option.name),
-                rule: t(option.rule),
-              })}
+              accessibilityLabel={t('{{country}}. {{rule}}', { country: t(option.name), rule: t(option.rule) })}
               onPress={() => onChange(option.code)}
               style={({ pressed }) => [
                 styles.tile,
-                {
-                  backgroundColor: theme.backgroundElement,
-                  transform: [{ scale: pressed ? 0.97 : 1 }],
-                },
+                { backgroundColor: theme.backgroundElement, transform: [{ scale: pressed ? 0.97 : 1 }] },
               ]}>
               {active && <BrandGradient />}
               {active && (
@@ -150,13 +148,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   tickText: { color: '#064E3B', fontSize: 11, fontWeight: '800' },
-  rate: {
-    flexDirection: 'row',
-    gap: Spacing.two,
-    borderRadius: 12,
-    padding: Spacing.three,
-    alignItems: 'flex-start',
-  },
+  rate: { flexDirection: 'row', gap: Spacing.two, borderRadius: 12, padding: Spacing.three, alignItems: 'flex-start' },
   rateDot: { width: 8, height: 8, borderRadius: 4, marginTop: 6 },
   flex: { flex: 1 },
 });

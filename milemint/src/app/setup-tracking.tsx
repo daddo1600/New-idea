@@ -122,10 +122,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   point: { borderRadius: 12, padding: Spacing.three, gap: Spacing.half },
-  button: {
-    alignItems: 'center',
-    paddingVertical: Spacing.three,
-    borderRadius: 12,
-  },
+  button: { alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12 },
   later: { alignItems: 'center', paddingVertical: Spacing.two },
 });

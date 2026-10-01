@@ -31,10 +31,7 @@ export function VehiclePicker({ value, onChange }: { value: VehicleType; onChang
               styles.option,
               selected
                 ? { backgroundColor: theme.accent, borderColor: theme.accent }
-                : {
-                    backgroundColor: theme.backgroundElement,
-                    borderColor: theme.backgroundSelected,
-                  },
+                : { backgroundColor: theme.backgroundElement, borderColor: theme.backgroundSelected },
             ]}>
             <Text style={styles.icon}>{VEHICLE_ICONS[vehicle]}</Text>
             <ThemedText type="smallBold" numberOfLines={1} style={{ color: selected ? theme.onAccent : theme.text }}>

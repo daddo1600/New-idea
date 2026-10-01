@@ -166,7 +166,10 @@ export default function HomeScreen() {
               <ShiftBar
                 shift={shiftMode.shift}
                 drives={shiftTrips.length}
-                distance={formatDistance(shiftTrips.reduce((sum, trip) => sum + trip.distanceMeters, 0), region)}
+                distance={formatDistance(
+                  shiftTrips.reduce((sum, trip) => sum + trip.distanceMeters, 0),
+                  region,
+                )}
                 value={formatMoney(
                   shiftTrips.reduce((sum, trip) => sum + (deductions.get(trip.id) ?? 0), 0),
                   region,
@@ -779,7 +782,9 @@ function ShiftBar({
     minutes: String(minutes % 60).padStart(2, '0'),
   });
   return (
-    <View style={styles.shiftOn} accessibilityLabel={t('On shift for {{elapsed}}, {{count}} drives', { elapsed, count: drives })}>
+    <View
+      style={styles.shiftOn}
+      accessibilityLabel={t('On shift for {{elapsed}}, {{count}} drives', { elapsed, count: drives })}>
       <BrandGradient />
       <LiveDot color="#FACC15" />
       <View style={styles.flex}>
