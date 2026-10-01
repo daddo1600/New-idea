@@ -1,8 +1,8 @@
-import { t } from "@/i18n/i18n";
+import { t } from '@/i18n/i18n';
 
 /** MileMint on the App Store (live once version 1.0 is released). */
-export const APP_STORE_URL = "https://apps.apple.com/app/id6817748981";
-const APP_ID = "6817748981";
+export const APP_STORE_URL = 'https://apps.apple.com/app/id6817748981';
+const APP_ID = '6817748981';
 
 /**
  * Apple offer code giving a friend their first month of Pro free. Set once it
@@ -12,8 +12,7 @@ const APP_ID = "6817748981";
  */
 export const FRIEND_OFFER_CODE: string | null = null;
 
-const redeemUrl = (code: string) =>
-  `https://apps.apple.com/redeem?ctx=offercodes&id=${APP_ID}&code=${code}`;
+const redeemUrl = (code: string) => `https://apps.apple.com/redeem?ctx=offercodes&id=${APP_ID}&code=${code}`;
 
 /**
  * A message to share, with the download link and (when live) the friend's
@@ -21,26 +20,22 @@ const redeemUrl = (code: string) =>
  * translated here, in the current language.
  */
 export function withInvite(message: string): string {
-  const lines = [
-    message,
-    "",
-    t("Get MileMint free on the App Store: {{url}}", { url: APP_STORE_URL }),
-  ];
+  const lines = [message, '', t('Get MileMint free on the App Store: {{url}}', { url: APP_STORE_URL })];
   if (FRIEND_OFFER_CODE) {
     lines.push(
-      t("New to Pro? Your first month is on me: {{url}}", {
+      t('New to Pro? Your first month is on me: {{url}}', {
         url: redeemUrl(FRIEND_OFFER_CODE),
       }),
     );
   }
-  return lines.join("\n");
+  return lines.join('\n');
 }
 
 /** The "Invite a friend" message, in the current language. Call it when sharing. */
 export function inviteMessage(): string {
   return withInvite(
     t(
-      "I use MileMint to log my business mileage automatically. It works out what every drive is worth at tax time, so nothing goes unclaimed. 🚗💸",
+      'I use MileMint to log my business mileage automatically. It works out what every drive is worth at tax time, so nothing goes unclaimed. 🚗💸',
     ),
   );
 }

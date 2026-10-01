@@ -12,7 +12,7 @@ import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
-import { INVITE_MESSAGE } from '@/referral/links';
+import { inviteMessage } from '@/referral/links';
 import { useRegion } from '@/region/region';
 
 const SUPPORT_EMAIL = 'milemint.support@gmail.com';
@@ -114,7 +114,7 @@ function Menu({ onClose }: { onClose: () => void }) {
       detail: t('Share MileMint on WhatsApp and more'),
       onPress: () => {
         onClose();
-        Share.share({ message: INVITE_MESSAGE }).catch(() => {});
+        Share.share({ message: inviteMessage() }).catch(() => {});
       },
     },
     {

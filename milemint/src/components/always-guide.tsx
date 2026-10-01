@@ -28,7 +28,9 @@ export function AlwaysGuide({ current }: { current: 'While Using the App' | 'Nev
     <ThemedView type="backgroundElement" style={styles.card} accessibilityRole="alert">
       <ThemedText type="smallBold">{t('One quick switch in Settings')}</ThemedText>
       <ThemedText type="small" themeColor="textSecondary">
-        {t('iOS only offers “Always” in Settings. It takes ten seconds, and MileMint carries on by itself when you come back.')}
+        {t(
+          'iOS only offers “Always” in Settings. It takes ten seconds, and MileMint carries on by itself when you come back.',
+        )}
       </ThemedText>
 
       <View style={styles.steps}>

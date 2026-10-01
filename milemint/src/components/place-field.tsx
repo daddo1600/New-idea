@@ -23,11 +23,13 @@ export const EMPTY_PLACE: PlaceDraft = { text: '', at: null, placeId: null };
 export async function resolvePlace(draft: PlaceDraft): Promise<LatLng> {
   if (draft.at) return draft.at;
   const found = await locateAddress(draft.text.trim());
-  if (!found) throw new Error(
+  if (!found) {
+    throw new Error(
       translateNow('Couldn’t find “{{address}}”. Pick a suggestion, or add the town or postcode.', {
         address: draft.text.trim(),
       }),
     );
+  }
   return found;
 }
 

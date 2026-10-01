@@ -3,9 +3,9 @@
  * good habits. Each is celebrated once, the first time it's reached.
  */
 
-import { msg } from "../i18n/i18n";
+import { msg } from '../i18n/i18n';
 
-export type MilestoneKind = "money" | "distance" | "habit";
+export type MilestoneKind = 'money' | 'distance' | 'habit';
 
 export type Milestone = {
   id: string;
@@ -16,34 +16,30 @@ export type Milestone = {
 };
 
 /** Money back, in pounds / dollars: real amounts for anyone who drives for work. */
-export const MONEY_STEPS = [
-  50, 100, 250, 500, 1_000, 2_500, 5_000, 10_000,
-] as const;
+export const MONEY_STEPS = [50, 100, 250, 500, 1_000, 2_500, 5_000, 10_000] as const;
 /** Business distance, in miles or kilometres. */
-export const DISTANCE_STEPS = [
-  100, 500, 1_000, 2_500, 5_000, 10_000, 25_000,
-] as const;
+export const DISTANCE_STEPS = [100, 500, 1_000, 2_500, 5_000, 10_000, 25_000] as const;
 
 export const HABITS = {
-  "first-trip": {
-    emoji: "🚗",
-    title: msg("First trip logged"),
-    message: msg("MileMint is on the job. Just drive."),
+  'first-trip': {
+    emoji: '🚗',
+    title: msg('First trip logged'),
+    message: msg('MileMint is on the job. Just drive.'),
   },
-  "first-shift": {
-    emoji: "📦",
-    title: msg("First shift done"),
-    message: msg("Every drive of it counted as business."),
+  'first-shift': {
+    emoji: '📦',
+    title: msg('First shift done'),
+    message: msg('Every drive of it counted as business.'),
   },
-  "sorted-week": {
-    emoji: "✅",
-    title: msg("A fully sorted week"),
-    message: msg("Every drive sorted. Tax time just got easier."),
+  'sorted-week': {
+    emoji: '✅',
+    title: msg('A fully sorted week'),
+    message: msg('Every drive sorted. Tax time just got easier.'),
   },
-  "first-report": {
-    emoji: "📄",
-    title: msg("First report exported"),
-    message: msg("Your mileage log is ready for your tax return."),
+  'first-report': {
+    emoji: '📄',
+    title: msg('First report exported'),
+    message: msg('Your mileage log is ready for your tax return.'),
   },
 } as const;
 export type HabitId = keyof typeof HABITS;
@@ -51,19 +47,19 @@ export type HabitId = keyof typeof HABITS;
 export const MILESTONES: readonly Milestone[] = [
   ...MONEY_STEPS.map((threshold) => ({
     id: `money-${threshold}`,
-    kind: "money" as const,
+    kind: 'money' as const,
     threshold,
-    emoji: "💰",
+    emoji: '💰',
   })),
   ...DISTANCE_STEPS.map((threshold) => ({
     id: `distance-${threshold}`,
-    kind: "distance" as const,
+    kind: 'distance' as const,
     threshold,
-    emoji: "🛣️",
+    emoji: '🛣️',
   })),
   ...(Object.keys(HABITS) as HabitId[]).map((id) => ({
     id,
-    kind: "habit" as const,
+    kind: 'habit' as const,
     threshold: 1,
     emoji: HABITS[id].emoji,
   })),
@@ -80,9 +76,9 @@ export type Progress = {
 /** Every milestone the progress has reached. */
 export function reachedMilestones(progress: Progress): Milestone[] {
   return MILESTONES.filter((m) =>
-    m.kind === "money"
+    m.kind === 'money'
       ? progress.moneyMinor >= m.threshold * 100
-      : m.kind === "distance"
+      : m.kind === 'distance'
         ? progress.distance >= m.threshold
         : progress.habits.has(m.id as HabitId),
   );
@@ -94,25 +90,19 @@ export function reachedMilestones(progress: Progress): Milestone[] {
  * newly reached is marked as celebrated at once, so a long-time user updating
  * the app gets one pat on the back, not ten in a row.
  */
-export function milestoneToCelebrate(
-  reached: readonly Milestone[],
-  celebrated: ReadonlySet<string>,
-): Milestone | null {
+export function milestoneToCelebrate(reached: readonly Milestone[], celebrated: ReadonlySet<string>): Milestone | null {
   const fresh = reached.filter((m) => !celebrated.has(m.id));
-  const rank = (m: Milestone) =>
-    (m.kind === "money" ? 3 : m.kind === "distance" ? 2 : 1) * 1e9 +
-    m.threshold;
+  const rank = (m: Milestone) => (m.kind === 'money' ? 3 : m.kind === 'distance' ? 2 : 1) * 1e9 + m.threshold;
   return fresh.sort((a, b) => rank(b) - rank(a))[0] ?? null;
 }
 
 /** The next milestone of a kind and how far along the way to it, 0–1. */
 export function nextMilestone(
-  kind: "money" | "distance",
+  kind: 'money' | 'distance',
   value: number,
 ): { threshold: number; progress: number } | null {
-  const steps: readonly number[] =
-    kind === "money" ? MONEY_STEPS : DISTANCE_STEPS;
-  const target = (n: number) => (kind === "money" ? n * 100 : n);
+  const steps: readonly number[] = kind === 'money' ? MONEY_STEPS : DISTANCE_STEPS;
+  const target = (n: number) => (kind === 'money' ? n * 100 : n);
   const index = steps.findIndex((step) => value < target(step));
   if (index === -1) return null;
   const previous = index === 0 ? 0 : target(steps[index - 1]);
@@ -123,12 +113,9 @@ export function nextMilestone(
 }
 
 /** A week (Monday start) where every drive was sorted, finished before `today`. Dates are YYYY-MM-DD. */
-export function hasSortedWeek(
-  trips: readonly { localDate: string; classification: string }[],
-  today: string,
-): boolean {
+export function hasSortedWeek(trips: readonly { localDate: string; classification: string }[], today: string): boolean {
   const weekOf = (date: string) => {
-    const [y, m, d] = date.split("-").map(Number);
+    const [y, m, d] = date.split('-').map(Number);
     const day = new Date(Date.UTC(y, m - 1, d));
     day.setUTCDate(day.getUTCDate() - ((day.getUTCDay() + 6) % 7));
     return day.toISOString().slice(0, 10);
@@ -138,10 +125,7 @@ export function hasSortedWeek(
   for (const trip of trips) {
     const week = weekOf(trip.localDate);
     if (week === current) continue;
-    weeks.set(
-      week,
-      (weeks.get(week) ?? true) && trip.classification !== "unclassified",
-    );
+    weeks.set(week, (weeks.get(week) ?? true) && trip.classification !== 'unclassified');
   }
   return [...weeks.values()].some(Boolean);
 }

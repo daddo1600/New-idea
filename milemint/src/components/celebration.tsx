@@ -97,8 +97,8 @@ export function Celebration({ content, onClose }: { content: CelebrationContent 
           <View style={styles.badge}>
             <Text style={styles.badgeEmoji}>{content.emoji}</Text>
           </View>
-          <Text style={styles.title}>{t(content.title)}</Text>
-          <Text style={styles.message}>{t(content.message)}</Text>
+          <Text style={styles.title}>{content.title}</Text>
+          <Text style={styles.message}>{content.message}</Text>
           <Pressable
             accessibilityRole="button"
             onPress={() => Share.share({ message: content.share }).catch(() => {})}

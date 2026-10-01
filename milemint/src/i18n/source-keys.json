@@ -1,0 +1,4035 @@
+[
+  {
+    "key": "…",
+    "files": [
+      "i18n/extract.ts"
+    ]
+  },
+  {
+    "key": "…unless you set your work hours. Until then, a few swipes will do.",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "{{achievement}} on MileMint {{emoji}} The mileage app that counts every mile.",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "{{amount}} back in your pocket",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "{{amount}} found",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "{{authority}} has no per-km rate for this vehicle.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "{{authority}} has no per-mile rate for this vehicle.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "{{authority}} mileage report (PDF) · Pro",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "{{authority}} needs a business purpose, e.g. \"Client meeting\".",
+    "files": [
+      "app/add-trip.tsx",
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "{{authority}} rate for bicycles: {{rate}}",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "{{authority}} rate for motorbikes and scooters: {{rate}}",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "{{count}} a month",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} days",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "{{count}} days left",
+    "files": [
+      "app/tax-dates.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} days left in the {{year}} tax year",
+    "files": [
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} days until your {{year}} {{returnName}} is due",
+    "files": [
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} drives are locked. Upgrade for unlimited drives.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} drives are waiting to be unlocked",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} selected",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} trips aren’t classified yet. Sort them first so the report is complete.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "{{count}}-day free trial",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "{{count}}-month free trial",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "{{country}}. {{rule}}",
+    "files": [
+      "components/country-options.tsx"
+    ]
+  },
+  {
+    "key": "{{date}} · {{distance}} · Added manually",
+    "files": [
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "{{day}} shift {{number}} end",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "{{day}} shift {{number}} start",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "{{distance}} · {{value}} · {{count}} drives",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "{{distance}} business",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "{{distance}} business · {{count}} to review",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "{{distance}} business km",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "{{distance}} business km logged with MileMint 🛣️ Every one counted.",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "{{distance}} business miles",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "{{distance}} business miles logged with MileMint 🛣️ Every one counted.",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "{{distance}} driven · {{percent}}% business",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "{{distance}} is more than one trip should be. Check for an extra digit.",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "{{distance}} km",
+    "files": [
+      "app/compare.tsx",
+      "app/milestones.tsx"
+    ]
+  },
+  {
+    "key": "{{distance}} km · a typical month of business driving",
+    "files": [
+      "components/launch-intro.tsx"
+    ]
+  },
+  {
+    "key": "{{distance}} km logged for work, every one counted. That’s a lot of road.",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "{{distance}} miles",
+    "files": [
+      "app/compare.tsx",
+      "app/milestones.tsx"
+    ]
+  },
+  {
+    "key": "{{distance}} miles · a typical month of business driving",
+    "files": [
+      "components/launch-intro.tsx"
+    ]
+  },
+  {
+    "key": "{{distance}} miles logged for work, every one counted. That’s a lot of road.",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "{{distance}} of business driving",
+    "files": [
+      "app/milestones.tsx"
+    ]
+  },
+  {
+    "key": "{{from}} to {{to}}, {{date}}, {{status}}",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "{{hint}}. Swipe the button to the right, or double-tap.",
+    "files": [
+      "components/swipe-to-start.tsx"
+    ]
+  },
+  {
+    "key": "{{hours}}h {{minutes}}m",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "{{label}} address",
+    "files": [
+      "components/place-field.tsx"
+    ]
+  },
+  {
+    "key": "{{label}}: earned",
+    "files": [
+      "app/milestones.tsx"
+    ]
+  },
+  {
+    "key": "{{label}}: not yet",
+    "files": [
+      "app/milestones.tsx"
+    ]
+  },
+  {
+    "key": "{{price}} per month is charged to your Apple Account and renews automatically unless cancelled at least 24 hours before the end of the period.",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "{{price}} per year is charged to your Apple Account and renews automatically unless cancelled at least 24 hours before the end of the period.",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "{{price}}/month",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "{{price}}/year",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "{{remaining}} to go to {{goal}}",
+    "files": [
+      "app/milestones.tsx"
+    ]
+  },
+  {
+    "key": "{{rule}}.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "{{rule}}. Petrol, diesel, hybrid or electric: same rate for a car or van you own.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "{{rule}}. Petrol, diesel, hybrid or electric: same rate.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "{{trial}}, then {{price}}/month",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "{{trial}}, then {{price}}/year",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "{{used}} of {{limit}} free drives in {{month}}",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "{{year}} at {{authority}} rates",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "{{year}} tax year",
+    "files": [
+      "app/tax-dates.tsx"
+    ]
+  },
+  {
+    "key": "{{year}} tax year at {{authority}} rates",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "↑ {{step}} OF 2",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "+ Add a place",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "+ Add a vehicle",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "+{{amount}} since you last looked",
+    "files": [
+      "components/launch-intro.tsx"
+    ]
+  },
+  {
+    "key": "+{{distance}} km your app missed",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "+{{distance}} miles your app missed",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "★ Pro · unlimited drives",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "✓ Found",
+    "files": [
+      "components/place-field.tsx"
+    ]
+  },
+  {
+    "key": "📍 I’m here now",
+    "files": [
+      "components/place-field.tsx"
+    ]
+  },
+  {
+    "key": "🔒 GPS runs only while you’re driving. Trips stay on your iPhone, never on our servers.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "1 month left in the {{year}} tax year",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "2 months left in the {{year}} tax year ⏳",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "24-hour times. A shift like 22:00 to 02:00 runs past midnight.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "31 January",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "31 October",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "40 automatic drives a month (a whole shift counts as one), plus unlimited trips by hand. Go Pro any time for unlimited.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "40 automatic drives a month, plus unlimited trips by hand. Go Pro any time for unlimited.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "A (slightly cheeky) nudge on Sunday evening to sort the week’s drives.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "A few swipes tonight beats a shoebox of receipts at tax time.",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "A fully sorted week",
+    "files": [
+      "domain/milestones.ts"
+    ]
+  },
+  {
+    "key": "A quick (slightly cheeky) reminder each Sunday evening to sort the week’s drives, so nothing goes unclaimed.",
+    "files": [
+      "components/reminder-ask.tsx"
+    ]
+  },
+  {
+    "key": "A quick Sunday reminder to sort your week. Turn it off any time in Settings.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "A ready-to-file report for you or your accountant: your mileage totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Active · thank you!",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Add a missed drive",
+    "files": [
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "Add a missed trip",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Add business purpose",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Add missed trip",
+    "files": [
+      "app/_layout.tsx"
+    ]
+  },
+  {
+    "key": "Add missed trips by hand",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Add shift",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Added manually",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Address",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Address or postcode",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "After the {{trial}}, {{price}} per month is charged to your Apple Account and renews automatically unless cancelled at least 24 hours before the end of the period.",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "After the {{trial}}, {{price}} per year is charged to your Apple Account and renews automatically unless cancelled at least 24 hours before the end of the period.",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "ALLOW LOCATION ACCESS",
+    "files": [
+      "components/always-guide.tsx"
+    ]
+  },
+  {
+    "key": "Allow location access and MileMint logs every drive for you.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Always",
+    "files": [
+      "components/always-guide.tsx"
+    ]
+  },
+  {
+    "key": "Apple Maps couldn’t place that one. Try another suggestion.",
+    "files": [
+      "components/place-field.tsx"
+    ]
+  },
+  {
+    "key": "April 15",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "April 30",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Ask Next Time Or When I Share",
+    "files": [
+      "components/always-guide.tsx"
+    ]
+  },
+  {
+    "key": "ATO cents per km method: 91c a km, up to 5,000 km per car a year",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Australia",
+    "files": [
+      "components/country-options.tsx",
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Auto: business by default · swipe left if personal",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Auto: commute",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Auto: in your work hours",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Auto: on shift",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Auto: outside your work hours · swipe right if it was work",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Auto: usual route",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Auto: work hours",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Automatic",
+    "files": [
+      "app/setup-tracking.tsx",
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Automatic drive logging",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Automatic tracking",
+    "files": [
+      "app/_layout.tsx"
+    ]
+  },
+  {
+    "key": "Automatic tracking is off",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Automatic tracking is paused",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Automatic tracking runs on your iPhone. Tap + to add a trip and try the app here.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Automatic tracking runs on your iPhone. This preview can’t track drives.",
+    "files": [
+      "app/setup-tracking.tsx"
+    ]
+  },
+  {
+    "key": "Automatic tracking runs on your iPhone. You can still add trips by hand here.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Autumn miles add up 🍂",
+    "files": [
+      "domain/seasons.ts"
+    ]
+  },
+  {
+    "key": "Back",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Bank or post office",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "BAS: if you’re registered for GST or pay PAYG instalments, you lodge quarterly by 28 October, 28 February, 28 April and 28 July. Rideshare drivers must register for GST from their first ride; delivery riders only once turnover reaches $75,000.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Before Monday shows up, give this week’s drives a quick sort.",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Best value",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Between workplaces",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Bicycle",
+    "files": [
+      "app/welcome.tsx",
+      "components/vehicle-picker.tsx",
+      "domain/trip.ts"
+    ]
+  },
+  {
+    "key": "Business",
+    "files": [
+      "app/add-trip.tsx",
+      "app/index.tsx",
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Business drives swipe right, personal swipe left. Easiest date of the week.",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Business errand",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Business km",
+    "files": [
+      "app/milestones.tsx",
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Business mileage (HMRC simplified expenses)",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Business miles",
+    "files": [
+      "app/milestones.tsx",
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Business or personal?",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Business or personal? Worth {{amount}} if business.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Business purpose",
+    "files": [
+      "app/add-trip.tsx",
+      "app/trip/[id].tsx",
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Business purpose: {{purpose}}",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Business purpose: not chosen",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Business use of your vehicle",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Buying supplies",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "By road, from Apple Maps",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Canada",
+    "files": [
+      "components/country-options.tsx",
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Cancel",
+    "files": [
+      "app/index.tsx",
+      "app/settings.tsx",
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Car or van",
+    "files": [
+      "app/welcome.tsx",
+      "components/vehicle-picker.tsx",
+      "domain/trip.ts"
+    ]
+  },
+  {
+    "key": "Change",
+    "files": [
+      "app/add-trip.tsx",
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Change country",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Change language",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Check {{days}}: use 24-hour times like 09:00, and an end different from the start.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Choose “Always”",
+    "files": [
+      "components/always-guide.tsx"
+    ]
+  },
+  {
+    "key": "Choose a purpose",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Choose one to continue",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Choose the language for MileMint. Reports for the tax office stay in English.",
+    "files": [
+      "app/language.tsx"
+    ]
+  },
+  {
+    "key": "Choose where you drove from and to.",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Classify by work hours",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Client",
+    "files": [
+      "app/settings.tsx",
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Client meeting",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Close",
+    "files": [
+      "components/purpose-picker.tsx",
+      "components/vehicle-sheet.tsx"
+    ]
+  },
+  {
+    "key": "Close menu",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Commute between home and work isn’t deductible.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Commuting km",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Commuting miles",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Compare with your delivery app",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Continue",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Continue without “Always”",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Could not save the place. Please try again.",
+    "files": [
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Could not save the trip. Please try again.",
+    "files": [
+      "app/add-trip.tsx",
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Could not save. Please try again.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Couldn’t create the file. Please try again.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Couldn’t find where you are right now. Type the address instead.",
+    "files": [
+      "components/place-field.tsx"
+    ]
+  },
+  {
+    "key": "Couldn’t load subscription options from the App Store. Check your connection and try again later.",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Couldn’t reach the App Store. Check your connection and try again.",
+    "files": [
+      "purchases/pro.tsx"
+    ]
+  },
+  {
+    "key": "Couldn’t save the place. Please try again.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Couldn’t save those places. Please try again.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Country",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "CRA asks for a logbook showing the date, destination, purpose and kilometres of each business trip, plus your odometer readings at the start and end of the year.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "CRA needs your total distance driven to work out your business-use share.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "CRA per-km rate: 73¢ for the first 5,000 km, then 67¢",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Create PDF report",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Date",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Date: {{date}}. Hide calendar",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Date: {{date}}. Show calendar",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Dates are a guide; deadlines can move for weekends and holidays. Check with {{authority}} or your accountant. Not tax advice.",
+    "files": [
+      "app/tax-dates.tsx"
+    ]
+  },
+  {
+    "key": "days",
+    "files": [
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "Deductions found in {{year}}",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Deductions found in {{year}} tax year",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Delete",
+    "files": [
+      "app/index.tsx",
+      "app/settings.tsx",
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Delete “{{name}}”?",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Delete {{name}}",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Delete trip",
+    "files": [
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Delete trip?",
+    "files": [
+      "app/index.tsx",
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Delivery apps only count km with an order on board. The drive to the pickup, between orders and home again are business km too, and MileMint logs them all.",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "Delivery apps only count miles with an order on board. The drive to the pickup, between orders and home again are business miles too, and MileMint logs them all.",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "Delivery or collection",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Done",
+    "files": [
+      "app/add-trip.tsx",
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Drives are logged in the background. No buttons to press.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Drives are logged when you park.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Drives may be missed",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Drives over the limit",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Driving {{vehicle}}. Change vehicle",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Driving now",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Driving:",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Due {{date}}. Your mileage report for {{year}} is ready to export.",
+    "files": [
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "e.g. Quote for Acme Ltd",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Edit this vehicle",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Employees reimbursed at CRA’s per-km rate: the figure above is what your employer can pay you tax-free.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Employees: claim work-related car expenses at D1 on your return, up to 5,000 km per car with the cents per km method.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Employees: if your employer pays less than 55p a mile (or nothing), claim the difference with form P87 or on Self Assessment. You can go back 4 tax years.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Employees: unreimbursed mileage can’t be deducted on your federal return. Use your log to get paid back by your employer; a few states still allow a deduction.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Employees: with a signed T2200 from your employer, claim vehicle expenses on form T777. Otherwise, use your log to get reimbursed at the per-km rate.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Employees: you can claim Mileage Allowance Relief on the difference between this total and any mileage allowance your employer paid you.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Encrypted on your iPhone, no ads",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "End is a saved place.",
+    "files": [
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "End of {{year}}",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "End shift",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Ends {{date}}",
+    "files": [
+      "app/tax-dates.tsx"
+    ]
+  },
+  {
+    "key": "Enter odometer readings as numbers, e.g. 48210.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Enter the kilometres driven, e.g. 12.5.",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Enter the miles driven, e.g. 12.5.",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Enter where you drove from and to.",
+    "files": [
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Estimated at {{authority}} rates for your business trips. Not tax advice.",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "Estimated tax: if you expect to owe $1,000 or more, pay quarterly with Form 1040-ES by April 15, June 15, September 15 and January 15. Your mileage lowers your profit, so keep it up to date to avoid overpaying.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Every business kilometre counts",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Every business mile counts",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Every business mile, counted.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Every drive counts as business",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Every drive is logged and unlocked. Thanks for supporting MileMint.",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Every drive is logged the moment you park. No buttons to press.",
+    "files": [
+      "app/setup-tracking.tsx"
+    ]
+  },
+  {
+    "key": "Every drive is unlocked.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Every drive of it counted as business.",
+    "files": [
+      "domain/milestones.ts"
+    ]
+  },
+  {
+    "key": "Every drive sorted. Tax time just got easier.",
+    "files": [
+      "domain/milestones.ts"
+    ]
+  },
+  {
+    "key": "Every drive until you end it counts as business",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Every drive until you end it counts as business.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Every quarter (some people)",
+    "files": [
+      "app/tax-dates.tsx"
+    ]
+  },
+  {
+    "key": "Every trip with date, places, kilometres, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Every trip with date, places, miles, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Every year",
+    "files": [
+      "app/tax-dates.tsx"
+    ]
+  },
+  {
+    "key": "Export CSV",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Export report",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Export your {{year}} mileage report from MileMint and you’re one step closer.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Fall miles add up 🍂",
+    "files": [
+      "domain/seasons.ts"
+    ]
+  },
+  {
+    "key": "Files are shared straight from your iPhone. MileMint never uploads them. Deductions are estimates, not tax advice.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Finish",
+    "files": [
+      "components/work-hours-quick.tsx"
+    ]
+  },
+  {
+    "key": "Finish earlier",
+    "files": [
+      "components/work-hours-quick.tsx"
+    ]
+  },
+  {
+    "key": "Finish later",
+    "files": [
+      "components/work-hours-quick.tsx"
+    ]
+  },
+  {
+    "key": "First report exported",
+    "files": [
+      "domain/milestones.ts"
+    ]
+  },
+  {
+    "key": "First shift done",
+    "files": [
+      "domain/milestones.ts"
+    ]
+  },
+  {
+    "key": "First trip logged",
+    "files": [
+      "domain/milestones.ts"
+    ]
+  },
+  {
+    "key": "For delivery and courier work (Uber Eats, Deliveroo, Amazon Flex, Evri, DPD and the like): a Start shift button on the home screen. Every drive in a shift is business, and a whole shift counts as one drive on the free plan.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Found for you so far",
+    "files": [
+      "app/milestones.tsx"
+    ]
+  },
+  {
+    "key": "found this tax year",
+    "files": [
+      "components/launch-intro.tsx"
+    ]
+  },
+  {
+    "key": "Free",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Free money alert 💸",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Free plan",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Free plan: {{count}} automatic drives a month, unlimited manual trips and CSV export.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Free to start",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Free trial",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Fri",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "From",
+    "files": [
+      "app/add-trip.tsx",
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "From its weekly or monthly summary",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "Future you says thanks 🙌",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "G’day! Summer on the road ☀️",
+    "files": [
+      "domain/seasons.ts"
+    ]
+  },
+  {
+    "key": "Game on! 🎯",
+    "files": [
+      "domain/cheers.ts"
+    ]
+  },
+  {
+    "key": "Get MileMint free on the App Store: {{url}}",
+    "files": [
+      "referral/links.ts"
+    ]
+  },
+  {
+    "key": "Get my report",
+    "files": [
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "Get started",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Get your kilometres up to date before {{date}} so you claim everything you’re owed. {{amount}} found so far.",
+    "files": [
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "Get your miles up to date before {{date}} so you claim everything you’re owed. {{amount}} found so far.",
+    "files": [
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "Give the place a name, e.g. “Acme HQ”.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Go Pro",
+    "files": [
+      "app/index.tsx",
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Good habits",
+    "files": [
+      "app/milestones.tsx"
+    ]
+  },
+  {
+    "key": "Good to know",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "GPS only runs while you drive. Parked, MileMint sleeps.",
+    "files": [
+      "app/setup-tracking.tsx"
+    ]
+  },
+  {
+    "key": "Happy Halloween 🎃",
+    "files": [
+      "domain/seasons.ts"
+    ]
+  },
+  {
+    "key": "Happy holidays from MileMint 🎁",
+    "files": [
+      "domain/seasons.ts"
+    ]
+  },
+  {
+    "key": "Happy New Year 🎆",
+    "files": [
+      "domain/seasons.ts"
+    ]
+  },
+  {
+    "key": "Help & feedback",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Here we go! 🙌",
+    "files": [
+      "domain/cheers.ts"
+    ]
+  },
+  {
+    "key": "HMRC mileage rate: 55p a mile for the first 10,000 business miles, then 25p",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Home",
+    "files": [
+      "app/settings.tsx",
+      "app/trip/[id].tsx",
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "How do you work?",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "I use MileMint to log my business mileage automatically. It works out what every drive is worth at tax time, so nothing goes unclaimed. 🚗💸",
+    "files": [
+      "referral/links.ts"
+    ]
+  },
+  {
+    "key": "I’ll swipe each drive myself.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "I’ve found {{amount}} in business mileage with MileMint 🚗💸 Every mile counted, automatically.",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "If you’re employed",
+    "files": [
+      "app/tax-dates.tsx"
+    ]
+  },
+  {
+    "key": "If you’ve parked, the trip is saved after 5 minutes.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "In Settings, under Allow Location Access, choose Always",
+    "files": [
+      "components/always-guide.tsx"
+    ]
+  },
+  {
+    "key": "Included",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Includes {{amount}} from home ↔ work commutes, which usually aren’t deductible.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Individuals: enter the deduction as Work-related car expenses (D1) using the cents per km method. Sole traders: include it with your business motor vehicle expenses.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Instalments: if your net tax owing is over $3,000 ($1,800 in Quebec), CRA asks for quarterly payments by March 15, June 15, September 15 and December 15.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Invite a friend",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "iOS asks twice. Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "iOS only offers “Always” in Settings. It takes ten seconds, and MileMint carries on by itself when you come back.",
+    "files": [
+      "components/always-guide.tsx"
+    ]
+  },
+  {
+    "key": "IRS standard mileage rate: 76¢ a mile from July 2026",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Just drive. Each trip appears after you park, and business drives count at {{authority}}’s {{rate}} rate.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Just drive. Each trip appears here after you park, ready to swipe business or personal.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Keep going",
+    "files": [
+      "components/celebration.tsx"
+    ]
+  },
+  {
+    "key": "Kept, locked",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "kilometres",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Kilometres",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Kilometres don’t sort themselves…",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Kilometres your delivery app counted",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "km",
+    "files": [
+      "components/country-options.tsx"
+    ]
+  },
+  {
+    "key": "km your delivery app counted",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "Knock knock 🚪",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Language",
+    "files": [
+      "app/_layout.tsx",
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Language: {{name}}. Change",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Last call: make sure every business drive is in MileMint before {{date}}.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Last day of the {{year}} tax year",
+    "files": [
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "Last days of the {{year}} tax year",
+    "files": [
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "Last month",
+    "files": [
+      "domain/missed-miles.ts"
+    ]
+  },
+  {
+    "key": "Let’s do this! 💪",
+    "files": [
+      "domain/cheers.ts"
+    ]
+  },
+  {
+    "key": "Let’s go! 🚀",
+    "files": [
+      "domain/cheers.ts"
+    ]
+  },
+  {
+    "key": "Light on battery",
+    "files": [
+      "app/setup-tracking.tsx"
+    ]
+  },
+  {
+    "key": "Literally. We counted them. Come and sort this week’s.",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Location is off for MileMint, so type the address instead.",
+    "files": [
+      "components/place-field.tsx"
+    ]
+  },
+  {
+    "key": "Location is set to “While Using”. Switch it to “Always” so drives are logged when the app is closed.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Locked drive",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Locked drive on {{date}}, {{distance}}",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Log every drive automatically",
+    "files": [
+      "app/setup-tracking.tsx"
+    ]
+  },
+  {
+    "key": "Log every drive with MileMint Pro",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Low effort, high reward",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Making Tax Digital: if your self-employed and property income is over £50,000 (£30,000 from April 2027, £20,000 from April 2028), you also send quarterly updates through MTD software by 7 August, 7 November, 7 February and 7 May. Your mileage counts towards each update.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Manage or cancel anytime in your App Store account settings.",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Manage subscription",
+    "files": [
+      "app/pro.tsx",
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Mark {{from}} to {{to}} as business",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Mark {{from}} to {{to}} as personal",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Measuring the route…",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Menu",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Mileage log (CSV)",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Mileage log export (CSV)",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "MileMint couldn’t open this screen. Your trips are safe. Please send a screenshot of this page to {{email}} so we can fix it.",
+    "files": [
+      "app/_layout.tsx"
+    ]
+  },
+  {
+    "key": "MileMint has now found {{amount}} in business mileage for you. Hard work, properly rewarded.",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "MileMint has now found {{amount}} in business mileage for you. Nicely done. Keep it rolling.",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "MileMint has now found {{amount}} in business mileage for you. That’s real money back at tax time.",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "MileMint has now found {{amount}} in business mileage for you. You’ve earned every penny of it.",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "MileMint hit a problem",
+    "files": [
+      "errors/fatal-errors.ts"
+    ]
+  },
+  {
+    "key": "MileMint is logging this drive",
+    "files": [
+      "tracking/background.ts"
+    ]
+  },
+  {
+    "key": "MileMint is on the job. Just drive.",
+    "files": [
+      "domain/milestones.ts"
+    ]
+  },
+  {
+    "key": "MileMint logged",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "MileMint logs your drives automatically and works out what they’re worth at tax time.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "MileMint needs location access set to “Always” to notice when you start driving, even when the app is closed.",
+    "files": [
+      "app/setup-tracking.tsx"
+    ]
+  },
+  {
+    "key": "MileMint Pro is active",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "MileMint Pro restored",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "MileMint sorts your drives to match. You can always swipe to change a trip.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "MileMint uses your country’s currency, distance unit, tax year and official mileage rate.",
+    "files": [
+      "app/region.tsx"
+    ]
+  },
+  {
+    "key": "MileMint. Tap to skip",
+    "files": [
+      "components/launch-intro.tsx"
+    ]
+  },
+  {
+    "key": "miles",
+    "files": [
+      "app/add-trip.tsx",
+      "components/country-options.tsx"
+    ]
+  },
+  {
+    "key": "Miles",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Miles don’t sort themselves…",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "miles your delivery app counted",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "Miles your delivery app counted",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "Milestones",
+    "files": [
+      "app/_layout.tsx",
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Missed miles check",
+    "files": [
+      "app/_layout.tsx",
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Mon",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Money back",
+    "files": [
+      "app/milestones.tsx"
+    ]
+  },
+  {
+    "key": "Monthly",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Moped or motorbike",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Motorbike",
+    "files": [
+      "components/vehicle-picker.tsx"
+    ]
+  },
+  {
+    "key": "Motorbike or scooter",
+    "files": [
+      "domain/trip.ts"
+    ]
+  },
+  {
+    "key": "My bike",
+    "files": [
+      "domain/vehicles.ts"
+    ]
+  },
+  {
+    "key": "My car",
+    "files": [
+      "domain/vehicles.ts"
+    ]
+  },
+  {
+    "key": "My delivery app counted {{counted}} km last month. MileMint logged {{logged}} business km: that's {{extra}} km (about {{amount}}) I'd have missed claiming. 🚗💸 MileMint logs every mile automatically.",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "My delivery app counted {{counted}} km this month. MileMint logged {{logged}} business km: that's {{extra}} km (about {{amount}}) I'd have missed claiming. 🚗💸 MileMint logs every mile automatically.",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "My delivery app counted {{counted}} km this week. MileMint logged {{logged}} business km: that's {{extra}} km (about {{amount}}) I'd have missed claiming. 🚗💸 MileMint logs every mile automatically.",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "My delivery app counted {{counted}} miles last month. MileMint logged {{logged}} business miles: that's {{extra}} miles (about {{amount}}) I'd have missed claiming. 🚗💸 MileMint logs every mile automatically.",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "My delivery app counted {{counted}} miles this month. MileMint logged {{logged}} business miles: that's {{extra}} miles (about {{amount}}) I'd have missed claiming. 🚗💸 MileMint logs every mile automatically.",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "My delivery app counted {{counted}} miles this week. MileMint logged {{logged}} business miles: that's {{extra}} miles (about {{amount}}) I'd have missed claiming. 🚗💸 MileMint logs every mile automatically.",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "My motorbike",
+    "files": [
+      "domain/vehicles.ts"
+    ]
+  },
+  {
+    "key": "Name, e.g. Acme HQ",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Name, e.g. Cargo bike",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Name, e.g. Golf",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Name, e.g. Honda PCX",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Neither",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Never",
+    "files": [
+      "components/always-guide.tsx"
+    ]
+  },
+  {
+    "key": "Never miss a mile.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "New drives start as business",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "New drives this month are saved but locked until you upgrade.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "New to Pro? Your first month is on me: {{url}}",
+    "files": [
+      "referral/links.ts"
+    ]
+  },
+  {
+    "key": "Next month",
+    "files": [
+      "components/calendar-picker.tsx"
+    ]
+  },
+  {
+    "key": "No account. Your trips stay encrypted on your iPhone.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "No drives yet",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "No places yet. Add one below, or open a trip and tap “Save as place”.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "No subscription found",
+    "files": [
+      "app/pro.tsx",
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "No thanks",
+    "files": [
+      "components/reminder-ask.tsx"
+    ]
+  },
+  {
+    "key": "No trips in {{year}} yet.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Not included",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Not now",
+    "files": [
+      "app/pro.tsx",
+      "app/setup-tracking.tsx",
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Not sorted",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Note",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Note (optional)",
+    "files": [
+      "app/add-trip.tsx",
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Notifications are off for MileMint. Turn them on in iPhone Settings → Notifications.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Now spend one minute taking the credit. Sort this week’s drives.",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Number plate (optional)",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Odometer at the end of {{year}}, in {{unit}}",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Odometer at the start of {{year}}, in {{unit}}",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Odometer readings",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "of business driving last month",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "of business driving this month",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "of business driving this week",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "Off we go! 👋",
+    "files": [
+      "domain/cheers.ts"
+    ]
+  },
+  {
+    "key": "On shift · {{elapsed}}",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "On shift for {{elapsed}}, {{count}} drives",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Once a year: by April 30, or June 15 if you’re self-employed (any tax owing is still due April 30). Self-employed claim vehicle costs on form T2125.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Once a year: lodge by 31 October after the income year ends (30 June), or later if you use a registered tax agent and sign up with them before 31 October.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "One quick switch in Settings",
+    "files": [
+      "components/always-guide.tsx"
+    ]
+  },
+  {
+    "key": "One week left in the {{year}} tax year 🏁",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Open Settings",
+    "files": [
+      "app/setup-tracking.tsx",
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Opening the App Store…",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Opens a list of purposes",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Opens MileMint Pro to unlock it",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Opens trip details. Long press to delete",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Optional",
+    "files": [
+      "app/add-trip.tsx",
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Optional. Shows your total driving and the business share on the report.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Ordinary commuting between home and your permanent workplace is not business mileage.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Other",
+    "files": [
+      "app/settings.tsx",
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Other personal km",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Other personal miles",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Other…",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Parking fees and tolls for business trips can be deducted on top of the standard mileage rate.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Past trips keep their names.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "PDF reports are created on iPhone.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Personal",
+    "files": [
+      "app/add-trip.tsx",
+      "app/index.tsx",
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Pick both places to fill this in, or type it",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Place name",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Places",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Please send a screenshot of this to support.",
+    "files": [
+      "errors/fatal-errors.ts"
+    ]
+  },
+  {
+    "key": "Plot twist: driving pays",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Preparing…",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Preview mode",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Previous month",
+    "files": [
+      "components/calendar-picker.tsx"
+    ]
+  },
+  {
+    "key": "Privacy Policy",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Private",
+    "files": [
+      "app/setup-tracking.tsx",
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Pro is active: unlimited automatic drives.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Ready when you are",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Recording a drive · {{distance}}",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Reminders",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Remove",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Remove “{{name}}”?",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Remove {{day}} shift {{number}}",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Remove this vehicle",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Reports",
+    "files": [
+      "app/_layout.tsx"
+    ]
+  },
+  {
+    "key": "Reports & export",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Reports: export your mileage log",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Restore purchases",
+    "files": [
+      "app/pro.tsx",
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Sat",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Save",
+    "files": [
+      "app/region.tsx",
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Save and continue",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Save as place",
+    "files": [
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Save end as a place",
+    "files": [
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Save end as a place: {{name}}",
+    "files": [
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Save my hours",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Save place",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Save places like clients or the depot from any trip.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Save readings",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Save start as a place",
+    "files": [
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Save start as a place: {{name}}",
+    "files": [
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Save trip",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Save vehicle",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Save work hours",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Saved. New drives will use these hours.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Saved. The PDF report includes these readings.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Saving…",
+    "files": [
+      "app/add-trip.tsx",
+      "app/settings.tsx",
+      "app/trip/[id].tsx",
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Search an address or place",
+    "files": [
+      "app/add-trip.tsx",
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Search for its address, or use “I’m here now”.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "See what each business drive saves you at tax time.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Select",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Select {{count}} unsorted",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Select several trips to sort at once",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Self Assessment return",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Self Assessment return due in a week 📄",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Self-employed (T2125): claim your actual vehicle costs multiplied by your business-use share, which is business kilometres divided by total kilometres driven in the year. Record your odometer readings below to work it out.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Self-employed: enter business, commuting and other miles on Schedule C, Part IV (lines 44a–44c) and the deduction on line 9, Car and truck expenses, using the standard mileage rate.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Self-employed: once a year on Form 1040 with Schedule C, due April 15 (October 15 with an extension, but tax owed is still due in April).",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Self-employed: once a year, online by 31 January after the tax year ends (5 April). Your mileage goes in Car, van and travel expenses.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Self-employed: this total is your simplified expenses figure for business mileage. Include it in Car, van and travel expenses on your Self Assessment return.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Set hours",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Set it and forget it ⏱️",
+    "files": [
+      "reminders/weekly.ts"
+    ]
+  },
+  {
+    "key": "Set location to “Always” and MileMint logs every drive, even when it’s closed.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Set up auto-logging",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Set your work hours any time in Settings, and most drives sort themselves.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Sets your currency, miles or kilometres, tax year and official mileage rate. You can change it later.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Settings",
+    "files": [
+      "app/_layout.tsx",
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Share it",
+    "files": [
+      "components/celebration.tsx"
+    ]
+  },
+  {
+    "key": "Share MileMint on WhatsApp and more",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Share this",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "Shift mode",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Shifts & rounds (delivery apps)",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Since {{time}}. It’s saved as a trip once you park.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Site visit",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Skip for now",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "So trips read “Home → …” instead of a street name. Optional.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Something went wrong",
+    "files": [
+      "app/_layout.tsx"
+    ]
+  },
+  {
+    "key": "Sort {{count}} drives",
+    "files": [
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "Sort this week’s drives and bank the deduction. Done in a minute.",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Sort this week’s drives now and tax time becomes a two-minute job.",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Sort your drives and add any you missed before {{date}}. Every business kilometre is money back.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Sort your drives and add any you missed before {{date}}. Every business mile is money back.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Sort your drives each week and your figures are ready whenever a deadline comes round. MileMint reminds you two months, one month and one week before the tax year ends.",
+    "files": [
+      "app/tax-dates.tsx"
+    ]
+  },
+  {
+    "key": "Spring has sprung 🌸",
+    "files": [
+      "domain/seasons.ts"
+    ]
+  },
+  {
+    "key": "Start",
+    "files": [
+      "components/work-hours-quick.tsx"
+    ]
+  },
+  {
+    "key": "Start earlier",
+    "files": [
+      "components/work-hours-quick.tsx"
+    ]
+  },
+  {
+    "key": "Start free trial",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Start is a saved place.",
+    "files": [
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Start later",
+    "files": [
+      "components/work-hours-quick.tsx"
+    ]
+  },
+  {
+    "key": "Start of {{year}}",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Start shift",
+    "files": [
+      "i18n/i18n.ts"
+    ]
+  },
+  {
+    "key": "Start using MileMint",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Stay ready",
+    "files": [
+      "app/tax-dates.tsx"
+    ]
+  },
+  {
+    "key": "Step {{step}} of {{total}}",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Step 1 · Country",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "STEP 2 · TRACKING",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Step 3 · Your work",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Step 4 · Places",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Stop selecting trips",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Stopped · {{distance}}",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Subscribe",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Subscriptions are available in the App Store version of MileMint on iPhone.",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Sun",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Sunday scaries? Not for your taxes",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Sunny days, business miles ☀️",
+    "files": [
+      "domain/seasons.ts"
+    ]
+  },
+  {
+    "key": "Swap from and to",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Swipe a trip right for business, left for personal.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Swipe right on savings",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Swipe this week’s trips business or personal and see what you’ve earned back.",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Swipe to sort business trips",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Swipe to start shift",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Tap “Allow While Using App”",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Tap “Change to Always Allow”",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Tap “Location”",
+    "files": [
+      "components/always-guide.tsx"
+    ]
+  },
+  {
+    "key": "Tap “Open Settings” below",
+    "files": [
+      "components/always-guide.tsx"
+    ]
+  },
+  {
+    "key": "Tap “Start shift” when you start work. Every drive until you end it is business.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.",
+    "files": [
+      "i18n/rich.tsx"
+    ]
+  },
+  {
+    "key": "Tap here",
+    "files": [
+      "components/always-guide.tsx"
+    ]
+  },
+  {
+    "key": "Tap trips to select them",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Tax dates",
+    "files": [
+      "app/_layout.tsx",
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Tax dates ›",
+    "files": [
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "tax return",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "tax return (Form 1040)",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Tax return (Form 1040) due in a week 📄",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Tax return due in a week 📄",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Tax-ready PDF report",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Tell MileMint your work hours once and it sorts most drives for you. Takes 30 seconds.",
+    "files": [
+      "reminders/weekly.ts"
+    ]
+  },
+  {
+    "key": "Terms of Use",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "The {{year}} tax year ends soon",
+    "files": [
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "The App Store couldn’t start the purchase. Please try again.",
+    "files": [
+      "purchases/pro.tsx"
+    ]
+  },
+  {
+    "key": "The ATO cents per km method is for cars only. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "The CRA per-km rate is for cars. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "The end reading must be higher than the start reading.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "The IRS asks for a record made at or near the time of each trip, showing the date, where you went, the business purpose and the miles.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "The IRS standard mileage rate is for cars, vans and pickups. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "The purchase didn’t go through. Please try again.",
+    "files": [
+      "purchases/pro.tsx"
+    ]
+  },
+  {
+    "key": "The weekend’s nearly over 🛋️",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "They’d like to be sorted before Monday. It takes a minute.",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "This Apple Account doesn’t have MileMint Pro.",
+    "files": [
+      "app/pro.tsx",
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "This is CRA’s reimbursement rate for employees. If you’re self-employed, CRA usually wants your actual car costs, so treat the figure as an estimate.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "This month",
+    "files": [
+      "domain/missed-miles.ts"
+    ]
+  },
+  {
+    "key": "This trip no longer exists.",
+    "files": [
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "This week",
+    "files": [
+      "domain/missed-miles.ts"
+    ]
+  },
+  {
+    "key": "Thu",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Time to get your kilometres up to date. Add any drives you missed so you claim everything you’re owed.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Time to get your miles up to date. Add any drives you missed so you claim everything you’re owed.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Time to roll! 🚗",
+    "files": [
+      "domain/cheers.ts"
+    ]
+  },
+  {
+    "key": "to",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "To",
+    "files": [
+      "app/add-trip.tsx",
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "today",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Today",
+    "files": [
+      "app/add-trip.tsx",
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "today left",
+    "files": [
+      "app/tax-dates.tsx"
+    ]
+  },
+  {
+    "key": "Total km",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Total miles",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Tracking on",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Tracking stops automatically when you park.",
+    "files": [
+      "tracking/background.ts"
+    ]
+  },
+  {
+    "key": "Trades, sales, care, office. Drives in your hours are business.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Training or conference",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Trip",
+    "files": [
+      "app/_layout.tsx"
+    ]
+  },
+  {
+    "key": "Trips",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Trips already logged in it keep it in their record.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Trips then read “Home → Work” instead of street names, and commutes are flagged for you. Both are optional.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Try again",
+    "files": [
+      "app/_layout.tsx"
+    ]
+  },
+  {
+    "key": "Tue",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Turn it back on to keep logging drives.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Turn on",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Turn on automatic tracking",
+    "files": [
+      "app/setup-tracking.tsx"
+    ]
+  },
+  {
+    "key": "Turn on automatic tracking and your drives will appear here.",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Turn on automatic tracking from the home screen whenever you’re ready, or add trips with the + button.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber. Car, van, moped or bike.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "UK",
+    "files": [
+      "components/country-options.tsx"
+    ]
+  },
+  {
+    "key": "United Kingdom",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "United States",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Unlimited",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Unlimited drives and PDF reports",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Unlock with MileMint Pro",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Unlock with Pro",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Unlocked",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Upgrade to Pro",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "USA",
+    "files": [
+      "components/country-options.tsx"
+    ]
+  },
+  {
+    "key": "Use",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Use now",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Use shifts",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Vehicle",
+    "files": [
+      "app/trip/[id].tsx",
+      "components/garage-picker.tsx",
+      "components/vehicle-picker.tsx"
+    ]
+  },
+  {
+    "key": "Vehicle name",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Vehicle use (Schedule C, Part IV)",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Want a Sunday nudge?",
+    "files": [
+      "components/reminder-ask.tsx"
+    ]
+  },
+  {
+    "key": "We read every message",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Wed",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Weekly reminder",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Well, technically it’s your money. Sort this week’s drives to claim it back.",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "What are you driving?",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "What do you drive?",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "What’s included",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "When and how to claim with {{authority}}",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Where are home and work?",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Where do you drive?",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Where’s home?",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Which vehicle today?",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "While Using the App",
+    "files": [
+      "components/always-guide.tsx"
+    ]
+  },
+  {
+    "key": "Who’s there? This week’s drives. They’d like to know if they were business.",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Without “Always”, drives go unlogged and unclaimed.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Work",
+    "files": [
+      "app/settings.tsx",
+      "app/trip/[id].tsx",
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Work hours",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Work hours, places and reminders",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Work hours, places, learned routes",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Work on {{day}}",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Work-related car use (cents per km method)",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "worth about {{amount}}",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "Worth money",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "worth up to {{amount}}",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Worth up to {{amount}} in deductions if they were for business.",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Wrap up warm out there ❄️",
+    "files": [
+      "domain/seasons.ts"
+    ]
+  },
+  {
+    "key": "Yearly",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Yes, remind me",
+    "files": [
+      "components/reminder-ask.tsx"
+    ]
+  },
+  {
+    "key": "Yesterday",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "You can claim up to 5,000 business kilometres per car each income year. This report assumes one car.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "You don’t need a logbook for this method, but the ATO may ask how you worked out your kilometres. This trip log shows that.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "You drive: {{vehicle}}. Use other vehicles too? Tap to add; you’ll pick one when you start a shift.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "You’re all set.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Your {{year}} {{returnName}} is due",
+    "files": [
+      "app/tax-dates.tsx",
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "Your {{year}} {{returnName}} is due today",
+    "files": [
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "Your {{year}} Self Assessment return is due",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Your {{year}} Self Assessment return is due in a month",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Your {{year}} tax return (Form 1040) is due",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Your {{year}} tax return (Form 1040) is due in a month",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Your {{year}} tax return is due",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Your {{year}} tax return is due in a month",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Your app counted as much as MileMint logged. Check your trips are sorted as business.",
+    "files": [
+      "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "Your car did the hard part",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Your country",
+    "files": [
+      "app/_layout.tsx"
+    ]
+  },
+  {
+    "key": "Your driving",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Your kilometres called 📞",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Your mileage log for {{authority}}",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Your mileage log is ready for your tax return.",
+    "files": [
+      "domain/milestones.ts"
+    ]
+  },
+  {
+    "key": "Your mileage report is ready. Export it now so the figures are to hand.",
+    "files": [
+      "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Your miles called 📞",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Your money back and badges",
+    "files": [
+      "components/header-menu.tsx"
+    ]
+  },
+  {
+    "key": "Your own purpose",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Your trips are stored encrypted on your phone, not on our servers.",
+    "files": [
+      "app/setup-tracking.tsx"
+    ]
+  },
+  {
+    "key": "Your vehicles",
+    "files": [
+      "app/settings.tsx"
+    ]
+  }
+]

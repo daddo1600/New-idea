@@ -1,23 +1,23 @@
-import { msg } from "../i18n/i18n";
-import type { AutoReason } from "./classify-rules";
+import { msg } from '../i18n/i18n';
+import type { AutoReason } from './classify-rules';
 
-export type Classification = "unclassified" | "business" | "personal";
-export type TripSource = "manual" | "auto";
+export type Classification = 'unclassified' | 'business' | 'personal';
+export type TripSource = 'manual' | 'auto';
 
 /** What the trip was driven (or ridden) in; tax offices price them differently. */
-export type VehicleType = "car" | "motorbike" | "bicycle";
+export type VehicleType = 'car' | 'motorbike' | 'bicycle';
 
 export const VEHICLE_ICONS: Record<VehicleType, string> = {
-  car: "🚗",
-  motorbike: "🛵",
-  bicycle: "🚲",
+  car: '🚗',
+  motorbike: '🛵',
+  bicycle: '🚲',
 };
 
 /** Names of vehicle types; marked for translation (the report keeps them in English). */
 export const VEHICLE_LABELS: Record<VehicleType, string> = {
-  car: msg("Car or van"),
-  motorbike: msg("Motorbike or scooter"),
-  bicycle: msg("Bicycle"),
+  car: msg('Car or van'),
+  motorbike: msg('Motorbike or scooter'),
+  bicycle: msg('Bicycle'),
 };
 
 export type Trip = {
@@ -63,7 +63,7 @@ export function milesToMeters(miles: number): number {
 /** Local calendar date (YYYY-MM-DD) of a Date in the device's time zone. */
 export function toLocalIsoDate(date: Date): string {
   const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const d = String(date.getDate()).padStart(2, "0");
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
   return `${y}-${m}-${d}`;
 }

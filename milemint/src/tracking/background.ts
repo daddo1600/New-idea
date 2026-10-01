@@ -1,33 +1,29 @@
-import * as Location from "expo-location";
-import type { SQLiteDatabase } from "expo-sqlite";
-import * as TaskManager from "expo-task-manager";
-import { Platform } from "react-native";
+import * as Location from 'expo-location';
+import type { SQLiteDatabase } from 'expo-sqlite';
+import * as TaskManager from 'expo-task-manager';
+import { Platform } from 'react-native';
 
-import { getBackgroundDatabase } from "@/db/database";
-import { listPlaces } from "@/db/places-repo";
-import { loadSettings } from "@/db/settings-repo";
-import { shiftAt } from "@/db/shifts-repo";
-import { refreshLaunchTotal } from "@/region/launch-total";
-import {
-  autoTripExists,
-  insertTrip,
-  listClassificationHistory,
-} from "@/db/trips-repo";
-import { suggestClassification } from "@/domain/classify-rules";
-import type { LatLng } from "@/domain/geo";
-import { matchPlace } from "@/domain/places";
+import { getBackgroundDatabase } from '@/db/database';
+import { listPlaces } from '@/db/places-repo';
+import { loadSettings } from '@/db/settings-repo';
+import { shiftAt } from '@/db/shifts-repo';
+import { refreshLaunchTotal } from '@/region/launch-total';
+import { autoTripExists, insertTrip, listClassificationHistory } from '@/db/trips-repo';
+import { suggestClassification } from '@/domain/classify-rules';
+import type { LatLng } from '@/domain/geo';
+import { matchPlace } from '@/domain/places';
 import {
   GEOFENCE_RADIUS_M,
   INITIAL_TRACKER_RECORD,
   onGeofenceExit,
   onLocations,
   parkedAt,
-} from "@/domain/tracker-policy";
-import { toLocalIsoDate } from "@/domain/trip";
-import type { DetectedTrip, LocationSample } from "@/domain/trip-detector";
-import { t } from "@/i18n/i18n";
+} from '@/domain/tracker-policy';
+import { toLocalIsoDate } from '@/domain/trip';
+import type { DetectedTrip, LocationSample } from '@/domain/trip-detector';
+import { t } from '@/i18n/i18n';
 
-import { loadTrackerRecord, saveTrackerRecord } from "./tracker-store";
+import { loadTrackerRecord, saveTrackerRecord } from './tracker-store';
 
 /**
  * Automatic trip logging.
@@ -41,16 +37,15 @@ import { loadTrackerRecord, saveTrackerRecord } from "./tracker-store";
  * is imported from the root layout.
  */
 
-const GEOFENCE_TASK = "milemint-geofence";
-const LOCATION_TASK = "milemint-location";
+const GEOFENCE_TASK = 'milemint-geofence';
+const LOCATION_TASK = 'milemint-location';
 
-export const TRACKING_SUPPORTED =
-  Platform.OS === "ios" || Platform.OS === "android";
+export const TRACKING_SUPPORTED = Platform.OS === 'ios' || Platform.OS === 'android';
 
 /** Serialises task handling: iOS can deliver a geofence exit and GPS batches back to back. */
 let queue: Promise<void> = Promise.resolve();
 function serial(work: () => Promise<void>): Promise<void> {
-  queue = queue.then(work).catch((error) => console.warn("[tracking]", error));
+  queue = queue.then(work).catch((error) => console.warn('[tracking]', error));
   return queue;
 }
 
@@ -67,7 +62,7 @@ function toSample(location: Location.LocationObject): LocationSample {
 async function armGeofence(at: LatLng): Promise<void> {
   await Location.startGeofencingAsync(GEOFENCE_TASK, [
     {
-      identifier: "parked",
+      identifier: 'parked',
       latitude: at.latitude,
       longitude: at.longitude,
       radius: GEOFENCE_RADIUS_M,
@@ -87,17 +82,13 @@ async function startGps(): Promise<void> {
     // Shows the blue location pill while driving: honest, and keeps iOS from suspending us.
     showsBackgroundLocationIndicator: true,
     foregroundService: {
-      notificationTitle: t("MileMint is logging this drive"),
-      notificationBody: t("Tracking stops automatically when you park."),
+      notificationTitle: t('MileMint is logging this drive'),
+      notificationBody: t('Tracking stops automatically when you park.'),
     },
   });
 }
 
-async function stopTask(
-  name: string,
-  isRunning: (n: string) => Promise<boolean>,
-  stop: (n: string) => Promise<void>,
-) {
+async function stopTask(name: string, isRunning: (n: string) => Promise<boolean>, stop: (n: string) => Promise<void>) {
   if (await isRunning(name)) await stop(name);
 }
 
@@ -105,20 +96,14 @@ async function labelFor(point: LatLng): Promise<string> {
   try {
     const [place] = await Location.reverseGeocodeAsync(point);
     const label = place?.name ?? place?.street ?? place?.city;
-    if (label)
-      return place?.city && label !== place.city
-        ? `${label}, ${place.city}`
-        : label;
+    if (label) return place?.city && label !== place.city ? `${label}, ${place.city}` : label;
   } catch {
     // Offline or rate-limited: fall back to coordinates; the user can rename later.
   }
   return `${point.latitude.toFixed(4)}, ${point.longitude.toFixed(4)}`;
 }
 
-async function saveDetectedTrip(
-  db: SQLiteDatabase,
-  trip: DetectedTrip,
-): Promise<void> {
+async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise<void> {
   // If the app was killed after saving a trip but before saving the tracker
   // state, the same drive is detected again on the next wake-up.
   if (await autoTripExists(db, new Date(trip.startedAt).toISOString())) return;
@@ -135,9 +120,7 @@ async function saveDetectedTrip(
   ]);
   const started = new Date(trip.startedAt);
   // Shift mode: every drive in a shift is work.
-  const shift = settings.shiftMode
-    ? await shiftAt(db, started.toISOString())
-    : null;
+  const shift = settings.shiftMode ? await shiftAt(db, started.toISOString()) : null;
   const suggestion = suggestClassification(
     {
       start: { placeId: startPlace?.id ?? null, point: trip.start },
@@ -162,21 +145,20 @@ async function saveDetectedTrip(
       endLabel,
       distanceMeters: trip.distanceMeters,
       classification: shift
-        ? "business"
-        : (suggestion.classification ??
-          (settings.defaultBusiness ? "business" : "unclassified")),
+        ? 'business'
+        : (suggestion.classification ?? (settings.defaultBusiness ? 'business' : 'unclassified')),
       // Business without a learned purpose stays empty; the trip list asks for one.
-      purpose: suggestion.purpose ?? (shift ? "Deliveries" : ""),
-      source: "auto",
+      purpose: suggestion.purpose ?? (shift ? 'Deliveries' : ''),
+      source: 'auto',
       startPlaceId: startPlace?.id ?? null,
       endPlaceId: endPlace?.id ?? null,
       // Stored as the work-hours rule (a shift is working time); shiftId tells them apart.
       autoReason: shift
-        ? "work-hours"
+        ? 'work-hours'
         : suggestion.classification
           ? suggestion.reason
           : settings.defaultBusiness
-            ? "default"
+            ? 'default'
             : null,
       vehicle: settings.vehicle,
       vehicleId: settings.currentVehicleId,
@@ -195,11 +177,7 @@ async function handleLocations(samples: LocationSample[]): Promise<void> {
   for (const trip of decision.completed) await saveDetectedTrip(db, trip);
   await saveTrackerRecord(db, decision.record);
   if (decision.switchToGeofenceAt) {
-    await stopTask(
-      LOCATION_TASK,
-      Location.hasStartedLocationUpdatesAsync,
-      Location.stopLocationUpdatesAsync,
-    );
+    await stopTask(LOCATION_TASK, Location.hasStartedLocationUpdatesAsync, Location.stopLocationUpdatesAsync);
     await armGeofence(decision.switchToGeofenceAt);
   }
 }
@@ -210,54 +188,39 @@ async function handleGeofenceExit(): Promise<void> {
   const next = onGeofenceExit(record, Date.now());
   if (next === record) return;
   await saveTrackerRecord(db, next);
-  await stopTask(
-    GEOFENCE_TASK,
-    Location.hasStartedGeofencingAsync,
-    Location.stopGeofencingAsync,
-  );
+  await stopTask(GEOFENCE_TASK, Location.hasStartedGeofencingAsync, Location.stopGeofencingAsync);
   await startGps();
 }
 
 if (TRACKING_SUPPORTED) {
-  TaskManager.defineTask<{ locations: Location.LocationObject[] }>(
-    LOCATION_TASK,
-    ({ data, error }) => {
-      if (error || !data) return Promise.resolve();
-      return serial(() => handleLocations(data.locations.map(toSample)));
-    },
-  );
+  TaskManager.defineTask<{ locations: Location.LocationObject[] }>(LOCATION_TASK, ({ data, error }) => {
+    if (error || !data) return Promise.resolve();
+    return serial(() => handleLocations(data.locations.map(toSample)));
+  });
 
-  TaskManager.defineTask<{ eventType: Location.LocationGeofencingEventType }>(
-    GEOFENCE_TASK,
-    ({ data, error }) => {
-      if (
-        error ||
-        data?.eventType !== Location.LocationGeofencingEventType.Exit
-      ) {
-        return Promise.resolve();
-      }
-      return serial(handleGeofenceExit);
-    },
-  );
+  TaskManager.defineTask<{ eventType: Location.LocationGeofencingEventType }>(GEOFENCE_TASK, ({ data, error }) => {
+    if (error || data?.eventType !== Location.LocationGeofencingEventType.Exit) {
+      return Promise.resolve();
+    }
+    return serial(handleGeofenceExit);
+  });
 }
 
 export type TrackingStatus =
-  | "unsupported"
-  | "needs-permission" // no location access yet
-  | "needs-always" // "While Using" only: drives would be missed
-  | "off" // permission fine, user switched tracking off
-  | "on";
+  | 'unsupported'
+  | 'needs-permission' // no location access yet
+  | 'needs-always' // "While Using" only: drives would be missed
+  | 'off' // permission fine, user switched tracking off
+  | 'on';
 
-export async function getTrackingStatus(
-  db: SQLiteDatabase,
-): Promise<TrackingStatus> {
-  if (!TRACKING_SUPPORTED) return "unsupported";
+export async function getTrackingStatus(db: SQLiteDatabase): Promise<TrackingStatus> {
+  if (!TRACKING_SUPPORTED) return 'unsupported';
   const foreground = await Location.getForegroundPermissionsAsync();
-  if (!foreground.granted) return "needs-permission";
+  if (!foreground.granted) return 'needs-permission';
   const background = await Location.getBackgroundPermissionsAsync();
-  if (!background.granted) return "needs-always";
+  if (!background.granted) return 'needs-always';
   const record = await loadTrackerRecord(db);
-  return record.enabled ? "on" : "off";
+  return record.enabled ? 'on' : 'off';
 }
 
 /**
@@ -269,7 +232,7 @@ export async function requestTrackingPermissions(
   db: SQLiteDatabase,
   onAsking?: (question: 1 | 2) => void,
 ): Promise<TrackingStatus> {
-  if (!TRACKING_SUPPORTED) return "unsupported";
+  if (!TRACKING_SUPPORTED) return 'unsupported';
   onAsking?.(1);
   const foreground = await Location.requestForegroundPermissionsAsync();
   if (foreground.granted) {
@@ -288,11 +251,7 @@ export async function startTracking(db: SQLiteDatabase): Promise<void> {
   await serial(async () => {
     // The phone is where the car is parked, so the first drive starts from here.
     await saveTrackerRecord(db, parkedAt(here.coords, Date.now()));
-    await stopTask(
-      LOCATION_TASK,
-      Location.hasStartedLocationUpdatesAsync,
-      Location.stopLocationUpdatesAsync,
-    );
+    await stopTask(LOCATION_TASK, Location.hasStartedLocationUpdatesAsync, Location.stopLocationUpdatesAsync);
     await armGeofence(here.coords);
   });
 }
@@ -301,16 +260,8 @@ export async function stopTracking(db: SQLiteDatabase): Promise<void> {
   if (!TRACKING_SUPPORTED) return;
   await serial(async () => {
     await saveTrackerRecord(db, INITIAL_TRACKER_RECORD);
-    await stopTask(
-      LOCATION_TASK,
-      Location.hasStartedLocationUpdatesAsync,
-      Location.stopLocationUpdatesAsync,
-    );
-    await stopTask(
-      GEOFENCE_TASK,
-      Location.hasStartedGeofencingAsync,
-      Location.stopGeofencingAsync,
-    );
+    await stopTask(LOCATION_TASK, Location.hasStartedLocationUpdatesAsync, Location.stopLocationUpdatesAsync);
+    await stopTask(GEOFENCE_TASK, Location.hasStartedGeofencingAsync, Location.stopGeofencingAsync);
   });
 }
 
@@ -325,20 +276,14 @@ export async function reconcileTracking(db: SQLiteDatabase): Promise<void> {
     if (!record.enabled) return;
     const background = await Location.getBackgroundPermissionsAsync();
     if (!background.granted) return;
-    if (record.mode === "gps") {
+    if (record.mode === 'gps') {
       const decision = onLocations(record, [], Date.now());
       for (const trip of decision.completed) await saveDetectedTrip(db, trip);
       await saveTrackerRecord(db, decision.record);
       if (decision.switchToGeofenceAt) {
-        await stopTask(
-          LOCATION_TASK,
-          Location.hasStartedLocationUpdatesAsync,
-          Location.stopLocationUpdatesAsync,
-        );
+        await stopTask(LOCATION_TASK, Location.hasStartedLocationUpdatesAsync, Location.stopLocationUpdatesAsync);
         await armGeofence(decision.switchToGeofenceAt);
-      } else if (
-        !(await Location.hasStartedLocationUpdatesAsync(LOCATION_TASK))
-      ) {
+      } else if (!(await Location.hasStartedLocationUpdatesAsync(LOCATION_TASK))) {
         await startGps();
       }
     } else if (!(await Location.hasStartedGeofencingAsync(GEOFENCE_TASK))) {

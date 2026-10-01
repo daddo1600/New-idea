@@ -1,34 +1,27 @@
-import { msg } from "../i18n/i18n";
-import type { DeductionTrip } from "./regions";
+import { msg } from '../i18n/i18n';
+import type { DeductionTrip } from './regions';
 
-export type Period = "this-week" | "this-month" | "last-month";
+export type Period = 'this-week' | 'this-month' | 'last-month';
 
 export const PERIOD_LABELS: Record<Period, string> = {
-  "this-week": msg("This week"),
-  "this-month": msg("This month"),
-  "last-month": msg("Last month"),
+  'this-week': msg('This week'),
+  'this-month': msg('This month'),
+  'last-month': msg('Last month'),
 };
 
 const iso = (date: Date) =>
-  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
 /** First and last local date (YYYY-MM-DD) of a period. Weeks start on Monday. */
-export function periodBounds(
-  period: Period,
-  today: Date,
-): { start: string; end: string } {
+export function periodBounds(period: Period, today: Date): { start: string; end: string } {
   const y = today.getFullYear();
   const m = today.getMonth();
-  if (period === "this-month")
-    return { start: iso(new Date(y, m, 1)), end: iso(new Date(y, m + 1, 0)) };
-  if (period === "last-month")
-    return { start: iso(new Date(y, m - 1, 1)), end: iso(new Date(y, m, 0)) };
+  if (period === 'this-month') return { start: iso(new Date(y, m, 1)), end: iso(new Date(y, m + 1, 0)) };
+  if (period === 'last-month') return { start: iso(new Date(y, m - 1, 1)), end: iso(new Date(y, m, 0)) };
   const monday = new Date(y, m, today.getDate() - ((today.getDay() + 6) % 7));
   return {
     start: iso(monday),
-    end: iso(
-      new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + 6),
-    ),
+    end: iso(new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + 6)),
   };
 }
 
@@ -56,19 +49,10 @@ export function missedMiles(
   toUnits: (meters: number) => number,
 ): MissedMiles {
   const inPeriod = trips.filter(
-    (trip) =>
-      trip.classification === "business" &&
-      trip.localDate >= bounds.start &&
-      trip.localDate <= bounds.end,
+    (trip) => trip.classification === 'business' && trip.localDate >= bounds.start && trip.localDate <= bounds.end,
   );
-  const logged = inPeriod.reduce(
-    (sum, trip) => sum + toUnits(trip.distanceMeters),
-    0,
-  );
-  const value = inPeriod.reduce(
-    (sum, trip) => sum + (deductions.get(trip.id) ?? 0),
-    0,
-  );
+  const logged = inPeriod.reduce((sum, trip) => sum + toUnits(trip.distanceMeters), 0);
+  const value = inPeriod.reduce((sum, trip) => sum + (deductions.get(trip.id) ?? 0), 0);
   const extra = Math.max(0, logged - counted);
   return {
     logged,

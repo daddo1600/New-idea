@@ -240,7 +240,7 @@ function QuickIntro({
         )}
       </Animated.View>
       <Animated.View style={[styles.counter, counterStyle]}>
-        {season && <Text style={styles.greeting}>{t(season.greeting)}</Text>}
+        {season && <Text style={styles.greeting}>{season.greeting}</Text>}
         <Text style={styles.money}>{formatMoney(shown, region)}</Text>
         <Text style={styles.distance}>{t('found this tax year')}</Text>
         {gained > 0 && (
@@ -351,7 +351,7 @@ function FullIntro({
         )}
       </Animated.View>
       <Animated.View style={[styles.counter, counterStyle]}>
-        {season && <Text style={styles.greeting}>{t(season.greeting)}</Text>}
+        {season && <Text style={styles.greeting}>{season.greeting}</Text>}
         <Text style={styles.money}>{formatMoney(Math.round(units * ratePerUnit), region)}</Text>
         <Text style={styles.distance}>
           {region.unit === 'mi'
