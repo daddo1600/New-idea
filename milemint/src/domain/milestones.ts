@@ -108,7 +108,8 @@ export function hasSortedWeek(
   const weeks = new Map<string, boolean>();
   for (const trip of trips) {
     const week = weekOf(trip.localDate);
-    if (week === current) continue;
+    // Only weeks that are over count (not this one, nor a future one).
+    if (week >= current) continue;
     weeks.set(week, (weeks.get(week) ?? true) && trip.classification !== 'unclassified');
   }
   return [...weeks.values()].some(Boolean);

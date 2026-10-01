@@ -84,7 +84,8 @@ export const FILING: Record<RegionCode, FilingGuide> = {
     returnDueInWeek: msg('Tax return due in a week 📄'),
     dueText: msg('April 30'),
     due: { month: 4, day: 30 },
-    weekendRolls: false,
+    // CRA accepts a return on the next business day when April 30 falls on a weekend.
+    weekendRolls: true,
     yearly:
       msg('Once a year: by April 30, or June 15 if you’re self-employed (any tax owing is still due April 30). Self-employed claim vehicle costs on form T2125.'),
     quarterly:
@@ -99,7 +100,8 @@ export const FILING: Record<RegionCode, FilingGuide> = {
     returnDueInWeek: msg('Tax return due in a week 📄'),
     dueText: msg('31 October'),
     due: { month: 10, day: 31 },
-    weekendRolls: false,
+    // The ATO accepts lodgment on the next business day when 31 October falls on a weekend.
+    weekendRolls: true,
     yearly:
       msg('Once a year: lodge by 31 October after the income year ends (30 June), or later if you use a registered tax agent and sign up with them before 31 October.'),
     quarterly:
@@ -108,6 +110,9 @@ export const FILING: Record<RegionCode, FilingGuide> = {
       msg('Employees: claim work-related car expenses at D1 on your return, up to 5,000 km per car with the cents per km method.'),
   },
 };
+
+/** Countdown reminders go off at this local hour. */
+export const REMINDER_HOUR = 18;
 
 /** Countdown windows: shown from this many days out. */
 export const YEAR_END_WINDOW_DAYS = 60;
@@ -131,10 +136,27 @@ export function returnDueDate(startYear: number, region: Region): string {
   const year = sameYear > taxYearBounds(startYear, region).end ? endYear : endYear + 1;
   const date = new Date(Date.UTC(year, guide.due.month - 1, guide.due.day));
   if (guide.weekendRolls) {
-    const weekday = date.getUTCDay();
-    if (weekday === 6) date.setUTCDate(date.getUTCDate() + 2);
-    if (weekday === 0) date.setUTCDate(date.getUTCDate() + 1);
+    // On to the next business day: past the weekend and, in the US, Emancipation Day.
+    const holiday = region.code === 'US' ? emancipationDay(year) : null;
+    for (;;) {
+      const weekday = date.getUTCDay();
+      const iso = date.toISOString().slice(0, 10);
+      if (weekday !== 0 && weekday !== 6 && iso !== holiday) break;
+      date.setUTCDate(date.getUTCDate() + 1);
+    }
   }
+  return date.toISOString().slice(0, 10);
+}
+
+/**
+ * Washington DC's Emancipation Day (16 April) as observed: the Friday before
+ * when it's a Saturday, the Monday after when it's a Sunday. The IRS deadline
+ * moves past it, as in 2028 (Tuesday 18 April).
+ */
+export function emancipationDay(year: number): string {
+  const date = new Date(Date.UTC(year, 3, 16));
+  if (date.getUTCDay() === 6) date.setUTCDate(15);
+  if (date.getUTCDay() === 0) date.setUTCDate(17);
   return date.toISOString().slice(0, 10);
 }
 
@@ -261,5 +283,7 @@ export function countdownReminders(
     title: r.title,
     body: r.body,
   }));
-  return [...yearEnd, ...returnDue].filter((r) => r.date > now);
+  // Each fires at 18:00 that day: today's still counts until then.
+  const beforeSix = today.getHours() < REMINDER_HOUR;
+  return [...yearEnd, ...returnDue].filter((r) => r.date > now || (r.date === now && beforeSix));
 }

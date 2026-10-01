@@ -1,7 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 
-import { countdownReminders } from '@/domain/deadlines';
+import { countdownReminders, REMINDER_HOUR } from '@/domain/deadlines';
 import type { DistanceUnit, Region } from '@/domain/regions';
 import { tomorrowAt, upcomingSundays, weeklyMessage } from '@/domain/reminders';
 import { t } from '@/i18n/i18n';
@@ -20,7 +20,7 @@ const LEGACY_REMINDER_ID = 'milemint-weekly-review';
 const WEEKLY_PREFIX = 'milemint-weekly-';
 const WEEKS_AHEAD = 8;
 /** Sunday 6pm, when most people plan the week ahead. */
-const HOUR = 18;
+const HOUR = REMINDER_HOUR;
 
 const WORK_HOURS_NUDGE_ID = 'milemint-work-hours-nudge';
 

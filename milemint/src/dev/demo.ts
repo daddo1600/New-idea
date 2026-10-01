@@ -49,10 +49,19 @@ export const DEMO_DRIVING = demoParam === 'driving';
  * look on that date. Works without `demo` too, so the opening (skipped in the
  * demo) can be previewed.
  */
-export const DEMO_TODAY =
+export const DEMO_TODAY = validDate(
   __DEV__ && Platform.OS === 'web' && typeof window !== 'undefined'
     ? new URLSearchParams(window.location.search).get('today')
-    : null;
+    : null,
+);
+
+/** A real calendar date as YYYY-MM-DD, or null ("2027-3-20", "x" and 30 February are ignored). */
+function validDate(text: string | null): string | null {
+  if (!text || !/^\d{4}-\d{2}-\d{2}$/.test(text)) return null;
+  const [y, m, d] = text.split('-').map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  return date.getUTCMonth() === m - 1 && date.getUTCDate() === d ? text : null;
+}
 
 /** Demo users are Pro (every drive visible) unless showing the free plan. */
 export const DEMO_PRO = DEMO_MODE && demoParam !== 'free';

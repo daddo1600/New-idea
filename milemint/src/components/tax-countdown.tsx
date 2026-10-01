@@ -37,7 +37,8 @@ export function TaxCountdown({
   const urgent = countdown.days <= URGENT_DAYS;
   const color = urgent ? '#CA8A04' : theme.accent;
   const yearEnd = countdown.kind === 'year-end';
-  const today = countdown.days <= 0;
+  // The year-end count includes today (1 on the last day); the return counts down to 0 on the due day.
+  const today = countdown.days <= (yearEnd ? 1 : 0);
   const count = today ? t('Today') : String(countdown.days);
   // The word under the number in the box: "day" or "days".
   const unit = today ? '' : t('days', { count: countdown.days });

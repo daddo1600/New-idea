@@ -48,7 +48,7 @@ export default function TaxDatesScreen() {
             {region.flag} {t('{{year}} tax year', { year: taxYearLabel(year, region) })}
           </Text>
           <Text style={styles.heroBig}>
-            {daysLeft <= 0 ? t('Last day today') : t('{{count}} days left', { count: daysLeft })}
+            {daysLeft <= 1 ? t('Last day today') : t('{{count}} days left', { count: daysLeft })}
           </Text>
           <Text style={styles.heroLabel}>{t('Ends {{date}}', { date: formatLongDate(end, region) })}</Text>
           <View style={styles.divider} />
