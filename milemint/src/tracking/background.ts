@@ -129,11 +129,7 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
       weekday: started.getDay(),
       minutesOfDay: started.getHours() * 60 + started.getMinutes(),
     },
-    {
-      history,
-      places,
-      workHours: settings.workHoursEnabled ? settings.workWeek : null,
-    },
+    { history, places, workHours: settings.workHoursEnabled ? settings.workWeek : null },
   );
   await insertTrip(
     db,
@@ -198,12 +194,15 @@ if (TRACKING_SUPPORTED) {
     return serial(() => handleLocations(data.locations.map(toSample)));
   });
 
-  TaskManager.defineTask<{ eventType: Location.LocationGeofencingEventType }>(GEOFENCE_TASK, ({ data, error }) => {
-    if (error || data?.eventType !== Location.LocationGeofencingEventType.Exit) {
-      return Promise.resolve();
-    }
-    return serial(handleGeofenceExit);
-  });
+  TaskManager.defineTask<{ eventType: Location.LocationGeofencingEventType }>(
+    GEOFENCE_TASK,
+    ({ data, error }) => {
+      if (error || data?.eventType !== Location.LocationGeofencingEventType.Exit) {
+        return Promise.resolve();
+      }
+      return serial(handleGeofenceExit);
+    },
+  );
 }
 
 export type TrackingStatus =
@@ -245,9 +244,7 @@ export async function requestTrackingPermissions(
 /** Turns automatic logging on: arms a geofence where the phone is now. */
 export async function startTracking(db: SQLiteDatabase): Promise<void> {
   if (!TRACKING_SUPPORTED) return;
-  const here = await Location.getCurrentPositionAsync({
-    accuracy: Location.Accuracy.Balanced,
-  });
+  const here = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
   await serial(async () => {
     // The phone is where the car is parked, so the first drive starts from here.
     await saveTrackerRecord(db, parkedAt(here.coords, Date.now()));
@@ -287,9 +284,7 @@ export async function reconcileTracking(db: SQLiteDatabase): Promise<void> {
         await startGps();
       }
     } else if (!(await Location.hasStartedGeofencingAsync(GEOFENCE_TASK))) {
-      const here = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Balanced,
-      });
+      const here = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
       await armGeofence(here.coords);
     }
   });

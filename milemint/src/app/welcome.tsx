@@ -2,7 +2,16 @@ import { router, type Href } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useRef, useState } from 'react';
 import { useSQLiteContext } from 'expo-sqlite';
-import { KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Linking,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AlwaysGuide } from '@/components/always-guide';
@@ -14,7 +23,12 @@ import { VehiclePicker } from '@/components/vehicle-picker';
 import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { DEFAULT_SIMPLE_WEEK, toWorkWeek, WorkHoursQuick, type SimpleWeek } from '@/components/work-hours-quick';
+import {
+  DEFAULT_SIMPLE_WEEK,
+  toWorkWeek,
+  WorkHoursQuick,
+  type SimpleWeek,
+} from '@/components/work-hours-quick';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, saveSettings } from '@/db/settings-repo';
@@ -134,11 +148,7 @@ export default function WelcomeScreen() {
   }, [cameBackWithAlways]);
 
   const chooseShifts = async () => {
-    await saveSettings(db, {
-      ...(await loadSettings(db)),
-      shiftMode: true,
-      workHoursEnabled: false,
-    });
+    await saveSettings(db, { ...(await loadSettings(db)), shiftMode: true, workHoursEnabled: false });
     // Couriers often switch between a car and a moped: add the others they ticked.
     const garage = await listVehicles(db);
     for (const type of extraVehicles) {
@@ -150,11 +160,7 @@ export default function WelcomeScreen() {
 
   const saveHours = async () => {
     const settings = await loadSettings(db);
-    await saveSettings(db, {
-      ...settings,
-      workHoursEnabled: true,
-      workWeek: toWorkWeek(week),
-    });
+    await saveSettings(db, { ...settings, workHoursEnabled: true, workWeek: toWorkWeek(week) });
     setHoursSet(true);
     setStep(PLACES);
   };
@@ -189,11 +195,7 @@ export default function WelcomeScreen() {
     try {
       // The Sunday check-in is on by default: iOS asks once, here. Turning it off is in Settings.
       const scheduled = await enableWeeklyReminder(picked.unit).catch(() => false);
-      await saveSettings(db, {
-        ...(await loadSettings(db)),
-        weeklyReminder: scheduled,
-        reminderAsked: true,
-      });
+      await saveSettings(db, { ...(await loadSettings(db)), weeklyReminder: scheduled, reminderAsked: true });
       if (!hoursSet && !shifts) await scheduleWorkHoursNudge().catch(() => {});
     } finally {
       setBusy(false);
@@ -214,11 +216,7 @@ export default function WelcomeScreen() {
   const scrollFieldUp = (field: 'home' | 'work') =>
     // After the keyboard has started to open and the extra room has been added.
     setTimeout(
-      () =>
-        scroller.current?.scrollTo({
-          y: Math.max(0, fieldTops.current[field] - 8),
-          animated: true,
-        }),
+      () => scroller.current?.scrollTo({ y: Math.max(0, fieldTops.current[field] - 8), animated: true }),
       250,
     );
 
@@ -230,10 +228,7 @@ export default function WelcomeScreen() {
       onPress={onPress}
       style={[
         styles.primary,
-        {
-          backgroundColor: onBrand ? '#FFFFFF' : theme.accent,
-          opacity: busy ? 0.6 : enabled ? 1 : 0.35,
-        },
+        { backgroundColor: onBrand ? '#FFFFFF' : theme.accent, opacity: busy ? 0.6 : enabled ? 1 : 0.35 },
       ]}>
       <ThemedText type="smallBold" style={{ color: onBrand ? '#064E3B' : theme.onAccent }}>
         {label}
@@ -252,10 +247,7 @@ export default function WelcomeScreen() {
     <ThemedView
       style={[
         styles.container,
-        {
-          paddingTop: insets.top + Spacing.three,
-          paddingBottom: insets.bottom + Spacing.three,
-        },
+        { paddingTop: insets.top + Spacing.three, paddingBottom: insets.bottom + Spacing.three },
       ]}>
       <StatusBar style={onBrand ? 'light' : 'auto'} />
       {onBrand ? <BrandGradient /> : <MintWash />}
@@ -273,12 +265,7 @@ export default function WelcomeScreen() {
         ) : (
           <View />
         )}
-        <View
-          accessibilityLabel={t('Step {{step}} of {{total}}', {
-            step: step + 1,
-            total: STEPS,
-          })}
-          style={styles.dots}>
+        <View accessibilityLabel={t('Step {{step}} of {{total}}', { step: step + 1, total: STEPS })} style={styles.dots}>
           {Array.from({ length: STEPS }, (_, i) => (
             <View
               key={i}
@@ -301,9 +288,7 @@ export default function WelcomeScreen() {
         {step === 0 ? (
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={t('Language: {{name}}. Change', {
-              name: languageName,
-            })}
+            accessibilityLabel={t('Language: {{name}}. Change', { name: languageName })}
             hitSlop={8}
             onPress={() => router.push('/language' as Href)}
             style={styles.languagePill}>
@@ -375,9 +360,9 @@ export default function WelcomeScreen() {
                 <ThemedText type="small" themeColor="textSecondary" accessibilityLiveRegion="polite">
                   {vehicle === 'car'
                     ? t('{{rule}}. Petrol, diesel, hybrid or electric: same rate.', {
-                        rule: t(vehicleRule(picked, vehicle)),
+                        rule: vehicleRule(picked, vehicle),
                       })
-                    : t(vehicleRule(picked, vehicle))}
+                    : vehicleRule(picked, vehicle)}
                 </ThemedText>
               </View>
             </>
@@ -442,7 +427,9 @@ export default function WelcomeScreen() {
                 detail={t('Trades, sales, care, office. Drives in your hours are business.')}
                 onPress={() => setWorkStyle('hours')}
               />
-              {workStyle === 'hours' && <WorkHoursQuick value={week} onChange={setWeek} locale={picked.locale} />}
+              {workStyle === 'hours' && (
+                <WorkHoursQuick value={week} onChange={setWeek} locale={picked.locale} />
+              )}
               <WorkStyleOption
                 selected={workStyle === 'shifts'}
                 emoji="📦"
@@ -452,14 +439,7 @@ export default function WelcomeScreen() {
               />
               {workStyle === 'shifts' && (
                 <View style={styles.vehicles}>
-                  <ThemedText type="small" themeColor="textSecondary">
-                    {t(
-                      'You drive: {{vehicle}}. Use other vehicles too? Tap to add; you’ll pick one when you start a shift.',
-                      {
-                        vehicle: `${VEHICLE_ICONS[vehicle]} ${t(EXTRA_LABELS[vehicle])}`,
-                      },
-                    )}
-                  </ThemedText>
+                  <ThemedText type="smallBold">{t('Use other vehicles for work too?')}</ThemedText>
                   <View style={styles.extraRow}>
                     {(['car', 'motorbike', 'bicycle'] as const)
                       .filter((type) => type !== vehicle)
@@ -478,23 +458,19 @@ export default function WelcomeScreen() {
                             style={[
                               styles.extraChip,
                               on
-                                ? {
-                                    backgroundColor: theme.accent,
-                                    borderColor: theme.accent,
-                                  }
+                                ? { backgroundColor: theme.accent, borderColor: theme.accent }
                                 : { borderColor: theme.backgroundSelected },
                             ]}>
-                            <ThemedText
-                              type="smallBold"
-                              style={{
-                                color: on ? theme.onAccent : theme.text,
-                              }}>
+                            <ThemedText type="smallBold" style={{ color: on ? theme.onAccent : theme.text }}>
                               {on ? '✓' : '+'} {VEHICLE_ICONS[type]} {t(EXTRA_LABELS[type])}
                             </ThemedText>
                           </Pressable>
                         );
                       })}
                   </View>
+                  <ThemedText type="small" themeColor="textSecondary">
+                    {t('You’ll choose which one when you start a shift.')}
+                  </ThemedText>
                 </View>
               )}
               <WorkStyleOption
@@ -572,10 +548,20 @@ export default function WelcomeScreen() {
                   ['📅', t('A quick Sunday reminder to sort your week. Turn it off any time in Settings.')],
                   ['📍', t('Save places like clients or the depot from any trip.')],
                   ...(shifts
-                    ? [['▶️', t('Tap “Start shift” when you start work. Every drive until you end it is business.')]]
+                    ? [
+                        [
+                          '▶️',
+                          t('Tap “Start shift” when you start work. Every drive until you end it is business.'),
+                        ],
+                      ]
                     : hoursSet
                       ? []
-                      : [['⏱️', t('Set your work hours any time in Settings, and most drives sort themselves.')]]),
+                      : [
+                          [
+                            '⏱️',
+                            t('Set your work hours any time in Settings, and most drives sort themselves.'),
+                          ],
+                        ]),
                 ].map(([icon, text]) => (
                   <View key={icon} style={styles.tip}>
                     <Text style={styles.tipIcon}>{icon}</Text>
@@ -618,7 +604,9 @@ export default function WelcomeScreen() {
             !asking &&
             status !== 'on' &&
             status !== 'unsupported' &&
-            secondary(status === 'needs-always' ? t('Continue without “Always”') : t('Not now'), () => setStep(HOURS))}
+            secondary(status === 'needs-always' ? t('Continue without “Always”') : t('Not now'), () =>
+              setStep(HOURS),
+            )}
           {step === HOURS &&
             (workStyle === 'hours'
               ? primary(t('Save my hours'), saveHours)
@@ -628,7 +616,10 @@ export default function WelcomeScreen() {
                   ? primary(t('Continue'), () => setStep(PLACES))
                   : primary(t('Choose one to continue'), () => {}, false))}
           {step === PLACES &&
-            primary(busy ? t('Saving…') : home.text || work.text ? t('Save and continue') : t('Continue'), savePlaces)}
+            primary(
+              busy ? t('Saving…') : home.text || work.text ? t('Save and continue') : t('Continue'),
+              savePlaces,
+            )}
           {step === PLACES && secondary(t('Skip for now'), () => setStep(DONE))}
           {step === DONE && primary(t('Start using MileMint'), finish)}
         </View>
@@ -703,13 +694,7 @@ const styles = StyleSheet.create({
   },
   radioTick: { fontSize: 13, fontWeight: '800' },
   container: { flex: 1, paddingHorizontal: Spacing.four },
-  brandTitle: {
-    color: '#FFFFFF',
-    fontSize: 40,
-    lineHeight: 46,
-    fontWeight: '800',
-    letterSpacing: -0.5,
-  },
+  brandTitle: { color: '#FFFFFF', fontSize: 40, lineHeight: 46, fontWeight: '800', letterSpacing: -0.5 },
   brandBody: { color: '#D1FAE5', fontSize: 17, lineHeight: 24 },
   pointTick: {
     width: 22,
@@ -732,26 +717,9 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: 'rgba(255,255,255,0.3)',
   },
-  brandEyebrow: {
-    color: '#FACC15',
-    fontSize: 12,
-    fontWeight: '800',
-    letterSpacing: 1.2,
-    marginTop: Spacing.one,
-  },
-  brandTitleSmall: {
-    color: '#FFFFFF',
-    fontSize: 34,
-    lineHeight: 40,
-    fontWeight: '800',
-    letterSpacing: -0.5,
-  },
-  brandCallout: {
-    color: '#FACC15',
-    fontSize: 17,
-    lineHeight: 23,
-    fontWeight: '800',
-  },
+  brandEyebrow: { color: '#FACC15', fontSize: 12, fontWeight: '800', letterSpacing: 1.2, marginTop: Spacing.one },
+  brandTitleSmall: { color: '#FFFFFF', fontSize: 34, lineHeight: 40, fontWeight: '800', letterSpacing: -0.5 },
+  brandCallout: { color: '#FACC15', fontSize: 17, lineHeight: 23, fontWeight: '800' },
   pointBody: { color: '#D1FAE5', fontSize: 14, lineHeight: 20 },
   brandSoft: { color: '#D1FAE5' },
   glass: {
@@ -765,12 +733,7 @@ const styles = StyleSheet.create({
   tip: { flexDirection: 'row', gap: Spacing.two, alignItems: 'flex-start' },
   tipIcon: { fontSize: 15, lineHeight: 20 },
   hidden: { display: 'none' },
-  top: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    minHeight: 32,
-  },
+  top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 32 },
   topSpacer: { width: 32 },
   languagePill: {
     backgroundColor: 'rgba(255,255,255,0.16)',
@@ -809,19 +772,8 @@ const styles = StyleSheet.create({
     gap: Spacing.one,
     alignItems: 'center',
   },
-  coachStep: {
-    color: '#D1FAE5',
-    fontSize: 15,
-    fontWeight: '800',
-    letterSpacing: 1.2,
-  },
-  coachText: {
-    color: '#FACC15',
-    fontSize: 28,
-    lineHeight: 35,
-    fontWeight: '800',
-    textAlign: 'center',
-  },
+  coachStep: { color: '#D1FAE5', fontSize: 15, fontWeight: '800', letterSpacing: 1.2 },
+  coachText: { color: '#FACC15', fontSize: 28, lineHeight: 35, fontWeight: '800', textAlign: 'center' },
   privacy: { color: '#FFFFFF', fontSize: 15, lineHeight: 21 },
   extraRow: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
   extraChip: {
@@ -830,22 +782,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     paddingVertical: Spacing.two,
   },
-  reminderRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: Spacing.three,
-  },
+  reminderRow: { flexDirection: 'row', alignItems: 'flex-start', gap: Spacing.three },
   card: { borderRadius: 12, padding: Spacing.three, gap: Spacing.one },
-  actions: {
-    gap: Spacing.two,
-    width: '100%',
-    maxWidth: MaxContentWidth,
-    alignSelf: 'center',
-  },
-  primary: {
-    alignItems: 'center',
-    paddingVertical: Spacing.three,
-    borderRadius: 12,
-  },
+  actions: { gap: Spacing.two, width: '100%', maxWidth: MaxContentWidth, alignSelf: 'center' },
+  primary: { alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12 },
   secondary: { alignItems: 'center', paddingVertical: Spacing.two },
 });

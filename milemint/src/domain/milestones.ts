@@ -21,16 +21,8 @@ export const MONEY_STEPS = [50, 100, 250, 500, 1_000, 2_500, 5_000, 10_000] as c
 export const DISTANCE_STEPS = [100, 500, 1_000, 2_500, 5_000, 10_000, 25_000] as const;
 
 export const HABITS = {
-  'first-trip': {
-    emoji: '🚗',
-    title: msg('First trip logged'),
-    message: msg('MileMint is on the job. Just drive.'),
-  },
-  'first-shift': {
-    emoji: '📦',
-    title: msg('First shift done'),
-    message: msg('Every drive of it counted as business.'),
-  },
+  'first-trip': { emoji: '🚗', title: msg('First trip logged'), message: msg('MileMint is on the job. Just drive.') },
+  'first-shift': { emoji: '📦', title: msg('First shift done'), message: msg('Every drive of it counted as business.') },
   'sorted-week': {
     emoji: '✅',
     title: msg('A fully sorted week'),
@@ -45,12 +37,7 @@ export const HABITS = {
 export type HabitId = keyof typeof HABITS;
 
 export const MILESTONES: readonly Milestone[] = [
-  ...MONEY_STEPS.map((threshold) => ({
-    id: `money-${threshold}`,
-    kind: 'money' as const,
-    threshold,
-    emoji: '💰',
-  })),
+  ...MONEY_STEPS.map((threshold) => ({ id: `money-${threshold}`, kind: 'money' as const, threshold, emoji: '💰' })),
   ...DISTANCE_STEPS.map((threshold) => ({
     id: `distance-${threshold}`,
     kind: 'distance' as const,
@@ -97,23 +84,20 @@ export function milestoneToCelebrate(reached: readonly Milestone[], celebrated: 
 }
 
 /** The next milestone of a kind and how far along the way to it, 0–1. */
-export function nextMilestone(
-  kind: 'money' | 'distance',
-  value: number,
-): { threshold: number; progress: number } | null {
+export function nextMilestone(kind: 'money' | 'distance', value: number): { threshold: number; progress: number } | null {
   const steps: readonly number[] = kind === 'money' ? MONEY_STEPS : DISTANCE_STEPS;
   const target = (n: number) => (kind === 'money' ? n * 100 : n);
   const index = steps.findIndex((step) => value < target(step));
   if (index === -1) return null;
   const previous = index === 0 ? 0 : target(steps[index - 1]);
-  return {
-    threshold: steps[index],
-    progress: (value - previous) / (target(steps[index]) - previous),
-  };
+  return { threshold: steps[index], progress: (value - previous) / (target(steps[index]) - previous) };
 }
 
 /** A week (Monday start) where every drive was sorted, finished before `today`. Dates are YYYY-MM-DD. */
-export function hasSortedWeek(trips: readonly { localDate: string; classification: string }[], today: string): boolean {
+export function hasSortedWeek(
+  trips: readonly { localDate: string; classification: string }[],
+  today: string,
+): boolean {
   const weekOf = (date: string) => {
     const [y, m, d] = date.split('-').map(Number);
     const day = new Date(Date.UTC(y, m - 1, d));

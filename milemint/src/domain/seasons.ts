@@ -53,14 +53,10 @@ function seasonId(day: number, southern: boolean): SeasonId | null {
   if (day >= 1024 && day <= 1031) return 'halloween';
   // Then the weather, by meteorological season (whole months).
   const month = Math.floor(day / 100);
-  const northern = month === 12 || month <= 2 ? 'winter' : month <= 5 ? 'spring' : month <= 8 ? 'summer' : 'autumn';
+  const northern =
+    month === 12 || month <= 2 ? 'winter' : month <= 5 ? 'spring' : month <= 8 ? 'summer' : 'autumn';
   if (!southern) return northern;
-  const flipped = {
-    winter: 'summer',
-    spring: 'autumn',
-    summer: 'winter',
-    autumn: 'spring',
-  } as const;
+  const flipped = { winter: 'summer', spring: 'autumn', summer: 'winter', autumn: 'spring' } as const;
   const season = flipped[northern];
   return season === 'summer' ? 'aussie-summer' : season;
 }

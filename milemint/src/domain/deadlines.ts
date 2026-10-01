@@ -55,15 +55,12 @@ export const FILING: Record<RegionCode, FilingGuide> = {
     dueText: msg('31 January'),
     due: { month: 1, day: 31 },
     weekendRolls: false,
-    yearly: msg(
-      'Self-employed: once a year, online by 31 January after the tax year ends (5 April). Your mileage goes in Car, van and travel expenses.',
-    ),
-    quarterly: msg(
-      'Making Tax Digital: if your self-employed and property income is over £50,000 (£30,000 from April 2027, £20,000 from April 2028), you also send quarterly updates through MTD software by 7 August, 7 November, 7 February and 7 May. Your mileage counts towards each update.',
-    ),
-    employees: msg(
-      'Employees: if your employer pays less than 55p a mile (or nothing), claim the difference with form P87 or on Self Assessment. You can go back 4 tax years.',
-    ),
+    yearly:
+      msg('Self-employed: once a year, online by 31 January after the tax year ends (5 April). Your mileage goes in Car, van and travel expenses.'),
+    quarterly:
+      msg('Making Tax Digital: if your self-employed and property income is over £50,000 (£30,000 from April 2027, £20,000 from April 2028), you also send quarterly updates through MTD software by 7 August, 7 November, 7 February and 7 May. Your mileage counts towards each update.'),
+    employees:
+      msg('Employees: if your employer pays less than 55p a mile (or nothing), claim the difference with form P87 or on Self Assessment. You can go back 4 tax years.'),
   },
   US: {
     returnName: msg('tax return (Form 1040)'),
@@ -73,15 +70,12 @@ export const FILING: Record<RegionCode, FilingGuide> = {
     dueText: msg('April 15'),
     due: { month: 4, day: 15 },
     weekendRolls: true,
-    yearly: msg(
-      'Self-employed: once a year on Form 1040 with Schedule C, due April 15 (October 15 with an extension, but tax owed is still due in April).',
-    ),
-    quarterly: msg(
-      'Estimated tax: if you expect to owe $1,000 or more, pay quarterly with Form 1040-ES by April 15, June 15, September 15 and January 15. Your mileage lowers your profit, so keep it up to date to avoid overpaying.',
-    ),
-    employees: msg(
-      'Employees: unreimbursed mileage can’t be deducted on your federal return. Use your log to get paid back by your employer; a few states still allow a deduction.',
-    ),
+    yearly:
+      msg('Self-employed: once a year on Form 1040 with Schedule C, due April 15 (October 15 with an extension, but tax owed is still due in April).'),
+    quarterly:
+      msg('Estimated tax: if you expect to owe $1,000 or more, pay quarterly with Form 1040-ES by April 15, June 15, September 15 and January 15. Your mileage lowers your profit, so keep it up to date to avoid overpaying.'),
+    employees:
+      msg('Employees: unreimbursed mileage can’t be deducted on your federal return. Use your log to get paid back by your employer; a few states still allow a deduction.'),
   },
   CA: {
     returnName: msg('tax return'),
@@ -91,15 +85,12 @@ export const FILING: Record<RegionCode, FilingGuide> = {
     dueText: msg('April 30'),
     due: { month: 4, day: 30 },
     weekendRolls: false,
-    yearly: msg(
-      'Once a year: by April 30, or June 15 if you’re self-employed (any tax owing is still due April 30). Self-employed claim vehicle costs on form T2125.',
-    ),
-    quarterly: msg(
-      'Instalments: if your net tax owing is over $3,000 ($1,800 in Quebec), CRA asks for quarterly payments by March 15, June 15, September 15 and December 15.',
-    ),
-    employees: msg(
-      'Employees: with a signed T2200 from your employer, claim vehicle expenses on form T777. Otherwise, use your log to get reimbursed at the per-km rate.',
-    ),
+    yearly:
+      msg('Once a year: by April 30, or June 15 if you’re self-employed (any tax owing is still due April 30). Self-employed claim vehicle costs on form T2125.'),
+    quarterly:
+      msg('Instalments: if your net tax owing is over $3,000 ($1,800 in Quebec), CRA asks for quarterly payments by March 15, June 15, September 15 and December 15.'),
+    employees:
+      msg('Employees: with a signed T2200 from your employer, claim vehicle expenses on form T777. Otherwise, use your log to get reimbursed at the per-km rate.'),
   },
   AU: {
     returnName: msg('tax return'),
@@ -109,15 +100,12 @@ export const FILING: Record<RegionCode, FilingGuide> = {
     dueText: msg('31 October'),
     due: { month: 10, day: 31 },
     weekendRolls: false,
-    yearly: msg(
-      'Once a year: lodge by 31 October after the income year ends (30 June), or later if you use a registered tax agent and sign up with them before 31 October.',
-    ),
-    quarterly: msg(
-      'BAS: if you’re registered for GST or pay PAYG instalments, you lodge quarterly by 28 October, 28 February, 28 April and 28 July. Rideshare drivers must register for GST from their first ride; delivery riders only once turnover reaches $75,000.',
-    ),
-    employees: msg(
-      'Employees: claim work-related car expenses at D1 on your return, up to 5,000 km per car with the cents per km method.',
-    ),
+    yearly:
+      msg('Once a year: lodge by 31 October after the income year ends (30 June), or later if you use a registered tax agent and sign up with them before 31 October.'),
+    quarterly:
+      msg('BAS: if you’re registered for GST or pay PAYG instalments, you lodge quarterly by 28 October, 28 February, 28 April and 28 July. Rideshare drivers must register for GST from their first ride; delivery riders only once turnover reaches $75,000.'),
+    employees:
+      msg('Employees: claim work-related car expenses at D1 on your return, up to 5,000 km per car with the cents per km method.'),
   },
 };
 
@@ -220,7 +208,7 @@ export function countdownReminders(
   const guide = FILING[region.code];
   const minus = (date: string, days: number) => new Date(utc(date) - days * DAY).toISOString().slice(0, 10);
   const endDate = formatLongDate(end, region);
-  // Year end: two months, one month and one week out. Built now, in the current language.
+  // Year end: two months, one month and one week out. Written now, in the current language.
   const yearEnd = [
     {
       before: 60,

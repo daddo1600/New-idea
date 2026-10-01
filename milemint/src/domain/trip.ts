@@ -7,13 +7,9 @@ export type TripSource = 'manual' | 'auto';
 /** What the trip was driven (or ridden) in; tax offices price them differently. */
 export type VehicleType = 'car' | 'motorbike' | 'bicycle';
 
-export const VEHICLE_ICONS: Record<VehicleType, string> = {
-  car: '🚗',
-  motorbike: '🛵',
-  bicycle: '🚲',
-};
+export const VEHICLE_ICONS: Record<VehicleType, string> = { car: '🚗', motorbike: '🛵', bicycle: '🚲' };
 
-/** Names of vehicle types; marked for translation (the report keeps them in English). */
+/** Names of vehicle types, marked for translation (the report keeps them in English). */
 export const VEHICLE_LABELS: Record<VehicleType, string> = {
   car: msg('Car or van'),
   motorbike: msg('Motorbike or scooter'),

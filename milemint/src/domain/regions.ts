@@ -95,20 +95,14 @@ export const REGIONS: Record<RegionCode, Region> = {
     rule: msg('IRS standard mileage rate: 76¢ a mile from July 2026'),
     caveat: null,
     otherVehicleRates: {},
-    vehicleNote: msg(
-      'The IRS standard mileage rate is for cars, vans and pickups. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.',
-    ),
+    vehicleNote: msg('The IRS standard mileage rate is for cars, vans and pickups. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.'),
     limitsPerVehicle: false,
     report: {
       summaryHeading: msg('Vehicle use (Schedule C, Part IV)'),
       guidance: [
-        msg(
-          'Self-employed: enter business, commuting and other miles on Schedule C, Part IV (lines 44a–44c) and the deduction on line 9, Car and truck expenses, using the standard mileage rate.',
-        ),
+        msg('Self-employed: enter business, commuting and other miles on Schedule C, Part IV (lines 44a–44c) and the deduction on line 9, Car and truck expenses, using the standard mileage rate.'),
         msg('Parking fees and tolls for business trips can be deducted on top of the standard mileage rate.'),
-        msg(
-          'The IRS asks for a record made at or near the time of each trip, showing the date, where you went, the business purpose and the miles.',
-        ),
+        msg('The IRS asks for a record made at or near the time of each trip, showing the date, where you went, the business purpose and the miles.'),
       ],
       askForOdometer: false,
     },
@@ -124,20 +118,8 @@ export const REGIONS: Record<RegionCode, Region> = {
     authority: 'HMRC',
     taxYearStart: { month: 4, day: 6 },
     rates: [
-      {
-        from: '2011-04-06',
-        tiers: [
-          { upTo: 10_000, rate: 450 },
-          { upTo: null, rate: 250 },
-        ],
-      },
-      {
-        from: '2026-04-06',
-        tiers: [
-          { upTo: 10_000, rate: 550 },
-          { upTo: null, rate: 250 },
-        ],
-      },
+      { from: '2011-04-06', tiers: [{ upTo: 10_000, rate: 450 }, { upTo: null, rate: 250 }] },
+      { from: '2026-04-06', tiers: [{ upTo: 10_000, rate: 550 }, { upTo: null, rate: 250 }] },
     ],
     rule: msg('HMRC mileage rate: 55p a mile for the first 10,000 business miles, then 25p'),
     caveat: null,
@@ -150,12 +132,8 @@ export const REGIONS: Record<RegionCode, Region> = {
     report: {
       summaryHeading: msg('Business mileage (HMRC simplified expenses)'),
       guidance: [
-        msg(
-          'Self-employed: this total is your simplified expenses figure for business mileage. Include it in Car, van and travel expenses on your Self Assessment return.',
-        ),
-        msg(
-          'Employees: you can claim Mileage Allowance Relief on the difference between this total and any mileage allowance your employer paid you.',
-        ),
+        msg('Self-employed: this total is your simplified expenses figure for business mileage. Include it in Car, van and travel expenses on your Self Assessment return.'),
+        msg('Employees: you can claim Mileage Allowance Relief on the difference between this total and any mileage allowance your employer paid you.'),
         msg('Ordinary commuting between home and your permanent workplace is not business mileage.'),
       ],
       askForOdometer: false,
@@ -172,47 +150,22 @@ export const REGIONS: Record<RegionCode, Region> = {
     authority: 'CRA',
     taxYearStart: { month: 1, day: 1 },
     rates: [
-      {
-        from: '2024-01-01',
-        tiers: [
-          { upTo: 5_000, rate: 700 },
-          { upTo: null, rate: 640 },
-        ],
-      },
-      {
-        from: '2025-01-01',
-        tiers: [
-          { upTo: 5_000, rate: 720 },
-          { upTo: null, rate: 660 },
-        ],
-      },
-      {
-        from: '2026-01-01',
-        tiers: [
-          { upTo: 5_000, rate: 730 },
-          { upTo: null, rate: 670 },
-        ],
-      },
+      { from: '2024-01-01', tiers: [{ upTo: 5_000, rate: 700 }, { upTo: null, rate: 640 }] },
+      { from: '2025-01-01', tiers: [{ upTo: 5_000, rate: 720 }, { upTo: null, rate: 660 }] },
+      { from: '2026-01-01', tiers: [{ upTo: 5_000, rate: 730 }, { upTo: null, rate: 670 }] },
     ],
     rule: msg('CRA per-km rate: 73¢ for the first 5,000 km, then 67¢'),
-    caveat: msg(
-      'This is CRA’s reimbursement rate for employees. If you’re self-employed, CRA usually wants your actual car costs, so treat the figure as an estimate.',
-    ),
+    caveat:
+      msg('This is CRA’s reimbursement rate for employees. If you’re self-employed, CRA usually wants your actual car costs, so treat the figure as an estimate.'),
     otherVehicleRates: {},
-    vehicleNote: msg(
-      'The CRA per-km rate is for cars. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.',
-    ),
+    vehicleNote: msg('The CRA per-km rate is for cars. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.'),
     limitsPerVehicle: false,
     report: {
       summaryHeading: msg('Business use of your vehicle'),
       guidance: [
-        msg(
-          'Self-employed (T2125): claim your actual vehicle costs multiplied by your business-use share, which is business kilometres divided by total kilometres driven in the year. Record your odometer readings below to work it out.',
-        ),
+        msg('Self-employed (T2125): claim your actual vehicle costs multiplied by your business-use share, which is business kilometres divided by total kilometres driven in the year. Record your odometer readings below to work it out.'),
         msg('Employees reimbursed at CRA’s per-km rate: the figure above is what your employer can pay you tax-free.'),
-        msg(
-          'CRA asks for a logbook showing the date, destination, purpose and kilometres of each business trip, plus your odometer readings at the start and end of the year.',
-        ),
+        msg('CRA asks for a logbook showing the date, destination, purpose and kilometres of each business trip, plus your odometer readings at the start and end of the year.'),
       ],
       askForOdometer: true,
     },
@@ -228,45 +181,21 @@ export const REGIONS: Record<RegionCode, Region> = {
     authority: 'ATO',
     taxYearStart: { month: 7, day: 1 },
     rates: [
-      {
-        from: '2023-07-01',
-        tiers: [
-          { upTo: 5_000, rate: 850 },
-          { upTo: null, rate: 0 },
-        ],
-      },
-      {
-        from: '2024-07-01',
-        tiers: [
-          { upTo: 5_000, rate: 880 },
-          { upTo: null, rate: 0 },
-        ],
-      },
-      {
-        from: '2026-07-01',
-        tiers: [
-          { upTo: 5_000, rate: 910 },
-          { upTo: null, rate: 0 },
-        ],
-      },
+      { from: '2023-07-01', tiers: [{ upTo: 5_000, rate: 850 }, { upTo: null, rate: 0 }] },
+      { from: '2024-07-01', tiers: [{ upTo: 5_000, rate: 880 }, { upTo: null, rate: 0 }] },
+      { from: '2026-07-01', tiers: [{ upTo: 5_000, rate: 910 }, { upTo: null, rate: 0 }] },
     ],
     rule: msg('ATO cents per km method: 91c a km, up to 5,000 km per car a year'),
     caveat: null,
     otherVehicleRates: {},
-    vehicleNote: msg(
-      'The ATO cents per km method is for cars only. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.',
-    ),
+    vehicleNote: msg('The ATO cents per km method is for cars only. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.'),
     limitsPerVehicle: true,
     report: {
       summaryHeading: msg('Work-related car use (cents per km method)'),
       guidance: [
-        msg(
-          'Individuals: enter the deduction as Work-related car expenses (D1) using the cents per km method. Sole traders: include it with your business motor vehicle expenses.',
-        ),
+        msg('Individuals: enter the deduction as Work-related car expenses (D1) using the cents per km method. Sole traders: include it with your business motor vehicle expenses.'),
         msg('You can claim up to 5,000 business kilometres per car each income year. This report assumes one car.'),
-        msg(
-          'You don’t need a logbook for this method, but the ATO may ask how you worked out your kilometres. This trip log shows that.',
-        ),
+        msg('You don’t need a logbook for this method, but the ATO may ask how you worked out your kilometres. This trip log shows that.'),
       ],
       askForOdometer: false,
     },
@@ -299,19 +228,13 @@ export function fromUnits(units: number, region: Region): number {
 }
 
 export function formatDistance(meters: number, region: Region): string {
-  const value = new Intl.NumberFormat(region.locale, {
-    minimumFractionDigits: 1,
-    maximumFractionDigits: 1,
-  });
+  const value = new Intl.NumberFormat(region.locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   return `${value.format(toUnits(meters, region))} ${region.unit}`;
 }
 
 /** Money is kept in minor units (cents, pence). */
 export function formatMoney(minor: number, region: Region): string {
-  return new Intl.NumberFormat(region.locale, {
-    style: 'currency',
-    currency: region.currency,
-  }).format(minor / 100);
+  return new Intl.NumberFormat(region.locale, { style: 'currency', currency: region.currency }).format(minor / 100);
 }
 
 /** e.g. "55p", "72.5¢", "91c". */
@@ -339,7 +262,8 @@ export function taxYearLabel(startYear: number, region: Region): string {
   return region.code === 'GB' ? `${startYear}/${next}` : `${startYear}–${next}`;
 }
 
-const iso = (y: number, m: number, d: number) => `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+const iso = (y: number, m: number, d: number) =>
+  `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 
 /** First and last day (YYYY-MM-DD) of the tax year starting in `startYear`. */
 export function taxYearBounds(startYear: number, region: Region): { start: string; end: string } {
@@ -400,7 +324,11 @@ export function currentTaxYear(region: Region, today: Date = new Date()): number
 // ─── Rates and deductions ───────────────────────────────────────────────────
 
 /** The rate period in force on `localDate`, or null before the first known one. */
-export function ratePeriodFor(localDate: string, region: Region, vehicle: VehicleType = 'car'): RatePeriod | null {
+export function ratePeriodFor(
+  localDate: string,
+  region: Region,
+  vehicle: VehicleType = 'car',
+): RatePeriod | null {
   const periods = ratesFor(region, vehicle);
   if (!periods) return null;
   const day = localDate.slice(0, 10);
@@ -427,23 +355,13 @@ export function vehicleRule(region: Region, vehicle: VehicleType): string {
   if (!periods) {
     if (region.vehicleNote) return t(region.vehicleNote);
     return region.unit === 'mi'
-      ? t('{{authority}} has no per-mile rate for this vehicle.', {
-          authority: region.authority,
-        })
-      : t('{{authority}} has no per-km rate for this vehicle.', {
-          authority: region.authority,
-        });
+      ? t('{{authority}} has no per-mile rate for this vehicle.', { authority: region.authority })
+      : t('{{authority}} has no per-km rate for this vehicle.', { authority: region.authority });
   }
   const rate = describeTier(periods[periods.length - 1], 0, region);
   return vehicle === 'motorbike'
-    ? t('{{authority}} rate for motorbikes and scooters: {{rate}}', {
-        authority: region.authority,
-        rate,
-      })
-    : t('{{authority}} rate for bicycles: {{rate}}', {
-        authority: region.authority,
-        rate,
-      });
+    ? t('{{authority}} rate for motorbikes and scooters: {{rate}}', { authority: region.authority, rate })
+    : t('{{authority}} rate for bicycles: {{rate}}', { authority: region.authority, rate });
 }
 
 /** The earliest date MileMint has a rate for in this region. */
@@ -478,14 +396,7 @@ function tieredParts(
     const ceiling = tier.upTo ?? Infinity;
     const start = Math.max(already, floor);
     const end = Math.min(to, ceiling);
-    if (end > start)
-      parts.push({
-        period,
-        tier: index,
-        units: end - start,
-        rate: tier.rate,
-        vehicle,
-      });
+    if (end > start) parts.push({ period, tier: index, units: end - start, rate: tier.rate, vehicle });
     floor = ceiling;
   });
   return parts;
@@ -497,7 +408,10 @@ function tieredValue(period: RatePeriod, already: number, units: number): number
 }
 
 /** How each business trip's distance was priced, for reports that show the rates used. */
-export function computeDeductionParts(trips: readonly DeductionTrip[], region: Region): Map<string, DeductionPart[]> {
+export function computeDeductionParts(
+  trips: readonly DeductionTrip[],
+  region: Region,
+): Map<string, DeductionPart[]> {
   const result = new Map<string, DeductionPart[]>();
   // Running totals per tax year and vehicle: the UK's 10,000-mile threshold counts cars and vans only.
   const driven = new Map<string, number>();
@@ -523,13 +437,8 @@ export function computeDeductionParts(trips: readonly DeductionTrip[], region: R
  */
 export function describeTier(period: RatePeriod, tier: number, region: Region, tr: Translator = t): string {
   const mi = region.unit === 'mi';
-  const rate = mi
-    ? tr('{{rate}} a mile', {
-        rate: formatRate(period.tiers[tier].rate, region),
-      })
-    : tr('{{rate}} a km', {
-        rate: formatRate(period.tiers[tier].rate, region),
-      });
+  const amount = formatRate(period.tiers[tier].rate, region);
+  const rate = mi ? tr('{{rate}} a mile', { rate: amount }) : tr('{{rate}} a km', { rate: amount });
   if (period.tiers.length === 1) return rate;
   const number = (n: number) => new Intl.NumberFormat(region.locale).format(n);
   const upTo = period.tiers[tier].upTo;
@@ -573,7 +482,11 @@ export function computeDeductions(trips: readonly DeductionTrip[], region: Regio
  * What a not-yet-business trip would add if marked business, at the tier the
  * year has reached so far. An estimate for the "worth up to" nudge.
  */
-export function potentialDeduction(trip: DeductionTrip, trips: readonly DeductionTrip[], region: Region): number {
+export function potentialDeduction(
+  trip: DeductionTrip,
+  trips: readonly DeductionTrip[],
+  region: Region,
+): number {
   const vehicle = trip.vehicle ?? 'car';
   const period = ratePeriodFor(trip.localDate, region, vehicle);
   if (!period) return 0;

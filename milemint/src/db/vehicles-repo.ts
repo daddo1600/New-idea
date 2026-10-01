@@ -6,12 +6,7 @@ import { defaultVehicleName, type Vehicle } from '@/domain/vehicles';
 
 import { loadSettings, saveSettings } from './settings-repo';
 
-type VehicleRow = {
-  id: string;
-  name: string;
-  type: VehicleType;
-  registration: string | null;
-};
+type VehicleRow = { id: string; name: string; type: VehicleType; registration: string | null };
 
 const fromRow = (row: VehicleRow): Vehicle => ({
   id: row.id,
@@ -74,20 +69,12 @@ export async function removeVehicle(db: SQLiteDatabase, id: string): Promise<voi
   const settings = await loadSettings(db);
   if (settings.currentVehicleId === id) {
     const [next] = await listVehicles(db);
-    await saveSettings(db, {
-      ...settings,
-      currentVehicleId: next?.id ?? null,
-      vehicle: next?.type ?? 'car',
-    });
+    await saveSettings(db, { ...settings, currentVehicleId: next?.id ?? null, vehicle: next?.type ?? 'car' });
   }
 }
 
 export async function setCurrentVehicle(db: SQLiteDatabase, vehicle: Vehicle): Promise<void> {
-  await saveSettings(db, {
-    ...(await loadSettings(db)),
-    currentVehicleId: vehicle.id,
-    vehicle: vehicle.type,
-  });
+  await saveSettings(db, { ...(await loadSettings(db)), currentVehicleId: vehicle.id, vehicle: vehicle.type });
 }
 
 /**
@@ -100,21 +87,13 @@ export async function ensureVehicles(db: SQLiteDatabase): Promise<{ vehicles: Ve
   const settings = await loadSettings(db);
   if (vehicles.length === 0) {
     const first = await addVehicle(db, { type: settings.vehicle });
-    await db.runAsync(
-      'UPDATE trips SET vehicle_id = ? WHERE vehicle_id IS NULL AND vehicle = ?;',
-      first.id,
-      first.type,
-    );
+    await db.runAsync('UPDATE trips SET vehicle_id = ? WHERE vehicle_id IS NULL AND vehicle = ?;', first.id, first.type);
     vehicles = [first];
   }
   let current = vehicles.find((vehicle) => vehicle.id === settings.currentVehicleId);
   if (!current) {
     current = vehicles[0];
-    await saveSettings(db, {
-      ...settings,
-      currentVehicleId: current.id,
-      vehicle: current.type,
-    });
+    await saveSettings(db, { ...settings, currentVehicleId: current.id, vehicle: current.type });
   }
   return { vehicles, current };
 }

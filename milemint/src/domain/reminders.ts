@@ -6,11 +6,7 @@ import type { DistanceUnit } from './regions';
  * reading. Lines that name the distance unit have a kilometres version
  * (`titleKm`), used where the region counts in km.
  */
-export const WEEKLY_MESSAGES: readonly {
-  title: string;
-  titleKm?: string;
-  body: string;
-}[] = [
+export const WEEKLY_MESSAGES: readonly { title: string; titleKm?: string; body: string }[] = [
   {
     title: msg('Your miles called 📞'),
     titleKm: msg('Your kilometres called 📞'),

@@ -19,10 +19,7 @@ export function periodBounds(period: Period, today: Date): { start: string; end:
   if (period === 'this-month') return { start: iso(new Date(y, m, 1)), end: iso(new Date(y, m + 1, 0)) };
   if (period === 'last-month') return { start: iso(new Date(y, m - 1, 1)), end: iso(new Date(y, m, 0)) };
   const monday = new Date(y, m, today.getDate() - ((today.getDay() + 6) % 7));
-  return {
-    start: iso(monday),
-    end: iso(new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + 6)),
-  };
+  return { start: iso(monday), end: iso(new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + 6)) };
 }
 
 export type MissedMiles = {
@@ -54,10 +51,5 @@ export function missedMiles(
   const logged = inPeriod.reduce((sum, trip) => sum + toUnits(trip.distanceMeters), 0);
   const value = inPeriod.reduce((sum, trip) => sum + (deductions.get(trip.id) ?? 0), 0);
   const extra = Math.max(0, logged - counted);
-  return {
-    logged,
-    counted,
-    extra,
-    extraValue: logged > 0 ? Math.round((value * extra) / logged) : 0,
-  };
+  return { logged, counted, extra, extraValue: logged > 0 ? Math.round((value * extra) / logged) : 0 };
 }

@@ -110,7 +110,7 @@ export function CountryOptions({
         <ThemedView type="backgroundElement" style={styles.rate}>
           <View style={[styles.rateDot, { backgroundColor: theme.accent }]} />
           <ThemedText type="small" themeColor="textSecondary" style={styles.flex} accessibilityLiveRegion="polite">
-            {t(vehicleRule(chosen, vehicle))}
+            {vehicleRule(chosen, vehicle)}
           </ThemedText>
         </ThemedView>
       )}

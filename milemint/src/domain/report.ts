@@ -156,11 +156,7 @@ export function buildReport(
   }
   report.byRate = [...byRate.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([, total]) => ({
-      label: total.label,
-      distance: total.distance,
-      deduction: Math.round(total.tenths / 10),
-    }));
+    .map(([, total]) => ({ label: total.label, distance: total.distance, deduction: Math.round(total.tenths / 10) }));
   return report;
 }
 
@@ -172,10 +168,7 @@ const CLASSIFICATION_LABELS: Record<Trip['classification'], string> = {
 
 function localTime(iso: string | null, region: Region): string {
   if (!iso) return '';
-  return new Date(iso).toLocaleTimeString(region.locale, {
-    hour: 'numeric',
-    minute: '2-digit',
-  });
+  return new Date(iso).toLocaleTimeString(region.locale, { hour: 'numeric', minute: '2-digit' });
 }
 
 /** The rate(s) a trip was priced at, e.g. "55p" or "55p / 25p" when it crossed a tier. */
@@ -242,7 +235,11 @@ export function toCsv(report: MileageReport): string {
 }
 
 function escapeHtml(text: string): string {
-  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 /** Page size for the PDF: US Letter in North America, A4 elsewhere (points). */
