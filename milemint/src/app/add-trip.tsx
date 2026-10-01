@@ -1,12 +1,13 @@
 import { router } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
 import { CalendarPicker } from '@/components/calendar-picker';
 import { Chip, EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { PurposePicker } from '@/components/purpose-picker';
 import { Segmented } from '@/components/segmented';
+import { VehiclePicker } from '@/components/vehicle-picker';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
@@ -18,7 +19,8 @@ import type { LatLng } from '@/domain/geo';
 import { matchPlace, type Place } from '@/domain/places';
 import { earliestDate, formatDistance, formatLongDate, fromUnits, toUnits } from '@/domain/regions';
 import { frequentPurposes, frequentSpots } from '@/domain/suggestions';
-import { toLocalIsoDate, type Trip, VEHICLE_ICONS, VEHICLE_LABELS, type VehicleType } from '@/domain/trip';
+import { toLocalIsoDate, type Trip, type VehicleType } from '@/domain/trip';
+import { useKeyboardOpen } from '@/hooks/use-keyboard-open';
 import { useTheme } from '@/hooks/use-theme';
 import { drivingDistance } from '@/places/address-search';
 import { useRegion } from '@/region/region';
@@ -42,6 +44,12 @@ export default function AddTripScreen() {
   const today = toLocalIsoDate(new Date());
 
   const [kind, setKind] = useState<Kind>('business');
+  const keyboardOpen = useKeyboardOpen();
+  const scroller = useRef<ScrollView>(null);
+  const fieldTops = useRef({ from: 0, to: 0 });
+  /** Moves an address box near the top, so its suggestions show above the keyboard. */
+  const scrollFieldUp = (field: 'from' | 'to') =>
+    setTimeout(() => scroller.current?.scrollTo({ y: Math.max(0, fieldTops.current[field] - 8), animated: true }), 250);
   const [vehicle, setVehicle] = useState<VehicleType>('car');
   const [date, setDate] = useState(today);
   const [calendarOpen, setCalendarOpen] = useState(false);
@@ -142,7 +150,10 @@ export default function AddTripScreen() {
   return (
     <ThemedView style={styles.container}>
       <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView contentContainerStyle={styles.form} keyboardShouldPersistTaps="handled">
+        <ScrollView
+          ref={scroller}
+          contentContainerStyle={[styles.form, keyboardOpen && styles.roomToScroll]}
+          keyboardShouldPersistTaps="handled">
           <Segmented
             options={[
               { value: 'business', label: 'Business' },
@@ -192,18 +203,21 @@ export default function AddTripScreen() {
             )}
           </ThemedView>
 
-          <PlaceField
-            label="From"
-            placeholder="Search an address or place"
-            value={from}
-            onChange={(next) => {
-              clearError();
-              setFrom(next);
-            }}
-            places={places}
-            recent={spots}
-            near={near}
-          />
+          <View onLayout={(e) => (fieldTops.current.from = e.nativeEvent.layout.y)}>
+            <PlaceField
+              label="From"
+              placeholder="Search an address or place"
+              value={from}
+              onChange={(next) => {
+                clearError();
+                setFrom(next);
+              }}
+              places={places}
+              recent={spots}
+              near={near}
+              onFocus={() => scrollFieldUp('from')}
+            />
+          </View>
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Swap from and to"
@@ -217,30 +231,24 @@ export default function AddTripScreen() {
               ⇅
             </ThemedText>
           </Pressable>
-          <PlaceField
-            label="To"
-            placeholder="Search an address or place"
-            value={to}
-            onChange={(next) => {
-              clearError();
-              setTo(next);
-            }}
-            places={places}
-            recent={spots}
-            near={near}
-            here={false}
-          />
-
-          <View style={styles.chips} accessibilityRole="radiogroup" accessibilityLabel="Vehicle">
-            {(['car', 'motorbike', 'bicycle'] as const).map((value) => (
-              <Chip
-                key={value}
-                label={`${VEHICLE_ICONS[value]} ${VEHICLE_LABELS[value]}`}
-                selected={vehicle === value}
-                onPress={() => setVehicle(value)}
-              />
-            ))}
+          <View onLayout={(e) => (fieldTops.current.to = e.nativeEvent.layout.y)}>
+            <PlaceField
+              label="To"
+              placeholder="Search an address or place"
+              value={to}
+              onChange={(next) => {
+                clearError();
+                setTo(next);
+              }}
+              places={places}
+              recent={spots}
+              near={near}
+              here={false}
+              onFocus={() => scrollFieldUp('to')}
+            />
           </View>
+
+          <VehiclePicker value={vehicle} onChange={setVehicle} />
 
           <View style={styles.field}>
             <View style={styles.labelRow}>
@@ -347,6 +355,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   field: { gap: Spacing.one },
+  roomToScroll: { paddingBottom: 420 },
   labelRow: { flexDirection: 'row', justifyContent: 'space-between' },
   input: { borderRadius: 10, paddingHorizontal: Spacing.three, paddingVertical: 12, fontSize: 16 },
   save: { alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12 },

@@ -96,10 +96,10 @@ const styles = StyleSheet.create({
     padding: Spacing.three,
     gap: 2,
     overflow: 'hidden',
-    minHeight: 128,
+    minHeight: 104,
     justifyContent: 'flex-end',
   },
-  flag: { fontSize: 40, lineHeight: 50, marginBottom: Spacing.one },
+  flag: { fontSize: 32, lineHeight: 40, marginBottom: 2 },
   onBrand: { color: '#FFFFFF' },
   onBrandSoft: { color: '#D1FAE5' },
   tick: {

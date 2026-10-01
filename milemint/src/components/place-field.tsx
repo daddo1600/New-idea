@@ -48,6 +48,7 @@ export function PlaceField({
   recent = [],
   near = null,
   here = true,
+  onFocus,
 }: {
   label: string;
   /** Shown in a small mint tile before the label, e.g. 🏠. */
@@ -63,6 +64,8 @@ export function PlaceField({
   near?: LatLng | null;
   /** Offer "I'm here now". */
   here?: boolean;
+  /** Typing has started here: e.g. scroll the field up so the suggestions have room. */
+  onFocus?: () => void;
 }) {
   const theme = useTheme();
   const [locating, setLocating] = useState(false);
@@ -187,7 +190,10 @@ export function PlaceField({
         accessibilityLabel={`${label} address`}
         value={value.text}
         onChangeText={type}
-        onFocus={() => setFocused(true)}
+        onFocus={() => {
+          setFocused(true);
+          onFocus?.();
+        }}
         // A beat later, so tapping a suggestion lands before the list hides.
         onBlur={() => setTimeout(() => setFocused(false), 200)}
         placeholder={placeholder}

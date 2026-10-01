@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSQLiteContext } from 'expo-sqlite';
 import {
   KeyboardAvoidingView,
@@ -9,7 +9,6 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  Keyboard,
   Switch,
   Text,
   View,
@@ -21,7 +20,8 @@ import { BrandGradient } from '@/components/brand-gradient';
 import { CountryOptions, phoneRegion } from '@/components/country-options';
 import { LeafMark } from '@/components/leaf-mark';
 import { MintWash, NumberedSteps, StepHeader } from '@/components/step-header';
-import { Chip, EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
+import { VehiclePicker } from '@/components/vehicle-picker';
+import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import {
@@ -34,12 +34,13 @@ import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, saveSettings } from '@/db/settings-repo';
 import { formatRate, REGIONS, type RegionCode } from '@/domain/regions';
+import { useKeyboardOpen } from '@/hooks/use-keyboard-open';
 import { useTheme } from '@/hooks/use-theme';
 import { useRegion } from '@/region/region';
 import { enableWeeklyReminder, REMINDERS_SUPPORTED, scheduleWorkHoursNudge } from '@/reminders/weekly';
 import type { TrackingStatus } from '@/tracking/background';
 import { useTracking } from '@/tracking/use-tracking';
-import { VEHICLE_ICONS, type VehicleType } from '@/domain/trip';
+import type { VehicleType } from '@/domain/trip';
 
 /**
  * First launch, as one full-screen flow instead of a chain of pop-ups:
@@ -177,19 +178,13 @@ export default function WelcomeScreen() {
   const onBrand = step === 0 || step === DONE;
   // While typing, the buttons would ride up above the keyboard, right over the address
   // suggestions, so a tap meant for a suggestion could save and move on. Hide them meanwhile.
-  const [typing, setTyping] = useState(false);
-  useEffect(() => {
-    const show = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow', () =>
-      setTyping(true),
-    );
-    const hide = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide', () =>
-      setTyping(false),
-    );
-    return () => {
-      show.remove();
-      hide.remove();
-    };
-  }, []);
+  const typing = useKeyboardOpen();
+  const scroller = useRef<ScrollView>(null);
+  const fieldTops = useRef({ home: 0, work: 0 });
+  /** Moves an address box near the top, so its suggestions show above the keyboard. */
+  const scrollFieldUp = (field: 'home' | 'work') =>
+    // After the keyboard has started to open and the extra room has been added.
+    setTimeout(() => scroller.current?.scrollTo({ y: Math.max(0, fieldTops.current[field] - 8), animated: true }), 250);
 
   const primary = (label: string, onPress: () => void) => (
     <Pressable
@@ -260,7 +255,13 @@ export default function WelcomeScreen() {
 
       <KeyboardAvoidingView style={styles.flexFill} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView
-          contentContainerStyle={[styles.content, !onBrand && styles.contentTop]}
+          ref={scroller}
+          contentContainerStyle={[
+            styles.content,
+            !onBrand && styles.contentTop,
+            // Room to scroll an address box up to the top while the keyboard is open.
+            typing && step === PLACES && styles.roomToScroll,
+          ]}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled">
           {step === 0 && (
@@ -292,24 +293,20 @@ export default function WelcomeScreen() {
                 Sets your currency, miles or kilometres, tax year and official mileage rate. You can change it
                 later.
               </StepHeader>
-              <CountryOptions value={country} onChange={setCountry} vehicle={vehicle} />
-              <View
-                style={styles.vehicles}
-                accessibilityRole="radiogroup"
-                accessibilityLabel="What do you drive?">
+              <CountryOptions
+                value={country}
+                onChange={(code) => {
+                  setCountry(code);
+                  // Bring "What do you drive?" into view once a country is picked.
+                  setTimeout(() => scroller.current?.scrollToEnd({ animated: true }), 150);
+                }}
+                vehicle={vehicle}
+              />
+              <View style={styles.vehicles}>
                 <ThemedText type="small" themeColor="textSecondary">
                   What do you drive?
                 </ThemedText>
-                <View style={styles.vehicleChips}>
-                  {(['car', 'motorbike', 'bicycle'] as const).map((value) => (
-                    <Chip
-                      key={value}
-                      label={`${VEHICLE_ICONS[value]} ${value === 'car' ? 'Car or van' : value === 'motorbike' ? 'Motorbike' : 'Bicycle'}`}
-                      selected={vehicle === value}
-                      onPress={() => setVehicle(value)}
-                    />
-                  ))}
-                </View>
+                <VehiclePicker value={vehicle} onChange={setVehicle} />
               </View>
             </>
           )}
@@ -359,20 +356,26 @@ export default function WelcomeScreen() {
                 Trips then read “Home → Work” instead of street names, and commutes are flagged for you. Both
                 are optional.
               </StepHeader>
-              <PlaceField
-                label="Home"
-                icon="🏠"
-                placeholder="Address or postcode"
-                value={home}
-                onChange={setHome}
-              />
-              <PlaceField
-                label="Work"
-                icon="💼"
-                placeholder="Address or postcode"
-                value={work}
-                onChange={setWork}
-              />
+              <View onLayout={(e) => (fieldTops.current.home = e.nativeEvent.layout.y)}>
+                <PlaceField
+                  label="Home"
+                  icon="🏠"
+                  placeholder="Address or postcode"
+                  value={home}
+                  onChange={setHome}
+                  onFocus={() => scrollFieldUp('home')}
+                />
+              </View>
+              <View onLayout={(e) => (fieldTops.current.work = e.nativeEvent.layout.y)}>
+                <PlaceField
+                  label="Work"
+                  icon="💼"
+                  placeholder="Address or postcode"
+                  value={work}
+                  onChange={setWork}
+                  onFocus={() => scrollFieldUp('work')}
+                />
+              </View>
               {placeError && (
                 <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
                   {placeError}
@@ -523,7 +526,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1, gap: Spacing.half },
   flexFill: { flex: 1 },
   vehicles: { gap: Spacing.two },
-  vehicleChips: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
+  roomToScroll: { paddingBottom: 420 },
   reminderRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three },
   card: { borderRadius: 12, padding: Spacing.three, gap: Spacing.one },
   actions: { gap: Spacing.two, width: '100%', maxWidth: MaxContentWidth, alignSelf: 'center' },
