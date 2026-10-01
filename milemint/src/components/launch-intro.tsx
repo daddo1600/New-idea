@@ -55,10 +55,12 @@ const COUNTER_TOP = 40;
 
 const DRIVE_MS = 3200;
 const HOLD_MS = 500;
-const QUICK_DRIVE_MS = 850;
-const QUICK_HOLD_MS = 550;
+/** The car's climb and the total counting up: unhurried enough to follow. */
+const QUICK_DRIVE_MS = 1600;
+/** The total stays up, still, long enough to read and take in. */
+const QUICK_HOLD_MS = 1500;
 /** A little longer to enjoy the seasonal touches. */
-const SEASON_HOLD_MS = 900;
+const SEASON_HOLD_MS = 1900;
 const FADE_MS = 300;
 /** The drive the counter shows. */
 /**
@@ -193,7 +195,8 @@ function QuickIntro({
   const [shown, setShown] = useState(reduceMotion ? totals.total : from);
 
   useEffect(() => {
-    const easing = Easing.out(Easing.cubic);
+    // Eases in and out, so the car doesn't dart off the line.
+    const easing = Easing.inOut(Easing.cubic);
     drive.value = withDelay(80, withTiming(1, { duration: reduceMotion ? 0 : QUICK_DRIVE_MS, easing }));
     fade.value = withDelay(
       80 + (reduceMotion ? 0 : QUICK_DRIVE_MS) + (season ? SEASON_HOLD_MS : QUICK_HOLD_MS),
