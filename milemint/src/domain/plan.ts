@@ -10,16 +10,17 @@ import type { Trip } from './trip';
 export const FREE_AUTO_DRIVES_PER_MONTH = 40;
 
 /**
- * Referrals, Dropbox style and uncapped: redeeming a friend's code adds this
- * many automatic drives a month, and so does every friend who joins with
- * yours. Both sides get it, for good.
+ * Referrals, Dropbox style and uncapped: joining with a friend's single-use
+ * invite adds this many automatic drives a month, and so does every friend
+ * who joins with one of yours. Both sides get it, for good.
  */
 export const REFERRAL_BONUS_DRIVES = 10;
 
 /**
  * The free plan's automatic drives a month: the base allowance, plus a bonus
- * for having joined with a friend's code and one for each friend who joined
- * with this user's code (counted in iCloud; 0 until that's switched on).
+ * for having joined with a friend's invite (`redeemed`: only once iCloud has
+ * confirmed it, never while it's pending) and one for each friend who joined
+ * with this user's invites (counted in iCloud; 0 until that's switched on).
  */
 /** No limit on friends in practice; this only stops a corrupted count reaching Infinity. */
 const MAX_FRIENDS_COUNTED = 10_000;

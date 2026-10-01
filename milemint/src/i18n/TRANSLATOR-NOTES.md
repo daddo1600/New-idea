@@ -77,3 +77,4 @@ Context for short or ambiguous lines, by the part of the app they come from. Key
 - {{year}}: tax-year label "2026", "2026/27", "2026–27". {{date}}: formatted date.
 - {{achievement}}: milestone title. 'today' stands alone as the countdown value.
 - 'My bike' = bicycle (motorbike default is 'My motorbike').
+- Single-use invites (Invite friends, Settings, the friend's-code box): every share makes a new invite with its own code, and each code works for one friend. Never say "your code" as if there were one permanent code. "Invites sent: {{count}}" is a counter label. "Your invite code is {{code}}…" goes inside the share message to a friend (informal, like a text). "…on their way once the invite is confirmed": the friend's bonus waits until iCloud confirms the invite, so don't promise it now. "Apple Account" = Apple's own name in your language.

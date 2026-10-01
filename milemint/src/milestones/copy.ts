@@ -2,7 +2,6 @@ import type { CelebrationContent } from '@/components/celebration';
 import { HABITS, type HabitId, type Milestone } from '@/domain/milestones';
 import { formatMoney, type Region } from '@/domain/regions';
 import { msg, t } from '@/i18n/i18n';
-import { withInvite } from '@/referral/links';
 
 /** A few warm messages, picked by the milestone so the same one always reads the same. */
 const MONEY_MESSAGES = [
@@ -17,7 +16,9 @@ const pounds = (region: Region, major: number) => formatMoney(major * 100, regio
 /**
  * The celebration for a milestone, in the current language. `employee`: a UK
  * employee, whose mileage isn't money back by itself (they claim relief on
- * what the employer didn't pay), so the money milestones talk about mileage logged.
+ * what the employer didn't pay), so the money milestones talk about mileage
+ * logged. `share` is the brag line alone: the celebration adds the App Store
+ * link and a fresh single-use invite code when Share is tapped.
  */
 export function celebrationFor(milestone: Milestone, region: Region, employee = false): CelebrationContent {
   if (milestone.kind === 'money' && employee) {
@@ -29,9 +30,9 @@ export function celebrationFor(milestone: Milestone, region: Region, employee = 
         'MileMint has now logged {{amount}} of business mileage at {{authority}} rates, ready for your expense and relief claims.',
         { amount, authority: region.authority },
       ),
-      share: withInvite(
-        t('I’ve logged {{amount}} of business mileage with MileMint 🚗 Every mile counted, automatically.', { amount }),
-      ),
+      share: t('I’ve logged {{amount}} of business mileage with MileMint 🚗 Every mile counted, automatically.', {
+        amount,
+      }),
     };
   }
   if (milestone.kind === 'money') {
@@ -41,11 +42,9 @@ export function celebrationFor(milestone: Milestone, region: Region, employee = 
       emoji: '💰',
       title: t('{{amount}} back in your pocket', { amount }),
       message: t(message, { amount }),
-      share: withInvite(
-        t('I’ve found {{amount}} in business mileage with MileMint 🚗💸 Every mile counted, automatically.', {
-          amount,
-        }),
-      ),
+      share: t('I’ve found {{amount}} in business mileage with MileMint 🚗💸 Every mile counted, automatically.', {
+        amount,
+      }),
     };
   }
   if (milestone.kind === 'distance') {
@@ -61,11 +60,9 @@ export function celebrationFor(milestone: Milestone, region: Region, employee = 
       message: mi
         ? t('{{distance}} miles logged for work, every one counted. That’s a lot of road.', params)
         : t('{{distance}} km logged for work, every one counted. That’s a lot of road.', params),
-      share: withInvite(
-        mi
-          ? t('{{distance}} business miles logged with MileMint 🛣️ Every one counted.', params)
-          : t('{{distance}} business km logged with MileMint 🛣️ Every one counted.', params),
-      ),
+      share: mi
+        ? t('{{distance}} business miles logged with MileMint 🛣️ Every one counted.', params)
+        : t('{{distance}} business km logged with MileMint 🛣️ Every one counted.', params),
     };
   }
   const habit = HABITS[milestone.id as HabitId];
@@ -74,11 +71,9 @@ export function celebrationFor(milestone: Milestone, region: Region, employee = 
     emoji: habit.emoji,
     title,
     message: t(habit.message),
-    share: withInvite(
-      t('{{achievement}} on MileMint {{emoji}} The mileage app that counts every mile.', {
-        achievement: title,
-        emoji: habit.emoji,
-      }),
-    ),
+    share: t('{{achievement}} on MileMint {{emoji}} The mileage app that counts every mile.', {
+      achievement: title,
+      emoji: habit.emoji,
+    }),
   };
 }

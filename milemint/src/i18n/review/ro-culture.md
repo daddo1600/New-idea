@@ -125,3 +125,27 @@ Each line was translated, back-translated cold, then checked for culture and len
 | That’s your own code… | Acesta e chiar codul tău. Mai bine trimite-l prietenilor. | Pass 2 added *chiar* (“your very own”): without it the line lost “own”. |
 | Redeem | Aplică | Common for promo codes in Romanian shops; short. |
 | Share it · friends get +10 drives | Distribuie · +10 curse pentru prieteni | 38 chars (1.15×). |
+
+## Round 5: single-use invites
+
+Referrals now use single-use invites: every share makes a new code that works for one friend, and a friend’s code stays **pending** (no bonus yet) until iCloud confirms it. 15 new lines (the Invite friends screen and Settings, the pending and confirmed states of the friend’s-code box, the reasons a code is turned down, the share message) and 6 removed (Your code, Share my code, the old hero line, the old “friends get their drives at once” note, the old own-code message and the old share line). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: nothing implies one permanent personal code, and nothing promises drives before the invite is confirmed. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Send a friend an invite. When they join MileMint with it, you both get 10 extra free automatic drives a month. For every friend, with no limit. | Trimite-i unui prieten o invitație. Când se alătură MileMint cu ea, primiți amândoi 10 curse automate gratuite în plus pe lună. Pentru fiecare prieten, fără limită. | “Send a friend an invitation. When they join MileMint with it, you both get 10 more free automatic trips a month. For every friend, no limit.” *curse*, *primiți amândoi* as in Round 4. |
+| Send an invite | Trimite invitație | “Send invitation” Button; “Trimite o invitație” was 1.36×, now 1.21×. |
+| Every invite has its own code, for one friend. | Fiecare invitație are codul ei, pentru un singur prieten. | “Each invitation has its own code, for a single friend.” |
+| Invites sent: {{count}} | Invitații trimise: {{count}} | “Invitations sent: {{count}}” Counter label: no noun agreement with the number needed. |
+| Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you. | Invitațiile se confirmă prin iCloud, care vine într-o actualizare viitoare. Prietenii care se alătură până atunci primesc cursele în plus când e activat, iar tu la fel. | “Invitations are confirmed through iCloud, which comes in a future update. Friends who join until then get the extra trips when it’s turned on, and you too.” No promise of drives today. |
+| You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed. | Ai introdus {{code}}. Cele 10 curse în plus vin imediat ce invitația e confirmată. | “You entered {{code}}. The 10 extra trips come as soon as the invitation is confirmed.” |
+| Code {{code}} saved | Codul {{code}} a fost salvat | “Code {{code}} was saved” Mirrors “Codul {{code}} a fost adăugat”. |
+| Your 10 extra drives are on their way once the invite is confirmed. | Cele 10 curse în plus vin imediat ce invitația e confirmată. | “The 10 extra trips come as soon as the invitation is confirmed.” |
+| Your invite code is {{code}}. Enter it when you set up MileMint for 10 extra free drives a month. | Codul tău de invitație este {{code}}. Introdu-l când configurezi MileMint și primești 10 curse gratuite în plus pe lună. | “Your invitation code is {{code}}. Enter it when you set up MileMint and you get 10 more free trips a month.” Share message, tu. |
+| We couldn’t find that invite. Check the code with your friend. | Nu am găsit invitația. Verifică codul cu prietenul tău. | “We didn’t find the invitation. Check the code with your friend.” |
+| That invite has already been used. Ask your friend to send you a new one. | Invitația a fost deja folosită. Roagă-ți prietenul să-ți trimită una nouă. | “The invitation has already been used. Ask your friend to send you a new one.” |
+| That’s one of your own invites. Send it to a friend instead. | Aceasta e una dintre invitațiile tale. Mai bine trimite-o unui prieten. | “This is one of your invitations. Better send it to a friend.” |
+| This Apple Account has already joined with a friend’s invite. | Acest cont Apple s-a alăturat deja cu invitația unui prieten. | “This Apple account has already joined with a friend’s invitation.” *cont Apple* as in existing lines. |
+| 🎉 Your friend’s invite is confirmed | 🎉 Invitația prietenului tău e confirmată | “🎉 Your friend’s invitation is confirmed” |
+| Your friend’s invite couldn’t be used | Invitația prietenului tău nu a putut fi folosită | “Your friend’s invitation couldn’t be used” |
+
+**Sign-off:** approved, pending an on-device check of the new alert titles.

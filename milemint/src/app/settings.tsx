@@ -7,7 +7,6 @@ import {
   Platform,
   Pressable,
   ScrollView,
-  Share,
   StyleSheet,
   Switch,
   Text,
@@ -44,7 +43,6 @@ import { useTheme } from '@/hooks/use-theme';
 import { LANGUAGES, msg, useLanguage, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
 import { RedeemCode } from '@/components/redeem-code';
-import { inviteMessage } from '@/referral/links';
 import { useReferral } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 import {
@@ -1225,29 +1223,30 @@ function ProSection() {
   );
 }
 
-/** Settings → Invite friends: your code to share, and (for 30 days after install) a friend's code to enter. */
+/** Settings → Invite friends: send a single-use invite, and (for 30 days after install) a friend's code to enter. */
 function InviteSection() {
   const theme = useTheme();
   const t = useT();
-  const { code, redeemedCode, friendsJoined, counting } = useReferral();
+  const { loaded, invitesSent, redeemedCode, redeemStatus, friendsJoined, counting, shareInvite, sharing } =
+    useReferral();
+  const canShare = loaded && !sharing;
   return (
     <>
       <ThemedText type="smallBold">{t('Invite friends')}</ThemedText>
       <ThemedView type="backgroundElement" style={styles.card}>
         <View style={styles.rowBetween}>
           <View style={styles.flex}>
+            <ThemedText type="small">{t('Invites sent: {{count}}', { count: invitesSent })}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              {t('Your code')}
-            </ThemedText>
-            <ThemedText type="subtitle" selectable style={styles.code}>
-              {code ?? '…'}
+              {t('Every invite has its own code, for one friend.')}
             </ThemedText>
           </View>
           <Pressable
             accessibilityRole="button"
-            disabled={!code}
-            onPress={() => Share.share({ message: inviteMessage() }).catch(() => {})}
-            style={[styles.smallButton, { backgroundColor: theme.accent }]}>
+            accessibilityState={{ disabled: !canShare }}
+            disabled={!canShare}
+            onPress={() => shareInvite().catch(() => {})}
+            style={[styles.smallButton, { backgroundColor: theme.accent, opacity: canShare ? 1 : 0.5 }]}>
             <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
               {t('Share')}
             </ThemedText>
@@ -1263,7 +1262,11 @@ function InviteSection() {
         </ThemedText>
         {redeemedCode ? (
           <ThemedText type="small" themeColor="textSecondary">
-            {t('You joined with {{code}}: 10 extra free drives a month.', { code: redeemedCode })}
+            {redeemStatus === 'granted'
+              ? t('You joined with {{code}}: 10 extra free drives a month.', { code: redeemedCode })
+              : t('You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed.', {
+                  code: redeemedCode,
+                })}
           </ThemedText>
         ) : (
           <RedeemCode />
@@ -1279,7 +1282,6 @@ function InviteSection() {
 }
 
 const styles = StyleSheet.create({
-  code: { letterSpacing: 2 },
   vehicleRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three, borderRadius: 12, padding: Spacing.three },
   vehicleIcon: { fontSize: 24, lineHeight: 30 },
   vehicleMain: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: Spacing.three },

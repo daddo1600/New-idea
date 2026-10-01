@@ -873,15 +873,11 @@ const dictionary: Dictionary = {
   '{{hint}}. Swipe the button to the left, or double-tap.': '{{hint}}। बटन को बाईं ओर स्वाइप करें, या दो बार टैप करें।',
   "Invite friends": "दोस्तों को इनवाइट करें",
   "More free drives for every friend": "हर दोस्त पर और फ़्री ट्रिप",
-  "When a friend joins MileMint with your code, you both get 10 extra free automatic drives a month. For every friend, with no limit.": "आपके कोड से किसी दोस्त के MileMint से जुड़ने पर आप दोनों को हर महीने 10 और फ़्री ऑटोमैटिक ट्रिप मिलती हैं। हर दोस्त पर, बिना किसी सीमा के।",
-  "Your code": "आपका कोड",
-  "Share my code": "मेरा कोड शेयर करें",
   "Friends joined: {{count}} · +{{drives}} free drives a month": {
     "one": "जुड़े दोस्त: {{count}} · हर महीने +{{drives}} फ़्री ट्रिप",
     "other": "जुड़े दोस्त: {{count}} · हर महीने +{{drives}} फ़्री ट्रिप"
   },
   "Friends count once they’ve logged a few drives.": "दोस्त कुछ ट्रिप दर्ज होने के बाद गिने जाते हैं।",
-  "Your friends get their extra drives as soon as they enter your code. Yours are added when MileMint can count the friends who joined, coming in an update.": "आपका कोड डालते ही दोस्तों को ज़्यादा ट्रिप मिल जाती हैं। आपकी ट्रिप तब जुड़ेंगी जब MileMint जुड़े दोस्तों को गिन सकेगा, जो आने वाले किसी अपडेट में होगा।",
   "You have Pro, so your drives are already unlimited. Your friends still get their extra drives.": "आपके पास Pro है, इसलिए आपकी ट्रिप पहले से अनलिमिटेड हैं। आपके दोस्तों को फिर भी ज़्यादा ट्रिप मिलेंगी।",
   "Your free plan: {{count}} automatic drives a month.": {
     "one": "आपका फ़्री प्लान: हर महीने {{count}} ऑटोमैटिक ट्रिप।",
@@ -895,7 +891,6 @@ const dictionary: Dictionary = {
   "How it works": "यह कैसे काम करता है",
   "Share it · friends get +10 drives": "शेयर करें · दोस्तों को +10 ट्रिप",
   "That doesn’t look like a MileMint code. It’s 4 letters, a dash and 3 more, like TRVB-7K2.": "यह MileMint कोड नहीं लगता। इसमें 4 अक्षर, एक डैश और 3 और कैरेक्टर होते हैं, जैसे TRVB-7K2।",
-  "That’s your own code. Share it with friends instead.": "यह आपका अपना कोड है। इसे दोस्तों के साथ शेयर करें।",
   "A friend’s code has already been used on this iPhone.": "इस iPhone पर किसी दोस्त का कोड पहले ही इस्तेमाल हो चुका है।",
   "A friend’s code can only be entered in the first 30 days after installing MileMint.": "दोस्त का कोड MileMint इंस्टॉल करने के बाद पहले 30 दिनों में ही डाला जा सकता है।",
   "Code {{code}} added": "कोड {{code}} जुड़ गया",
@@ -904,7 +899,24 @@ const dictionary: Dictionary = {
   "Enter it for 10 extra free drives every month.": "इसे डालें और हर महीने 10 फ़्री ट्रिप ज़्यादा पाएँ।",
   "Friend’s code": "दोस्त का कोड",
   "Redeem": "रिडीम करें",
-  "Enter my code {{code}} when you set up MileMint for 10 extra free drives a month.": "MileMint सेट करते समय मेरा कोड {{code}} डालें और हर महीने 10 फ़्री ट्रिप ज़्यादा पाएँ।",
+  "Send a friend an invite. When they join MileMint with it, you both get 10 extra free automatic drives a month. For every friend, with no limit.": "किसी दोस्त को इनवाइट भेजें। जब वह इसके ज़रिए MileMint से जुड़ेगा, तो आप दोनों को हर महीने 10 और फ़्री ऑटोमैटिक ट्रिप मिलेंगी। हर दोस्त पर, बिना किसी सीमा के।",
+  "Send an invite": "इनवाइट भेजें",
+  "Every invite has its own code, for one friend.": "हर इनवाइट का अपना कोड होता है, एक दोस्त के लिए।",
+  "Invites sent: {{count}}": {
+    "one": "भेजे गए इनवाइट: {{count}}",
+    "other": "भेजे गए इनवाइट: {{count}}",
+  },
+  "Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you.": "इनवाइट iCloud से कन्फ़र्म होते हैं, जो आने वाले किसी अपडेट में आएगा। उससे पहले जुड़ने वाले दोस्तों को इसके चालू होते ही ज़्यादा ट्रिप मिलेंगी, और आपको भी।",
+  "You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed.": "आपने {{code}} डाला है। इनवाइट कन्फ़र्म होते ही आपकी 10 ज़्यादा ट्रिप मिल जाएँगी।",
+  "Code {{code}} saved": "कोड {{code}} सेव हो गया",
+  "Your 10 extra drives are on their way once the invite is confirmed.": "इनवाइट कन्फ़र्म होते ही आपकी 10 ज़्यादा ट्रिप मिल जाएँगी।",
+  "Your invite code is {{code}}. Enter it when you set up MileMint for 10 extra free drives a month.": "आपका इनवाइट कोड {{code}} है। MileMint सेट करते समय इसे डालें और हर महीने 10 फ़्री ट्रिप ज़्यादा पाएँ।",
+  "We couldn’t find that invite. Check the code with your friend.": "यह इनवाइट नहीं मिला। अपने दोस्त से कोड दोबारा जाँच लें।",
+  "That invite has already been used. Ask your friend to send you a new one.": "यह इनवाइट पहले ही इस्तेमाल हो चुका है। अपने दोस्त से नया इनवाइट भेजने को कहें।",
+  "That’s one of your own invites. Send it to a friend instead.": "यह आपका अपना इनवाइट है। इसे किसी दोस्त को भेजें।",
+  "This Apple Account has already joined with a friend’s invite.": "यह Apple खाता पहले ही किसी दोस्त के इनवाइट से जुड़ चुका है।",
+  "🎉 Your friend’s invite is confirmed": "🎉 आपके दोस्त का इनवाइट कन्फ़र्म हो गया",
+  "Your friend’s invite couldn’t be used": "आपके दोस्त का इनवाइट इस्तेमाल नहीं हो सका",
 };
 
 export default dictionary;

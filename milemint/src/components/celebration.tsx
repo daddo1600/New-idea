@@ -1,6 +1,6 @@
 import * as Haptics from 'expo-haptics';
 import { useEffect, useMemo } from 'react';
-import { Modal, Platform, Pressable, Share, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { Modal, Platform, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -15,6 +15,7 @@ import { BrandGradient } from '@/components/brand-gradient';
 import { LeafMark } from '@/components/leaf-mark';
 import { Spacing } from '@/constants/theme';
 import { useT } from '@/i18n/i18n';
+import { useReferral } from '@/referral/referral';
 
 const CONFETTI_COLORS = ['#FACC15', '#4ADE80', '#FFFFFF', '#BBF7D0', '#F59E0B'];
 const PIECES = 36;
@@ -63,11 +64,12 @@ function Piece({ index, width, height }: { index: number; width: number; height:
 
 /**
  * A pat on the back: confetti in the brand colours, a gold badge and a warm
- * line, for a milestone reached. Share sends a ready-made brag message with
- * the user's referral code, so a friend who joins earns them both 10 drives a month.
+ * line, for a milestone reached. Share sends a ready-made brag message with a
+ * new single-use invite code, so a friend who joins earns them both 10 drives a month.
  */
 export function Celebration({ content, onClose }: { content: CelebrationContent | null; onClose: () => void }) {
   const t = useT();
+  const { shareInvite, sharing } = useReferral();
   const reduceMotion = useReducedMotion();
   const { width, height } = useWindowDimensions();
   const pop = useSharedValue(0);
@@ -102,11 +104,13 @@ export function Celebration({ content, onClose }: { content: CelebrationContent 
           <Text style={styles.message}>{content.message}</Text>
           <Pressable
             accessibilityRole="button"
-            onPress={() => Share.share({ message: content.share }).catch(() => {})}
-            style={styles.share}>
+            accessibilityState={{ disabled: sharing }}
+            disabled={sharing}
+            onPress={() => shareInvite(content.share).catch(() => {})}
+            style={[styles.share, sharing && styles.dim]}>
             <Text style={styles.shareText}>{t('Share it · friends get +10 drives')}</Text>
           </Pressable>
-          {/* The share carries the user's referral code (src/referral/links.ts). */}
+          {/* The share carries a new single-use invite code (src/referral/invites.ts). */}
           <Text style={styles.reward}>{t('You both get +10 free drives a month when a friend joins.')}</Text>
           <Pressable accessibilityRole="button" hitSlop={8} onPress={onClose}>
             <Text style={styles.close}>{t('Keep going')}</Text>
@@ -159,6 +163,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.two + 2,
   },
   shareText: { color: '#064E3B', fontSize: 16, fontWeight: '800', textAlign: 'center' },
+  dim: { opacity: 0.6 },
   reward: { color: '#D1FAE5', fontSize: 13, lineHeight: 18, textAlign: 'center' },
   close: { color: '#D1FAE5', fontSize: 15, marginTop: Spacing.two },
 });

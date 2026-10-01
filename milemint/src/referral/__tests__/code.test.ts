@@ -14,7 +14,7 @@ import {
 const bytes = (n: number) => new Uint8Array(randomBytes(n));
 const NOW = new Date('2026-10-01T12:00:00Z');
 const daysAgo = (days: number) => new Date(NOW.getTime() - days * 24 * 60 * 60 * 1000).toISOString();
-const fresh = { myCode: 'TRVB-7K2', redeemedCode: null, installedAt: daysAgo(1) };
+const fresh = { myInvites: ['TRVB-7K2', 'HJKM-PQR'], redeemedCode: null, installedAt: daysAgo(1) };
 
 describe('generateReferralCode', () => {
   it('makes short, readable codes like TRVB-7K2', () => {
@@ -67,8 +67,9 @@ describe('redeeming', () => {
     expect(checkRedeem('HELLO', fresh, NOW)).toEqual({ ok: false, problem: 'format' });
   });
 
-  it('rejects your own code', () => {
+  it('rejects any of your own invites', () => {
     expect(checkRedeem('trvb7k2', fresh, NOW)).toEqual({ ok: false, problem: 'own' });
+    expect(checkRedeem('HJKM PQR', fresh, NOW)).toEqual({ ok: false, problem: 'own' });
   });
 
   it('allows one redemption per install', () => {

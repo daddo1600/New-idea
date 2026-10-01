@@ -873,14 +873,10 @@ const dictionary: Dictionary = {
   '{{hint}}. Swipe the button to the left, or double-tap.': '{{hint}}。向左滑动按钮，或连按两下。',
   "Invite friends": "邀请朋友",
   "More free drives for every friend": "每邀请一位朋友，多得免费行程",
-  "When a friend joins MileMint with your code, you both get 10 extra free automatic drives a month. For every friend, with no limit.": "朋友用你的邀请码加入 MileMint 后，你们俩每月都能多得 10 次免费自动记录的行程。每位朋友都算，没有上限。",
-  "Your code": "你的邀请码",
-  "Share my code": "分享我的邀请码",
   "Friends joined: {{count}} · +{{drives}} free drives a month": {
     "other": "已加入的朋友：{{count}} 位 · 每月 +{{drives}} 次免费行程"
   },
   "Friends count once they’ve logged a few drives.": "朋友记录几次行程后才会计入。",
-  "Your friends get their extra drives as soon as they enter your code. Yours are added when MileMint can count the friends who joined, coming in an update.": "朋友输入你的邀请码后，马上就能获得额外行程。你的奖励会在 MileMint 能统计已加入的朋友后发放，这项功能将在后续更新中推出。",
   "You have Pro, so your drives are already unlimited. Your friends still get their extra drives.": "你已开通 Pro，行程本来就不限次数。你的朋友仍然可以获得额外行程。",
   "Your free plan: {{count}} automatic drives a month.": {
     "other": "你的免费版：每月可自动记录 {{count}} 次行程。"
@@ -893,7 +889,6 @@ const dictionary: Dictionary = {
   "How it works": "了解规则",
   "Share it · friends get +10 drives": "分享 · 朋友多得 10 次行程",
   "That doesn’t look like a MileMint code. It’s 4 letters, a dash and 3 more, like TRVB-7K2.": "这看起来不像 MileMint 邀请码。邀请码由 4 个字母、一个短横线和另外 3 个字符组成，例如 TRVB-7K2。",
-  "That’s your own code. Share it with friends instead.": "这是你自己的邀请码，分享给朋友吧。",
   "A friend’s code has already been used on this iPhone.": "这台 iPhone 已经使用过朋友的邀请码。",
   "A friend’s code can only be entered in the first 30 days after installing MileMint.": "朋友的邀请码只能在安装 MileMint 后的 30 天内输入。",
   "Code {{code}} added": "已添加邀请码 {{code}}",
@@ -902,7 +897,23 @@ const dictionary: Dictionary = {
   "Enter it for 10 extra free drives every month.": "输入邀请码，每月多得 10 次免费行程。",
   "Friend’s code": "朋友的邀请码",
   "Redeem": "兑换",
-  "Enter my code {{code}} when you set up MileMint for 10 extra free drives a month.": "设置 MileMint 时输入我的邀请码 {{code}}，每月可多得 10 次免费行程。",
+  "Send a friend an invite. When they join MileMint with it, you both get 10 extra free automatic drives a month. For every friend, with no limit.": "给朋友发一份邀请。朋友用它加入 MileMint 后，你们俩每月都能多得 10 次免费自动记录的行程。每位朋友都算，没有上限。",
+  "Send an invite": "发送邀请",
+  "Every invite has its own code, for one friend.": "每份邀请都有专属邀请码，仅限一位朋友使用。",
+  "Invites sent: {{count}}": {
+    "other": "已发送邀请：{{count}} 份",
+  },
+  "Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you.": "邀请需通过 iCloud 确认，这项功能将在后续更新中推出。在此之前加入的朋友，会在功能开启后获得额外行程，你也一样。",
+  "You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed.": "你已输入 {{code}}。邀请确认后，你的 10 次额外行程就会到账。",
+  "Code {{code}} saved": "已保存邀请码 {{code}}",
+  "Your 10 extra drives are on their way once the invite is confirmed.": "邀请确认后，你的 10 次额外行程就会到账。",
+  "Your invite code is {{code}}. Enter it when you set up MileMint for 10 extra free drives a month.": "你的邀请码是 {{code}}。设置 MileMint 时输入它，每月可多得 10 次免费行程。",
+  "We couldn’t find that invite. Check the code with your friend.": "找不到这个邀请。请和朋友核对一下邀请码。",
+  "That invite has already been used. Ask your friend to send you a new one.": "这个邀请已经被使用过了。请朋友再发一份新的给你。",
+  "That’s one of your own invites. Send it to a friend instead.": "这是你自己发出的邀请，发给朋友吧。",
+  "This Apple Account has already joined with a friend’s invite.": "此 Apple 账户已经通过朋友的邀请加入过了。",
+  "🎉 Your friend’s invite is confirmed": "🎉 朋友的邀请已确认",
+  "Your friend’s invite couldn’t be used": "无法使用朋友的邀请",
 };
 
 export default dictionary;

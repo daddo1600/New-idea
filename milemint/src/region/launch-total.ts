@@ -5,8 +5,9 @@ import { Platform } from 'react-native';
 import { loadSettings } from '@/db/settings-repo';
 import { listTrips } from '@/db/trips-repo';
 import { marApplies, marForYear } from '@/domain/mar';
-import { lockedTripIds, monthlyAllowance } from '@/domain/plan';
+import { lockedTripIds } from '@/domain/plan';
 import { currentTaxYear, REGIONS, summarizeTaxYear } from '@/domain/regions';
+import { referralAllowance } from '@/referral/invites';
 
 import { rememberTotal } from './remembered-region';
 
@@ -24,7 +25,7 @@ export async function refreshLaunchTotal(db: SQLiteDatabase): Promise<void> {
   const region = REGIONS[settings.region];
   const isPro = Platform.OS !== 'web' && (await SecureStore.getItemAsync(PRO_CACHE_KEY).catch(() => null)) === '1';
   const trips = await listTrips(db);
-  const allowance = monthlyAllowance({ redeemed: settings.redeemedCode !== null, friendsJoined: settings.friendsJoined });
+  const allowance = referralAllowance(settings);
   const locked = lockedTripIds(trips, isPro, allowance);
   const visible = trips.filter((trip) => !locked.has(trip.id));
   const year = currentTaxYear(region);

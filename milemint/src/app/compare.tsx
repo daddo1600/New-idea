@@ -5,7 +5,6 @@ import {
   Platform,
   Pressable,
   ScrollView,
-  Share,
   StyleSheet,
   Text,
   TextInput,
@@ -27,8 +26,7 @@ import type { Trip } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
-import { withInvite } from '@/referral/links';
-import { useAllowance } from '@/referral/referral';
+import { useReferral } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 
 type T = ReturnType<typeof useT>;
@@ -93,7 +91,7 @@ export default function CompareScreen() {
   const [counted, setCounted] = useState('');
 
   const { isPro } = usePro();
-  const allowance = useAllowance();
+  const { allowance, shareInvite } = useReferral();
   useEffect(() => {
     // Locked drives (past the free plan's allowance) stay out of the figures, as everywhere else.
     listTrips(db).then((all) => {
@@ -118,17 +116,16 @@ export default function CompareScreen() {
       ? t('{{distance}} miles', { distance: number(n), count: Math.round(n) })
       : t('{{distance}} km', { distance: number(n), count: Math.round(n) });
 
+  // With a new single-use invite code, like every share.
   const share = () => {
-    Share.share({
-      message: withInvite(
-        shareMessage(t, period, miles, {
-          counted: number(result.counted),
-          logged: number(result.logged),
-          extra: number(result.extra),
-          amount: formatMoney(result.extraValue, region),
-        }),
-      ),
-    }).catch(() => {});
+    shareInvite(
+      shareMessage(t, period, miles, {
+        counted: number(result.counted),
+        logged: number(result.logged),
+        extra: number(result.extra),
+        amount: formatMoney(result.extraValue, region),
+      }),
+    ).catch(() => {});
   };
 
   return (

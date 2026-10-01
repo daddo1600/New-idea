@@ -178,3 +178,27 @@ Each line was translated, back-translated cold, then checked for culture and len
 | Invite friends | ਦੋਸਤਾਂ ਨੂੰ ਸੱਦੋ | Same verb as the old “ਕਿਸੇ ਦੋਸਤ ਨੂੰ ਸੱਦੋ”. |
 | Redeem | ਰਿਡੀਮ ਕਰੋ | Loanword, as in payment apps. |
 | Share it · friends get +10 drives | ਸਾਂਝਾ ਕਰੋ · ਦੋਸਤਾਂ ਨੂੰ +10 ਟ੍ਰਿਪ | Short; fits the pill. |
+
+## Round 5: single-use invites
+
+Referrals now use single-use invites: every share makes a new code that works for one friend, and a friend’s code stays **pending** (no bonus yet) until iCloud confirms it. 15 new lines (the Invite friends screen and Settings, the pending and confirmed states of the friend’s-code box, the reasons a code is turned down, the share message) and 6 removed (Your code, Share my code, the old hero line, the old “friends get their drives at once” note, the old own-code message and the old share line). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: nothing implies one permanent personal code, and nothing promises drives before the invite is confirmed. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Send a friend an invite. When they join MileMint with it, you both get 10 extra free automatic drives a month. For every friend, with no limit. | ਕਿਸੇ ਦੋਸਤ ਨੂੰ ਸੱਦਾ ਭੇਜੋ। ਜਦੋਂ ਉਹ ਇਸ ਰਾਹੀਂ MileMint ’ਤੇ ਆਵੇਗਾ, ਤਾਂ ਤੁਹਾਨੂੰ ਦੋਵਾਂ ਨੂੰ ਹਰ ਮਹੀਨੇ 10 ਵਾਧੂ ਮੁਫ਼ਤ ਆਟੋਮੈਟਿਕ ਟ੍ਰਿਪ ਮਿਲਣਗੇ। ਹਰ ਦੋਸਤ ਲਈ, ਬਿਨਾਂ ਕਿਸੇ ਹੱਦ ਦੇ। | “Send an invitation to a friend. When they come to MileMint through it, you both will get 10 extra free automatic trips every month. For every friend, without any limit.” *ਸੱਦਾ* as in “ਦੋਸਤਾਂ ਨੂੰ ਸੱਦੋ”. |
+| Send an invite | ਸੱਦਾ ਭੇਜੋ | “Send invitation” Button, short. |
+| Every invite has its own code, for one friend. | ਹਰ ਸੱਦੇ ਦਾ ਆਪਣਾ ਕੋਡ ਹੁੰਦਾ ਹੈ, ਇੱਕ ਦੋਸਤ ਲਈ। | “Every invitation has its own code, for one friend.” |
+| Invites sent: {{count}} | ਭੇਜੇ ਸੱਦੇ: {{count}} | “Invitations sent: {{count}}” Counter label. |
+| Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you. | ਸੱਦੇ iCloud ਰਾਹੀਂ ਪੱਕੇ ਹੁੰਦੇ ਹਨ, ਜੋ ਆਉਣ ਵਾਲੇ ਕਿਸੇ ਅੱਪਡੇਟ ਵਿੱਚ ਆਵੇਗਾ। ਉਸ ਤੋਂ ਪਹਿਲਾਂ ਜੁੜਨ ਵਾਲੇ ਦੋਸਤਾਂ ਨੂੰ ਇਸ ਦੇ ਚਾਲੂ ਹੁੰਦੇ ਹੀ ਵਾਧੂ ਟ੍ਰਿਪ ਮਿਲਣਗੇ, ਅਤੇ ਤੁਹਾਨੂੰ ਵੀ। | “Invitations are confirmed through iCloud, which will come in some upcoming update. Friends who join before that will get extra trips as soon as it’s on, and you too.” *ਪੱਕੇ* (made firm/confirmed) is the everyday word. |
+| You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed. | ਤੁਸੀਂ {{code}} ਭਰਿਆ ਹੈ। ਸੱਦਾ ਪੱਕਾ ਹੁੰਦੇ ਹੀ ਤੁਹਾਡੇ 10 ਵਾਧੂ ਟ੍ਰਿਪ ਮਿਲ ਜਾਣਗੇ। | “You have entered {{code}}. As soon as the invitation is confirmed you will get your 10 extra trips.” |
+| Code {{code}} saved | ਕੋਡ {{code}} ਸੇਵ ਹੋ ਗਿਆ | “Code {{code}} saved” Mirrors “ਕੋਡ {{code}} ਜੁੜ ਗਿਆ”. |
+| Your 10 extra drives are on their way once the invite is confirmed. | ਸੱਦਾ ਪੱਕਾ ਹੁੰਦੇ ਹੀ ਤੁਹਾਡੇ 10 ਵਾਧੂ ਟ੍ਰਿਪ ਮਿਲ ਜਾਣਗੇ। | “As soon as the invitation is confirmed you will get your 10 extra trips.” |
+| Your invite code is {{code}}. Enter it when you set up MileMint for 10 extra free drives a month. | ਤੁਹਾਡਾ ਸੱਦਾ ਕੋਡ {{code}} ਹੈ। MileMint ਸੈੱਟ ਕਰਦੇ ਸਮੇਂ ਇਸ ਨੂੰ ਭਰੋ ਅਤੇ ਹਰ ਮਹੀਨੇ 10 ਵਾਧੂ ਮੁਫ਼ਤ ਟ੍ਰਿਪ ਪਾਓ। | “Your invitation code is {{code}}. Enter it while setting up MileMint and get 10 extra free trips every month.” |
+| We couldn’t find that invite. Check the code with your friend. | ਇਹ ਸੱਦਾ ਨਹੀਂ ਮਿਲਿਆ। ਆਪਣੇ ਦੋਸਤ ਨਾਲ ਕੋਡ ਮਿਲਾ ਕੇ ਦੇਖੋ। | “This invitation wasn’t found. Match the code with your friend.” |
+| That invite has already been used. Ask your friend to send you a new one. | ਇਹ ਸੱਦਾ ਪਹਿਲਾਂ ਹੀ ਵਰਤਿਆ ਜਾ ਚੁੱਕਾ ਹੈ। ਆਪਣੇ ਦੋਸਤ ਨੂੰ ਨਵਾਂ ਸੱਦਾ ਭੇਜਣ ਲਈ ਕਹੋ। | “This invitation has already been used. Ask your friend to send a new invitation.” |
+| That’s one of your own invites. Send it to a friend instead. | ਇਹ ਤੁਹਾਡਾ ਆਪਣਾ ਸੱਦਾ ਹੈ। ਇਸ ਨੂੰ ਕਿਸੇ ਦੋਸਤ ਨੂੰ ਭੇਜੋ। | “This is your own invitation. Send it to a friend.” |
+| This Apple Account has already joined with a friend’s invite. | ਇਹ Apple ਖਾਤਾ ਪਹਿਲਾਂ ਹੀ ਕਿਸੇ ਦੋਸਤ ਦੇ ਸੱਦੇ ਨਾਲ ਜੁੜ ਚੁੱਕਾ ਹੈ। | “This Apple account has already joined with a friend’s invitation.” *Apple ਖਾਤਾ* as in existing lines. |
+| 🎉 Your friend’s invite is confirmed | 🎉 ਤੁਹਾਡੇ ਦੋਸਤ ਦਾ ਸੱਦਾ ਪੱਕਾ ਹੋ ਗਿਆ | “🎉 Your friend’s invitation is confirmed” |
+| Your friend’s invite couldn’t be used | ਤੁਹਾਡੇ ਦੋਸਤ ਦਾ ਸੱਦਾ ਵਰਤਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ | “Your friend’s invitation couldn’t be used” |
+
+**Sign-off:** approved, pending an on-device check of the new alert titles.

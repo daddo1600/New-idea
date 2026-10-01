@@ -130,3 +130,27 @@ Each line was translated, back-translated cold, then checked for culture and len
 | You joined with {{code}}: … | कोड {{code}} से जुड़ने का फ़ायदा: हर महीने 10 फ़्री ट्रिप ज़्यादा। | “आप जुड़े” is masculine; a noun phrase (“benefit of joining with code”) avoids it. |
 | Redeem | रिडीम करें | Loanword used by Indian payment apps for codes. |
 | Invite friends | दोस्तों को इनवाइट करें | Same verb as the old “दोस्त को इनवाइट करें”. 22 chars: fits the nav bar. |
+
+## Round 5: single-use invites
+
+Referrals now use single-use invites: every share makes a new code that works for one friend, and a friend’s code stays **pending** (no bonus yet) until iCloud confirms it. 15 new lines (the Invite friends screen and Settings, the pending and confirmed states of the friend’s-code box, the reasons a code is turned down, the share message) and 6 removed (Your code, Share my code, the old hero line, the old “friends get their drives at once” note, the old own-code message and the old share line). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: nothing implies one permanent personal code, and nothing promises drives before the invite is confirmed. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Send a friend an invite. When they join MileMint with it, you both get 10 extra free automatic drives a month. For every friend, with no limit. | किसी दोस्त को इनवाइट भेजें। जब वह इसके ज़रिए MileMint से जुड़ेगा, तो आप दोनों को हर महीने 10 और फ़्री ऑटोमैटिक ट्रिप मिलेंगी। हर दोस्त पर, बिना किसी सीमा के। | “Send an invite to a friend. When they join MileMint through it, you both will get 10 more free automatic trips every month. For every friend, without any limit.” *इनवाइट* as in “दोस्तों को इनवाइट करें”; first draft “उससे दोस्त के … जुड़ने पर” read awkwardly, rewritten as a when-clause. |
+| Send an invite | इनवाइट भेजें | “Send invite” Button, short. |
+| Every invite has its own code, for one friend. | हर इनवाइट का अपना कोड होता है, एक दोस्त के लिए। | “Every invite has its own code, for one friend.” |
+| Invites sent: {{count}} | भेजे गए इनवाइट: {{count}} | “Invites sent: {{count}}” Counter label. |
+| Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you. | इनवाइट iCloud से कन्फ़र्म होते हैं, जो आने वाले किसी अपडेट में आएगा। उससे पहले जुड़ने वाले दोस्तों को इसके चालू होते ही ज़्यादा ट्रिप मिलेंगी, और आपको भी। | “Invites are confirmed with iCloud, which will come in some upcoming update. Friends who join before that will get more trips as soon as it’s on, and you too.” No promise of drives today. |
+| You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed. | आपने {{code}} डाला है। इनवाइट कन्फ़र्म होते ही आपकी 10 ज़्यादा ट्रिप मिल जाएँगी। | “You have entered {{code}}. As soon as the invite is confirmed you will get your 10 extra trips.” |
+| Code {{code}} saved | कोड {{code}} सेव हो गया | “Code {{code}} saved” Mirrors “कोड {{code}} जुड़ गया”. |
+| Your 10 extra drives are on their way once the invite is confirmed. | इनवाइट कन्फ़र्म होते ही आपकी 10 ज़्यादा ट्रिप मिल जाएँगी। | “As soon as the invite is confirmed you will get your 10 extra trips.” |
+| Your invite code is {{code}}. Enter it when you set up MileMint for 10 extra free drives a month. | आपका इनवाइट कोड {{code}} है। MileMint सेट करते समय इसे डालें और हर महीने 10 फ़्री ट्रिप ज़्यादा पाएँ। | “Your invite code is {{code}}. Enter it while setting up MileMint and get 10 more free trips every month.” Matches the old share line’s wording. |
+| We couldn’t find that invite. Check the code with your friend. | यह इनवाइट नहीं मिला। अपने दोस्त से कोड दोबारा जाँच लें। | “This invite wasn’t found. Check the code again with your friend.” |
+| That invite has already been used. Ask your friend to send you a new one. | यह इनवाइट पहले ही इस्तेमाल हो चुका है। अपने दोस्त से नया इनवाइट भेजने को कहें। | “This invite has already been used. Ask your friend to send a new invite.” |
+| That’s one of your own invites. Send it to a friend instead. | यह आपका अपना इनवाइट है। इसे किसी दोस्त को भेजें। | “This is your own invite. Send it to a friend.” |
+| This Apple Account has already joined with a friend’s invite. | यह Apple खाता पहले ही किसी दोस्त के इनवाइट से जुड़ चुका है। | “This Apple account has already joined with a friend’s invite.” *Apple खाता* as in existing lines. |
+| 🎉 Your friend’s invite is confirmed | 🎉 आपके दोस्त का इनवाइट कन्फ़र्म हो गया | “🎉 Your friend’s invite is confirmed” *कन्फ़र्म*: everyday Hinglish, as users see it in other apps. |
+| Your friend’s invite couldn’t be used | आपके दोस्त का इनवाइट इस्तेमाल नहीं हो सका | “Your friend’s invite couldn’t be used” |
+
+**Sign-off:** approved, pending an on-device check of the new alert titles.

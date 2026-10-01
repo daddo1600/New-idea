@@ -116,3 +116,27 @@ Each line was translated, back-translated cold, then checked for culture and len
 | How it works | কীভাবে কাজ করে | Shortened from “এটি কীভাবে কাজ করে” for a link. |
 | Redeem | রিডিম করুন | Loanword used by bKash and app stores. |
 | Invite friends | বন্ধুদের আমন্ত্রণ জানান | Matches the old “বন্ধুকে আমন্ত্রণ জানান”. 1.6× but a nav title, where it fits. |
+
+## Round 5: single-use invites
+
+Referrals now use single-use invites: every share makes a new code that works for one friend, and a friend’s code stays **pending** (no bonus yet) until iCloud confirms it. 15 new lines (the Invite friends screen and Settings, the pending and confirmed states of the friend’s-code box, the reasons a code is turned down, the share message) and 6 removed (Your code, Share my code, the old hero line, the old “friends get their drives at once” note, the old own-code message and the old share line). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: nothing implies one permanent personal code, and nothing promises drives before the invite is confirmed. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Send a friend an invite. When they join MileMint with it, you both get 10 extra free automatic drives a month. For every friend, with no limit. | কোনো বন্ধুকে আমন্ত্রণ পাঠান। সেটি দিয়ে বন্ধু MileMint-এ যোগ দিলে আপনারা দুজনেই প্রতি মাসে 10টি করে বাড়তি ফ্রি অটোমেটিক ট্রিপ পাবেন। প্রতিটি বন্ধুর জন্য, কোনো সীমা ছাড়াই। | “Send an invitation to a friend. If the friend joins MileMint with it, you both will get 10 extra free automatic trips each every month. For every friend, without any limit.” *আমন্ত্রণ* as in “বন্ধুদের আমন্ত্রণ জানান”. |
+| Send an invite | আমন্ত্রণ পাঠান | “Send invitation” Button, short. |
+| Every invite has its own code, for one friend. | প্রতিটি আমন্ত্রণের নিজস্ব কোড থাকে, একজন বন্ধুর জন্য। | “Every invitation has its own code, for one friend.” |
+| Invites sent: {{count}} | পাঠানো আমন্ত্রণ: {{count}}টি | “Invitations sent: {{count}}” *টি* classifier after the number, as in other counts. |
+| Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you. | আমন্ত্রণগুলো iCloud-এর মাধ্যমে নিশ্চিত হয়, যা আসবে পরের কোনো আপডেটে। তার আগে যোগ দেওয়া বন্ধুরা এটি চালু হলেই বাড়তি ট্রিপ পাবেন, আপনিও পাবেন। | “Invitations are confirmed through iCloud, which will come in some next update. Friends who join before that will get extra trips as soon as it’s on, you will too.” No promise of drives today. |
+| You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed. | আপনি {{code}} দিয়েছেন। আমন্ত্রণ নিশ্চিত হলেই আপনার 10টি বাড়তি ট্রিপ চলে আসবে। | “You have entered {{code}}. As soon as the invitation is confirmed your 10 extra trips will arrive.” |
+| Code {{code}} saved | কোড {{code}} সেভ হয়েছে | “Code {{code}} saved” Mirrors “কোড {{code}} যোগ হয়েছে”. |
+| Your 10 extra drives are on their way once the invite is confirmed. | আমন্ত্রণ নিশ্চিত হলেই আপনার 10টি বাড়তি ট্রিপ চলে আসবে। | “As soon as the invitation is confirmed your 10 extra trips will arrive.” |
+| Your invite code is {{code}}. Enter it when you set up MileMint for 10 extra free drives a month. | আপনার আমন্ত্রণ কোড {{code}}। MileMint সেট আপ করার সময় এটি দিন, প্রতি মাসে 10টি বাড়তি ফ্রি ট্রিপ পাবেন। | “Your invitation code is {{code}}. Enter it while setting up MileMint, you will get 10 extra free trips every month.” |
+| We couldn’t find that invite. Check the code with your friend. | এই আমন্ত্রণটি খুঁজে পাওয়া যায়নি। বন্ধুর সাথে কোডটি মিলিয়ে দেখুন। | “This invitation couldn’t be found. Check the code with your friend.” |
+| That invite has already been used. Ask your friend to send you a new one. | এই আমন্ত্রণটি আগেই ব্যবহার করা হয়েছে। বন্ধুকে নতুন একটি পাঠাতে বলুন। | “This invitation has already been used. Ask your friend to send a new one.” |
+| That’s one of your own invites. Send it to a friend instead. | এটি আপনার নিজের আমন্ত্রণ। বরং কোনো বন্ধুকে পাঠান। | “This is your own invitation. Send it to a friend instead.” |
+| This Apple Account has already joined with a friend’s invite. | এই Apple অ্যাকাউন্ট আগেই একজন বন্ধুর আমন্ত্রণে যোগ দিয়েছে। | “This Apple account has already joined with a friend’s invitation.” *Apple অ্যাকাউন্ট* as in existing lines. |
+| 🎉 Your friend’s invite is confirmed | 🎉 আপনার বন্ধুর আমন্ত্রণ নিশ্চিত হয়েছে | “🎉 Your friend’s invitation is confirmed” |
+| Your friend’s invite couldn’t be used | আপনার বন্ধুর আমন্ত্রণটি ব্যবহার করা যায়নি | “Your friend’s invitation couldn’t be used” |
+
+**Sign-off:** approved, pending an on-device check of the new alert titles.
