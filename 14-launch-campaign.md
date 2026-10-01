@@ -4,6 +4,18 @@
 
 This builds on [`12-launch-plan.md`](12-launch-plan.md) (who to reach and when) and [`11-growth-ideas.md`](11-growth-ideas.md) (referral and perks). This doc is the **campaign**: the message, the share loop built into the app, the offer and the calendar to go from zero to thousands of users by the 31 January Self Assessment deadline.
 
+> ### ⭐ Must do at App Store launch: "Uber only sees Uber"
+>
+> **The lead message for every gig-worker channel** (couriers, multi-app drivers, US gig drivers):
+>
+> **"Uber only sees Uber."** Someone running Uber Eats, Deliveroo and Amazon Flex has three partial mileage records and no total. Miles driven with no app on, between apps, and home at the end of a shift may not be in any of them, and those miles are often claimable (depending on the country's rules). MileMint logs every mile, whichever app you're on.
+>
+> - **Lines to use:** "Uber only sees Uber. MileMint sees every mile." · "Three apps, three half-records. One total." · "Keep using your apps. See what they aren't counting."
+> - **The proof is the missed-miles check.** Every post, video and QR card ends with it: "Enter the miles your apps show. After a week, see what they missed." Its share card is the main creative.
+> - **Use real numbers only.** The panel's favourite quote ("Uber said 9 thousand miles, the app found almost 14 thousand") came from a *simulated* persona ([`15-persona-panel.md`](15-persona-panel.md)), so it must never appear in marketing as a real user's words. Before launch, collect real before-and-after figures from TestFlight couriers, with their permission, and use those.
+> - **Stay honest:** say "may not be counted" and "often claimable", never "Uber gets it wrong" or a promised refund. Name the delivery apps in text only, with no logos and no implied partnership.
+> - **Where:** App Store subtitle/promo text and the courier screenshot, the one-page site's courier section, courier WhatsApp and Facebook groups, QR cards at pickup spots, TikTok "day in the life" videos, and the ambassador kit ([`13-courier-week-1.md`](13-courier-week-1.md)).
+
 ---
 
 ## 1. The engine: growth built into the app
@@ -69,7 +81,7 @@ Scarcity and belonging, at no cost.
 
 | Audience | Hook | Where |
 |---|---|---|
-| **Couriers** (Uber Eats, Deliveroo, Just Eat, Amazon Flex, Evri, DPD) | "Your app only counts miles with food on board. The drive to the pickup is yours to claim too." The **missed miles** screen is the proof | Zone and depot WhatsApp groups, courier Facebook groups, TikTok, the restaurant pickup queue ([`13-courier-week-1.md`](13-courier-week-1.md)) |
+| **Couriers and multi-app drivers** (Uber Eats, Deliveroo, Just Eat, Amazon Flex, Evri, DPD) | **Lead: "Uber only sees Uber. MileMint sees every mile."** (see the must-do above). Backup: "Your app only counts miles with an order on. The drive to the pickup is yours to claim too." The **missed miles** screen is the proof | Zone and depot WhatsApp groups, courier Facebook groups, TikTok, the restaurant pickup queue ([`13-courier-week-1.md`](13-courier-week-1.md)) |
 | **Tradespeople** (sparkies, plumbers, builders, cleaners, carers) | "55p a mile. A plumber doing 12,000 business miles can claim over £5,000. Are you logging yours?" | Trade counters, trades Facebook groups, local groups, accountants |
 | **Employees who use their own car** (sales reps, nurses, estate agents) | "Your employer owes you for every mile. Stop guessing on the expense form." | LinkedIn, workplace WhatsApp groups, later Teams |
 | **Accountants and bookkeepers** | "Clients turn up in January with no mileage log. Send them this." | Direct approach, free Pro for the accountant plus a client code |
@@ -128,6 +140,7 @@ Always say **"estimated"** and **"based on HMRC rates"**; never promise a tax sa
 
 ## 8. To do next (in order)
 
+0. **Must do at launch:** lead every gig-worker channel with "Uber only sees Uber" (see the box at the top), using real TestFlight couriers' missed-miles numbers, collected with permission.
 1. Submit 1.0 for App Store review (needs a contact phone number in App Store Connect).
 2. On approval: create the "1 month Pro free" offer code and set `FRIEND_OFFER_CODE` in `milemint/src/referral/links.ts`.
 3. One-page site with the Founding 1,000 counter.

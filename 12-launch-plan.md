@@ -51,7 +51,7 @@
 - **UK two wheels:** motorbikes and scooters 24p a mile, bicycles 20p.
 - **No:** drivers in Amazon-branded vans employed by Amazon's delivery partners, because the firm covers the van's costs.
 
-**The hook:** the delivery apps only count miles while you're carrying an order. Driving to the restaurant, between orders and home are business miles too, and MileMint logs them all. For example, 25,000 business miles a year ≈ **£9,250** at 55p and 25p (always "estimated").
+**The hook (must do at launch): "Uber only sees Uber."** Multi-app drivers have a partial record in each app and no total, and miles with no app on or driving home may be in none of them. See the must-do box in [`14-launch-campaign.md`](14-launch-campaign.md). Also: the delivery apps only count miles while you're carrying an order. Driving to the restaurant, between orders and home are business miles too, and MileMint logs them all. For example, 25,000 business miles a year ≈ **£9,250** at 55p and 25p (always "estimated").
 
 **Where and how:**
 1. **Where they wait:** QR cards at pickup hotspots (fast-food car parks, food courts), Amazon Flex stations, Evri and DPD depots. "Waiting for an order? See what your miles are worth."
