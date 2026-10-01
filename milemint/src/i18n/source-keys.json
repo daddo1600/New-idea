@@ -773,6 +773,78 @@
     ]
   },
   {
+    "key": "Back up now",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Backed up {{count}} days ago",
+    "files": [
+      "backup/copy.ts"
+    ]
+  },
+  {
+    "key": "Backed up {{count}} hours ago",
+    "files": [
+      "backup/copy.ts"
+    ]
+  },
+  {
+    "key": "Backed up {{count}} minutes ago",
+    "files": [
+      "backup/copy.ts"
+    ]
+  },
+  {
+    "key": "Backed up just now",
+    "files": [
+      "backup/copy.ts"
+    ]
+  },
+  {
+    "key": "Backed up to iCloud.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Backing up…",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Backs up by itself when something changes, at most once a day, and keeps the last four backups.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Backup",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Backup from {{date}}",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Backup from {{date}} with {{count}} trips",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Backups to iCloud work in the iPhone app.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "Bank or post office",
     "files": [
       "components/purpose-picker.tsx"
@@ -949,6 +1021,12 @@
     ]
   },
   {
+    "key": "Checking iCloud…",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "Choose “Always”",
     "files": [
       "components/always-guide.tsx"
@@ -1066,6 +1144,12 @@
     ]
   },
   {
+    "key": "Couldn’t back up. Check your connection and try again.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "Couldn’t create the file. Please try again.",
     "files": [
       "app/report.tsx"
@@ -1087,6 +1171,18 @@
     "key": "Couldn’t reach the App Store. Check your connection and try again.",
     "files": [
       "purchases/pro.tsx"
+    ]
+  },
+  {
+    "key": "Couldn’t reach your iCloud backups. Check your connection and try again.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Couldn’t restore. Nothing on this iPhone was changed.",
+    "files": [
+      "app/settings.tsx"
     ]
   },
   {
@@ -1337,6 +1433,12 @@
     "key": "Encrypted on your iPhone, no ads",
     "files": [
       "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Encrypted with a key only your iCloud Keychain holds. MileMint never sees your trips.",
+    "files": [
+      "app/settings.tsx"
     ]
   },
   {
@@ -1785,6 +1887,30 @@
     "key": "I’ve found {{amount}} in business mileage with MileMint 🚗💸 Every mile counted, automatically.",
     "files": [
       "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "iCloud backup",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "iCloud is off for MileMint. Sign in to iCloud and turn on iCloud Drive in iPhone Settings to back up your trips.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "iCloud isn’t available. Sign in to iCloud and turn on iCloud Drive in iPhone Settings.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "iCloud Keychain isn’t available, so the backup key is kept on this iPhone only. These backups can’t be restored on a new iPhone.",
+    "files": [
+      "app/settings.tsx"
     ]
   },
   {
@@ -2412,6 +2538,12 @@
     ]
   },
   {
+    "key": "Not backed up yet.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "Not included",
     "files": [
       "app/pro.tsx"
@@ -2442,6 +2574,12 @@
     "files": [
       "app/add-trip.tsx",
       "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Nothing to back up yet. Your trips are backed up once you have some.",
+    "files": [
+      "app/settings.tsx"
     ]
   },
   {
@@ -2751,6 +2889,12 @@
     ]
   },
   {
+    "key": "Replace what’s on this iPhone?",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "Reports",
     "files": [
       "app/_layout.tsx"
@@ -2769,10 +2913,53 @@
     ]
   },
   {
+    "key": "Restore",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Restore from iCloud backup",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Restore my trips",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Restore purchases",
     "files": [
       "app/pro.tsx",
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Restore the backup from {{date}} with {{count}} trips. The trips, places, vehicles and settings on this iPhone are replaced by the ones in the backup.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Restore your trips from iCloud",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Restored {{count}} trips from iCloud.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Restoring…",
+    "files": [
+      "app/settings.tsx",
+      "app/welcome.tsx"
     ]
   },
   {
@@ -3136,6 +3323,12 @@
     ]
   },
   {
+    "key": "Start fresh instead",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Start is a saved place.",
     "files": [
       "app/trip/[id].tsx"
@@ -3401,6 +3594,12 @@
     ]
   },
   {
+    "key": "The backup hasn’t downloaded from iCloud yet. Check your connection and try again.",
+    "files": [
+      "backup/copy.ts"
+    ]
+  },
+  {
     "key": "The CRA per-km rate is for cars. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.",
     "files": [
       "domain/regions.ts"
@@ -3437,6 +3636,12 @@
     ]
   },
   {
+    "key": "There’s no backup in iCloud yet.",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "They’d like to be sorted before Monday. It takes a minute.",
     "files": [
       "domain/reminders.ts"
@@ -3447,6 +3652,24 @@
     "files": [
       "app/pro.tsx",
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "This backup couldn’t be read. It may be damaged.",
+    "files": [
+      "backup/copy.ts"
+    ]
+  },
+  {
+    "key": "This backup is locked with a key from your iCloud Keychain that hasn’t reached this iPhone yet. Check that iCloud Keychain is on (iPhone Settings → your name → iCloud), wait a minute, then try again.",
+    "files": [
+      "backup/copy.ts"
+    ]
+  },
+  {
+    "key": "This backup was made by a newer version of MileMint. Update the app, then try again.",
+    "files": [
+      "backup/copy.ts"
     ]
   },
   {
@@ -4059,6 +4282,12 @@
     "key": "Your own purpose",
     "files": [
       "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Your trips are back, with your places, vehicles and settings.",
+    "files": [
+      "app/welcome.tsx"
     ]
   },
   {

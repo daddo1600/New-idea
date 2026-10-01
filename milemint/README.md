@@ -26,6 +26,7 @@ npx expo start      # press w for the web preview (also generates route types)
 | `src/tracking/` | Background tracking: geofence while parked, GPS while driving, trips saved with route and place names |
 | `src/db/` | Encrypted SQLite (SQLCipher, key in Keychain), migrations, trip repository with an append-only edit history for audits |
 | `src/app/` | Screens (Expo Router): home with deductions counter and trip list, add-trip modal |
+| `src/backup/`, `modules/icloud-backup/` | Automatic end-to-end encrypted backup to the user's own iCloud (key in iCloud Keychain), and restore on a new phone. Setup notes for the iCloud container are in `modules/icloud-backup/README.md` |
 
 ## Status
 
@@ -38,6 +39,7 @@ npx expo start      # press w for the web preview (also generates route types)
 - Deductions counter
 - Split IRS rates
 - Encrypted storage with edit history
+- Encrypted iCloud backup and restore, no account (needs the iCloud container set up once, see `modules/icloud-backup/README.md`)
 - Manual "add missed trip" fallback
 
 **Next:**

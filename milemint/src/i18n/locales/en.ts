@@ -54,6 +54,32 @@ const en: Dictionary = {
     one: '{{distance}} · {{value}} · {{count}} drive',
     other: '{{distance}} · {{value}} · {{count}} drives',
   },
+  'Backed up {{count}} minutes ago': {
+    one: 'Backed up {{count}} minute ago',
+    other: 'Backed up {{count}} minutes ago',
+  },
+  'Backed up {{count}} hours ago': {
+    one: 'Backed up {{count}} hour ago',
+    other: 'Backed up {{count}} hours ago',
+  },
+  'Backed up {{count}} days ago': {
+    one: 'Backed up {{count}} day ago',
+    other: 'Backed up {{count}} days ago',
+  },
+  'Backup from {{date}} with {{count}} trips': {
+    one: 'Backup from {{date}} with {{count}} trip',
+    other: 'Backup from {{date}} with {{count}} trips',
+  },
+  'Restored {{count}} trips from iCloud.': {
+    one: 'Restored {{count}} trip from iCloud.',
+    other: 'Restored {{count}} trips from iCloud.',
+  },
+  'Restore the backup from {{date}} with {{count}} trips. The trips, places, vehicles and settings on this iPhone are replaced by the ones in the backup.':
+    {
+      one: 'Restore the backup from {{date}} with {{count}} trip. The trips, places, vehicles and settings on this iPhone are replaced by the ones in the backup.',
+      other:
+        'Restore the backup from {{date}} with {{count}} trips. The trips, places, vehicles and settings on this iPhone are replaced by the ones in the backup.',
+    },
 };
 
 export default en;

@@ -13,6 +13,10 @@ import {
   View,
 } from 'react-native';
 
+import { backUp, findLatestBackup, loadBackupState, restoreBackup, type FoundBackup } from '@/backup/backup';
+import { backedUpText, formatBackupDate, PROBLEM_TEXT } from '@/backup/copy';
+import { backupAge } from '@/backup/schedule';
+import { tripCount, type Snapshot } from '@/backup/snapshot';
 import { GoldButton } from '@/components/gold-button';
 import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { Segmented } from '@/components/segmented';
@@ -40,6 +44,8 @@ import {
   enableWeeklyReminder,
   REMINDERS_SUPPORTED,
 } from '@/reminders/weekly';
+
+import { ICloudBackup, type BackupKeyInfo } from '../../modules/icloud-backup';
 
 /** Monday first, as people read a work week; values are `Date.getDay()` indexes. */
 const DAYS = [
@@ -138,6 +144,8 @@ export default function SettingsScreen() {
         <DrivingSection />
 
         {REMINDERS_SUPPORTED && <ReminderSection />}
+
+        <BackupSection />
 
         <ThemedText type="smallBold">{t('Work hours')}</ThemedText>
         <ThemedView type="backgroundElement" style={styles.card}>
@@ -420,6 +428,169 @@ function ReminderSection() {
           <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
             {note}
           </ThemedText>
+        )}
+      </ThemedView>
+    </>
+  );
+}
+
+/** Encrypted iCloud backup: whether it's working, when it last ran, and back up or restore now. */
+function BackupSection() {
+  const db = useSQLiteContext();
+  const theme = useTheme();
+  const t = useT();
+  const { region, reload } = useRegion();
+  const [available, setAvailable] = useState<boolean | null>(null);
+  const [key, setKey] = useState<BackupKeyInfo | null>(null);
+  const [lastAt, setLastAt] = useState<Date | null>(null);
+  const [busy, setBusy] = useState<'backup' | 'restore' | null>(null);
+  const [note, setNote] = useState<{ error: boolean; text: string } | null>(null);
+
+  const refresh = useCallback(async () => {
+    const [isAvailable, keyInfo, state] = await Promise.all([
+      ICloudBackup.isAvailable(),
+      ICloudBackup.keyInfo().catch(() => null),
+      loadBackupState(),
+    ]);
+    setAvailable(isAvailable);
+    setKey(keyInfo);
+    setLastAt(state ? new Date(state.at) : null);
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      refresh().catch(() => setAvailable(false));
+    }, [refresh]),
+  );
+
+  const backUpNow = async () => {
+    setBusy('backup');
+    setNote(null);
+    try {
+      const outcome = await backUp(db, { force: true });
+      setNote(
+        outcome === 'written'
+          ? { error: false, text: t('Backed up to iCloud.') }
+          : outcome === 'empty'
+            ? { error: false, text: t('Nothing to back up yet. Your trips are backed up once you have some.') }
+            : {
+                error: true,
+                text: t('iCloud isn’t available. Sign in to iCloud and turn on iCloud Drive in iPhone Settings.'),
+              },
+      );
+    } catch {
+      setNote({ error: true, text: t('Couldn’t back up. Check your connection and try again.') });
+    } finally {
+      setBusy(null);
+      refresh().catch(() => {});
+    }
+  };
+
+  const restoreNow = async (found: FoundBackup, snapshot: Snapshot) => {
+    setBusy('restore');
+    try {
+      await restoreBackup(db, { ...found, snapshot });
+      await reload();
+      setNote({ error: false, text: t('Restored {{count}} trips from iCloud.', { count: tripCount(snapshot) }) });
+    } catch {
+      setNote({ error: true, text: t('Couldn’t restore. Nothing on this iPhone was changed.') });
+    } finally {
+      setBusy(null);
+      refresh().catch(() => {});
+    }
+  };
+
+  const restore = async () => {
+    setBusy('restore');
+    setNote(null);
+    let found: FoundBackup | null;
+    try {
+      found = await findLatestBackup();
+    } catch {
+      return setNote({ error: true, text: t('Couldn’t reach your iCloud backups. Check your connection and try again.') });
+    } finally {
+      setBusy(null);
+    }
+    if (!found) return setNote({ error: false, text: t('There’s no backup in iCloud yet.') });
+    const { snapshot } = found;
+    if (!snapshot) return setNote({ error: true, text: t(PROBLEM_TEXT[found.problem ?? 'damaged']) });
+    const from = found;
+    Alert.alert(
+      t('Replace what’s on this iPhone?'),
+      t(
+        'Restore the backup from {{date}} with {{count}} trips. The trips, places, vehicles and settings on this iPhone are replaced by the ones in the backup.',
+        { date: formatBackupDate(found.createdAt, region), count: tripCount(snapshot) },
+      ),
+      [
+        { text: t('Cancel'), style: 'cancel' },
+        { text: t('Restore'), style: 'destructive', onPress: () => restoreNow(from, snapshot) },
+      ],
+    );
+  };
+
+  const status = !ICloudBackup.supported
+    ? t('Backups to iCloud work in the iPhone app.')
+    : available === null
+      ? t('Checking iCloud…')
+      : !available
+        ? t('iCloud is off for MileMint. Sign in to iCloud and turn on iCloud Drive in iPhone Settings to back up your trips.')
+        : lastAt
+          ? backedUpText(backupAge(lastAt, new Date()), t)
+          : t('Not backed up yet.');
+
+  return (
+    <>
+      <ThemedText type="smallBold">{t('Backup')}</ThemedText>
+      <ThemedView type="backgroundElement" style={styles.card}>
+        <View style={styles.flex}>
+          <ThemedText type="smallBold">{t('iCloud backup')}</ThemedText>
+          <ThemedText type="small" themeColor={available === false ? 'danger' : 'textSecondary'}>
+            {status}
+          </ThemedText>
+        </View>
+        <ThemedText type="small" themeColor="textSecondary">
+          {t('Encrypted with a key only your iCloud Keychain holds. MileMint never sees your trips.')}
+        </ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          {t('Backs up by itself when something changes, at most once a day, and keeps the last four backups.')}
+        </ThemedText>
+        {key?.exists && !key.synchronizable && (
+          <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
+            {t(
+              'iCloud Keychain isn’t available, so the backup key is kept on this iPhone only. These backups can’t be restored on a new iPhone.',
+            )}
+          </ThemedText>
+        )}
+        {note && (
+          <ThemedText
+            type="small"
+            themeColor={note.error ? 'danger' : 'textSecondary'}
+            accessibilityRole={note.error ? 'alert' : undefined}>
+            {note.text}
+          </ThemedText>
+        )}
+        {ICloudBackup.supported && available && (
+          <View style={styles.rowBetween}>
+            <Pressable
+              accessibilityRole="button"
+              disabled={busy !== null}
+              hitSlop={8}
+              onPress={restore}
+              style={[styles.flex, { opacity: busy ? 0.6 : 1 }]}>
+              <ThemedText type="small" style={{ color: theme.accent }}>
+                {busy === 'restore' ? t('Restoring…') : t('Restore from iCloud backup')}
+              </ThemedText>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              disabled={busy !== null}
+              onPress={backUpNow}
+              style={[styles.smallButton, { backgroundColor: theme.accent, opacity: busy ? 0.6 : 1 }]}>
+              <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
+                {busy === 'backup' ? t('Backing up…') : t('Back up now')}
+              </ThemedText>
+            </Pressable>
+          </View>
         )}
       </ThemedView>
     </>

@@ -14,6 +14,9 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { findLatestBackup, isDatabaseEmpty, problemOf, restoreBackup, type FoundBackup } from '@/backup/backup';
+import { formatBackupDate, PROBLEM_TEXT } from '@/backup/copy';
+import { tripCount } from '@/backup/snapshot';
 import { AlwaysGuide } from '@/components/always-guide';
 import { BrandGradient } from '@/components/brand-gradient';
 import { CountryOptions, phoneRegion } from '@/components/country-options';
@@ -45,11 +48,17 @@ import { VEHICLE_ICONS, type VehicleType } from '@/domain/trip';
 import { defaultVehicleName, isDefaultVehicleName } from '@/domain/vehicles';
 import { addVehicle, ensureVehicles, listVehicles, updateVehicle } from '@/db/vehicles-repo';
 
+import { ICloudBackup } from '../../modules/icloud-backup';
+
 /**
  * First launch, as one full-screen flow instead of a chain of pop-ups:
  * welcome → country → automatic tracking → work hours → home and work → done.
  * The last three are optional and skip in one tap. Each step does one thing,
  * and the user always sees how far along they are.
+ *
+ * On a new iPhone with a MileMint backup in iCloud, the welcome offers to
+ * restore it instead; the backup brings the country, hours and places, so
+ * only the tracking step (a permission for this phone) remains.
  */
 
 const STEPS = 6;
@@ -74,8 +83,14 @@ export default function WelcomeScreen() {
   const lang = useLanguage();
   const languageName = LANGUAGES.find((l) => l.code === lang)?.name ?? 'English';
   const insets = useSafeAreaInsets();
-  const { region, chosen, setRegion, finishOnboarding } = useRegion();
+  const { region, chosen, setRegion, finishOnboarding, reload } = useRegion();
   const [step, setStep] = useState(0);
+  /** A backup in iCloud, offered when this iPhone has no trips yet. */
+  const [backup, setBackup] = useState<FoundBackup | null>(null);
+  const [restoreError, setRestoreError] = useState<string | null>(null);
+  /** Restored from iCloud: set-up is done but for tracking, which is per phone. */
+  const [restored, setRestored] = useState(false);
+  const afterTracking = restored ? DONE : HOURS;
   const { status, enable } = useTracking(undefined, { watch: step === 2 });
   const [country, setCountry] = useState<RegionCode>(() => (chosen ? region.code : phoneRegion()));
   const [busy, setBusy] = useState(false);
@@ -96,6 +111,47 @@ export default function WelcomeScreen() {
   const [home, setHome] = useState<PlaceDraft>(EMPTY_PLACE);
   const [work, setWork] = useState<PlaceDraft>(EMPTY_PLACE);
   const [placeError, setPlaceError] = useState<string | null>(null);
+
+  // A new iPhone: look for a backup in iCloud while the welcome is read.
+  useEffect(() => {
+    if (!ICloudBackup.supported) return;
+    let current = true;
+    (async () => {
+      if (!(await isDatabaseEmpty(db))) return;
+      const found = await findLatestBackup();
+      if (current && found) setBackup(found);
+    })().catch(() => {});
+    return () => {
+      current = false;
+    };
+  }, [db]);
+
+  const restoreFromICloud = async () => {
+    if (!backup) return;
+    setBusy(true);
+    setRestoreError(null);
+    try {
+      await restoreBackup(db, backup);
+      await reload();
+      const settings = await loadSettings(db);
+      setBackup(null);
+      setHoursSet(settings.workHoursEnabled);
+      setShifts(settings.shiftMode);
+      setVehicle(settings.vehicle);
+      if (settings.region) {
+        setCountry(settings.region);
+        setRestored(true);
+        setStep(2);
+      } else {
+        // Backed up before choosing a country: ask now, then carry on as usual.
+        setStep(1);
+      }
+    } catch (error) {
+      setRestoreError(t(PROBLEM_TEXT[problemOf(error)]));
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const picked = REGIONS[country];
   const topRate = formatRate(picked.rates[picked.rates.length - 1].tiers[0].rate, picked);
@@ -120,7 +176,7 @@ export default function WelcomeScreen() {
     setBusy(true);
     try {
       const next = await enable(setAsking);
-      if (next === 'on') setStep(HOURS);
+      if (next === 'on') setStep(afterTracking);
     } finally {
       setAsking(null);
       setAsked(true);
@@ -136,14 +192,14 @@ export default function WelcomeScreen() {
       (next) => {
         if (!current) return;
         setInSettings(false);
-        if (next === 'on') setStep(HOURS);
+        if (next === 'on') setStep(afterTracking);
       },
       () => {},
     );
     return () => {
       current = false;
     };
-    // Runs once per return from Settings; `status` and `enable` are read, not watched.
+    // Runs once per return from Settings; `status`, `enable` and `afterTracking` are read, not watched.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cameBackWithAlways]);
 
@@ -332,6 +388,24 @@ export default function WelcomeScreen() {
                   </View>
                 ))}
               </View>
+              {backup && (
+                <View style={styles.glass} accessibilityLiveRegion="polite">
+                  <Text style={styles.pointTitle}>{t('Restore your trips from iCloud')}</Text>
+                  <Text style={styles.pointBody}>
+                    {backup.snapshot
+                      ? t('Backup from {{date}} with {{count}} trips', {
+                          date: formatBackupDate(backup.createdAt, picked),
+                          count: tripCount(backup.snapshot),
+                        })
+                      : t('Backup from {{date}}', { date: formatBackupDate(backup.createdAt, picked) })}
+                  </Text>
+                  {(restoreError || backup.problem === 'newer-app') && (
+                    <Text style={styles.brandCallout} accessibilityRole="alert">
+                      {restoreError ?? t(PROBLEM_TEXT['newer-app'])}
+                    </Text>
+                  )}
+                </View>
+              )}
             </>
           )}
 
@@ -531,6 +605,11 @@ export default function WelcomeScreen() {
             <>
               <LeafMark size={72} />
               <Text style={styles.brandTitleSmall}>{t('You’re all set.')}</Text>
+              {restored && (
+                <Text style={styles.brandCallout}>
+                  {t('Your trips are back, with your places, vehicles and settings.')}
+                </Text>
+              )}
               <Text style={styles.brandBody}>
                 {status === 'on'
                   ? t(
@@ -587,11 +666,15 @@ export default function WelcomeScreen() {
         </ScrollView>
 
         <View style={[styles.actions, typing && step === PLACES && styles.hidden]}>
-          {step === 0 && primary(t('Get started'), () => setStep(1))}
+          {step === 0 &&
+            (backup
+              ? primary(busy ? t('Restoring…') : t('Restore my trips'), restoreFromICloud)
+              : primary(t('Get started'), () => setStep(1)))}
+          {step === 0 && backup && secondary(t('Start fresh instead'), () => setStep(1))}
           {step === 1 && primary(t('Continue'), saveCountry)}
           {step === 2 &&
             (status === 'on' || status === 'unsupported'
-              ? primary(t('Continue'), () => setStep(HOURS))
+              ? primary(t('Continue'), () => setStep(afterTracking))
               : status === 'needs-always' || (status === 'needs-permission' && asked)
                 ? primary(t('Open Settings'), () => {
                     setInSettings(true);
@@ -605,7 +688,7 @@ export default function WelcomeScreen() {
             status !== 'on' &&
             status !== 'unsupported' &&
             secondary(status === 'needs-always' ? t('Continue without “Always”') : t('Not now'), () =>
-              setStep(HOURS),
+              setStep(afterTracking),
             )}
           {step === HOURS &&
             (workStyle === 'hours'

@@ -8,6 +8,7 @@ import ReanimatedSwipeable, {
   type SwipeableMethods,
 } from 'react-native-gesture-handler/ReanimatedSwipeable';
 
+import { useAutoBackup } from '@/backup/use-backup';
 import { AddTripButton, MenuButton } from '@/components/header-menu';
 import { BrandGradient } from '@/components/brand-gradient';
 import { LeafMark } from '@/components/leaf-mark';
@@ -78,6 +79,8 @@ export default function HomeScreen() {
   const { region, loaded, onboarded } = useRegion();
   const taxYear = currentTaxYear(region);
   useReminders(region);
+  // Encrypted copy in the user's own iCloud, so a lost phone doesn't take the log with it.
+  useAutoBackup(onboarded && !DEMO_MODE);
   const shiftMode = useShift();
   const liveDrive = useLiveDrive();
   const garage = useVehicles();

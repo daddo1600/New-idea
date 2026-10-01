@@ -17,6 +17,8 @@ type RegionState = {
   /** The welcome flow has been completed (the demo counts as done). */
   onboarded: boolean;
   finishOnboarding: () => Promise<void>;
+  /** Re-reads the settings, after restoring a backup replaced them. */
+  reload: () => Promise<void>;
 };
 
 const RegionContext = createContext<RegionState | null>(null);
@@ -51,6 +53,14 @@ export function RegionProvider({ children }: { children: ReactNode }) {
     };
   }, [db, demo]);
 
+  const reload = useCallback(async () => {
+    if (demo) return;
+    const settings = await loadSettings(db);
+    setCode(settings.region);
+    if (settings.region) rememberRegion(settings.region);
+    setOnboarded(settings.onboarded);
+  }, [db, demo]);
+
   const setRegion = useCallback(
     async (next: RegionCode) => {
       setCode(next);
@@ -75,8 +85,9 @@ export function RegionProvider({ children }: { children: ReactNode }) {
       setRegion,
       onboarded,
       finishOnboarding,
+      reload,
     }),
-    [code, loaded, setRegion, onboarded, finishOnboarding],
+    [code, loaded, setRegion, onboarded, finishOnboarding, reload],
   );
   return <RegionContext.Provider value={value}>{children}</RegionContext.Provider>;
 }
