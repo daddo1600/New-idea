@@ -66,6 +66,15 @@ const en: Dictionary = {
     one: '{{count}} past trip may still have an address and a route. Replace it with the area only and delete the route?',
     other: '{{count}} past trips may still have addresses and routes. Replace them with the area only and delete the routes?',
   },
+  '{{count}} days to go': { one: '{{count}} day to go', other: '{{count}} days to go' },
+  '{{count}} drives in this period aren’t sorted yet. They count as private until you sort them.': {
+    one: '{{count}} drive in this period isn’t sorted yet. It counts as private until you sort it.',
+    other: '{{count}} drives in this period aren’t sorted yet. They count as private until you sort them.',
+  },
+  '{{count}} business drives have no reason yet. The ATO asks for the reason for each journey.': {
+    one: '{{count}} business drive has no reason yet. The ATO asks for the reason for each journey.',
+    other: '{{count}} business drives have no reason yet. The ATO asks for the reason for each journey.',
+  },
 };
 
 export default en;

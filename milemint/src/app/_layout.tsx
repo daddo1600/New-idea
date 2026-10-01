@@ -56,6 +56,7 @@ export default function RootLayout() {
                   <Stack.Screen name="milestones" options={{ title: t('Milestones') }} />
                   <Stack.Screen name="tax-dates" options={{ title: t('Tax dates') }} />
                   <Stack.Screen name="claim-relief" options={{ title: t('Claim mileage relief') }} />
+                  <Stack.Screen name="logbook" options={{ title: t('ATO logbook') }} />
                   <Stack.Screen name="language" options={{ title: t('Language'), presentation: 'modal' }} />
                 </Stack>
               </ProProvider>

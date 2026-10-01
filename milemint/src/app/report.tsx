@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { router, type Href } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
@@ -7,6 +7,7 @@ import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
+import { getCarExpenses, listLogbooks } from '@/db/logbooks-repo';
 import { getOdometer, saveOdometer, type OdometerReadings } from '@/db/odometer-repo';
 import { loadSettings, saveSettings } from '@/db/settings-repo';
 import { listEditedTripIds } from '@/db/trips-repo';
@@ -15,13 +16,15 @@ import type { Vehicle } from '@/domain/vehicles';
 import { useTrips } from '@/db/use-trips';
 import { lockedTripIds } from '@/domain/plan';
 import { EXPORT_FORMATS, PRO_FORMATS, type ExportFormat } from '@/domain/accounting-export';
+import { logbooksForReport, summarizeLogbook, type CarExpenses, type Logbook } from '@/domain/logbook';
 import { buildReport, reportYears } from '@/domain/report';
 import { currentTaxYear, formatDistance, formatMoney, fromUnits, taxYearLabel } from '@/domain/regions';
+import { toLocalIsoDate } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
 import { useRegion } from '@/region/region';
-import { PDF_AVAILABLE, shareCsv, sharePdf } from '@/reports/export';
+import { PDF_AVAILABLE, shareCsv, shareLogbookCsv, sharePdf } from '@/reports/export';
 
 const FORMAT_LABELS: Record<ExportFormat, string> = {
   spreadsheet: msg('Spreadsheet'),
@@ -59,7 +62,8 @@ export default function ReportScreen() {
   const [editedIds, setEditedIds] = useState<Set<string>>(new Set());
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [year, setYear] = useState(() => String(currentTaxYear(region)));
-  const [busy, setBusy] = useState<'csv' | 'pdf' | null>(null);
+  const [busy, setBusy] = useState<'csv' | 'pdf' | 'logbook' | null>(null);
+  const [logbooks, setLogbooks] = useState<Logbook[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [format, setFormat] = useState<ExportFormat>('spreadsheet');
   useEffect(() => {
@@ -76,6 +80,12 @@ export default function ReportScreen() {
     listEditedTripIds(db).then(setEditedIds, () => setEditedIds(new Set()));
     listAllVehicles(db).then(setVehicles, () => {});
   }, [db]);
+
+  // Australia: ATO logbooks, summarised in the PDF and exported on their own.
+  const australia = region.code === 'AU';
+  useEffect(() => {
+    if (australia) listLogbooks(db).then(setLogbooks, () => {});
+  }, [db, australia]);
 
   // Readings for the chosen country and tax year, tagged so a stale load never shows for another year.
   const odometerKey = `${region.code}-${year}`;
@@ -96,16 +106,50 @@ export default function ReportScreen() {
   }, [trips, region]);
 
   // Drives over the free limit stay out until they're unlocked, as on the home screen.
-  const report = useMemo(() => {
+  const visible = useMemo(() => {
     const locked = lockedTripIds(trips ?? [], isPro);
-    const visible = (trips ?? []).filter((trip) => !locked.has(trip.id));
-    return buildReport(visible, region, Number(year), {
-      places,
-      editedIds,
-      odometer: odometer ?? undefined,
-      vehicles,
-    });
-  }, [trips, isPro, region, year, places, editedIds, odometer, vehicles]);
+    return (trips ?? []).filter((trip) => !locked.has(trip.id));
+  }, [trips, isPro]);
+  const today = toLocalIsoDate(new Date());
+  const yearLogbooks = useMemo(
+    () =>
+      australia
+        ? logbooksForReport(
+            logbooks.map((logbook) => summarizeLogbook(logbook, visible, today)),
+            Number(year),
+          )
+        : [],
+    [australia, logbooks, visible, today, year],
+  );
+
+  // Each logbook car's running costs for the year, tagged like the odometer readings.
+  const expensesKey = `${year}:${yearLogbooks.map((s) => s.logbook.vehicleId).join(',')}`;
+  const [loadedExpenses, setLoadedExpenses] = useState<{ key: string; byCar: Map<string, CarExpenses | null> } | null>(
+    null,
+  );
+  useEffect(() => {
+    const [taxYear, ids] = expensesKey.split(':');
+    const cars = ids ? ids.split(',') : [];
+    Promise.all(cars.map((id) => getCarExpenses(db, id, Number(taxYear)).catch(() => null))).then((all) =>
+      setLoadedExpenses({ key: expensesKey, byCar: new Map(cars.map((id, i) => [id, all[i]])) }),
+    );
+  }, [db, expensesKey]);
+  const expenses = loadedExpenses?.key === expensesKey ? loadedExpenses.byCar : null;
+
+  const report = useMemo(
+    () =>
+      buildReport(visible, region, Number(year), {
+        places,
+        editedIds,
+        odometer: odometer ?? undefined,
+        vehicles,
+        logbooks: yearLogbooks.map((summary) => ({
+          summary,
+          expenses: expenses?.get(summary.logbook.vehicleId) ?? null,
+        })),
+      }),
+    [visible, region, year, places, editedIds, odometer, vehicles, yearLogbooks, expenses],
+  );
 
   if (!trips) return <ActivityIndicator style={styles.loading} />;
 
@@ -271,6 +315,46 @@ export default function ReportScreen() {
             </Pressable>
           )}
         </View>
+
+        {australia && (
+          <View style={styles.option}>
+            <ThemedText type="smallBold">{t('ATO logbook (CSV)')}</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">
+              {report.logbooks.length > 0
+                ? t(
+                    'Your 12-week logbook with everything the ATO asks for: the period, odometer readings, total and business km, each business journey with its reason, and the business-use percentage. The PDF report includes a summary.',
+                  )
+                : t('Driving more than 5,000 business km in a car? A 12-week logbook could claim more than cents per km.')}
+            </ThemedText>
+            {report.logbooks.map((entry) => (
+              <Pressable
+                key={entry.summary.logbook.id}
+                accessibilityRole="button"
+                disabled={busy !== null}
+                onPress={async () => {
+                  setError(null);
+                  setBusy('logbook');
+                  try {
+                    await shareLogbookCsv(entry.summary, entry.vehicle);
+                  } catch {
+                    setError(msg('Couldn’t create the file. Please try again.'));
+                  } finally {
+                    setBusy(null);
+                  }
+                }}
+                style={[styles.outline, { borderColor: theme.accent, opacity: busy ? 0.5 : 1 }]}>
+                <ThemedText type="smallBold" style={{ color: theme.accent }}>
+                  {busy === 'logbook' ? t('Preparing…') : t('Export logbook: {{vehicle}}', { vehicle: entry.vehicle })}
+                </ThemedText>
+              </Pressable>
+            ))}
+            <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/logbook' as Href)}>
+              <ThemedText type="small" style={{ color: theme.accent }}>
+                {report.logbooks.length > 0 ? t('Open the ATO logbook') : t('Start a 12-week logbook')}
+              </ThemedText>
+            </Pressable>
+          </View>
+        )}
 
         {empty && (
           <ThemedText type="small" themeColor="textSecondary">

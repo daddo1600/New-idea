@@ -1,4 +1,5 @@
-import { formatDate, formatRate, type Region } from './regions';
+import { percentBasisText, statusText, validYearsText, type LogbookSummary } from './logbook';
+import { formatDate, formatRate, REGIONS, type Region } from './regions';
 import { csvCell, toCsv, type MileageReport, type ReportRow } from './report';
 
 /**
@@ -171,4 +172,73 @@ export function exportFile(report: MileageReport, format: ExportFormat): { name:
     default:
       return { name: `MileMint ${year} mileage log.csv`, text: toCsv(report) };
   }
+}
+
+// ─── ATO logbook (Australia) ────────────────────────────────────────────────
+
+const AU = REGIONS.AU;
+const km1 = (value: number) => value.toFixed(1);
+const reading = (value: number | null) => (value === null ? '' : km1(value));
+
+/**
+ * The logbook as a CSV with every field the ATO asks for: the period, the
+ * odometer at its start and end, total km, each business journey (dates,
+ * odometer, km, reason) and the business-use percentage.
+ */
+export function toLogbookCsv(summary: LogbookSummary, vehicle: string): string {
+  const { logbook } = summary;
+  const rows: (string | number)[][] = [
+    ['ATO car logbook (logbook method)'],
+    ['Vehicle', vehicle],
+    ['Logbook period start', formatDate(logbook.startDate, AU)],
+    ['Logbook period end', formatDate(logbook.endDate, AU)],
+    ['Status', statusText(summary)],
+    ['Odometer at start of period (km)', reading(logbook.odometerStart)],
+    ['Odometer at end of period (km)', reading(logbook.odometerEnd)],
+    [
+      'Total km travelled in the period',
+      km1(summary.totalKm),
+      summary.basis === 'odometer' ? 'Odometer end minus start' : 'Km logged by MileMint (odometer readings missing)',
+    ],
+    ['Business km travelled in the period', km1(summary.businessKm)],
+    ['Business-use percentage', summary.businessPercent === null ? '' : `${summary.businessPercent}%`, percentBasisText(summary)],
+    ['Can be used for income years', summary.status === 'complete' ? validYearsText(logbook) : ''],
+    [],
+    [
+      'Journey start date',
+      'Journey end date',
+      'Odometer at start (km)',
+      'Odometer at end (km)',
+      'Km travelled',
+      'Reason for the journey',
+      'From',
+      'To',
+      'Odometer readings',
+    ],
+  ];
+  for (const journey of summary.journeys) {
+    const { trip } = journey;
+    rows.push([
+      formatDate(journey.startDate, AU),
+      formatDate(journey.endDate, AU),
+      reading(journey.odometerStart),
+      reading(journey.odometerEnd),
+      km1(journey.km),
+      trip.purpose,
+      trip.startLabel,
+      trip.endLabel,
+      journey.odometerStart === null ? '' : 'Calculated from GPS distance',
+    ]);
+  }
+  rows.push(
+    [],
+    [
+      'Journey odometer readings are calculated from the odometer at the start of the period plus the GPS distance of every drive logged since; the readings at the start and end of the period are read off the car. The logbook can be used for the income year it was kept in and the next 4, unless your circumstances change. Prepared with MileMint; not tax advice.',
+    ],
+  );
+  return lines(rows);
+}
+
+export function logbookFileName(summary: LogbookSummary): string {
+  return `MileMint ATO logbook ${summary.logbook.startDate} to ${summary.logbook.endDate}.csv`;
 }

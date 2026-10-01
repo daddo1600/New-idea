@@ -11,6 +11,7 @@ import ReanimatedSwipeable, {
 import { AddTripButton, MenuButton } from '@/components/header-menu';
 import { BrandGradient } from '@/components/brand-gradient';
 import { LeafMark } from '@/components/leaf-mark';
+import { LogbookNudge } from '@/components/logbook-nudge';
 import { Celebration } from '@/components/celebration';
 import { ReminderAsk } from '@/components/reminder-ask';
 import { SwipeToStart } from '@/components/swipe-to-start';
@@ -213,6 +214,8 @@ export default function HomeScreen() {
                 setSelected(new Set(unsorted.map((trip) => trip.id)));
               }}
             />
+            {/* Australia: past 5,000 km in a car, the logbook method usually claims more. */}
+            <LogbookNudge trips={visible} vehicles={garage.vehicles} />
             {visible.length > 0 && <ReminderAsk />}
             {garage.vehicles.length > 1 && garage.current && (
               <Pressable
