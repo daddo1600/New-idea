@@ -1,3 +1,4 @@
+import { msg } from '../i18n/i18n';
 import type { AutoReason } from './classify-rules';
 
 export type Classification = 'unclassified' | 'business' | 'personal';
@@ -8,10 +9,11 @@ export type VehicleType = 'car' | 'motorbike' | 'bicycle';
 
 export const VEHICLE_ICONS: Record<VehicleType, string> = { car: '🚗', motorbike: '🛵', bicycle: '🚲' };
 
+/** Names of vehicle types; marked for translation (the report keeps them in English). */
 export const VEHICLE_LABELS: Record<VehicleType, string> = {
-  car: 'Car or van',
-  motorbike: 'Motorbike or scooter',
-  bicycle: 'Bicycle',
+  car: msg('Car or van'),
+  motorbike: msg('Motorbike or scooter'),
+  bicycle: msg('Bicycle'),
 };
 
 export type Trip = {

@@ -8,6 +8,7 @@ import {
   formatMoney,
   formatRate,
   fromUnits,
+  inEnglish,
   periodRangeInTaxYear,
   taxYearBounds,
   taxYearLabel,
@@ -135,7 +136,7 @@ export function buildReport(
         // Cars first (sorted by key), then two-wheelers, each labelled.
         const key = `${part.vehicle === 'car' ? 0 : part.vehicle === 'motorbike' ? 1 : 2}#${part.period.from}#${part.tier}`;
         const range = periodRangeInTaxYear(part.period, taxYear, region, part.vehicle);
-        const tier = describeTier(part.period, part.tier, region);
+        const tier = describeTier(part.period, part.tier, region, inEnglish);
         const what = part.vehicle === 'car' ? tier : `${VEHICLE_LABELS[part.vehicle]}: ${tier}`;
         const total = byRate.get(key) ?? {
           label: range ? `${range}: ${what}` : what,

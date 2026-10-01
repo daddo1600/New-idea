@@ -1,3 +1,4 @@
+import { msg, t, translate } from '../i18n/i18n';
 import { METERS_PER_MILE, type Trip, type VehicleType } from './trip';
 
 /**
@@ -68,10 +69,16 @@ export type Region = {
 
 const METERS_PER_KM = 1000;
 
+/** Translates a line: `t` (the current language) on screen, `inEnglish` for the report. */
+export type Translator = (key: string, params?: Record<string, string | number>) => string;
+
+/** The PDF and CSV reports go to the tax office, so their wording stays in English. */
+export const inEnglish: Translator = (key, params) => translate('en', key, params);
+
 export const REGIONS: Record<RegionCode, Region> = {
   US: {
     code: 'US',
-    name: 'United States',
+    name: msg('United States'),
     flag: '🇺🇸',
     currency: 'USD',
     currencySymbol: '$',
@@ -85,24 +92,24 @@ export const REGIONS: Record<RegionCode, Region> = {
       { from: '2026-01-01', tiers: [{ upTo: null, rate: 725 }] },
       { from: '2026-07-01', tiers: [{ upTo: null, rate: 760 }] },
     ],
-    rule: 'IRS standard mileage rate: 76¢ a mile from July 2026',
+    rule: msg('IRS standard mileage rate: 76¢ a mile from July 2026'),
     caveat: null,
     otherVehicleRates: {},
-    vehicleNote: 'The IRS standard mileage rate is for cars, vans and pickups. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.',
+    vehicleNote: msg('The IRS standard mileage rate is for cars, vans and pickups. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.'),
     limitsPerVehicle: false,
     report: {
-      summaryHeading: 'Vehicle use (Schedule C, Part IV)',
+      summaryHeading: msg('Vehicle use (Schedule C, Part IV)'),
       guidance: [
-        'Self-employed: enter business, commuting and other miles on Schedule C, Part IV (lines 44a–44c) and the deduction on line 9, Car and truck expenses, using the standard mileage rate.',
-        'Parking fees and tolls for business trips can be deducted on top of the standard mileage rate.',
-        'The IRS asks for a record made at or near the time of each trip, showing the date, where you went, the business purpose and the miles.',
+        msg('Self-employed: enter business, commuting and other miles on Schedule C, Part IV (lines 44a–44c) and the deduction on line 9, Car and truck expenses, using the standard mileage rate.'),
+        msg('Parking fees and tolls for business trips can be deducted on top of the standard mileage rate.'),
+        msg('The IRS asks for a record made at or near the time of each trip, showing the date, where you went, the business purpose and the miles.'),
       ],
       askForOdometer: false,
     },
   },
   GB: {
     code: 'GB',
-    name: 'United Kingdom',
+    name: msg('United Kingdom'),
     flag: '🇬🇧',
     currency: 'GBP',
     currencySymbol: '£',
@@ -114,7 +121,7 @@ export const REGIONS: Record<RegionCode, Region> = {
       { from: '2011-04-06', tiers: [{ upTo: 10_000, rate: 450 }, { upTo: null, rate: 250 }] },
       { from: '2026-04-06', tiers: [{ upTo: 10_000, rate: 550 }, { upTo: null, rate: 250 }] },
     ],
-    rule: 'HMRC mileage rate: 55p a mile for the first 10,000 business miles, then 25p',
+    rule: msg('HMRC mileage rate: 55p a mile for the first 10,000 business miles, then 25p'),
     caveat: null,
     otherVehicleRates: {
       motorbike: [{ from: '2011-04-06', tiers: [{ upTo: null, rate: 240 }] }],
@@ -123,18 +130,18 @@ export const REGIONS: Record<RegionCode, Region> = {
     vehicleNote: null,
     limitsPerVehicle: false,
     report: {
-      summaryHeading: 'Business mileage (HMRC simplified expenses)',
+      summaryHeading: msg('Business mileage (HMRC simplified expenses)'),
       guidance: [
-        'Self-employed: this total is your simplified expenses figure for business mileage. Include it in Car, van and travel expenses on your Self Assessment return.',
-        'Employees: you can claim Mileage Allowance Relief on the difference between this total and any mileage allowance your employer paid you.',
-        'Ordinary commuting between home and your permanent workplace is not business mileage.',
+        msg('Self-employed: this total is your simplified expenses figure for business mileage. Include it in Car, van and travel expenses on your Self Assessment return.'),
+        msg('Employees: you can claim Mileage Allowance Relief on the difference between this total and any mileage allowance your employer paid you.'),
+        msg('Ordinary commuting between home and your permanent workplace is not business mileage.'),
       ],
       askForOdometer: false,
     },
   },
   CA: {
     code: 'CA',
-    name: 'Canada',
+    name: msg('Canada'),
     flag: '🇨🇦',
     currency: 'CAD',
     currencySymbol: '$',
@@ -147,25 +154,25 @@ export const REGIONS: Record<RegionCode, Region> = {
       { from: '2025-01-01', tiers: [{ upTo: 5_000, rate: 720 }, { upTo: null, rate: 660 }] },
       { from: '2026-01-01', tiers: [{ upTo: 5_000, rate: 730 }, { upTo: null, rate: 670 }] },
     ],
-    rule: 'CRA per-km rate: 73¢ for the first 5,000 km, then 67¢',
+    rule: msg('CRA per-km rate: 73¢ for the first 5,000 km, then 67¢'),
     caveat:
-      'This is CRA’s reimbursement rate for employees. If you’re self-employed, CRA usually wants your actual car costs, so treat the figure as an estimate.',
+      msg('This is CRA’s reimbursement rate for employees. If you’re self-employed, CRA usually wants your actual car costs, so treat the figure as an estimate.'),
     otherVehicleRates: {},
-    vehicleNote: 'The CRA per-km rate is for cars. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.',
+    vehicleNote: msg('The CRA per-km rate is for cars. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.'),
     limitsPerVehicle: false,
     report: {
-      summaryHeading: 'Business use of your vehicle',
+      summaryHeading: msg('Business use of your vehicle'),
       guidance: [
-        'Self-employed (T2125): claim your actual vehicle costs multiplied by your business-use share, which is business kilometres divided by total kilometres driven in the year. Record your odometer readings below to work it out.',
-        'Employees reimbursed at CRA’s per-km rate: the figure above is what your employer can pay you tax-free.',
-        'CRA asks for a logbook showing the date, destination, purpose and kilometres of each business trip, plus your odometer readings at the start and end of the year.',
+        msg('Self-employed (T2125): claim your actual vehicle costs multiplied by your business-use share, which is business kilometres divided by total kilometres driven in the year. Record your odometer readings below to work it out.'),
+        msg('Employees reimbursed at CRA’s per-km rate: the figure above is what your employer can pay you tax-free.'),
+        msg('CRA asks for a logbook showing the date, destination, purpose and kilometres of each business trip, plus your odometer readings at the start and end of the year.'),
       ],
       askForOdometer: true,
     },
   },
   AU: {
     code: 'AU',
-    name: 'Australia',
+    name: msg('Australia'),
     flag: '🇦🇺',
     currency: 'AUD',
     currencySymbol: '$',
@@ -178,17 +185,17 @@ export const REGIONS: Record<RegionCode, Region> = {
       { from: '2024-07-01', tiers: [{ upTo: 5_000, rate: 880 }, { upTo: null, rate: 0 }] },
       { from: '2026-07-01', tiers: [{ upTo: 5_000, rate: 910 }, { upTo: null, rate: 0 }] },
     ],
-    rule: 'ATO cents per km method: 91c a km, up to 5,000 km per car a year',
+    rule: msg('ATO cents per km method: 91c a km, up to 5,000 km per car a year'),
     caveat: null,
     otherVehicleRates: {},
-    vehicleNote: 'The ATO cents per km method is for cars only. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.',
+    vehicleNote: msg('The ATO cents per km method is for cars only. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.'),
     limitsPerVehicle: true,
     report: {
-      summaryHeading: 'Work-related car use (cents per km method)',
+      summaryHeading: msg('Work-related car use (cents per km method)'),
       guidance: [
-        'Individuals: enter the deduction as Work-related car expenses (D1) using the cents per km method. Sole traders: include it with your business motor vehicle expenses.',
-        'You can claim up to 5,000 business kilometres per car each income year. This report assumes one car.',
-        'You don’t need a logbook for this method, but the ATO may ask how you worked out your kilometres. This trip log shows that.',
+        msg('Individuals: enter the deduction as Work-related car expenses (D1) using the cents per km method. Sole traders: include it with your business motor vehicle expenses.'),
+        msg('You can claim up to 5,000 business kilometres per car each income year. This report assumes one car.'),
+        msg('You don’t need a logbook for this method, but the ATO may ask how you worked out your kilometres. This trip log shows that.'),
       ],
       askForOdometer: false,
     },
@@ -338,14 +345,23 @@ export function ratesFor(region: Region, vehicle: VehicleType = 'car'): readonly
   return vehicle === 'car' ? region.rates : (region.otherVehicleRates[vehicle] ?? null);
 }
 
-/** One line on how a vehicle's trips are valued here, e.g. "HMRC rate for motorbikes: 24p a mile". */
+/**
+ * One line on how a vehicle's trips are valued here, e.g. "HMRC rate for
+ * motorbikes and scooters: 24p a mile", in the current language.
+ */
 export function vehicleRule(region: Region, vehicle: VehicleType): string {
-  if (vehicle === 'car') return region.rule;
+  if (vehicle === 'car') return t(region.rule);
   const periods = ratesFor(region, vehicle);
-  if (!periods) return region.vehicleNote ?? `${region.authority} has no per-${region.unit === 'mi' ? 'mile' : 'km'} rate for this vehicle.`;
-  const latest = periods[periods.length - 1];
-  const kind = vehicle === 'motorbike' ? 'motorbikes and scooters' : 'bicycles';
-  return `${region.authority} rate for ${kind}: ${describeTier(latest, 0, region)}`;
+  if (!periods) {
+    if (region.vehicleNote) return t(region.vehicleNote);
+    return region.unit === 'mi'
+      ? t('{{authority}} has no per-mile rate for this vehicle.', { authority: region.authority })
+      : t('{{authority}} has no per-km rate for this vehicle.', { authority: region.authority });
+  }
+  const rate = describeTier(periods[periods.length - 1], 0, region);
+  return vehicle === 'motorbike'
+    ? t('{{authority}} rate for motorbikes and scooters: {{rate}}', { authority: region.authority, rate })
+    : t('{{authority}} rate for bicycles: {{rate}}', { authority: region.authority, rate });
 }
 
 /** The earliest date MileMint has a rate for in this region. */
@@ -415,20 +431,32 @@ export function computeDeductionParts(
   return result;
 }
 
-/** e.g. "55p a mile, first 10,000 miles" / "25p a mile after 10,000 miles". */
-export function describeTier(period: RatePeriod, tier: number, region: Region): string {
-  const unit = region.unit === 'mi' ? 'mile' : 'km';
-  const units = region.unit === 'mi' ? 'miles' : 'km';
-  const rate = `${formatRate(period.tiers[tier].rate, region)} a ${unit}`;
+/**
+ * e.g. "55p a mile, first 10,000 miles" / "25p a mile after 10,000 miles".
+ * In the current language; the report passes `inEnglish`.
+ */
+export function describeTier(period: RatePeriod, tier: number, region: Region, tr: Translator = t): string {
+  const mi = region.unit === 'mi';
+  const rate = mi
+    ? tr('{{rate}} a mile', { rate: formatRate(period.tiers[tier].rate, region) })
+    : tr('{{rate}} a km', { rate: formatRate(period.tiers[tier].rate, region) });
   if (period.tiers.length === 1) return rate;
   const number = (n: number) => new Intl.NumberFormat(region.locale).format(n);
   const upTo = period.tiers[tier].upTo;
   const below = tier > 0 ? period.tiers[tier - 1].upTo : null;
   if (period.tiers[tier].rate === 0 && below !== null) {
-    return `Over ${number(below)} ${units}: not claimable (${region.authority} limit)`;
+    const params = { distance: number(below), authority: region.authority };
+    return mi
+      ? tr('Over {{distance}} miles: not claimable ({{authority}} limit)', params)
+      : tr('Over {{distance}} km: not claimable ({{authority}} limit)', params);
   }
-  if (upTo !== null) return `${rate}, first ${number(upTo)} ${units}`;
-  return below !== null ? `${rate} after ${number(below)} ${units}` : rate;
+  if (upTo !== null) {
+    const params = { rate, distance: number(upTo) };
+    return mi ? tr('{{rate}}, first {{distance}} miles', params) : tr('{{rate}}, first {{distance}} km', params);
+  }
+  if (below === null) return rate;
+  const params = { rate, distance: number(below) };
+  return mi ? tr('{{rate}} after {{distance}} miles', params) : tr('{{rate}} after {{distance}} km', params);
 }
 
 export type DeductionTrip = Pick<Trip, 'id' | 'localDate' | 'startedAt' | 'distanceMeters' | 'classification'> & {

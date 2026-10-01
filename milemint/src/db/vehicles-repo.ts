@@ -2,7 +2,7 @@ import * as Crypto from 'expo-crypto';
 import type { SQLiteDatabase } from 'expo-sqlite';
 
 import type { VehicleType } from '@/domain/trip';
-import { DEFAULT_VEHICLE_NAMES, type Vehicle } from '@/domain/vehicles';
+import { defaultVehicleName, type Vehicle } from '@/domain/vehicles';
 
 import { loadSettings, saveSettings } from './settings-repo';
 
@@ -35,7 +35,7 @@ export async function addVehicle(
 ): Promise<Vehicle> {
   const vehicle: Vehicle = {
     id: Crypto.randomUUID(),
-    name: input.name?.trim() || DEFAULT_VEHICLE_NAMES[input.type],
+    name: input.name?.trim() || defaultVehicleName(input.type),
     type: input.type,
     registration: input.registration ?? null,
   };

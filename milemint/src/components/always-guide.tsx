@@ -28,7 +28,9 @@ export function AlwaysGuide({ current }: { current: 'While Using the App' | 'Nev
     <ThemedView type="backgroundElement" style={styles.card} accessibilityRole="alert">
       <ThemedText type="smallBold">{t('One quick switch in Settings')}</ThemedText>
       <ThemedText type="small" themeColor="textSecondary">
-        {t('iOS only offers “Always” in Settings. It takes ten seconds, and MileMint carries on by itself when you come back.')}
+        {t(
+          'iOS only offers “Always” in Settings. It takes ten seconds, and MileMint carries on by itself when you come back.',
+        )}
       </ThemedText>
 
       <View style={styles.steps}>
@@ -46,10 +48,14 @@ export function AlwaysGuide({ current }: { current: 'While Using the App' | 'Nev
       <View
         accessible
         accessibilityLabel={t('In Settings, under Allow Location Access, choose Always')}
-        style={[styles.mock, { backgroundColor: theme.background, borderColor: theme.backgroundSelected }]}>
-        <Text style={[styles.mockHeader, { color: theme.textSecondary }]}>
-          {t('ALLOW LOCATION ACCESS')}
-        </Text>
+        style={[
+          styles.mock,
+          {
+            backgroundColor: theme.background,
+            borderColor: theme.backgroundSelected,
+          },
+        ]}>
+        <Text style={[styles.mockHeader, { color: theme.textSecondary }]}>{t('ALLOW LOCATION ACCESS')}</Text>
         {OPTIONS.map((option, i) => {
           const target = option === 'Always';
           return (
@@ -66,7 +72,10 @@ export function AlwaysGuide({ current }: { current: 'While Using the App' | 'Nev
               <Text
                 style={[
                   styles.mockText,
-                  { color: target ? theme.accent : theme.textSecondary, fontWeight: target ? '700' : '400' },
+                  {
+                    color: target ? theme.accent : theme.textSecondary,
+                    fontWeight: target ? '700' : '400',
+                  },
                 ]}>
                 {t(option)}
               </Text>
@@ -88,7 +97,13 @@ const styles = StyleSheet.create({
   card: { borderRadius: 16, padding: Spacing.three, gap: Spacing.two },
   steps: { gap: Spacing.one + 2, marginTop: Spacing.one },
   step: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
-  number: { width: 20, height: 20, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
+  number: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   numberText: { fontSize: 12, fontWeight: '800' },
   mock: {
     borderRadius: 12,
@@ -111,6 +126,11 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
   },
   mockText: { fontSize: 14 },
-  tapBadge: { backgroundColor: '#FACC15', borderRadius: 999, paddingHorizontal: 8, paddingVertical: 2 },
+  tapBadge: {
+    backgroundColor: '#FACC15',
+    borderRadius: 999,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
   tapText: { color: '#064E3B', fontSize: 11, fontWeight: '800' },
 });

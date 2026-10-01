@@ -24,8 +24,57 @@ import { missedMiles, PERIOD_LABELS, periodBounds, type Period } from '@/domain/
 import { computeDeductions, formatMoney, toUnits } from '@/domain/regions';
 import type { Trip } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/i18n/i18n';
 import { withInvite } from '@/referral/links';
 import { useRegion } from '@/region/region';
+
+type T = ReturnType<typeof useT>;
+type ShareParams = { counted: string; logged: string; extra: string; amount: string };
+
+/** The message shared with friends, one whole sentence per period and unit. */
+function shareMessage(t: T, period: Period, miles: boolean, params: ShareParams): string {
+  if (miles) {
+    if (period === 'this-week') {
+      return t(
+        'My delivery app counted {{counted}} miles this week. MileMint logged {{logged}} business miles: that\'s {{extra}} miles (about {{amount}}) I\'d have missed claiming. 🚗💸 MileMint logs every mile automatically.',
+        params,
+      );
+    }
+    if (period === 'this-month') {
+      return t(
+        'My delivery app counted {{counted}} miles this month. MileMint logged {{logged}} business miles: that\'s {{extra}} miles (about {{amount}}) I\'d have missed claiming. 🚗💸 MileMint logs every mile automatically.',
+        params,
+      );
+    }
+    return t(
+      'My delivery app counted {{counted}} miles last month. MileMint logged {{logged}} business miles: that\'s {{extra}} miles (about {{amount}}) I\'d have missed claiming. 🚗💸 MileMint logs every mile automatically.',
+      params,
+    );
+  }
+  if (period === 'this-week') {
+    return t(
+      'My delivery app counted {{counted}} km this week. MileMint logged {{logged}} business km: that\'s {{extra}} km (about {{amount}}) I\'d have missed claiming. 🚗💸 MileMint logs every mile automatically.',
+      params,
+    );
+  }
+  if (period === 'this-month') {
+    return t(
+      'My delivery app counted {{counted}} km this month. MileMint logged {{logged}} business km: that\'s {{extra}} km (about {{amount}}) I\'d have missed claiming. 🚗💸 MileMint logs every mile automatically.',
+      params,
+    );
+  }
+  return t(
+    'My delivery app counted {{counted}} km last month. MileMint logged {{logged}} business km: that\'s {{extra}} km (about {{amount}}) I\'d have missed claiming. 🚗💸 MileMint logs every mile automatically.',
+    params,
+  );
+}
+
+/** "of business driving this month", under the logged distance. */
+function periodCaption(t: T, period: Period): string {
+  if (period === 'this-week') return t('of business driving this week');
+  if (period === 'this-month') return t('of business driving this month');
+  return t('of business driving last month');
+}
 
 /**
  * "Missed miles": delivery apps only count distance with an order on board.
@@ -34,6 +83,7 @@ import { useRegion } from '@/region/region';
 export default function CompareScreen() {
   const db = useSQLiteContext();
   const theme = useTheme();
+  const t = useT();
   const { region } = useRegion();
   const [trips, setTrips] = useState<Trip[]>([]);
   const [period, setPeriod] = useState<Period>('this-month');
@@ -43,7 +93,7 @@ export default function CompareScreen() {
     listTrips(db).then(setTrips, () => {});
   }, [db]);
 
-  const units = region.unit === 'mi' ? 'miles' : 'km';
+  const miles = region.unit === 'mi';
   const deductions = useMemo(() => computeDeductions(trips, region), [trips, region]);
   const typed = parseMiles(counted);
   const result = useMemo(
@@ -53,13 +103,21 @@ export default function CompareScreen() {
   );
   const number = (n: number) => new Intl.NumberFormat(region.locale, { maximumFractionDigits: 0 }).format(n);
 
+  // `count` lets a translation pick a plural form for the unit.
+  const distance = (n: number) =>
+    miles
+      ? t('{{distance}} miles', { distance: number(n), count: Math.round(n) })
+      : t('{{distance}} km', { distance: number(n), count: Math.round(n) });
+
   const share = () => {
-    const when = PERIOD_LABELS[period].toLowerCase();
     Share.share({
       message: withInvite(
-        `My delivery app counted ${number(result.counted)} ${units} ${when}. MileMint logged ${number(result.logged)} ` +
-        `business ${units}: that's ${number(result.extra)} ${units} (about ${formatMoney(result.extraValue, region)}) ` +
-        `I'd have missed claiming. 🚗💸 MileMint logs every mile automatically.`,
+        shareMessage(t, period, miles, {
+          counted: number(result.counted),
+          logged: number(result.logged),
+          extra: number(result.extra),
+          amount: formatMoney(result.extraValue, region),
+        }),
       ),
     }).catch(() => {});
   };
@@ -69,14 +127,19 @@ export default function CompareScreen() {
       <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           <ThemedText type="small" themeColor="textSecondary">
-            Delivery apps only count {units} with an order on board. The drive to the pickup, between orders
-            and home again are business {units} too, and MileMint logs them all.
+            {miles
+              ? t(
+                  'Delivery apps only count miles with an order on board. The drive to the pickup, between orders and home again are business miles too, and MileMint logs them all.',
+                )
+              : t(
+                  'Delivery apps only count km with an order on board. The drive to the pickup, between orders and home again are business km too, and MileMint logs them all.',
+                )}
           </ThemedText>
 
           <Segmented
             options={(['this-week', 'this-month', 'last-month'] as const).map((value) => ({
               value,
-              label: PERIOD_LABELS[value],
+              label: t(PERIOD_LABELS[value]),
             }))}
             value={period}
             onChange={setPeriod}
@@ -84,14 +147,14 @@ export default function CompareScreen() {
 
           <View style={styles.field}>
             <ThemedText type="small" themeColor="textSecondary">
-              {units === 'miles' ? 'Miles' : 'Kilometres'} your delivery app counted
+              {miles ? t('Miles your delivery app counted') : t('Kilometres your delivery app counted')}
             </ThemedText>
             <TextInput
-              accessibilityLabel={`${units} your delivery app counted`}
+              accessibilityLabel={miles ? t('miles your delivery app counted') : t('km your delivery app counted')}
               value={counted}
               onChangeText={setCounted}
               inputMode="decimal"
-              placeholder="From its weekly or monthly summary"
+              placeholder={t('From its weekly or monthly summary')}
               placeholderTextColor={theme.textSecondary}
               style={[styles.input, { color: theme.text, backgroundColor: theme.backgroundElement }]}
             />
@@ -102,23 +165,31 @@ export default function CompareScreen() {
             <View style={styles.leaf} pointerEvents="none">
               <LeafMark size={150} opacity={0.2} />
             </View>
-            <Text style={styles.resultLabel}>MileMint logged</Text>
-            <Text style={styles.resultBig}>
-              {number(result.logged)} {units}
-            </Text>
-            <Text style={styles.resultLabel}>of business driving {PERIOD_LABELS[period].toLowerCase()}</Text>
+            <Text style={styles.resultLabel}>{t('MileMint logged')}</Text>
+            <Text style={styles.resultBig}>{distance(result.logged)}</Text>
+            <Text style={styles.resultLabel}>{periodCaption(t, period)}</Text>
             {typed !== null && (
               <View style={styles.extra}>
                 {result.extra > 0 ? (
                   <>
                     <Text style={styles.extraBig}>
-                      +{number(result.extra)} {units} your app missed
+                      {miles
+                        ? t('+{{distance}} miles your app missed', {
+                            distance: number(result.extra),
+                            count: Math.round(result.extra),
+                          })
+                        : t('+{{distance}} km your app missed', {
+                            distance: number(result.extra),
+                            count: Math.round(result.extra),
+                          })}
                     </Text>
-                    <Text style={styles.extraSub}>worth about {formatMoney(result.extraValue, region)}</Text>
+                    <Text style={styles.extraSub}>
+                      {t('worth about {{amount}}', { amount: formatMoney(result.extraValue, region) })}
+                    </Text>
                   </>
                 ) : (
                   <Text style={styles.extraSub}>
-                    Your app counted as much as MileMint logged. Check your trips are sorted as business.
+                    {t('Your app counted as much as MileMint logged. Check your trips are sorted as business.')}
                   </Text>
                 )}
               </View>
@@ -131,12 +202,14 @@ export default function CompareScreen() {
               onPress={share}
               style={[styles.shareButton, { backgroundColor: theme.accent }]}>
               <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-                Share this
+                {t('Share this')}
               </ThemedText>
             </Pressable>
           )}
           <ThemedText type="small" themeColor="textSecondary">
-            Estimated at {region.authority} rates for your business trips. Not tax advice.
+            {t('Estimated at {{authority}} rates for your business trips. Not tax advice.', {
+              authority: region.authority,
+            })}
           </ThemedText>
         </ScrollView>
       </KeyboardAvoidingView>
