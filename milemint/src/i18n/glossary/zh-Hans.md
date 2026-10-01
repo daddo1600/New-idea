@@ -46,9 +46,11 @@ The user is always **你** (never 您), as Apple's Simplified Chinese iOS does. 
 | automatic tracking | 自动追踪 | |
 | delivery app | 配送 App | Covers food delivery and parcel couriers. |
 | Milestones | 里程碑 | A natural pun on 里程 (mileage). |
+| Money back (milestones section) | 里程价值 | Not 找回的钱, which reads as a promised refund. |
+| "mile" in lines shown in every country | 里程 / 一段路 / 一趟 (never 英里 or 公里) | Taglines, welcome text and generic share lines are seen before or regardless of the country; only the separate miles/km keys name a unit. |
 | place (saved) | 地点; Home = 家, Work = 工作地点, Client = 客户 | |
 | vehicle | 车辆 | |
-| Car or van / Motorbike / Moped / Bicycle | 汽车或货车 / 摩托车 / 助力车 / 自行车 | |
+| Car or van / Motorbike / Moped / Bicycle | 汽车或货车 / 摩托车 / 踏板车 / 自行车 | Moped = **踏板车**, the same word as scooter. In mainland usage 助力车 often means an e-assist bicycle; 踏板车 is what Chinese couriers call the step-through bikes (e.g. Honda PCX) they ride. |
 | odometer | 里程表 | |
 | miles / km | 英里 / 公里 | |
 | Apple Account | Apple 账户 | Apple's zh-Hans name. |
@@ -73,10 +75,13 @@ The user is always **你** (never 您), as Apple's Simplified Chinese iOS does. 
 ## Adapted jokes
 
 - Knock knock → 咚咚咚 / 谁呀？是本周的行程…… Chinese has no knock-knock format, so this is a short knocking-at-the-door exchange instead.
-- Swipe right on savings / Easiest date of the week → 右滑，为省钱心动 / 本周最轻松的一场“约会”. Uses the dating-app swipe (探探 / Tinder style).
+- Swipe right on savings / Easiest date of the week → 右滑，心动一下 / 本周最轻松的一场“约会”. Uses the dating-app swipe (探探 / Tinder style), without promising savings.
+- Free money alert / Well, technically it’s your money → 天上不掉馅饼 / 不过这笔本来就是你的。 Turns a line that sounded like a giveaway pitch into an honest joke.
+- Plot twist: driving pays → 剧情反转：这些路没白跑. Avoids 开车 (internet slang for smutty talk) and any money promise.
+- Shift cheers: Game on → 开工大吉, Let’s do this → 加油, Time to roll → 出车啦. Avoids 开干 and 冲 (slang double meanings) and 上路 (also a euphemism for dying).
 - Sunday scaries → 周日焦虑？报税这事不用愁.
 - Every business mile counts / Literally. We counted them → 都算数 / 我们一个个数过了. Plays on 算数 and 数.
-- Spring has sprung → 春暖花开. G’day → 你好呀. Your miles called → 你的里程来电了.
+- Spring has sprung → 春暖花开. G’day! Summer on the road → 你好呀！夏日出车好时光. Your miles / kilometres called → 你的里程来电了.
 
 ## Unsure
 
@@ -87,7 +92,7 @@ The user is always **你** (never 您), as Apple's Simplified Chinese iOS does. 
 5. **“设置”→“通知”** (Settings → Notifications). This is the standard wording, but the quote marks are a style choice.
 6. **{{dueLine}}** lines (`{{year}} Self Assessment 申报截止日`). These were written to work both on their own and before "：还有 N 天", which is why they drop 你的. Please check that both uses read well.
 7. **Worth money → 价值看得见**. This is a short feature heading, so the wording is free. Please check that it reads naturally.
-8. **Moped → 助力车**. Some regions would say 电动车 or 踏板车. I chose 助力车 as the neutral option.
+8. ~~**Moped → 助力车**~~ Resolved in check 3: **踏板车**.
 9. **Shifts & rounds (delivery apps) → 班次和派送（配送 App）**. "Rounds" has no exact equivalent. 派送 (delivery runs) is the closest.
 10. **Plot twist: driving pays → 剧情反转：开车也有回报**. I softened it so it doesn't read as a promise of money.
 11. **{{used}} of {{limit}} free drives in {{month}}** → `{{month}}免费行程已用 …`. This assumes {{month}} is a month name formatted for Chinese, such as 10月.
