@@ -1,4 +1,4 @@
-import { router, useFocusEffect, type Href } from 'expo-router';
+import { router, Stack, useFocusEffect, type Href } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -144,6 +144,8 @@ export default function SettingsScreen() {
 
   return (
     <ThemedView style={styles.container}>
+      {/* Set here too, so the title follows a language change straight away. */}
+      <Stack.Screen options={{ title: t('Settings') }} />
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <ProSection />
 

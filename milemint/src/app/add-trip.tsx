@@ -236,7 +236,9 @@ export default function AddTripScreen() {
       });
       // Filled in: the home card stops offering it.
       if (gap.gap) await markGapFilled(db, gap.gap).catch(() => {});
-      router.back();
+      // Opened from a link (nothing to go back to): home instead.
+      if (router.canGoBack()) router.back();
+      else router.replace('/');
     } catch {
       setError(t('Could not save the trip. Please try again.'));
       setSaving(false);

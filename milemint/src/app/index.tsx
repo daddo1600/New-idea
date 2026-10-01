@@ -22,6 +22,7 @@ import { shortTime, ShiftRow } from '@/components/shift-row';
 import { ShiftSwitch } from '@/components/shift-switch';
 import { TaxCountdown } from '@/components/tax-countdown';
 import { TrackingHealthCard } from '@/components/tracking-health-card';
+import { useTrackingHealth } from '@/tracking/use-tracking-health';
 import { Segmented } from '@/components/segmented';
 import { VehicleSheet } from '@/components/vehicle-sheet';
 import { ThemedText } from '@/components/themed-text';
@@ -153,6 +154,8 @@ export default function HomeScreen() {
   );
   const celebration = useMilestoneCelebration(trips ? visible : null, deductions, region);
   // Tax offices want a purpose for every business drive: the one-tap choices, and the drives still missing one.
+  const trackingHealth = useTrackingHealth();
+  const trackingProblem = ['tracking-stopped', 'stale', 'precise-location-off'].includes(trackingHealth.health?.issue ?? '');
   const purposeChoices = useMemo(
     () =>
       quickPurposes({
@@ -360,14 +363,14 @@ export default function HomeScreen() {
             )}
             {liveDrive && <LiveDriveBanner drive={liveDrive} />}
             {/* Tracking that stopped, or a drive it lost: never silent. */}
-            <TrackingHealthCard />
+            <TrackingHealthCard state={trackingHealth} />
             <SummaryCard
               summary={summary}
               commuteCents={commuteCents}
               relief={relief && { year: relief, paysLess: employerPaysLess(relief, region, employerRate) }}
             />
             {nudge && <ReliefNudge nudge={nudge} />}
-            <TrackingCard status={status} />
+            <TrackingCard status={status} working={!trackingProblem} />
             <TaxCountdown
               foundMinor={launchTotal}
               unsortedCount={unsorted.length}
@@ -1430,11 +1433,13 @@ const TRACKING_MESSAGES: Record<Exclude<TrackingStatus, 'on'>, { title: string; 
   },
 };
 
-function TrackingCard({ status }: { status: TrackingStatus | null }) {
+function TrackingCard({ status, working }: { status: TrackingStatus | null; working: boolean }) {
   const theme = useTheme();
   const t = useT();
   if (!status) return null;
   if (status === 'on') {
+    // Permission is fine but tracking isn't (stopped, Precise Location off): the health card above says so.
+    if (!working) return null;
     return (
       <View style={styles.trackingOn} accessibilityRole="text">
         <View style={[styles.livePill, { backgroundColor: theme.accent + '1F' }]}>

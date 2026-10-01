@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
@@ -18,6 +18,7 @@ export default function LanguageScreen() {
 
   return (
     <ThemedView style={styles.container}>
+      <Stack.Screen options={{ title: t('Language') }} />
       <ScrollView contentContainerStyle={styles.content}>
         <ThemedText type="small" themeColor="textSecondary">
           {t('Choose the language for MileMint. Reports for the tax office stay in English.')}

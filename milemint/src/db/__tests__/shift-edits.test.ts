@@ -96,3 +96,19 @@ describeSqlite('shift edits', () => {
     expect((await currentShift(db, now))?.id).toBe(shift.id);
   });
 });
+
+describeSqlite('moving a shift’s end and back', () => {
+  it('+15 then −15 puts the drives back as they were', async () => {
+    const db = await database();
+    const shift = await startShift(db, at(0));
+    await insertTrip(db, drive(30, 20, { shiftId: shift.id, ...work }), ROUTE);
+    await endShift(db, at(60));
+    await insertTrip(db, drive(66, 10), ROUTE); // after the end, left to sort
+    await editShiftTimes(db, shift.id, { endedAt: at(75) }, at(200));
+    expect((await listTrips(db)).filter((trip) => trip.shiftId === shift.id)).toHaveLength(2);
+    await editShiftTimes(db, shift.id, { endedAt: at(60) }, at(200));
+    const trips = await listTrips(db);
+    expect(trips.filter((trip) => trip.shiftId === shift.id)).toHaveLength(1);
+    expect(trips.find((trip) => trip.startedAt === at(66).toISOString())).toMatchObject({ shiftId: null, classification: 'unclassified' });
+  });
+});

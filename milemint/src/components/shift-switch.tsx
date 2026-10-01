@@ -1,8 +1,10 @@
 import * as Haptics from 'expo-haptics';
-import { useEffect, useId, useState, type ReactNode } from 'react';
+import { useFocusEffect } from 'expo-router';
+import { useCallback, useEffect, useId, useState, type ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
+  cancelAnimation,
   Easing,
   interpolate,
   interpolateColor,
@@ -149,20 +151,31 @@ export function ShiftSwitch({
     );
   }, [on, revision, travel, x, engaged]);
 
-  useEffect(() => {
-    if (reduceMotion) return;
-    shimmer.set(withRepeat(withTiming(1, { duration: 1400, easing: Easing.linear }), -1, false));
-    twinkle.set(withRepeat(withTiming(1, { duration: 2400, easing: Easing.linear }), -1, false));
-    halo.set(withRepeat(withTiming(1, { duration: 1800, easing: Easing.out(Easing.quad) }), -1, false));
-    nudge.value = withRepeat(
-      withSequence(
-        withDelay(2200, withTiming(1, { duration: 260, easing: Easing.out(Easing.quad) })),
-        withSpring(0, { damping: 6, stiffness: 180 }),
-      ),
-      -1,
-      false,
-    );
-  }, [shimmer, nudge, twinkle, halo, reduceMotion]);
+  // Only while home is on screen: the loops would otherwise run on behind Settings or a report.
+  useFocusEffect(
+    useCallback(() => {
+      if (reduceMotion) return;
+      shimmer.set(withRepeat(withTiming(1, { duration: 1400, easing: Easing.linear }), -1, false));
+      twinkle.set(withRepeat(withTiming(1, { duration: 2400, easing: Easing.linear }), -1, false));
+      halo.set(withRepeat(withTiming(1, { duration: 1800, easing: Easing.out(Easing.quad) }), -1, false));
+      nudge.set(
+        withRepeat(
+          withSequence(
+            withDelay(2200, withTiming(1, { duration: 260, easing: Easing.out(Easing.quad) })),
+            withSpring(0, { damping: 6, stiffness: 180 }),
+          ),
+          -1,
+          false,
+        ),
+      );
+      return () => {
+        for (const value of [shimmer, twinkle, halo, nudge]) {
+          cancelAnimation(value);
+          value.set(0);
+        }
+      };
+    }, [shimmer, nudge, twinkle, halo, reduceMotion]),
+  );
 
   useEffect(() => clock.setActive(live), [clock, live]);
   const tick = () => {

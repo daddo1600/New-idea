@@ -60,11 +60,12 @@ export function formatMoment(at: number, region: Region, now: number, sameDayAs?
   });
 }
 
-export function TrackingHealthCard() {
+/** Home's card; `state` comes from home's own useTrackingHealth, which also decides whether "Tracking on" shows. */
+export function TrackingHealthCard({ state }: { state: ReturnType<typeof useTrackingHealth> }) {
   const theme = useTheme();
   const t = useT();
   const { region } = useRegion();
-  const { health, checkedAt: now, restart, dismissGap, labelGap } = useTrackingHealth();
+  const { health, checkedAt: now, restart, dismissGap, labelGap } = state;
   useTrackingAlerts();
   const [busy, setBusy] = useState(false);
 

@@ -289,7 +289,8 @@ export async function editShiftTimes(
       );
       await db.runAsync('DELETE FROM shift_pauses WHERE shift_id = ? AND started_at >= ?;', id, saved.endedAt);
     }
-    await rederiveUnlocked(db, saved, now);
+    // The end the user set is the end: the grace after it no longer keeps a drive in.
+    await rederiveUnlocked(db, saved, now, { keepGrace: saved.endedAt === shift.endedAt });
     result = saved;
   });
   return result;
@@ -301,7 +302,12 @@ export async function editShiftTimes(
  * that started in the grace after the end keeps what it had. Then any drive
  * running across the end or a pause is cut.
  */
-async function rederiveUnlocked(db: SQLiteDatabase, shift: Shift, now: Date): Promise<void> {
+async function rederiveUnlocked(
+  db: SQLiteDatabase,
+  shift: Shift,
+  now: Date,
+  { keepGrace = true }: { keepGrace?: boolean } = {},
+): Promise<void> {
   const start = Date.parse(shift.startedAt);
   const end = shift.endedAt ? Date.parse(shift.endedAt) : now.getTime();
   const pauses = await listPauses(db, shift.id);
@@ -329,7 +335,7 @@ async function rederiveUnlocked(db: SQLiteDatabase, shift: Shift, now: Date): Pr
   );
   for (const row of rows) {
     const at = Date.parse(row.started_at);
-    if (at >= end && at <= end + SHIFT_GRACE_MS && row.shift_id === shift.id) continue;
+    if (keepGrace && at >= end && at <= end + SHIFT_GRACE_MS && row.shift_id === shift.id) continue;
     const member = at >= start && working(at);
     if (member && row.shift_id !== shift.id) await setTripShiftUnlocked(db, row.id, shift.id);
     if (!member && row.shift_id === shift.id) await setTripShiftUnlocked(db, row.id, null);
