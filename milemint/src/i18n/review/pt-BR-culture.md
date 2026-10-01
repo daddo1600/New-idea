@@ -302,3 +302,40 @@ Back-translations: Choose all that apply. The first you choose is filled in for 
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+## Round 8g: practice tutorial
+
+The practice run after setup (sorting two sample drives, a sample shift) and home’s first, empty screen worded from the setup answers. Business, personal, swipe and shift reuse this file’s existing words.
+
+| English | Translation | Back-translation | Note |
+|---|---|---|---|
+| Swipe on your shift when you start work. Every drive in it counts as {{purpose}}. | Deslize para iniciar o turno quando começar a trabalhar. Todo trajeto nele conta como {{purpose}}. | Swipe to start the shift when you start working. Every trip in it counts as {{purpose}}. | *Deslize para iniciar o turno* as on the shift bar. |
+| Drives in your hours ({{days}} {{from}}–{{to}}) are sorted as business for you. | Os trajetos no seu horário ({{days}} {{from}}–{{to}}) são marcados como profissionais para você. | Trips in your hours ({{days}} {{from}}–{{to}}) are marked professional for you. | *horário* as in “Horário de trabalho”. |
+| Drives in your work hours are sorted as business for you. | Os trajetos no seu horário de trabalho são marcados como profissionais para você. | Trips in your work hours are marked professional for you. | Natural, fits its place. |
+| After each drive, swipe right for business or left for personal. | Depois de cada trajeto, deslize para a direita se for profissional ou para a esquerda se for pessoal. | After each trip, swipe right if professional or left if personal. | Same shape as the auto notes. |
+| {{rate}} a mile · {{vehicle}} · {{country}} | {{rate}} por milha · {{vehicle}} · {{country}} | {{rate}} per mile · {{vehicle}} · {{country}} | Natural, fits its place. |
+| {{rate}} a km · {{vehicle}} · {{country}} | {{rate}} por km · {{vehicle}} · {{country}} | {{rate}} per km · {{vehicle}} · {{country}} | Natural, fits its place. |
+| PRACTICE RUN | TREINO | PRACTICE | Eyebrow; *treino* is the everyday word. |
+| This is how a drive shows up after you park. Try sorting it. | É assim que um trajeto aparece depois que você estaciona. Tente classificá-lo. | This is how a trip appears after you park. Try classifying it. | Natural, fits its place. |
+| Swipe left for personal | Deslize para a esquerda se for pessoal | Swipe left if personal | Natural, fits its place. |
+| Not that way. Try again. | Para o outro lado. Tente de novo. | The other way. Try again. | Natural, fits its place. |
+| Sorted as personal ✓ | Marcado como pessoal ✓ | Marked as personal ✓ | Natural, fits its place. |
+| Now a work drive. Work drives are worth money back. | Agora um trajeto profissional. Trajetos profissionais valem dinheiro de volta. | Now a professional trip. Professional trips are worth money back. | *Profissional* is this file’s word for business. |
+| Swipe right for business | Deslize para a direita se for profissional | Swipe right if professional | Natural, fits its place. |
+| Sorted as business: worth {{amount}} | Marcado como profissional: vale {{amount}} | Marked as professional: worth {{amount}} | *vale* as in “Vale {{amount}} se for profissional”. |
+| Swipe to start your shift | Deslize para iniciar o seu turno | Swipe to start your shift | Natural, fits its place. |
+| Your shift is on ✓ | Seu turno começou ✓ | Your shift has started ✓ | Natural, fits its place. |
+| Mark as personal | Marcar como pessoal | Mark as personal | Natural, fits its place. |
+| Mark as business | Marcar como profissional | Mark as professional | Natural, fits its place. |
+| Practice drive · not saved | Trajeto de treino · não é salvo | Practice trip · not saved | Natural, fits its place. |
+| Supermarket | Supermercado | Supermarket | Natural, fits its place. |
+| Office | Escritório | Office | Natural, fits its place. |
+| Customer | Cliente | Customer | Natural, fits its place. |
+| That’s it. Just drive: trips appear here after you park. | Pronto. É só dirigir: os trajetos aparecem aqui depois que você estaciona. | Done. Just drive: trips appear here after you park. | *É só dirigir* as in the empty state before. |
+| Start driving | Começar a dirigir | Start driving | Natural, fits its place. |
+| Skip | Pular | Skip | Natural, fits its place. |
+| Skip the practice run | Pular o treino | Skip the practice | Natural, fits its place. |
+| Tutorial | Tutorial | Tutorial | Natural, fits its place. |
+| Replay the tutorial | Rever o tutorial | See the tutorial again | Natural, fits its place. |
+| Try sorting two sample drives again. Nothing is saved. | Classifique de novo dois trajetos de exemplo. Nada é salvo. | Classify two sample trips again. Nothing is saved. | Natural, fits its place. |
+| Replay | Rever | See again | Natural, fits its place. |

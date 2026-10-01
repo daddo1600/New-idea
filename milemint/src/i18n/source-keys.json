@@ -455,6 +455,18 @@
     ]
   },
   {
+    "key": "{{rate}} a km · {{vehicle}} · {{country}}",
+    "files": [
+      "components/home-empty.tsx"
+    ]
+  },
+  {
+    "key": "{{rate}} a mile · {{vehicle}} · {{country}}",
+    "files": [
+      "components/home-empty.tsx"
+    ]
+  },
+  {
     "key": "{{remaining}} to go to {{goal}}",
     "files": [
       "app/milestones.tsx"
@@ -834,6 +846,12 @@
     "key": "Address or postcode",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "After each drive, swipe right for business or left for personal.",
+    "files": [
+      "components/home-empty.tsx"
     ]
   },
   {
@@ -1656,6 +1674,12 @@
     ]
   },
   {
+    "key": "Customer",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
     "key": "Date",
     "files": [
       "app/add-trip.tsx"
@@ -1810,6 +1834,18 @@
     "key": "Drives can’t be measured from a rough position. Tap to fix it.",
     "files": [
       "tracking/health-alerts.ts"
+    ]
+  },
+  {
+    "key": "Drives in your hours ({{days}} {{from}}–{{to}}) are sorted as business for you.",
+    "files": [
+      "components/home-empty.tsx"
+    ]
+  },
+  {
+    "key": "Drives in your work hours are sorted as business for you.",
+    "files": [
+      "components/home-empty.tsx"
     ]
   },
   {
@@ -2164,13 +2200,15 @@
   {
     "key": "Every drive until you end it counts as business",
     "files": [
-      "app/index.tsx"
+      "app/index.tsx",
+      "components/practice-tutorial.tsx"
     ]
   },
   {
     "key": "Every drive until you end it counts as business.",
     "files": [
-      "app/index.tsx"
+      "app/index.tsx",
+      "components/practice-tutorial.tsx"
     ]
   },
   {
@@ -2657,7 +2695,8 @@
     "files": [
       "app/settings.tsx",
       "app/trip/[id].tsx",
-      "app/welcome.tsx"
+      "app/welcome.tsx",
+      "components/practice-tutorial.tsx"
     ]
   },
   {
@@ -2855,12 +2894,6 @@
     "key": "Just drive. Each trip appears after you park, and business drives count at {{authority}}’s {{rate}} rate.",
     "files": [
       "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "Just drive. Each trip appears here after you park, ready to swipe business or personal.",
-    "files": [
-      "app/index.tsx"
     ]
   },
   {
@@ -3112,6 +3145,18 @@
     "key": "Mark {{from}} to {{to}} as personal",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Mark as business",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
+    "key": "Mark as personal",
+    "files": [
+      "components/practice-tutorial.tsx"
     ]
   },
   {
@@ -3603,6 +3648,12 @@
     ]
   },
   {
+    "key": "Not that way. Try again.",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
     "key": "Note",
     "files": [
       "app/add-trip.tsx"
@@ -3632,6 +3683,12 @@
     "key": "Notifications are off for MileMint. Turn them on in iPhone Settings → Notifications.",
     "files": [
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Now a work drive. Work drives are worth money back.",
+    "files": [
+      "components/practice-tutorial.tsx"
     ]
   },
   {
@@ -3699,6 +3756,12 @@
     "key": "Off we go! 👋",
     "files": [
       "domain/cheers.ts"
+    ]
+  },
+  {
+    "key": "Office",
+    "files": [
+      "components/practice-tutorial.tsx"
     ]
   },
   {
@@ -4062,6 +4125,18 @@
     ]
   },
   {
+    "key": "Practice drive · not saved",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
+    "key": "PRACTICE RUN",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
     "key": "Precise Location is off",
     "files": [
       "components/tracking-health-card.tsx",
@@ -4201,6 +4276,18 @@
     "key": "Replace…",
     "files": [
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Replay",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
+    "key": "Replay the tutorial",
+    "files": [
+      "components/practice-tutorial.tsx"
     ]
   },
   {
@@ -4677,9 +4764,21 @@
     ]
   },
   {
+    "key": "Skip",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
     "key": "Skip for now",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Skip the practice run",
+    "files": [
+      "components/practice-tutorial.tsx"
     ]
   },
   {
@@ -4728,6 +4827,18 @@
     "key": "Sort your drives each week and your figures are ready whenever a deadline comes round. MileMint reminds you two months, one month and one week before the tax year ends.",
     "files": [
       "app/tax-dates.tsx"
+    ]
+  },
+  {
+    "key": "Sorted as business: worth {{amount}}",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
+    "key": "Sorted as personal ✓",
+    "files": [
+      "components/practice-tutorial.tsx"
     ]
   },
   {
@@ -4783,6 +4894,12 @@
     "key": "Start a new logbook",
     "files": [
       "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Start driving",
+    "files": [
+      "components/practice-tutorial.tsx"
     ]
   },
   {
@@ -4872,7 +4989,8 @@
   {
     "key": "Step {{step}} of {{total}}",
     "files": [
-      "app/welcome.tsx"
+      "app/welcome.tsx",
+      "components/practice-tutorial.tsx"
     ]
   },
   {
@@ -4948,6 +5066,12 @@
     ]
   },
   {
+    "key": "Supermarket",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
     "key": "Swap from and to",
     "files": [
       "app/add-trip.tsx"
@@ -4963,6 +5087,24 @@
     "key": "Swipe back to end your shift.",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Swipe left for personal",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
+    "key": "Swipe on your shift when you start work. Every drive in it counts as {{purpose}}.",
+    "files": [
+      "components/home-empty.tsx"
+    ]
+  },
+  {
+    "key": "Swipe right for business",
+    "files": [
+      "components/practice-tutorial.tsx"
     ]
   },
   {
@@ -4986,7 +5128,14 @@
   {
     "key": "Swipe to start shift",
     "files": [
-      "app/index.tsx"
+      "app/index.tsx",
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
+    "key": "Swipe to start your shift",
+    "files": [
+      "components/practice-tutorial.tsx"
     ]
   },
   {
@@ -5114,6 +5263,12 @@
     "key": "That invite has already been used. Ask your friend to send you a new one.",
     "files": [
       "referral/referral.tsx"
+    ]
+  },
+  {
+    "key": "That’s it. Just drive: trips appear here after you park.",
+    "files": [
+      "components/practice-tutorial.tsx"
     ]
   },
   {
@@ -5297,6 +5452,12 @@
     "key": "This is CRA’s reimbursement rate for employees. If you’re self-employed, CRA usually wants your actual car costs, so treat the figure as an estimate.",
     "files": [
       "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "This is how a drive shows up after you park. Try sorting it.",
+    "files": [
+      "components/practice-tutorial.tsx"
     ]
   },
   {
@@ -5484,6 +5645,12 @@
     ]
   },
   {
+    "key": "Try sorting two sample drives again. Nothing is saved.",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
     "key": "Tue",
     "files": [
       "app/settings.tsx"
@@ -5510,7 +5677,7 @@
   {
     "key": "Turn on automatic tracking and your drives will appear here.",
     "files": [
-      "app/index.tsx"
+      "components/home-empty.tsx"
     ]
   },
   {
@@ -5523,6 +5690,12 @@
     "key": "Turn tracking back on",
     "files": [
       "components/tracking-health-card.tsx"
+    ]
+  },
+  {
+    "key": "Tutorial",
+    "files": [
+      "components/practice-tutorial.tsx"
     ]
   },
   {
@@ -6170,6 +6343,12 @@
     "key": "Your shift ended after 16 hours",
     "files": [
       "tracking/shift-notifications.ts"
+    ]
+  },
+  {
+    "key": "Your shift is on ✓",
+    "files": [
+      "components/practice-tutorial.tsx"
     ]
   },
   {

@@ -19,6 +19,7 @@ import { backedUpText, formatBackupDate, PROBLEM_TEXT } from '@/backup/copy';
 import { backupAge } from '@/backup/schedule';
 import { tripCount, type Snapshot } from '@/backup/snapshot';
 import { GoldButton } from '@/components/gold-button';
+import { ReplayTutorialSection } from '@/components/practice-tutorial';
 import { PurposePicker } from '@/components/purpose-picker';
 import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { Segmented } from '@/components/segmented';
@@ -156,6 +157,8 @@ export default function SettingsScreen() {
         <LogbookSection />
 
         <LanguageSection />
+
+        <ReplayTutorialSection />
 
         <DrivingSection />
 

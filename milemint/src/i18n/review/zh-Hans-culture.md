@@ -269,3 +269,40 @@ Back-translations: Multiple choice allowed. The first one chosen is filled in fo
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+## Round 8g: practice tutorial
+
+The practice run after setup (sorting two sample drives, a sample shift) and home’s first, empty screen worded from the setup answers. Business, personal, swipe and shift reuse this file’s existing words.
+
+| English | Translation | Back-translation | Note |
+|---|---|---|---|
+| Swipe on your shift when you start work. Every drive in it counts as {{purpose}}. | 开始干活时滑动开工。开工期间的每次行程都算作{{purpose}}。 | When you start work, swipe to start. Every trip while on shift counts as {{purpose}}. | *滑动开工* as on the shift bar. |
+| Drives in your hours ({{days}} {{from}}–{{to}}) are sorted as business for you. | 你工作时间（{{days}} {{from}}–{{to}}）内的行程会自动归为工作。 | Trips within your work hours ({{days}} {{from}}–{{to}}) are filed as work automatically. | Full-width brackets. |
+| Drives in your work hours are sorted as business for you. | 你工作时间内的行程会自动归为工作。 | Trips within your work hours are filed as work automatically. | Natural, fits its place. |
+| After each drive, swipe right for business or left for personal. | 每次行程后，右滑为工作，左滑为私人。 | After each trip, swipe right for work, left for personal. | *右滑/左滑* as in the auto notes. |
+| {{rate}} a mile · {{vehicle}} · {{country}} | 每英里 {{rate}} · {{vehicle}} · {{country}} | {{rate}} per mile · {{vehicle}} · {{country}} | Natural, fits its place. |
+| {{rate}} a km · {{vehicle}} · {{country}} | 每公里 {{rate}} · {{vehicle}} · {{country}} | {{rate}} per km · {{vehicle}} · {{country}} | *每公里* as in the vehicle note. |
+| PRACTICE RUN | 练习一下 | A LITTLE PRACTICE | Eyebrow; no capitals in Chinese. |
+| This is how a drive shows up after you park. Try sorting it. | 停车后行程会这样显示。试着给它分类。 | After you park a trip shows like this. Try classifying it. | Natural, fits its place. |
+| Swipe left for personal | 私人请左滑 | If personal, swipe left | As in the auto note. |
+| Not that way. Try again. | 方向不对，再试一次。 | Wrong direction, try again. | Natural, fits its place. |
+| Sorted as personal ✓ | 已归为私人 ✓ | Filed as personal ✓ | Natural, fits its place. |
+| Now a work drive. Work drives are worth money back. | 再来一段工作行程。工作行程可以帮你拿回钱。 | Next, a work trip. Work trips can get you money back. | Natural, fits its place. |
+| Swipe right for business | 工作请右滑 | If work, swipe right | Natural, fits its place. |
+| Sorted as business: worth {{amount}} | 已归为工作：价值 {{amount}} | Filed as work: worth {{amount}} | *价值* as in the row. |
+| Swipe to start your shift | 滑动即可开工 | Swipe to start work | Natural, fits its place. |
+| Your shift is on ✓ | 已开工 ✓ | Shift started ✓ | *开工* as in “开工中”. |
+| Mark as personal | 标为私人 | Mark as personal | As in the row buttons. |
+| Mark as business | 标为工作 | Mark as work | Natural, fits its place. |
+| Practice drive · not saved | 练习行程 · 不会保存 | Practice trip · not saved | Natural, fits its place. |
+| Supermarket | 超市 | Supermarket | Natural, fits its place. |
+| Office | 办公室 | Office | Natural, fits its place. |
+| Customer | 顾客 | Customer | Natural, fits its place. |
+| That’s it. Just drive: trips appear here after you park. | 就这样。尽管开车：停车后行程会出现在这里。 | That’s it. Just drive: trips appear here after you park. | *尽管开车* as in the old empty state. |
+| Start driving | 出发吧 | Let’s go | Button. |
+| Skip | 跳过 | Skip | Natural, fits its place. |
+| Skip the practice run | 跳过练习 | Skip the practice | Natural, fits its place. |
+| Tutorial | 教程 | Tutorial | Natural, fits its place. |
+| Replay the tutorial | 重看教程 | Watch the tutorial again | Natural, fits its place. |
+| Try sorting two sample drives again. Nothing is saved. | 再练习分类两段示例行程。不会保存任何内容。 | Practise classifying two sample trips again. Nothing is saved. | Natural, fits its place. |
+| Replay | 重看 | Watch again | Natural, fits its place. |

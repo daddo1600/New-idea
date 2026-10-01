@@ -84,6 +84,11 @@ export type AppSettings = {
   friendsJoined: number;
   /** ISO time the app was first set up: a friend's code can be entered for 30 days after. */
   installedAt: string | null;
+  /**
+   * The practice run on home (sorting two sample drives) has been finished or
+   * skipped. Settings can set it back to false to replay it.
+   */
+  tutorialDone: boolean;
 };
 
 const WEEKDAY_9_TO_5 = [{ start: '09:00', end: '17:00' }];
@@ -118,6 +123,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   qualifiedAt: null,
   friendsJoined: 0,
   installedAt: null,
+  tutorialDone: false,
 };
 
 type Check<T> = (value: unknown) => T | undefined;
@@ -194,6 +200,7 @@ const CHECKS: { [K in keyof AppSettings]-?: Check<AppSettings[K]> } = {
   qualifiedAt: textOrNull,
   friendsJoined: (value) => (typeof value === 'number' && Number.isInteger(value) && value >= 0 ? value : undefined),
   installedAt: textOrNull,
+  tutorialDone: bool,
 };
 
 /** Stored settings, each field checked against its type and allowed values (see CHECKS). */

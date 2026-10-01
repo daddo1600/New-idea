@@ -269,3 +269,40 @@ Back-translations: Choose everything that applies. The first chosen is filled in
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+## Round 8g: practice tutorial
+
+The practice run after setup (sorting two sample drives, a sample shift) and home’s first, empty screen worded from the setup answers. Business, personal, swipe and shift reuse this file’s existing words.
+
+| English | Translation | Back-translation | Note |
+|---|---|---|---|
+| Swipe on your shift when you start work. Every drive in it counts as {{purpose}}. | Au début du travail, glissez pour commencer votre quart. Chaque trajet du quart compte comme {{purpose}}. | When work starts, swipe to start your shift. Each trip in the shift counts as {{purpose}}. | *Glissez pour commencer le quart* as on the shift bar. |
+| Drives in your hours ({{days}} {{from}}–{{to}}) are sorted as business for you. | Les trajets pendant vos heures ({{days}} {{from}}–{{to}}) sont classés affaires pour vous. | Trips during your hours ({{days}} {{from}}–{{to}}) are classed as business for you. | *classer* as in the row buttons. |
+| Drives in your work hours are sorted as business for you. | Les trajets pendant vos heures de travail sont classés affaires pour vous. | Trips during your work hours are classed as business for you. | Natural, fits its place. |
+| After each drive, swipe right for business or left for personal. | Après chaque trajet, balayez vers la droite pour affaires ou vers la gauche pour personnel. | After each trip, swipe right for business or left for personal. | *balayez* as in the auto notes. |
+| {{rate}} a mile · {{vehicle}} · {{country}} | {{rate}} par mile · {{vehicle}} · {{country}} | {{rate}} per mile · {{vehicle}} · {{country}} | Natural, fits its place. |
+| {{rate}} a km · {{vehicle}} · {{country}} | {{rate}} par km · {{vehicle}} · {{country}} | {{rate}} per km · {{vehicle}} · {{country}} | Natural, fits its place. |
+| PRACTICE RUN | ENTRAÎNEMENT | PRACTICE | Eyebrow. |
+| This is how a drive shows up after you park. Try sorting it. | Voici comment un trajet apparaît quand vous vous garez. Essayez de le classer. | Here is how a trip appears when you park. Try classing it. | Natural, fits its place. |
+| Swipe left for personal | Balayez vers la gauche pour personnel | Swipe left for personal | Natural, fits its place. |
+| Not that way. Try again. | Pas dans ce sens. Réessayez. | Not that way. Try again. | Natural, fits its place. |
+| Sorted as personal ✓ | Classé personnel ✓ | Classed personal ✓ | Natural, fits its place. |
+| Now a work drive. Work drives are worth money back. | Maintenant, un trajet d’affaires. Ces trajets vous rapportent de l’argent. | Now a business trip. These trips bring you money. | Natural, fits its place. |
+| Swipe right for business | Balayez vers la droite pour affaires | Swipe right for business | Natural, fits its place. |
+| Sorted as business: worth {{amount}} | Classé affaires : vaut {{amount}} | Classed business: worth {{amount}} | Space before the colon, as elsewhere in fr. |
+| Swipe to start your shift | Glissez pour commencer votre quart | Swipe to start your shift | Natural, fits its place. |
+| Your shift is on ✓ | Votre quart a commencé ✓ | Your shift has started ✓ | Natural, fits its place. |
+| Mark as personal | Classer comme personnel | Class as personal | Natural, fits its place. |
+| Mark as business | Classer comme affaires | Class as business | Natural, fits its place. |
+| Practice drive · not saved | Trajet d’entraînement · non enregistré | Practice trip · not saved | Natural, fits its place. |
+| Supermarket | Supermarché | Supermarket | Natural, fits its place. |
+| Office | Bureau | Office | Natural, fits its place. |
+| Customer | Client | Customer | Natural, fits its place. |
+| That’s it. Just drive: trips appear here after you park. | C’est tout. Conduisez : les trajets apparaissent ici quand vous vous garez. | That’s all. Drive: trips appear here when you park. | Natural, fits its place. |
+| Start driving | Prendre la route | Hit the road | Button. |
+| Skip | Passer | Skip | Natural, fits its place. |
+| Skip the practice run | Passer l’entraînement | Skip the practice | Natural, fits its place. |
+| Tutorial | Tutoriel | Tutorial | Natural, fits its place. |
+| Replay the tutorial | Revoir le tutoriel | See the tutorial again | Natural, fits its place. |
+| Try sorting two sample drives again. Nothing is saved. | Classez à nouveau deux trajets d’exemple. Rien n’est enregistré. | Class two sample trips again. Nothing is saved. | Natural, fits its place. |
+| Replay | Revoir | See again | Natural, fits its place. |

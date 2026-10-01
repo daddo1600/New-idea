@@ -343,3 +343,40 @@ Back-translations: Choose all that apply. Whichever you choose first, we'll fill
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+## Round 8g: practice tutorial
+
+The practice run after setup (sorting two sample drives, a sample shift) and home’s first, empty screen worded from the setup answers. Business, personal, swipe and shift reuse this file’s existing words.
+
+| English | Translation | Back-translation | Note |
+|---|---|---|---|
+| Swipe on your shift when you start work. Every drive in it counts as {{purpose}}. | ਕੰਮ ਸ਼ੁਰੂ ਕਰਦੇ ਸਮੇਂ ਸਵਾਈਪ ਕਰਕੇ ਸ਼ਿਫਟ ਸ਼ੁਰੂ ਕਰੋ। ਉਸ ਵਿੱਚ ਹਰ ਟ੍ਰਿਪ {{purpose}} ਗਿਣਿਆ ਜਾਵੇਗਾ। | When starting work, swipe to start the shift. Every trip in it will be counted as {{purpose}}. | Natural, fits its place. |
+| Drives in your hours ({{days}} {{from}}–{{to}}) are sorted as business for you. | ਤੁਹਾਡੇ ਘੰਟਿਆਂ ({{days}} {{from}}–{{to}}) ਵਿੱਚ ਟ੍ਰਿਪ ਆਪਣੇ-ਆਪ ਬਿਜ਼ਨਸ ਵਿੱਚ ਪਾਏ ਜਾਂਦੇ ਹਨ। | Trips in your hours ({{days}} {{from}}–{{to}}) are put in business automatically. | Natural, fits its place. |
+| Drives in your work hours are sorted as business for you. | ਤੁਹਾਡੇ ਕੰਮ ਦੇ ਘੰਟਿਆਂ ਵਿੱਚ ਟ੍ਰਿਪ ਆਪਣੇ-ਆਪ ਬਿਜ਼ਨਸ ਵਿੱਚ ਪਾਏ ਜਾਂਦੇ ਹਨ। | Trips in your work hours are put in business automatically. | *ਕੰਮ ਦੇ ਘੰਟੇ* as in Settings. |
+| After each drive, swipe right for business or left for personal. | ਹਰ ਟ੍ਰਿਪ ਤੋਂ ਬਾਅਦ, ਬਿਜ਼ਨਸ ਲਈ ਸੱਜੇ ਜਾਂ ਨਿੱਜੀ ਲਈ ਖੱਬੇ ਸਵਾਈਪ ਕਰੋ। | After each trip, swipe right for business or left for personal. | Natural, fits its place. |
+| {{rate}} a mile · {{vehicle}} · {{country}} | {{rate}} ਪ੍ਰਤੀ ਮੀਲ · {{vehicle}} · {{country}} | {{rate}} per mile · {{vehicle}} · {{country}} | Natural, fits its place. |
+| {{rate}} a km · {{vehicle}} · {{country}} | {{rate}} ਪ੍ਰਤੀ ਕਿ.ਮੀ. · {{vehicle}} · {{country}} | {{rate}} per km · {{vehicle}} · {{country}} | *ਪ੍ਰਤੀ ਕਿ.ਮੀ.* as in the vehicle note. |
+| PRACTICE RUN | ਅਭਿਆਸ | PRACTICE | Natural, fits its place. |
+| This is how a drive shows up after you park. Try sorting it. | ਪਾਰਕ ਕਰਨ ਤੋਂ ਬਾਅਦ ਟ੍ਰਿਪ ਇੰਝ ਦਿਸਦਾ ਹੈ। ਇਸਨੂੰ ਛਾਂਟ ਕੇ ਦੇਖੋ। | After parking a trip looks like this. Try sorting it. | Natural, fits its place. |
+| Swipe left for personal | ਨਿੱਜੀ ਲਈ ਖੱਬੇ ਸਵਾਈਪ ਕਰੋ | Swipe left for personal | Natural, fits its place. |
+| Not that way. Try again. | ਉਸ ਪਾਸੇ ਨਹੀਂ। ਫਿਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ। | Not that side. Try again. | Natural, fits its place. |
+| Sorted as personal ✓ | ਨਿੱਜੀ ਵਿੱਚ ਪਾਇਆ ✓ | Put in personal ✓ | Natural, fits its place. |
+| Now a work drive. Work drives are worth money back. | ਹੁਣ ਇੱਕ ਕੰਮ ਦਾ ਟ੍ਰਿਪ। ਕੰਮ ਦੇ ਟ੍ਰਿਪਾਂ ਨਾਲ ਪੈਸੇ ਵਾਪਸ ਮਿਲਦੇ ਹਨ। | Now a work trip. Work trips get money back. | Natural, fits its place. |
+| Swipe right for business | ਬਿਜ਼ਨਸ ਲਈ ਸੱਜੇ ਸਵਾਈਪ ਕਰੋ | Swipe right for business | Natural, fits its place. |
+| Sorted as business: worth {{amount}} | ਬਿਜ਼ਨਸ ਵਿੱਚ ਪਾਇਆ: ਕੀਮਤ {{amount}} | Put in business: worth {{amount}} | Natural, fits its place. |
+| Swipe to start your shift | ਆਪਣੀ ਸ਼ਿਫਟ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਸਵਾਈਪ ਕਰੋ | Swipe to start your shift | Natural, fits its place. |
+| Your shift is on ✓ | ਤੁਹਾਡੀ ਸ਼ਿਫਟ ਸ਼ੁਰੂ ਹੋ ਗਈ ✓ | Your shift has started ✓ | Natural, fits its place. |
+| Mark as personal | ਨਿੱਜੀ ਮਾਰਕ ਕਰੋ | Mark personal | Natural, fits its place. |
+| Mark as business | ਬਿਜ਼ਨਸ ਮਾਰਕ ਕਰੋ | Mark business | Natural, fits its place. |
+| Practice drive · not saved | ਅਭਿਆਸ ਟ੍ਰਿਪ · ਸੇਵ ਨਹੀਂ ਹੋਵੇਗਾ | Practice trip · won’t be saved | Natural, fits its place. |
+| Supermarket | ਸੁਪਰਮਾਰਕੀਟ | Supermarket | Natural, fits its place. |
+| Office | ਦਫ਼ਤਰ | Office | Natural, fits its place. |
+| Customer | ਗਾਹਕ | Customer | Natural, fits its place. |
+| That’s it. Just drive: trips appear here after you park. | ਬੱਸ ਇੰਨਾ ਹੀ। ਗੱਡੀ ਚਲਾਓ: ਪਾਰਕ ਕਰਨ ਤੋਂ ਬਾਅਦ ਟ੍ਰਿਪ ਇੱਥੇ ਦਿਸਣਗੇ। | That’s all. Drive: trips will show here after you park. | *ਗੱਡੀ ਚਲਾਓ* as in the old empty state. |
+| Start driving | ਗੱਡੀ ਚਲਾਉਣਾ ਸ਼ੁਰੂ ਕਰੋ | Start driving | Natural, fits its place. |
+| Skip | ਛੱਡੋ | Skip | Natural, fits its place. |
+| Skip the practice run | ਅਭਿਆਸ ਛੱਡੋ | Skip practice | Natural, fits its place. |
+| Tutorial | ਟਿਊਟੋਰੀਅਲ | Tutorial | Natural, fits its place. |
+| Replay the tutorial | ਟਿਊਟੋਰੀਅਲ ਫਿਰ ਦੇਖੋ | See the tutorial again | Natural, fits its place. |
+| Try sorting two sample drives again. Nothing is saved. | ਦੋ ਨਮੂਨਾ ਟ੍ਰਿਪ ਫਿਰ ਛਾਂਟ ਕੇ ਦੇਖੋ। ਕੁਝ ਵੀ ਸੇਵ ਨਹੀਂ ਹੁੰਦਾ। | Try sorting two sample trips again. Nothing is saved. | Natural, fits its place. |
+| Replay | ਫਿਰ ਦੇਖੋ | See again | Natural, fits its place. |

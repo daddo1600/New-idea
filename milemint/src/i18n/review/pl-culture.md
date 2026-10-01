@@ -294,3 +294,40 @@ Back-translations: Choose all that fit. We'll enter the first one chosen for you
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+## Round 8g: practice tutorial
+
+The practice run after setup (sorting two sample drives, a sample shift) and home’s first, empty screen worded from the setup answers. Business, personal, swipe and shift reuse this file’s existing words.
+
+| English | Translation | Back-translation | Note |
+|---|---|---|---|
+| Swipe on your shift when you start work. Every drive in it counts as {{purpose}}. | Gdy zaczynasz pracę, przesuń, aby zacząć zmianę. Każdy przejazd na zmianie liczy się jako {{purpose}}. | When you start work, swipe to start the shift. Each drive on the shift counts as {{purpose}}. | *Przesuń, aby zacząć zmianę* as on the bar. |
+| Drives in your hours ({{days}} {{from}}–{{to}}) are sorted as business for you. | Przejazdy w Twoich godzinach ({{days}} {{from}}–{{to}}) oznaczamy automatycznie jako służbowe. | We mark drives in your hours ({{days}} {{from}}–{{to}}) automatically as business. | Polite capital *Twoich*, as elsewhere. |
+| Drives in your work hours are sorted as business for you. | Przejazdy w Twoich godzinach pracy oznaczamy automatycznie jako służbowe. | We mark drives in your work hours automatically as business. | Natural, fits its place. |
+| After each drive, swipe right for business or left for personal. | Po każdym przejeździe przesuń w prawo, jeśli służbowy, lub w lewo, jeśli prywatny. | After each drive swipe right if business, or left if private. | Natural, fits its place. |
+| {{rate}} a mile · {{vehicle}} · {{country}} | {{rate}} za milę · {{vehicle}} · {{country}} | {{rate}} per mile · {{vehicle}} · {{country}} | Natural, fits its place. |
+| {{rate}} a km · {{vehicle}} · {{country}} | {{rate}} za km · {{vehicle}} · {{country}} | {{rate}} per km · {{vehicle}} · {{country}} | Natural, fits its place. |
+| PRACTICE RUN | ĆWICZENIE | EXERCISE | Natural, fits its place. |
+| This is how a drive shows up after you park. Try sorting it. | Tak wygląda przejazd po zaparkowaniu. Spróbuj go posortować. | This is what a drive looks like after parking. Try sorting it. | Natural, fits its place. |
+| Swipe left for personal | Przesuń w lewo, jeśli prywatny | Swipe left if private | Natural, fits its place. |
+| Not that way. Try again. | Nie w tę stronę. Spróbuj jeszcze raz. | Not that way. Try once more. | Natural, fits its place. |
+| Sorted as personal ✓ | Oznaczono jako prywatny ✓ | Marked as private ✓ | Natural, fits its place. |
+| Now a work drive. Work drives are worth money back. | Teraz przejazd służbowy. Służbowe przejazdy to zwrot pieniędzy. | Now a business drive. Business drives mean money back. | Natural, fits its place. |
+| Swipe right for business | Przesuń w prawo, jeśli służbowy | Swipe right if business | Natural, fits its place. |
+| Sorted as business: worth {{amount}} | Oznaczono jako służbowy: wart {{amount}} | Marked as business: worth {{amount}} | *wart* as in the row. |
+| Swipe to start your shift | Przesuń, aby zacząć zmianę | Swipe to start the shift | Same as the bar. |
+| Your shift is on ✓ | Zmiana rozpoczęta ✓ | Shift started ✓ | Natural, fits its place. |
+| Mark as personal | Oznacz jako prywatny | Mark as private | Natural, fits its place. |
+| Mark as business | Oznacz jako służbowy | Mark as business | Natural, fits its place. |
+| Practice drive · not saved | Przejazd ćwiczebny · niezapisany | Practice drive · unsaved | Natural, fits its place. |
+| Supermarket | Supermarket | Supermarket | Natural, fits its place. |
+| Office | Biuro | Office | Natural, fits its place. |
+| Customer | Klient | Customer | Natural, fits its place. |
+| That’s it. Just drive: trips appear here after you park. | To wszystko. Po prostu jedź: przejazdy pojawią się tutaj po zaparkowaniu. | That’s all. Just drive: drives will appear here after parking. | Natural, fits its place. |
+| Start driving | Ruszaj w drogę | Hit the road | Natural, fits its place. |
+| Skip | Pomiń | Skip | Natural, fits its place. |
+| Skip the practice run | Pomiń ćwiczenie | Skip the exercise | Natural, fits its place. |
+| Tutorial | Samouczek | Tutorial | Standard Polish UI word. |
+| Replay the tutorial | Powtórz samouczek | Repeat the tutorial | Natural, fits its place. |
+| Try sorting two sample drives again. Nothing is saved. | Jeszcze raz posortuj dwa przykładowe przejazdy. Nic nie zostanie zapisane. | Sort two sample drives once more. Nothing will be saved. | Natural, fits its place. |
+| Replay | Powtórz | Repeat | Natural, fits its place. |
