@@ -4,7 +4,7 @@ Everyday spoken Hindi, the way Indian drivers and couriers in the UK, US, Canada
 
 ## Form of address
 
-The app always calls the user **आप** and uses polite imperatives (करें, चुनें, देखें). Where the user speaks in the first person (share texts, “I’ll swipe each drive myself”), the line is worded so it has no gender (for example “मुझसे छूट जाता”, “मुझे खुद स्वाइप करनी है”).
+The app always calls the user **आप** and uses polite imperatives (करें, चुनें, देखें). Hindi verbs show gender, and the default आप + करते हैं / सकते हैं form is masculine. So lines about the user are worded without a gendered verb wherever possible: passive or impersonal forms (बदला जा सकता है, जोड़ी जा सकती हैं, चुननी होगी), noun phrases (ड्राइविंग के दौरान, अगर आप कर्मचारी हैं), or a plain imperative (स्वाइप करें). First-person lines (share texts, “I’ll swipe each drive myself”) are also gender-free (for example “मुझसे छूट जाता”, “मुझे खुद स्वाइप करनी है”).
 
 ## Terms
 
@@ -20,7 +20,7 @@ The app always calls the user **आप** and uses polite imperatives (करे�
 | tax year | टैक्स वर्ष | वर्ष is familiar from वित्त वर्ष. Kept the same everywhere. |
 | income year (ATO) | आय वर्ष | Different from the tax year in Australia. |
 | tax return | टैक्स रिटर्न | Standard. |
-| deduction | टैक्स छूट | What people say. कटौती sounds like a pay cut. |
+| deduction | टैक्स कटौती; can't be deducted = घटाया नहीं जा सकता | The official Hindi tax term. With टैक्स in front it doesn't read as a pay cut. Not छूट: that means exemption (a bigger promise) and is already used for “missed”. |
 | claim | क्लेम करना | Standard loanword. |
 | business mileage | बिज़नेस माइलेज | Standard. |
 | mileage rate | माइलेज रेट; per mile/km = प्रति मील / प्रति किमी | Standard. |
@@ -28,7 +28,7 @@ The app always calls the user **आप** and uses polite imperatives (करे�
 | mileage log | माइलेज लॉग | Standard. |
 | log (verb) | लॉग करना / लॉग होना | Standard. |
 | export | एक्सपोर्ट करना | Standard. |
-| miles / kilometres / km | मील / किलोमीटर / किमी | किमी is the normal Hindi abbreviation. |
+| miles / kilometres / km | मील / किलोमीटर / किमी | किमी is the normal Hindi abbreviation. Only where the line is the miles or km variant. Lines shown in every country (welcome tagline, season greetings, money/achievement share texts) use ट्रिप instead: “Never miss a mile” = एक भी ट्रिप न छूटे। |
 | vehicle | गाड़ी (feminine) | Everyday word for car, van or bike. वाहन is formal. |
 | place (saved) | जगह; Places = जगहें | Everyday. |
 | start / end of trip | शुरुआत / मंज़िल; From/To = कहाँ से / कहाँ तक | Natural. |
@@ -38,7 +38,11 @@ The app always calls the user **आप** and uses polite imperatives (करे�
 | employer / employee | एम्प्लॉयर / कर्मचारी | Common usage. |
 | self-employed | सेल्फ़-एम्प्लॉयड | Matches the English on tax forms. |
 | estimated / estimate | अनुमानित / अनुमान | Used wherever the English says so. |
-| worth (money value) | कीमत (कीमत लगभग {{amount}}, कीमत {{amount}} तक) | Gives a value without promising a saving. |
+| worth (money value) | कीमत (कीमत लगभग {{amount}}, कीमत {{amount}} तक) | Gives a value without promising a saving. Also used for “money back” / “earned back” (हर बिज़नेस मील की अपनी कीमत है). |
+| money back (milestones) | मिली रकम; money milestone = {{amount}} का पड़ाव पार! | Avoids पैसे वापस / जेब में, which read as a cash refund. |
+| Driving: (vehicle chip) | गाड़ी: ; Driving now = अभी चल रही | Gender-neutral and short. |
+| country (tax region) | देश; Your country = देश चुनें; your country’s … = चुने गए देश की … | For diaspora readers आपका देश means India. Never ask where the user is “from”. |
+| Missed miles check | छूटी दूरी की जाँच | Shown in every country, so no unit. |
 | Pro / MileMint Pro | Pro (Latin) | Plan name, kept. Go Pro = Pro लें. |
 | free plan / Free | फ़्री प्लान / फ़्री | Free trial = फ़्री ट्रायल. |
 | unlimited | अनलिमिटेड | Common in phone plans. |
@@ -67,7 +71,13 @@ The app always calls the user **आप** and uses polite imperatives (करे�
 - Every penny → **पाई-पाई** (an idiom, not a currency).
 - Spring has sprung → **बहार आ गई**.
 - G’day → **हैलो!**
-- Fall/Autumn miles add up → one line for both keys.
+- Fall/Autumn miles add up → one line for both keys: पतझड़ में भी ट्रिप जुड़ती जाती हैं (unit-free: shown in Canada and Australia).
+- Free money alert → **आपके पैसों की बात** (not मुफ़्त पैसा, which sounds like a scam).
+- Low effort, high reward → **थोड़ी-सी मेहनत, बड़ा आराम** (no money promise).
+- Future you says thanks → **आने वाले कल की ओर से शुक्रिया** (gender-neutral).
+- (slightly cheeky) → **(थोड़ा मज़ेदार)**, not शरारती.
+- Wrap up warm → **बाहर ठंड है, अपना ध्यान रखें**.
+- Season greetings stay secular: शुभकामनाएँ (good wishes) only, no blessings or religious words.
 - Cheers: खेल शुरू!, चलो, शुरू करते हैं!, हो जाए!, चलो चलें!, चल पड़े!, चलो, गाड़ी स्टार्ट!
 
 ## Unsure
@@ -86,11 +96,11 @@ These need a check by a reviewer, ideally against an iPhone set to Hindi:
    - "Open Settings" → सेटिंग्ज़ खोलें
    - "Settings → Notifications" → सेटिंग्ज़ → सूचनाएँ
 2. **टैक्स वर्ष vs टैक्स ईयर.** Some diaspora users may say "टैक्स ईयर". I chose वर्ष so the term reads the same everywhere.
-3. **टैक्स छूट for "deduction".** Natural, but strictly "छूट" can also mean exemption or relief. The alternative is कटौती.
+3. ~~टैक्स छूट for "deduction"~~ Resolved: changed to टैक्स कटौती in review.
 4. **"Plot twist: driving pays"** → कहानी में ट्विस्ट: ड्राइविंग की भी कीमत है. I softened it so it doesn't promise money.
 5. **"Best value"** → सबसे किफ़ायती. A reviewer may prefer बेस्ट वैल्यू.
 6. **"Worth money"** (feature heading) → पैसों की बात. This is a loose adaptation.
 7. **"Use"** (apply a typed purpose) → जोड़ें, and **"Use now"** (vehicle) → अभी चुनें. I chose these for length; they aren't literal.
-8. **"Driving:"** → चला रहे हैं: and **"Driving now"** → अभी इस्तेमाल में. Please check them in the UI.
+8. ~~"Driving:" / "Driving now"~~ Resolved in review: गाड़ी: / अभी चल रही (gender-neutral, shorter).
 9. **"Trades, sales, care, office"** → कारीगर, सेल्स, केयर, ऑफ़िस. "Trades" has no exact everyday equivalent.
 10. **Plural forms.** In Hindi, `one` also covers 0. The `one` forms use singular verbs (है), which read fine for 0 and 1.

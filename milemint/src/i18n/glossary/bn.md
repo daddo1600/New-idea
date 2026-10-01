@@ -38,7 +38,7 @@ The user is always **আপনি**, with polite verb forms (করুন, দ�
 | work hours | কাজের সময় | |
 | Home / Work (places) | বাড়ি / কর্মস্থল | বাড়ি is understood on both sides of the border, where বাসা is mostly Bangladeshi. কর্মস্থল fits tradespeople as well as office workers. |
 | place / saved place | জায়গা / সেভ করা জায়গা | |
-| Save | সেভ করুন | Short and everyday. Saving… is সেভ হচ্ছে… |
+| Save | সেভ (button) / সেভ করুন (in running text and longer buttons such as “ট্রিপ সেভ করুন”) | The bare header-bar button is সেভ, like বাতিল and সম্পন্ন, so it stays as short as the English. Saving… is সেভ হচ্ছে… |
 | Delete / Remove | মুছুন / সরান | Delete removes data. Remove takes an item out of a list. |
 | vehicle | যানবাহন | Covers cars, bikes and mopeds, where গাড়ি means "car" only. |
 | car / van / motorbike / bicycle / moped | গাড়ি / ভ্যান / মোটরবাইক / সাইকেল / মোপেড | |
@@ -55,10 +55,16 @@ The user is always **আপনি**, with polite verb forms (করুন, দ�
 | odometer | ওডোমিটার | |
 | employee / self-employed | কর্মচারী / স্বনিযুক্ত | স্বনিযুক্ত is standard Bangla. At first mention it's followed by "(self-employed)". |
 | Done | সম্পন্ন | Apple's Bengali wording. |
+| Use (apply a typed purpose) / Use now (vehicle) | নিন / বেছে নিন | Short button labels; “ব্যবহার করুন” was 2–3× the English length. |
+| Trips (list heading) | ট্রিপ | Short heading. |
+| Money back (milestones section) / Your money back and badges | টাকার হিসাব / আপনার টাকার হিসাব আর ব্যাজ | “টাকা ফেরত” reads as “refund”. The figures are estimated deduction values, not cash returned. |
+| Missed miles check | বাদ পড়া দূরত্ব যাচাই | Screen is shown in km countries too, so the unit is not named. |
 | Cancel | বাতিল | Apple's Bengali wording. |
 | Settings | সেটিংস | Apple's Bengali wording. |
-| Notifications | বিজ্ঞপ্তি | Apple's Bengali wording (see Unsure). |
-| Location | লোকেশন | See Unsure. |
+| Notifications | নোটিফিকেশন | Apple's Bengali iPhone User Guide uses নোটিফিকেশন (check 2). |
+| Location | লোকেশন | Apple's Bengali iPhone User Guide uses লোকেশন (check 2). |
+| Always (iOS location option) | সবসময় | Everyday register, matches “সবসময় ফ্রি” elsewhere; replaced সর্বদা in check 2. |
+| Change to Always Allow | সবসময় অনুমতি দিন-এ পরিবর্তন করুন | Unverified against a device (see Unsure). |
 | km / kilometres / miles | কিমি / কিলোমিটার / মাইল | |
 | Short weekdays | সোম, মঙ্গল, বুধ, বৃহঃ, শুক্র, শনি, রবি | The usual short forms. |
 
@@ -69,10 +75,18 @@ The user is always **আপনি**, with polite verb forms (করুন, দ�
 - **Postpositions on placeholders:** suffixes are attached with a hyphen ({{authority}}-এর, {{date}}-এর আগে, {{month}}-এ). That way they read correctly whatever value is filled in.
 - **Counting:** counts use the classifier টি ({{count}}টি ট্রিপ). Days use {{count}} দিন.
 - **Plurals:** bn has the categories `one` and `other`. Bengali nouns don't change for number, so both forms are usually the same. The exception is the "Sort them/it" line, where সেটি and সেগুলো differ.
+- **Unit-neutral lines:** lines shown in every country (welcome tagline, “Never miss a mile.”, share and celebration text, season greetings, the “Missed miles check” title) don't name মাইল or কিলোমিটার. They say ট্রিপ, হিসাব or দূরত্ব instead (for example “একটা ট্রিপও বাদ যাবে না।”). Lines that come as a miles/km pair keep their own unit.
+- **Money wording:** “money back” is never টাকা ফেরত (refund) where it describes the app's figures. Use দাম আছে, টাকার হিসাব or পাওনার খাতা, and দাবি করা for claim.
 - **English kept as-is:** MileMint, Pro, HMRC/IRS/CRA/ATO, all form and scheme names (Self Assessment, Making Tax Digital/MTD, Schedule C Part IV, Form 1040/1040-ES, T2125, T2200, T777, P87, BAS, PAYG, GST, D1, Mileage Allowance Relief, "Car, van and travel expenses", "Car and truck expenses", "Work-related car expenses", "simplified expenses", "cents per km method", "standard mileage rate"), delivery apps, and vehicle models (Golf, Honda PCX). Where it helps, a short Bangla gloss is added in brackets, for example "Estimated tax (আনুমানিক ট্যাক্স)" and "Instalments (কিস্তি)".
 - **Rewritten jokes:**
   - The knock-knock joke became "দরজায় টোকা 🚪 / কে? এই সপ্তাহের ট্রিপগুলো!…"
   - The dating pun became "সপ্তাহের সবচেয়ে সহজ ম্যাচ".
+  - "Swipe right on savings" became "ডানে সোয়াইপ, হিসাব সহজ" (no savings promise).
+  - "Free money alert" became "টাকা ফেলে রাখবেন না" ("ফ্রি টাকা" reads like a scam text).
+  - "Plot twist: driving pays" became "চমক: ড্রাইভিংয়েরও দাম আছে".
+  - "Game on!" became "শুরু হয়ে যাক!" (avoids "খেলা হবে", a political slogan in West Bengal and Bangladesh).
+  - "(slightly cheeky)" is "(একটু মজার)", not দুষ্টু.
+  - "Future you says thanks" became "পরে নিজেই নিজেকে ধন্যবাদ দেবেন".
   - "Every business mile counts" became "…মাইলই গোনার মতো", a pun on "worth counting". The body line "আমরা গুনে দেখেছি" picks the pun up.
   - "Sunday scaries" became "রবিবারের মন খারাপ?"
   - "G’day!" became a plain "হ্যালো!"
@@ -85,18 +99,18 @@ The user is always **আপনি**, with polite verb forms (করুন, দ�
 These need checking against an iPhone set to Bengali:
 
 1. **Allow While Using App**: used "অ্যাপ ব্যবহার করার সময় অনুমতি দিন".
-2. **Change to Always Allow**: used "সর্বদা অনুমতি দিন-এ পরিবর্তন করুন". This one is the least certain.
-3. **Always**: used "সর্বদা", on the assumption that this is Apple's word rather than "সবসময়". Every quoted “Always” in the app uses it.
+2. **Change to Always Allow**: now "সবসময় অনুমতি দিন-এ পরিবর্তন করুন". This one is the least certain.
+3. **Always**: now "সবসময়" (changed from সর্বদা in check 2). Every quoted “Always” in the app uses it. Still to confirm on a device.
 4. **While Using the App**: used "অ্যাপ ব্যবহার করার সময়". The shortened "While Using" in the line “Location is set to ‘While Using’” uses the same text.
 5. **Never**: used "কখনও না".
 6. **Ask Next Time Or When I Share**: used "পরের বার বা আমি শেয়ার করলে জিজ্ঞাসা করুন".
 7. **ALLOW LOCATION ACCESS** (section header): used "লোকেশন অ্যাক্সেসের অনুমতি দিন". Bengali has no capitals. The same text is used inside “In Settings, under Allow Location Access…”.
-8. **Location**: used "লোকেশন". Apple may use "অবস্থান".
+8. **Location**: "লোকেশন". Resolved in check 2 from Apple's Bengali guide.
 9. **Open Settings**: used "সেটিংস খুলুন".
-10. **Settings → Notifications**: used "সেটিংস → বিজ্ঞপ্তি".
+10. **Settings → Notifications**: now "সেটিংস → নোটিফিকেশন". Resolved in check 2 from Apple's Bengali guide.
 11. **"Done"** is "সম্পন্ন" and **"Back"** is "পিছনে". I believe these are Apple's terms, but haven't checked.
 12. **"Private"** (feature heading) is "গোপনীয়". **"Worth money"** is "আর্থিক মূল্য". Both are short headings and might read a little abstract.
-13. **"{{hours}}h {{minutes}}m"** is "{{hours}}ঘ {{minutes}}মি". These abbreviations are common, but some readers might prefer ঘণ্টা/মিনিট written out.
+13. **"{{hours}}h {{minutes}}m"** is now "{{hours}} ঘ. {{minutes}} মি." (check 2).
 14. **"Trades, sales, care, office"** became "কারিগরি কাজ, সেলস, কেয়ার, অফিস". "কেয়ার" is clear in the UK, but may be less clear to Indian readers.
 15. **"Autumn/Fall miles add up"** uses শরৎ for autumn. In Bengali seasons, শরৎ is early autumn. That's fine as a greeting.
 16. **Short weekday "বৃহঃ"** (Thursday) uses the visarga abbreviation. Some apps write "বৃহস্পতি" in full.
