@@ -20,9 +20,10 @@ import {
   INITIAL_TRACKER_RECORD,
   onGeofenceExit,
   onLocations,
+  onReconcile,
   parkedAt,
 } from '@/domain/tracker-policy';
-import { toLocalIsoDate } from '@/domain/trip';
+import { isoDateAtOffset } from '@/domain/trip';
 import type { DetectedTrip, LocationSample } from '@/domain/trip-detector';
 import { t } from '@/i18n/i18n';
 
@@ -60,6 +61,9 @@ function toSample(location: Location.LocationObject): LocationSample {
     accuracy: location.coords.accuracy,
     speed: location.coords.speed,
     timestamp: location.timestamp,
+    // The time zone the phone is in when the fix is taken: a drive's date is
+    // where it started, even if it's saved after crossing into another zone.
+    utcOffsetMin: new Date(location.timestamp).getTimezoneOffset(),
   };
 }
 
@@ -160,7 +164,8 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
     db,
     {
       startedAt: started.toISOString(),
-      localDate: toLocalIsoDate(started),
+      // The date where the drive started, not where the phone is when it's saved.
+      localDate: isoDateAtOffset(trip.startedAt, trip.utcOffsetMin),
       endedAt: new Date(trip.endedAt).toISOString(),
       startLabel,
       endLabel,
@@ -300,7 +305,14 @@ export async function reconcileTracking(db: SQLiteDatabase): Promise<void> {
     const background = await Location.getBackgroundPermissionsAsync();
     if (!background.granted) return;
     if (record.mode === 'gps') {
-      const decision = onLocations(record, [], Date.now());
+      // Where the phone is now, first: if iOS killed the app mid-drive, the
+      // last fix can be far behind. The detector decides whether the drive
+      // carried on or ended back there, and tracking restarts from here
+      // rather than from a stale point that would look like a jump.
+      const here = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High })
+        .then(toSample)
+        .catch(() => null);
+      const decision = onReconcile(record, here, Date.now());
       for (const trip of decision.completed) await saveDetectedTrip(db, trip);
       await saveTrackerRecord(db, decision.record);
       if (decision.switchToGeofenceAt) {

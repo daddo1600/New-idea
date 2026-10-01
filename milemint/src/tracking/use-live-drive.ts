@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { AppState } from 'react-native';
 
 import { DEMO_DRIVING, DEMO_MODE } from '@/dev/demo';
+import { currentDistanceM } from '@/domain/trip-detector';
 
 import { loadTrackerRecord } from './tracker-store';
 
@@ -35,7 +36,7 @@ export function useLiveDrive(): LiveDrive | null {
         detector?.mode === 'driving'
           ? {
               startedAt: detector.start.timestamp,
-              distanceMeters: detector.stop ? detector.stop.distanceM : detector.distanceM,
+              distanceMeters: currentDistanceM(detector),
               stopped: detector.stop !== null,
             }
           : null,

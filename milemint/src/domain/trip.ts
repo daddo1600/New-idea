@@ -56,6 +56,18 @@ export function milesToMeters(miles: number): number {
   return Math.round(miles * METERS_PER_MILE);
 }
 
+/**
+ * Calendar date (YYYY-MM-DD) of a moment at a given UTC offset, in
+ * `Date#getTimezoneOffset()` minutes (UTC minus local, so UK summer time is -60).
+ * Without a known offset, the device's current time zone is used.
+ */
+export function isoDateAtOffset(epochMs: number, utcOffsetMin?: number | null): string {
+  if (utcOffsetMin === null || utcOffsetMin === undefined || !Number.isFinite(utcOffsetMin)) {
+    return toLocalIsoDate(new Date(epochMs));
+  }
+  return new Date(epochMs - utcOffsetMin * 60_000).toISOString().slice(0, 10);
+}
+
 /** Local calendar date (YYYY-MM-DD) of a Date in the device's time zone. */
 export function toLocalIsoDate(date: Date): string {
   const y = date.getFullYear();
