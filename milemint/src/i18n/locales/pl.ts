@@ -821,6 +821,7 @@ const dictionary: Dictionary = {
   "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.": "Osobna pozycja zwrotu kosztów dla każdego przejazdu służbowego (data, skąd, dokąd, cel, odległość, stawka i kwota) do systemu rozliczania kosztów Twojego pracodawcy.",
   "Export to Xero, QuickBooks and FreeAgent": "Eksport do Xero, QuickBooks i FreeAgent",
   "Unlimited drives, PDF reports and accounting exports": "Przejazdy bez limitu, raporty PDF i eksport do księgowości",
+  "Shift done · {{elapsed}} · {{distance}} · {{value}}": "Zmiana zakończona · {{elapsed}} · {{distance}} · {{value}}",
 };
 
 export default dictionary;

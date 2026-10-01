@@ -1,7 +1,7 @@
 import { Redirect, router, Stack } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming, ZoomIn } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming, FadeInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ReanimatedSwipeable, {
   SwipeDirection,
@@ -13,7 +13,7 @@ import { BrandGradient } from '@/components/brand-gradient';
 import { LeafMark } from '@/components/leaf-mark';
 import { Celebration } from '@/components/celebration';
 import { ReminderAsk } from '@/components/reminder-ask';
-import { SwipeToStart } from '@/components/swipe-to-start';
+import { ShiftSlider } from '@/components/shift-slider';
 import { TaxCountdown } from '@/components/tax-countdown';
 import { Segmented } from '@/components/segmented';
 import { VehicleSheet } from '@/components/vehicle-sheet';
@@ -732,7 +732,7 @@ function LiveDriveBanner({ drive }: { drive: LiveDrive }) {
   );
 }
 
-/** Shift mode: one tap to start, and everything until "End shift" is work. */
+/** Shift mode: swipe right to start, swipe back to end; everything in between is work. */
 function ShiftBar({
   shift,
   drives,
@@ -751,65 +751,67 @@ function ShiftBar({
   const t = useT();
   const { region } = useRegion();
   const [now, setNow] = useState(() => Date.now());
-  /** A send-off shown for a few seconds after swiping to start. */
+  /** A send-off shown for a few seconds after starting, and a summary after ending. */
   const [cheer, setCheer] = useState<string | null>(null);
+  const [summary, setSummary] = useState<string | null>(null);
   useEffect(() => {
     if (!shift) return;
     const timer = setInterval(() => setNow(Date.now()), 30_000);
     return () => clearInterval(timer);
   }, [shift]);
 
-  if (!shift) {
-    return (
-      <View style={styles.shiftStart}>
-        <SwipeToStart
-          label={t('Swipe to start shift')}
-          hint={t('Every drive until you end it counts as business')}
-          onComplete={() => {
-            setCheer(shiftCheer(region.code, Math.floor(Date.now() / 1000), getLanguage()));
-            setTimeout(() => setCheer(null), 3500);
-            onStart();
-          }}
-        />
-        <ThemedText type="small" themeColor="textSecondary" style={styles.shiftHint}>
-          {t('Every drive until you end it counts as business.')}
-        </ThemedText>
-      </View>
-    );
-  }
-
-  const minutes = Math.max(0, Math.floor((now - Date.parse(shift.startedAt)) / 60_000));
+  const minutes = shift ? Math.max(0, Math.floor((now - Date.parse(shift.startedAt)) / 60_000)) : 0;
   const elapsed = t('{{hours}}h {{minutes}}m', {
     hours: Math.floor(minutes / 60),
     minutes: String(minutes % 60).padStart(2, '0'),
   });
+
   return (
-    <View
-      style={styles.shiftOn}
-      accessibilityLabel={t('On shift for {{elapsed}}, {{count}} drives', { elapsed, count: drives })}>
-      <BrandGradient />
-      <LiveDot color="#FACC15" />
-      <View style={styles.flex}>
-        {cheer ? (
-          <Animated.Text
-            entering={ZoomIn.springify().damping(12)}
-            style={styles.cheer}
-            numberOfLines={1}
-            adjustsFontSizeToFit>
-            {cheer}
-          </Animated.Text>
-        ) : (
-          <Text style={styles.shiftTitle}>{t('On shift · {{elapsed}}', { elapsed })}</Text>
-        )}
-        <Text style={styles.shiftSub}>
-          {drives > 0
+    <View style={styles.shiftStart}>
+      <ShiftSlider
+        on={!!shift}
+        offLabel={t('Swipe to start shift')}
+        onTitle={cheer ?? t('On shift · {{elapsed}}', { elapsed })}
+        onSubtitle={
+          drives > 0
             ? t('{{distance}} · {{value}} · {{count}} drives', { distance, value, count: drives })
-            : t('Every drive counts as business')}
-        </Text>
-      </View>
-      <Pressable accessibilityRole="button" onPress={onEnd} style={styles.shiftEnd}>
-        <Text style={styles.shiftEndText}>{t('End shift')}</Text>
-      </Pressable>
+            : t('Every drive counts as business')
+        }
+        endHint={t('End shift')}
+        accessibilityLabel={
+          shift ? t('On shift for {{elapsed}}, {{count}} drives', { elapsed, count: drives }) : t('Swipe to start shift')
+        }
+        accessibilityHint={
+          shift
+            ? t('End shift')
+            : t('{{hint}}. Swipe the button to the right, or double-tap.', {
+                hint: t('Every drive until you end it counts as business'),
+              })
+        }
+        onStart={() => {
+          setSummary(null);
+          setCheer(shiftCheer(region.code, Math.floor(Date.now() / 1000), getLanguage()));
+          setTimeout(() => setCheer(null), 3500);
+          onStart();
+        }}
+        onEnd={() => {
+          setCheer(null);
+          setSummary(t('Shift done · {{elapsed}} · {{distance}} · {{value}}', { elapsed, distance, value }));
+          setTimeout(() => setSummary(null), 6000);
+          onEnd();
+        }}
+      />
+      {summary ? (
+        <Animated.Text entering={FadeInDown.springify().damping(14)} style={styles.shiftSummary}>
+          {summary}
+        </Animated.Text>
+      ) : (
+        !shift && (
+          <ThemedText type="small" themeColor="textSecondary" style={styles.shiftHint}>
+            {t('Every drive until you end it counts as business.')}
+          </ThemedText>
+        )
+      )}
     </View>
   );
 }
@@ -955,19 +957,7 @@ const styles = StyleSheet.create({
   goProText: { color: '#064E3B', fontSize: 13, fontWeight: '800' },
   shiftStart: { gap: Spacing.one + 2 },
   shiftHint: { textAlign: 'center' },
-  cheer: { color: '#FACC15', fontSize: 20, fontWeight: '800' },
-  shiftOn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.three,
-    borderRadius: 16,
-    padding: Spacing.three,
-    overflow: 'hidden',
-  },
-  shiftTitle: { color: '#FFFFFF', fontSize: 16, fontWeight: '800' },
-  shiftSub: { color: '#D1FAE5', fontSize: 13 },
-  shiftEnd: { backgroundColor: '#FFFFFF', borderRadius: 999, paddingHorizontal: Spacing.three, paddingVertical: Spacing.two },
-  shiftEndText: { color: '#064E3B', fontSize: 14, fontWeight: '700' },
+  shiftSummary: { textAlign: 'center', color: '#0B7A55', fontSize: 14, fontWeight: '700' },
   row: { borderRadius: 12, padding: Spacing.three, gap: Spacing.two },
   rowHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: Spacing.two },
   route: { flex: 1 },

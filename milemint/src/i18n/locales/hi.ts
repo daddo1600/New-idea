@@ -671,6 +671,7 @@ const dictionary: Dictionary = {
   'A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.': 'हर बिज़नेस ट्रिप के लिए एक क्लेम लाइन (तारीख, कहाँ से, कहाँ तक, मकसद, दूरी, रेट और रकम), आपके एम्प्लॉयर के खर्च सिस्टम के लिए।',
   'Export to Xero, QuickBooks and FreeAgent': 'Xero, QuickBooks और FreeAgent में एक्सपोर्ट',
   'Unlimited drives, PDF reports and accounting exports': 'अनलिमिटेड ट्रिप, PDF रिपोर्ट और अकाउंटिंग एक्सपोर्ट',
+  "Shift done · {{elapsed}} · {{distance}} · {{value}}": "शिफ्ट खत्म · {{elapsed}} · {{distance}} · {{value}}",
 };
 
 export default dictionary;

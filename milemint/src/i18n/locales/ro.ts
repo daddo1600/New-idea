@@ -671,6 +671,7 @@ const dictionary: Dictionary = {
   "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.": "Câte o linie de decont pentru fiecare cursă de lucru (dată, de la, până la, scop, distanță, tarif și sumă) pentru sistemul de deconturi al angajatorului tău.",
   "Export to Xero, QuickBooks and FreeAgent": "Export în Xero, QuickBooks și FreeAgent",
   "Unlimited drives, PDF reports and accounting exports": "Curse nelimitate, rapoarte PDF și exporturi contabile",
+  "Shift done · {{elapsed}} · {{distance}} · {{value}}": "Tură încheiată · {{elapsed}} · {{distance}} · {{value}}",
 };
 
 export default dictionary;

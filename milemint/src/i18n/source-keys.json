@@ -269,7 +269,7 @@
   {
     "key": "{{hint}}. Swipe the button to the right, or double-tap.",
     "files": [
-      "components/swipe-to-start.tsx"
+      "app/index.tsx"
     ]
   },
   {
@@ -1505,6 +1505,12 @@
     "key": "Export report",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Export to Xero, QuickBooks and FreeAgent",
+    "files": [
+      "app/pro.tsx"
     ]
   },
   {
@@ -3028,6 +3034,12 @@
     ]
   },
   {
+    "key": "Shift done · {{elapsed}} · {{distance}} · {{value}}",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
     "key": "Shift mode",
     "files": [
       "app/settings.tsx"
@@ -3662,7 +3674,7 @@
     ]
   },
   {
-    "key": "Unlimited drives and PDF reports",
+    "key": "Unlimited drives, PDF reports and accounting exports",
     "files": [
       "components/header-menu.tsx"
     ]

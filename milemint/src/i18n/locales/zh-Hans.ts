@@ -671,6 +671,7 @@ const dictionary: Dictionary = {
   'A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.': '每段工作行程一行报销明细（日期、起点、终点、事由、距离、费率和金额），用于提交到雇主的报销系统。',
   'Export to Xero, QuickBooks and FreeAgent': '导出到 Xero、QuickBooks 和 FreeAgent',
   'Unlimited drives, PDF reports and accounting exports': '无限行程、PDF 报告和会计软件导出',
+  "Shift done · {{elapsed}} · {{distance}} · {{value}}": "已收工 · {{elapsed}} · {{distance}} · {{value}}",
 };
 
 export default dictionary;
