@@ -215,3 +215,36 @@ The home list now shows one row per shift, which opens to its drives. A drive th
 | Your shift ended after 16 hours | Tura s-a încheiat după 16 ore | “The shift ended after 16 hours” |
 
 **Sign-off:** approved, pending an on-device look at the shift row and the undo toast in this language.
+
+## Round 7: tracking health
+
+Tracking health: home card, Settings “Starea înregistrării” row and background notifications. 24 new lines. Terms: *cursă*, *înregistrare (automată)* for tracking (never *urmărire*), *ratată*, tu. iOS wording: *Configurări*, *Localizare*, *Localizare precisă*. Three passes per line: translate; cold back-translation against the English; culture, honesty and length (titles and the Settings row wrap; buttons ≤1.3× English). Rule for all of them: say plainly what's wrong and the one tap that fixes it, never blame the driver, and say "may" wherever a missed drive isn't certain. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Precise Location is off | Localizarea precisă e dezactivată | “Precise location is deactivated”. *Localizare precisă* is my reading of Apple’s ro toggle: listed under Unsure. |
+| MileMint only gets a rough position, so drives can’t be measured. In Settings, tap Location and turn on Precise Location. | MileMint primește doar o poziție aproximativă, așa că nu poate măsura cursele. În Configurări, atinge Localizare și activează Localizare precisă. | “MileMint only gets an approximate position, so it can’t measure the trips. In Settings, touch Location and turn on Precise Location.” |
+| Tracking has stopped | Înregistrarea s-a oprit | “Recording has stopped”. |
+| Automatic tracking stopped running, so new drives aren’t being logged. | Înregistrarea automată nu mai funcționează, așa că cursele noi nu se înregistrează. | “Automatic recording no longer works, so new trips aren’t recorded.” |
+| Tracking may have stopped | Poate că înregistrarea s-a oprit | “Maybe recording has stopped”. |
+| No location since {{time}}, in the middle of a drive. | Nicio localizare de la {{time}}, în mijlocul unei curse. | “No location since {{time}}, in the middle of a trip.” |
+| Turn tracking back on | Repornește înregistrarea | “Restart recording”. Button, 24 chars (1.14×). |
+| Tracking stopped {{from}}–{{to}} | Înregistrare oprită {{from}}–{{to}} | “Recording stopped {{from}}–{{to}}”. |
+| A drive may have been missed | Poate că o cursă a fost ratată | “Maybe a trip was missed”. Passive: no blame on the driver. |
+| About {{distance}} may be missing. Add the missed trip? | Pot lipsi cam {{distance}}. Adaugi cursa ratată? | “About {{distance}} may be missing. Add the missed trip?” *cursa ratată* as in “Adaugă o cursă ratată”. |
+| Your phone moved about {{distance}} between {{from}} and {{to}}, but no drive was logged. Add the missed trip? | Telefonul tău s-a deplasat cam {{distance}} între {{from}} și {{to}}, dar nu s-a înregistrat nicio cursă. Adaugi cursa ratată? | “Your phone moved about {{distance}} between {{from}} and {{to}}, but no trip was recorded. Add the missed trip?” |
+| Not a drive | Nu a fost o cursă | “It wasn’t a trip”. Link, 17 chars; room in the row. |
+| All good | Totul e în regulă | “Everything is fine”. |
+| just now | chiar acum | “right now / just now”. |
+| {{count}} minutes ago | one: acum {{count}} minut / few: acum {{count}} minute / other: acum {{count}} de minute | “{{count}} minute(s) ago”. one/few/other with *de* from 20, as in the backup lines. |
+| {{count}} hours ago | one: acum {{count}} oră / few: acum {{count}} ore / other: acum {{count}} de ore | “{{count}} hour(s) ago”. |
+| {{count}} days ago | one: acum {{count}} zi / few: acum {{count}} zile / other: acum {{count}} de zile | “{{count}} day(s) ago”. |
+| Tracking check | Starea înregistrării | “Recording status”. |
+| Last location: {{ago}} | Ultima localizare: {{ago}} | “Last location: {{ago}}”. |
+| No location yet | Încă nicio localizare | “No location yet”. |
+| Location access for MileMint is off, so drives aren’t being logged. Tap to turn it back on. | Accesul MileMint la localizare e oprit, așa că nu se înregistrează nicio cursă. Atinge ca să-l pornești din nou. | “MileMint’s access to location is off, so no trip is recorded. Touch to turn it on again.” |
+| Drives can’t be measured from a rough position. Tap to fix it. | Cu o poziție aproximativă, cursele nu pot fi măsurate. Atinge ca să rezolvi. | “With an approximate position, trips can’t be measured. Touch to fix.” |
+| New drives aren’t being logged. Tap to turn tracking back on. | Cursele noi nu se înregistrează. Atinge ca să repornești înregistrarea. | “New trips aren’t recorded. Touch to restart recording.” |
+| No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up. | Nicio localizare de la {{time}}, în mijlocul unei curse. Deschide MileMint ca să reia înregistrarea. | “No location since {{time}}, in the middle of a trip. Open MileMint so it resumes recording.” |
+
+**Sign-off:** approved, pending an on-device check of *Localizare precisă*.

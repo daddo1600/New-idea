@@ -135,3 +135,9 @@ Still open, not blocking release:
 5. **"Jak rozliczasz przebieg"** for "How you’re paid for mileage" isn't literal (see `review/pl-accuracy.md`, round 3).
 6. **Resolved (round 3b):** the amount hint is now "np. 2400 lub 2400,50"; the logbook parser accepts a decimal comma, so the "z centami po kropce" instruction was dropped.
 7. **Two shift-switch lines** ("Swipe back to end your shift.", the swipe-left hint) appeared in the source during this round and were translated to keep the test green. They weren't in the 201-line brief.
+
+## Round 7: tracking health
+
+| English | Term | Why |
+|---|---|---|
+| Precise Location (iOS toggle) | Dokładna lokalizacja | Apple’s own name for the toggle under Location. |

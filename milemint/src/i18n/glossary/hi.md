@@ -129,3 +129,11 @@ These need a check by a reviewer, ideally against an iPhone set to Hindi:
 12. **"logbook method" in Latin.** Chosen to match "cents per km method". A reviewer may prefer लॉगबुक तरीका.
 13. **"End early" → अभी खत्म करें.** Drops the word "early"; the alert around it explains.
 14. **“Client visit · इलाका”** in the add-trip privacy line mixes scripts on purpose (the saved label is English). If the label is ever translated, this line must change too.
+
+## Round 7: tracking health
+
+| English | Term | Why |
+|---|---|---|
+| Precise Location (iOS toggle) | सटीक स्थान | Best match for the iOS toggle; see Unsure. |
+
+**Unsure:** “सटीक स्थान” as the name iOS shows for Precise Location (Settings → MileMint → Location). Please check on an iPhone set to this language.

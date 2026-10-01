@@ -219,3 +219,36 @@ The home list now shows one row per shift, which opens to its drives. A drive th
 | Your shift ended after 16 hours | Zmiana zakończyła się po 16 godzinach | “The shift ended after 16 hours” |
 
 **Sign-off:** approved, pending an on-device look at the shift row and the undo toast in this language.
+
+## Round 7: tracking health
+
+Tracking health: home card, Settings “Stan śledzenia” row and background notifications. 24 new lines. Terms: *przejazd*, *śledzenie*, *zapisywać*, *pominięty*, Ty (capitalised Twój). iOS wording: *Ustawienia*, *Lokalizacja*, *Dokładna lokalizacja*; *Stuknij* as elsewhere. Three passes per line: translate; cold back-translation against the English; culture, honesty and length (titles and the Settings row wrap; buttons ≤1.3× English). Rule for all of them: say plainly what's wrong and the one tap that fixes it, never blame the driver, and say "may" wherever a missed drive isn't certain. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Precise Location is off | Dokładna lokalizacja jest wyłączona | “Precise location is off”. *Dokładna lokalizacja* is Apple’s Polish toggle. |
+| MileMint only gets a rough position, so drives can’t be measured. In Settings, tap Location and turn on Precise Location. | MileMint dostaje tylko przybliżoną pozycję, więc nie może mierzyć przejazdów. W Ustawieniach stuknij Lokalizacja i włącz Dokładna lokalizacja. | “MileMint only gets an approximate position, so it can’t measure trips. In Settings tap Location and turn on Precise Location.” |
+| Tracking has stopped | Śledzenie się zatrzymało | “Tracking has stopped”. |
+| Automatic tracking stopped running, so new drives aren’t being logged. | Automatyczne śledzenie przestało działać, więc nowe przejazdy nie są zapisywane. | “Automatic tracking stopped working, so new trips aren’t being saved.” |
+| Tracking may have stopped | Śledzenie mogło się zatrzymać | “Tracking may have stopped”. |
+| No location since {{time}}, in the middle of a drive. | Brak lokalizacji od {{time}}, w trakcie przejazdu. | “No location since {{time}}, during a trip.” |
+| Turn tracking back on | Włącz śledzenie ponownie | “Turn tracking on again”. Button, 24 chars (1.14×). |
+| Tracking stopped {{from}}–{{to}} | Śledzenie przerwane {{from}}–{{to}} | “Tracking interrupted {{from}}–{{to}}”. |
+| A drive may have been missed | Przejazd mógł zostać pominięty | “A trip may have been missed”. |
+| About {{distance}} may be missing. Add the missed trip? | Może brakować około {{distance}}. Dodać pominięty przejazd? | “About {{distance}} may be missing. Add the missed trip?” *pominięty przejazd* as in “Dodaj pominięty przejazd”. |
+| Your phone moved about {{distance}} between {{from}} and {{to}}, but no drive was logged. Add the missed trip? | Twój telefon przemieścił się o około {{distance}} między {{from}} a {{to}}, ale żaden przejazd nie został zapisany. Dodać pominięty przejazd? | “Your phone moved about {{distance}} between {{from}} and {{to}}, but no trip was saved. Add the missed trip?” |
+| Not a drive | To nie był przejazd | “That wasn’t a trip”. Link, 19 chars; the natural phrasing, room in the row. |
+| All good | Wszystko w porządku | “Everything is fine”. |
+| just now | przed chwilą | “a moment ago”. |
+| {{count}} minutes ago | one: {{count}} minutę temu / few: {{count}} minuty temu / many: {{count}} minut temu / other: {{count}} minuty temu | “{{count}} minute(s) ago”: minutę/minuty/minut, other for fractions. |
+| {{count}} hours ago | one: {{count}} godzinę temu / few: {{count}} godziny temu / many: {{count}} godzin temu / other: {{count}} godziny temu | “{{count}} hour(s) ago”: godzinę/godziny/godzin. |
+| {{count}} days ago | one: {{count}} dzień temu / few: {{count}} dni temu / many: {{count}} dni temu / other: {{count}} dnia temu | “{{count}} day(s) ago”: dzień/dni/dni, other *dnia*. |
+| Tracking check | Stan śledzenia | “Tracking status”. |
+| Last location: {{ago}} | Ostatnia lokalizacja: {{ago}} | “Last location: {{ago}}”. |
+| No location yet | Brak lokalizacji | “No location”. *jeszcze* dropped: “Brak lokalizacji” is the usual empty-state wording. |
+| Location access for MileMint is off, so drives aren’t being logged. Tap to turn it back on. | Dostęp MileMint do lokalizacji jest wyłączony, więc przejazdy nie są zapisywane. Stuknij, aby włączyć go ponownie. | “MileMint’s access to location is off, so trips aren’t saved. Tap to turn it on again.” |
+| Drives can’t be measured from a rough position. Tap to fix it. | Przejazdów nie da się zmierzyć z przybliżonej pozycji. Stuknij, aby to naprawić. | “Trips can’t be measured from an approximate position. Tap to fix it.” |
+| New drives aren’t being logged. Tap to turn tracking back on. | Nowe przejazdy nie są zapisywane. Stuknij, aby ponownie włączyć śledzenie. | “New trips aren’t saved. Tap to turn tracking on again.” |
+| No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up. | Brak lokalizacji od {{time}}, w trakcie przejazdu. Otwórz MileMint, aby wznowić śledzenie. | “No location since {{time}}, during a trip. Open MileMint to resume tracking.” |
+
+**Sign-off:** approved.

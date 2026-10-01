@@ -136,3 +136,11 @@ Status after checks 2 and 3: only item 1 (Apple's iOS wording) is still open. It
     - **Basic / Higher / Additional = ਬੇਸਿਕ / ਹਾਇਰ / ਐਡੀਸ਼ਨਲ.** These are loanwords, as on HMRC letters. ਮੁੱਢਲੀ / ਉੱਚੀ / ਵਾਧੂ ਦਰ is the Punjabi alternative.
     - **Depreciation = ਡੈਪ੍ਰੀਸੀਏਸ਼ਨ (ਕੀਮਤ ਵਿੱਚ ਕਮੀ).** It's long for a field label. Drop the gloss if space is tight.
     - **"Ended early" = ਵਿਚਾਲੇ ਖ਼ਤਮ.** This is colloquial. ਸਮੇਂ ਤੋਂ ਪਹਿਲਾਂ ਖ਼ਤਮ is more exact but longer.
+
+## Round 7: tracking health
+
+| English | Term | Why |
+|---|---|---|
+| Precise Location (iOS toggle) | ਸਹੀ ਟਿਕਾਣਾ | Best match for the iOS toggle; see Unsure. |
+
+**Unsure:** “ਸਹੀ ਟਿਕਾਣਾ” as the name iOS shows for Precise Location (Settings → MileMint → Location). Please check on an iPhone set to this language.

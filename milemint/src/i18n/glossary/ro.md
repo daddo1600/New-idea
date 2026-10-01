@@ -90,3 +90,11 @@ Jokes were adapted. Examples: “Knock knock” became *Cioc, cioc* / *Cine-i ac
 - Round 3b: “Enter amounts as numbers, e.g. 2400 or 2,400.50.” is now *Introdu sumele ca numere, de ex. 2400 sau 2400,50.* The logbook parser accepts a decimal comma, so the *cu punct la zecimale* instruction was dropped.
 - Round 3: “Client visit · area” is quoted in English (*„Client visit · zona”*) because the stored label isn’t translated. If the app starts translating stored labels, change it to *Vizită la client · zona*.
 - Round 3: “End early” as *Încheie acum* (the alert’s question already says *mai devreme*).
+
+## Round 7: tracking health
+
+| English | Term | Why |
+|---|---|---|
+| Precise Location (iOS toggle) | Localizare precisă | Best match for the iOS toggle; see Unsure. |
+
+**Unsure:** “Localizare precisă” as the name iOS shows for Precise Location (Settings → MileMint → Location). Please check on an iPhone set to this language.

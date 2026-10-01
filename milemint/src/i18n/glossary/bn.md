@@ -135,3 +135,11 @@ These need checking against an iPhone set to Bengali:
 19. **“Client visit · area”** is quoted in English inside the add-trip alert, because the label is stored and shown in English. The purpose button says "ক্লায়েন্ট ভিজিট", so the same idea appears in two scripts. Consider translating the label at display time.
 20. **"Depreciation"** became "অবচয় (দাম কমা)". অবচয় is the accounting term, and the gloss is for everyday readers.
 21. **"Employed, in your own vehicle?"** became "কর্মচারী, আর নিজের যানবাহনে কাজ করেন?". It's a little longer than the English, but it's a heading.
+
+## Round 7: tracking health
+
+| English | Term | Why |
+|---|---|---|
+| Precise Location (iOS toggle) | সুনির্দিষ্ট লোকেশন | Best match for the iOS toggle; see Unsure. |
+
+**Unsure:** “সুনির্দিষ্ট লোকেশন” as the name iOS shows for Precise Location (Settings → MileMint → Location). Please check on an iPhone set to this language.

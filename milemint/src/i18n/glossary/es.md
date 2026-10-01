@@ -128,3 +128,9 @@ es categories: one, many, other. Every plural entry gives `one`, plus `many` equ
 15. **Round 3: "{{example}}"** in the privacy explanation is the English label (e.g. “Client visit · Leeds LS6”) inside a Spanish sentence; correct because that is what the trip shows, but it may look odd.
 16. **Round 3: "beneficio fiscal"** for P87 "relief" — clear and honest, though not an HMRC term; "desgravación" is Spain-only.
 17. **Round 3: "Registro vehicular"** for the AU "Registration" (rego) cost could be confused with "registro" (log) out of context; it sits in a list of car costs.
+
+## Round 7: tracking health
+
+| English | Term | Why |
+|---|---|---|
+| Precise Location (iOS toggle) | Ubicación exacta | Apple’s own name for the toggle under Location. |

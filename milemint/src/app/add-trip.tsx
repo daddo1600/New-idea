@@ -1,5 +1,5 @@
 import * as Location from 'expo-location';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
@@ -29,11 +29,39 @@ import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
 import { drivingDistance } from '@/places/address-search';
 import { useRegion } from '@/region/region';
+import { markGapFilled } from '@/tracking/use-tracking-health';
 
 type Kind = 'business' | 'personal';
 
 /** One manual entry longer than this (about 1,000 miles) is almost certainly a typo. */
 const MAX_TRIP_METERS = 1_610_000;
+
+/** Route params from the home card's missed-trip offer (all optional strings). */
+type GapParams = {
+  gap?: string;
+  date?: string;
+  fromLabel?: string;
+  fromLat?: string;
+  fromLng?: string;
+  toLabel?: string;
+  toLat?: string;
+  toLng?: string;
+  startedAt?: string;
+  endedAt?: string;
+};
+
+function gapPlace(label?: string, lat?: string, lng?: string): PlaceDraft {
+  const latitude = Number(lat);
+  const longitude = Number(lng);
+  if (!label?.trim()) return EMPTY_PLACE;
+  const at = lat && lng && Number.isFinite(latitude) && Number.isFinite(longitude) ? { latitude, longitude } : null;
+  return { text: label, at, placeId: null };
+}
+
+/** A valid ISO time from a route param, or null. */
+function isoParam(value?: string): string | null {
+  return value && Number.isFinite(Date.parse(value)) ? new Date(value).toISOString() : null;
+}
 
 const daysAgo = (days: number) => {
   const date = new Date();
@@ -59,10 +87,12 @@ export default function AddTripScreen() {
   const [vehicle, setVehicle] = useState<VehicleType>('car');
   const [vehicleId, setVehicleId] = useState<string | null>(null);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [date, setDate] = useState(today);
+  // Opened from the home card's "Add missed trip": a gap tracking lost, with its ends and times.
+  const gap = useLocalSearchParams<GapParams>();
+  const [date, setDate] = useState(gap.date && gap.date <= today ? gap.date : today);
   const [calendarOpen, setCalendarOpen] = useState(false);
-  const [from, setFrom] = useState<PlaceDraft>(EMPTY_PLACE);
-  const [to, setTo] = useState<PlaceDraft>(EMPTY_PLACE);
+  const [from, setFrom] = useState<PlaceDraft>(() => gapPlace(gap.fromLabel, gap.fromLat, gap.fromLng));
+  const [to, setTo] = useState<PlaceDraft>(() => gapPlace(gap.toLabel, gap.toLat, gap.toLng));
   const [distance, setDistance] = useState('');
   /** Set when Apple Maps filled the distance in; cleared once the user types their own. */
   const [estimated, setEstimated] = useState(false);
@@ -175,11 +205,13 @@ export default function AddTripScreen() {
         const at = draft.at ?? (await resolvePlace(draft).catch(() => null));
         return at ? (matchPlace(at, places)?.id ?? null) : null;
       };
+      // A gap tracking lost keeps its real times, unless the date was changed.
+      const gapTimes = gap.gap && date === gap.date ? { start: isoParam(gap.startedAt), end: isoParam(gap.endedAt) } : null;
       await insertTrip(db, {
         // Manual trips have no clock time; noon local keeps the UTC stamp on the same day.
-        startedAt: new Date(`${date}T12:00:00`).toISOString(),
+        startedAt: gapTimes?.start ?? new Date(`${date}T12:00:00`).toISOString(),
         localDate: date,
-        endedAt: null,
+        endedAt: gapTimes?.start ? gapTimes.end : null,
         startLabel: await labelFor(from),
         endLabel: await labelFor(to),
         distanceMeters: meters,
@@ -191,6 +223,8 @@ export default function AddTripScreen() {
         startPlaceId: await placeFor(from),
         endPlaceId: await placeFor(to),
       });
+      // Filled in: the home card stops offering it.
+      if (gap.gap) await markGapFilled(db, gap.gap).catch(() => {});
       router.back();
     } catch {
       setError(t('Could not save the trip. Please try again.'));

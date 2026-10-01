@@ -194,3 +194,36 @@ The home list now shows one row per shift, which opens to its drives. A drive th
 | Your shift ended after 16 hours | Votre quart s’est terminé après 16 heures | “Your shift ended after 16 hours” |
 
 **Sign-off:** approved, pending an on-device look at the shift row and the undo toast in this language.
+
+## Round 7: tracking health
+
+Tracking health: home card, Settings “État du suivi” row and background notifications. 24 new lines. Terms: *trajet*, *suivi*, *enregistrer*, *trajet oublié* (as in “Ajouter un trajet oublié”), vous. iOS wording: *Réglages*, *Position*, *Position exacte*. Narrow no-break space before “?” and “:”, as elsewhere. Three passes per line: translate; cold back-translation against the English; culture, honesty and length (titles and the Settings row wrap; buttons ≤1.3× English). Rule for all of them: say plainly what's wrong and the one tap that fixes it, never blame the driver, and say "may" wherever a missed drive isn't certain. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Precise Location is off | Position exacte désactivée | “Precise Position deactivated”. *Position exacte* is Apple’s French toggle. |
+| MileMint only gets a rough position, so drives can’t be measured. In Settings, tap Location and turn on Precise Location. | MileMint ne reçoit qu’une position approximative et ne peut donc pas mesurer les trajets. Dans Réglages, touchez Position et activez Position exacte. | “MileMint only receives an approximate position and so can’t measure trips. In Settings, touch Position and turn on Precise Position.” |
+| Tracking has stopped | Le suivi s’est arrêté | “Tracking has stopped”. |
+| Automatic tracking stopped running, so new drives aren’t being logged. | Le suivi automatique s’est arrêté, les nouveaux trajets ne sont donc pas enregistrés. | “Automatic tracking has stopped, so new trips aren’t recorded.” |
+| Tracking may have stopped | Le suivi s’est peut-être arrêté | “Tracking has perhaps stopped”. |
+| No location since {{time}}, in the middle of a drive. | Aucune position depuis {{time}}, en plein trajet. | “No position since {{time}}, mid-trip.” |
+| Turn tracking back on | Réactiver le suivi | “Reactivate tracking”. Button, 18 chars. |
+| Tracking stopped {{from}}–{{to}} | Suivi interrompu de {{from}} à {{to}} | “Tracking interrupted from {{from}} to {{to}}”. *de … à …* reads better than a dash in French. |
+| A drive may have been missed | Un trajet a peut-être été manqué | “A trip was perhaps missed”. |
+| About {{distance}} may be missing. Add the missed trip? | Il manque peut-être environ {{distance}}. Ajouter le trajet oublié ? | “About {{distance}} may be missing. Add the forgotten trip?” *trajet oublié* matches the existing button; *oublié* is used app-wide for missed trips without blaming anyone. |
+| Your phone moved about {{distance}} between {{from}} and {{to}}, but no drive was logged. Add the missed trip? | Votre téléphone s’est déplacé d’environ {{distance}} entre {{from}} et {{to}}, mais aucun trajet n’a été enregistré. Ajouter le trajet oublié ? | “Your phone moved about {{distance}} between {{from}} and {{to}}, but no trip was recorded. Add the forgotten trip?” |
+| Not a drive | Pas un trajet | “Not a trip”. Link, 13 chars. |
+| All good | Tout va bien | “All is well”. |
+| just now | à l’instant | “just now”. |
+| {{count}} minutes ago | one: il y a {{count}} minute / many: il y a {{count}} minutes / other: il y a {{count}} minutes | “{{count}} minute(s) ago”. one/many/other. |
+| {{count}} hours ago | one: il y a {{count}} heure / many: il y a {{count}} heures / other: il y a {{count}} heures | “{{count}} hour(s) ago”. |
+| {{count}} days ago | one: il y a {{count}} jour / many: il y a {{count}} jours / other: il y a {{count}} jours | “{{count}} day(s) ago”. |
+| Tracking check | État du suivi | “Tracking status”. Section header. |
+| Last location: {{ago}} | Dernière position : {{ago}} | “Last position: {{ago}}”. |
+| No location yet | Aucune position pour l’instant | “No position yet”. |
+| Location access for MileMint is off, so drives aren’t being logged. Tap to turn it back on. | L’accès à la position est désactivé pour MileMint, les trajets ne sont donc pas enregistrés. Touchez pour le réactiver. | “Position access is off for MileMint, so trips aren’t recorded. Touch to turn it back on.” |
+| Drives can’t be measured from a rough position. Tap to fix it. | Impossible de mesurer les trajets avec une position approximative. Touchez pour corriger. | “Impossible to measure trips with an approximate position. Touch to fix.” |
+| New drives aren’t being logged. Tap to turn tracking back on. | Les nouveaux trajets ne sont pas enregistrés. Touchez pour réactiver le suivi. | “New trips aren’t recorded. Touch to reactivate tracking.” |
+| No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up. | Aucune position depuis {{time}}, en plein trajet. Ouvrez MileMint pour reprendre le suivi. | “No position since {{time}}, mid-trip. Open MileMint to resume tracking.” |
+
+**Sign-off:** approved.

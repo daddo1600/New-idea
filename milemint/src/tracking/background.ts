@@ -18,17 +18,22 @@ import { areaLabel, clientVisitLabel } from '@/domain/privacy';
 import { shiftLegs } from '@/domain/shift-split';
 import type { RegionCode } from '@/domain/regions';
 import {
+  dismissGap,
   GEOFENCE_RADIUS_M,
   INITIAL_TRACKER_RECORD,
   onGeofenceExit,
   onLocations,
   onReconcile,
+  onReconcileParked,
   parkedAt,
+  type TrackerRecord,
 } from '@/domain/tracker-policy';
+import { alertWorthy, trackingHealth, type TrackingHealth, type TrackingPermissions } from '@/domain/tracking-health';
 import { isoDateAtOffset } from '@/domain/trip';
 import type { DetectedTrip, LocationSample } from '@/domain/trip-detector';
 import { t } from '@/i18n/i18n';
 
+import { armDriveWatchdog, cancelHealthAlerts, queueHealthAlert } from './health-alerts';
 import { waitForPromptAnswer } from './prompt-answer';
 import { cancelEndShiftPrompt, scheduleEndShiftPrompt } from './shift-notifications';
 import { loadTrackerRecord, saveTrackerRecord } from './tracker-store';
@@ -55,6 +60,16 @@ let queue: Promise<void> = Promise.resolve();
 function serial(work: () => Promise<void>): Promise<void> {
   queue = queue.then(work).catch((error) => console.warn('[tracking]', error));
   return queue;
+}
+
+/** `serial`, for work whose result (or error) the caller needs. */
+function inQueue<T>(work: () => Promise<T>): Promise<T> {
+  const result = queue.then(work);
+  queue = result.then(
+    () => {},
+    (error) => console.warn('[tracking]', error),
+  );
+  return result;
 }
 
 function toSample(location: Location.LocationObject): LocationSample {
@@ -103,7 +118,7 @@ async function stopTask(name: string, isRunning: (n: string) => Promise<boolean>
   if (await isRunning(name)) await stop(name);
 }
 
-async function labelFor(point: LatLng): Promise<string> {
+export async function labelFor(point: LatLng): Promise<string> {
   try {
     const [place] = await Location.reverseGeocodeAsync(point);
     const label = place?.name ?? place?.street ?? place?.city;
@@ -210,12 +225,57 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
   await refreshLaunchTotal(db).catch(() => {});
 }
 
+/** What iOS says about location access and MileMint's tasks right now. */
+export async function readTrackingPermissions(): Promise<TrackingPermissions> {
+  const foreground = await Location.getForegroundPermissionsAsync();
+  const background = foreground.granted ? await Location.getBackgroundPermissionsAsync() : null;
+  const [geofence, gps] = await Promise.all([
+    Location.hasStartedGeofencingAsync(GEOFENCE_TASK).catch(() => null),
+    Location.hasStartedLocationUpdatesAsync(LOCATION_TASK).catch(() => null),
+  ]);
+  return {
+    foreground: foreground.granted,
+    background: background?.granted ?? false,
+    precise: foreground.ios?.accuracy ? foreground.ios.accuracy === 'full' : null,
+    tasks: geofence === null || gps === null ? null : { geofence, gps },
+  };
+}
+
+/** Background checks are cheap but not free: at most this often while woken. */
+const WAKE_CHECK_EVERY_MS = 15 * 60_000;
+let lastWakeCheck = 0;
+
+/**
+ * After a background wake-up: a drive in progress keeps a "tracking may have
+ * stopped" notification queued just past the point it would be overdue, so if
+ * iOS kills the app mid-drive the driver still hears about it. Now and then,
+ * also checks for a setting that silently loses drives (Precise Location off).
+ */
+async function afterWake(record: TrackerRecord, now: number, driveEnded: boolean): Promise<TrackerRecord> {
+  let next = record;
+  try {
+    if (driveEnded || next.mode !== 'gps') next = await cancelHealthAlerts(next, now, ['stale']);
+    else next = await armDriveWatchdog(next, now);
+    if (now - lastWakeCheck >= WAKE_CHECK_EVERY_MS) {
+      lastWakeCheck = now;
+      // Just woken by a task, so the tasks themselves are fine.
+      const permissions = { ...(await readTrackingPermissions()), tasks: null };
+      const { issue } = trackingHealth(next, permissions, now);
+      if (issue !== 'stale' && alertWorthy(issue, next)) next = await queueHealthAlert(next, issue, now, now);
+    }
+  } catch (error) {
+    console.warn('[tracking] health', error);
+  }
+  return next;
+}
+
 async function handleLocations(samples: LocationSample[]): Promise<void> {
   const db = await getBackgroundDatabase();
   const record = await loadTrackerRecord(db);
-  const decision = onLocations(record, samples, Date.now());
+  const now = Date.now();
+  const decision = onLocations(record, samples, now);
   for (const trip of decision.completed) await saveDetectedTrip(db, trip);
-  await saveTrackerRecord(db, decision.record);
+  await saveTrackerRecord(db, await afterWake(decision.record, now, decision.switchToGeofenceAt !== null));
   if (decision.switchToGeofenceAt) {
     await stopTask(LOCATION_TASK, Location.hasStartedLocationUpdatesAsync, Location.stopLocationUpdatesAsync);
     await armGeofence(decision.switchToGeofenceAt);
@@ -225,9 +285,10 @@ async function handleLocations(samples: LocationSample[]): Promise<void> {
 async function handleGeofenceExit(): Promise<void> {
   const db = await getBackgroundDatabase();
   const record = await loadTrackerRecord(db);
-  const next = onGeofenceExit(record, Date.now());
+  const now = Date.now();
+  const next = onGeofenceExit(record, now);
   if (next === record) return;
-  await saveTrackerRecord(db, next);
+  await saveTrackerRecord(db, await afterWake(next, now, false));
   // Driving again: not parked at home after all.
   await cancelEndShiftPrompt();
   await stopTask(GEOFENCE_TASK, Location.hasStartedGeofencingAsync, Location.stopGeofencingAsync);
@@ -301,7 +362,9 @@ export async function startTracking(db: SQLiteDatabase): Promise<void> {
   const here = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
   await serial(async () => {
     // The phone is where the car is parked, so the first drive starts from here.
-    await saveTrackerRecord(db, parkedAt(here.coords, Date.now()));
+    // Gaps still to fill and today's alerts survive switching tracking back on.
+    const previous = await loadTrackerRecord(db);
+    await saveTrackerRecord(db, { ...parkedAt(here.coords, Date.now()), gaps: previous.gaps, alerts: previous.alerts });
     await stopTask(LOCATION_TASK, Location.hasStartedLocationUpdatesAsync, Location.stopLocationUpdatesAsync);
     await armGeofence(here.coords);
   });
@@ -310,6 +373,9 @@ export async function startTracking(db: SQLiteDatabase): Promise<void> {
 export async function stopTracking(db: SQLiteDatabase): Promise<void> {
   if (!TRACKING_SUPPORTED) return;
   await serial(async () => {
+    // Switched off on purpose: nothing to warn about any more.
+    const record = await loadTrackerRecord(db);
+    await cancelHealthAlerts(record, Date.now()).catch(() => record);
     await saveTrackerRecord(db, INITIAL_TRACKER_RECORD);
     await stopTask(LOCATION_TASK, Location.hasStartedLocationUpdatesAsync, Location.stopLocationUpdatesAsync);
     await stopTask(GEOFENCE_TASK, Location.hasStartedGeofencingAsync, Location.stopGeofencingAsync);
@@ -344,9 +410,47 @@ export async function reconcileTracking(db: SQLiteDatabase): Promise<void> {
       } else if (!(await Location.hasStartedLocationUpdatesAsync(LOCATION_TASK))) {
         await startGps();
       }
-    } else if (!(await Location.hasStartedGeofencingAsync(GEOFENCE_TASK))) {
-      const here = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
-      await armGeofence(here.coords);
+    } else {
+      // Parked. A recent fix iOS already has (no GPS spin-up) shows whether the
+      // phone left the geofence without it ever firing: a drive may be missing.
+      const recent = await Location.getLastKnownPositionAsync({ maxAge: 10 * 60_000, requiredAccuracy: 100 })
+        .then((fix) => (fix ? toSample(fix) : null))
+        .catch(() => null);
+      const decision = onReconcileParked(record, recent, Date.now());
+      if (decision.switchToGeofenceAt) {
+        await saveTrackerRecord(db, decision.record);
+        await armGeofence(decision.switchToGeofenceAt);
+      } else if (!(await Location.hasStartedGeofencingAsync(GEOFENCE_TASK))) {
+        const here = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
+        await armGeofence(here.coords);
+      }
     }
   });
+}
+
+/**
+ * Is tracking really working? Null where there is no tracking (the web
+ * preview). Waits its turn behind a reconcile, so a geofence being re-armed
+ * isn't mistaken for one that's gone.
+ */
+export async function getTrackingHealth(db: SQLiteDatabase): Promise<TrackingHealth | null> {
+  if (!TRACKING_SUPPORTED) return null;
+  return inQueue(async () => trackingHealth(await loadTrackerRecord(db), await readTrackingPermissions(), Date.now()));
+}
+
+/** Changes the tracker record in its turn, so it can't overwrite a background update. */
+export function updateTrackerRecord(
+  db: SQLiteDatabase,
+  change: (record: TrackerRecord) => TrackerRecord | Promise<TrackerRecord>,
+): Promise<void> {
+  return inQueue(async () => {
+    const record = await loadTrackerRecord(db);
+    const next = await change(record);
+    if (next !== record) await saveTrackerRecord(db, next);
+  });
+}
+
+/** The missed trip was added, or the user says it wasn't a drive. */
+export function dismissTrackingGap(db: SQLiteDatabase, id: string): Promise<void> {
+  return updateTrackerRecord(db, (record) => dismissGap(record, id));
 }

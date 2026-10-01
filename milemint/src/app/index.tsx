@@ -21,6 +21,7 @@ import { BackdateOffer, EndShiftPrompt, UndoEndBar } from '@/components/shift-pr
 import { shortTime, ShiftRow } from '@/components/shift-row';
 import { ShiftSwitch } from '@/components/shift-switch';
 import { TaxCountdown } from '@/components/tax-countdown';
+import { TrackingHealthCard } from '@/components/tracking-health-card';
 import { Segmented } from '@/components/segmented';
 import { VehicleSheet } from '@/components/vehicle-sheet';
 import { ThemedText } from '@/components/themed-text';
@@ -317,6 +318,8 @@ export default function HomeScreen() {
               />
             )}
             {liveDrive && <LiveDriveBanner drive={liveDrive} />}
+            {/* Tracking that stopped, or a drive it lost: never silent. */}
+            <TrackingHealthCard />
             <SummaryCard
               summary={summary}
               commuteCents={commuteCents}
