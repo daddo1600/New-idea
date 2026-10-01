@@ -89,8 +89,6 @@ const dictionary: Dictionary = {
   "{{rule}}.": "{{rule}}।",
   "{{rule}}. Petrol, diesel, hybrid or electric: same rate for a car or van you own.": "{{rule}}। পেট্রোল, ডিজেল, হাইব্রিড বা ইলেকট্রিক: আপনার নিজের গাড়ি বা ভ্যানের জন্য একই রেট।",
   "{{rule}}. Petrol, diesel, hybrid or electric: same rate.": "{{rule}}। পেট্রোল, ডিজেল, হাইব্রিড বা ইলেকট্রিক: একই রেট।",
-  "{{trial}}, then {{price}}/month": "{{trial}}, তারপর {{price}}/মাস",
-  "{{trial}}, then {{price}}/year": "{{trial}}, তারপর {{price}}/বছর",
   "{{year}} at {{authority}} rates": "{{authority}} রেটে {{year}}",
   "{{year}} tax year": "{{year}} ট্যাক্স বছর",
   "{{year}} tax year at {{authority}} rates": "{{authority}} রেটে {{year}} ট্যাক্স বছর",
@@ -155,7 +153,6 @@ const dictionary: Dictionary = {
   "Bank or post office": "ব্যাংক বা পোস্ট অফিস",
   "BAS: if you’re registered for GST or pay PAYG instalments, you lodge quarterly by 28 October, 28 February, 28 April and 28 July. Rideshare drivers must register for GST from their first ride; delivery riders only once turnover reaches $75,000.": "BAS: আপনি GST-তে রেজিস্টার্ড হলে বা PAYG কিস্তি দিলে, প্রতি তিন মাসে 28 অক্টোবর, 28 ফেব্রুয়ারি, 28 এপ্রিল ও 28 জুলাইয়ের মধ্যে জমা দিতে হয়। রাইডশেয়ার ড্রাইভারদের প্রথম রাইড থেকেই GST-তে রেজিস্টার করতে হয়; ডেলিভারি রাইডারদের শুধু টার্নওভার $75,000 হলে।",
   "Before Monday shows up, give this week’s drives a quick sort.": "সোমবার আসার আগে এই সপ্তাহের ট্রিপগুলো চটপট বাছাই করে ফেলুন।",
-  "Best value": "সবচেয়ে সাশ্রয়ী",
   "Between workplaces": "এক কর্মস্থল থেকে আরেকটিতে",
   "Bicycle": "সাইকেল",
   "Business": "ব্যবসায়িক",
@@ -1144,6 +1141,31 @@ const dictionary: Dictionary = {
   "Motion & Fitness": "মোশন ও ফিটনেস",
   "On": "চালু",
   "Off": "বন্ধ",
+  "{{count}} days free": {
+    "one": "{{count}} দিন ফ্রি",
+    "other": "{{count}} দিন ফ্রি"
+  },
+  "{{count}} months free": {
+    "one": "{{count}} মাস ফ্রি",
+    "other": "{{count}} মাস ফ্রি"
+  },
+  "{{count}} months": {
+    "one": "{{count}} মাস",
+    "other": "{{count}} মাস"
+  },
+  "{{price}} a month": "মাসে {{price}}",
+  "Most popular": "সবচেয়ে জনপ্রিয়",
+  "We’ll remind you 3 days before it ends.": "শেষ হওয়ার 3 দিন আগে আমরা আপনাকে মনে করিয়ে দেব।",
+  "{{trial}} free, then {{price}} a year. Cancel any time in Settings.": "{{trial}} ফ্রি, তারপর বছরে {{price}}। সেটিংসে যেকোনো সময় বাতিল করুন।",
+  "{{trial}} free, then {{price}} a month. Cancel any time in Settings.": "{{trial}} ফ্রি, তারপর মাসে {{price}}। সেটিংসে যেকোনো সময় বাতিল করুন।",
+  "Free trial, then {{price}} a year. Cancel any time in Settings.": "ফ্রি ট্রায়াল, তারপর বছরে {{price}}। সেটিংসে যেকোনো সময় বাতিল করুন।",
+  "Free trial, then {{price}} a month. Cancel any time in Settings.": "ফ্রি ট্রায়াল, তারপর মাসে {{price}}। সেটিংসে যেকোনো সময় বাতিল করুন।",
+  "{{price}} a year. Cancel any time in Settings.": "বছরে {{price}}। সেটিংসে যেকোনো সময় বাতিল করুন।",
+  "{{price}} a month. Cancel any time in Settings.": "মাসে {{price}}। সেটিংসে যেকোনো সময় বাতিল করুন।",
+  "Your free month ends on {{date}}": "আপনার ফ্রি মাস শেষ হবে {{date}}",
+  "Your free trial ends on {{date}}": "আপনার ফ্রি ট্রায়াল শেষ হবে {{date}}",
+  "Keep Pro for {{price}} a year, or cancel in Settings. Nothing to do if you’re staying.": "বছরে {{price}}-এ Pro রাখুন, অথবা সেটিংসে বাতিল করুন। থাকতে চাইলে কিছুই করতে হবে না।",
+  "Keep Pro for {{price}} a month, or cancel in Settings. Nothing to do if you’re staying.": "মাসে {{price}}-এ Pro রাখুন, অথবা সেটিংসে বাতিল করুন। থাকতে চাইলে কিছুই করতে হবে না।",
 };
 
 export default dictionary;

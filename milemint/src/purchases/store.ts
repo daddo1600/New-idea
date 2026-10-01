@@ -2,6 +2,8 @@ import { requireOptionalNativeModule } from 'expo';
 import type { ActiveSubscription, ProductSubscription, Purchase } from 'expo-iap';
 import { Platform } from 'react-native';
 
+import type { TrialLength } from '@/domain/pro-offer';
+
 /**
  * MileMint Pro through Apple's StoreKit, with no third-party service: the
  * App Store holds the subscription and the phone checks it, so no account and
@@ -41,13 +43,16 @@ export type ProPlan = {
   id: string;
   /** Localized, e.g. "$49.99". */
   price: string;
+  /** The same price as a number (49.99) with its ISO currency ("GBP"), for the per-month sum; null if not given. */
+  amount: number | null;
+  currency: string | null;
   period: 'month' | 'year';
   /** The free trial the user is eligible for, if any; worded on screen (e.g. "30-day free trial"). */
   trial: ProTrial | null;
 };
 
 /** A free trial's length; `unit: null` when the App Store gives no length we word. */
-export type ProTrial = { count: number; unit: 'day' | 'month' | null };
+export type ProTrial = TrialLength;
 
 function trialOf(product: ProductSubscription): ProTrial | null {
   if (product.platform !== 'ios' || product.introductoryPricePaymentModeIOS !== 'free-trial') return null;
@@ -68,6 +73,8 @@ export async function loadPlans(): Promise<ProPlan[]> {
     .map((product) => ({
       id: product.id,
       price: product.displayPrice,
+      amount: typeof product.price === 'number' && Number.isFinite(product.price) ? product.price : null,
+      currency: product.currency || null,
       period: product.id === PRO_YEARLY ? ('year' as const) : ('month' as const),
       trial: trialOf(product),
     }))

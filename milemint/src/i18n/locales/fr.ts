@@ -140,8 +140,6 @@ const dictionary: Dictionary = {
   "{{rule}}.": "{{rule}}.",
   "{{rule}}. Petrol, diesel, hybrid or electric: same rate for a car or van you own.": "{{rule}}. Essence, diesel, hybride ou électrique : même taux pour une voiture ou une camionnette qui vous appartient.",
   "{{rule}}. Petrol, diesel, hybrid or electric: same rate.": "{{rule}}. Essence, diesel, hybride ou électrique : même taux.",
-  "{{trial}}, then {{price}}/month": "{{trial}}, puis {{price}}/mois",
-  "{{trial}}, then {{price}}/year": "{{trial}}, puis {{price}}/an",
   "{{year}} at {{authority}} rates": "{{year}} aux taux de {{authority}}",
   "{{year}} tax year": "Année d’imposition {{year}}",
   "{{year}} tax year at {{authority}} rates": "Année d’imposition {{year}} aux taux de {{authority}}",
@@ -214,7 +212,6 @@ const dictionary: Dictionary = {
   "Bank or post office": "Banque ou bureau de poste",
   "BAS: if you’re registered for GST or pay PAYG instalments, you lodge quarterly by 28 October, 28 February, 28 April and 28 July. Rideshare drivers must register for GST from their first ride; delivery riders only once turnover reaches $75,000.": "BAS : si vous êtes inscrit à la GST ou si vous payez des acomptes PAYG, vous produisez une déclaration chaque trimestre, au plus tard le 28 octobre, le 28 février, le 28 avril et le 28 juillet. Les chauffeurs de covoiturage commercial (comme Uber) doivent s’inscrire à la GST dès leur première course ; les livreurs, seulement quand leur chiffre d’affaires atteint 75 000 $.",
   "Before Monday shows up, give this week’s drives a quick sort.": "Avant l’arrivée de lundi, prenez une minute pour classer les trajets de la semaine.",
-  "Best value": "Meilleure offre",
   "Between workplaces": "Entre lieux de travail",
   "Bicycle": "Vélo",
   "Business": "Affaires",
@@ -1234,6 +1231,34 @@ const dictionary: Dictionary = {
   "Motion & Fitness": "Mouvements et forme physique",
   "On": "Activé",
   "Off": "Désactivé",
+  "{{count}} days free": {
+    "one": "{{count}} jour offert",
+    "many": "{{count}} jours offerts",
+    "other": "{{count}} jours offerts"
+  },
+  "{{count}} months free": {
+    "one": "{{count}} mois offert",
+    "many": "{{count}} mois offerts",
+    "other": "{{count}} mois offerts"
+  },
+  "{{count}} months": {
+    "one": "{{count}} mois",
+    "many": "{{count}} mois",
+    "other": "{{count}} mois"
+  },
+  "{{price}} a month": "{{price}} par mois",
+  "Most popular": "Le plus populaire",
+  "We’ll remind you 3 days before it ends.": "Nous vous le rappellerons 3 jours avant la fin.",
+  "{{trial}} free, then {{price}} a year. Cancel any time in Settings.": "Gratuit pendant {{trial}}, puis {{price}} par an. Résiliez à tout moment dans Réglages.",
+  "{{trial}} free, then {{price}} a month. Cancel any time in Settings.": "Gratuit pendant {{trial}}, puis {{price}} par mois. Résiliez à tout moment dans Réglages.",
+  "Free trial, then {{price}} a year. Cancel any time in Settings.": "Essai gratuit, puis {{price}} par an. Résiliez à tout moment dans Réglages.",
+  "Free trial, then {{price}} a month. Cancel any time in Settings.": "Essai gratuit, puis {{price}} par mois. Résiliez à tout moment dans Réglages.",
+  "{{price}} a year. Cancel any time in Settings.": "{{price}} par an. Résiliez à tout moment dans Réglages.",
+  "{{price}} a month. Cancel any time in Settings.": "{{price}} par mois. Résiliez à tout moment dans Réglages.",
+  "Your free month ends on {{date}}": "Votre mois gratuit se termine le {{date}}",
+  "Your free trial ends on {{date}}": "Votre essai gratuit se termine le {{date}}",
+  "Keep Pro for {{price}} a year, or cancel in Settings. Nothing to do if you’re staying.": "Gardez Pro pour {{price}} par an, ou résiliez dans Réglages. Rien à faire si vous restez.",
+  "Keep Pro for {{price}} a month, or cancel in Settings. Nothing to do if you’re staying.": "Gardez Pro pour {{price}} par mois, ou résiliez dans Réglages. Rien à faire si vous restez.",
 };
 
 export default dictionary;

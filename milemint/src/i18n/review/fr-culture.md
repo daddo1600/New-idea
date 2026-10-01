@@ -300,3 +300,26 @@ iOS’s own names: “Mouvements et forme physique” (Réglages), “Autoriser�
 | Motion & Fitness | Mouvements et forme physique | Motion & Fitness | |
 | On | Activé | On | |
 | Off | Désactivé | Off | |
+
+## Round 8h: Pro screen
+
+Plain trial terms. “Gratuit pendant {{trial}}” avoids agreeing “offert(s)” with a length that may be singular or plural. “Résilier” is the usual verb for ending a subscription; “Réglages” is the iPhone Settings app. {{date}} is “1 novembre”. The trial pill and lengths are plurals, so “1 month” / “2 months” read right.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| {{count}} days free | {{count}} jour offert / {{count}} jours offerts / {{count}} jours offerts | {{count}} day(s) free |  |
+| {{count}} months free | {{count}} mois offert / {{count}} mois offerts / {{count}} mois offerts | {{count}} month(s) free |  |
+| {{count}} months | {{count}} mois / {{count}} mois / {{count}} mois | {{count}} month(s) |  |
+| {{price}} a month | {{price}} par mois | {{price}} per month | Under the yearly price: the yearly price ÷ 12. |
+| Most popular | Le plus populaire | The most popular | Badge on the yearly plan. |
+| We’ll remind you 3 days before it ends. | Nous vous le rappellerons 3 jours avant la fin. | We’ll remind you 3 days before the end. |  |
+| {{trial}} free, then {{price}} a year. Cancel any time in Settings. | Gratuit pendant {{trial}}, puis {{price}} par an. Résiliez à tout moment dans Réglages. | Free for {{trial}}, then {{price}} per year. Cancel at any time in Settings. |  |
+| {{trial}} free, then {{price}} a month. Cancel any time in Settings. | Gratuit pendant {{trial}}, puis {{price}} par mois. Résiliez à tout moment dans Réglages. | Free for {{trial}}, then {{price}} per month. Cancel at any time in Settings. |  |
+| Free trial, then {{price}} a year. Cancel any time in Settings. | Essai gratuit, puis {{price}} par an. Résiliez à tout moment dans Réglages. | Free trial, then {{price}} per year. Cancel at any time in Settings. |  |
+| Free trial, then {{price}} a month. Cancel any time in Settings. | Essai gratuit, puis {{price}} par mois. Résiliez à tout moment dans Réglages. | Free trial, then {{price}} per month. Cancel at any time in Settings. |  |
+| {{price}} a year. Cancel any time in Settings. | {{price}} par an. Résiliez à tout moment dans Réglages. | {{price}} per year. Cancel at any time in Settings. |  |
+| {{price}} a month. Cancel any time in Settings. | {{price}} par mois. Résiliez à tout moment dans Réglages. | {{price}} per month. Cancel at any time in Settings. |  |
+| Your free month ends on {{date}} | Votre mois gratuit se termine le {{date}} | Your free month ends on {{date}} | Notification title, 3 days before a one-month trial ends. |
+| Your free trial ends on {{date}} | Votre essai gratuit se termine le {{date}} | Your free trial ends on {{date}} | For other trial lengths. |
+| Keep Pro for {{price}} a year, or cancel in Settings. Nothing to do if you’re staying. | Gardez Pro pour {{price}} par an, ou résiliez dans Réglages. Rien à faire si vous restez. | Keep Pro for {{price}} per year, or cancel in Settings. Nothing to do if you stay. | Notification body. |
+| Keep Pro for {{price}} a month, or cancel in Settings. Nothing to do if you’re staying. | Gardez Pro pour {{price}} par mois, ou résiliez dans Réglages. Rien à faire si vous restez. | Keep Pro for {{price}} per month, or cancel in Settings. Nothing to do if you stay. |  |

@@ -374,3 +374,26 @@ Unsure: iOS’s Punjabi button and Settings names aren’t known for certain; �
 | Motion & Fitness | ਮੋਸ਼ਨ ਅਤੇ ਫਿਟਨੈੱਸ | Motion & Fitness | |
 | On | ਚਾਲੂ | On | |
 | Off | ਬੰਦ | Off | |
+
+## Round 8h: Pro screen
+
+Plain trial terms. “ਸੈਟਿੰਗਾਂ” is the iPhone Settings app, as in “ਸੈਟਿੰਗਾਂ ਖੋਲ੍ਹੋ”. “ਮੁਫ਼ਤ ਟ੍ਰਾਇਲ” as already used on the paywall. The trial pill and lengths are plurals, so “1 month” / “2 months” read right.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| {{count}} days free | {{count}} ਦਿਨ ਮੁਫ਼ਤ / {{count}} ਦਿਨ ਮੁਫ਼ਤ | {{count}} day(s) free |  |
+| {{count}} months free | {{count}} ਮਹੀਨਾ ਮੁਫ਼ਤ / {{count}} ਮਹੀਨੇ ਮੁਫ਼ਤ | {{count}} month(s) free |  |
+| {{count}} months | {{count}} ਮਹੀਨਾ / {{count}} ਮਹੀਨੇ | {{count}} month(s) |  |
+| {{price}} a month | {{price}} ਹਰ ਮਹੀਨੇ | {{price}} every month | Under the yearly price: the yearly price ÷ 12. |
+| Most popular | ਸਭ ਤੋਂ ਪ੍ਰਸਿੱਧ | Most popular | Badge on the yearly plan. |
+| We’ll remind you 3 days before it ends. | ਖ਼ਤਮ ਹੋਣ ਤੋਂ 3 ਦਿਨ ਪਹਿਲਾਂ ਅਸੀਂ ਤੁਹਾਨੂੰ ਯਾਦ ਕਰਵਾਵਾਂਗੇ। | We’ll remind you 3 days before it ends. |  |
+| {{trial}} free, then {{price}} a year. Cancel any time in Settings. | {{trial}} ਮੁਫ਼ਤ, ਫਿਰ {{price}} ਹਰ ਸਾਲ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਜਦੋਂ ਮਰਜ਼ੀ ਰੱਦ ਕਰੋ। | {{trial}} free, then {{price}} every year. Cancel whenever you like in Settings. |  |
+| {{trial}} free, then {{price}} a month. Cancel any time in Settings. | {{trial}} ਮੁਫ਼ਤ, ਫਿਰ {{price}} ਹਰ ਮਹੀਨੇ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਜਦੋਂ ਮਰਜ਼ੀ ਰੱਦ ਕਰੋ। | {{trial}} free, then {{price}} every month. Cancel whenever you like in Settings. |  |
+| Free trial, then {{price}} a year. Cancel any time in Settings. | ਮੁਫ਼ਤ ਟ੍ਰਾਇਲ, ਫਿਰ {{price}} ਹਰ ਸਾਲ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਜਦੋਂ ਮਰਜ਼ੀ ਰੱਦ ਕਰੋ। | Free trial, then {{price}} every year. Cancel whenever you like in Settings. |  |
+| Free trial, then {{price}} a month. Cancel any time in Settings. | ਮੁਫ਼ਤ ਟ੍ਰਾਇਲ, ਫਿਰ {{price}} ਹਰ ਮਹੀਨੇ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਜਦੋਂ ਮਰਜ਼ੀ ਰੱਦ ਕਰੋ। | Free trial, then {{price}} every month. Cancel whenever you like in Settings. |  |
+| {{price}} a year. Cancel any time in Settings. | {{price}} ਹਰ ਸਾਲ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਜਦੋਂ ਮਰਜ਼ੀ ਰੱਦ ਕਰੋ। | {{price}} every year. Cancel whenever you like in Settings. |  |
+| {{price}} a month. Cancel any time in Settings. | {{price}} ਹਰ ਮਹੀਨੇ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਜਦੋਂ ਮਰਜ਼ੀ ਰੱਦ ਕਰੋ। | {{price}} every month. Cancel whenever you like in Settings. |  |
+| Your free month ends on {{date}} | ਤੁਹਾਡਾ ਮੁਫ਼ਤ ਮਹੀਨਾ {{date}} ਨੂੰ ਖ਼ਤਮ ਹੋਵੇਗਾ | Your free month will end on {{date}} | Notification title, 3 days before a one-month trial ends. |
+| Your free trial ends on {{date}} | ਤੁਹਾਡਾ ਮੁਫ਼ਤ ਟ੍ਰਾਇਲ {{date}} ਨੂੰ ਖ਼ਤਮ ਹੋਵੇਗਾ | Your free trial will end on {{date}} | For other trial lengths. |
+| Keep Pro for {{price}} a year, or cancel in Settings. Nothing to do if you’re staying. | Pro ਨੂੰ {{price}} ਸਾਲਾਨਾ ਵਿੱਚ ਜਾਰੀ ਰੱਖੋ, ਜਾਂ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਰੱਦ ਕਰੋ। ਜਾਰੀ ਰੱਖਣਾ ਹੈ ਤਾਂ ਕੁਝ ਕਰਨ ਦੀ ਲੋੜ ਨਹੀਂ। | Continue Pro at {{price}} yearly, or cancel in Settings. If you’re continuing, nothing needs doing. | Notification body. |
+| Keep Pro for {{price}} a month, or cancel in Settings. Nothing to do if you’re staying. | Pro ਨੂੰ {{price}} ਮਹੀਨਾਵਾਰ ਵਿੱਚ ਜਾਰੀ ਰੱਖੋ, ਜਾਂ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਰੱਦ ਕਰੋ। ਜਾਰੀ ਰੱਖਣਾ ਹੈ ਤਾਂ ਕੁਝ ਕਰਨ ਦੀ ਲੋੜ ਨਹੀਂ। | Continue Pro at {{price}} monthly, or cancel in Settings. If you’re continuing, nothing needs doing. |  |

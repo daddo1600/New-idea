@@ -82,8 +82,6 @@ const dictionary: Dictionary = {
   "{{rule}}.": "{{rule}}。",
   "{{rule}}. Petrol, diesel, hybrid or electric: same rate for a car or van you own.": "{{rule}}。汽油、柴油、混动还是电动都一样：只要是你自己的汽车或货车，费率相同。",
   "{{rule}}. Petrol, diesel, hybrid or electric: same rate.": "{{rule}}。汽油、柴油、混动还是电动，费率都一样。",
-  "{{trial}}, then {{price}}/month": "{{trial}}，之后 {{price}}/月",
-  "{{trial}}, then {{price}}/year": "{{trial}}，之后 {{price}}/年",
   "{{year}} at {{authority}} rates": "{{year}}，按 {{authority}} 费率计算",
   "{{year}} tax year": "{{year}} 纳税年度",
   "{{year}} tax year at {{authority}} rates": "{{year}} 纳税年度，按 {{authority}} 费率计算",
@@ -148,7 +146,6 @@ const dictionary: Dictionary = {
   "Bank or post office": "银行或邮局",
   "BAS: if you’re registered for GST or pay PAYG instalments, you lodge quarterly by 28 October, 28 February, 28 April and 28 July. Rideshare drivers must register for GST from their first ride; delivery riders only once turnover reaches $75,000.": "BAS：如果你已注册 GST 或需缴纳 PAYG 分期税款，就要按季度申报，截止日期为 10月28日、2月28日、4月28日和 7月28日。网约车司机从第一单起就必须注册 GST；外卖配送员则在营业额达到 $75,000 后才需要注册。",
   "Before Monday shows up, give this week’s drives a quick sort.": "趁周一还没到，给本周行程快速分个类。",
-  "Best value": "最划算",
   "Between workplaces": "往返工作地点之间",
   "Bicycle": "自行车",
   "Business": "工作",
@@ -1106,6 +1103,28 @@ const dictionary: Dictionary = {
   "Motion & Fitness": "运动与健身",
   "On": "已开启",
   "Off": "已关闭",
+  "{{count}} days free": {
+    "other": "免费 {{count}} 天"
+  },
+  "{{count}} months free": {
+    "other": "免费 {{count}} 个月"
+  },
+  "{{count}} months": {
+    "other": "{{count}} 个月"
+  },
+  "{{price}} a month": "每月 {{price}}",
+  "Most popular": "最受欢迎",
+  "We’ll remind you 3 days before it ends.": "结束前 3 天我们会提醒你。",
+  "{{trial}} free, then {{price}} a year. Cancel any time in Settings.": "免费 {{trial}}，之后每年 {{price}}。可随时在“设置”中取消。",
+  "{{trial}} free, then {{price}} a month. Cancel any time in Settings.": "免费 {{trial}}，之后每月 {{price}}。可随时在“设置”中取消。",
+  "Free trial, then {{price}} a year. Cancel any time in Settings.": "免费试用，之后每年 {{price}}。可随时在“设置”中取消。",
+  "Free trial, then {{price}} a month. Cancel any time in Settings.": "免费试用，之后每月 {{price}}。可随时在“设置”中取消。",
+  "{{price}} a year. Cancel any time in Settings.": "每年 {{price}}。可随时在“设置”中取消。",
+  "{{price}} a month. Cancel any time in Settings.": "每月 {{price}}。可随时在“设置”中取消。",
+  "Your free month ends on {{date}}": "你的免费月将于 {{date}} 结束",
+  "Your free trial ends on {{date}}": "你的免费试用将于 {{date}} 结束",
+  "Keep Pro for {{price}} a year, or cancel in Settings. Nothing to do if you’re staying.": "以每年 {{price}} 继续使用 Pro，或在“设置”中取消。继续使用的话，无需任何操作。",
+  "Keep Pro for {{price}} a month, or cancel in Settings. Nothing to do if you’re staying.": "以每月 {{price}} 继续使用 Pro，或在“设置”中取消。继续使用的话，无需任何操作。",
 };
 
 export default dictionary;

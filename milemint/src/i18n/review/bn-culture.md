@@ -312,3 +312,26 @@ Unsure: “অনুমতি দিন” / “অনুমতি দেবে�
 | Motion & Fitness | মোশন ও ফিটনেস | Motion & Fitness | |
 | On | চালু | On | |
 | Off | বন্ধ | Off | |
+
+## Round 8h: Pro screen
+
+Plain trial terms. “সেটিংস” is the iPhone Settings app, as in “সেটিংস খুলুন”. Price after “বছরে / মাসে” reads naturally (“বছরে £49.99”). The trial pill and lengths are plurals, so “1 month” / “2 months” read right.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| {{count}} days free | {{count}} দিন ফ্রি / {{count}} দিন ফ্রি | {{count}} day(s) free |  |
+| {{count}} months free | {{count}} মাস ফ্রি / {{count}} মাস ফ্রি | {{count}} month(s) free |  |
+| {{count}} months | {{count}} মাস / {{count}} মাস | {{count}} month(s) |  |
+| {{price}} a month | মাসে {{price}} | {{price}} a month | Under the yearly price: the yearly price ÷ 12. |
+| Most popular | সবচেয়ে জনপ্রিয় | Most popular | Badge on the yearly plan. |
+| We’ll remind you 3 days before it ends. | শেষ হওয়ার 3 দিন আগে আমরা আপনাকে মনে করিয়ে দেব। | We’ll remind you 3 days before it ends. |  |
+| {{trial}} free, then {{price}} a year. Cancel any time in Settings. | {{trial}} ফ্রি, তারপর বছরে {{price}}। সেটিংসে যেকোনো সময় বাতিল করুন। | {{trial}} free, then {{price}} a year. Cancel any time in Settings. |  |
+| {{trial}} free, then {{price}} a month. Cancel any time in Settings. | {{trial}} ফ্রি, তারপর মাসে {{price}}। সেটিংসে যেকোনো সময় বাতিল করুন। | {{trial}} free, then {{price}} a month. Cancel any time in Settings. |  |
+| Free trial, then {{price}} a year. Cancel any time in Settings. | ফ্রি ট্রায়াল, তারপর বছরে {{price}}। সেটিংসে যেকোনো সময় বাতিল করুন। | Free trial, then {{price}} a year. Cancel any time in Settings. |  |
+| Free trial, then {{price}} a month. Cancel any time in Settings. | ফ্রি ট্রায়াল, তারপর মাসে {{price}}। সেটিংসে যেকোনো সময় বাতিল করুন। | Free trial, then {{price}} a month. Cancel any time in Settings. |  |
+| {{price}} a year. Cancel any time in Settings. | বছরে {{price}}। সেটিংসে যেকোনো সময় বাতিল করুন। | {{price}} a year. Cancel any time in Settings. |  |
+| {{price}} a month. Cancel any time in Settings. | মাসে {{price}}। সেটিংসে যেকোনো সময় বাতিল করুন। | {{price}} a month. Cancel any time in Settings. |  |
+| Your free month ends on {{date}} | আপনার ফ্রি মাস শেষ হবে {{date}} | Your free month will end {{date}} | Notification title, 3 days before a one-month trial ends. |
+| Your free trial ends on {{date}} | আপনার ফ্রি ট্রায়াল শেষ হবে {{date}} | Your free trial will end {{date}} | For other trial lengths. |
+| Keep Pro for {{price}} a year, or cancel in Settings. Nothing to do if you’re staying. | বছরে {{price}}-এ Pro রাখুন, অথবা সেটিংসে বাতিল করুন। থাকতে চাইলে কিছুই করতে হবে না। | Keep Pro at {{price}} a year, or cancel in Settings. If you want to stay, nothing needs doing. | Notification body. |
+| Keep Pro for {{price}} a month, or cancel in Settings. Nothing to do if you’re staying. | মাসে {{price}}-এ Pro রাখুন, অথবা সেটিংসে বাতিল করুন। থাকতে চাইলে কিছুই করতে হবে না। | Keep Pro at {{price}} a month, or cancel in Settings. If you want to stay, nothing needs doing. |  |

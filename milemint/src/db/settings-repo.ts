@@ -90,6 +90,11 @@ export type AppSettings = {
   dismissedHomeSpots: LatLng[];
   /** The same for "Is this work?". */
   dismissedWorkSpots: LatLng[];
+  /**
+   * ISO time the "your free trial ends soon" reminder is queued for, so it's
+   * queued once; cleared when the subscription is no longer active.
+   */
+  trialReminderAt: string | null;
 };
 
 const WEEKDAY_9_TO_5 = [{ start: '09:00', end: '17:00' }];
@@ -126,6 +131,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   installedAt: null,
   dismissedHomeSpots: [],
   dismissedWorkSpots: [],
+  trialReminderAt: null,
 };
 
 type Check<T> = (value: unknown) => T | undefined;
@@ -136,6 +142,13 @@ const oneOf =
   (value) =>
     allowed.includes(value as T) ? (value as T) : undefined;
 const textOrNull: Check<string | null> = (value) => (value === null || typeof value === 'string' ? value : undefined);
+/** A moment as a full ISO time ("2026-10-28T09:30:00.000Z"); anything else (a bare date, garbage) is dropped. */
+const isoTimeOrNull: Check<string | null> = (value) => {
+  if (value === null) return null;
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T/.test(value)) return undefined;
+  const time = Date.parse(value);
+  return Number.isFinite(time) ? new Date(time).toISOString() : undefined;
+};
 const TIME = /^([01]\d|2[0-3]):[0-5]\d$/;
 
 /** Seven days of work hours; a damaged week would silently classify nothing (or crash the settings screen). */
@@ -221,6 +234,7 @@ const CHECKS: { [K in keyof AppSettings]-?: Check<AppSettings[K]> } = {
   installedAt: textOrNull,
   dismissedHomeSpots: spots,
   dismissedWorkSpots: spots,
+  trialReminderAt: isoTimeOrNull,
 };
 
 /** Stored settings, each field checked against its type and allowed values (see CHECKS). */

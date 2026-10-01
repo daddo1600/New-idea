@@ -101,8 +101,6 @@ const dictionary: Dictionary = {
   "{{rule}}.": "{{rule}}।",
   "{{rule}}. Petrol, diesel, hybrid or electric: same rate for a car or van you own.": "{{rule}}। ਪੈਟਰੋਲ, ਡੀਜ਼ਲ, ਹਾਈਬ੍ਰਿਡ ਜਾਂ ਇਲੈਕਟ੍ਰਿਕ: ਤੁਹਾਡੀ ਆਪਣੀ ਕਾਰ ਜਾਂ ਵੈਨ ਲਈ ਇੱਕੋ ਰੇਟ।",
   "{{rule}}. Petrol, diesel, hybrid or electric: same rate.": "{{rule}}। ਪੈਟਰੋਲ, ਡੀਜ਼ਲ, ਹਾਈਬ੍ਰਿਡ ਜਾਂ ਇਲੈਕਟ੍ਰਿਕ: ਇੱਕੋ ਰੇਟ।",
-  "{{trial}}, then {{price}}/month": "{{trial}}, ਫਿਰ {{price}}/ਮਹੀਨਾ",
-  "{{trial}}, then {{price}}/year": "{{trial}}, ਫਿਰ {{price}}/ਸਾਲ",
   "{{year}} at {{authority}} rates": "{{year}}, {{authority}} ਰੇਟਾਂ ’ਤੇ",
   "{{year}} tax year": "{{year}} ਟੈਕਸ ਸਾਲ",
   "{{year}} tax year at {{authority}} rates": "{{year}} ਟੈਕਸ ਸਾਲ, {{authority}} ਰੇਟਾਂ ’ਤੇ",
@@ -167,7 +165,6 @@ const dictionary: Dictionary = {
   "Bank or post office": "ਬੈਂਕ ਜਾਂ ਡਾਕਖ਼ਾਨਾ",
   "BAS: if you’re registered for GST or pay PAYG instalments, you lodge quarterly by 28 October, 28 February, 28 April and 28 July. Rideshare drivers must register for GST from their first ride; delivery riders only once turnover reaches $75,000.": "BAS: ਜੇ ਤੁਸੀਂ GST ਲਈ ਰਜਿਸਟਰਡ ਹੋ ਜਾਂ ਤੁਹਾਡੀਆਂ PAYG ਕਿਸ਼ਤਾਂ ਬਣਦੀਆਂ ਹਨ, ਤਾਂ ਹਰ ਤਿਮਾਹੀ 28 ਅਕਤੂਬਰ, 28 ਫ਼ਰਵਰੀ, 28 ਅਪ੍ਰੈਲ ਅਤੇ 28 ਜੁਲਾਈ ਤੱਕ BAS ਭਰਨਾ ਹੁੰਦਾ ਹੈ। ਰਾਈਡਸ਼ੇਅਰ ਡਰਾਈਵਰਾਂ ਨੂੰ ਪਹਿਲੀ ਸਵਾਰੀ ਤੋਂ ਹੀ GST ਲਈ ਰਜਿਸਟਰ ਕਰਨਾ ਪੈਂਦਾ ਹੈ; ਡਿਲੀਵਰੀ ਰਾਈਡਰਾਂ ਨੂੰ ਸਿਰਫ਼ ਉਦੋਂ ਜਦੋਂ ਟਰਨਓਵਰ $75,000 ਤੱਕ ਪਹੁੰਚ ਜਾਵੇ।",
   "Before Monday shows up, give this week’s drives a quick sort.": "ਸੋਮਵਾਰ ਆਉਣ ਤੋਂ ਪਹਿਲਾਂ, ਇਸ ਹਫ਼ਤੇ ਦੇ ਟ੍ਰਿਪ ਫਟਾਫਟ ਛਾਂਟ ਲਓ।",
-  "Best value": "ਸਭ ਤੋਂ ਕਿਫ਼ਾਇਤੀ",
   "Between workplaces": "ਕੰਮ ਦੀਆਂ ਥਾਵਾਂ ਵਿਚਕਾਰ",
   "Bicycle": "ਸਾਈਕਲ",
   "Business": "ਬਿਜ਼ਨਸ",
@@ -1156,6 +1153,31 @@ const dictionary: Dictionary = {
   "Motion & Fitness": "ਮੋਸ਼ਨ ਅਤੇ ਫਿਟਨੈੱਸ",
   "On": "ਚਾਲੂ",
   "Off": "ਬੰਦ",
+  "{{count}} days free": {
+    "one": "{{count}} ਦਿਨ ਮੁਫ਼ਤ",
+    "other": "{{count}} ਦਿਨ ਮੁਫ਼ਤ"
+  },
+  "{{count}} months free": {
+    "one": "{{count}} ਮਹੀਨਾ ਮੁਫ਼ਤ",
+    "other": "{{count}} ਮਹੀਨੇ ਮੁਫ਼ਤ"
+  },
+  "{{count}} months": {
+    "one": "{{count}} ਮਹੀਨਾ",
+    "other": "{{count}} ਮਹੀਨੇ"
+  },
+  "{{price}} a month": "{{price}} ਹਰ ਮਹੀਨੇ",
+  "Most popular": "ਸਭ ਤੋਂ ਪ੍ਰਸਿੱਧ",
+  "We’ll remind you 3 days before it ends.": "ਖ਼ਤਮ ਹੋਣ ਤੋਂ 3 ਦਿਨ ਪਹਿਲਾਂ ਅਸੀਂ ਤੁਹਾਨੂੰ ਯਾਦ ਕਰਵਾਵਾਂਗੇ।",
+  "{{trial}} free, then {{price}} a year. Cancel any time in Settings.": "{{trial}} ਮੁਫ਼ਤ, ਫਿਰ {{price}} ਹਰ ਸਾਲ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਜਦੋਂ ਮਰਜ਼ੀ ਰੱਦ ਕਰੋ।",
+  "{{trial}} free, then {{price}} a month. Cancel any time in Settings.": "{{trial}} ਮੁਫ਼ਤ, ਫਿਰ {{price}} ਹਰ ਮਹੀਨੇ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਜਦੋਂ ਮਰਜ਼ੀ ਰੱਦ ਕਰੋ।",
+  "Free trial, then {{price}} a year. Cancel any time in Settings.": "ਮੁਫ਼ਤ ਟ੍ਰਾਇਲ, ਫਿਰ {{price}} ਹਰ ਸਾਲ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਜਦੋਂ ਮਰਜ਼ੀ ਰੱਦ ਕਰੋ।",
+  "Free trial, then {{price}} a month. Cancel any time in Settings.": "ਮੁਫ਼ਤ ਟ੍ਰਾਇਲ, ਫਿਰ {{price}} ਹਰ ਮਹੀਨੇ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਜਦੋਂ ਮਰਜ਼ੀ ਰੱਦ ਕਰੋ।",
+  "{{price}} a year. Cancel any time in Settings.": "{{price}} ਹਰ ਸਾਲ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਜਦੋਂ ਮਰਜ਼ੀ ਰੱਦ ਕਰੋ।",
+  "{{price}} a month. Cancel any time in Settings.": "{{price}} ਹਰ ਮਹੀਨੇ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਜਦੋਂ ਮਰਜ਼ੀ ਰੱਦ ਕਰੋ।",
+  "Your free month ends on {{date}}": "ਤੁਹਾਡਾ ਮੁਫ਼ਤ ਮਹੀਨਾ {{date}} ਨੂੰ ਖ਼ਤਮ ਹੋਵੇਗਾ",
+  "Your free trial ends on {{date}}": "ਤੁਹਾਡਾ ਮੁਫ਼ਤ ਟ੍ਰਾਇਲ {{date}} ਨੂੰ ਖ਼ਤਮ ਹੋਵੇਗਾ",
+  "Keep Pro for {{price}} a year, or cancel in Settings. Nothing to do if you’re staying.": "Pro ਨੂੰ {{price}} ਸਾਲਾਨਾ ਵਿੱਚ ਜਾਰੀ ਰੱਖੋ, ਜਾਂ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਰੱਦ ਕਰੋ। ਜਾਰੀ ਰੱਖਣਾ ਹੈ ਤਾਂ ਕੁਝ ਕਰਨ ਦੀ ਲੋੜ ਨਹੀਂ।",
+  "Keep Pro for {{price}} a month, or cancel in Settings. Nothing to do if you’re staying.": "Pro ਨੂੰ {{price}} ਮਹੀਨਾਵਾਰ ਵਿੱਚ ਜਾਰੀ ਰੱਖੋ, ਜਾਂ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਰੱਦ ਕਰੋ। ਜਾਰੀ ਰੱਖਣਾ ਹੈ ਤਾਂ ਕੁਝ ਕਰਨ ਦੀ ਲੋੜ ਨਹੀਂ।",
 };
 
 export default dictionary;

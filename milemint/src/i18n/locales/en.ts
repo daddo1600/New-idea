@@ -62,6 +62,9 @@ const en: Dictionary = {
   },
   '{{count}}-day free trial': { one: '{{count}}-day free trial', other: '{{count}}-day free trial' },
   '{{count}}-month free trial': { one: '{{count}}-month free trial', other: '{{count}}-month free trial' },
+  '{{count}} months': { one: '{{count}} month', other: '{{count}} months' },
+  '{{count}} days free': { one: '{{count}} day free', other: '{{count}} days free' },
+  '{{count}} months free': { one: '{{count}} month free', other: '{{count}} months free' },
   'Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.': {
     one: 'Free plan: {{count}} work drive a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.',
     other:
