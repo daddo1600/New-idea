@@ -1141,7 +1141,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: Spacing.three,
     gap: Spacing.one,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   tileIcon: { fontSize: 28, lineHeight: 34 },
   tileLabel: { lineHeight: 19 },
