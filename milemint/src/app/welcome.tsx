@@ -83,7 +83,7 @@ export default function WelcomeScreen() {
   const [week, setWeek] = useState<SimpleWeek>(DEFAULT_SIMPLE_WEEK);
   const [hoursSet, setHoursSet] = useState(false);
   const [vehicle, setVehicle] = useState<VehicleType>('car');
-  const [workStyle, setWorkStyle] = useState<'hours' | 'shifts'>('hours');
+  const [workStyle, setWorkStyle] = useState<'hours' | 'shifts' | 'neither' | null>(null);
   const [extraVehicles, setExtraVehicles] = useState<VehicleType[]>([]);
   /** Chose shifts (delivery apps) instead of set hours. */
   const [shifts, setShifts] = useState(false);
@@ -213,14 +213,15 @@ export default function WelcomeScreen() {
       250,
     );
 
-  const primary = (label: string, onPress: () => void) => (
+  const primary = (label: string, onPress: () => void, enabled = true) => (
     <Pressable
       accessibilityRole="button"
-      disabled={busy}
+      accessibilityState={{ disabled: busy || !enabled }}
+      disabled={busy || !enabled}
       onPress={onPress}
       style={[
         styles.primary,
-        { backgroundColor: onBrand ? '#FFFFFF' : theme.accent, opacity: busy ? 0.6 : 1 },
+        { backgroundColor: onBrand ? '#FFFFFF' : theme.accent, opacity: busy ? 0.6 : enabled ? 1 : 0.35 },
       ]}>
       <ThemedText type="smallBold" style={{ color: onBrand ? '#064E3B' : theme.onAccent }}>
         {label}
@@ -429,6 +430,13 @@ export default function WelcomeScreen() {
                   </View>
                 </View>
               )}
+              <WorkStyleOption
+                selected={workStyle === 'neither'}
+                emoji="✋"
+                title="Neither"
+                detail="No set hours. I’ll swipe each drive business or personal myself."
+                onPress={() => setWorkStyle('neither')}
+              />
             </>
           )}
 
@@ -549,8 +557,11 @@ export default function WelcomeScreen() {
           {step === HOURS &&
             (workStyle === 'hours'
               ? primary('Save my hours', saveHours)
-              : primary('Use shifts', chooseShifts))}
-          {step === HOURS && secondary('Neither, I’ll sort drives myself', () => setStep(PLACES))}
+              : workStyle === 'shifts'
+                ? primary('Use shifts', chooseShifts)
+                : workStyle === 'neither'
+                  ? primary('Continue', () => setStep(PLACES))
+                  : primary('Choose one to continue', () => {}, false))}
           {step === PLACES &&
             primary(busy ? 'Saving…' : home.text || work.text ? 'Save and continue' : 'Continue', savePlaces)}
           {step === PLACES && secondary('Skip for now', () => setStep(DONE))}
