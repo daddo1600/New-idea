@@ -11,9 +11,11 @@ import ReanimatedSwipeable, {
 import { useAutoBackup } from '@/backup/use-backup';
 import { AddTripButton, MenuButton } from '@/components/header-menu';
 import { BrandGradient } from '@/components/brand-gradient';
+import { HomeEmptyLines } from '@/components/home-empty';
 import { LeafMark } from '@/components/leaf-mark';
 import { LogbookNudge } from '@/components/logbook-nudge';
 import { PlanSheet } from '@/components/plan-rules';
+import { PracticeTutorial } from '@/components/practice-tutorial';
 import { Celebration } from '@/components/celebration';
 import { ReminderAsk } from '@/components/reminder-ask';
 import { purposeIcon, quickPurposes, shownPurpose } from '@/components/purpose-picker';
@@ -434,11 +436,7 @@ export default function HomeScreen() {
             <View style={styles.empty}>
               <LeafMark size={72} />
               <ThemedText type="smallBold">{status === 'on' ? t('Ready when you are') : t('No drives yet')}</ThemedText>
-              <ThemedText type="small" themeColor="textSecondary" style={styles.emptyBody}>
-                {status === 'on'
-                  ? t('Just drive. Each trip appears here after you park, ready to swipe business or personal.')
-                  : t('Turn on automatic tracking and your drives will appear here.')}
-              </ThemedText>
+              <HomeEmptyLines trackingOn={status === 'on'} style={styles.emptyBody} />
             </View>
           )
         }
@@ -490,6 +488,8 @@ export default function HomeScreen() {
       {!selecting && <AddTripButton bottom={insets.bottom} />}
       {waiting && <ValueWaitsNotice bottom={insets.bottom} onClose={() => setRejoined(null)} />}
       <Celebration content={celebration.content} onClose={celebration.close} />
+      {/* Once after setup (or replayed from Settings): sort two sample drives, nothing saved. */}
+      <PracticeTutorial TripRow={TripRow} />
       <VehicleSheet
         visible={picking !== null}
         title={picking === 'shift' ? t('Which vehicle today?') : t('What are you driving?')}
@@ -831,9 +831,12 @@ function TripRow({
   usualPurpose,
   purposeChoices,
   onPurpose,
+  onOpen,
 }: {
   trip: Trip;
   deduction: number;
+  /** Instead of opening the trip's details (the practice tutorial's sample drives aren't saved). */
+  onOpen?: () => void;
   /** Filled in for business drives with none; a trip still showing it is marked to check. */
   usualPurpose: string | null;
   /** One-tap purposes for a business drive without one, most likely first. */
@@ -860,7 +863,7 @@ function TripRow({
     shownPurpose(trip.purpose, t),
     deduction > 0 ? formatMoney(deduction, region) : '',
   ].filter(Boolean);
-  const openDetails = () => router.push({ pathname: '/trip/[id]', params: { id: trip.id } });
+  const openDetails = onOpen ?? (() => router.push({ pathname: '/trip/[id]', params: { id: trip.id } }));
   // Filled in by the app with the usual purpose and not checked since: said quietly, so it can be.
   const filledWithUsual =
     !!trip.purposeFilled &&

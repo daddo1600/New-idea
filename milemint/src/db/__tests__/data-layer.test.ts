@@ -157,6 +157,15 @@ describe('parseSettings', () => {
     expect(settings.workWeek[1]).toEqual([{ start: '08:00', end: '16:00' }]);
   });
 
+  it('keeps whether the practice tutorial is done, not done by default or when damaged', () => {
+    expect(DEFAULT_SETTINGS.tutorialDone).toBe(false);
+    expect(parseSettings(JSON.stringify({ tutorialDone: true })).tutorialDone).toBe(true);
+    expect(parseSettings(JSON.stringify({ tutorialDone: false, onboarded: true })).tutorialDone).toBe(false);
+    for (const value of ['true', 1, null, {}]) {
+      expect(parseSettings(JSON.stringify({ tutorialDone: value })).tutorialDone).toBe(false);
+    }
+  });
+
   it.each(['null', '[1,2]', '"text"', '5', 'not json', ''])('gives the defaults for %p', (json) => {
     expect(parseSettings(json)).toEqual(DEFAULT_SETTINGS);
   });

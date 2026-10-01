@@ -313,3 +313,40 @@ iOS’s own names: “Movimiento y forma física” is the Settings item; “Per
 | Motion & Fitness | Movimiento y forma física | Motion & Fitness | |
 | On | Activado | On | |
 | Off | Desactivado | Off | |
+
+## Round 8g: practice tutorial
+
+The practice run after setup (sorting two sample drives, a sample shift) and home’s first, empty screen worded from the setup answers. Business, personal, swipe and shift reuse this file’s existing words.
+
+| English | Translation | Back-translation | Note |
+|---|---|---|---|
+| Swipe on your shift when you start work. Every drive in it counts as {{purpose}}. | Desliza para iniciar tu turno cuando empieces a trabajar. Cada viaje del turno cuenta como {{purpose}}. | Swipe to start your shift when you begin working. Each trip in the shift counts as {{purpose}}. | Empty home, shift workers. *Desliza para iniciar turno* as on the shift bar. |
+| Drives in your hours ({{days}} {{from}}–{{to}}) are sorted as business for you. | Los viajes en tu horario ({{days}} {{from}}–{{to}}) se clasifican como de trabajo automáticamente. | Trips in your schedule ({{days}} {{from}}–{{to}}) are classified as work automatically. | *horario* as in “Horario de trabajo”; days and times come formatted for es. |
+| Drives in your work hours are sorted as business for you. | Los viajes en tu horario de trabajo se clasifican como de trabajo automáticamente. | Trips in your work schedule are classified as work automatically. | When the hours differ by day. |
+| After each drive, swipe right for business or left for personal. | Después de cada viaje, desliza a la derecha si es de trabajo o a la izquierda si es personal. | After each trip, swipe right if it’s work or left if it’s personal. | Same pattern as “desliza a la izquierda si es personal”. |
+| {{rate}} a mile · {{vehicle}} · {{country}} | {{rate}} por milla · {{vehicle}} · {{country}} | {{rate}} per mile · {{vehicle}} · {{country}} | *por milla* as in the HMRC rate line. |
+| {{rate}} a km · {{vehicle}} · {{country}} | {{rate}} por km · {{vehicle}} · {{country}} | {{rate}} per km · {{vehicle}} · {{country}} | Natural, fits its place. |
+| PRACTICE RUN | PRÁCTICA | PRACTICE | Eyebrow in capitals, like “PASO {{step}} DE 2”. |
+| This is how a drive shows up after you park. Try sorting it. | Así aparece un viaje cuando te estacionas. Intenta clasificarlo. | This is how a trip appears when you park. Try classifying it. | *te estacionas* (es-419), as in “Los viajes se registran cuando te estacionas”. |
+| Swipe left for personal | Desliza a la izquierda si es personal | Swipe left if it’s personal | Tooltip; reuses the auto note’s wording. |
+| Not that way. Try again. | Hacia el otro lado. Inténtalo de nuevo. | The other way. Try again. | Friendlier than a literal “Not that way”. |
+| Sorted as personal ✓ | Marcado como personal ✓ | Marked as personal ✓ | *Marcar* as in the row buttons. |
+| Now a work drive. Work drives are worth money back. | Ahora un viaje de trabajo. Los viajes de trabajo te devuelven dinero. | Now a work trip. Work trips give you money back. | Natural, fits its place. |
+| Swipe right for business | Desliza a la derecha si es de trabajo | Swipe right if it’s work | Natural, fits its place. |
+| Sorted as business: worth {{amount}} | Marcado como de trabajo: vale {{amount}} | Marked as work: worth {{amount}} | *vale* as in “Vale {{amount}} si es de trabajo”. |
+| Swipe to start your shift | Desliza para iniciar tu turno | Swipe to start your shift | Natural, fits its place. |
+| Your shift is on ✓ | Tu turno está en marcha ✓ | Your shift is under way ✓ | Natural, fits its place. |
+| Mark as personal | Marcar como personal | Mark as personal | VoiceOver button. |
+| Mark as business | Marcar como de trabajo | Mark as work | VoiceOver button. |
+| Practice drive · not saved | Viaje de práctica · no se guarda | Practice trip · not saved | Natural, fits its place. |
+| Supermarket | Supermercado | Supermarket | Sample place name. |
+| Office | Oficina | Office | Sample place name. |
+| Customer | Cliente | Customer | Sample drop-off for couriers. |
+| That’s it. Just drive: trips appear here after you park. | Eso es todo. Solo conduce: los viajes aparecen aquí cuando te estacionas. | That’s all. Just drive: trips appear here when you park. | *Solo conduce* as in the welcome line. |
+| Start driving | A conducir | Let’s drive | Button; short and upbeat. |
+| Skip | Saltar | Skip | Natural, fits its place. |
+| Skip the practice run | Saltar la práctica | Skip the practice | Accessibility label. |
+| Tutorial | Tutorial | Tutorial | Settings heading; common in es-419. |
+| Replay the tutorial | Repetir el tutorial | Repeat the tutorial | Natural, fits its place. |
+| Try sorting two sample drives again. Nothing is saved. | Vuelve a clasificar dos viajes de ejemplo. No se guarda nada. | Classify two sample trips again. Nothing is saved. | Natural, fits its place. |
+| Replay | Repetir | Repeat | Natural, fits its place. |

@@ -321,3 +321,40 @@ The welcome’s privacy line now names the phone, not the iPhone. Home and work 
 | Motion & Fitness | Mișcare și fitness | Motion & Fitness | |
 | On | Activat | On | |
 | Off | Dezactivat | Off | |
+
+## Round 8g: practice tutorial
+
+The practice run after setup (sorting two sample drives, a sample shift) and home’s first, empty screen worded from the setup answers. Business, personal, swipe and shift reuse this file’s existing words.
+
+| English | Translation | Back-translation | Note |
+|---|---|---|---|
+| Swipe on your shift when you start work. Every drive in it counts as {{purpose}}. | Glisează ca să începi tura când te apuci de lucru. Toate cursele din tură contează ca {{purpose}}. | Swipe to start the shift when you get to work. All trips in the shift count as {{purpose}}. | *Glisează ca să începi tura* as on the shift bar. |
+| Drives in your hours ({{days}} {{from}}–{{to}}) are sorted as business for you. | Cursele din orele tale ({{days}} {{from}}–{{to}}) sunt trecute automat ca de lucru. | Trips in your hours ({{days}} {{from}}–{{to}}) are put down automatically as work. | Natural, fits its place. |
+| Drives in your work hours are sorted as business for you. | Cursele din orele tale de lucru sunt trecute automat ca de lucru. | Trips in your work hours are put down automatically as work. | Natural, fits its place. |
+| After each drive, swipe right for business or left for personal. | După fiecare cursă, glisează la dreapta pentru de lucru sau la stânga pentru personală. | After each trip, swipe right for work or left for personal. | Natural, fits its place. |
+| {{rate}} a mile · {{vehicle}} · {{country}} | {{rate}} pe milă · {{vehicle}} · {{country}} | {{rate}} per mile · {{vehicle}} · {{country}} | *pe milă* as in the HMRC line. |
+| {{rate}} a km · {{vehicle}} · {{country}} | {{rate}} pe km · {{vehicle}} · {{country}} | {{rate}} per km · {{vehicle}} · {{country}} | Natural, fits its place. |
+| PRACTICE RUN | EXERCIȚIU | EXERCISE | Eyebrow. |
+| This is how a drive shows up after you park. Try sorting it. | Așa apare o cursă după ce parchezi. Încearcă s-o sortezi. | This is how a trip appears after you park. Try sorting it. | Natural, fits its place. |
+| Swipe left for personal | Glisează la stânga pentru personală | Swipe left for personal | Natural, fits its place. |
+| Not that way. Try again. | Nu în direcția asta. Mai încearcă. | Not in this direction. Try again. | Natural, fits its place. |
+| Sorted as personal ✓ | Trecută ca personală ✓ | Put down as personal ✓ | Feminine, agreeing with *cursă*. |
+| Now a work drive. Work drives are worth money back. | Acum o cursă de lucru. Cursele de lucru îți aduc bani înapoi. | Now a work trip. Work trips bring you money back. | Natural, fits its place. |
+| Swipe right for business | Glisează la dreapta pentru de lucru | Swipe right for work | Natural, fits its place. |
+| Sorted as business: worth {{amount}} | Trecută ca de lucru: valorează {{amount}} | Put down as work: worth {{amount}} | *valorează* as in the row. |
+| Swipe to start your shift | Glisează ca să începi tura | Swipe to start the shift | Same as the bar. |
+| Your shift is on ✓ | Tura a început ✓ | The shift has started ✓ | Natural, fits its place. |
+| Mark as personal | Marchează ca personală | Mark as personal | Natural, fits its place. |
+| Mark as business | Marchează ca de lucru | Mark as work | Natural, fits its place. |
+| Practice drive · not saved | Cursă de probă · nu se salvează | Trial trip · not saved | Natural, fits its place. |
+| Supermarket | Supermarket | Supermarket | Natural, fits its place. |
+| Office | Birou | Office | Natural, fits its place. |
+| Customer | Client | Customer | Natural, fits its place. |
+| That’s it. Just drive: trips appear here after you park. | Asta e tot. Doar condu: cursele apar aici după ce parchezi. | That’s all. Just drive: trips appear here after you park. | *Doar condu* as in the old empty state. |
+| Start driving | Pornește la drum | Set off | Natural, fits its place. |
+| Skip | Sari peste | Skip | Natural, fits its place. |
+| Skip the practice run | Sari peste exercițiu | Skip the exercise | Natural, fits its place. |
+| Tutorial | Tutorial | Tutorial | Natural, fits its place. |
+| Replay the tutorial | Reia tutorialul | Replay the tutorial | Natural, fits its place. |
+| Try sorting two sample drives again. Nothing is saved. | Sortează din nou două curse de probă. Nu se salvează nimic. | Sort two trial trips again. Nothing is saved. | Natural, fits its place. |
+| Replay | Reia | Replay | Natural, fits its place. |

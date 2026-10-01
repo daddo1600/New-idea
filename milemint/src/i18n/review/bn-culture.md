@@ -312,3 +312,40 @@ Unsure: “অনুমতি দিন” / “অনুমতি দেবে�
 | Motion & Fitness | মোশন ও ফিটনেস | Motion & Fitness | |
 | On | চালু | On | |
 | Off | বন্ধ | Off | |
+
+## Round 8g: practice tutorial
+
+The practice run after setup (sorting two sample drives, a sample shift) and home’s first, empty screen worded from the setup answers. Business, personal, swipe and shift reuse this file’s existing words.
+
+| English | Translation | Back-translation | Note |
+|---|---|---|---|
+| Swipe on your shift when you start work. Every drive in it counts as {{purpose}}. | কাজ শুরু করার সময় সোয়াইপ করে শিফট শুরু করুন। শিফটের প্রতিটি ট্রিপ {{purpose}} হিসেবে গোনা হবে। | When starting work, swipe to start the shift. Every trip in the shift will be counted as {{purpose}}. | *গোনা হবে* as in the shift hint. |
+| Drives in your hours ({{days}} {{from}}–{{to}}) are sorted as business for you. | আপনার সময়ের ({{days}} {{from}}–{{to}}) ট্রিপগুলো আপনাআপনি ব্যবসায়িক হিসেবে সাজানো হয়। | Trips in your hours ({{days}} {{from}}–{{to}}) are sorted as business automatically. | Natural, fits its place. |
+| Drives in your work hours are sorted as business for you. | আপনার কাজের সময়ের ট্রিপগুলো আপনাআপনি ব্যবসায়িক হিসেবে সাজানো হয়। | Trips in your work hours are sorted as business automatically. | *কাজের সময়* as in Settings. |
+| After each drive, swipe right for business or left for personal. | প্রতিটি ট্রিপের পর, ব্যবসায়িক হলে ডানে বা ব্যক্তিগত হলে বাঁয়ে সোয়াইপ করুন। | After each trip, swipe right if business or left if personal. | Natural, fits its place. |
+| {{rate}} a mile · {{vehicle}} · {{country}} | {{rate}} প্রতি মাইল · {{vehicle}} · {{country}} | {{rate}} per mile · {{vehicle}} · {{country}} | Natural, fits its place. |
+| {{rate}} a km · {{vehicle}} · {{country}} | {{rate}} প্রতি কিমি · {{vehicle}} · {{country}} | {{rate}} per km · {{vehicle}} · {{country}} | Natural, fits its place. |
+| PRACTICE RUN | অনুশীলন | PRACTICE | Natural, fits its place. |
+| This is how a drive shows up after you park. Try sorting it. | পার্ক করার পর ট্রিপ এভাবে দেখা যায়। এটি সাজিয়ে দেখুন। | After parking a trip looks like this. Try sorting it. | Natural, fits its place. |
+| Swipe left for personal | ব্যক্তিগত হলে বাঁয়ে সোয়াইপ করুন | Swipe left if personal | As in the auto note. |
+| Not that way. Try again. | ওদিকে নয়। আবার চেষ্টা করুন। | Not that way. Try again. | Natural, fits its place. |
+| Sorted as personal ✓ | ব্যক্তিগত হিসেবে সাজানো হলো ✓ | Sorted as personal ✓ | Natural, fits its place. |
+| Now a work drive. Work drives are worth money back. | এবার একটি কাজের ট্রিপ। কাজের ট্রিপে টাকা ফেরত পাওয়া যায়। | Now a work trip. Work trips get money back. | Natural, fits its place. |
+| Swipe right for business | ব্যবসায়িক হলে ডানে সোয়াইপ করুন | Swipe right if business | Natural, fits its place. |
+| Sorted as business: worth {{amount}} | ব্যবসায়িক হিসেবে সাজানো হলো: মূল্য {{amount}} | Sorted as business: worth {{amount}} | *মূল্য* as in the row. |
+| Swipe to start your shift | আপনার শিফট শুরু করতে সোয়াইপ করুন | Swipe to start your shift | Natural, fits its place. |
+| Your shift is on ✓ | আপনার শিফট শুরু হয়েছে ✓ | Your shift has started ✓ | Natural, fits its place. |
+| Mark as personal | ব্যক্তিগত হিসেবে চিহ্নিত করুন | Mark as personal | As in the row buttons. |
+| Mark as business | ব্যবসায়িক হিসেবে চিহ্নিত করুন | Mark as business | Natural, fits its place. |
+| Practice drive · not saved | অনুশীলনের ট্রিপ · সেভ হবে না | Practice trip · won’t be saved | Natural, fits its place. |
+| Supermarket | সুপারমার্কেট | Supermarket | Natural, fits its place. |
+| Office | অফিস | Office | Natural, fits its place. |
+| Customer | গ্রাহক | Customer | Natural, fits its place. |
+| That’s it. Just drive: trips appear here after you park. | এটুকুই। শুধু ড্রাইভ করুন: পার্ক করার পর ট্রিপ এখানে দেখা যাবে। | That’s all. Just drive: trips will show here after parking. | *শুধু ড্রাইভ করুন* as in the old empty state. |
+| Start driving | ড্রাইভ শুরু করুন | Start driving | Natural, fits its place. |
+| Skip | বাদ দিন | Skip | Natural, fits its place. |
+| Skip the practice run | অনুশীলন বাদ দিন | Skip practice | Natural, fits its place. |
+| Tutorial | টিউটোরিয়াল | Tutorial | Natural, fits its place. |
+| Replay the tutorial | টিউটোরিয়াল আবার দেখুন | See the tutorial again | Natural, fits its place. |
+| Try sorting two sample drives again. Nothing is saved. | দুটি নমুনা ট্রিপ আবার সাজিয়ে দেখুন। কিছুই সেভ হয় না। | Try sorting two sample trips again. Nothing is saved. | Natural, fits its place. |
+| Replay | আবার দেখুন | See again | Natural, fits its place. |

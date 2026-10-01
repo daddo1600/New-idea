@@ -90,6 +90,11 @@ export type AppSettings = {
   dismissedHomeSpots: LatLng[];
   /** The same for "Is this work?". */
   dismissedWorkSpots: LatLng[];
+  /**
+   * The practice run on home (sorting two sample drives) has been finished or
+   * skipped. Settings can set it back to false to replay it.
+   */
+  tutorialDone: boolean;
 };
 
 const WEEKDAY_9_TO_5 = [{ start: '09:00', end: '17:00' }];
@@ -126,6 +131,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   installedAt: null,
   dismissedHomeSpots: [],
   dismissedWorkSpots: [],
+  tutorialDone: false,
 };
 
 type Check<T> = (value: unknown) => T | undefined;
@@ -221,6 +227,7 @@ const CHECKS: { [K in keyof AppSettings]-?: Check<AppSettings[K]> } = {
   installedAt: textOrNull,
   dismissedHomeSpots: spots,
   dismissedWorkSpots: spots,
+  tutorialDone: bool,
 };
 
 /** Stored settings, each field checked against its type and allowed values (see CHECKS). */

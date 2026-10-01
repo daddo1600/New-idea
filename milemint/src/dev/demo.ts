@@ -24,6 +24,9 @@ import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/tri
  *   ?demo=courier shift mode on (the swipe-to-start shift bar)
  *   ?demo=places no Home or Work saved yet: "Is this home?" (then, after No, "Is this work?")
  *   ?demo=motion Motion & Fitness not asked yet: set-up offers it after location
+ *   ?demo=tutorial the practice run shown after setup, over an empty home
+ *   ?demo=empty  home just after setup, with no drives yet
+ *   &courier     (with tutorial or empty) a shift worker; &hours: set work hours
  *   &region=GB   preview another country's currency, units and rules
  */
 const demoParam =
@@ -75,8 +78,18 @@ export const DEMO_GAP_PLACES = {
 /** `?demo=celebrate`: shows the milestone celebration for the demo trips. */
 export const DEMO_CELEBRATE = demoParam === 'celebrate';
 
-/** `?demo=courier`: shift mode is on, so the home screen leads with the shift bar. */
-export const DEMO_COURIER = demoParam === 'courier';
+const demoFlag = (name: string) =>
+  demoParam !== null && typeof window !== 'undefined' && new URLSearchParams(window.location.search).has(name);
+
+/** `?demo=courier` (or `&courier`): shift mode is on, so the home screen leads with the shift bar. */
+export const DEMO_COURIER = demoParam === 'courier' || demoFlag('courier');
+
+/** `?demo=tutorial`: the practice run (sorting two sample drives) over home, as after setup. */
+export const DEMO_TUTORIAL = demoParam === 'tutorial';
+
+/** `?demo=empty` (and the tutorial): home just after setup, no drives yet; `&hours` turns on work hours. */
+export const DEMO_EMPTY = demoParam === 'empty' || DEMO_TUTORIAL;
+const DEMO_HOURS = demoFlag('hours');
 
 /**
  * `?demo=places`: set hours, but no Home or Work saved, and the drives have
@@ -339,6 +352,10 @@ export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
   if ((existing?.n ?? 0) > 0) return;
   if (DEMO_COURIER) await updateSettings(db, { shiftMode: true });
   if (DEMO_PLACES) await updateSettings(db, { workHoursEnabled: true });
+  if (DEMO_EMPTY) {
+    if (DEMO_HOURS) await updateSettings(db, { workHoursEnabled: true });
+    return;
+  }
   const placeIds = new Map<string, string>();
   for (const place of PLACES) {
     if (DEMO_PLACES && place.kind !== 'client') continue;
