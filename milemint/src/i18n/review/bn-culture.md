@@ -103,3 +103,16 @@ Each line was translated, back-translated cold, then checked for culture and len
 | Swipe back to end your shift. | (missing) | শিফট শেষ করতে উল্টো দিকে সোয়াইপ করুন। | New line. Back-translation: "Swipe the opposite way to end the shift." Mirrors "শিফট শুরু করতে সোয়াইপ করুন" and "শিফট শেষ করুন" (আপনি). Shorter than English on screen. |
 | {{hint}}. Swipe the button to the left, or double-tap. | (missing) | {{hint}}। বোতামটি বাঁয়ে সোয়াইপ করুন, বা দুবার ট্যাপ করুন। | New VoiceOver hint; mirrors the "ডানে" line exactly. |
 | Enter amounts as numbers, e.g. 2400 or 2,400.50. | পরিমাণ সংখ্যায় লিখুন, যেমন 2400 বা 2,400.50। | (unchanged) | Checked: English-style example with Latin digits, as the glossary says; no dot instruction. |
+
+## Round 4: referrals
+
+28 new lines (Invite friends screen, the friend’s-code box in the welcome and Settings, the celebration share button, the free-plan counter, the share message with the code) and 3 removed (Invite a friend, Share it, Share MileMint on WhatsApp and more). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: the friend’s bonus is immediate, the sharer’s only “when a friend joins”, so nothing promises the user drives they don’t have yet. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| You both get +10 free drives a month when a friend joins. | বন্ধু যোগ দিলে আপনারা দুজনেই মাসে +10টি ফ্রি ট্রিপ পাবেন। | আপনারা (plural polite) for “you both”. |
+| Friends joined: {{count}} · … | যোগ দেওয়া বন্ধু: {{count}} জন · মাসে +{{drives}}টি ফ্রি ট্রিপ | Counters: জন for people, টি for trips, as elsewhere. |
+| That doesn’t look like a MileMint code… | …আরও 3টি অক্ষর বা সংখ্যা… | Pass 2: “3 more” can be digits. |
+| How it works | কীভাবে কাজ করে | Shortened from “এটি কীভাবে কাজ করে” for a link. |
+| Redeem | রিডিম করুন | Loanword used by bKash and app stores. |
+| Invite friends | বন্ধুদের আমন্ত্রণ জানান | Matches the old “বন্ধুকে আমন্ত্রণ জানান”. 1.6× but a nav title, where it fits. |

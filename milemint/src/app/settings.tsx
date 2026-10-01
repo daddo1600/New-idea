@@ -7,6 +7,7 @@ import {
   Platform,
   Pressable,
   ScrollView,
+  Share,
   StyleSheet,
   Switch,
   Text,
@@ -30,8 +31,8 @@ import { AREA_EXAMPLES, clientVisitLabel } from '@/domain/privacy';
 import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, saveSettings, type AppSettings } from '@/db/settings-repo';
 import { isValidShift, type WorkShift } from '@/domain/classify-rules';
+import { REFERRAL_BONUS_DRIVES } from '@/domain/plan';
 import { marApplies, parsePence, TAX_BAND_RATES, type TaxBand } from '@/domain/mar';
-import { FREE_AUTO_DRIVES_PER_MONTH } from '@/domain/plan';
 import { vehicleRule } from '@/domain/regions';
 import { VEHICLE_ICONS, VEHICLE_LABELS, type VehicleType } from '@/domain/trip';
 import { defaultVehicleName, normaliseRegistration, type Vehicle } from '@/domain/vehicles';
@@ -42,6 +43,9 @@ import { type MileagePay, useMileagePay } from '@/hooks/use-mileage-pay';
 import { useTheme } from '@/hooks/use-theme';
 import { LANGUAGES, msg, useLanguage, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
+import { RedeemCode } from '@/components/redeem-code';
+import { inviteMessage } from '@/referral/links';
+import { useReferral } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 import {
   cancelWorkHoursNudge,
@@ -141,6 +145,8 @@ export default function SettingsScreen() {
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <ProSection />
+
+        <InviteSection />
 
         <CountrySection />
 
@@ -452,6 +458,7 @@ function BackupSection() {
   const theme = useTheme();
   const t = useT();
   const { region, reload } = useRegion();
+  const referral = useReferral();
   const [available, setAvailable] = useState<boolean | null>(null);
   const [key, setKey] = useState<BackupKeyInfo | null>(null);
   const [lastAt, setLastAt] = useState<Date | null>(null);
@@ -503,6 +510,7 @@ function BackupSection() {
     try {
       await restoreBackup(db, { ...found, snapshot });
       await reload();
+      await referral.reload();
       // Every section on this screen loaded the old data: open it afresh so
       // nothing stale (work hours, places) gets saved over what was restored.
       Alert.alert(t('Restored {{count}} trips from iCloud.', { count: tripCount(snapshot) }));
@@ -1175,6 +1183,7 @@ function ProSection() {
   const theme = useTheme();
   const t = useT();
   const { isPro, storeAvailable, busy, restore, manage } = usePro();
+  const { allowance } = useReferral();
   const onRestore = async () => {
     const found = await restore();
     Alert.alert(
@@ -1190,7 +1199,7 @@ function ProSection() {
           {isPro
             ? t('Pro is active: unlimited automatic drives.')
             : t('Free plan: {{count}} automatic drives a month, unlimited manual trips and CSV export.', {
-                count: FREE_AUTO_DRIVES_PER_MONTH,
+                count: allowance,
               })}
         </ThemedText>
         {isPro ? (
@@ -1216,7 +1225,61 @@ function ProSection() {
   );
 }
 
+/** Settings → Invite friends: your code to share, and (for 30 days after install) a friend's code to enter. */
+function InviteSection() {
+  const theme = useTheme();
+  const t = useT();
+  const { code, redeemedCode, friendsJoined, counting } = useReferral();
+  return (
+    <>
+      <ThemedText type="smallBold">{t('Invite friends')}</ThemedText>
+      <ThemedView type="backgroundElement" style={styles.card}>
+        <View style={styles.rowBetween}>
+          <View style={styles.flex}>
+            <ThemedText type="small" themeColor="textSecondary">
+              {t('Your code')}
+            </ThemedText>
+            <ThemedText type="subtitle" selectable style={styles.code}>
+              {code ?? '…'}
+            </ThemedText>
+          </View>
+          <Pressable
+            accessibilityRole="button"
+            disabled={!code}
+            onPress={() => Share.share({ message: inviteMessage() }).catch(() => {})}
+            style={[styles.smallButton, { backgroundColor: theme.accent }]}>
+            <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
+              {t('Share')}
+            </ThemedText>
+          </Pressable>
+        </View>
+        <ThemedText type="small" themeColor="textSecondary">
+          {counting
+            ? t('Friends joined: {{count}} · +{{drives}} free drives a month', {
+                count: friendsJoined,
+                drives: friendsJoined * REFERRAL_BONUS_DRIVES,
+              })
+            : t('You both get +10 free drives a month when a friend joins.')}
+        </ThemedText>
+        {redeemedCode ? (
+          <ThemedText type="small" themeColor="textSecondary">
+            {t('You joined with {{code}}: 10 extra free drives a month.', { code: redeemedCode })}
+          </ThemedText>
+        ) : (
+          <RedeemCode />
+        )}
+        <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/friends' as Href)}>
+          <ThemedText type="small" style={{ color: theme.accent }}>
+            {t('How it works')}
+          </ThemedText>
+        </Pressable>
+      </ThemedView>
+    </>
+  );
+}
+
 const styles = StyleSheet.create({
+  code: { letterSpacing: 2 },
   vehicleRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three, borderRadius: 12, padding: Spacing.three },
   vehicleIcon: { fontSize: 24, lineHeight: 30 },
   vehicleMain: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: Spacing.three },

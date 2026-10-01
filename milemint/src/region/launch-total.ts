@@ -5,7 +5,7 @@ import { Platform } from 'react-native';
 import { loadSettings } from '@/db/settings-repo';
 import { listTrips } from '@/db/trips-repo';
 import { marApplies, marForYear } from '@/domain/mar';
-import { lockedTripIds } from '@/domain/plan';
+import { lockedTripIds, monthlyAllowance } from '@/domain/plan';
 import { currentTaxYear, REGIONS, summarizeTaxYear } from '@/domain/regions';
 
 import { rememberTotal } from './remembered-region';
@@ -24,7 +24,8 @@ export async function refreshLaunchTotal(db: SQLiteDatabase): Promise<void> {
   const region = REGIONS[settings.region];
   const isPro = Platform.OS !== 'web' && (await SecureStore.getItemAsync(PRO_CACHE_KEY).catch(() => null)) === '1';
   const trips = await listTrips(db);
-  const locked = lockedTripIds(trips, isPro);
+  const allowance = monthlyAllowance({ redeemed: settings.redeemedCode !== null, friendsJoined: settings.friendsJoined });
+  const locked = lockedTripIds(trips, isPro, allowance);
   const visible = trips.filter((trip) => !locked.has(trip.id));
   const year = currentTaxYear(region);
   // UK employees see their Mileage Allowance Relief on home, so the opening counts that up.

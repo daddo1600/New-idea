@@ -29,7 +29,7 @@ import { DEMO_MODE } from '@/dev/demo';
 import { shiftCheer } from '@/domain/cheers';
 import { isCommute, type AutoReason } from '@/domain/classify-rules';
 import { employerPaysLess, marForYear, marSummary, type MarYear, unclaimedNudge, type UnclaimedNudge } from '@/domain/mar';
-import { autoDrivesInMonth, FREE_AUTO_DRIVES_PER_MONTH, lockedTripIds } from '@/domain/plan';
+import { autoDrivesInMonth, lockedTripIds } from '@/domain/plan';
 import type { Place } from '@/domain/places';
 import { shownLabel } from '@/domain/privacy';
 import {
@@ -49,6 +49,7 @@ import { useMileagePay } from '@/hooks/use-mileage-pay';
 import { useTheme } from '@/hooks/use-theme';
 import { getLanguage, msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
+import { useAllowance, useReferral } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 import { rememberTotal } from '@/region/remembered-region';
 import { useReminders } from '@/reminders/use-reminders';
@@ -82,6 +83,7 @@ export default function HomeScreen() {
   const [selected, setSelected] = useState<ReadonlySet<string>>(new Set());
   const { status } = useTracking(reload);
   const { isPro } = usePro();
+  const allowance = useAllowance();
   const { region, loaded, onboarded } = useRegion();
   const taxYear = currentTaxYear(region);
   useReminders(region);
@@ -96,7 +98,7 @@ export default function HomeScreen() {
   const [picking, setPicking] = useState<'shift' | 'switch' | null>(null);
   /** Bumped when a swipe didn't start or end a shift (picker dismissed, or it failed), so the switch snaps back. */
   const [shiftRevision, bumpShiftRevision] = useReducer((n: number) => n + 1, 0);
-  const locked = useMemo(() => lockedTripIds(trips ?? [], isPro), [trips, isPro]);
+  const locked = useMemo(() => lockedTripIds(trips ?? [], isPro, allowance), [trips, isPro, allowance]);
   // Locked drives don't count towards the total (or a tier limit) until they're unlocked.
   const visible = useMemo(() => (trips ?? []).filter((trip) => !locked.has(trip.id)), [trips, locked]);
   const deductions = useMemo(() => computeDeductions(visible, region), [visible, region]);
@@ -777,13 +779,13 @@ function PlanCard({ trips, lockedCount }: { trips: readonly Trip[]; lockedCount:
   const theme = useTheme();
   const t = useT();
   const { region } = useRegion();
+  // 40 a month, plus 10 for joining with a friend's code and 10 for each friend who joined with yours.
+  const limit = useAllowance();
+  const { counting, canRedeem } = useReferral();
   const now = new Date();
-  const used = Math.min(
-    autoDrivesInMonth(trips, toLocalIsoDate(now).slice(0, 7)),
-    FREE_AUTO_DRIVES_PER_MONTH,
-  );
+  const used = Math.min(autoDrivesInMonth(trips, toLocalIsoDate(now).slice(0, 7)), limit);
   const month = now.toLocaleDateString(displayLocale(region), { month: 'long' });
-  const full = used >= FREE_AUTO_DRIVES_PER_MONTH;
+  const full = used >= limit;
   return (
     <Pressable accessibilityRole="button" onPress={() => router.push('/pro')}>
       <ThemedView
@@ -791,7 +793,7 @@ function PlanCard({ trips, lockedCount }: { trips: readonly Trip[]; lockedCount:
         style={[styles.planCard, lockedCount > 0 && { borderColor: theme.accent, borderWidth: 1 }]}>
         <View style={styles.rowHeader}>
           <ThemedText type="smallBold">
-            {t('{{used}} of {{limit}} free drives in {{month}}', { used, limit: FREE_AUTO_DRIVES_PER_MONTH, month })}
+            {t('{{used}} of {{limit}} free drives in {{month}}', { used, limit, month })}
           </ThemedText>
           <View style={styles.goPro}>
             <Text style={styles.goProText}>★ {t('Go Pro')}</Text>
@@ -802,7 +804,7 @@ function PlanCard({ trips, lockedCount }: { trips: readonly Trip[]; lockedCount:
             style={[
               styles.meterFill,
               {
-                width: `${(used / FREE_AUTO_DRIVES_PER_MONTH) * 100}%`,
+                width: `${(used / limit) * 100}%`,
                 backgroundColor: full ? theme.danger : theme.accent,
               },
             ]}
@@ -818,6 +820,16 @@ function PlanCard({ trips, lockedCount }: { trips: readonly Trip[]; lockedCount:
               {t('New drives this month are saved but locked until you upgrade.')}
             </ThemedText>
           )
+        )}
+        {/* The sharer's own bonus needs iCloud to count friends; until then only a friend's code helps. */}
+        {(full || lockedCount > 0) && (counting || canRedeem) && (
+          <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/friends' as Href)}>
+            <ThemedText type="small" style={{ color: theme.accent }}>
+              {counting
+                ? t('Or invite a friend: you both get 10 more free drives a month.')
+                : t('Got a code from a friend? It adds 10 free drives a month.')}
+            </ThemedText>
+          </Pressable>
         )}
       </ThemedView>
     </Pressable>

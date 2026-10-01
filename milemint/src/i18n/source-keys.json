@@ -599,6 +599,18 @@
     ]
   },
   {
+    "key": "A friend’s code can only be entered in the first 30 days after installing MileMint.",
+    "files": [
+      "components/redeem-code.tsx"
+    ]
+  },
+  {
+    "key": "A friend’s code has already been used on this iPhone.",
+    "files": [
+      "components/redeem-code.tsx"
+    ]
+  },
+  {
     "key": "A fully sorted week",
     "files": [
       "domain/milestones.ts"
@@ -1343,6 +1355,12 @@
     ]
   },
   {
+    "key": "Code {{code}} added",
+    "files": [
+      "components/redeem-code.tsx"
+    ]
+  },
+  {
     "key": "Commute between home and work isn’t deductible.",
     "files": [
       "app/index.tsx"
@@ -1600,6 +1618,7 @@
     "key": "Done",
     "files": [
       "app/add-trip.tsx",
+      "app/friends.tsx",
       "app/pro.tsx"
     ]
   },
@@ -1800,6 +1819,18 @@
     "key": "Enter amounts as numbers, e.g. 2400 or 2,400.50.",
     "files": [
       "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Enter it for 10 extra free drives every month.",
+    "files": [
+      "components/redeem-code.tsx"
+    ]
+  },
+  {
+    "key": "Enter my code {{code}} when you set up MileMint for 10 extra free drives a month.",
+    "files": [
+      "referral/links.ts"
     ]
   },
   {
@@ -2147,6 +2178,25 @@
     ]
   },
   {
+    "key": "Friend’s code",
+    "files": [
+      "components/redeem-code.tsx"
+    ]
+  },
+  {
+    "key": "Friends count once they’ve logged a few drives.",
+    "files": [
+      "app/friends.tsx"
+    ]
+  },
+  {
+    "key": "Friends joined: {{count}} · +{{drives}} free drives a month",
+    "files": [
+      "app/friends.tsx",
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "From",
     "files": [
       "app/add-trip.tsx",
@@ -2239,6 +2289,19 @@
     ]
   },
   {
+    "key": "Got a code from a friend?",
+    "files": [
+      "components/redeem-code.tsx"
+    ]
+  },
+  {
+    "key": "Got a code from a friend? It adds 10 free drives a month.",
+    "files": [
+      "app/index.tsx",
+      "app/pro.tsx"
+    ]
+  },
+  {
     "key": "GPS only runs while you drive. Parked, MileMint sleeps.",
     "files": [
       "app/setup-tracking.tsx"
@@ -2316,6 +2379,12 @@
     "key": "How do you work?",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "How it works",
+    "files": [
+      "app/settings.tsx"
     ]
   },
   {
@@ -2453,8 +2522,10 @@
     ]
   },
   {
-    "key": "Invite a friend",
+    "key": "Invite friends",
     "files": [
+      "app/_layout.tsx",
+      "app/settings.tsx",
       "components/header-menu.tsx"
     ]
   },
@@ -2957,6 +3028,12 @@
     ]
   },
   {
+    "key": "More free drives for every friend",
+    "files": [
+      "app/friends.tsx"
+    ]
+  },
+  {
     "key": "Motorbike",
     "files": [
       "components/vehicle-picker.tsx"
@@ -3389,6 +3466,13 @@
     ]
   },
   {
+    "key": "Or invite a friend: you both get 10 more free drives a month.",
+    "files": [
+      "app/index.tsx",
+      "app/pro.tsx"
+    ]
+  },
+  {
     "key": "Ordinary commuting between home and your permanent workplace is not business mileage.",
     "files": [
       "domain/regions.ts"
@@ -3603,6 +3687,12 @@
     "key": "Recording a drive · {{distance}}",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Redeem",
+    "files": [
+      "components/redeem-code.tsx"
     ]
   },
   {
@@ -4017,15 +4107,21 @@
     ]
   },
   {
-    "key": "Share it",
+    "key": "Share",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Share it · friends get +10 drives",
     "files": [
       "components/celebration.tsx"
     ]
   },
   {
-    "key": "Share MileMint on WhatsApp and more",
+    "key": "Share my code",
     "files": [
-      "components/header-menu.tsx"
+      "app/friends.tsx"
     ]
   },
   {
@@ -4436,6 +4532,18 @@
     "key": "Terms of Use",
     "files": [
       "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "That doesn’t look like a MileMint code. It’s 4 letters, a dash and 3 more, like TRVB-7K2.",
+    "files": [
+      "components/redeem-code.tsx"
+    ]
+  },
+  {
+    "key": "That’s your own code. Share it with friends instead.",
+    "files": [
+      "components/redeem-code.tsx"
     ]
   },
   {
@@ -4975,6 +5083,12 @@
     ]
   },
   {
+    "key": "When a friend joins MileMint with your code, you both get 10 extra free automatic drives a month. For every friend, with no limit.",
+    "files": [
+      "app/friends.tsx"
+    ]
+  },
+  {
     "key": "When and how to claim with {{authority}}",
     "files": [
       "components/header-menu.tsx"
@@ -5121,6 +5235,14 @@
     ]
   },
   {
+    "key": "You both get +10 free drives a month when a friend joins.",
+    "files": [
+      "app/settings.tsx",
+      "components/celebration.tsx",
+      "components/header-menu.tsx"
+    ]
+  },
+  {
     "key": "You can claim up to 5,000 business kilometres per car each income year. This report assumes one car.",
     "files": [
       "domain/regions.ts"
@@ -5135,6 +5257,25 @@
   {
     "key": "You drive your own vehicle for your employer. If they pay less than HMRC’s rate (or nothing), you can claim tax relief on the difference.",
     "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "You get 10 extra free drives every month.",
+    "files": [
+      "components/redeem-code.tsx"
+    ]
+  },
+  {
+    "key": "You have Pro, so your drives are already unlimited. Your friends still get their extra drives.",
+    "files": [
+      "app/friends.tsx"
+    ]
+  },
+  {
+    "key": "You joined with {{code}}: 10 extra free drives a month.",
+    "files": [
+      "app/friends.tsx",
       "app/settings.tsx"
     ]
   },
@@ -5217,6 +5358,13 @@
     ]
   },
   {
+    "key": "Your code",
+    "files": [
+      "app/friends.tsx",
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "Your country",
     "files": [
       "app/_layout.tsx"
@@ -5256,6 +5404,18 @@
     "key": "Your employer pays nothing for mileage. HMRC’s rate is {{rate}} a mile for the first 10,000 business miles.",
     "files": [
       "app/claim-relief.tsx"
+    ]
+  },
+  {
+    "key": "Your free plan: {{count}} automatic drives a month.",
+    "files": [
+      "app/friends.tsx"
+    ]
+  },
+  {
+    "key": "Your friends get their extra drives as soon as they enter your code. Yours are added when MileMint can count the friends who joined, coming in an update.",
+    "files": [
+      "app/friends.tsx"
     ]
   },
   {

@@ -91,3 +91,16 @@ Each line was translated, back-translated cold, then checked for culture and len
 | Swipe back to end your shift. | (missing) | Glissez à gauche pour terminer le quart. | New line. Back-translation: "Slide left to end the shift." Uses "Glissez" (slide button, as "Glissez pour commencer le quart") and "terminer le quart". 1.38× English: kept, because "en arrière" is longer and "finir" would break the glossary term; the caption has no line limit and wraps. |
 | {{hint}}. Swipe the button to the left, or double-tap. | (missing) | {{hint}}. Faites glisser le bouton vers la gauche ou touchez deux fois. | New VoiceOver hint; mirrors the "vers la droite" line exactly. |
 | Enter amounts as numbers, e.g. 2400 or 2,400.50. | Entrez les montants en chiffres, p. ex. 2400 ou 2400.50. | Entrez les montants en chiffres, p. ex. 2400 ou 2400,50. | The parser now accepts a decimal comma, so the example uses the French decimal comma. |
+
+## Round 4: referrals
+
+28 new lines (Invite friends screen, the friend’s-code box in the welcome and Settings, the celebration share button, the free-plan counter, the share message with the code) and 3 removed (Invite a friend, Share it, Share MileMint on WhatsApp and more). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: the friend’s bonus is immediate, the sharer’s only “when a friend joins”, so nothing promises the user drives they don’t have yet. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| You both get +10 free drives a month when a friend joins. | Vous recevez chacun +10 trajets gratuits par mois quand un ami vous rejoint. | “Vous … chacun” = you and the friend, each. Vous, as elsewhere in the app. |
+| Enter my code {{code}} when you set up MileMint… | Entre mon code {{code}} en configurant MileMint pour avoir 10 trajets gratuits de plus par mois. | A message to a friend, so **tu**, like “Je t’offre ton premier mois”. |
+| Share it · friends get +10 drives | Partager · +10 trajets pour vos amis | 36 chars (1.09×). |
+| Friends joined: {{count}} · … | Amis qui vous ont rejoint : {{count}} · … | “inscrits” was dropped in pass 2: it implies an account, and MileMint has none. |
+| Redeem | Valider | Short, and what French apps say for a promo code; Apple’s “Utiliser” reads oddly alone on a button. |
+| Got a code from a friend? | Un ami vous a donné un code ? | Narrow no-break space before “?” and no-break space before “:”, as in the rest of the file. |

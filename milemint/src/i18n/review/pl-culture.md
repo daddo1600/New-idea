@@ -116,3 +116,16 @@ Each line was translated, back-translated cold, then checked for culture and len
 | Swipe back to end your shift. | Przesuń z powrotem, aby zakończyć zmianę. | Przesuń w lewo, aby zakończyć zmianę. | Was 1.41× English. "W lewo" is shorter (1.28×), clearer, and matches the VoiceOver hint and "Przesuń, aby zacząć zmianę". Back-translation: "Swipe left to end the shift." |
 | {{hint}}. Swipe the button to the left, or double-tap. | {{hint}}. Przesuń przycisk w lewo albo stuknij dwukrotnie. | (unchanged) | Checked: mirrors the "w prawo" line exactly. |
 | Enter amounts as numbers, e.g. 2400 or 2,400.50. | Wpisz kwoty jako liczby, z centami po kropce, np. 2400 lub 2400.50. | Wpisz kwoty jako liczby, np. 2400 lub 2400,50. | The parser now accepts a decimal comma: dropped "z centami po kropce" and used the Polish decimal comma. |
+
+## Round 4: referrals
+
+28 new lines (Invite friends screen, the friend’s-code box in the welcome and Settings, the celebration share button, the free-plan counter, the share message with the code) and 3 removed (Invite a friend, Share it, Share MileMint on WhatsApp and more). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: the friend’s bonus is immediate, the sharer’s only “when a friend joins”, so nothing promises the user drives they don’t have yet. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| You both get +10 free drives a month when a friend joins. | Obie strony dostają +10 darmowych przejazdów miesięcznie, gdy dołączy znajomy. | “Oboje/obaj” mark gender; “obie strony” (both sides) is neutral. |
+| You joined with {{code}}: … | Kod od znajomego {{code}}: 10 dodatkowych darmowych przejazdów miesięcznie. | “Dołączyłeś/Dołączyłaś” is gendered; rephrased as a noun phrase. Back: “Code from a friend …: 10 extra free drives a month.” |
+| Friends joined: {{count}} · +{{drives}} … | Znajomi, którzy dołączyli: {{count}} · +{{drives}} darmowych przejazdów miesięcznie | {{drives}} is always a multiple of 10, so the genitive plural is always right. |
+| Your friends get their extra drives… coming in an update. | …gdy MileMint zacznie liczyć znajomych… | “będzie mógł” would give MileMint a gender; “zacznie” avoids it. |
+| Redeem | Użyj | Short; Apple’s “Zrealizuj” sounds formal on a small button. |
+| Share it · friends get +10 drives | Udostępnij · +10 przejazdów dla znajomych | 41 chars (1.24×). |

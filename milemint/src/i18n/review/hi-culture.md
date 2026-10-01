@@ -117,3 +117,16 @@ Each line was translated, back-translated cold, then checked for culture and len
 | Swipe back to end your shift. | (missing) | वापस स्वाइप करके शिफ्ट खत्म करें। | New line. Back-translation: "End the shift by swiping back." Mirrors "स्वाइप करके शिफ्ट शुरू करें" and "शिफ्ट खत्म करें" (आप, gender-free imperative). Shorter than English on screen. |
 | {{hint}}. Swipe the button to the left, or double-tap. | (missing) | {{hint}}। बटन को बाईं ओर स्वाइप करें, या दो बार टैप करें। | New VoiceOver hint; mirrors the "दाईं ओर" line exactly. |
 | Enter amounts as numbers, e.g. 2400 or 2,400.50. | रकम नंबर में लिखें, जैसे 2400 या 2,400.50। | (unchanged) | Checked: English-style example is natural; no dot instruction. |
+
+## Round 4: referrals
+
+28 new lines (Invite friends screen, the friend’s-code box in the welcome and Settings, the celebration share button, the free-plan counter, the share message with the code) and 3 removed (Invite a friend, Share it, Share MileMint on WhatsApp and more). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: the friend’s bonus is immediate, the sharer’s only “when a friend joins”, so nothing promises the user drives they don’t have yet. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| You both get +10 free drives a month when a friend joins. | दोस्त के जुड़ने पर आप दोनों को हर महीने +10 फ़्री ट्रिप मिलती हैं। | Gender-free: “को … मिलती हैं” agrees with ट्रिप (f.), not the user. |
+| When a friend joins MileMint with your code, … | …आप दोनों को हर महीने 10 और फ़्री ऑटोमैटिक ट्रिप मिलती हैं… | Pass 2 reordered “10 ऑटोमैटिक ट्रिप ज़्यादा फ़्री” to the natural “10 और फ़्री ऑटोमैटिक ट्रिप”. |
+| You get 10 extra free drives every month. | अब हर महीने 10 फ़्री ट्रिप ज़्यादा मिलेंगी। | “अब” (now) instead of a gendered “आप पाएँगे”. Back: “Now you’ll get 10 more free trips every month.” |
+| You joined with {{code}}: … | कोड {{code}} से जुड़ने का फ़ायदा: हर महीने 10 फ़्री ट्रिप ज़्यादा। | “आप जुड़े” is masculine; a noun phrase (“benefit of joining with code”) avoids it. |
+| Redeem | रिडीम करें | Loanword used by Indian payment apps for codes. |
+| Invite friends | दोस्तों को इनवाइट करें | Same verb as the old “दोस्त को इनवाइट करें”. 22 chars: fits the nav bar. |

@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { router, type Href } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -8,12 +8,13 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTrips } from '@/db/use-trips';
-import { FREE_AUTO_DRIVES_PER_MONTH, lockedTripIds } from '@/domain/plan';
+import { lockedTripIds } from '@/domain/plan';
 import { formatMoney, potentialDeduction } from '@/domain/regions';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
 import type { ProPlan, ProTrial } from '@/purchases/store';
+import { useReferral } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 
 const TERMS_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
@@ -90,16 +91,17 @@ export default function ProScreen() {
   const { isPro, plans, plansLoaded, storeAvailable, busy, error, buy, restore, manage } = usePro();
   const { trips } = useTrips();
   const { region } = useRegion();
+  const { allowance, counting, canRedeem } = useReferral();
   const [selected, setSelected] = useState<string | null>(null);
 
   // What upgrading is worth to this user right now, if they've hit the limit.
   const locked = useMemo(() => {
-    const ids = lockedTripIds(trips ?? [], false);
+    const ids = lockedTripIds(trips ?? [], false, allowance);
     const visible = (trips ?? []).filter((trip) => !ids.has(trip.id));
     const drives = (trips ?? []).filter((trip) => ids.has(trip.id));
     const value = drives.reduce((sum, trip) => sum + potentialDeduction(trip, visible, region), 0);
     return { count: drives.length, value };
-  }, [trips, region]);
+  }, [trips, region, allowance]);
 
   // Close once the subscription becomes active here, whether bought or restored.
   const wasPro = useRef(isPro);
@@ -164,7 +166,18 @@ export default function ProScreen() {
           </ThemedView>
         )}
 
-        <Comparison />
+        <Comparison allowance={allowance} />
+
+        {/* Staying free: friends add drives. The sharer's own bonus needs iCloud to count friends. */}
+        {(counting || canRedeem) && (
+          <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/friends' as Href)}>
+            <ThemedText type="small" style={{ color: theme.accent }}>
+              {counting
+                ? t('Or invite a friend: you both get 10 more free drives a month.')
+                : t('Got a code from a friend? It adds 10 free drives a month.')}
+            </ThemedText>
+          </Pressable>
+        )}
 
         {!storeAvailable ? (
           <ThemedText type="small" themeColor="textSecondary">
@@ -262,13 +275,13 @@ export default function ProScreen() {
   );
 }
 
-function Comparison() {
+function Comparison({ allowance }: { allowance: number }) {
   const theme = useTheme();
   const t = useT();
   const cell = (value: string | boolean | null, pro: boolean) =>
     value === null || typeof value === 'string' ? (
       <ThemedText type="small" style={[styles.planCell, pro && { color: theme.accent }]}>
-        {value === null ? t('{{count}} a month', { count: FREE_AUTO_DRIVES_PER_MONTH }) : t(value)}
+        {value === null ? t('{{count}} a month', { count: allowance }) : t(value)}
       </ThemedText>
     ) : (
       <ThemedText

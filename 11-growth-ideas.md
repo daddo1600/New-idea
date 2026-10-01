@@ -1,15 +1,38 @@
 # Growth ideas (to review later for marketing)
 
-Two ideas to grow MileMint and keep drivers coming back. Neither is started. Both need the same foundation as Teams (a domain and a small server, see [`10-roadmap-teams.md`](10-roadmap-teams.md)), so they can share the work.
+Two ideas to grow MileMint and keep drivers coming back. The referral scheme is built and needs no server (the sharer's credit waits for CloudKit). Partner perks aren't started and need the same foundation as Teams (a domain and a small server, see [`10-roadmap-teams.md`](10-roadmap-teams.md)).
 
 ---
 
-## 1. Referral scheme
+## 1. Referral scheme: "more for every friend you bring" (built)
 
-**Rewards only for real paying customers:**
+Dropbox style, and **uncapped**: every friend who joins with your code earns you both more free automatic drives, for good.
 
-| Your referral | You get | They get |
+| Who | Gets | When |
 |---|---|---|
+| **Friend** (new user) | **+10 free automatic drives a month** | At once, when they enter your code (in the welcome's last step, or in Settings / Invite friends for 30 days after installing) |
+| **You** (the sharer) | **+10 free automatic drives a month per friend** | When the friend joins: they've redeemed your code and made 3 real automatic drives |
+| Ten friends | +100 a month | No cap. Pro stays unlimited anyway |
+
+Free plan allowance = **40 + 10 × (joined with a code ? 1 : 0) + 10 × friends joined** (`monthlyAllowance` in `milemint/src/domain/plan.ts`). It drives the home counter ("2 of 50 free drives in October"), which drives lock, and the paywall's free column.
+
+Why drives, not free months: drives cost nothing to give, can't be turned into money, and make the free plan visibly better the more you share, which is the loop that made Dropbox grow. Pro (unlimited) is still the upgrade.
+
+**In the app (built):**
+- **Your code**: short and readable, e.g. `TRVB-7K2` (4 consonants, a dash, 3 letters or digits; no vowels so no words, no look-alikes 0/O, 1/I/L, 5/S). Made once, kept in settings (so it's in the iCloud backup) and in the iPhone keychain (same code after a reinstall).
+- **Invite friends** screen (logo menu, Settings): the code, **Share my code**, and "Friends joined: N · +X free drives a month" once friends can be counted.
+- **Redeeming**: optional "Got a code from a friend?" on the welcome's last step and in Settings for 30 days after install. Checks the format, refuses your own code, once per iPhone (a keychain flag survives reinstalling).
+- **Invite links**: `milemint://invite/TRVB-7K2` opens the app with the code filled in.
+- **Every share carries the code**: milestone celebrations ("Share it · friends get +10 drives", "You both get +10 free drives a month when a friend joins") and the invite message ("Enter my code TRVB-7K2 when you set up MileMint for 10 extra free drives a month").
+
+**Crediting the sharer without a server: CloudKit (designed, switched off).**
+- The friend's app saves one anonymous `Referral` record (`code`, `createdAt`) in CloudKit's **public** database once they have 3 real automatic drives. The sharer's app counts the **distinct iCloud accounts** (`creatorUserRecordID`) that saved one for their code.
+- JS side ready in `milemint/src/referral/cloud.ts`; the native design is in `milemint/modules/referral-cloud/README.md`.
+- **It switches on when** the iCloud container `iCloud.com.milemint.app` is set up in the Apple Developer portal (with CloudKit), the `Referral` schema is deployed in the CloudKit Dashboard, the small Swift module is written, and `extra.icloudBackup` in `app.json` is turned on (the same switch as iCloud backup). Until then friends still get their +10 straight away and the sharer's counter is hidden; friends who joined before are recorded and credited on the first build with CloudKit.
+
+**Later, with a server (Teams):** keep the drives scheme, and add a reward for a **business that signs up to MileMint Teams** (a year of Pro free for the referrer), confirmed by the first paid invoice. A branded link (`milemint.app/r/TRVB-7K2`) with a WhatsApp preview card can replace the plain App Store link.
+
+---|---|---|
 | A friend **subscribes to Pro** (monthly or yearly) | **1 month of Pro free** per friend | 1 month of Pro free |
 | A business **signs up to MileMint Teams** | **A year of Pro free** | Their first month of Teams free (or a launch discount) |
 

@@ -91,3 +91,16 @@ Each line was translated, back-translated cold, then checked for culture and len
 | Swipe back to end your shift. | (missing) | 往回滑动即可收工。 | New line. Back-translation: "Swipe back to clock off." Mirrors "滑动开工" and uses 收工 for End shift (你 implied). |
 | {{hint}}. Swipe the button to the left, or double-tap. | (missing) | {{hint}}。向左滑动按钮，或连按两下。 | New VoiceOver hint; mirrors the "向右滑动按钮" line exactly. |
 | Enter amounts as numbers, e.g. 2400 or 2,400.50. | 请用数字输入金额，例如 2400 或 2,400.50。 | (unchanged) | Checked: English-style example is standard in Chinese; no dot instruction. |
+
+## Round 4: referrals
+
+28 new lines (Invite friends screen, the friend’s-code box in the welcome and Settings, the celebration share button, the free-plan counter, the share message with the code) and 3 removed (Invite a friend, Share it, Share MileMint on WhatsApp and more). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: the friend’s bonus is immediate, the sharer’s only “when a friend joins”, so nothing promises the user drives they don’t have yet. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| You both get +10 free drives a month when a friend joins. | 朋友加入后，你们俩每月都能多得 10 次免费行程。 | “+10” written as 多得 10 次, the natural Chinese way to say a bonus. |
+| code (referral) | 邀请码 | The term Chinese apps use for referral codes; never just 代码. |
+| Your friends get their extra drives… coming in an update. | …你的奖励会在 MileMint 能统计已加入的朋友后发放，这项功能将在后续更新中推出。 | Honest timing: “will be issued once MileMint can count…, coming in a later update”. |
+| Redeem | 兑换 | Apple’s 兑换 for codes. |
+| How it works | 了解规则 | “See the rules”: natural for a referral link; 如何运作 sounds technical. |
+| Share it · friends get +10 drives | 分享 · 朋友多得 10 次行程 | Short; fits the pill. |

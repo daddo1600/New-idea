@@ -63,7 +63,8 @@ function Piece({ index, width, height }: { index: number; width: number; height:
 
 /**
  * A pat on the back: confetti in the brand colours, a gold badge and a warm
- * line, for a milestone reached. Share sends a ready-made brag message.
+ * line, for a milestone reached. Share sends a ready-made brag message with
+ * the user's referral code, so a friend who joins earns them both 10 drives a month.
  */
 export function Celebration({ content, onClose }: { content: CelebrationContent | null; onClose: () => void }) {
   const t = useT();
@@ -103,8 +104,10 @@ export function Celebration({ content, onClose }: { content: CelebrationContent 
             accessibilityRole="button"
             onPress={() => Share.share({ message: content.share }).catch(() => {})}
             style={styles.share}>
-            <Text style={styles.shareText}>{t('Share it')}</Text>
+            <Text style={styles.shareText}>{t('Share it · friends get +10 drives')}</Text>
           </Pressable>
+          {/* The share carries the user's referral code (src/referral/links.ts). */}
+          <Text style={styles.reward}>{t('You both get +10 free drives a month when a friend joins.')}</Text>
           <Pressable accessibilityRole="button" hitSlop={8} onPress={onClose}>
             <Text style={styles.close}>{t('Keep going')}</Text>
           </Pressable>
@@ -155,6 +158,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.five,
     paddingVertical: Spacing.two + 2,
   },
-  shareText: { color: '#064E3B', fontSize: 16, fontWeight: '800' },
+  shareText: { color: '#064E3B', fontSize: 16, fontWeight: '800', textAlign: 'center' },
+  reward: { color: '#D1FAE5', fontSize: 13, lineHeight: 18, textAlign: 'center' },
   close: { color: '#D1FAE5', fontSize: 15, marginTop: Spacing.two },
 });

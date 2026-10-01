@@ -1,4 +1,4 @@
-import { router, type Href } from 'expo-router';
+import { router, useLocalSearchParams, type Href } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useRef, useState } from 'react';
 import { useSQLiteContext } from 'expo-sqlite';
@@ -25,6 +25,7 @@ import { CountryOptions, phoneRegion } from '@/components/country-options';
 import { LeafMark } from '@/components/leaf-mark';
 import { MintWash, StepHeader, StepIcon } from '@/components/step-header';
 import { VehiclePicker } from '@/components/vehicle-picker';
+import { RedeemCode } from '@/components/redeem-code';
 import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -43,6 +44,7 @@ import { useKeyboardOpen } from '@/hooks/use-keyboard-open';
 import { useTheme } from '@/hooks/use-theme';
 import { LANGUAGES, msg, useLanguage, useT } from '@/i18n/i18n';
 import { Rich } from '@/i18n/rich';
+import { useReferral } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 import { enableWeeklyReminder, scheduleWorkHoursNudge } from '@/reminders/weekly';
 import type { TrackingStatus } from '@/tracking/background';
@@ -87,6 +89,9 @@ export default function WelcomeScreen() {
   const languageName = LANGUAGES.find((l) => l.code === lang)?.name ?? 'English';
   const insets = useSafeAreaInsets();
   const { region, chosen, setRegion, finishOnboarding, reload } = useRegion();
+  const referral = useReferral();
+  /** A friend's code from an invite link (milemint://invite/CODE), offered on the last step. */
+  const { code: linkCode } = useLocalSearchParams<{ code?: string }>();
   const [step, setStep] = useState(0);
   /** A backup in iCloud, offered when this iPhone has no trips yet. */
   const [backup, setBackup] = useState<FoundBackup | null>(null);
@@ -142,6 +147,7 @@ export default function WelcomeScreen() {
     try {
       await restoreBackup(db, backup);
       await reload();
+      await referral.reload();
       const settings = await loadSettings(db);
       setBackup(null);
       setHoursSet(settings.workHoursEnabled);
@@ -766,6 +772,8 @@ export default function WelcomeScreen() {
                   </Text>
                 </View>
               </View>
+              {/* Optional: a friend's code adds 10 drives a month (also in Settings for 30 days). */}
+              <RedeemCode onBrand initialCode={linkCode} style={styles.glass} />
             </>
           )}
         </ScrollView>

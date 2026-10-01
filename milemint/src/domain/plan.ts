@@ -9,6 +9,23 @@ import type { Trip } from './trip';
  */
 export const FREE_AUTO_DRIVES_PER_MONTH = 40;
 
+/**
+ * Referrals, Dropbox style and uncapped: redeeming a friend's code adds this
+ * many automatic drives a month, and so does every friend who joins with
+ * yours. Both sides get it, for good.
+ */
+export const REFERRAL_BONUS_DRIVES = 10;
+
+/**
+ * The free plan's automatic drives a month: the base allowance, plus a bonus
+ * for having joined with a friend's code and one for each friend who joined
+ * with this user's code (counted in iCloud; 0 until that's switched on).
+ */
+export function monthlyAllowance({ redeemed, friendsJoined }: { redeemed: boolean; friendsJoined: number }): number {
+  const friends = Number.isFinite(friendsJoined) ? Math.max(0, Math.floor(friendsJoined)) : 0;
+  return FREE_AUTO_DRIVES_PER_MONTH + REFERRAL_BONUS_DRIVES * ((redeemed ? 1 : 0) + friends);
+}
+
 /** YYYY-MM of a trip's local date: the month its drive counts towards. */
 function monthOf(trip: Pick<Trip, 'localDate'>): string {
   return trip.localDate.slice(0, 7);

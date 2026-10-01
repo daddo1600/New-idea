@@ -17,6 +17,7 @@ import { useMileagePay } from '@/hooks/use-mileage-pay';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
+import { useAllowance } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 import { PDF_AVAILABLE, shareP87Summary } from '@/reports/export';
 
@@ -29,6 +30,7 @@ export default function ClaimReliefScreen() {
   const t = useT();
   const { region } = useRegion();
   const { isPro } = usePro();
+  const allowance = useAllowance();
   const { trips } = useTrips();
   const { pay, update } = useMileagePay();
   const [busy, setBusy] = useState<'csv' | 'pdf' | null>(null);
@@ -42,10 +44,10 @@ export default function ClaimReliefScreen() {
   );
   // Drives over the free limit stay out until they're unlocked, as on the home screen.
   const summary = useMemo(() => {
-    const locked = lockedTripIds(trips ?? [], isPro);
+    const locked = lockedTripIds(trips ?? [], isPro, allowance);
     const visible = (trips ?? []).filter((trip) => !locked.has(trip.id));
     return marSummary(visible, region, options, today);
-  }, [trips, isPro, region, options, today]);
+  }, [trips, isPro, allowance, region, options, today]);
 
   if (!trips || !pay) return <ActivityIndicator style={styles.loading} />;
 

@@ -55,6 +55,18 @@ export type AppSettings = {
    * area of stops the user hasn't named, and no GPS route. See domain/privacy.
    */
   clientPrivacy: boolean;
+  /** This user's own referral code ("TRVB-7K2"), made once (src/referral/code.ts). */
+  referralCode: string | null;
+  /** A friend's code redeemed on this install: +10 free automatic drives a month. */
+  redeemedCode: string | null;
+  /** ISO time the friend's code was redeemed. */
+  redeemedAt: string | null;
+  /** ISO time the friend's redemption was saved to iCloud, crediting the sharer. */
+  referralRecordedAt: string | null;
+  /** Friends who joined with this user's code, as iCloud last counted them (+10 drives each). */
+  friendsJoined: number;
+  /** ISO time the app was first set up: a friend's code can be entered for 30 days after. */
+  installedAt: string | null;
 };
 
 const WEEKDAY_9_TO_5 = [{ start: '09:00', end: '17:00' }];
@@ -79,6 +91,12 @@ export const DEFAULT_SETTINGS: AppSettings = {
   taxBand: 'unsure',
   claimedReliefYears: [],
   clientPrivacy: false,
+  referralCode: null,
+  redeemedCode: null,
+  redeemedAt: null,
+  referralRecordedAt: null,
+  friendsJoined: 0,
+  installedAt: null,
 };
 
 export async function loadSettings(db: SQLiteDatabase): Promise<AppSettings> {
@@ -90,6 +108,7 @@ export async function loadSettings(db: SQLiteDatabase): Promise<AppSettings> {
     if (settings.region !== null && !(settings.region in REGIONS)) settings.region = null;
     if (!Number.isFinite(settings.employerRate) || settings.employerRate < 0) settings.employerRate = DEFAULT_SETTINGS.employerRate;
     if (!Array.isArray(settings.claimedReliefYears)) settings.claimedReliefYears = [];
+    if (!Number.isFinite(settings.friendsJoined) || settings.friendsJoined < 0) settings.friendsJoined = 0;
     // A damaged week would silently classify nothing; fall back instead.
     return Array.isArray(settings.workWeek) && settings.workWeek.length === 7
       ? settings

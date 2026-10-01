@@ -1,7 +1,7 @@
 import { router, type Href } from 'expo-router';
 import { SymbolView, type SFSymbol } from 'expo-symbols';
 import { useEffect, useState } from 'react';
-import { Linking, Modal, Pressable, Share, StyleSheet, Text, View } from 'react-native';
+import { Linking, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -12,7 +12,6 @@ import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
-import { inviteMessage } from '@/referral/links';
 import { useRegion } from '@/region/region';
 
 const SUPPORT_EMAIL = 'milemint.support@gmail.com';
@@ -110,12 +109,9 @@ function Menu({ onClose }: { onClose: () => void }) {
     {
       icon: 'gift.fill',
       glyph: '🎁',
-      title: t('Invite a friend'),
-      detail: t('Share MileMint on WhatsApp and more'),
-      onPress: () => {
-        onClose();
-        Share.share({ message: inviteMessage() }).catch(() => {});
-      },
+      title: t('Invite friends'),
+      detail: t('You both get +10 free drives a month when a friend joins.'),
+      onPress: () => go('/friends' as Href),
     },
     {
       icon: 'trophy.fill',

@@ -112,3 +112,16 @@ Each line was translated, back-translated cold, then checked for culture and len
 | Swipe back to end your shift. | (missing) | Glisează înapoi ca să închei tura. | New line. Back-translation: "Swipe back to end the shift." Mirrors "Glisează ca să începi tura" and "Încheie tura" (tu). 1.17× English. |
 | {{hint}}. Swipe the button to the left, or double-tap. | (missing) | {{hint}}. Glisează butonul spre stânga sau atinge de două ori. | New VoiceOver hint; mirrors the "spre dreapta" line exactly. |
 | Enter amounts as numbers, e.g. 2400 or 2,400.50. | Introdu sumele ca numere, cu punct la zecimale, de ex. 2400 sau 2,400.50. | Introdu sumele ca numere, de ex. 2400 sau 2400,50. | The parser now accepts a decimal comma: dropped "cu punct la zecimale" and used the Romanian decimal comma. |
+
+## Round 4: referrals
+
+28 new lines (Invite friends screen, the friend’s-code box in the welcome and Settings, the celebration share button, the free-plan counter, the share message with the code) and 3 removed (Invite a friend, Share it, Share MileMint on WhatsApp and more). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: the friend’s bonus is immediate, the sharer’s only “when a friend joins”, so nothing promises the user drives they don’t have yet. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| You both get +10 free drives a month when a friend joins. | Primiți amândoi +10 curse gratuite pe lună când un prieten se alătură. | Back: “You both receive +10 free rides a month when a friend joins.” ✓ |
+| Friends joined: {{count}} · +{{drives}} free drives a month | Prieteni care s-au alăturat: {{count}} · Curse gratuite în plus pe lună: +{{drives}} | Noun moved before the number: 10 needs “curse”, 20+ needs “de curse”, and the plural form follows {{count}}, not {{drives}}. |
+| Your free plan: {{count}} automatic drives a month. | one/few/other … {{count}} (de) curse automate pe lună. | “de” only in the other form (20+), as in the existing free-plan line. |
+| That’s your own code… | Acesta e chiar codul tău. Mai bine trimite-l prietenilor. | Pass 2 added *chiar* (“your very own”): without it the line lost “own”. |
+| Redeem | Aplică | Common for promo codes in Romanian shops; short. |
+| Share it · friends get +10 drives | Distribuie · +10 curse pentru prieteni | 38 chars (1.15×). |

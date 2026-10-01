@@ -14,13 +14,22 @@ export const FRIEND_OFFER_CODE: string | null = null;
 
 const redeemUrl = (code: string) => `https://apps.apple.com/redeem?ctx=offercodes&id=${APP_ID}&code=${code}`;
 
+/** This user's referral code, set by the ReferralProvider once settings are read. */
+let myCode: string | null = null;
+export function setShareCode(code: string | null): void {
+  myCode = code;
+}
+
 /**
- * A message to share, with the download link and (when live) the friend's
- * free month. `message` should already be translated; the link lines are
- * translated here, in the current language.
+ * A message to share, with the download link, the user's referral code and
+ * (when live) the friend's free month. `message` should already be
+ * translated; the extra lines are translated here, in the current language.
  */
-export function withInvite(message: string): string {
+export function withInvite(message: string, code: string | null = myCode): string {
   const lines = [message, '', t('Get MileMint free on the App Store: {{url}}', { url: APP_STORE_URL })];
+  if (code) {
+    lines.push(t('Enter my code {{code}} when you set up MileMint for 10 extra free drives a month.', { code }));
+  }
   if (FRIEND_OFFER_CODE) {
     lines.push(
       t('New to Pro? Your first month is on me: {{url}}', {

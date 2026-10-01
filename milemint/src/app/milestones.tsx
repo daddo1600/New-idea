@@ -18,6 +18,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
 import { milestoneProgress } from '@/milestones/use-milestones';
 import { usePro } from '@/purchases/pro';
+import { useAllowance } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 
 /** Badges for money back, distance logged and good habits, with progress to the next one. */
@@ -27,6 +28,7 @@ export default function MilestonesScreen() {
   const t = useT();
   const { region } = useRegion();
   const { isPro } = usePro();
+  const allowance = useAllowance();
   const [trips, setTrips] = useState<Trip[]>([]);
   const [exported, setExported] = useState(false);
 
@@ -38,9 +40,9 @@ export default function MilestonesScreen() {
   );
 
   const visible = useMemo(() => {
-    const locked = lockedTripIds(trips, isPro);
+    const locked = lockedTripIds(trips, isPro, allowance);
     return trips.filter((trip) => !locked.has(trip.id));
-  }, [trips, isPro]);
+  }, [trips, isPro, allowance]);
   const progress = useMemo(
     () => milestoneProgress(visible, computeDeductions(visible, region), region, exported),
     [visible, region, exported],

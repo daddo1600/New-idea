@@ -124,3 +124,16 @@ Each line was translated, back-translated cold, then checked for culture and len
 | Swipe back to end your shift. | (missing) | Deslize de volta e encerre o turno. | New line. Back-translation: "Swipe back and end the shift." Uses Deslize (você) and "encerrar turno" as in "Encerrar turno". 1.21× English. |
 | {{hint}}. Swipe the button to the left, or double-tap. | (missing) | {{hint}}. Deslize o botão para a esquerda ou toque duas vezes. | New VoiceOver hint; mirrors the "para a direita" line exactly. |
 | Enter amounts as numbers, e.g. 2400 or 2,400.50. | Digite os valores só com números, ex.: 2400 ou 2400.50 (com ponto antes dos centavos). | Digite os valores em números, ex.: 2400 ou 2.400,50. | The parser now accepts a decimal comma, so the example uses Brazilian format and the "com ponto" instruction is gone. Back-translation: "Type the amounts as numbers, e.g. 2400 or 2.400,50." |
+
+## Round 4: referrals
+
+28 new lines (Invite friends screen, the friend’s-code box in the welcome and Settings, the celebration share button, the free-plan counter, the share message with the code) and 3 removed (Invite a friend, Share it, Share MileMint on WhatsApp and more). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: the friend’s bonus is immediate, the sharer’s only “when a friend joins”, so nothing promises the user drives they don’t have yet. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| You both get +10 free drives a month when a friend joins. | Vocês dois ganham +10 trajetos grátis por mês quando um amigo entra. | *ganhar* reads as a reward, natural for Brazilian promos (“ganhe”). |
+| Share it · friends get +10 drives | Compartilhar · +10 trajetos para amigos | 39 chars (1.18×); verb first, like the old “Compartilhar”. |
+| Invite friends | Convidar amigos | Matches the old “Convidar um amigo” style (infinitive for titles). |
+| Redeem | Resgatar | Apple pt-BR wording (“Resgatar cartão-presente ou código”). |
+| Got a code from a friend? It adds 10 free drives a month. | Tem o código de um amigo? Ele soma 10 trajetos grátis por mês. | Back: “Do you have a friend’s code? It adds 10 free trips a month.” ✓ |
+| Enter my code {{code}} when you set up MileMint… | Use meu código {{code}} ao configurar o MileMint e ganhe 10 trajetos grátis a mais por mês. | “o MileMint” with the article, as the glossary sets. |

@@ -55,6 +55,7 @@ import { vehicleLabel, type Vehicle } from '@/domain/vehicles';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
+import { useAllowance } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 import { shareLogbookCsv } from '@/reports/export';
 import { useVehicles } from '@/vehicles/use-vehicles';
@@ -70,6 +71,7 @@ export default function LogbookScreen() {
   const t = useT();
   const { region } = useRegion();
   const { isPro } = usePro();
+  const allowance = useAllowance();
   const { trips } = useTrips();
   const garage = useVehicles();
   const [chosenId, setChosenId] = useState<string | null>(null);
@@ -93,9 +95,9 @@ export default function LogbookScreen() {
 
   // Drives over the free limit stay out until they're unlocked, as in reports.
   const visible = useMemo(() => {
-    const locked = lockedTripIds(trips ?? [], isPro);
+    const locked = lockedTripIds(trips ?? [], isPro, allowance);
     return (trips ?? []).filter((trip) => !locked.has(trip.id));
-  }, [trips, isPro]);
+  }, [trips, isPro, allowance]);
   const summaries = useMemo(
     () => (logbooks ?? []).map((logbook) => summarizeLogbook(logbook, visible, today)),
     [logbooks, visible, today],

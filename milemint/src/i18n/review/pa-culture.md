@@ -165,3 +165,16 @@ Each line was translated, back-translated cold, then checked for culture and len
 | Swipe back to end your shift. | ਸ਼ਿਫਟ ਖ਼ਤਮ ਕਰਨ ਲਈ ਵਾਪਸ ਸਵਾਈਪ ਕਰੋ। | (unchanged) | Checked. Back-translation: "Swipe back to end the shift." Matches "ਸ਼ਿਫਟ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਸਵਾਈਪ" and "ਸ਼ਿਫਟ ਖ਼ਤਮ ਕਰੋ" (ਤੁਸੀਂ). Shorter than English on screen. |
 | {{hint}}. Swipe the button to the left, or double-tap. | {{hint}}। ਬਟਨ ਨੂੰ ਖੱਬੇ ਪਾਸੇ ਸਵਾਈਪ ਕਰੋ, ਜਾਂ ਦੋ ਵਾਰ ਟੈਪ ਕਰੋ। | (unchanged) | Checked: mirrors the "ਸੱਜੇ ਪਾਸੇ" line exactly. |
 | Enter amounts as numbers, e.g. 2400 or 2,400.50. | ਰਕਮਾਂ ਅੰਕਾਂ ਵਿੱਚ ਭਰੋ, ਜਿਵੇਂ 2400 ਜਾਂ 2,400.50। | (unchanged) | Checked: English-style example is what Punjabi speakers use; no dot instruction. |
+
+## Round 4: referrals
+
+28 new lines (Invite friends screen, the friend’s-code box in the welcome and Settings, the celebration share button, the free-plan counter, the share message with the code) and 3 removed (Invite a friend, Share it, Share MileMint on WhatsApp and more). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: the friend’s bonus is immediate, the sharer’s only “when a friend joins”, so nothing promises the user drives they don’t have yet. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| You both get +10 free drives a month when a friend joins. | ਦੋਸਤ ਦੇ ਜੁੜਨ ’ਤੇ ਤੁਹਾਨੂੰ ਦੋਵਾਂ ਨੂੰ ਹਰ ਮਹੀਨੇ +10 ਮੁਫ਼ਤ ਟ੍ਰਿਪ ਮਿਲਦੇ ਹਨ। | Verb agrees with ਟ੍ਰਿਪ (m.), not the user, per the gender-neutral rule. |
+| You joined with {{code}}: … | ਕੋਡ {{code}} ਨਾਲ ਜੁੜਨ ਦਾ ਫ਼ਾਇਦਾ: ਹਰ ਮਹੀਨੇ 10 ਵਾਧੂ ਮੁਫ਼ਤ ਟ੍ਰਿਪ। | “ਤੁਸੀਂ ਜੁੜੇ” is gendered; noun phrase instead. |
+| That doesn’t look like a MileMint code… | …4 ਅੱਖਰ, ਇੱਕ ਡੈਸ਼ ਅਤੇ 3 ਹੋਰ ਅੱਖਰ ਜਾਂ ਅੰਕ… | Pass 2: “3 more” could be digits, so “letters or digits”. |
+| Invite friends | ਦੋਸਤਾਂ ਨੂੰ ਸੱਦੋ | Same verb as the old “ਕਿਸੇ ਦੋਸਤ ਨੂੰ ਸੱਦੋ”. |
+| Redeem | ਰਿਡੀਮ ਕਰੋ | Loanword, as in payment apps. |
+| Share it · friends get +10 drives | ਸਾਂਝਾ ਕਰੋ · ਦੋਸਤਾਂ ਨੂੰ +10 ਟ੍ਰਿਪ | Short; fits the pill. |

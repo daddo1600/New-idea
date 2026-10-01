@@ -10,6 +10,7 @@ import { DEMO_MODE, seedDemoTrips } from '@/dev/demo';
 import { describeError } from '@/errors/fatal-errors';
 import { ProProvider } from '@/purchases/pro';
 import { loadLanguage, useT } from '@/i18n/i18n';
+import { ReferralProvider } from '@/referral/referral';
 import { RegionProvider } from '@/region/region';
 // Registers the background location tasks; must run before the app renders.
 import '@/tracking/background';
@@ -36,29 +37,34 @@ export default function RootLayout() {
           <SQLiteProvider databaseName={DATABASE_NAME} onInit={onInit} useSuspense>
             <RegionProvider>
               <ProProvider>
-                <Stack>
-                  <Stack.Screen name="index" options={{ title: 'MileMint' }} />
-                  <Stack.Screen
-                    name="welcome"
-                    options={{ headerShown: false, gestureEnabled: false, animation: 'fade' }}
-                  />
-                  <Stack.Screen name="add-trip" options={{ title: t('Add missed trip'), presentation: 'modal' }} />
-                  <Stack.Screen
-                    name="setup-tracking"
-                    options={{ title: t('Automatic tracking'), presentation: 'modal' }}
-                  />
-                  <Stack.Screen name="settings" options={{ title: t('Settings') }} />
-                  <Stack.Screen name="trip/[id]" options={{ title: t('Trip') }} />
-                  <Stack.Screen name="report" options={{ title: t('Reports') }} />
-                  <Stack.Screen name="region" options={{ title: t('Your country'), presentation: 'modal' }} />
-                  <Stack.Screen name="pro" options={{ title: 'MileMint Pro', presentation: 'modal' }} />
-                  <Stack.Screen name="compare" options={{ title: t('Missed miles check'), presentation: 'modal' }} />
-                  <Stack.Screen name="milestones" options={{ title: t('Milestones') }} />
-                  <Stack.Screen name="tax-dates" options={{ title: t('Tax dates') }} />
-                  <Stack.Screen name="claim-relief" options={{ title: t('Claim mileage relief') }} />
-                  <Stack.Screen name="logbook" options={{ title: t('ATO logbook') }} />
-                  <Stack.Screen name="language" options={{ title: t('Language'), presentation: 'modal' }} />
-                </Stack>
+                <ReferralProvider>
+                  <Stack>
+                    <Stack.Screen name="index" options={{ title: 'MileMint' }} />
+                    <Stack.Screen
+                      name="welcome"
+                      options={{ headerShown: false, gestureEnabled: false, animation: 'fade' }}
+                    />
+                    <Stack.Screen name="add-trip" options={{ title: t('Add missed trip'), presentation: 'modal' }} />
+                    <Stack.Screen
+                      name="setup-tracking"
+                      options={{ title: t('Automatic tracking'), presentation: 'modal' }}
+                    />
+                    <Stack.Screen name="settings" options={{ title: t('Settings') }} />
+                    <Stack.Screen name="trip/[id]" options={{ title: t('Trip') }} />
+                    <Stack.Screen name="report" options={{ title: t('Reports') }} />
+                    <Stack.Screen name="region" options={{ title: t('Your country'), presentation: 'modal' }} />
+                    <Stack.Screen name="pro" options={{ title: 'MileMint Pro', presentation: 'modal' }} />
+                    <Stack.Screen name="compare" options={{ title: t('Missed miles check'), presentation: 'modal' }} />
+                    <Stack.Screen name="milestones" options={{ title: t('Milestones') }} />
+                    <Stack.Screen name="tax-dates" options={{ title: t('Tax dates') }} />
+                    <Stack.Screen name="claim-relief" options={{ title: t('Claim mileage relief') }} />
+                    <Stack.Screen name="logbook" options={{ title: t('ATO logbook') }} />
+                    <Stack.Screen name="language" options={{ title: t('Language'), presentation: 'modal' }} />
+                    <Stack.Screen name="friends" options={{ title: t('Invite friends') }} />
+                    {/* milemint://invite/TRVB-7K2: notes the code, then opens "Invite friends" or the welcome. */}
+                    <Stack.Screen name="invite/[code]" options={{ headerShown: false, animation: 'none' }} />
+                  </Stack>
+                </ReferralProvider>
               </ProProvider>
             </RegionProvider>
           </SQLiteProvider>

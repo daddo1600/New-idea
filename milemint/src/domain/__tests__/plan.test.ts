@@ -1,6 +1,12 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { autoDrivesInMonth, FREE_AUTO_DRIVES_PER_MONTH as FREE, lockedTripIds } from '../plan';
+import {
+  autoDrivesInMonth,
+  FREE_AUTO_DRIVES_PER_MONTH as FREE,
+  lockedTripIds,
+  monthlyAllowance,
+  REFERRAL_BONUS_DRIVES,
+} from '../plan';
 import type { Trip } from '../trip';
 
 type Drive = Pick<Trip, 'id' | 'localDate' | 'startedAt' | 'source'>;
@@ -74,5 +80,33 @@ describe('shift mode', () => {
       shiftId: 'shift-2',
     }));
     expect(lockedTripIds([...early, ...late], false)).toEqual(new Set(late.map((d) => d.id)));
+  });
+});
+
+describe('monthlyAllowance', () => {
+  it('is the free allowance with no referrals', () => {
+    expect(monthlyAllowance({ redeemed: false, friendsJoined: 0 })).toBe(FREE);
+  });
+
+  it('adds 10 for joining with a friend’s code', () => {
+    expect(REFERRAL_BONUS_DRIVES).toBe(10);
+    expect(monthlyAllowance({ redeemed: true, friendsJoined: 0 })).toBe(FREE + 10);
+  });
+
+  it('adds 10 for every friend who joined, with no cap', () => {
+    expect(monthlyAllowance({ redeemed: false, friendsJoined: 3 })).toBe(FREE + 30);
+    expect(monthlyAllowance({ redeemed: true, friendsJoined: 100 })).toBe(FREE + 10 + 1000);
+  });
+
+  it('ignores a damaged count', () => {
+    expect(monthlyAllowance({ redeemed: false, friendsJoined: -2 })).toBe(FREE);
+    expect(monthlyAllowance({ redeemed: false, friendsJoined: Number.NaN })).toBe(FREE);
+    expect(monthlyAllowance({ redeemed: false, friendsJoined: 2.7 })).toBe(FREE + 20);
+  });
+
+  it('is the limit lockedTripIds applies', () => {
+    const allowance = monthlyAllowance({ redeemed: true, friendsJoined: 1 });
+    const locked = lockedTripIds(drives('2026-10', allowance + 2), false, allowance);
+    expect([...locked].sort()).toEqual([`d${allowance}`, `d${allowance + 1}`].sort());
   });
 });

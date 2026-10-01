@@ -103,3 +103,17 @@ Each line was translated, back-translated cold, then checked for culture and len
 | Swipe back to end your shift. | (missing) | Desliza atrás para terminar el turno. | New line. Back-translation: "Swipe back to end the shift." Uses Desliza (tú) and "terminar turno" as in "Terminar turno". 1.28× English. |
 | {{hint}}. Swipe the button to the left, or double-tap. | (missing) | {{hint}}. Desliza el botón hacia la izquierda o toca dos veces. | New VoiceOver hint; mirrors the "hacia la derecha" line word for word. Back-translation: "Slide the button to the left or tap twice." |
 | Enter amounts as numbers, e.g. 2400 or 2,400.50. | Escribe los montos como números, p. ej., 2400 o 2,400.50. | (unchanged) | Checked: no dot instruction; the English-style example matches the glossary (numbers keep English format) and Latin American usage. |
+
+## Round 4: referrals
+
+28 new lines (Invite friends screen, the friend’s-code box in the welcome and Settings, the celebration share button, the free-plan counter, the share message with the code) and 3 removed (Invite a friend, Share it, Share MileMint on WhatsApp and more). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: the friend’s bonus is immediate, the sharer’s only “when a friend joins”, so nothing promises the user drives they don’t have yet. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| You both get +10 free drives a month when a friend joins. | Los dos reciben +10 viajes gratis al mes cuando un amigo se une. | “The two of you receive…”. es-419 *reciben* (ustedes), as the glossary targets Latin America. |
+| Share it · friends get +10 drives | Compartir · +10 viajes para tus amigos | Pill button: 38 chars (1.15×). Reordered so the verb stays first, like “Compartir”. |
+| That doesn’t look like a MileMint code… | Eso no parece un código de MileMint. Son 4 letras, un guion y 3 caracteres más… | “3 more” made explicit as *caracteres*: the last three can be digits. |
+| A friend’s code can only be entered in the first 30 days… | …solo se puede ingresar en los primeros 30 días… | *ingresar* is the es-419 verb for typing a code (Apple uses it). |
+| Redeem | Canjear | Apple es-419 wording for codes and gift cards. |
+| Enter my code {{code}} when you set up MileMint… | Usa mi código {{code}} al configurar MileMint y recibe 10 viajes gratis más al mes. | Sent to a friend: tú, first person. Back: “Use my code … and get 10 more free trips a month.” |
+| Friends count once they’ve logged a few drives. | Tus amigos cuentan una vez que registren algunos viajes. | Subjunctive keeps it neutral and future-facing. |

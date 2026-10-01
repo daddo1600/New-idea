@@ -24,6 +24,7 @@ import { toLocalIsoDate } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
+import { useAllowance } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 import { PDF_AVAILABLE, shareCsv, shareLogbookCsv, sharePdf } from '@/reports/export';
 
@@ -58,6 +59,7 @@ export default function ReportScreen() {
   const theme = useTheme();
   const t = useT();
   const { isPro } = usePro();
+  const allowance = useAllowance();
   const { region } = useRegion();
   const { trips, places } = useTrips();
   const [editedIds, setEditedIds] = useState<Set<string>>(new Set());
@@ -112,9 +114,9 @@ export default function ReportScreen() {
 
   // Drives over the free limit stay out until they're unlocked, as on the home screen.
   const visible = useMemo(() => {
-    const locked = lockedTripIds(trips ?? [], isPro);
+    const locked = lockedTripIds(trips ?? [], isPro, allowance);
     return (trips ?? []).filter((trip) => !locked.has(trip.id));
-  }, [trips, isPro]);
+  }, [trips, isPro, allowance]);
   const today = toLocalIsoDate(new Date());
   const yearLogbooks = useMemo(
     () =>
