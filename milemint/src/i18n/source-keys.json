@@ -831,12 +831,6 @@
     ]
   },
   {
-    "key": "Address or postcode",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
     "key": "After the {{trial}}, {{price}} per month is charged to your Apple Account and renews automatically unless cancelled at least 24 hours before the end of the period.",
     "files": [
       "app/pro.tsx"
@@ -1617,12 +1611,6 @@
     "key": "Couldn’t save the place. Please try again.",
     "files": [
       "app/settings.tsx"
-    ]
-  },
-  {
-    "key": "Couldn’t save those places. Please try again.",
-    "files": [
-      "app/welcome.tsx"
     ]
   },
   {
@@ -2657,7 +2645,7 @@
     "files": [
       "app/settings.tsx",
       "app/trip/[id].tsx",
-      "app/welcome.tsx"
+      "hooks/use-place-ask.ts"
     ]
   },
   {
@@ -2843,6 +2831,18 @@
     "key": "IRS standard mileage rate: 76¢ a mile from July 2026",
     "files": [
       "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Is this home? {{place}}",
+    "files": [
+      "components/place-ask-card.tsx"
+    ]
+  },
+  {
+    "key": "Is this work? {{place}}",
+    "files": [
+      "components/place-ask-card.tsx"
     ]
   },
   {
@@ -3496,7 +3496,13 @@
     ]
   },
   {
-    "key": "No account. Your trips stay encrypted on your iPhone.",
+    "key": "No",
+    "files": [
+      "components/place-ask-card.tsx"
+    ]
+  },
+  {
+    "key": "No account. Your trips stay on your phone.",
     "files": [
       "app/welcome.tsx"
     ]
@@ -4097,8 +4103,7 @@
   {
     "key": "Private",
     "files": [
-      "app/setup-tracking.tsx",
-      "app/welcome.tsx"
+      "app/setup-tracking.tsx"
     ]
   },
   {
@@ -4297,12 +4302,6 @@
     ]
   },
   {
-    "key": "Save and continue",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
     "key": "Save as place",
     "files": [
       "app/trip/[id].tsx"
@@ -4422,8 +4421,7 @@
     "files": [
       "app/add-trip.tsx",
       "app/settings.tsx",
-      "app/trip/[id].tsx",
-      "app/welcome.tsx"
+      "app/trip/[id].tsx"
     ]
   },
   {
@@ -4683,12 +4681,6 @@
     ]
   },
   {
-    "key": "So trips read “Home → …” instead of a street name. Optional.",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
     "key": "Something went wrong",
     "files": [
       "app/_layout.tsx"
@@ -4889,12 +4881,6 @@
   },
   {
     "key": "Step 3 · Your work",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "Step 4 · Places",
     "files": [
       "app/welcome.tsx"
     ]
@@ -5466,12 +5452,6 @@
     ]
   },
   {
-    "key": "Trips then read “Home → Work” instead of street names, and commutes are flagged for you. Both are optional.",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
     "key": "Trips you add by hand never count.",
     "files": [
       "components/plan-rules.tsx"
@@ -5752,12 +5732,6 @@
     ]
   },
   {
-    "key": "Where are home and work?",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
     "key": "Where do you drive?",
     "files": [
       "app/welcome.tsx"
@@ -5779,12 +5753,6 @@
     "key": "Where your shift started",
     "files": [
       "domain/shift-split.ts"
-    ]
-  },
-  {
-    "key": "Where’s home?",
-    "files": [
-      "app/welcome.tsx"
     ]
   },
   {
@@ -5816,7 +5784,7 @@
     "files": [
       "app/settings.tsx",
       "app/trip/[id].tsx",
-      "app/welcome.tsx"
+      "hooks/use-place-ask.ts"
     ]
   },
   {
@@ -5892,6 +5860,18 @@
     ]
   },
   {
+    "key": "Yes, that’s home",
+    "files": [
+      "components/place-ask-card.tsx"
+    ]
+  },
+  {
+    "key": "Yes, that’s work",
+    "files": [
+      "components/place-ask-card.tsx"
+    ]
+  },
+  {
     "key": "Yesterday",
     "files": [
       "app/add-trip.tsx"
@@ -5951,6 +5931,12 @@
     ]
   },
   {
+    "key": "You stopped here for the night. Trips to and from it will read “Home”.",
+    "files": [
+      "components/place-ask-card.tsx"
+    ]
+  },
+  {
     "key": "You’ll choose which one when you start a shift.",
     "files": [
       "app/welcome.tsx"
@@ -5960,6 +5946,12 @@
     "key": "You’re all set.",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes.",
+    "files": [
+      "components/place-ask-card.tsx"
     ]
   },
   {

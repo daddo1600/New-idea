@@ -28,7 +28,6 @@ import { purposeIcon, quickPurposes, shownPurpose } from '@/components/purpose-p
 import { MintWash, StepHeader, StepIcon } from '@/components/step-header';
 import { VehiclePicker } from '@/components/vehicle-picker';
 import { firstCode, RedeemCode } from '@/components/redeem-code';
-import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import {
@@ -38,13 +37,10 @@ import {
   type SimpleWeek,
 } from '@/components/work-hours-quick';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
-import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, updateSettings } from '@/db/settings-repo';
-import { SHIFT_PURPOSE } from '@/domain/auto-classify';
 import { marApplies, parsePence } from '@/domain/mar';
 import { FREE_AUTO_DRIVES_PER_MONTH } from '@/domain/plan';
 import { displayLocale, formatRate, REGIONS, vehicleRule, type RegionCode } from '@/domain/regions';
-import { useKeyboardOpen } from '@/hooks/use-keyboard-open';
 import { useTheme } from '@/hooks/use-theme';
 import { LANGUAGES, msg, useLanguage, useT } from '@/i18n/i18n';
 import { Rich } from '@/i18n/rich';
@@ -61,9 +57,11 @@ import { ICloudBackup } from '../../modules/icloud-backup';
 
 /**
  * First launch, as one full-screen flow instead of a chain of pop-ups:
- * welcome → country → automatic tracking → work hours → usual purpose → home
- * and work → done. The last four are optional and skip in one tap. Each step does one thing,
- * and the user always sees how far along they are.
+ * welcome → country → automatic tracking → how you work → usual purpose →
+ * done. Shift workers skip the usual purpose (their drives are Deliveries,
+ * domain/auto-classify). Home and work aren't asked here: the home screen asks
+ * "Is this home?" once the drives show it (domain/place-asks). Each step does
+ * one thing, and the user always sees how far along they are.
  *
  * On a new iPhone with a MileMint backup in iCloud, the welcome offers to
  * restore it instead; the backup brings the country, hours and places, so
@@ -71,7 +69,7 @@ import { ICloudBackup } from '../../modules/icloud-backup';
  */
 
 /** Dots shown: the usual purpose is part of "Your work", not a step of its own. */
-const STEPS = 6;
+const STEPS = 5;
 const EXTRA_LABELS: Record<VehicleType, string> = {
   car: msg('Car or van'),
   motorbike: msg('Moped or motorbike'),
@@ -80,13 +78,11 @@ const EXTRA_LABELS: Record<VehicleType, string> = {
 const HOURS = 3;
 /** "What are most of your work drives for?", right after how they work. */
 const PURPOSE = 4;
-const PLACES = 5;
-const DONE = 6;
+const DONE = 5;
 
 const WELCOME_POINTS = [
   [msg('Automatic'), msg('Drives are logged in the background. No buttons to press.')],
   [msg('Worth money'), msg('See what each business drive saves you at tax time.')],
-  [msg('Private'), msg('No account. Your trips stay encrypted on your iPhone.')],
 ] as const;
 
 export default function WelcomeScreen() {
@@ -144,9 +140,6 @@ export default function WelcomeScreen() {
   const [clientPrivacy, setClientPrivacy] = useState(false);
   /** Chose shifts (delivery apps) instead of set hours. */
   const [shifts, setShifts] = useState(false);
-  const [home, setHome] = useState<PlaceDraft>(EMPTY_PLACE);
-  const [work, setWork] = useState<PlaceDraft>(EMPTY_PLACE);
-  const [placeError, setPlaceError] = useState<string | null>(null);
   /** UK: employed and using their own vehicle, so home shows Mileage Allowance Relief. Optional. */
   const [employed, setEmployed] = useState(false);
   const [employerPaysNothing, setEmployerPaysNothing] = useState(false);
@@ -268,9 +261,13 @@ export default function WelcomeScreen() {
     for (const type of extraVehicles) {
       if (!garage.some((v) => v.type === type)) await addVehicle(db, { type });
     }
+    // No usual-purpose step: no usual purpose already means "Deliveries" in shift mode
+    // (domain/auto-classify), and choosing set hours after going back asks again.
+    await updateSettings(db, { defaultPurpose: null, workPurposes: [] });
+    setWorkChoices([]);
     setShifts(true);
     setHoursSet(false);
-    setStep(PURPOSE);
+    setStep(DONE);
   };
 
   const saveHours = async () => {
@@ -297,13 +294,8 @@ export default function WelcomeScreen() {
     setStep(PURPOSE);
   };
 
-  /**
-   * The usual purpose, saved as the user's own only when they tap one. Taking
-   * the preselected "Deliveries" (shift workers) or skipping saves none, so
-   * going back and choosing set hours instead leaves nothing behind: in shift
-   * mode no usual purpose already means "Deliveries" (domain/auto-classify).
-   */
-  const shownChoices = workChoices ?? (shifts ? [SHIFT_PURPOSE] : []);
+  /** The usual purpose (set hours or neither; shift workers skip it), saved only when they tap one. */
+  const shownChoices = workChoices ?? [];
   /** Several can be picked: the first is filled in on work drives, all of them are offered first on a trip. */
   const toggleWork = (purpose: string) =>
     setWorkChoices(
@@ -311,43 +303,14 @@ export default function WelcomeScreen() {
     );
   const saveWork = async (choices: string[]) => {
     const first = choices[0] ?? null;
-    await updateSettings(db, {
-      // Deliveries first for a shift worker is what no setting already means.
-      defaultPurpose: shifts && first === SHIFT_PURPOSE ? null : first,
-      workPurposes: choices,
-    });
+    await updateSettings(db, { defaultPurpose: first, workPurposes: choices });
     setWorkChoices(choices);
-    setStep(PLACES);
+    setStep(DONE);
   };
-  const purposeOptions = quickPurposes({ shiftMode: shifts, clientPrivacy }, 10);
+  const purposeOptions = quickPurposes({ shiftMode: false, clientPrivacy }, 10);
 
   // Under whichever way of working is chosen: care and support work comes in all three.
   const privacyCheck = <ClientPrivacyCheck value={clientPrivacy} onChange={setClientPrivacy} />;
-
-  const savePlaces = async () => {
-    setPlaceError(null);
-    setBusy(true);
-    try {
-      const existing = await listPlaces(db);
-      for (const [draft, kind, name] of [
-        [home, 'home', t('Home')],
-        [work, 'work', t('Work')],
-      ] as const) {
-        if (!draft.text.trim() && !draft.at) continue;
-        const at = await resolvePlace(draft);
-        // Going back and saving again replaces the place instead of adding a second one.
-        for (const old of existing.filter((place) => place.kind === kind && place.name === name)) {
-          await deletePlace(db, old.id);
-        }
-        await insertPlace(db, { name, kind, at });
-      }
-      setStep(DONE);
-    } catch (error) {
-      setPlaceError(error instanceof Error ? error.message : t('Couldn’t save those places. Please try again.'));
-    } finally {
-      setBusy(false);
-    }
-  };
 
   const finish = async () => {
     setBusy(true);
@@ -368,18 +331,9 @@ export default function WelcomeScreen() {
   const onBrand = step === 0 || step === 2 || step === DONE;
   /** The dot lit for this step: the usual purpose shares "Your work"'s. */
   const dot = step >= PURPOSE ? step - 1 : step;
-  // While typing, the buttons would ride up above the keyboard, right over the address
-  // suggestions, so a tap meant for a suggestion could save and move on. Hide them meanwhile.
-  const typing = useKeyboardOpen();
   const scroller = useRef<ScrollView>(null);
-  const fieldTops = useRef({ home: 0, work: 0 });
-  /** Moves an address box near the top, so its suggestions show above the keyboard. */
-  const scrollFieldUp = (field: 'home' | 'work') =>
-    // After the keyboard has started to open and the extra room has been added.
-    setTimeout(
-      () => scroller.current?.scrollTo({ y: Math.max(0, fieldTops.current[field] - 8), animated: true }),
-      250,
-    );
+  /** Back from the finish skips the steps that weren't shown (shift workers have no usual-purpose step). */
+  const previous = step === DONE ? (restored ? 2 : shifts ? HOURS : PURPOSE) : step - 1;
 
   const primary = (label: string, onPress: () => void | Promise<void>, enabled = true) => (
     <Pressable
@@ -413,12 +367,12 @@ export default function WelcomeScreen() {
       <StatusBar style={onBrand ? 'light' : 'auto'} />
       {onBrand ? <BrandGradient /> : <MintWash />}
       <View style={styles.top}>
-        {step > 0 && step < DONE ? (
+        {step > 0 ? (
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={t('Back')}
             hitSlop={12}
-            onPress={() => setStep(step - 1)}>
+            onPress={() => setStep(previous)}>
             <ThemedText type="small" style={{ color: onBrand ? '#D1FAE5' : theme.accent }}>
               {t('Back')}
             </ThemedText>
@@ -468,8 +422,6 @@ export default function WelcomeScreen() {
           contentContainerStyle={[
             styles.content,
             (!onBrand || step === 2 || step === DONE) && styles.contentTop,
-            // Room to scroll an address box up to the top while the keyboard is open.
-            typing && step === PLACES && styles.roomToScroll,
           ]}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled">
@@ -480,6 +432,9 @@ export default function WelcomeScreen() {
               <Text style={styles.brandBody}>
                 {t('MileMint logs your drives automatically and works out what they’re worth at tax time.')}
               </Text>
+              <View style={styles.privacyPill}>
+                <Text style={styles.privacyPillText}>🔒 {t('No account. Your trips stay on your phone.')}</Text>
+              </View>
               <View style={styles.points}>
                 {WELCOME_POINTS.map(([title, body]) => (
                   <View key={title} style={styles.point}>
@@ -775,50 +730,6 @@ export default function WelcomeScreen() {
             </>
           )}
 
-          {step === PLACES && (
-            <>
-              {shifts ? (
-                <StepHeader glyph="home" eyebrow={t('Step 4 · Places')} title={t('Where’s home?')}>
-                  {t('So trips read “Home → …” instead of a street name. Optional.')}
-                </StepHeader>
-              ) : (
-                <StepHeader glyph="home" eyebrow={t('Step 4 · Places')} title={t('Where are home and work?')}>
-                  {t(
-                    'Trips then read “Home → Work” instead of street names, and commutes are flagged for you. Both are optional.',
-                  )}
-                </StepHeader>
-              )}
-              <View onLayout={(e) => (fieldTops.current.home = e.nativeEvent.layout.y)}>
-                <PlaceField
-                  label={t('Home')}
-                  icon="🏠"
-                  placeholder={t('Address or postcode')}
-                  value={home}
-                  onChange={setHome}
-                  onFocus={() => scrollFieldUp('home')}
-                />
-              </View>
-              {/* Couriers have no single workplace: no Work question, and no commute rule. */}
-              {!shifts && (
-                <View onLayout={(e) => (fieldTops.current.work = e.nativeEvent.layout.y)}>
-                  <PlaceField
-                    label={t('Work')}
-                    icon="💼"
-                    placeholder={t('Address or postcode')}
-                    value={work}
-                    onChange={setWork}
-                    onFocus={() => scrollFieldUp('work')}
-                  />
-                </View>
-              )}
-              {placeError && (
-                <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
-                  {placeError}
-                </ThemedText>
-              )}
-            </>
-          )}
-
           {step === DONE && (
             <>
               <LeafMark size={72} />
@@ -890,7 +801,7 @@ export default function WelcomeScreen() {
           )}
         </ScrollView>
 
-        <View style={[styles.actions, typing && step === PLACES && styles.hidden]}>
+        <View style={styles.actions}>
           {step === 0 &&
             (backup
               ? primary(busy ? t('Restoring…') : t('Restore my trips'), restoreFromICloud)
@@ -925,12 +836,6 @@ export default function WelcomeScreen() {
                   : primary(t('Choose one to continue'), () => {}, false))}
           {step === PURPOSE && shownChoices.length > 0 && primary(t('Continue'), () => saveWork(shownChoices))}
           {step === PURPOSE && secondary(t('Skip for now'), () => saveWork([]))}
-          {step === PLACES &&
-            primary(
-              busy ? t('Saving…') : home.text || work.text ? t('Save and continue') : t('Continue'),
-              savePlaces,
-            )}
-          {step === PLACES && secondary(t('Skip for now'), () => setStep(DONE))}
           {step === DONE && primary(t('Start using MileMint'), finish)}
         </View>
       </KeyboardAvoidingView>
@@ -1083,7 +988,6 @@ const styles = StyleSheet.create({
   },
   tip: { flexDirection: 'row', gap: Spacing.two, alignItems: 'flex-start' },
   tipIcon: { fontSize: 15, lineHeight: 20 },
-  hidden: { display: 'none' },
   top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 32 },
   topSpacer: { width: 32 },
   languagePill: {
@@ -1114,7 +1018,6 @@ const styles = StyleSheet.create({
   flex: { flex: 1, gap: Spacing.half },
   flexFill: { flex: 1 },
   vehicles: { gap: Spacing.two },
-  roomToScroll: { paddingBottom: 420 },
   // Pinned low, below where iOS's alert sits, on a dark card so it still reads while dimmed.
   coach: { flex: 1, justifyContent: 'flex-end' },
   coachCard: {
@@ -1127,6 +1030,17 @@ const styles = StyleSheet.create({
   coachStep: { color: '#D1FAE5', fontSize: 15, fontWeight: '800', letterSpacing: 1.2 },
   coachText: { color: '#FACC15', fontSize: 28, lineHeight: 35, fontWeight: '800', textAlign: 'center' },
   privacy: { color: '#FFFFFF', fontSize: 15, lineHeight: 21 },
+  privacyPill: {
+    alignSelf: 'flex-start',
+    backgroundColor: 'rgba(250,204,21,0.16)',
+    borderColor: 'rgba(250,204,21,0.5)',
+    borderWidth: 1,
+    // Rounded, not a pill: longer languages wrap to two lines.
+    borderRadius: 14,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
+  },
+  privacyPillText: { color: '#FACC15', fontSize: 15, lineHeight: 20, fontWeight: '800' },
   extraRow: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
   extraChip: {
     borderWidth: 1.5,

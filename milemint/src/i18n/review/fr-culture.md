@@ -269,3 +269,18 @@ Back-translations: Choose everything that applies. The first chosen is filled in
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+## Round 8e: shorter setup
+
+The welcome’s privacy line now names the phone, not the iPhone. Home and work are no longer asked during set-up; the home screen asks “Is this home?” / “Is this work?” instead. The removed set-up lines (“Where’s home?”, “Step 4 · Places”, …) are gone from the dictionary.
+
+| English | fr | Back-translation | Note |
+|---|---|---|---|
+| No account. Your trips stay on your phone. | Aucun compte. Vos trajets restent sur votre téléphone. | No account. Your trips stay on your phone. | Keeps “Aucun compte” from the old line. |
+| Is this home? {{place}} | Est-ce votre domicile ? {{place}} | Is this your home? {{place}} | *Domicile* as in “Home”; space before “?” per French typography. |
+| You stopped here for the night. Trips to and from it will read “Home”. | Vous avez passé la nuit ici. Les trajets qui partent d’ici ou y arrivent afficheront « Domicile ». | You spent the night here. Trips leaving from or arriving here will show “Home”. | « » quotes as elsewhere in this file. |
+| Yes, that’s home | Oui, c’est mon domicile | Yes, it’s my home |  |
+| No | Non | No |  |
+| Is this work? {{place}} | Est-ce votre lieu de travail ? {{place}} | Is this your workplace? {{place}} | *lieu de travail* reads better in a question than bare *Travail*. |
+| You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes. | Vous êtes souvent garé ici pendant vos heures de travail. Les trajets afficheront « Travail », et les trajets domicile-travail seront signalés. | You’re often parked here during your working hours. Trips will show “Work”, and home-work trips will be flagged. | *garé* as in the end-shift prompt; *domicile-travail* as before. |
+| Yes, that’s work | Oui, c’est mon travail | Yes, it’s my work |  |

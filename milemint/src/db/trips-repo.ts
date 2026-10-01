@@ -142,6 +142,30 @@ export async function getRoute(db: SQLiteDatabase, tripId: string): Promise<LatL
   }
 }
 
+/** Where each recorded route of the drives started since `sinceIso` begins and ends, by trip id. */
+export async function listRouteEnds(
+  db: SQLiteDatabase,
+  sinceIso: string,
+): Promise<Map<string, { start: LatLng; end: LatLng }>> {
+  const rows = await db.getAllAsync<{ trip_id: string; points: string }>(
+    `SELECT r.trip_id, r.points FROM trip_routes r JOIN trips t ON t.id = r.trip_id
+      WHERE t.started_at >= ?;`,
+    sinceIso,
+  );
+  const ends = new Map<string, { start: LatLng; end: LatLng }>();
+  for (const row of rows) {
+    try {
+      const points = JSON.parse(row.points) as LatLng[];
+      if (Array.isArray(points) && points.length > 0) {
+        ends.set(row.trip_id, { start: points[0], end: points[points.length - 1] });
+      }
+    } catch {
+      // A damaged route: that drive just isn't asked about.
+    }
+  }
+  return ends;
+}
+
 type HistoryRow = {
   classification: 'business' | 'personal';
   purpose: string;

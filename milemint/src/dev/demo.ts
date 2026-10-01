@@ -22,6 +22,7 @@ import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/tri
  *   ?demo=stopped / ?demo=precise  tracking not running / Precise Location off
  *   ?demo=free   a free-plan user, with sample App Store prices on the paywall
  *   ?demo=courier shift mode on (the swipe-to-start shift bar)
+ *   ?demo=places no Home or Work saved yet: "Is this home?" (then, after No, "Is this work?")
  *   &region=GB   preview another country's currency, units and rules
  */
 const demoParam =
@@ -75,6 +76,13 @@ export const DEMO_CELEBRATE = demoParam === 'celebrate';
 
 /** `?demo=courier`: shift mode is on, so the home screen leads with the shift bar. */
 export const DEMO_COURIER = demoParam === 'courier';
+
+/**
+ * `?demo=places`: set hours, but no Home or Work saved, and the drives have
+ * routes, so the home screen asks "Is this home?" about where last night's
+ * drive ended, and (after a No) "Is this work?" about the office.
+ */
+export const DEMO_PLACES = demoParam === 'places';
 
 /** `?demo=driving`: the home screen shows a drive being recorded. */
 export const DEMO_DRIVING = demoParam === 'driving';
@@ -142,6 +150,17 @@ const CLIENTS = [
 
 function historyTrips(): DemoTrip[] {
   const trips: DemoTrip[] = [];
+  if (DEMO_PLACES) {
+    // To the office and back on recent weekdays: parked there all day, every day.
+    for (let daysAgo = 2; daysAgo <= 20; daysAgo++) {
+      const day = new Date();
+      day.setDate(day.getDate() - daysAgo);
+      if (day.getDay() === 0 || day.getDay() === 6) continue;
+      trips.push([daysAgo, 8, 'Home', 'Office, N 1st St', 7.9, 'business', 'Office', 'learned-route']);
+      trips.push([daysAgo, 17, 'Office, N 1st St', 'Home', 7.9, 'personal', '', 'commute']);
+    }
+    return trips;
+  }
   const today = new Date();
   const startOfYear = new Date(today.getFullYear(), 0, 1);
   const days = Math.floor((today.getTime() - startOfYear.getTime()) / 86_400_000);
@@ -223,10 +242,24 @@ const COURIER_SHIFTS: CourierShift[] = [
   },
 ];
 
+/** Where the `?demo=places` drives go, under the street names they'd be logged with. */
+const PLACE_SPOTS: Record<string, LatLng> = {
+  '14 Maple Ave, San Jose': PLACES[0].at,
+  '200 N 1st St, San Jose': PLACES[1].at,
+  'Acme Corp HQ, Santa Clara': PLACES[2].at,
+  '1st Street, San Jose': { latitude: 37.3382, longitude: -121.8863 },
+  'Westfield Valley Fair': { latitude: 37.3255, longitude: -121.9454 },
+  'Job site, Elm St': { latitude: 37.3541, longitude: -121.9552 },
+  'Trader Joe’s, Campbell': { latitude: 37.2872, longitude: -121.9500 },
+  'San Jose Airport (SJC)': { latitude: 37.3639, longitude: -121.9289 },
+};
+/** Not saved as places in `?demo=places`: logged by street name instead. */
+const UNNAMED: Record<string, string> = { Home: '14 Maple Ave, San Jose', 'Office, N 1st St': '200 N 1st St, San Jose' };
+
 /** A believable wiggly route between two spots, for the shift map. */
-function demoRoute(from: string, to: string): LatLng[] {
-  const a = SPOTS[from];
-  const b = SPOTS[to];
+function demoRoute(from: string, to: string, spots: Record<string, LatLng> = SPOTS): LatLng[] {
+  const a = spots[from];
+  const b = spots[to];
   if (!a || !b) return [];
   const steps = 12;
   return Array.from({ length: steps + 1 }, (_, i) => {
@@ -297,14 +330,19 @@ export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
   const existing = await db.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM trips;');
   if ((existing?.n ?? 0) > 0) return;
   if (DEMO_COURIER) await updateSettings(db, { shiftMode: true });
+  if (DEMO_PLACES) await updateSettings(db, { workHoursEnabled: true });
   const placeIds = new Map<string, string>();
-  for (const place of PLACES) placeIds.set(place.name, (await insertPlace(db, place)).id);
+  for (const place of PLACES) {
+    if (DEMO_PLACES && place.kind !== 'client') continue;
+    placeIds.set(place.name, (await insertPlace(db, place)).id);
+  }
   if (DEMO_COURIER) await seedCourierShifts(db, placeIds);
   // A courier's own days are the shifts above; the office drives are history.
-  for (const [daysAgo, hour, from, to, miles, classification, purpose, autoReason] of [
+  for (const [daysAgo, hour, rawFrom, rawTo, miles, classification, purpose, autoReason] of [
     ...(DEMO_COURIER ? [] : TRIPS),
     ...historyTrips(),
   ].reverse()) {
+    const [from, to] = DEMO_PLACES ? [UNNAMED[rawFrom] ?? rawFrom, UNNAMED[rawTo] ?? rawTo] : [rawFrom, rawTo];
     const start = new Date();
     start.setDate(start.getDate() - daysAgo);
     start.setHours(hour, 12, 0, 0);
@@ -322,6 +360,6 @@ export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
       startPlaceId: placeIds.get(from) ?? null,
       endPlaceId: placeIds.get(to) ?? null,
       autoReason: autoReason ?? null,
-    });
+    }, DEMO_PLACES ? demoRoute(from, to, PLACE_SPOTS) : []);
   }
 }

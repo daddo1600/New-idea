@@ -281,3 +281,18 @@ Back-translations: Choose all that fit. We'll set the first one for you. / Will 
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+## Round 8e: shorter setup
+
+The welcome’s privacy line now names the phone, not the iPhone. Home and work are no longer asked during set-up; the home screen asks “Is this home?” / “Is this work?” instead. The removed set-up lines (“Where’s home?”, “Step 4 · Places”, …) are gone from the dictionary.
+
+| English | bn | Back-translation | Note |
+|---|---|---|---|
+| No account. Your trips stay on your phone. | কোনো অ্যাকাউন্ট লাগে না। আপনার ট্রিপ আপনার ফোনেই থাকে। | No account needed. Your trips stay on your phone. | Keeps “কোনো অ্যাকাউন্ট লাগে না”. |
+| Is this home? {{place}} | এটা কি বাড়ি? {{place}} | Is this home? {{place}} | *বাড়ি* as in “Home”. |
+| You stopped here for the night. Trips to and from it will read “Home”. | আপনি রাতটা এখানেই কাটিয়েছেন। এখান থেকে যাওয়া-আসার ট্রিপে “বাড়ি” লেখা থাকবে। | You spent the night here. Trips to and from here will say “Home”. |  |
+| Yes, that’s home | হ্যাঁ, এটা বাড়ি | Yes, this is home |  |
+| No | না | No |  |
+| Is this work? {{place}} | এটা কি কর্মস্থল? {{place}} | Is this the workplace? {{place}} | *কর্মস্থল* as in “Work”. |
+| You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes. | কাজের সময়ে আপনি প্রায়ই এখানে পার্ক করেন। ট্রিপে “কর্মস্থল” লেখা থাকবে, আর বাড়ি-কর্মস্থল যাতায়াত চিহ্নিত হবে। | In work hours you often park here. Trips will say “Workplace”, and home-workplace travel will be marked. | *যাতায়াত* as in the old places line. |
+| Yes, that’s work | হ্যাঁ, এটা কর্মস্থল | Yes, this is the workplace |  |

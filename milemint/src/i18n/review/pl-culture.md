@@ -294,3 +294,18 @@ Back-translations: Choose all that fit. We'll enter the first one chosen for you
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+## Round 8e: shorter setup
+
+The welcome’s privacy line now names the phone, not the iPhone. Home and work are no longer asked during set-up; the home screen asks “Is this home?” / “Is this work?” instead. The removed set-up lines (“Where’s home?”, “Step 4 · Places”, …) are gone from the dictionary.
+
+| English | pl | Back-translation | Note |
+|---|---|---|---|
+| No account. Your trips stay on your phone. | Bez zakładania konta. Twoje przejazdy zostają na Twoim telefonie. | No account needed. Your trips stay on your phone. | Keeps “Bez zakładania konta”. |
+| Is this home? {{place}} | Czy to dom? {{place}} | Is this home? {{place}} | *Dom* as in “Home”. |
+| You stopped here for the night. Trips to and from it will read “Home”. | Tu był Twój nocny postój. Przejazdy stąd i do tego miejsca będą opisane jako „Dom”. | This was your overnight stop. Trips from and to this place will be described as “Home”. | Built around a noun (*nocny postój*) to avoid a gendered past-tense verb. |
+| Yes, that’s home | Tak, to dom | Yes, it’s home |  |
+| No | Nie | No |  |
+| Is this work? {{place}} | Czy to praca? {{place}} | Is this work? {{place}} | *Praca* as in “Work”. |
+| You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes. | W godzinach pracy często tu parkujesz. Przejazdy będą opisane jako „Praca”, a dojazdy między domem a pracą zostaną oznaczone. | You often park here during working hours. Trips will be described as “Work”, and commutes between home and work will be marked. | *dojazdy* as in the old places line. |
+| Yes, that’s work | Tak, to praca | Yes, it’s work |  |

@@ -3,7 +3,9 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 import { EXPORT_FORMATS, type ExportFormat } from '@/domain/accounting-export';
 import { MAX_PURPOSE_LENGTH } from '@/domain/auto-classify';
 import type { WorkShift, WorkWeek } from '@/domain/classify-rules';
+import type { LatLng } from '@/domain/geo';
 import { TAX_BANDS, type TaxBand } from '@/domain/mar';
+import { MAX_DISMISSED_SPOTS } from '@/domain/place-asks';
 import { REGIONS, type RegionCode } from '@/domain/regions';
 import { VEHICLE_TYPES, type VehicleType } from '@/domain/trip';
 import { cleanInvites, type ClaimRefusal, type IssuedInvite, type RedeemStatus } from '@/referral/invites';
@@ -84,6 +86,10 @@ export type AppSettings = {
   friendsJoined: number;
   /** ISO time the app was first set up: a friend's code can be entered for 30 days after. */
   installedAt: string | null;
+  /** Spots answered "No" to "Is this home?" on the home screen: not asked again nearby (domain/place-asks). */
+  dismissedHomeSpots: LatLng[];
+  /** The same for "Is this work?". */
+  dismissedWorkSpots: LatLng[];
 };
 
 const WEEKDAY_9_TO_5 = [{ start: '09:00', end: '17:00' }];
@@ -118,6 +124,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
   qualifiedAt: null,
   friendsJoined: 0,
   installedAt: null,
+  dismissedHomeSpots: [],
+  dismissedWorkSpots: [],
 };
 
 type Check<T> = (value: unknown) => T | undefined;
@@ -143,6 +151,23 @@ const workWeek: Check<WorkWeek> = (value) => {
     ),
   );
 };
+
+/** Points on Earth, the latest ten; anything else in the list is dropped. */
+const spots: Check<LatLng[]> = (value) =>
+  Array.isArray(value)
+    ? value
+        .filter(
+          (spot): spot is LatLng =>
+            typeof spot === 'object' &&
+            spot !== null &&
+            Number.isFinite((spot as LatLng).latitude) &&
+            Number.isFinite((spot as LatLng).longitude) &&
+            Math.abs((spot as LatLng).latitude) <= 90 &&
+            Math.abs((spot as LatLng).longitude) <= 180,
+        )
+        .map((spot) => ({ latitude: spot.latitude, longitude: spot.longitude }))
+        .slice(-MAX_DISMISSED_SPOTS)
+    : undefined;
 
 /**
  * How each stored field is checked: anything else (a value from an older or
@@ -194,6 +219,8 @@ const CHECKS: { [K in keyof AppSettings]-?: Check<AppSettings[K]> } = {
   qualifiedAt: textOrNull,
   friendsJoined: (value) => (typeof value === 'number' && Number.isInteger(value) && value >= 0 ? value : undefined),
   installedAt: textOrNull,
+  dismissedHomeSpots: spots,
+  dismissedWorkSpots: spots,
 };
 
 /** Stored settings, each field checked against its type and allowed values (see CHECKS). */

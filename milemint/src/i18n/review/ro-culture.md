@@ -290,3 +290,18 @@ Back-translations: Choose everything that fits. We fill in the first one chosen.
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+## Round 8e: shorter setup
+
+The welcome’s privacy line now names the phone, not the iPhone. Home and work are no longer asked during set-up; the home screen asks “Is this home?” / “Is this work?” instead. The removed set-up lines (“Where’s home?”, “Step 4 · Places”, …) are gone from the dictionary.
+
+| English | ro | Back-translation | Note |
+|---|---|---|---|
+| No account. Your trips stay on your phone. | Fără cont. Cursele tale rămân pe telefon. | No account. Your trips stay on the phone. | Keeps “Fără cont” from the old line. |
+| Is this home? {{place}} | Aici e acasă? {{place}} | Is this home? {{place}} | *Acasă* as in “Home”. |
+| You stopped here for the night. Trips to and from it will read “Home”. | Ai rămas aici peste noapte. Cursele care pleacă sau ajung aici vor arăta „Acasă”. | You stayed here overnight. Trips leaving or arriving here will show “Home”. | „ ” quotes as elsewhere. |
+| Yes, that’s home | Da, e acasă | Yes, it’s home |  |
+| No | Nu | No |  |
+| Is this work? {{place}} | Aici e serviciul? {{place}} | Is this the job? {{place}} | *Serviciu* as in “Work”. |
+| You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes. | Parchezi des aici în orele de lucru. Cursele vor arăta „Serviciu”, iar navetele dintre acasă și serviciu vor fi marcate. | You often park here in working hours. Trips will show “Job”, and commutes between home and job will be marked. | *navete* as in the old places line. |
+| Yes, that’s work | Da, e serviciul | Yes, it’s the job |  |

@@ -269,3 +269,18 @@ Back-translations: Multiple choice allowed. The first one chosen is filled in fo
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+## Round 8e: shorter setup
+
+The welcome’s privacy line now names the phone, not the iPhone. Home and work are no longer asked during set-up; the home screen asks “Is this home?” / “Is this work?” instead. The removed set-up lines (“Where’s home?”, “Step 4 · Places”, …) are gone from the dictionary.
+
+| English | zh-Hans | Back-translation | Note |
+|---|---|---|---|
+| No account. Your trips stay on your phone. | 无需注册账户。你的行程只保存在你的手机上。 | No account needed. Your trips are saved only on your phone. | Keeps “无需注册账户”; *手机* instead of iPhone. |
+| Is this home? {{place}} | 这里是家吗？{{place}} | Is this home? {{place}} | *家* as in “Home”; full-width question mark. |
+| You stopped here for the night. Trips to and from it will read “Home”. | 你在这里停了一夜。往返这里的行程将显示为“家”。 | You parked here for a night. Trips to and from here will show “Home”. |  |
+| Yes, that’s home | 是，这是我家 | Yes, this is my home |  |
+| No | 不是 | No | “不是” answers a 是…吗 question naturally. |
+| Is this work? {{place}} | 这里是工作地点吗？{{place}} | Is this the workplace? {{place}} | *工作地点* as in “Work”. |
+| You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes. | 你常在工作时间停在这里。行程将显示为“工作地点”，家和工作地点之间的行程会标为通勤。 | You often park here in work hours. Trips will show “Workplace”, and trips between home and workplace will be marked as commutes. | *通勤* as in the commute notes. |
+| Yes, that’s work | 是，这是工作地点 | Yes, this is the workplace |  |

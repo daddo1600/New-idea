@@ -302,3 +302,18 @@ Back-translations: Choose all that apply. The first you choose is filled in for 
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+## Round 8e: shorter setup
+
+The welcome’s privacy line now names the phone, not the iPhone. Home and work are no longer asked during set-up; the home screen asks “Is this home?” / “Is this work?” instead. The removed set-up lines (“Where’s home?”, “Step 4 · Places”, …) are gone from the dictionary.
+
+| English | pt-BR | Back-translation | Note |
+|---|---|---|---|
+| No account. Your trips stay on your phone. | Sem cadastro. Seus trajetos ficam no seu celular. | No sign-up. Your trips stay on your cell phone. | Keeps “Sem cadastro” from the old line; *celular* is the everyday pt-BR word. |
+| Is this home? {{place}} | Aqui é sua casa? {{place}} | Is this your home? {{place}} | *Casa* as in “Home”. |
+| You stopped here for the night. Trips to and from it will read “Home”. | Você passou a noite aqui. Os trajetos que saem ou chegam aqui vão mostrar “Casa”. | You spent the night here. Trips leaving or arriving here will show “Home”. |  |
+| Yes, that’s home | Sim, é minha casa | Yes, it’s my home |  |
+| No | Não | No |  |
+| Is this work? {{place}} | Aqui é seu trabalho? {{place}} | Is this your work? {{place}} | *Trabalho* as in “Work”. |
+| You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes. | Você costuma estacionar aqui no horário de trabalho. Os trajetos vão mostrar “Trabalho”, e os deslocamentos casa-trabalho serão marcados. | You usually park here in work hours. Trips will show “Work”, and home-work commutes will be marked. | *estacionar* as in the end-shift prompt; *casa-trabalho* as before. |
+| Yes, that’s work | Sim, é meu trabalho | Yes, it’s my work |  |

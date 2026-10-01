@@ -282,3 +282,18 @@ Back-translations: Choose all that apply. The first you choose is filled in for 
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+## Round 8e: shorter setup
+
+The welcome’s privacy line now names the phone, not the iPhone. Home and work are no longer asked during set-up; the home screen asks “Is this home?” / “Is this work?” instead. The removed set-up lines (“Where’s home?”, “Step 4 · Places”, …) are gone from the dictionary.
+
+| English | es | Back-translation | Note |
+|---|---|---|---|
+| No account. Your trips stay on your phone. | Sin cuenta. Tus viajes se quedan en tu teléfono. | No account. Your trips stay on your phone. | Replaces “Sin cuenta… cifrados en tu iPhone”; *teléfono* since the line no longer names the device. |
+| Is this home? {{place}} | ¿Es tu casa? {{place}} | Is it your home? {{place}} | *Casa* as in “Home”. |
+| You stopped here for the night. Trips to and from it will read “Home”. | Aquí pasaste la noche. Los viajes que salgan o lleguen aquí dirán “Casa”. | You spent the night here. Trips leaving or arriving here will say “Home”. | *Casa* in quotes matches the saved place name. |
+| Yes, that’s home | Sí, es mi casa | Yes, it’s my home | Short button. |
+| No | No | No |  |
+| Is this work? {{place}} | ¿Es tu trabajo? {{place}} | Is it your work? {{place}} | *Trabajo* as in “Work”. |
+| You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes. | Sueles estacionar aquí en tu horario de trabajo. Los viajes dirán “Trabajo”, y los trayectos casa-trabajo se marcarán. | You usually park here in your work hours. Trips will say “Work”, and home-work journeys will be marked. | *estacionar* as in the end-shift prompt (es-419); *casa-trabajo* as in “Automático: casa-trabajo”. |
+| Yes, that’s work | Sí, es mi trabajo | Yes, it’s my work | Short button. |

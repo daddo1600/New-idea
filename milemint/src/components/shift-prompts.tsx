@@ -12,7 +12,8 @@ import { useT } from '@/i18n/i18n';
  * (started late, still on at home, swiped off by mistake).
  */
 
-function PromptCard({
+/** A question with one action and a way to wave it away; also asks "Is this home?" (place-ask-card). */
+export function PromptCard({
   title,
   body,
   action,

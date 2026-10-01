@@ -17,6 +17,7 @@ import { PlanSheet } from '@/components/plan-rules';
 import { Celebration } from '@/components/celebration';
 import { ReminderAsk } from '@/components/reminder-ask';
 import { purposeIcon, quickPurposes, shownPurpose } from '@/components/purpose-picker';
+import { PlaceAskCard } from '@/components/place-ask-card';
 import { BackdateOffer, EndShiftPrompt, UndoEndBar } from '@/components/shift-prompts';
 import { shortTime, ShiftRow } from '@/components/shift-row';
 import { ShiftSwitch } from '@/components/shift-switch';
@@ -55,6 +56,7 @@ import {
 } from '@/domain/regions';
 import { type Classification, toLocalIsoDate, type Trip, VEHICLE_ICONS } from '@/domain/trip';
 import { useMileagePay } from '@/hooks/use-mileage-pay';
+import { usePlaceAsk } from '@/hooks/use-place-ask';
 import { usePurposeSettings } from '@/hooks/use-purpose-settings';
 import { useTheme } from '@/hooks/use-theme';
 import { getLanguage, msg, useT } from '@/i18n/i18n';
@@ -205,6 +207,8 @@ export default function HomeScreen() {
       )
       .reduce((sum, trip) => sum + (deductions.get(trip.id) ?? 0), 0);
   }, [visible, places, region, taxYear, deductions]);
+
+  const placeAsk = usePlaceAsk(trips, places, now, reload);
 
   // First launch goes through the welcome flow before anything else is shown.
   if (!loaded) return <ActivityIndicator style={styles.loading} />;
@@ -371,6 +375,14 @@ export default function HomeScreen() {
             />
             {nudge && <ReliefNudge nudge={nudge} />}
             <TrackingCard status={status} working={!trackingProblem} />
+            {/* Home and work, asked once the drives show where they are (not at set-up). */}
+            {placeAsk.ask && !selecting && filling === null && (
+              <PlaceAskCard
+                ask={placeAsk.ask}
+                onYes={() => placeAsk.confirm().catch(() => {})}
+                onNo={() => placeAsk.decline().catch(() => {})}
+              />
+            )}
             <TaxCountdown
               foundMinor={launchTotal}
               unsortedCount={unsorted.length}

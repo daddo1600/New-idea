@@ -295,3 +295,18 @@ Back-translations: Choose all that apply. Whichever you choose first, we'll fill
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+## Round 8e: shorter setup
+
+The welcome’s privacy line now names the phone, not the iPhone. Home and work are no longer asked during set-up; the home screen asks “Is this home?” / “Is this work?” instead. The removed set-up lines (“Where’s home?”, “Step 4 · Places”, …) are gone from the dictionary.
+
+| English | hi | Back-translation | Note |
+|---|---|---|---|
+| No account. Your trips stay on your phone. | कोई खाता नहीं। आपकी ट्रिप आपके फ़ोन पर ही रहती हैं। | No account. Your trips stay on your phone only. | *फ़ोन* instead of iPhone; otherwise as the old line. |
+| Is this home? {{place}} | क्या यह घर है? {{place}} | Is this home? {{place}} | *घर* as in “Home”. |
+| You stopped here for the night. Trips to and from it will read “Home”. | आपने रात यहीं बिताई। यहाँ से आने-जाने वाली ट्रिप पर “घर” दिखेगा। | You spent the night right here. Trips coming and going from here will show “Home”. |  |
+| Yes, that’s home | हाँ, यह घर है | Yes, this is home |  |
+| No | नहीं | No |  |
+| Is this work? {{place}} | क्या यह काम की जगह है? {{place}} | Is this the place of work? {{place}} | *काम की जगह* in the question; the saved place reads *काम* as in “Work”. |
+| You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes. | काम के घंटों में आपकी गाड़ी अक्सर यहीं खड़ी रहती है। ट्रिप पर “काम” दिखेगा, और घर-काम आना-जाना अलग से मार्क होगा। | In work hours your vehicle often stands right here. Trips will show “Work”, and home-work travel will be marked separately. | *घर-काम आना-जाना* as in the old places line. |
+| Yes, that’s work | हाँ, यह काम की जगह है | Yes, this is the place of work |  |

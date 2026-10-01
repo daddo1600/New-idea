@@ -343,3 +343,18 @@ Back-translations: Choose all that apply. Whichever you choose first, we'll fill
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+## Round 8e: shorter setup
+
+The welcome’s privacy line now names the phone, not the iPhone. Home and work are no longer asked during set-up; the home screen asks “Is this home?” / “Is this work?” instead. The removed set-up lines (“Where’s home?”, “Step 4 · Places”, …) are gone from the dictionary.
+
+| English | pa | Back-translation | Note |
+|---|---|---|---|
+| No account. Your trips stay on your phone. | ਕੋਈ ਖਾਤਾ ਨਹੀਂ। ਤੁਹਾਡੇ ਟ੍ਰਿਪ ਤੁਹਾਡੇ ਫ਼ੋਨ ’ਤੇ ਹੀ ਰਹਿੰਦੇ ਹਨ। | No account. Your trips stay on your phone only. | *ਫ਼ੋਨ* instead of iPhone; otherwise as the old line. |
+| Is this home? {{place}} | ਕੀ ਇਹ ਘਰ ਹੈ? {{place}} | Is this home? {{place}} | *ਘਰ* as in “Home”. |
+| You stopped here for the night. Trips to and from it will read “Home”. | ਤੁਸੀਂ ਰਾਤ ਇੱਥੇ ਹੀ ਕੱਟੀ। ਇੱਥੋਂ ਆਉਣ-ਜਾਣ ਵਾਲੇ ਟ੍ਰਿਪਾਂ ’ਤੇ “ਘਰ” ਲਿਖਿਆ ਆਵੇਗਾ। | You spent the night right here. Trips coming and going from here will say “Home”. | *ਰਾਤ ਕੱਟੀ* is the everyday “spent the night”. |
+| Yes, that’s home | ਹਾਂ, ਇਹ ਘਰ ਹੈ | Yes, this is home |  |
+| No | ਨਹੀਂ | No |  |
+| Is this work? {{place}} | ਕੀ ਇਹ ਕੰਮ ਦੀ ਥਾਂ ਹੈ? {{place}} | Is this the place of work? {{place}} | *ਕੰਮ ਦੀ ਥਾਂ* in the question; the saved place reads *ਕੰਮ* as in “Work”. |
+| You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes. | ਕੰਮ ਦੇ ਘੰਟਿਆਂ ਵਿੱਚ ਤੁਹਾਡੀ ਗੱਡੀ ਅਕਸਰ ਇੱਥੇ ਖੜ੍ਹੀ ਹੁੰਦੀ ਹੈ। ਟ੍ਰਿਪਾਂ ’ਤੇ “ਕੰਮ” ਲਿਖਿਆ ਆਵੇਗਾ, ਅਤੇ ਘਰ-ਕੰਮ ਆਉਣ-ਜਾਣ ਵੱਖਰਾ ਪਛਾਣਿਆ ਜਾਵੇਗਾ। | In work hours your vehicle is often parked here. Trips will say “Work”, and home-work travel will be recognised separately. | *ਘਰ-ਕੰਮ ਆਉਣ-ਜਾਣ* as in the old places line. |
+| Yes, that’s work | ਹਾਂ, ਇਹ ਕੰਮ ਦੀ ਥਾਂ ਹੈ | Yes, this is the place of work |  |
