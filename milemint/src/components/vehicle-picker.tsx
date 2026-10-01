@@ -34,7 +34,7 @@ export function VehiclePicker({ value, onChange }: { value: VehicleType; onChang
                 : { backgroundColor: theme.backgroundElement, borderColor: theme.backgroundSelected },
             ]}>
             <Text style={styles.icon}>{VEHICLE_ICONS[vehicle]}</Text>
-            <ThemedText type="smallBold" numberOfLines={1} style={{ color: selected ? theme.onAccent : theme.text }}>
+            <ThemedText type="smallBold" numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.75} style={{ color: selected ? theme.onAccent : theme.text }}>
               {t(SHORT_LABELS[vehicle])}
             </ThemedText>
           </Pressable>

@@ -45,10 +45,14 @@ export async function scheduleTrialReminder(
   const at = trialReminderDate(start, plan.trial);
   if (!end || !at || at.getTime() <= now || !(await trialRemindersAllowed())) return;
 
+  // A saved date restored from another phone's backup isn't a reminder queued on this one.
+  const queuedHere = await Notifications.getAllScheduledNotificationsAsync()
+    .then((all) => all.some((n) => n.identifier === TRIAL_REMINDER_ID))
+    .catch(() => false);
   // Claimed in the settings first, so two purchase events can't both queue it.
   let claimed = false;
   await updateSettings(db, (saved) => {
-    if (saved.trialReminderAt) return {};
+    if (saved.trialReminderAt && queuedHere) return {};
     claimed = true;
     return { trialReminderAt: at.toISOString() };
   });

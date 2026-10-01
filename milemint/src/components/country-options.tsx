@@ -91,7 +91,7 @@ export function CountryOptions({
               )}
               <Text style={styles.flag}>{option.flag}</Text>
               <View style={styles.flex}>
-                <ThemedText type="smallBold" style={active && styles.onBrand} numberOfLines={1}>
+                <ThemedText type="smallBold" style={active && styles.onBrand} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.75}>
                   {t(SHORT_NAMES[option.code])}
                 </ThemedText>
                 <ThemedText
