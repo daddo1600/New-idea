@@ -9,7 +9,7 @@ Encrypted backups of the trip database in the user's own iCloud. No MileMint acc
 ## How it works
 
 1. `src/backup/backup.ts` reads every table into a versioned JSON snapshot.
-2. `seal()` compresses and encrypts it in Swift with a 256-bit key kept in the Keychain as a **synchronizable** item (iCloud Keychain, accessible after first unlock), so the key follows the user to a new iPhone. Plaintext never touches the iCloud file.
+2. `sealText()` takes the snapshot as text (UTF-8 encoding happens in Swift, off the JS thread; `openText()` is its inverse). Builds from before it only have `seal()`/`open()`, which take base64; `ICloudBackup.sealsText` says which, and `src/backup/backup.ts` falls back to base64 made a slice at a time. Either way it compresses and encrypts it in Swift with a 256-bit key kept in the Keychain as a **synchronizable** item (iCloud Keychain, accessible after first unlock), so the key follows the user to a new iPhone. Plaintext never touches the iCloud file.
 3. `write()` puts the sealed file in iCloud atomically and keeps the newest 4.
 4. On a new iPhone, `list()` finds the backups (iCloud's index knows about files not downloaded yet), `read()` downloads one, `open()` decrypts it with the synced key, and the app restores it in one database transaction.
 

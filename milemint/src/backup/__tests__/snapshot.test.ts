@@ -10,9 +10,12 @@ import {
   consistentTables,
   emptyTables,
   makeSnapshot,
+  packRoute,
   parseSnapshot,
   restorePlan,
+  SNAPSHOT_VERSION,
   tripCount,
+  unpackRoute,
   validateSnapshot,
   type BackupTable,
   type Tables,
@@ -90,7 +93,7 @@ describe('snapshots', () => {
     const snapshot = sample();
     expect(snapshot).toMatchObject({
       format: 'milemint-backup',
-      version: 1,
+      version: SNAPSHOT_VERSION,
       schemaVersion: CURRENT,
       appVersion: '1.0.0',
       createdAt: '2026-10-01T09:30:00.000Z',
@@ -149,7 +152,7 @@ describe('snapshots', () => {
   it('ask for an app update when the backup is from a newer schema', () => {
     const newer = { ...sample(), schemaVersion: CURRENT + 1 };
     expect(codeOf(() => validateSnapshot(newer, CURRENT))).toBe('newer-app');
-    expect(codeOf(() => validateSnapshot({ ...sample(), version: 2 }, CURRENT))).toBe('newer-app');
+    expect(codeOf(() => validateSnapshot({ ...sample(), version: SNAPSHOT_VERSION + 1 }, CURRENT))).toBe('newer-app');
   });
 
   it('bring older backups forward: missing tables are empty, the schema becomes current', () => {
@@ -265,5 +268,53 @@ describe('backup file names', () => {
   it('ignore names that are not ours', () => {
     expect(backupDateFromName('notes.txt')).toBeNull();
     expect(backupDateFromName('milemint-backup-latest.mmbk')).toBeNull();
+  });
+});
+
+describe('routes in a backup', () => {
+  const route = Array.from({ length: 500 }, (_, i) => ({
+    latitude: Math.round((51.5 + i * 0.00031) * 1e5) / 1e5,
+    longitude: Math.round((-0.12 - i * 0.00027) * 1e5) / 1e5,
+  }));
+  const points = JSON.stringify(route);
+
+  it('are packed to a small fraction of their JSON and unpacked exactly', () => {
+    const packed = packRoute({ trip_id: 't1', points });
+    expect(packed).not.toHaveProperty('points');
+    expect(typeof packed.polyline).toBe('string');
+    expect(String(packed.polyline).length).toBeLessThan(points.length / 8);
+    expect(unpackRoute(packed)).toEqual({ trip_id: 't1', points });
+  });
+
+  it('round-trip through a whole snapshot and its restore plan', () => {
+    const tables = { ...sampleTables(), trip_routes: [{ trip_id: 't1', points }] };
+    const snapshot = parseSnapshot(JSON.stringify(makeSnapshot(tables, { appVersion: '1', createdAt: new Date() })));
+    const insert = restorePlan(snapshot, columnsOf(tables)).find((step) => step.sql.startsWith('INSERT INTO trip_routes'));
+    expect(insert?.sql).toBe('INSERT INTO trip_routes (trip_id, points) VALUES (?, ?);');
+    expect(insert?.rows).toEqual([['t1', points]]);
+  });
+
+  it('keep points that are not a plain list of coordinates as they are', () => {
+    for (const odd of ['not json', '{"a":1}', '[{"latitude":"51","longitude":0}]', '[null]']) {
+      expect(packRoute({ trip_id: 't1', points: odd })).toEqual({ trip_id: 't1', points: odd });
+    }
+  });
+
+  it('restore from version-1 backups (routes as JSON), as made by older builds', () => {
+    const v1 = { ...makeSnapshot(sampleTables(), { appVersion: '1', createdAt: new Date() }), version: 1 };
+    v1.tables.trip_routes = [{ trip_id: 't1', points: '[{"latitude":51.123456789,"longitude":-0.12}]' }];
+    const snapshot = parseSnapshot(JSON.stringify(v1));
+    const insert = restorePlan(snapshot, columnsOf(sampleTables())).find((step) =>
+      step.sql.startsWith('INSERT INTO trip_routes'),
+    );
+    expect(insert?.rows).toEqual([['t1', '[{"latitude":51.123456789,"longitude":-0.12}]']]);
+  });
+
+  it('refuse a damaged packed route', () => {
+    const damaged = { ...sample(), tables: { ...sampleTables(), trip_routes: [{ trip_id: 't1', polyline: 'a b' }] } };
+    expect(codeOf(() => validateSnapshot(JSON.parse(JSON.stringify(damaged))))).toBe('not-a-backup');
+    expect(codeOf(() => unpackRoute({ trip_id: 't1', polyline: '_' }))).toBe('not-a-backup');
+    const missing = { ...sample(), tables: { ...sampleTables(), trip_routes: [{ trip_id: 't1' }] } };
+    expect(codeOf(() => validateSnapshot(JSON.parse(JSON.stringify(missing))))).toBe('not-a-backup');
   });
 });

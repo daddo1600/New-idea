@@ -29,7 +29,7 @@ import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { countPastTrips, scrubPastTrips } from '@/db/privacy-repo';
 import { AREA_EXAMPLES, clientVisitLabel } from '@/domain/privacy';
 import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
-import { loadSettings, saveSettings, type AppSettings } from '@/db/settings-repo';
+import { loadSettings, updateSettings, type AppSettings } from '@/db/settings-repo';
 import { isValidShift, type WorkShift } from '@/domain/classify-rules';
 import { REFERRAL_BONUS_DRIVES } from '@/domain/plan';
 import { marApplies, parsePence, TAX_BAND_RATES, type TaxBand } from '@/domain/mar';
@@ -115,10 +115,9 @@ export default function SettingsScreen() {
         }),
       });
     }
-    // Keep the other settings (such as the region) as they are.
-    const settings: AppSettings = { ...(await loadSettings(db)), workHoursEnabled: enabled, workWeek: week };
     try {
-      await saveSettings(db, settings);
+      // Only these two: the other settings (such as the region) stay as they are.
+      await updateSettings(db, { workHoursEnabled: enabled, workWeek: week });
       if (enabled) cancelWorkHoursNudge().catch(() => {});
       setMessage({ error: false, text: t('Saved. New drives will use these hours.') });
     } catch {
@@ -420,7 +419,7 @@ function ReminderSection() {
       setNote(t('Notifications are off for MileMint. Turn them on in iPhone Settings → Notifications.'));
     }
     setOn(scheduled);
-    await saveSettings(db, { ...(await loadSettings(db)), weeklyReminder: scheduled });
+    await updateSettings(db, { weeklyReminder: scheduled });
   };
 
   return (
@@ -795,9 +794,8 @@ function DrivingSection() {
   if (!settings) return null;
 
   const change = async (changes: Partial<AppSettings>) => {
-    const next = { ...(await loadSettings(db)), ...changes };
-    setSettings(next);
-    await saveSettings(db, next);
+    setSettings((shown) => shown && { ...shown, ...changes });
+    setSettings(await updateSettings(db, changes));
   };
 
   return (
@@ -897,7 +895,7 @@ function ClientPrivacySection() {
     setNote(null);
     setOn(value);
     try {
-      await saveSettings(db, { ...(await loadSettings(db)), clientPrivacy: value });
+      await updateSettings(db, { clientPrivacy: value });
       if (value) await offerScrub();
     } catch {
       setOn(!value);

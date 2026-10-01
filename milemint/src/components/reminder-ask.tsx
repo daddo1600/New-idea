@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
-import { loadSettings, saveSettings } from '@/db/settings-repo';
+import { loadSettings, updateSettings } from '@/db/settings-repo';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
 import { useRegion } from '@/region/region';
@@ -30,7 +30,7 @@ export function ReminderAsk() {
   const answer = async (yes: boolean) => {
     setShow(false);
     const scheduled = yes ? await enableWeeklyReminder(region.unit).catch(() => false) : false;
-    await saveSettings(db, { ...(await loadSettings(db)), reminderAsked: true, weeklyReminder: scheduled });
+    await updateSettings(db, { reminderAsked: true, weeklyReminder: scheduled });
   };
 
   return (

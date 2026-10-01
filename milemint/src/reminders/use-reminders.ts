@@ -3,7 +3,7 @@ import { router, type Href } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect } from 'react';
 
-import { loadSettings, saveSettings } from '@/db/settings-repo';
+import { loadSettings, updateSettings } from '@/db/settings-repo';
 import type { Region } from '@/domain/regions';
 import { useLanguage } from '@/i18n/i18n';
 
@@ -42,8 +42,7 @@ export function useReminders(region: Region) {
         if (settings.reminderDefaulted || !settings.onboarded) return;
         // On by default: switch it on once for people who set up before it was.
         const scheduled = await enableWeeklyReminder(unit).catch(() => false);
-        await saveSettings(db, {
-          ...(await loadSettings(db)),
+        await updateSettings(db, {
           weeklyReminder: scheduled,
           reminderAsked: true,
           reminderDefaulted: true,

@@ -2,6 +2,8 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 
 import type { RegionCode } from '@/domain/regions';
 
+import { withWriteLock } from './transaction';
+
 /** Odometer readings for one tax year, in the region's unit (miles or km). */
 export type OdometerReadings = { start: number | null; end: number | null };
 
@@ -20,12 +22,14 @@ export async function saveOdometer(
   taxYear: number,
   readings: OdometerReadings,
 ): Promise<void> {
-  await db.runAsync(
-    `INSERT INTO odometer_readings (region, tax_year, start_reading, end_reading) VALUES (?, ?, ?, ?)
-     ON CONFLICT (region, tax_year) DO UPDATE SET start_reading = excluded.start_reading, end_reading = excluded.end_reading;`,
-    region,
-    taxYear,
-    readings.start,
-    readings.end,
+  await withWriteLock(() =>
+    db.runAsync(
+      `INSERT INTO odometer_readings (region, tax_year, start_reading, end_reading) VALUES (?, ?, ?, ?)
+       ON CONFLICT (region, tax_year) DO UPDATE SET start_reading = excluded.start_reading, end_reading = excluded.end_reading;`,
+      region,
+      taxYear,
+      readings.start,
+      readings.end,
+    ),
   );
 }

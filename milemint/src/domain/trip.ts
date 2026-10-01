@@ -6,6 +6,7 @@ export type TripSource = 'manual' | 'auto';
 
 /** What the trip was driven (or ridden) in; tax offices price them differently. */
 export type VehicleType = 'car' | 'motorbike' | 'bicycle';
+export const VEHICLE_TYPES: readonly VehicleType[] = ['car', 'motorbike', 'bicycle'];
 
 export const VEHICLE_ICONS: Record<VehicleType, string> = { car: '🚗', motorbike: '🛵', bicycle: '🚲' };
 

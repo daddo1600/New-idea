@@ -66,6 +66,24 @@ public class ICloudBackupModule: Module {
       guard let envelope = Data(base64Encoded: base64) else { throw failure("ERR_BACKUP_DAMAGED", "Not base64.") }
       return try Envelope.open(envelope).base64EncodedString()
     }
+
+    /**
+     * `seal` for text: the snapshot as it is, encoded as UTF-8 here. Base64 on
+     * the JavaScript thread took seconds for a year of routes (Hermes has no JIT).
+     */
+    AsyncFunction("sealText") { (text: String) throws -> String in
+      return try Envelope.seal(Data(text.utf8)).base64EncodedString()
+    }
+
+    /** `open` for text: the snapshot back as a string, decoded from UTF-8 here. */
+    AsyncFunction("openText") { (base64: String) throws -> String in
+      guard let envelope = Data(base64Encoded: base64) else { throw failure("ERR_BACKUP_DAMAGED", "Not base64.") }
+      let plaintext = try Envelope.open(envelope)
+      guard let text = String(data: plaintext, encoding: .utf8) else {
+        throw failure("ERR_BACKUP_DAMAGED", "The backup isn't readable text; it may be damaged.")
+      }
+      return text
+    }
   }
 }
 

@@ -4,6 +4,8 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 import type { LatLng } from '@/domain/geo';
 import { DEFAULT_PLACE_RADIUS_M, type Place, type PlaceKind } from '@/domain/places';
 
+import { withWriteLock } from './transaction';
+
 type PlaceRow = {
   id: string;
   name: string;
@@ -41,21 +43,23 @@ export async function insertPlace(
     longitude: input.at.longitude,
     radiusM: input.radiusM ?? DEFAULT_PLACE_RADIUS_M,
   };
-  await db.runAsync(
-    `INSERT INTO places (id, name, latitude, longitude, radius_m, kind, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?);`,
-    place.id,
-    place.name,
-    place.latitude,
-    place.longitude,
-    place.radiusM,
-    place.kind,
-    new Date().toISOString(),
+  await withWriteLock(() =>
+    db.runAsync(
+      `INSERT INTO places (id, name, latitude, longitude, radius_m, kind, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?);`,
+      place.id,
+      place.name,
+      place.latitude,
+      place.longitude,
+      place.radiusM,
+      place.kind,
+      new Date().toISOString(),
+    ),
   );
   return place;
 }
 
 /** Trips keep their labels; their link to the place is cleared by the foreign key. */
 export async function deletePlace(db: SQLiteDatabase, id: string): Promise<void> {
-  await db.runAsync('DELETE FROM places WHERE id = ?;', id);
+  await withWriteLock(() => db.runAsync('DELETE FROM places WHERE id = ?;', id));
 }

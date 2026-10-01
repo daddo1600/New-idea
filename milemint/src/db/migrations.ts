@@ -147,12 +147,35 @@ const MIGRATIONS: readonly string[] = [
 /** The schema this build creates: stored in PRAGMA user_version, and in iCloud backups. */
 export const SCHEMA_VERSION = MIGRATIONS.length;
 
+/**
+ * The database was last opened by a newer build of MileMint (an update then
+ * rolled back, or a backup of the phone restored onto an older app version):
+ * its schema has tables or columns this build doesn't know, and writing to it
+ * could lose or break them. Nothing is migrated or written; the app shows
+ * this message (root ErrorBoundary) and the user updates the app.
+ */
+export class DatabaseTooNewError extends Error {
+  readonly code = 'newer-app';
+
+  constructor(
+    readonly databaseVersion: number,
+    readonly appVersion: number = SCHEMA_VERSION,
+  ) {
+    super(
+      `This iPhone's MileMint data was saved by a newer version of the app (data version ${databaseVersion}, ` +
+        `this app knows up to ${appVersion}). Update MileMint from the App Store to open it; nothing has been changed.`,
+    );
+    this.name = 'DatabaseTooNewError';
+  }
+}
+
 export async function migrate(db: SQLiteDatabase): Promise<void> {
   // One write transaction on this (keyed) connection; see inWriteTransaction.
   // The version is re-read inside, in case a background wake-up migrated first.
   await inWriteTransaction(db, async () => {
     const row = await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version;');
     const current = row?.user_version ?? 0;
+    if (current > MIGRATIONS.length) throw new DatabaseTooNewError(current);
     for (let version = current; version < MIGRATIONS.length; version++) {
       await db.execAsync(MIGRATIONS[version]);
     }

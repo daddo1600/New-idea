@@ -219,9 +219,14 @@ const CLASSIFICATION_LABELS: Record<Trip['classification'], string> = {
   unclassified: 'Not classified',
 };
 
-function localTime(iso: string | null, region: Region): string {
-  if (!iso) return '';
-  return new Date(iso).toLocaleTimeString(region.locale, { hour: 'numeric', minute: '2-digit' });
+/**
+ * Formats local times of day. Made once per report: toLocaleTimeString builds
+ * a new formatter for every call, which is slow over a year of trips. Not kept
+ * between reports, so a change of time zone (travelling) is picked up.
+ */
+function localTimes(region: Region): (iso: string | null) => string {
+  const format = new Intl.DateTimeFormat(region.locale, { hour: 'numeric', minute: '2-digit' });
+  return (iso) => (iso ? format.format(new Date(iso)) : '');
 }
 
 /** The rate(s) a trip was priced at, e.g. "55p" or "55p / 25p" when it crossed a tier. */
@@ -261,14 +266,15 @@ export function csvColumns(region: Region): string[] {
 export function toCsv(report: MileageReport): string {
   const { region } = report;
   const lines = [csvColumns(region).map(csvCell).join(',')];
+  const localTime = localTimes(region);
   for (const row of report.rows) {
     const { trip } = row;
     const business = trip.classification === 'business';
     lines.push(
       [
         trip.localDate,
-        trip.source === 'auto' ? localTime(trip.startedAt, region) : '',
-        trip.source === 'auto' ? localTime(trip.endedAt, region) : '',
+        trip.source === 'auto' ? localTime(trip.startedAt) : '',
+        trip.source === 'auto' ? localTime(trip.endedAt) : '',
         trip.startLabel,
         trip.endLabel,
         row.distance.toFixed(1),

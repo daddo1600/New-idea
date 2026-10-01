@@ -1,7 +1,7 @@
 import { useSQLiteContext } from 'expo-sqlite';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 
-import { loadSettings, saveSettings } from '@/db/settings-repo';
+import { loadSettings, updateSettings } from '@/db/settings-repo';
 import { DEMO_REGION } from '@/dev/demo';
 import { DEFAULT_REGION, REGIONS, type Region, type RegionCode } from '@/domain/regions';
 
@@ -66,7 +66,7 @@ export function RegionProvider({ children }: { children: ReactNode }) {
       setCode(next);
       if (demo) return;
       rememberRegion(next);
-      await saveSettings(db, { ...(await loadSettings(db)), region: next });
+      await updateSettings(db, { region: next });
     },
     [db, demo],
   );
@@ -74,7 +74,7 @@ export function RegionProvider({ children }: { children: ReactNode }) {
   const finishOnboarding = useCallback(async () => {
     setOnboarded(true);
     if (demo) return;
-    await saveSettings(db, { ...(await loadSettings(db)), onboarded: true });
+    await updateSettings(db, { onboarded: true });
   }, [db, demo]);
 
   const value = useMemo<RegionState>(

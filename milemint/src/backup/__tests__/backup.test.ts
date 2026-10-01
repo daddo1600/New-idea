@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 
 import { noteScrubbed, pendingScrub } from '../after-scrub';
 import { backUp, restoreSnapshot } from '../backup';
-import { emptyTables, makeSnapshot } from '../snapshot';
+import { emptyTables, makeSnapshot, SNAPSHOT_VERSION } from '../snapshot';
 
 const writes: { name: string; keep: number }[] = [];
 const log: string[] = [];
@@ -83,5 +83,30 @@ describe('backUp', () => {
     const begins = log.map((sql, index) => [sql, index] as const).filter(([sql]) => sql.startsWith('BEGIN'));
     for (const [, index] of begins.slice(1)) expect(['COMMIT;', 'ROLLBACK;']).toContain(log[index - 1]);
     expect(log.filter((sql) => sql.startsWith('BEGIN'))).toEqual(['BEGIN DEFERRED;', 'BEGIN IMMEDIATE;', 'BEGIN DEFERRED;']);
+  });
+
+  it('hands the native module the snapshot as text when it takes text, as base64 otherwise', async () => {
+    const native = (jest.requireMock('../../../modules/icloud-backup') as { ICloudBackup: Record<string, unknown> })
+      .ICloudBackup;
+    const texts: string[] = [];
+    const sealed: string[] = [];
+    const seal = native.seal;
+    Object.assign(native, {
+      sealsText: true,
+      sealText: async (text: string) => (texts.push(text), 'sealed'),
+      seal: async (base64: string) => (sealed.push(base64), base64),
+    });
+    try {
+      await backUp(fakeDb() as never, { force: true });
+      native.sealsText = false;
+      await backUp(fakeDb() as never, { force: true });
+    } finally {
+      Object.assign(native, { sealsText: false, seal });
+    }
+    expect(JSON.parse(texts[0])).toMatchObject({ format: 'milemint-backup', version: SNAPSHOT_VERSION });
+    expect(JSON.parse(Buffer.from(sealed[0], 'base64').toString('utf8'))).toMatchObject({
+      format: 'milemint-backup',
+      version: SNAPSHOT_VERSION,
+    });
   });
 });

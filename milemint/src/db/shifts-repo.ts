@@ -1,6 +1,8 @@
 import * as Crypto from 'expo-crypto';
 import type { SQLiteDatabase } from 'expo-sqlite';
 
+import { inWriteTransaction, withWriteLock } from './transaction';
+
 /** A working shift in shift mode (couriers, gig drivers). */
 export type Shift = { id: string; startedAt: string; endedAt: string | null };
 
@@ -17,7 +19,8 @@ export const SHIFT_GRACE_MS = 10 * 60_000;
 /** A shift left running ends by itself after this long (nobody works a 16-hour delivery shift). */
 export const MAX_SHIFT_MS = 16 * 60 * 60_000;
 
-export async function currentShift(db: SQLiteDatabase, now = new Date()): Promise<Shift | null> {
+/** The open shift, closing a forgotten one first. Doesn't take the write lock (callers hold it). */
+async function openShift(db: SQLiteDatabase, now: Date): Promise<Shift | null> {
   const row = await db.getFirstAsync<ShiftRow>(
     'SELECT * FROM shifts WHERE ended_at IS NULL ORDER BY started_at DESC LIMIT 1;',
   );
@@ -30,20 +33,38 @@ export async function currentShift(db: SQLiteDatabase, now = new Date()): Promis
   return null;
 }
 
-export async function startShift(db: SQLiteDatabase, now = new Date()): Promise<Shift> {
-  const open = await currentShift(db);
-  if (open) return open;
-  const shift: Shift = { id: Crypto.randomUUID(), startedAt: now.toISOString(), endedAt: null };
-  await db.runAsync(
-    'INSERT INTO shifts (id, started_at, ended_at) VALUES (?, ?, NULL);',
-    shift.id,
-    shift.startedAt,
+export async function currentShift(db: SQLiteDatabase, now = new Date()): Promise<Shift | null> {
+  const row = await db.getFirstAsync<ShiftRow>(
+    'SELECT * FROM shifts WHERE ended_at IS NULL ORDER BY started_at DESC LIMIT 1;',
   );
-  return shift;
+  if (!row || now.getTime() <= Date.parse(row.started_at) + MAX_SHIFT_MS) return row ? fromRow(row) : null;
+  return withWriteLock(() => openShift(db, now));
+}
+
+/**
+ * Starts a shift, or returns the one already open. Checked and inserted in one
+ * transaction, so a double tap (or two screens) can't open two.
+ */
+export async function startShift(db: SQLiteDatabase, now = new Date()): Promise<Shift> {
+  let result: Shift | null = null;
+  await inWriteTransaction(db, async () => {
+    result = await openShift(db, now);
+    if (result) return;
+    const shift: Shift = { id: Crypto.randomUUID(), startedAt: now.toISOString(), endedAt: null };
+    await db.runAsync(
+      'INSERT INTO shifts (id, started_at, ended_at) VALUES (?, ?, NULL);',
+      shift.id,
+      shift.startedAt,
+    );
+    result = shift;
+  });
+  return result!;
 }
 
 export async function endShift(db: SQLiteDatabase, now = new Date()): Promise<void> {
-  await db.runAsync('UPDATE shifts SET ended_at = ? WHERE ended_at IS NULL;', now.toISOString());
+  await withWriteLock(() =>
+    db.runAsync('UPDATE shifts SET ended_at = ? WHERE ended_at IS NULL;', now.toISOString()),
+  );
 }
 
 /** The shift a drive that started at `startedAt` belongs to, if any. */

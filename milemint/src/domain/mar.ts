@@ -48,6 +48,7 @@ import { toLocalIsoDate } from './trip';
 
 /** The marginal income tax rate used for the "tax back" estimate. */
 export type TaxBand = 'basic' | 'higher' | 'additional' | 'unsure';
+export const TAX_BANDS: readonly TaxBand[] = ['basic', 'higher', 'additional', 'unsure'];
 
 /** Percent. "Not sure" estimates at the basic rate. */
 export const TAX_BAND_RATES: Record<TaxBand, number> = { basic: 20, higher: 40, additional: 45, unsure: 20 };

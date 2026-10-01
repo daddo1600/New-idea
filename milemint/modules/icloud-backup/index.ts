@@ -15,6 +15,9 @@ type ICloudBackupNative = {
   read(name: string): Promise<string>;
   seal(base64: string): Promise<string>;
   open(base64: string): Promise<string>;
+  /** Builds from after backups grew past what base64 on the JavaScript thread can handle; see `sealsText`. */
+  sealText?(text: string): Promise<string>;
+  openText?(base64: string): Promise<string>;
 };
 
 /** ios/ICloudBackupModule.swift. Missing on the web, on Android and in builds from before it was added. */
@@ -46,4 +49,15 @@ export const ICloudBackup = {
   read: (name: string): Promise<string> => (native ? native.read(name) : missing()),
   seal: (base64: string): Promise<string> => (native ? native.seal(base64) : missing()),
   open: (base64: string): Promise<string> => (native ? native.open(base64) : missing()),
+  /**
+   * This build's native module takes the snapshot as text (`sealText`) and
+   * gives it back as text (`openText`), converting to and from UTF-8 in Swift.
+   * Older builds (an over-the-air update can run on one) only have the base64
+   * `seal`/`open`, so callers check this first.
+   */
+  sealsText: typeof native?.sealText === 'function' && typeof native?.openText === 'function',
+  /** Compresses and encrypts text; the sealed backup comes back as base64, ready for `write`. */
+  sealText: (text: string): Promise<string> => (native?.sealText ? native.sealText(text) : missing()),
+  /** A sealed backup (base64, from `read`) opened back into its text. */
+  openText: (base64: string): Promise<string> => (native?.openText ? native.openText(base64) : missing()),
 };

@@ -1,4 +1,5 @@
 import { SCHEMA_VERSION } from '@/db/migrations';
+import { decodePolyline, encodePolyline } from '@/domain/polyline';
 
 /**
  * A backup is a versioned JSON snapshot of every table needed to rebuild the
@@ -7,8 +8,11 @@ import { SCHEMA_VERSION } from '@/db/migrations';
  */
 
 export const BACKUP_FORMAT = 'milemint-backup';
-/** The snapshot's own layout (not the database schema). Bump only if this file's shape changes. */
-export const SNAPSHOT_VERSION = 1;
+/**
+ * The snapshot's own layout (not the database schema). Bump only if this file's shape changes.
+ * 1: rows exactly as stored. 2: routes packed (see packRoute); version 1 backups still restore.
+ */
+export const SNAPSHOT_VERSION = 2;
 
 /**
  * Tables in a backup, parents before children (foreign keys): restored in
@@ -72,8 +76,68 @@ export function makeSnapshot(
     schemaVersion: meta.schemaVersion ?? SCHEMA_VERSION,
     appVersion: meta.appVersion,
     createdAt: meta.createdAt.toISOString(),
-    tables,
+    tables: { ...tables, trip_routes: tables.trip_routes.map(packRoute) },
   };
+}
+
+// ─── Routes ────────────────────────────────────────────────────────────────
+
+/*
+ * Routes are nearly all of a backup: a year of driving is tens of megabytes
+ * of JSON points. In a backup each is packed as an encoded polyline (five
+ * decimal places, about a metre, as new routes are stored anyway; see
+ * domain/polyline.ts) in a `polyline` column instead of `points`, a tenth of
+ * the size or less. Restoring unpacks it back into `points`.
+ */
+
+const POLYLINE = /^[\x3f-\x7e]*$/;
+
+const isPoint = (value: unknown): value is { latitude: number; longitude: number } =>
+  isRecord(value) &&
+  typeof value.latitude === 'number' &&
+  Number.isFinite(value.latitude) &&
+  typeof value.longitude === 'number' &&
+  Number.isFinite(value.longitude);
+
+/** A route row with its points packed; left as it is if they aren't a plain list of points. */
+export function packRoute(row: Row): Row {
+  if (typeof row.points !== 'string') return row;
+  let points: unknown;
+  try {
+    points = JSON.parse(row.points);
+  } catch {
+    return row;
+  }
+  if (!Array.isArray(points) || !points.every(isPoint)) return row;
+  const { points: _unpacked, ...rest } = row;
+  return { ...rest, polyline: encodePolyline(points) };
+}
+
+/** A route row as stored in the database: a packed one unpacked back into `points`. */
+export function unpackRoute(row: Row): Row {
+  if (typeof row.polyline !== 'string') return row;
+  const points = decodePolyline(row.polyline);
+  if (!points) throw new BackupError('not-a-backup', 'A route is damaged');
+  const { polyline: _packed, ...rest } = row;
+  return { ...rest, points: JSON.stringify(points) };
+}
+
+/**
+ * Runs `step` on each row, giving the JavaScript thread back every few
+ * milliseconds: a year of routes takes a while on a phone, and the app
+ * shouldn't freeze meanwhile.
+ */
+export async function mapRowsInTurns(rows: readonly Row[], step: (row: Row) => Row): Promise<Row[]> {
+  const out: Row[] = [];
+  let since = Date.now();
+  for (const row of rows) {
+    out.push(step(row));
+    if (Date.now() - since >= 8) {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      since = Date.now();
+    }
+  }
+  return out;
 }
 
 export const tripCount = (snapshot: Snapshot): number => snapshot.tables.trips.length;
@@ -182,6 +246,14 @@ export function validateSnapshot(value: unknown, currentSchema = SCHEMA_VERSION)
   const checked = emptyTables();
   // Tables this build doesn't know are ignored.
   for (const table of BACKUP_TABLES) checked[table] = checkRows(table, tables[table]);
+  if (
+    checked.trip_routes.some(
+      (route) =>
+        typeof route.points !== 'string' && (typeof route.polyline !== 'string' || !POLYLINE.test(route.polyline)),
+    )
+  ) {
+    throw new BackupError('not-a-backup', 'A route has no points');
+  }
   if (checked.trips.some((trip) => typeof trip.id !== 'string')) {
     throw new BackupError('not-a-backup', 'A trip has no id');
   }
@@ -256,7 +328,8 @@ export type RestoreStep = { sql: string; rows: Cell[][] };
  * written; a column an older backup lacks takes its default.
  */
 export function restorePlan(snapshot: Snapshot, columns: Record<BackupTable, readonly string[]>): RestoreStep[] {
-  const tables = consistentTables(snapshot.tables);
+  const consistent = consistentTables(snapshot.tables);
+  const tables = { ...consistent, trip_routes: consistent.trip_routes.map(unpackRoute) };
   const clear = [...BACKUP_TABLES].reverse().map((table): RestoreStep => ({ sql: `DELETE FROM ${table};`, rows: [] }));
   const inserts = BACKUP_TABLES.flatMap((table): RestoreStep[] => {
     const rows = tables[table];
