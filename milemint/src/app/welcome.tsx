@@ -286,7 +286,7 @@ export default function WelcomeScreen() {
           ref={scroller}
           contentContainerStyle={[
             styles.content,
-            (!onBrand || step === 2) && styles.contentTop,
+            (!onBrand || step === 2 || step === DONE) && styles.contentTop,
             // Room to scroll an address box up to the top while the keyboard is open.
             typing && step === PLACES && styles.roomToScroll,
           ]}
@@ -501,8 +501,8 @@ export default function WelcomeScreen() {
 
           {step === DONE && (
             <>
-              <LeafMark size={96} />
-              <Text style={[styles.brandTitle, styles.heading]}>You’re all set.</Text>
+              <LeafMark size={72} />
+              <Text style={styles.brandTitleSmall}>You’re all set.</Text>
               <Text style={styles.brandBody}>
                 {status === 'on'
                   ? `Just drive. Each trip appears after you park, and business drives count at ${picked.authority}’s ${topRate} rate.`
@@ -512,15 +512,12 @@ export default function WelcomeScreen() {
                 <Text style={styles.pointTitle}>Good to know</Text>
                 {[
                   ['👉', 'Swipe a trip right for business, left for personal.'],
-                  [
-                    '📍',
-                    'Add more places (clients, the depot, the gym) with “Save as place” on any trip, or in Settings → Places.',
-                  ],
+                  ['📍', 'Save places like clients or the depot from any trip.'],
                   ...(shifts
                     ? [
                         [
                           '▶️',
-                          'Tap “Start shift” on the home screen when you start work. Every drive until you end it is business.',
+                          'Tap “Start shift” when you start work. Every drive until you end it is business.',
                         ],
                       ]
                     : hoursSet
@@ -543,8 +540,8 @@ export default function WelcomeScreen() {
                 <View style={styles.flex}>
                   <Text style={styles.pointTitle}>Free to start</Text>
                   <Text style={styles.pointBody}>
-                    40 automatic drives a month{shifts ? ' (a whole shift counts as one)' : ''}, unlimited trips by
-                    hand and CSV reports. Go Pro any time for unlimited drives.
+                    40 automatic drives a month{shifts ? ' (a whole shift counts as one)' : ''}, plus unlimited trips
+                    by hand. Go Pro any time for unlimited.
                   </Text>
                 </View>
               </View>
@@ -737,7 +734,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     paddingVertical: Spacing.two,
   },
-  reminderRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three },
+  reminderRow: { flexDirection: 'row', alignItems: 'flex-start', gap: Spacing.three },
   card: { borderRadius: 12, padding: Spacing.three, gap: Spacing.one },
   actions: { gap: Spacing.two, width: '100%', maxWidth: MaxContentWidth, alignSelf: 'center' },
   primary: { alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12 },
