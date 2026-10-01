@@ -96,7 +96,7 @@ function Menu({ onClose }: { onClose: () => void }) {
       icon: 'star.fill',
       glyph: '⭐',
       title: isPro ? 'MileMint Pro' : t('Go Pro'),
-      detail: isPro ? t('Active · thank you!') : t('Unlimited drives and PDF reports'),
+      detail: isPro ? t('Active · thank you!') : t('Unlimited drives, PDF reports and accounting exports'),
       highlight: !isPro,
       onPress: () => go('/pro'),
     },

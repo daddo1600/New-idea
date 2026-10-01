@@ -31,6 +31,7 @@ const COMPARISON: readonly [feature: string, free: string | boolean | null, pro:
   [msg('Swipe to sort business trips'), true, true],
   [msg('Work hours, places, learned routes'), true, true],
   [msg('Mileage log export (CSV)'), true, true],
+  [msg('Export to Xero, QuickBooks and FreeAgent'), false, true],
   [msg('Tax-ready PDF report'), false, true],
   [msg('Encrypted on your iPhone, no ads'), true, true],
 ];

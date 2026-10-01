@@ -3,6 +3,7 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { Platform } from 'react-native';
 
+import { DEMO_MODE } from '@/dev/demo';
 import { exportFile, type ExportFormat } from '@/domain/accounting-export';
 import { pageSize, toReportHtml, type MileageReport } from '@/domain/report';
 
@@ -12,7 +13,8 @@ import { pageSize, toReportHtml, type MileageReport } from '@/domain/report';
  * where the user sends it.
  */
 
-export const PDF_AVAILABLE = Platform.OS !== 'web';
+/** The web preview's demo shows the button as on iPhone (for store screenshots). */
+export const PDF_AVAILABLE = Platform.OS !== 'web' || DEMO_MODE;
 
 function cacheFile(name: string): File {
   const file = new File(Paths.cache, name);

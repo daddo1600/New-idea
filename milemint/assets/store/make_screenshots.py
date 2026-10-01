@@ -15,9 +15,10 @@ SHOTS = [
     ("home", "Every mile\nis money.", "Your deduction adds up automatically\nevery time you drive for work."),
     ("list", "Just drive.\nTrips log themselves.", "Start, stop and miles are recorded\nin the background. No buttons."),
     ("swipe", "Swipe to sort\nbusiness trips.", "See what each drive is worth\nbefore you decide."),
+    ("export", "Straight into\nyour books.", "Pro exports to Xero, QuickBooks\nand FreeAgent, ready to import."),
     ("settings", "Set your hours once.\nIt sorts the rest.", "Work hours, saved places and your\nusual routes sort trips for you."),
     ("setup", "Your trips stay\non your iPhone.", "Encrypted on your phone.\nNo account. No ads."),
-    ("compare", "Free to start.\nPro when you need it.", "40 drives a month free, forever.\nUnlimited drives and PDF reports with Pro."),
+    ("compare", "Free to start.\nPro when you need it.", "40 drives a month free, forever.\nPro: unlimited drives, PDF reports\nand accounting exports."),
 ]
 
 
