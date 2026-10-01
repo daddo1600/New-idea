@@ -245,9 +245,19 @@ function QuickIntro({
         {season && hasRider(season.id) && (
           <SeasonRider season={season.id} drive={drive} size={SPLASH_SIZE} xs={roadXs} ys={roadYs} samples={SAMPLES} />
         )}
+        {/* The places flying past, as on the first launch, in every country and season. */}
+        {!reduceMotion && (
+          <IntroScenery
+            size={SPLASH_SIZE}
+            drive={drive}
+            roadAt={roadAt}
+            glyphs={season ? SEASON_PLACES[season.id] : undefined}
+            drop={season?.id === 'festive'}
+          />
+        )}
       </Animated.View>
       <Animated.View style={[styles.counter, counterStyle]}>
-        {season && <Text style={styles.greeting}>{season.greeting}</Text>}
+        {season && <Greeting text={season.greeting} />}
         <Text style={styles.money}>{formatMoney(shown, region)}</Text>
         <Text style={styles.distance}>{t('found this tax year')}</Text>
         {gained > 0 && (
@@ -358,7 +368,7 @@ function FullIntro({
         )}
       </Animated.View>
       <Animated.View style={[styles.counter, counterStyle]}>
-        {season && <Text style={styles.greeting}>{season.greeting}</Text>}
+        {season && <Greeting text={season.greeting} />}
         <Text style={styles.money}>{formatMoney(Math.round(units * ratePerUnit), region)}</Text>
         <Text style={styles.distance}>
           {region.unit === 'mi'
@@ -375,6 +385,21 @@ const SEASON_PLACES: Partial<Record<Season['id'], readonly string[]>> = {
   festive: ['gift', 'gift', 'gift', 'gift', 'gift'],
   halloween: ['pumpkin', 'ghost', 'candy', 'pumpkin', 'ghost'],
 };
+
+/**
+ * The season's line ("Autumn miles add up 🍂"), with the words centred and a
+ * trailing emoji hung just outside them, so it doesn't pull the words left.
+ */
+function Greeting({ text }: { text: string }) {
+  const match = /^(.*?)\s*(\p{Extended_Pictographic}[\p{Extended_Pictographic}\u200d\ufe0f]*)$/u.exec(text);
+  if (!match) return <Text style={styles.greeting}>{text}</Text>;
+  return (
+    <View style={styles.greetingRow}>
+      <Text style={styles.greeting}>{match[1]}</Text>
+      <Text style={[styles.greeting, styles.greetingEmoji]}>{match[2]}</Text>
+    </View>
+  );
+}
 
 /** The logo with the road being laid, the car (unless a rider stands in) and the season's hat. */
 function SeasonalLeaf({
@@ -407,6 +432,8 @@ function SeasonalLeaf({
 const styles = StyleSheet.create({
   layer: { zIndex: 10 },
   greeting: { color: '#FFFFFF', fontSize: 15, fontWeight: '700', marginBottom: 4 },
+  greetingRow: { alignItems: 'center' },
+  greetingEmoji: { position: 'absolute', left: '100%', marginLeft: 6 },
   gained: { color: '#FACC15', fontSize: 15, fontWeight: '700', marginTop: 6 },
   container: {
     backgroundColor: INTRO_BACKGROUND,
