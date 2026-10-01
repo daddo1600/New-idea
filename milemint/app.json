@@ -64,7 +64,8 @@
         }
       ],
       "expo-iap",
-      "./plugins/without-push-entitlement"
+      "./plugins/without-push-entitlement",
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true,

@@ -1,8 +1,10 @@
+import { getCalendars, getLocales } from 'expo-localization';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { BrandGradient } from '@/components/brand-gradient';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { detectRegion } from '@/domain/detect-region';
 import { Spacing } from '@/constants/theme';
 import {
   DEFAULT_REGION,
@@ -19,12 +21,22 @@ const UNIT_NAMES = { mi: 'miles', km: 'km' } as const;
 /** Short enough to fit a half-width tile beside the flag. */
 const SHORT_NAMES: Record<RegionCode, string> = { US: 'USA', GB: 'UK', CA: 'Canada', AU: 'Australia' };
 
-/** The phone's region as a MileMint country, e.g. an en-GB phone → GB. */
+/** The phone's country as a MileMint region (UK phone → GB), from its Region setting; no location permission. */
 export function phoneRegion(): RegionCode {
   try {
-    return regionFromLocale(Intl.DateTimeFormat().resolvedOptions().locale) ?? DEFAULT_REGION;
+    // The iPhone's Region setting, then its time zone, then the language: no location permission needed.
+    const [locale] = getLocales();
+    const [calendar] = getCalendars();
+    return (
+      detectRegion({ regionCode: locale?.regionCode, timeZone: calendar?.timeZone, locale: locale?.languageTag }) ??
+      DEFAULT_REGION
+    );
   } catch {
-    return DEFAULT_REGION;
+    try {
+      return regionFromLocale(Intl.DateTimeFormat().resolvedOptions().locale) ?? DEFAULT_REGION;
+    } catch {
+      return DEFAULT_REGION;
+    }
   }
 }
 
