@@ -6,7 +6,14 @@ import type { AutoReason, ClassifiedTrip } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
 import { roundRoute } from '@/domain/polyline';
 import { splitRoute } from '@/domain/shift-split';
-import { toLocalIsoDate, type Classification, type Trip, type TripSource, type VehicleType } from '@/domain/trip';
+import {
+  isValidCostMinor,
+  toLocalIsoDate,
+  type Classification,
+  type Trip,
+  type TripSource,
+  type VehicleType,
+} from '@/domain/trip';
 
 import { loadSettings } from './settings-repo';
 import { inWriteTransaction, withWriteLock } from './transaction';
@@ -31,6 +38,8 @@ type TripRow = {
   vehicle_id: string | null;
   shift_id: string | null;
   off_shift_id?: string | null;
+  parking_minor?: number | null;
+  tolls_minor?: number | null;
 };
 
 function fromRow(row: TripRow): Trip {
@@ -53,10 +62,21 @@ function fromRow(row: TripRow): Trip {
     vehicleId: row.vehicle_id ?? null,
     shiftId: row.shift_id ?? null,
     offShiftId: row.off_shift_id ?? null,
+    parkingMinor: row.parking_minor ?? 0,
+    tollsMinor: row.tolls_minor ?? 0,
   };
 }
 
-type AutoFields = 'startPlaceId' | 'endPlaceId' | 'autoReason' | 'vehicle' | 'vehicleId' | 'shiftId' | 'offShiftId';
+type AutoFields =
+  | 'startPlaceId'
+  | 'endPlaceId'
+  | 'autoReason'
+  | 'vehicle'
+  | 'vehicleId'
+  | 'shiftId'
+  | 'offShiftId'
+  | 'parkingMinor'
+  | 'tollsMinor';
 export type NewTrip = Omit<Trip, 'id' | 'createdAt' | AutoFields> & Partial<Pick<Trip, AutoFields>>;
 
 export async function listTrips(db: SQLiteDatabase): Promise<Trip[]> {
@@ -239,9 +259,12 @@ export async function insertTripUnlocked(
     shiftId: null,
     offShiftId: null,
     ...input,
+    parkingMinor: input.parkingMinor ?? 0,
+    tollsMinor: input.tollsMinor ?? 0,
     id: Crypto.randomUUID(),
     createdAt: new Date().toISOString(),
   };
+  checkCosts(trip);
   // A place or vehicle deleted since the caller looked it up (the background
   // tracker reverse-geocodes for a while) only unlinks the trip: the drive is still saved.
   if (!(await exists(db, 'places', trip.startPlaceId))) trip.startPlaceId = null;
@@ -250,8 +273,9 @@ export async function insertTripUnlocked(
   await db.runAsync(
     `INSERT INTO trips (id, started_at, local_date, ended_at, start_label, end_label,
        distance_meters, classification, purpose, source, created_at,
-       start_place_id, end_place_id, auto_reason, auto_default, vehicle, vehicle_id, shift_id, off_shift_id)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+       start_place_id, end_place_id, auto_reason, auto_default, vehicle, vehicle_id, shift_id, off_shift_id,
+       parking_minor, tolls_minor)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
     trip.id,
     trip.startedAt,
     trip.localDate,
@@ -271,6 +295,8 @@ export async function insertTripUnlocked(
     trip.vehicleId,
     trip.shiftId,
     trip.offShiftId ?? null,
+    trip.parkingMinor ?? 0,
+    trip.tollsMinor ?? 0,
   );
   if (route.length > 1) {
     await db.runAsync(
@@ -280,6 +306,9 @@ export async function insertTripUnlocked(
     );
   }
   await logEdit(db, trip.id, 'create', null, null, trip.source);
+  // Entered with the drive (added by hand): recorded at the time, so not an edit.
+  if (trip.parkingMinor) await logEdit(db, trip.id, 'create', 'parking_minor', null, String(trip.parkingMinor));
+  if (trip.tollsMinor) await logEdit(db, trip.id, 'create', 'tolls_minor', null, String(trip.tollsMinor));
   // Separate 'auto' entries so an auditor can tell a rule's guess from the user's choice.
   if (trip.autoReason && trip.classification !== 'unclassified') {
     await logEdit(db, trip.id, 'auto', 'classification', 'unclassified', trip.classification);
@@ -287,6 +316,14 @@ export async function insertTripUnlocked(
     if (trip.purpose) await logEdit(db, trip.id, 'auto', 'purpose', '', trip.purpose);
   }
   return trip;
+}
+
+/** Parking and tolls must be whole minor units from 0 to MAX_COST_MINOR; anything else is a bug upstream. */
+function checkCosts(changes: Partial<Pick<Trip, 'parkingMinor' | 'tollsMinor'>>) {
+  for (const key of ['parkingMinor', 'tollsMinor'] as const) {
+    const value = changes[key];
+    if (value !== undefined && !isValidCostMinor(value)) throw new RangeError(`${key} out of range: ${value}`);
+  }
 }
 
 /** What the part of a drive after a cut is: in the shift (work) or cut off it. */
@@ -301,6 +338,8 @@ export type CutPart =
  * drive ended, in the shift (business, "Deliveries") or cut off it (left to
  * sort). The two distances add up to the original exactly. Logged as
  * automatic changes, so the audit trail shows the drive was split.
+ * Parking and tolls stay on the first part (they were paid once, and the
+ * drive keeps its id); the new part starts with none.
  * Returns the new part, or null when `at` isn't inside the drive.
  */
 export async function splitTripUnlocked(
@@ -442,11 +481,17 @@ export async function setClassification(
   });
 }
 
-/** Updates purpose and place names, logging each field that differs from the saved trip. */
+/**
+ * Updates purpose, place names, vehicle, parking and tolls, logging each
+ * field that differs from the saved trip. Parking and tolls must be whole
+ * minor units within MAX_COST_MINOR (RangeError otherwise, nothing saved).
+ */
 export async function updateTripDetails(
   db: SQLiteDatabase,
   trip: Pick<Trip, 'id'>,
-  changes: Partial<Pick<Trip, 'purpose' | 'startLabel' | 'endLabel' | 'vehicle' | 'vehicleId'>>,
+  changes: Partial<
+    Pick<Trip, 'purpose' | 'startLabel' | 'endLabel' | 'vehicle' | 'vehicleId' | 'parkingMinor' | 'tollsMinor'>
+  >,
 ): Promise<void> {
   const columns = {
     purpose: 'purpose',
@@ -454,23 +499,26 @@ export async function updateTripDetails(
     endLabel: 'end_label',
     vehicle: 'vehicle',
     vehicleId: 'vehicle_id',
+    parkingMinor: 'parking_minor',
+    tollsMinor: 'tolls_minor',
   } as const;
   const keys = (Object.keys(columns) as (keyof typeof columns)[]).filter((key) => changes[key] !== undefined);
   if (keys.length === 0) return;
+  checkCosts(changes);
   await inWriteTransaction(db, async () => {
     const saved = await getTrip(db, trip.id);
     if (!saved) return;
     for (const key of keys) {
-      const value = changes[key] as string;
+      const value = changes[key];
       if (value === saved[key]) {
         // Saving the purpose the app filled in, unchanged: the user has checked it, and it's theirs now.
-        if (key === 'purpose' && value && (await purposeWasFilled(db, saved.id))) {
+        if (key === 'purpose' && typeof value === 'string' && value && (await purposeWasFilled(db, saved.id))) {
           await logEdit(db, saved.id, 'update', 'purpose', value, value);
         }
         continue;
       }
-      await db.runAsync(`UPDATE trips SET ${columns[key]} = ? WHERE id = ?;`, value, saved.id);
-      await logEdit(db, saved.id, 'update', columns[key], saved[key], value);
+      await db.runAsync(`UPDATE trips SET ${columns[key]} = ? WHERE id = ?;`, value ?? null, saved.id);
+      await logEdit(db, saved.id, 'update', columns[key], textOf(saved[key]), textOf(value));
     }
   });
 }
@@ -515,6 +563,10 @@ export async function deleteTrip(db: SQLiteDatabase, trip: Pick<Trip, 'id'>): Pr
     await logEdit(db, saved.id, 'delete', null, JSON.stringify(saved), null);
   });
 }
+
+/** A field's value as the edit log keeps it: text, or null. */
+const textOf = (value: string | number | null | undefined) =>
+  value === null || value === undefined ? null : String(value);
 
 function logEdit(
   db: SQLiteDatabase,

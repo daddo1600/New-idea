@@ -3,6 +3,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, TextInput } from 'react-native';
 
+import { CostFields, EMPTY_COSTS, maxCost, readCosts, type CostDraft } from '@/components/cost-fields';
 import { GaragePicker } from '@/components/garage-picker';
 import { PurposePicker } from '@/components/purpose-picker';
 import { Segmented } from '@/components/segmented';
@@ -23,11 +24,13 @@ import type { LatLng } from '@/domain/geo';
 import type { PlaceKind } from '@/domain/places';
 import { isAreaOnly, isPrivateLabel, placeNameSet } from '@/domain/privacy';
 import { loadSettings } from '@/db/settings-repo';
-import { formatDistance } from '@/domain/regions';
+import { minorToInput } from '@/domain/parse-number';
+import { costsNote, formatDistance } from '@/domain/regions';
 import { frequentPurposes } from '@/domain/suggestions';
 import { type Classification, type Trip, type VehicleType } from '@/domain/trip';
 import type { Vehicle } from '@/domain/vehicles';
 import { listVehicles } from '@/db/vehicles-repo';
+import { useMileagePay } from '@/hooks/use-mileage-pay';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { useRegion } from '@/region/region';
@@ -62,6 +65,8 @@ export default function TripScreen() {
   const [vehicle, setVehicle] = useState<VehicleType>('car');
   const [vehicleId, setVehicleId] = useState<string | null>(null);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [costs, setCosts] = useState<CostDraft>(EMPTY_COSTS);
+  const employee = useMileagePay().pay?.employee ?? false;
   const [purposes, setPurposes] = useState<string[]>([]);
   const [clientPrivacy, setClientPrivacy] = useState(false);
   // Null until loaded: the privacy note waits for it rather than guess.
@@ -88,6 +93,7 @@ export default function TripScreen() {
         setPurpose(loaded.purpose);
         setVehicle(loaded.vehicle);
         setVehicleId(loaded.vehicleId);
+        setCosts({ parking: minorToInput(loaded.parkingMinor), tolls: minorToInput(loaded.tollsMinor) });
       }
     })();
     return () => {
@@ -148,6 +154,8 @@ export default function TripScreen() {
     if (business && !purpose.trim()) {
       return setError(t('{{authority}} needs a business purpose, e.g. "Client meeting".', { authority: region.authority }));
     }
+    const paid = readCosts(costs);
+    if ('error' in paid) return setError(t(paid.error, { max: maxCost(region) }));
     setError(null);
     setSaving(true);
     try {
@@ -157,6 +165,8 @@ export default function TripScreen() {
         purpose: purpose.trim(),
         vehicle,
         vehicleId,
+        parkingMinor: paid.parkingMinor,
+        tollsMinor: paid.tollsMinor,
       });
       router.back();
     } catch {
@@ -216,6 +226,17 @@ export default function TripScreen() {
             />
           )}
         </Field>
+        <CostFields
+          value={costs}
+          onChange={(next) => {
+            setError(null);
+            setCosts(next);
+          }}
+          region={region}
+          note={
+            business ? t(costsNote(region, employee)) : t('Kept with the drive, but only counted on business drives.')
+          }
+        />
         {error && (
           <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
             {error}

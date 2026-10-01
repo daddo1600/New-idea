@@ -34,5 +34,6 @@ export async function refreshLaunchTotal(db: SQLiteDatabase): Promise<void> {
     const relief = marForYear(visible, region, year, { employerRate: settings.employerRate, band: settings.taxBand });
     return rememberTotal(relief.relief);
   }
-  await rememberTotal(summarizeTaxYear(visible, region, year).deduction);
+  // As home's hero total: parking and tolls included where they count.
+  await rememberTotal(summarizeTaxYear(visible, region, year).total);
 }

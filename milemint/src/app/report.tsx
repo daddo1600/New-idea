@@ -19,8 +19,9 @@ import { formatsFor, PRO_FORMATS, type ExportFormat } from '@/domain/accounting-
 import { logbooksForReport, summarizeLogbook, type CarExpenses, type Logbook } from '@/domain/logbook';
 import { buildReport, reportYears } from '@/domain/report';
 import { parseOdometer } from '@/domain/parse-number';
-import { currentTaxYear, formatDistance, formatMoney, fromUnits, taxYearLabel } from '@/domain/regions';
+import { costsNote, currentTaxYear, formatDistance, formatMoney, fromUnits, taxYearLabel } from '@/domain/regions';
 import { toLocalIsoDate } from '@/domain/trip';
+import { useMileagePay } from '@/hooks/use-mileage-pay';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
@@ -47,7 +48,7 @@ const FORMAT_NOTES: Record<Exclude<ExportFormat, 'spreadsheet'>, string> = {
     'Your business trips with date, description, distance and vehicle: everything FreeAgent’s mileage form asks for.',
   ),
   'expense-claim': msg(
-    'A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.',
+    'A claim line for every business trip (date, from, to, purpose, distance, rate, amount, parking and tolls) for your employer’s expense system.',
   ),
 };
 
@@ -62,6 +63,8 @@ export default function ReportScreen() {
   const allowance = useAllowance();
   const { region } = useRegion();
   const { trips, places } = useTrips();
+  // UK employees: parking and tolls are listed apart from Mileage Allowance Relief.
+  const employee = useMileagePay().pay?.employee ?? false;
   const [editedIds, setEditedIds] = useState<Set<string>>(new Set());
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [year, setYear] = useState(() => String(currentTaxYear(region)));
@@ -143,6 +146,7 @@ export default function ReportScreen() {
     () =>
       buildReport(trips ?? [], region, Number(year), {
         locked,
+        employee,
         places,
         editedIds,
         odometer: odometer ?? undefined,
@@ -152,7 +156,7 @@ export default function ReportScreen() {
           expenses: expenses?.get(summary.logbook.vehicleId) ?? null,
         })),
       }),
-    [trips, locked, region, year, places, editedIds, odometer, vehicles, yearLogbooks, expenses],
+    [trips, locked, employee, region, year, places, editedIds, odometer, vehicles, yearLogbooks, expenses],
   );
 
   if (!trips) return <ActivityIndicator style={styles.loading} />;
@@ -208,7 +212,7 @@ export default function ReportScreen() {
               ? t('{{year}} tax year at {{authority}} rates', { year: report.label, authority: region.authority })
               : t('{{year}} at {{authority}} rates', { year: report.label, authority: region.authority })}
           </ThemedText>
-          <ThemedText type="title">{formatMoney(report.deduction, region)}</ThemedText>
+          <ThemedText type="title">{formatMoney(report.total, region)}</ThemedText>
           <View style={styles.lines}>
             <Line label={miles ? t('Business miles') : t('Business km')} value={distance(report.businessDistance)} />
             <Line label={miles ? t('Commuting miles') : t('Commuting km')} value={distance(report.commutingDistance)} />
@@ -218,6 +222,23 @@ export default function ReportScreen() {
             />
             <Line label={miles ? t('Total miles') : t('Total km')} value={distance(report.totalDistance)} bold />
           </View>
+          {report.parking + report.tolls > 0 && (
+            <View style={styles.lines}>
+              {report.costsAdded && (
+                <Line
+                  label={t('Mileage at {{authority}} rates', { authority: region.authority })}
+                  value={formatMoney(report.deduction, region)}
+                />
+              )}
+              <Line label={t('Parking')} value={formatMoney(report.parking, region)} />
+              <Line label={t('Tolls')} value={formatMoney(report.tolls, region)} />
+              <ThemedText type="small" themeColor="textSecondary">
+                {report.costsAdded
+                  ? t('Included in the total above. {{note}}', { note: t(costsNote(region, employee)) })
+                  : t('Recorded, not included in the total above. {{note}}', { note: t(costsNote(region, employee)) })}
+              </ThemedText>
+            </View>
+          )}
           {region.caveat && (
             <ThemedText type="small" themeColor="textSecondary">
               {t(region.caveat)}

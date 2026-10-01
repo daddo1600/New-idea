@@ -73,6 +73,8 @@ describeSqlite('migration 10: indexes and the drive-in-progress route', () => {
     await migrate(db as never);
     // Back to how version 9 left it.
     db.raw.exec(`
+      ALTER TABLE trips DROP COLUMN parking_minor;
+      ALTER TABLE trips DROP COLUMN tolls_minor;
       DROP TABLE tracker_route;
       DROP INDEX trips_started_at;
       DROP INDEX trips_local_date_started_at;

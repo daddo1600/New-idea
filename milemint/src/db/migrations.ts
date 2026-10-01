@@ -176,6 +176,13 @@ const MIGRATIONS: readonly string[] = [
   CREATE INDEX trips_shift ON trips (shift_id);
   CREATE INDEX trip_edits_updates ON trip_edits (trip_id, field, old_value, at) WHERE action = 'update';
   `,
+  `
+  -- Parking and tolls paid on the drive, in minor units (pence, cents). Tax
+  -- offices let business parking and tolls be claimed on top of the mileage
+  -- rate (where they do: see Region.costs); 0 when none were entered.
+  ALTER TABLE trips ADD COLUMN parking_minor INTEGER NOT NULL DEFAULT 0;
+  ALTER TABLE trips ADD COLUMN tolls_minor INTEGER NOT NULL DEFAULT 0;
+  `,
 ];
 
 /** The schema this build creates: stored in PRAGMA user_version, and in iCloud backups. */

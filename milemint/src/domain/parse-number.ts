@@ -58,3 +58,26 @@ export function parseOdometer(text: string): number | null | undefined {
   if (/^\d{1,3}(\.\d{3})+$/.test(compact)) return Number(compact.split('.').join(''));
   return parseNumber(text);
 }
+
+/**
+ * An amount of money as typed, in minor units (pence, cents): "3.50", "3,50"
+ * (a decimal comma), "£3.50", "$12", "A$4.20", "1,250.00". As parseNumber,
+ * with a currency sign (and a country's letters before it) allowed in front,
+ * and at most two decimal places: "3.505" is a typo, not money.
+ *
+ * Empty → null; not an amount (negative, three decimals, words) → undefined.
+ */
+export function parseMoneyMinor(text: string): number | null | undefined {
+  const plain = text.trim().replace(/^(?:[A-Za-z]{1,3}\s?)?[$£€]\s*/, '');
+  const value = parseNumber(plain);
+  if (value === null || value === undefined) return value;
+  const minor = Math.round(value * 100);
+  // More than two decimal places once read ("3.505", "0,125"), or too big to hold exactly.
+  if (Math.abs(value * 100 - minor) > 1e-6 || !Number.isSafeInteger(minor)) return undefined;
+  return minor;
+}
+
+/** Minor units as an amount to edit: 350 → "3.50", 0 → "" (nothing entered). */
+export function minorToInput(minor: number | null | undefined): string {
+  return minor ? (minor / 100).toFixed(2) : '';
+}

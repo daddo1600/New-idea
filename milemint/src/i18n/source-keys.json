@@ -533,6 +533,12 @@
     ]
   },
   {
+    "key": "{{what}}, in {{currency}}",
+    "files": [
+      "components/cost-fields.tsx"
+    ]
+  },
+  {
     "key": "{{year}} at {{authority}} rates",
     "files": [
       "app/report.tsx"
@@ -568,6 +574,18 @@
     "key": "+ Add a vehicle",
     "files": [
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "+ Parking or tolls",
+    "files": [
+      "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "+{{amount}} parking & tolls",
+    "files": [
+      "app/index.tsx"
     ]
   },
   {
@@ -667,7 +685,7 @@
     ]
   },
   {
-    "key": "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.",
+    "key": "A claim line for every business trip (date, from, to, purpose, distance, rate, amount, parking and tolls) for your employer’s expense system.",
     "files": [
       "app/report.tsx"
     ]
@@ -1262,6 +1280,12 @@
     "key": "Business or personal? Worth {{amount}} if business.",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Business parking and tolls are deductible on top of the mileage rate. Parking at your regular workplace isn’t, and fines never are.",
+    "files": [
+      "domain/regions.ts"
     ]
   },
   {
@@ -1971,6 +1995,12 @@
     ]
   },
   {
+    "key": "Employees: parking and tolls are not part of Mileage Allowance Relief. They are listed separately, to claim from your employer or as a separate employment expense.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
     "key": "Employees: unreimbursed mileage can’t be deducted on your federal return. Use your log to get paid back by your employer; a few states still allow a deduction.",
     "files": [
       "domain/deadlines.ts"
@@ -2089,6 +2119,12 @@
     ]
   },
   {
+    "key": "Enter parking as an amount, e.g. 3.50.",
+    "files": [
+      "components/cost-fields.tsx"
+    ]
+  },
+  {
     "key": "Enter pence a mile as a number, e.g. 45.",
     "files": [
       "app/settings.tsx",
@@ -2105,6 +2141,12 @@
     "key": "Enter the miles driven, e.g. 12.5.",
     "files": [
       "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Enter tolls as an amount, e.g. 3.50.",
+    "files": [
+      "components/cost-fields.tsx"
     ]
   },
   {
@@ -2816,9 +2858,21 @@
     ]
   },
   {
+    "key": "incl. {{amount}} parking & tolls",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
     "key": "Included",
     "files": [
       "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Included in the total above. {{note}}",
+    "files": [
+      "app/report.tsx"
     ]
   },
   {
@@ -2937,6 +2991,13 @@
     "key": "Keep them",
     "files": [
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Kept with the drive, but only counted on business drives.",
+    "files": [
+      "app/add-trip.tsx",
+      "app/trip/[id].tsx"
     ]
   },
   {
@@ -3212,6 +3273,12 @@
     "key": "Mileage Allowance Relief you can claim",
     "files": [
       "app/claim-relief.tsx"
+    ]
+  },
+  {
+    "key": "Mileage at {{authority}} rates",
+    "files": [
+      "app/report.tsx"
     ]
   },
   {
@@ -4034,9 +4101,52 @@
     ]
   },
   {
+    "key": "Parking",
+    "files": [
+      "app/report.tsx",
+      "components/cost-fields.tsx"
+    ]
+  },
+  {
+    "key": "Parking & tolls: {{amount}} (recorded)",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Parking and tolls are listed separately and not added to the per-km figure. Self-employed: business parking fees are deducted in full on T2125, not reduced to your business-use share. Ask your accountant whether your tolls can be claimed.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Parking and tolls aren’t part of Mileage Allowance Relief. Claim them from your employer, or as a separate employment expense if they don’t repay them. Fines never count.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Parking at your regular place of work and tolls on your commute are not deductible.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
     "key": "Parking fees and tolls for business trips can be deducted on top of the standard mileage rate.",
     "files": [
       "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Parking fees and tolls for work trips aren’t covered by the cents per km rate. Claim them separately: individuals as Work-related travel expenses (D2), sole traders with business expenses. Not parking at your regular workplace, or tolls between home and work.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Parking or tolls over {{max}} for one drive? Check the amount.",
+    "files": [
+      "components/cost-fields.tsx"
     ]
   },
   {
@@ -4241,6 +4351,18 @@
     "key": "Ready when you are",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Recorded apart from the per-km figure. Self-employed: business parking is usually claimed in full. Ask your accountant about tolls.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "Recorded, not included in the total above. {{note}}",
+    "files": [
+      "app/report.tsx"
     ]
   },
   {
@@ -4629,6 +4751,12 @@
     ]
   },
   {
+    "key": "Self-employed: business parking, tolls and Congestion Charge or ULEZ charges are claimed on top of the mileage rate. Parking and traffic fines never are.",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
     "key": "Self-employed: enter business, commuting and other miles on Schedule C, Part IV (lines 44a–44c) and the deduction on line 9, Car and truck expenses, using the standard mileage rate.",
     "files": [
       "domain/regions.ts"
@@ -4644,6 +4772,12 @@
     "key": "Self-employed: once a year, online by 31 January after the tax year ends (5 April). Your mileage goes in Car, van and travel expenses.",
     "files": [
       "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Self-employed: parking, tolls and Congestion Charge or ULEZ charges on business journeys are added on top of the mileage figure, in the same Car, van and travel expenses box. Parking and traffic fines are never allowable.",
+    "files": [
+      "domain/regions.ts"
     ]
   },
   {
@@ -5567,6 +5701,13 @@
     ]
   },
   {
+    "key": "Tolls",
+    "files": [
+      "app/report.tsx",
+      "components/cost-fields.tsx"
+    ]
+  },
+  {
     "key": "Total km",
     "files": [
       "app/report.tsx"
@@ -6036,6 +6177,12 @@
     "key": "Work on {{day}}",
     "files": [
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Work parking and tolls aren’t covered by cents per km, so they’re claimed separately. Not parking at your regular workplace, or tolls on the way there.",
+    "files": [
+      "domain/regions.ts"
     ]
   },
   {

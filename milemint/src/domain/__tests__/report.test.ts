@@ -138,7 +138,8 @@ describe('toCsv', () => {
   it('marks edited trips', () => {
     const edited = trip({});
     const csv = toCsv(buildReport([edited], US, 2026, { editedIds: new Set([edited.id]) }));
-    expect(csv.trim().split('\r\n')[1].endsWith(',Yes')).toBe(true);
+    // "Edited later" keeps its place; parking and tolls come after it.
+    expect(csv.trim().split('\r\n')[1].endsWith(',Yes,0.00,0.00')).toBe(true);
   });
 });
 

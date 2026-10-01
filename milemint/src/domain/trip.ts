@@ -62,7 +62,29 @@ export type Trip = {
    * trip list can offer to check it.
    */
   purposeFilled?: boolean;
+  /**
+   * Parking and tolls (Congestion Charge, bridge and road tolls) paid on the
+   * drive, in minor units (pence, cents); 0 or missing when none. They stay
+   * with the drive whatever it's classified as, but only count on business
+   * drives, and only where the tax office lets them go on top of the mileage
+   * rate (see Region.costs).
+   */
+  parkingMinor?: number;
+  tollsMinor?: number;
 };
+
+/** One drive's parking or tolls can't be more than this (minor units: £1,000 or $1,000): a typo otherwise. */
+export const MAX_COST_MINOR = 100_000;
+
+/** Whether an amount of parking or tolls can be saved: whole minor units, from 0 up to MAX_COST_MINOR. */
+export function isValidCostMinor(value: unknown): value is number {
+  return typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= MAX_COST_MINOR;
+}
+
+/** Parking and tolls on a drive together, in minor units. */
+export function tripCostsMinor(trip: Pick<Trip, 'parkingMinor' | 'tollsMinor'>): number {
+  return (trip.parkingMinor ?? 0) + (trip.tollsMinor ?? 0);
+}
 
 export const METERS_PER_MILE = 1609.344;
 
