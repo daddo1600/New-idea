@@ -16,6 +16,8 @@ import {
 import type { Place } from './places';
 import {
   computeDeductionParts,
+  costsAdded,
+  costsNote,
   describeTier,
   formatDate,
   formatDistance,
@@ -55,6 +57,9 @@ export type ReportRow = {
   parts: DeductionPart[];
   /** Minor units (cents, pence). */
   deduction: number;
+  /** Parking and tolls entered on the drive, minor units; 0 for a locked drive (its value waits for Pro). */
+  parking: number;
+  tolls: number;
   /** Changed after it was recorded (the edit history keeps the originals). */
   edited: boolean;
   /** What it was driven in, e.g. "Honda PCX (AB12 CDE)" or "Car or van". */
@@ -101,7 +106,17 @@ export type MileageReport = {
   missingPurposeCount: number;
   /** Drives in the log whose value waits for Pro; not in any total. */
   lockedCount: number;
+  /** The mileage figure: business distance at the official rates. */
   deduction: number;
+  /** Parking and tolls on business drives with a value, minor units. */
+  parking: number;
+  tolls: number;
+  /** Whether parking and tolls are added to `total` here (see costsAdded), or listed apart. */
+  costsAdded: boolean;
+  /** Made for a UK employee (Mileage Allowance Relief). */
+  employee: boolean;
+  /** The deduction, plus parking and tolls where they count. */
+  total: number;
   byRate: RateTotal[];
   /** Odometer at the start and end of the tax year (region's unit), when the user entered them. */
   odometer: { start: number | null; end: number | null };
@@ -131,6 +146,8 @@ export function buildReport(
     logbooks?: readonly { summary: LogbookSummary; expenses: CarExpenses | null }[];
     /** Free plan: drives past the monthly allowance (lockedTripIds), logged without a value. */
     locked?: ReadonlySet<string>;
+    /** A UK employee (Mileage Allowance Relief): parking and tolls are listed apart, not added. */
+    employee?: boolean;
   } = {},
 ): MileageReport {
   const kindOf = (id: string | null) => options.places?.find((place) => place.id === id)?.kind ?? null;
@@ -154,6 +171,8 @@ export function buildReport(
         commute: isCommute(kindOf(trip.startPlaceId), kindOf(trip.endPlaceId)),
         parts,
         deduction: parts.reduce((sum, part) => sum + part.amount, 0),
+        parking: locked.has(trip.id) ? 0 : (trip.parkingMinor ?? 0),
+        tolls: locked.has(trip.id) ? 0 : (trip.tollsMinor ?? 0),
         edited: options.editedIds?.has(trip.id) ?? false,
         vehicle: vehicleOf(trip),
         showVehicle: (options.vehicles?.length ?? 0) > 1 || (trip.vehicle ?? 'car') !== 'car',
@@ -174,6 +193,11 @@ export function buildReport(
     missingPurposeCount: 0,
     lockedCount: 0,
     deduction: 0,
+    parking: 0,
+    tolls: 0,
+    costsAdded: costsAdded(region, options.employee),
+    employee: options.employee ?? false,
+    total: 0,
     byRate: [],
     odometer: options.odometer ?? { start: null, end: null },
     drivenDistance: null,
@@ -207,6 +231,8 @@ export function buildReport(
     if (row.trip.classification === 'business') {
       report.businessDistance += row.distance;
       report.deduction += row.deduction;
+      report.parking += row.parking;
+      report.tolls += row.tolls;
       for (const part of row.parts) {
         // Cars first (sorted by key), then two-wheelers, each labelled.
         const key = `${part.vehicle === 'car' ? 0 : part.vehicle === 'motorbike' ? 1 : 2}#${part.period.from}#${part.tier}`;
@@ -232,6 +258,7 @@ export function buildReport(
   report.byRate = [...byRate.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([, total]) => total);
+  report.total = report.deduction + (report.costsAdded ? report.parking + report.tolls : 0);
   return report;
 }
 
@@ -282,7 +309,15 @@ export function csvColumns(region: Region): string[] {
     `Deduction (${region.currency})`,
     'Recorded',
     'Edited later',
+    // Added after the columns above, so spreadsheets built on the old layout keep working.
+    `Parking (${region.currency})`,
+    `Tolls (${region.currency})`,
   ];
+}
+
+/** An amount of parking or tolls for a CSV cell: always on a business drive with a value, otherwise only when entered. */
+function costCell(minor: number, business: boolean): string {
+  return business || minor > 0 ? (minor / 100).toFixed(2) : '';
 }
 
 export function toCsv(report: MileageReport): string {
@@ -308,6 +343,8 @@ export function toCsv(report: MileageReport): string {
         business ? (row.deduction / 100).toFixed(2) : '',
         trip.source === 'auto' ? 'Automatically while driving' : `Added by hand on ${trip.createdAt.slice(0, 10)}`,
         row.edited ? 'Yes' : 'No',
+        row.locked ? '' : costCell(row.parking, business),
+        row.locked ? '' : costCell(row.tolls, business),
       ]
         .map(csvCell)
         .join(','),
@@ -376,6 +413,29 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
         `<tr><td>${escapeHtml(total.label)}</td><td class="num">${distance(total.distance)}</td><td class="num">${money(total.deduction)}</td></tr>`,
     )
     .join('');
+  // Parking and tolls: in the deduction table where they're added on top, otherwise a table of their own.
+  const costs = report.parking + report.tolls;
+  const costRows = `<tr><td colspan="2">Parking (business trips)</td><td class="num">${money(report.parking)}</td></tr>` +
+    `<tr><td colspan="2">Tolls and road charges (business trips)</td><td class="num">${money(report.tolls)}</td></tr>`;
+  const deductionRows =
+    costs > 0 && report.costsAdded
+      ? `${rateRows}<tr class="total"><td colspan="2">Mileage at ${escapeHtml(region.authority)} rates</td><td class="num">${money(report.deduction)}</td></tr>` +
+        `${costRows}<tr class="total"><td colspan="2">Total, including parking and tolls</td><td class="num">${money(report.total)}</td></tr>`
+      : `${rateRows}<tr class="total"><td colspan="2">Total</td><td class="num">${money(report.deduction)}</td></tr>`;
+  const separateCosts =
+    costs > 0 && !report.costsAdded
+      ? `<h2>Parking and tolls (recorded, not included above)</h2>
+  <table>
+    <tbody>${costRows}<tr class="total"><td colspan="2">Total parking and tolls</td><td class="num">${money(costs)}</td></tr></tbody>
+  </table>
+  <p class="hint">${escapeHtml(costsNote(region, report.employee))}</p>`
+      : '';
+  // The trip log has their columns only when some drive has them, so a log without any stays as narrow as before.
+  const costColumns = report.rows.some((row) => row.parking + row.tolls > 0);
+  const costCells = (row: ReportRow) =>
+    costColumns
+      ? `<td class="num">${row.parking ? money(row.parking) : ''}</td><td class="num">${row.tolls ? money(row.tolls) : ''}</td>`
+      : '';
   const tripRows = report.rows
     .map((row) => {
       const { trip } = row;
@@ -389,6 +449,7 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
         `${row.showVehicle ? ` · ${escapeHtml(row.vehicle)}` : ''}</td>` +
         `<td>${escapeHtml(trip.purpose)}</td>` +
         `<td class="num">${business ? money(row.deduction) : ''}</td>` +
+        costCells(row) +
         `<td>${trip.source === 'auto' ? 'Auto' : 'Manual'}${row.edited ? ', edited' : ''}</td>` +
         `</tr>`
       );
@@ -441,12 +502,13 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
   <h2>Deduction at ${escapeHtml(region.authority)} rates</h2>
   <table>
     <thead><tr><th>Rate</th><th class="num">Business ${units}</th><th class="num">Deduction</th></tr></thead>
-    <tbody>${rateRows}<tr class="total"><td colspan="2">Total</td><td class="num">${money(report.deduction)}</td></tr></tbody>
+    <tbody>${deductionRows}</tbody>
   </table>
+  ${separateCosts}
 
   <h2>Trip log</h2>
   <table class="log">
-    <thead><tr><th>Date</th><th>From → To</th><th class="num">${Units}</th><th>Type</th><th>Business purpose</th><th class="num">Deduction</th><th>Recorded</th></tr></thead>
+    <thead><tr><th>Date</th><th>From → To</th><th class="num">${Units}</th><th>Type</th><th>Business purpose</th><th class="num">Deduction</th>${costColumns ? '<th class="num">Parking</th><th class="num">Tolls</th>' : ''}<th>Recorded</th></tr></thead>
     <tbody>${tripRows}</tbody>
   </table>
 

@@ -68,7 +68,9 @@ describe('accounting exports (UK)', () => {
     expect(freeagent).toHaveLength(4);
     expect(freeagent[1]).toContain('Boiler install: Home → Site');
     const claim = rowsOf(toExpenseClaim(report));
-    expect(claim[0]).toBe('Date,From,To,Business purpose,Miles,Vehicle,Rate (HMRC),Amount (GBP)');
+    expect(claim[0]).toBe(
+      'Date,From,To,Business purpose,Miles,Vehicle,Rate (HMRC),Amount (GBP),Parking (GBP),Tolls (GBP),Total (GBP)',
+    );
     expect(claim[1]).toMatch(/^10\/04\/2026,Home,Site,Boiler install,20\.0,/);
   });
 

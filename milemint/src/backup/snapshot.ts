@@ -164,7 +164,13 @@ const NUMERIC: Partial<Record<BackupTable, Record<string, { nullable: boolean; m
   settings: { id: { nullable: false } },
   vehicles: { archived: { nullable: false } },
   places: { latitude: { nullable: false }, longitude: { nullable: false }, radius_m: { nullable: false, min: 0 } },
-  trips: { distance_meters: { nullable: false, min: 0 }, auto_default: { nullable: false } },
+  trips: {
+    distance_meters: { nullable: false, min: 0 },
+    auto_default: { nullable: false },
+    // Parking and tolls, minor units (schema 11). Missing in older backups: restored as 0.
+    parking_minor: { nullable: false, min: 0 },
+    tolls_minor: { nullable: false, min: 0 },
+  },
   trip_edits: { id: { nullable: true } },
   odometer_readings: {
     tax_year: { nullable: false },
@@ -216,6 +222,12 @@ const UPGRADES: Partial<Record<number, (tables: Tables) => Tables>> = {
   // 7: vehicles and trips.vehicle_id (null: the app links old trips to the first vehicle).
   // 8: logbooks and car_expenses. 9: shift_pauses and trips.off_shift_id (null).
   // 10: indexes, and tracker_route (the drive in progress: never backed up).
+  // 11: trips.parking_minor and trips.tolls_minor (NOT NULL DEFAULT 0). Written as 0 on
+  // every older trip rather than left out, so a restore never inserts null into them.
+  11: (tables) => ({
+    ...tables,
+    trips: tables.trips.map((trip) => ({ parking_minor: 0, tolls_minor: 0, ...trip })),
+  }),
 };
 
 export function upgradeSnapshot(snapshot: Snapshot, currentSchema = SCHEMA_VERSION): Snapshot {

@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
 import { CalendarPicker } from '@/components/calendar-picker';
+import { CostFields, EMPTY_COSTS, maxCost, readCosts, type CostDraft } from '@/components/cost-fields';
 import { Chip, EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { PurposePicker } from '@/components/purpose-picker';
 import { Segmented } from '@/components/segmented';
@@ -20,11 +21,20 @@ import type { LatLng } from '@/domain/geo';
 import { matchPlace, type Place } from '@/domain/places';
 import { areaLabel, clientVisitLabel, isAreaOnly, placeNameSet, privateLabel } from '@/domain/privacy';
 import { loadSettings } from '@/db/settings-repo';
-import { displayLocale, earliestDate, formatDistance, formatLongDate, fromUnits, toUnits } from '@/domain/regions';
+import {
+  costsNote,
+  displayLocale,
+  earliestDate,
+  formatDistance,
+  formatLongDate,
+  fromUnits,
+  toUnits,
+} from '@/domain/regions';
 import { frequentPurposes, frequentSpots } from '@/domain/suggestions';
 import { toLocalIsoDate, type Trip, type VehicleType } from '@/domain/trip';
 import type { Vehicle } from '@/domain/vehicles';
 import { useKeyboardOpen } from '@/hooks/use-keyboard-open';
+import { useMileagePay } from '@/hooks/use-mileage-pay';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
 import { drivingDistance } from '@/places/address-search';
@@ -97,6 +107,10 @@ export default function AddTripScreen() {
   /** Set when Apple Maps filled the distance in; cleared once the user types their own. */
   const [estimated, setEstimated] = useState(false);
   const [purpose, setPurpose] = useState('');
+  /** Parking and tolls: tucked behind "+ Parking or tolls" to keep the form short. */
+  const [costsOpen, setCostsOpen] = useState(false);
+  const [costs, setCosts] = useState<CostDraft>(EMPTY_COSTS);
+  const employee = useMileagePay().pay?.employee ?? false;
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [places, setPlaces] = useState<Place[]>([]);
@@ -191,6 +205,11 @@ export default function AddTripScreen() {
     if (kind === 'business' && !purpose.trim()) {
       return setError(t('{{authority}} needs a business purpose, e.g. "Client meeting".', { authority: region.authority }));
     }
+    const paid = readCosts(costs);
+    if ('error' in paid) {
+      setCostsOpen(true);
+      return setError(t(paid.error, { max: maxCost(region) }));
+    }
     // Client privacy: address search still works, but offer to store just the area.
     const placeNames = placeNameSet(places);
     const needsArea = (draft: PlaceDraft) =>
@@ -233,6 +252,8 @@ export default function AddTripScreen() {
         vehicleId,
         startPlaceId: await placeFor(from),
         endPlaceId: await placeFor(to),
+        parkingMinor: paid.parkingMinor,
+        tollsMinor: paid.tollsMinor,
       });
       // Filled in: the home card stops offering it.
       if (gap.gap) await markGapFilled(db, gap.gap).catch(() => {});
@@ -427,6 +448,32 @@ export default function AddTripScreen() {
             )}
           </View>
 
+          {costsOpen ? (
+            <CostFields
+              value={costs}
+              onChange={(next) => {
+                clearError();
+                setCosts(next);
+              }}
+              region={region}
+              note={
+                kind === 'business'
+                  ? t(costsNote(region, employee))
+                  : t('Kept with the drive, but only counted on business drives.')
+              }
+            />
+          ) : (
+            <Pressable
+              accessibilityRole="button"
+              hitSlop={8}
+              onPress={() => setCostsOpen(true)}
+              style={styles.addCosts}>
+              <ThemedText type="small" style={{ color: theme.accent }}>
+                {t('+ Parking or tolls')}
+              </ThemedText>
+            </Pressable>
+          )}
+
           {error && (
             <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
               {error}
@@ -476,4 +523,5 @@ const styles = StyleSheet.create({
   labelRow: { flexDirection: 'row', justifyContent: 'space-between' },
   input: { borderRadius: 10, paddingHorizontal: Spacing.three, paddingVertical: 12, fontSize: 16 },
   save: { alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12 },
+  addCosts: { alignSelf: 'flex-start' },
 });

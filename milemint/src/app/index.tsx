@@ -56,7 +56,7 @@ import {
   type Region,
   type TaxYearSummary,
 } from '@/domain/regions';
-import { type Classification, toLocalIsoDate, type Trip, VEHICLE_ICONS } from '@/domain/trip';
+import { type Classification, toLocalIsoDate, type Trip, tripCostsMinor, VEHICLE_ICONS } from '@/domain/trip';
 import { useMileagePay } from '@/hooks/use-mileage-pay';
 import { usePlaceAsk } from '@/hooks/use-place-ask';
 import { usePurposeSettings } from '@/hooks/use-purpose-settings';
@@ -152,9 +152,12 @@ export default function HomeScreen() {
     () => (shiftMode.shift ? (trips ?? []).filter((trip) => trip.shiftId === shiftMode.shift?.id) : []),
     [trips, shiftMode.shift],
   );
+  // UK employees don't deduct mileage: they claim Mileage Allowance Relief on what the employer didn't pay.
+  const { pay } = useMileagePay();
+  const employee = pay?.employee ?? false;
   const summary = useMemo(
-    () => summarizeTaxYear(visible, region, taxYear, deductions),
-    [visible, region, taxYear, deductions],
+    () => summarizeTaxYear(visible, region, taxYear, deductions, { employee }),
+    [visible, region, taxYear, deductions, employee],
   );
   const celebration = useMilestoneCelebration(trips ? visible : null, deductions, region);
   // Tax offices want a purpose for every business drive: the one-tap choices, and the drives still missing one.
@@ -176,9 +179,6 @@ export default function HomeScreen() {
     () => visible.filter((trip) => needsPurpose(trip) && taxYearOf(trip.localDate, region) === (filling ?? taxYear)),
     [visible, region, taxYear, filling],
   );
-  // UK employees don't deduct mileage: they claim Mileage Allowance Relief on what the employer didn't pay.
-  const { pay } = useMileagePay();
-  const employee = pay?.employee ?? false;
   const employerRate = pay?.employerRate ?? 0;
   const band = pay?.band ?? 'unsure';
   const claimedYears = pay?.claimedYears;
@@ -191,7 +191,7 @@ export default function HomeScreen() {
     return unclaimedNudge(marSummary(visible, region, { employerRate, band }, new Date(), deductions), region, claimedYears);
   }, [employee, claimedYears, visible, region, employerRate, band, deductions]);
   // For the quick opening next time: this tax year's total, counted up from what was last seen.
-  const launchTotal = relief ? relief.relief : summary.deduction;
+  const launchTotal = relief ? relief.relief : summary.total;
   useEffect(() => {
     if (trips && onboarded && !DEMO_MODE) rememberTotal(launchTotal).catch(() => {});
   }, [trips, onboarded, launchTotal]);
@@ -683,7 +683,7 @@ function SummaryCard({
 }) {
   const t = useT();
   const { region } = useRegion();
-  const total = formatMoney(summary.deduction, region);
+  const total = formatMoney(summary.total, region);
   const distance = formatDistance(summary.businessMeters, region);
   if (relief) return <EmployeeSummaryCard summary={summary} year={relief.year} paysLess={relief.paysLess} />;
   return (
@@ -706,6 +706,7 @@ function SummaryCard({
           ? t('{{distance}} business · {{count}} to review', { distance, count: summary.unclassifiedCount })
           : t('{{distance}} business', { distance })}
       </Text>
+      <CostsLine summary={summary} />
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={t('Reports: export your mileage log')}
@@ -766,6 +767,7 @@ function EmployeeSummaryCard({ summary, year, paysLess }: { summary: TaxYearSumm
           ? t('{{distance}} business · {{count}} to review', { distance, count: summary.unclassifiedCount })
           : t('{{distance}} business', { distance })}
       </Text>
+      <CostsLine summary={summary} />
       <View style={styles.heroButtons}>
         <Pressable
           accessibilityRole="button"
@@ -786,6 +788,24 @@ function EmployeeSummaryCard({ summary, year, paysLess }: { summary: TaxYearSumm
         )}
       </View>
     </View>
+  );
+}
+
+/**
+ * Parking and tolls on the year's business drives, under the hero total:
+ * "incl." where they're added on top, otherwise recorded and shown apart.
+ */
+function CostsLine({ summary }: { summary: TaxYearSummary }) {
+  const t = useT();
+  const { region } = useRegion();
+  if (summary.costs === 0) return null;
+  const amount = formatMoney(summary.costs, region);
+  return (
+    <Text style={styles.heroLabel}>
+      {summary.costsAdded
+        ? t('incl. {{amount}} parking & tolls', { amount })
+        : t('Parking & tolls: {{amount}} (recorded)', { amount })}
+    </Text>
   );
 }
 
@@ -908,6 +928,11 @@ function TripRow({
           <ThemedText type="small" themeColor="textSecondary">
             {details.join(' · ')}
           </ThemedText>
+          {business && tripCostsMinor(trip) > 0 && (
+            <ThemedText type="small" themeColor="textSecondary">
+              {t('+{{amount}} parking & tolls', { amount: formatMoney(tripCostsMinor(trip), region) })}
+            </ThemedText>
+          )}
           {trip.autoReason && (
             <ThemedText type="small" themeColor="textSecondary">
               {trip.shiftId

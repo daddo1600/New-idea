@@ -12,7 +12,12 @@ import { csvCell, toCsv, type MileageReport, type ReportRow } from './report';
  * business mileage at the official rate is debited to motor expenses and
  * credited to the owner's funds, which is how a sole trader books a mileage
  * allowance. Account names and codes are the software's defaults and can be
- * re-mapped on import.
+ * re-mapped on import. Parking and tolls on business drives, where they're
+ * added on top of the mileage (Region.costs), are a line of their own in the
+ * same journal, to the same expense account.
+ *
+ * Columns only ever get added at the end, so a spreadsheet or import mapping
+ * made for an earlier version keeps working.
  */
 export type ExportFormat = 'spreadsheet' | 'xero' | 'quickbooks' | 'freeagent' | 'expense-claim';
 
@@ -26,21 +31,35 @@ export function formatsFor(region: Pick<Region, 'code'>): readonly ExportFormat[
 /** Exports for accounting software need Pro; the plain spreadsheet and the claim form are free. */
 export const PRO_FORMATS: ReadonlySet<ExportFormat> = new Set(['xero', 'quickbooks', 'freeagent']);
 
-type Month = { key: string; lastDay: string; distance: number; deduction: number };
+type Month = { key: string; lastDay: string; distance: number; deduction: number; costs: number };
 
+const costsOf = (row: ReportRow) => row.parking + row.tolls;
+
+/**
+ * Business drives with a value: a mileage amount, or parking and tolls (a
+ * bicycle in the US has no rate, but its parking counts).
+ */
 const businessRows = (report: MileageReport) =>
-  report.rows.filter((row) => row.trip.classification === 'business' && !row.locked && row.deduction > 0);
+  report.rows.filter(
+    (row) => row.trip.classification === 'business' && !row.locked && (row.deduction > 0 || costsOf(row) > 0),
+  );
 
-/** Business mileage per calendar month, oldest first. */
+/**
+ * Business mileage per calendar month, oldest first, with the parking and
+ * tolls added on top where they count here (otherwise left out of the books).
+ */
 function months(report: MileageReport): Month[] {
   const byMonth = new Map<string, Month>();
   for (const row of businessRows(report)) {
+    const costs = report.costsAdded ? costsOf(row) : 0;
+    if (row.deduction === 0 && costs === 0) continue;
     const key = row.trip.localDate.slice(0, 7);
     const [y, m] = key.split('-').map(Number);
     const lastDay = new Date(Date.UTC(y, m, 0)).toISOString().slice(0, 10);
-    const month = byMonth.get(key) ?? { key, lastDay, distance: 0, deduction: 0 };
+    const month = byMonth.get(key) ?? { key, lastDay, distance: 0, deduction: 0, costs: 0 };
     month.distance += row.distance;
     month.deduction += row.deduction;
+    month.costs += costs;
     byMonth.set(key, month);
   }
   return [...byMonth.values()].sort((a, b) => a.key.localeCompare(b.key));
@@ -76,8 +95,14 @@ export function toXeroJournals(report: MileageReport): string {
   for (const month of months(report)) {
     const text = narration(month, region);
     const date = formatDate(month.lastDay, region);
-    rows.push([text, date, 'Motor vehicle expenses (mileage allowance)', accounts.expense, accounts.taxRate, money(month.deduction)]);
-    rows.push([text, date, 'Owner funds introduced', accounts.owner, accounts.taxRate, `-${money(month.deduction)}`]);
+    if (month.deduction > 0) {
+      rows.push([text, date, 'Motor vehicle expenses (mileage allowance)', accounts.expense, accounts.taxRate, money(month.deduction)]);
+    }
+    if (month.costs > 0) {
+      rows.push([text, date, 'Parking and tolls (business journeys)', accounts.expense, accounts.taxRate, money(month.costs)]);
+    }
+    const total = month.deduction + month.costs;
+    rows.push([text, date, 'Owner funds introduced', accounts.owner, accounts.taxRate, `-${money(total)}`]);
   }
   return lines(rows);
 }
@@ -99,8 +124,12 @@ export function toQuickBooksJournals(report: MileageReport): string {
     const number = `MM-${report.label.replace(/[^0-9]/g, '')}-${String(i + 1).padStart(2, '0')}`;
     const date = formatDate(month.lastDay, region);
     const text = narration(month, region);
-    rows.push([number, date, accounts.expense, money(month.deduction), '', text]);
-    rows.push([number, date, accounts.owner, '', money(month.deduction), text]);
+    if (month.deduction > 0) rows.push([number, date, accounts.expense, money(month.deduction), '', text]);
+    if (month.costs > 0) {
+      const costsText = `Parking and tolls ${monthName(month.key)}: business journeys (MileMint)`;
+      rows.push([number, date, accounts.expense, money(month.costs), '', costsText]);
+    }
+    rows.push([number, date, accounts.owner, '', money(month.deduction + month.costs), text]);
   }
   return lines(rows);
 }
@@ -108,12 +137,22 @@ export function toQuickBooksJournals(report: MileageReport): string {
 /**
  * One line per business trip with what FreeAgent's mileage form asks for:
  * date, description, distance and vehicle. Until there's a direct connection
- * it's entered from this list.
+ * it's entered from this list. FreeAgent's mileage form has no parking or
+ * tolls, so they're columns at the end, to enter as an expense of their own.
  */
 export function toFreeAgentMileage(report: MileageReport): string {
   const { region } = report;
   const rows: (string | number)[][] = [
-    ['Date', 'Description', region.unit === 'mi' ? 'Miles' : 'Kilometres', 'Vehicle', 'Claimed at', `Value (${region.currency})`],
+    [
+      'Date',
+      'Description',
+      region.unit === 'mi' ? 'Miles' : 'Kilometres',
+      'Vehicle',
+      'Claimed at',
+      `Value (${region.currency})`,
+      `Parking (${region.currency})`,
+      `Tolls (${region.currency})`,
+    ],
   ];
   for (const row of businessRows(report)) rows.push(tripLine(row, region, true));
   return lines(rows);
@@ -132,6 +171,10 @@ export function toExpenseClaim(report: MileageReport): string {
       'Vehicle',
       `Rate (${region.authority})`,
       `Amount (${region.currency})`,
+      // Paid on the trip: employers repay them on top of the mileage rate.
+      `Parking (${region.currency})`,
+      `Tolls (${region.currency})`,
+      `Total (${region.currency})`,
     ],
   ];
   for (const row of businessRows(report)) {
@@ -145,6 +188,9 @@ export function toExpenseClaim(report: MileageReport): string {
       row.vehicle,
       ratesOf(row, region),
       money(row.deduction),
+      money(row.parking),
+      money(row.tolls),
+      money(row.deduction + costsOf(row)),
     ]);
   }
   return lines(rows);
@@ -159,7 +205,16 @@ function tripLine(row: ReportRow, region: Region, describe: boolean): (string | 
   const description = describe
     ? [trip.purpose, `${trip.startLabel} → ${trip.endLabel}`].filter(Boolean).join(': ')
     : trip.purpose;
-  return [formatDate(trip.localDate, region), description, row.distance.toFixed(1), row.vehicle, ratesOf(row, region), money(row.deduction)];
+  return [
+    formatDate(trip.localDate, region),
+    description,
+    row.distance.toFixed(1),
+    row.vehicle,
+    ratesOf(row, region),
+    money(row.deduction),
+    money(row.parking),
+    money(row.tolls),
+  ];
 }
 
 /** The file for a format: its contents and a name. */

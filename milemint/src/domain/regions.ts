@@ -1,5 +1,5 @@
 import { getLanguage, msg, t, translate } from '../i18n/i18n';
-import { METERS_PER_MILE, type Trip, type VehicleType } from './trip';
+import { METERS_PER_MILE, tripCostsMinor, type Trip, type VehicleType } from './trip';
 
 /**
  * Where the user drives decides the currency, the distance unit, the tax
@@ -13,6 +13,21 @@ import { METERS_PER_MILE, type Trip, type VehicleType } from './trip';
  *       announced 21 May 2026, first change since 2011.
  *   CA  CRA reasonable per-km allowance (provinces; territories are 4¢ higher).
  *   AU  ATO cents per kilometre method, capped at 5,000 km per car per year.
+ *
+ * Parking and tolls on business drives (`costs`, checked Oct 2026):
+ *   US  Deductible on top of the standard mileage rate; not parking at the
+ *       regular workplace or commuting tolls (IRS Topic 510, Pub 463).
+ *   GB  Self-employed: allowable on top of simplified-expenses mileage, as is
+ *       the Congestion Charge on a business journey; fines never are (GOV.UK
+ *       simplified expenses, BIM). Employees: Mileage Allowance Relief only
+ *       covers the vehicle, so parking and tolls are a separate expense
+ *       (EIM31820), usually repaid by the employer: never added to MAR.
+ *   CA  Recorded and listed apart, not added: the per-km figure is CRA's
+ *       employer allowance, and the self-employed claim actual costs, where
+ *       business parking is deducted in full (T2125 Chart A) and tolls aren't
+ *       spelled out. Left to the user's accountant.
+ *   AU  Not covered by cents per km; claimed separately as work-related
+ *       travel expenses (D2), so added on top, and shown apart in the report.
  */
 
 export type RegionCode = 'US' | 'GB' | 'CA' | 'AU';
@@ -57,6 +72,15 @@ export type Region = {
   rule: string;
   /** Anything the user should know about what the figure means. */
   caveat: string | null;
+  /** Parking and tolls on business drives (see the sources above). */
+  costs: {
+    /** Added to the deduction on top of the mileage figure; otherwise recorded and listed apart. */
+    onTop: boolean;
+    /** One line on what counts, shown where they're entered. */
+    note: string;
+    /** UK employees: never part of Mileage Allowance Relief, so listed apart, with this line instead. */
+    employeeNote: string | null;
+  };
   /** How the printed report is worded for this tax office. */
   report: {
     summaryHeading: string;
@@ -94,6 +118,11 @@ export const REGIONS: Record<RegionCode, Region> = {
     ],
     rule: msg('IRS standard mileage rate: 76¢ a mile from July 2026'),
     caveat: null,
+    costs: {
+      onTop: true,
+      note: msg('Business parking and tolls are deductible on top of the mileage rate. Parking at your regular workplace isn’t, and fines never are.'),
+      employeeNote: null,
+    },
     otherVehicleRates: {},
     vehicleNote: msg('The IRS standard mileage rate is for cars, vans and pickups. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.'),
     limitsPerVehicle: false,
@@ -102,6 +131,7 @@ export const REGIONS: Record<RegionCode, Region> = {
       guidance: [
         msg('Self-employed: enter business, commuting and other miles on Schedule C, Part IV (lines 44a–44c) and the deduction on line 9, Car and truck expenses, using the standard mileage rate.'),
         msg('Parking fees and tolls for business trips can be deducted on top of the standard mileage rate.'),
+        msg('Parking at your regular place of work and tolls on your commute are not deductible.'),
         msg('The IRS asks for a record made at or near the time of each trip, showing the date, where you went, the business purpose and the miles.'),
       ],
       askForOdometer: false,
@@ -123,6 +153,11 @@ export const REGIONS: Record<RegionCode, Region> = {
     ],
     rule: msg('HMRC mileage rate: 55p a mile for the first 10,000 business miles, then 25p'),
     caveat: null,
+    costs: {
+      onTop: true,
+      note: msg('Self-employed: business parking, tolls and Congestion Charge or ULEZ charges are claimed on top of the mileage rate. Parking and traffic fines never are.'),
+      employeeNote: msg('Parking and tolls aren’t part of Mileage Allowance Relief. Claim them from your employer, or as a separate employment expense if they don’t repay them. Fines never count.'),
+    },
     otherVehicleRates: {
       motorbike: [{ from: '2011-04-06', tiers: [{ upTo: null, rate: 240 }] }],
       bicycle: [{ from: '2011-04-06', tiers: [{ upTo: null, rate: 200 }] }],
@@ -134,6 +169,8 @@ export const REGIONS: Record<RegionCode, Region> = {
       guidance: [
         msg('Self-employed: this total is your simplified expenses figure for business mileage. Include it in Car, van and travel expenses on your Self Assessment return.'),
         msg('Employees: you can claim Mileage Allowance Relief on the difference between this total and any mileage allowance your employer paid you.'),
+        msg('Self-employed: parking, tolls and Congestion Charge or ULEZ charges on business journeys are added on top of the mileage figure, in the same Car, van and travel expenses box. Parking and traffic fines are never allowable.'),
+        msg('Employees: parking and tolls are not part of Mileage Allowance Relief. They are listed separately, to claim from your employer or as a separate employment expense.'),
         msg('Ordinary commuting between home and your permanent workplace is not business mileage.'),
       ],
       askForOdometer: false,
@@ -155,6 +192,11 @@ export const REGIONS: Record<RegionCode, Region> = {
       { from: '2026-01-01', tiers: [{ upTo: 5_000, rate: 730 }, { upTo: null, rate: 670 }] },
     ],
     rule: msg('CRA per-km rate: 73¢ for the first 5,000 km, then 67¢'),
+    costs: {
+      onTop: false,
+      note: msg('Recorded apart from the per-km figure. Self-employed: business parking is usually claimed in full. Ask your accountant about tolls.'),
+      employeeNote: null,
+    },
     caveat:
       msg('This is CRA’s reimbursement rate for employees. If you’re self-employed, CRA usually wants your actual car costs, so treat the figure as an estimate.'),
     otherVehicleRates: {},
@@ -166,6 +208,7 @@ export const REGIONS: Record<RegionCode, Region> = {
         msg('Self-employed (T2125): claim your actual vehicle costs multiplied by your business-use share, which is business kilometres divided by total kilometres driven in the year. Record your odometer readings below to work it out.'),
         msg('Employees reimbursed at CRA’s per-km rate: the figure above is what your employer can pay you tax-free.'),
         msg('CRA asks for a logbook showing the date, destination, purpose and kilometres of each business trip, plus your odometer readings at the start and end of the year.'),
+        msg('Parking and tolls are listed separately and not added to the per-km figure. Self-employed: business parking fees are deducted in full on T2125, not reduced to your business-use share. Ask your accountant whether your tolls can be claimed.'),
       ],
       askForOdometer: true,
     },
@@ -187,6 +230,11 @@ export const REGIONS: Record<RegionCode, Region> = {
     ],
     rule: msg('ATO cents per km method: 91c a km, up to 5,000 km per car a year'),
     caveat: null,
+    costs: {
+      onTop: true,
+      note: msg('Work parking and tolls aren’t covered by cents per km, so they’re claimed separately. Not parking at your regular workplace, or tolls on the way there.'),
+      employeeNote: null,
+    },
     otherVehicleRates: {},
     vehicleNote: msg('The ATO cents per km method is for cars only. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.'),
     limitsPerVehicle: true,
@@ -196,6 +244,7 @@ export const REGIONS: Record<RegionCode, Region> = {
         msg('Individuals: enter the deduction as Work-related car expenses (D1) using the cents per km method. Sole traders: include it with your business motor vehicle expenses.'),
         msg('You can claim up to 5,000 business kilometres per car each income year. This report assumes one car.'),
         msg('You don’t need a logbook for this method, but the ATO may ask how you worked out your kilometres. This trip log shows that.'),
+        msg('Parking fees and tolls for work trips aren’t covered by the cents per km rate. Claim them separately: individuals as Work-related travel expenses (D2), sole traders with business expenses. Not parking at your regular workplace, or tolls between home and work.'),
       ],
       askForOdometer: false,
     },
@@ -562,7 +611,10 @@ export function describeTier(period: RatePeriod, tier: number, region: Region, t
   return mi ? tr('{{rate}} after {{distance}} miles', params) : tr('{{rate}} after {{distance}} km', params);
 }
 
-export type DeductionTrip = Pick<Trip, 'id' | 'localDate' | 'startedAt' | 'distanceMeters' | 'classification'> & {
+export type DeductionTrip = Pick<
+  Trip,
+  'id' | 'localDate' | 'startedAt' | 'distanceMeters' | 'classification' | 'parkingMinor' | 'tollsMinor'
+> & {
   /** Cars when missing. */
   vehicle?: VehicleType;
   /** Which of the user's vehicles, where limits are per vehicle. */
@@ -648,11 +700,33 @@ export function potentialDeductions(
   };
 }
 
+/**
+ * Whether parking and tolls on business drives are added to the deduction:
+ * where the tax office lets them go on top of the mileage figure, and never
+ * to a UK employee's Mileage Allowance Relief. Otherwise they're recorded and
+ * shown apart ("ask your accountant").
+ */
+export function costsAdded(region: Region, employee = false): boolean {
+  return region.costs.onTop && !(employee && region.costs.employeeNote !== null);
+}
+
+/** The line on what parking and tolls count for here, for the user's situation (English: show with t). */
+export function costsNote(region: Region, employee = false): string {
+  return employee && region.costs.employeeNote !== null ? region.costs.employeeNote : region.costs.note;
+}
+
 export type TaxYearSummary = {
   taxYear: number;
   label: string;
   businessMeters: number;
+  /** The mileage figure: business distance at the official rates. */
   deduction: number;
+  /** Parking and tolls entered on the year's business drives, minor units. */
+  costs: number;
+  /** Whether `costs` is part of `total` (see costsAdded), or only recorded. */
+  costsAdded: boolean;
+  /** The deduction, plus parking and tolls where they count. */
+  total: number;
   unclassifiedCount: number;
   tripCount: number;
 };
@@ -662,12 +736,16 @@ export function summarizeTaxYear(
   region: Region,
   taxYear: number,
   deductions: ReadonlyMap<string, number> = computeDeductions(trips, region),
+  options: { employee?: boolean } = {},
 ): TaxYearSummary {
   const summary: TaxYearSummary = {
     taxYear,
     label: taxYearLabel(taxYear, region),
     businessMeters: 0,
     deduction: 0,
+    costs: 0,
+    costsAdded: costsAdded(region, options.employee),
+    total: 0,
     unclassifiedCount: 0,
     tripCount: 0,
   };
@@ -678,7 +756,9 @@ export function summarizeTaxYear(
     if (trip.classification === 'business') {
       summary.businessMeters += trip.distanceMeters;
       summary.deduction += deductions.get(trip.id) ?? 0;
+      summary.costs += tripCostsMinor(trip);
     }
   }
+  summary.total = summary.deduction + (summary.costsAdded ? summary.costs : 0);
   return summary;
 }
