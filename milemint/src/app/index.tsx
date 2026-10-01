@@ -787,10 +787,11 @@ function PlanCard({ trips, lockedCount }: { trips: readonly Trip[]; lockedCount:
   const month = now.toLocaleDateString(displayLocale(region), { month: 'long' });
   const full = used >= limit;
   return (
-    <Pressable accessibilityRole="button" onPress={() => router.push('/pro')}>
-      <ThemedView
-        type="backgroundElement"
-        style={[styles.planCard, lockedCount > 0 && { borderColor: theme.accent, borderWidth: 1 }]}>
+    // The card opens Pro; the friend's-code link is its own button beside it, not nested inside.
+    <ThemedView
+      type="backgroundElement"
+      style={[styles.planCard, lockedCount > 0 && { borderColor: theme.accent, borderWidth: 1 }]}>
+      <Pressable accessibilityRole="button" onPress={() => router.push('/pro')} style={styles.planMain}>
         <View style={styles.rowHeader}>
           <ThemedText type="smallBold">
             {t('{{used}} of {{limit}} free drives in {{month}}', { used, limit, month })}
@@ -821,18 +822,18 @@ function PlanCard({ trips, lockedCount }: { trips: readonly Trip[]; lockedCount:
             </ThemedText>
           )
         )}
-        {/* The sharer's own bonus needs iCloud to count friends; until then only a friend's code helps. */}
-        {(full || lockedCount > 0) && (counting || canRedeem) && (
-          <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/friends' as Href)}>
-            <ThemedText type="small" style={{ color: theme.accent }}>
-              {counting
-                ? t('Or invite a friend: you both get 10 more free drives a month.')
-                : t('Got a code from a friend? It adds 10 free drives a month.')}
-            </ThemedText>
-          </Pressable>
-        )}
-      </ThemedView>
-    </Pressable>
+      </Pressable>
+      {/* The sharer's own bonus needs iCloud to count friends; until then only a friend's code helps. */}
+      {(full || lockedCount > 0) && (counting || canRedeem) && (
+        <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/friends' as Href)}>
+          <ThemedText type="small" style={{ color: theme.accent }}>
+            {counting
+              ? t('Or invite a friend: you both get 10 more free drives a month.')
+              : t('Got a code from a friend? It adds 10 free drives a month.')}
+          </ThemedText>
+        </Pressable>
+      )}
+    </ThemedView>
   );
 }
 
@@ -1154,6 +1155,7 @@ const styles = StyleSheet.create({
   bulkButtons: { flexDirection: 'row', gap: Spacing.two, width: '100%', maxWidth: MaxContentWidth, alignSelf: 'center' },
   bulkButton: { flex: 1, alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12 },
   planCard: { borderRadius: 16, padding: Spacing.three, gap: Spacing.two },
+  planMain: { gap: Spacing.two },
   meter: { height: 6, borderRadius: 3, overflow: 'hidden' },
   meterFill: { height: '100%', borderRadius: 3 },
   trackingOn: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, paddingHorizontal: Spacing.one },
