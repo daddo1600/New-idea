@@ -1,0 +1,75 @@
+# Polish (pl): cultural and UX-copy review (check 3 of 3)
+
+Reviewer profile: native Polish speaker who has lived in the UK for years and knows the Polish driver, courier and tradesperson community there.
+
+Scope: every entry in `src/i18n/locales/pl.ts`, read in context. For the jokes, cheers, greetings and celebrations I checked how they're used in `src/domain/reminders.ts`, `src/domain/cheers.ts`, `src/domain/seasons.ts` and `src/milestones/copy.ts`. For the units I checked which lines have separate miles and km keys (`welcome.tsx`, `copy.ts`, `compare.tsx`, `seasons.ts`). For the short labels I checked the layout in `src/app/index.tsx`, `src/app/pro.tsx`, `src/app/_layout.tsx`, `src/components/country-options.tsx`, `src/components/tax-countdown.tsx`, `src/components/always-guide.tsx` and `src/components/header-menu.tsx`.
+
+Checks:
+1. Offence and sensitivity, including double meanings.
+2. Tone.
+3. Money and tax honesty.
+4. Units.
+5. UI fit.
+6. iOS wording.
+
+Result: **36 strings changed.** Keys, placeholders, `<b>` tags and plural objects are untouched. `npx jest src/i18n` passes (31/31). The glossary (`glossary/pl.md`) is updated to match.
+
+## Decisions
+
+- **Capitalised Twój/Ci:** kept, and it's consistent across the file. Apple's Polish iOS capitalises these pronouns mid-sentence, and so do Polish banks and delivery apps. The app sits next to iOS alerts and quotes them, so matching Apple is the safest choice. It reads polite, not stiff, alongside the informal "Ty".
+- **Season greetings:** "Wesołych świąt" (lowercase *świąt*, no religious words) is the standard neutral December greeting. "Wesołego Halloween" only shows from 24 to 31 October, so it never overlaps with All Saints' Day (1 November), which Poles take seriously. Both kept.
+
+## Changes
+
+| English | Before | After | Why |
+|---|---|---|---|
+| Business drives swipe right, personal swipe left. Easiest date of the week. | …Najłatwiejsza randka w tym tygodniu. | …Najprostsza randka tygodnia. | Sensitivity. Next to *randka* (date), *łatwa* suggests *łatwa dziewczyna* (a "loose" woman). *Najprostsza* has no innuendo. |
+| New to Pro? Your first month is on me: {{url}} | Pierwszy raz z Pro? Pierwszy miesiąc… | Jeszcze nie masz Pro? Pierwszy miesiąc… | *Pierwszy raz z…* ("my first time with…") is a well-known sexual innuendo, and this line gets shared in group chats. The new wording is still gender-neutral. |
+| First shift done | Pierwsza zmiana zaliczona | Pierwsza zmiana za Tobą | *Zaliczyć* has a sexual slang meaning. It's unlikely here, but the zero-tolerance rule applies, and *za Tobą* ("behind you") is also warmer. |
+| A (slightly cheeky) nudge on Sunday evening to sort the week’s drives. | (Lekko zaczepne) przypomnienie… | Przypomnienie z przymrużeniem oka… | *Zaczepny* means provocative or combative, not playful. *Z przymrużeniem oka* ("with a wink") is the Polish for cheeky-but-kind. |
+| A quick (slightly cheeky) reminder each Sunday evening… | Krótkie (lekko zaczepne) przypomnienie… | Krótkie przypomnienie z przymrużeniem oka… | Same. |
+| They’d like to be sorted before Monday. It takes a minute. | Chcą zostać oznaczone… | Chciałyby zostać oznaczone… | *Chcą* ("they want") sounds demanding. The conditional is gentler and agrees with both *mile* and *kilometry*. |
+| Let’s do this! 💪 | Dasz radę! 💪 | Działamy! 💪 | *Dasz radę* ("you can manage it") can sound like the user needs reassurance before a normal shift. *Działamy!* is the upbeat "let's go" Polish workers use. |
+| Free money alert 💸 | Uwaga, darmowe pieniądze 💸 | Odliczenia czekają 💸 | *Darmowe pieniądze* is exactly how scam SMS and Facebook spam reads in Polish. The new title makes no cash promise. |
+| Well, technically it’s your money. Sort this week’s drives to claim it back. | No, technicznie to Twoje pieniądze. Oznacz…, żeby je odzyskać. | W końcu to efekt Twojej pracy. Oznacz przejazdy z tego tygodnia, żeby żadne odliczenie nie przepadło. | Rewritten to match the new title. *Odzyskać* ("get it back") implies a refund. The new line is warm and honest. |
+| Plot twist: driving pays | Zwrot akcji: jazda się opłaca | Zwrot akcji: jazda się liczy | *Jazda się opłaca* reads like a driver-recruitment or earnings ad. "It counts" keeps the twist without a money claim. |
+| Swipe this week’s trips business or personal and see what you’ve earned back. | Przesuń przejazdy… i zobacz, ile udało Ci się odzyskać. | Oznacz przejazdy z tego tygodnia jako służbowe lub prywatne i zobacz, ile są warte. | *Odzyskać* implies cash refunded. "How much they're worth" matches the app's own wording. The awkward "przesuń … jako" is fixed with the glossary verb *oznacz*. |
+| Low effort, high reward | Mało wysiłku, duża nagroda | Mało wysiłku, duży efekt | *Nagroda* (prize) is lottery and competition language. *Duży efekt* is the natural idiom with no payout promise. |
+| Sort this week’s drives and bank the deduction. Done in a minute. | …i zgarnij odliczenie. Minuta i gotowe. | Oznacz przejazdy z tego tygodnia, a odliczenia będą na bieżąco. Minuta i gotowe. | *Zgarnij* is promo-ad language ("zgarnij bonus") and suggests cash in hand. "Your deductions stay up to date" is honest. |
+| {{amount}} back in your pocket | {{amount}} wraca do Twojej kieszeni | Już {{amount}} w odliczeniach | The amount is a deduction, not tax saved. Saying it "comes back to your pocket" promises a refund of the whole sum. The celebration still feels like a win. |
+| MileMint has now found {{amount}} in business mileage for you. That’s real money back at tax time. | …To realne pieniądze do odzyskania przy rozliczeniu podatkowym. | …To realne pieniądze, które liczą się przy rozliczeniu podatkowym. | *Do odzyskania* ("to get back") promises a refund. "Real money that counts at tax time" keeps the encouragement. |
+| Money back | Odzyskane pieniądze | Odliczenia | Honesty (it's the deductions-found section on Milestones) and length (19 → 10 characters; English is 10). |
+| Your money back and badges | Odzyskane pieniądze i odznaki | Odliczenia i odznaki | Matches the section title. Same honesty point. |
+| Sort your drives and add any you missed before {{date}}. Every business mile is money back. | …Każda służbowa mila to pieniądze z powrotem. | …Każda służbowa mila ma swoją wartość. | "Money back" promises a refund. "Has its value" is true and still motivating. The miles variant keeps "mila". |
+| Sort your drives and add any you missed before {{date}}. Every business kilometre is money back. | …Każdy służbowy kilometr to pieniądze z powrotem. | …Każdy służbowy kilometr ma swoją wartość. | Same, km variant. |
+| Never miss a mile. | Nie przegap ani jednej mili. | Żaden przejazd nie przepadnie. | Units. This welcome title shows in every country, so it can't say "mile" to Canadian or Australian users. |
+| Every business mile, counted. | Każda służbowa mila policzona. | Każdy służbowy przejazd policzony. | Units. This is the first welcome screen in every country. |
+| {{achievement}} on MileMint {{emoji}} The mileage app that counts every mile. | …Aplikacja, która liczy każdą przejechaną milę. | …Aplikacja, dla której liczy się każdy przejazd. | Units. It's the share line for habit milestones in every country. The new wording is also a small pun ("counts" / "matters"). |
+| I’ve found {{amount}} in business mileage with MileMint 🚗💸 Every mile counted, automatically. | …Każda mila policzona automatycznie. | …Każdy przejazd policzony automatycznie. | Units. The money share line has no km variant. |
+| Missed miles check | Sprawdź brakujący przebieg | Pominięty przebieg | Length (26 → 18 characters; English is 18) for the menu item and modal title. Unit-neutral, and matches "pominięty przejazd" elsewhere. The menu detail line already says "Porównaj z aplikacją kurierską". |
+| UK | Wlk. Brytania | UK | The half-width tile has a flag and one line of text. "UK" is what Poles in Britain say every day ("pracuję w UK"). "Wielka Brytania" stays for "United Kingdom". |
+| Best value | Najkorzystniej | Korzystniej | Badge length (14 → 11 characters; English is 10). The comparative is correct because only two plans are shown (yearly vs monthly), and it reads better on a badge than the superlative adverb. |
+| Tax dates › | Terminy podatkowe › | Terminy › | A small text link on the tax countdown card, which already names the tax year. The screen and menu titles keep "Terminy podatkowe", because they have room for it. |
+| Try again | Spróbuj ponownie | Ponów | Crash-screen button (16 → 5 characters). *Ponów* is iOS's own Polish word for retry. The error messages still say "Spróbuj ponownie." in full. |
+| End shift | Zakończ zmianę | Zakończ | Small white pill on the shift card (14 → 7 characters; English is 9). The card already says "Na zmianie · 2 h 05 min", so the context is clear. |
+| Tap here | Stuknij tutaj | Stuknij tu | Small badge in the iOS settings mock-up (13 → 10 characters; English is 8). Same meaning. |
+| Save and continue | Zapisz i przejdź dalej | Zapisz i dalej | Main onboarding button (22 → 14 characters; English is 17). This is standard Polish UI wording. |
+| ALLOW LOCATION ACCESS | POZWÓL NA DOSTĘP DO LOKALIZACJI | POZWALAJ NA DOSTĘP DO LOKALIZACJI | iOS wording. Polish iOS uses the imperfective *Pozwalaj* for standing permission settings ("Pozwalaj na powiadomienia", "Pozwalaj, gdy używana"). *Zezwalaj* isn't Apple's verb here. |
+| In Settings, under Allow Location Access, choose Always | W Ustawieniach, w sekcji Pozwól na dostęp do lokalizacji, wybierz Zawsze | …w sekcji Pozwalaj na dostęp do lokalizacji… | Kept consistent with the header above. |
+| iOS asks twice. Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>. | …<b>Zmień na Zawsze pozwalaj</b>. | …<b>Zmień na: Zawsze pozwalaj</b>. | iOS wording. Without punctuation, "Zmień na Zawsze pozwalaj" reads as a garbled sentence. The colon form matches Apple's Polish pattern for "Change to X" buttons and makes the quoted option clear. |
+| Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>. | …<b>Zmień na Zawsze pozwalaj</b>. | …<b>Zmień na: Zawsze pozwalaj</b>. | Same. |
+| Tap “Change to Always Allow” | Stuknij „Zmień na Zawsze pozwalaj” | Stuknij „Zmień na: Zawsze pozwalaj” | Same. |
+
+## Checked and left as is
+
+- **Nationality and stereotypes:** nothing about nationality, migration status or "Polish builder/plumber" tropes. "Fachowcy, handlowcy, opieka, biuro" is neutral.
+- **Jokes:** "Puk, puk / Kto tam?", "Twoje mile/kilometry dzwoniły", "Niedzielna chandra? Nie przez podatki", "Twoje przyszłe ja dziękuje", "karton paragonów", "Przesuń w prawo, to może być miłość" all land and stay kind. *Stuknij* is Apple's standard verb and is fine despite its slang sense.
+- **Cheers:** Ruszamy! / No to jedziemy! / Czas ruszać! / Do dzieła! / W drogę! are natural.
+- **Seasons:** "Przyszła wiosna", "Cześć! Lato w trasie", "Ubierz się ciepło", "Jesienne trasy też się liczą", "Słoneczne dni, służbowe trasy" are unit-neutral and secular.
+- **Tax lines:** they stay hedged ("szacunkowo", "To nie jest porada podatkowa", "zwykle", "mogą być warte do", "o wartości ok."). "Ciężka praca, należycie nagrodzona" and "Zasłużone w stu procentach" are praise, not promises.
+- **Units:** the compare share lines, the distance celebrations and the weekly titles all have separate miles and km keys, and each keeps its own unit. "Parking fees and tolls…" ("stawką za milę") is US-only.
+- **Length, left as is:** "Zapisane, zablokowane" (it wraps at the comma in its table cell; shorter versions lose "kept"), "Jedziemy dalej" (a text link with room), "Śledzenie wł.", "Kup Pro", "Auto lub van", "Skuter lub motocykl", "Plan darmowy".
+
+## Sign-off
+
+**Approved for release.** One non-blocking item remains: when someone next has a Polish-language iPhone to hand, confirm the exact punctuation of "Zmień na: Zawsze pozwalaj" and the header "POZWALAJ NA DOSTĘP DO LOKALIZACJI". Either way, users will still match the screen.
