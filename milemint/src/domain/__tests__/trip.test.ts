@@ -86,6 +86,7 @@ describe('US tax-year summary', () => {
 describe('input parsing', () => {
   it('accepts positive decimal miles only', () => {
     expect(parseMiles(' 12.5 ')).toBe(12.5);
+    expect(parseMiles('12,5')).toBe(12.5);
     expect(parseMiles('0')).toBeNull();
     expect(parseMiles('-3')).toBeNull();
     expect(parseMiles('abc')).toBeNull();
