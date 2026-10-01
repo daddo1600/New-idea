@@ -8,11 +8,13 @@ import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import type { RegionCode } from '@/domain/regions';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/i18n/i18n';
 import { useRegion } from '@/region/region';
 
 /** Settings → Country: change where you drive. First launch uses the welcome flow instead. */
 export default function RegionScreen() {
   const theme = useTheme();
+  const t = useT();
   const { region, chosen, setRegion } = useRegion();
   const [selected, setSelected] = useState<RegionCode>(() => (chosen ? region.code : phoneRegion()));
 
@@ -26,12 +28,12 @@ export default function RegionScreen() {
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         <ThemedText type="small" themeColor="textSecondary">
-          MileMint uses your country’s currency, distance unit, tax year and official mileage rate.
+          {t('MileMint uses your country’s currency, distance unit, tax year and official mileage rate.')}
         </ThemedText>
         <CountryOptions value={selected} onChange={setSelected} />
         <Pressable accessibilityRole="button" onPress={done} style={[styles.button, { backgroundColor: theme.accent }]}>
           <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-            Save
+            {t('Save')}
           </ThemedText>
         </Pressable>
       </ScrollView>

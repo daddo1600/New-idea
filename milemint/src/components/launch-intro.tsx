@@ -29,6 +29,7 @@ import {
 } from '@/domain/regions';
 import { type Season, seasonFor } from '@/domain/seasons';
 import { toLocalIsoDate } from '@/domain/trip';
+import { useT } from '@/i18n/i18n';
 import { type LaunchTotals, markTotalSeen, recallRegion, recallTotals } from '@/region/remembered-region';
 
 /**
@@ -116,6 +117,7 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
  * launch is a reminder of the money coming back. A tap skips either.
  */
 export function LaunchIntro({ onDone }: { onDone: () => void }) {
+  const t = useT();
   const [mode, setMode] = useState<{ quick: LaunchTotals | null; code: RegionCode } | null>(null);
   const [skip, setSkip] = useState(false);
   useEffect(() => {
@@ -144,7 +146,7 @@ export function LaunchIntro({ onDone }: { onDone: () => void }) {
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel="MileMint. Tap to skip"
+      accessibilityLabel={t('MileMint. Tap to skip')}
       onPress={() => setSkip(true)}
       style={[StyleSheet.absoluteFill, styles.layer]}>
       {mode === null ? (
@@ -174,6 +176,7 @@ function QuickIntro({
   skip: boolean;
   onDone: () => void;
 }) {
+  const t = useT();
   const reduceMotion = useReducedMotion();
   const region = REGIONS[code];
   const from = Math.max(0, Math.min(totals.seen, totals.total));
@@ -237,11 +240,13 @@ function QuickIntro({
         )}
       </Animated.View>
       <Animated.View style={[styles.counter, counterStyle]}>
-        {season && <Text style={styles.greeting}>{season.greeting}</Text>}
+        {season && <Text style={styles.greeting}>{t(season.greeting)}</Text>}
         <Text style={styles.money}>{formatMoney(shown, region)}</Text>
-        <Text style={styles.distance}>found this tax year</Text>
+        <Text style={styles.distance}>{t('found this tax year')}</Text>
         {gained > 0 && (
-          <Text style={styles.gained}>+{formatMoney(gained, region)} since you last looked</Text>
+          <Text style={styles.gained}>
+            {t('+{{amount}} since you last looked', { amount: formatMoney(gained, region) })}
+          </Text>
         )}
       </Animated.View>
     </Animated.View>
@@ -260,6 +265,7 @@ function FullIntro({
   skip: boolean;
   onDone: () => void;
 }) {
+  const t = useT();
   const reduceMotion = useReducedMotion();
   const region = REGIONS[code];
   const ratePerUnit = useMemo(() => {
@@ -325,6 +331,7 @@ function FullIntro({
   const fadeStyle = useAnimatedStyle(() => ({ opacity: fade.value }));
 
   const units = Math.round(shown * DEMO_MONTH[region.unit]);
+  const distance = new Intl.NumberFormat(region.locale).format(units);
   return (
     <Animated.View style={[StyleSheet.absoluteFill, styles.container, fadeStyle]}>
       {season && <SeasonAmbient season={season.id} southern={code === 'AU'} />}
@@ -344,11 +351,12 @@ function FullIntro({
         )}
       </Animated.View>
       <Animated.View style={[styles.counter, counterStyle]}>
-        {season && <Text style={styles.greeting}>{season.greeting}</Text>}
+        {season && <Text style={styles.greeting}>{t(season.greeting)}</Text>}
         <Text style={styles.money}>{formatMoney(Math.round(units * ratePerUnit), region)}</Text>
         <Text style={styles.distance}>
-          {new Intl.NumberFormat(region.locale).format(units)} {region.unit === 'mi' ? 'miles' : 'km'} · a typical month
-          of business driving
+          {region.unit === 'mi'
+            ? t('{{distance}} miles · a typical month of business driving', { count: units, distance })
+            : t('{{distance}} km · a typical month of business driving', { count: units, distance })}
         </Text>
       </Animated.View>
     </Animated.View>

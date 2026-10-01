@@ -27,25 +27,29 @@ import { type Classification, type Trip, type VehicleType } from '@/domain/trip'
 import type { Vehicle } from '@/domain/vehicles';
 import { listVehicles } from '@/db/vehicles-repo';
 import { useTheme } from '@/hooks/use-theme';
+import { msg, useT } from '@/i18n/i18n';
 import { useRegion } from '@/region/region';
 
+// Labels are English, shown with t().
 const KIND_OPTIONS = [
-  { value: 'home', label: 'Home' },
-  { value: 'work', label: 'Work' },
-  { value: 'client', label: 'Client' },
-  { value: 'other', label: 'Other' },
+  { value: 'home', label: msg('Home') },
+  { value: 'work', label: msg('Work') },
+  { value: 'client', label: msg('Client') },
+  { value: 'other', label: msg('Other') },
 ] as const satisfies readonly { value: PlaceKind; label: string }[];
 
 type End = 'start' | 'end';
 
+// Labels are English, shown with t().
 const CLASSIFY_OPTIONS = [
-  { value: 'business', label: 'Business' },
-  { value: 'personal', label: 'Personal' },
+  { value: 'business', label: msg('Business') },
+  { value: 'personal', label: msg('Personal') },
 ] as const satisfies readonly { value: Classification; label: string }[];
 
 export default function TripScreen() {
   const db = useSQLiteContext();
   const theme = useTheme();
+  const t = useT();
   const { region } = useRegion();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [trip, setTrip] = useState<Trip | null | undefined>(undefined);
@@ -89,7 +93,7 @@ export default function TripScreen() {
     return (
       <ThemedView style={styles.container}>
         <ThemedText themeColor="textSecondary" style={styles.missing}>
-          This trip no longer exists.
+          {t('This trip no longer exists.')}
         </ThemedText>
       </ThemedView>
     );
@@ -103,10 +107,10 @@ export default function TripScreen() {
   };
 
   const confirmDelete = () =>
-    Alert.alert('Delete trip?', `${trip.startLabel} → ${trip.endLabel}`, [
-      { text: 'Cancel', style: 'cancel' },
+    Alert.alert(t('Delete trip?'), `${trip.startLabel} → ${trip.endLabel}`, [
+      { text: t('Cancel'), style: 'cancel' },
       {
-        text: 'Delete',
+        text: t('Delete'),
         style: 'destructive',
         onPress: async () => {
           await deleteTrip(db, trip);
@@ -130,9 +134,9 @@ export default function TripScreen() {
   };
 
   const save = async () => {
-    if (!startLabel.trim() || !endLabel.trim()) return setError('Enter where you drove from and to.');
+    if (!startLabel.trim() || !endLabel.trim()) return setError(t('Enter where you drove from and to.'));
     if (business && !purpose.trim()) {
-      return setError(`${region.authority} needs a business purpose, e.g. "Client meeting".`);
+      return setError(t('{{authority}} needs a business purpose, e.g. "Client meeting".', { authority: region.authority }));
     }
     setError(null);
     setSaving(true);
@@ -146,7 +150,7 @@ export default function TripScreen() {
       });
       router.back();
     } catch {
-      setError('Could not save the trip. Please try again.');
+      setError(t('Could not save the trip. Please try again.'));
       setSaving(false);
     }
   };
@@ -159,16 +163,20 @@ export default function TripScreen() {
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.form} keyboardShouldPersistTaps="handled">
         <ThemedText type="small" themeColor="textSecondary">
-          {trip.localDate} · {formatDistance(trip.distanceMeters, region)}
-          {trip.source === 'manual' ? ' · Added manually' : ''}
+          {trip.source === 'manual'
+            ? t('{{date}} · {{distance}} · Added manually', {
+                date: trip.localDate,
+                distance: formatDistance(trip.distanceMeters, region),
+              })
+            : `${trip.localDate} · ${formatDistance(trip.distanceMeters, region)}`}
         </ThemedText>
         <Segmented
-          options={CLASSIFY_OPTIONS}
+          options={CLASSIFY_OPTIONS.map((option) => ({ ...option, label: t(option.label) }))}
           value={trip.classification === 'unclassified' ? null : trip.classification}
           onChange={classify}
         />
         {vehicles.length > 1 && (
-          <Field label="Vehicle">
+          <Field label={t('Vehicle')}>
             <GaragePicker
               vehicles={vehicles}
               value={vehicleId}
@@ -179,13 +187,13 @@ export default function TripScreen() {
             />
           </Field>
         )}
-        <Field label="From">
+        <Field label={t('From')}>
           <TextInput style={inputStyle} value={startLabel} onChangeText={setStartLabel} />
         </Field>
-        <Field label="To">
+        <Field label={t('To')}>
           <TextInput style={inputStyle} value={endLabel} onChangeText={setEndLabel} />
         </Field>
-        <Field label={business ? 'Business purpose' : 'Note (optional)'}>
+        <Field label={business ? t('Business purpose') : t('Note (optional)')}>
           {business ? (
             <PurposePicker value={purpose} onChange={setPurpose} recent={purposes} />
           ) : (
@@ -194,7 +202,7 @@ export default function TripScreen() {
               placeholderTextColor={theme.textSecondary}
               value={purpose}
               onChangeText={setPurpose}
-              placeholder="Optional"
+              placeholder={t('Optional')}
             />
           )}
         </Field>
@@ -209,7 +217,7 @@ export default function TripScreen() {
           onPress={save}
           style={[styles.button, { backgroundColor: theme.accent, opacity: saving ? 0.6 : 1 }]}>
           <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-            {saving ? 'Saving…' : 'Save'}
+            {saving ? t('Saving…') : t('Save')}
           </ThemedText>
         </Pressable>
 
@@ -232,7 +240,7 @@ export default function TripScreen() {
 
         <Pressable accessibilityRole="button" onPress={confirmDelete} style={styles.delete}>
           <ThemedText type="small" themeColor="danger">
-            Delete trip
+            {t('Delete trip')}
           </ThemedText>
         </Pressable>
       </ScrollView>
@@ -256,13 +264,14 @@ function SaveAsPlace({
   onSave: (kind: PlaceKind) => Promise<void>;
 }) {
   const theme = useTheme();
+  const t = useT();
   const [kind, setKind] = useState<PlaceKind>('client');
   const [state, setState] = useState<'idle' | 'saving' | 'saved' | 'failed'>(linked ? 'saved' : 'idle');
 
   if (state === 'saved') {
     return (
       <ThemedText type="small" themeColor="textSecondary">
-        {end === 'start' ? 'Start' : 'End'} is a saved place.
+        {end === 'start' ? t('Start is a saved place.') : t('End is a saved place.')}
       </ThemedText>
     );
   }
@@ -281,12 +290,22 @@ function SaveAsPlace({
   return (
     <ThemedView type="backgroundElement" style={styles.placeCard}>
       <ThemedText type="smallBold">
-        Save {end === 'start' ? 'start' : 'end'} as a place{name ? `: ${name}` : ''}
+        {end === 'start'
+          ? name
+            ? t('Save start as a place: {{name}}', { name })
+            : t('Save start as a place')
+          : name
+            ? t('Save end as a place: {{name}}', { name })
+            : t('Save end as a place')}
       </ThemedText>
-      <Segmented options={KIND_OPTIONS} value={kind} onChange={setKind} />
+      <Segmented
+        options={KIND_OPTIONS.map((option) => ({ ...option, label: t(option.label) }))}
+        value={kind}
+        onChange={setKind}
+      />
       {state === 'failed' && (
         <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
-          Could not save the place. Please try again.
+          {t('Could not save the place. Please try again.')}
         </ThemedText>
       )}
       <Pressable
@@ -295,7 +314,7 @@ function SaveAsPlace({
         onPress={save}
         style={[styles.placeButton, { borderColor: theme.accent, opacity: name ? 1 : 0.5 }]}>
         <ThemedText type="smallBold" style={{ color: theme.accent }}>
-          {state === 'saving' ? 'Saving…' : 'Save as place'}
+          {state === 'saving' ? t('Saving…') : t('Save as place')}
         </ThemedText>
       </Pressable>
     </ThemedView>

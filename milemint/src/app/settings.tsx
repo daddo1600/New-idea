@@ -1,4 +1,4 @@
-import { router, useFocusEffect } from 'expo-router';
+import { router, useFocusEffect, type Href } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useEffect, useState } from 'react';
 import {
@@ -31,6 +31,7 @@ import { addVehicle, removeVehicle, updateVehicle } from '@/db/vehicles-repo';
 import { useVehicles } from '@/vehicles/use-vehicles';
 import type { Place, PlaceKind } from '@/domain/places';
 import { useTheme } from '@/hooks/use-theme';
+import { LANGUAGES, msg, useLanguage, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
 import { useRegion } from '@/region/region';
 import {
@@ -42,20 +43,20 @@ import {
 
 /** Monday first, as people read a work week; values are `Date.getDay()` indexes. */
 const DAYS = [
-  [1, 'Mon'],
-  [2, 'Tue'],
-  [3, 'Wed'],
-  [4, 'Thu'],
-  [5, 'Fri'],
-  [6, 'Sat'],
-  [0, 'Sun'],
+  [1, msg('Mon')],
+  [2, msg('Tue')],
+  [3, msg('Wed')],
+  [4, msg('Thu')],
+  [5, msg('Fri')],
+  [6, msg('Sat')],
+  [0, msg('Sun')],
 ] as const;
 
 const KIND_LABELS: Record<PlaceKind, string> = {
-  home: 'Home',
-  work: 'Work',
-  client: 'Client',
-  other: 'Other',
+  home: msg('Home'),
+  work: msg('Work'),
+  client: msg('Client'),
+  other: msg('Other'),
 };
 
 const NEW_SHIFT: WorkShift = { start: '09:00', end: '17:00' };
@@ -65,6 +66,7 @@ const EXTRA_SHIFT: WorkShift = { start: '18:00', end: '22:00' };
 export default function SettingsScreen() {
   const db = useSQLiteContext();
   const theme = useTheme();
+  const t = useT();
   const [enabled, setEnabled] = useState(false);
   const [week, setWeek] = useState<WorkShift[][] | null>(null);
   const [places, setPlaces] = useState<Place[]>([]);
@@ -93,7 +95,9 @@ export default function SettingsScreen() {
     if (enabled && invalid.length > 0) {
       return setMessage({
         error: true,
-        text: `Check ${invalid.map(([, name]) => name).join(', ')}: use 24-hour times like 09:00, and an end different from the start.`,
+        text: t('Check {{days}}: use 24-hour times like 09:00, and an end different from the start.', {
+          days: invalid.map(([, name]) => t(name)).join(', '),
+        }),
       });
     }
     // Keep the other settings (such as the region) as they are.
@@ -101,17 +105,17 @@ export default function SettingsScreen() {
     try {
       await saveSettings(db, settings);
       if (enabled) cancelWorkHoursNudge().catch(() => {});
-      setMessage({ error: false, text: 'Saved. New drives will use these hours.' });
+      setMessage({ error: false, text: t('Saved. New drives will use these hours.') });
     } catch {
-      setMessage({ error: true, text: 'Could not save. Please try again.' });
+      setMessage({ error: true, text: t('Could not save. Please try again.') });
     }
   };
 
   const confirmDelete = (place: Place) =>
-    Alert.alert(`Delete “${place.name}”?`, 'Past trips keep their names.', [
-      { text: 'Cancel', style: 'cancel' },
+    Alert.alert(t('Delete “{{name}}”?', { name: place.name }), t('Past trips keep their names.'), [
+      { text: t('Cancel'), style: 'cancel' },
       {
-        text: 'Delete',
+        text: t('Delete'),
         style: 'destructive',
         onPress: async () => {
           await deletePlace(db, place.id);
@@ -129,22 +133,25 @@ export default function SettingsScreen() {
 
         <CountrySection />
 
+        <LanguageSection />
+
         <DrivingSection />
 
         {REMINDERS_SUPPORTED && <ReminderSection />}
 
-        <ThemedText type="smallBold">Work hours</ThemedText>
+        <ThemedText type="smallBold">{t('Work hours')}</ThemedText>
         <ThemedView type="backgroundElement" style={styles.card}>
           <View style={styles.rowBetween}>
             <View style={styles.flex}>
-              <ThemedText type="smallBold">Classify by work hours</ThemedText>
+              <ThemedText type="smallBold">{t('Classify by work hours')}</ThemedText>
               <ThemedText type="small" themeColor="textSecondary">
-                Drives that start during your hours are marked business, others personal. Your usual
-                routes and commutes take priority.
+                {t(
+                  'Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.',
+                )}
               </ThemedText>
             </View>
             <Switch
-              accessibilityLabel="Classify by work hours"
+              accessibilityLabel={t('Classify by work hours')}
               value={enabled}
               onValueChange={(value) => {
                 setMessage(null);
@@ -160,9 +167,9 @@ export default function SettingsScreen() {
               return (
                 <View key={weekday} style={styles.day}>
                   <View style={styles.rowBetween}>
-                    <ThemedText type="smallBold">{name}</ThemedText>
+                    <ThemedText type="smallBold">{t(name)}</ThemedText>
                     <Switch
-                      accessibilityLabel={`Work on ${name}`}
+                      accessibilityLabel={t('Work on {{day}}', { day: t(name) })}
                       value={shifts.length > 0}
                       onValueChange={(on) => updateDay(weekday, on ? [{ ...NEW_SHIFT }] : [])}
                       trackColor={{ true: theme.accent }}
@@ -177,7 +184,7 @@ export default function SettingsScreen() {
                     return (
                       <View key={index} style={styles.shift}>
                         <TextInput
-                          accessibilityLabel={`${name} shift ${index + 1} start`}
+                          accessibilityLabel={t('{{day}} shift {{number}} start', { day: t(name), number: index + 1 })}
                           style={inputStyle}
                           value={shift.start}
                           onChangeText={(start) => setShift({ ...shift, start })}
@@ -187,10 +194,10 @@ export default function SettingsScreen() {
                           maxLength={5}
                         />
                         <ThemedText type="small" themeColor="textSecondary">
-                          to
+                          {t('to')}
                         </ThemedText>
                         <TextInput
-                          accessibilityLabel={`${name} shift ${index + 1} end`}
+                          accessibilityLabel={t('{{day}} shift {{number}} end', { day: t(name), number: index + 1 })}
                           style={inputStyle}
                           value={shift.end}
                           onChangeText={(end) => setShift({ ...shift, end })}
@@ -202,11 +209,11 @@ export default function SettingsScreen() {
                         {shifts.length > 1 && (
                           <Pressable
                             accessibilityRole="button"
-                            accessibilityLabel={`Remove ${name} shift ${index + 1}`}
+                            accessibilityLabel={t('Remove {{day}} shift {{number}}', { day: t(name), number: index + 1 })}
                             hitSlop={8}
                             onPress={() => updateDay(weekday, shifts.filter((_, i) => i !== index))}>
                             <ThemedText type="small" themeColor="danger">
-                              Remove
+                              {t('Remove')}
                             </ThemedText>
                           </Pressable>
                         )}
@@ -219,7 +226,7 @@ export default function SettingsScreen() {
                       hitSlop={8}
                       onPress={() => updateDay(weekday, [...shifts, { ...EXTRA_SHIFT }])}>
                       <ThemedText type="small" style={{ color: theme.accent }}>
-                        Add shift
+                        {t('Add shift')}
                       </ThemedText>
                     </Pressable>
                   )}
@@ -229,7 +236,7 @@ export default function SettingsScreen() {
 
           {enabled && (
             <ThemedText type="small" themeColor="textSecondary">
-              24-hour times. A shift like 22:00 to 02:00 runs past midnight.
+              {t('24-hour times. A shift like 22:00 to 02:00 runs past midnight.')}
             </ThemedText>
           )}
           {message && (
@@ -245,16 +252,16 @@ export default function SettingsScreen() {
             onPress={save}
             style={[styles.button, { backgroundColor: theme.accent }]}>
             <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-              Save work hours
+              {t('Save work hours')}
             </ThemedText>
           </Pressable>
         </ThemedView>
 
-        <ThemedText type="smallBold">Places</ThemedText>
+        <ThemedText type="smallBold">{t('Places')}</ThemedText>
         <ThemedView type="backgroundElement" style={styles.card}>
           {places.length === 0 ? (
             <ThemedText type="small" themeColor="textSecondary">
-              No places yet. Add one below, or open a trip and tap “Save as place”.
+              {t('No places yet. Add one below, or open a trip and tap “Save as place”.')}
             </ThemedText>
           ) : (
             places.map((place) => (
@@ -265,16 +272,16 @@ export default function SettingsScreen() {
                 <View style={styles.flex}>
                   <ThemedText type="smallBold">{place.name}</ThemedText>
                   <ThemedText type="small" themeColor="textSecondary">
-                    {KIND_LABELS[place.kind]}
+                    {t(KIND_LABELS[place.kind])}
                   </ThemedText>
                 </View>
                 <Pressable
                   accessibilityRole="button"
-                  accessibilityLabel={`Delete ${place.name}`}
+                  accessibilityLabel={t('Delete {{name}}', { name: place.name })}
                   hitSlop={8}
                   onPress={() => confirmDelete(place)}>
                   <ThemedText type="small" themeColor="danger">
-                    Delete
+                    {t('Delete')}
                   </ThemedText>
                 </Pressable>
               </Pressable>
@@ -291,6 +298,7 @@ export default function SettingsScreen() {
 function AddPlace({ onAdded }: { onAdded: () => void }) {
   const db = useSQLiteContext();
   const theme = useTheme();
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [kind, setKind] = useState<PlaceKind>('client');
@@ -302,15 +310,15 @@ function AddPlace({ onAdded }: { onAdded: () => void }) {
     return (
       <Pressable accessibilityRole="button" hitSlop={8} onPress={() => setOpen(true)}>
         <ThemedText type="smallBold" style={{ color: theme.accent }}>
-          + Add a place
+          {t('+ Add a place')}
         </ThemedText>
       </Pressable>
     );
   }
 
   const save = async () => {
-    if (!name.trim()) return setError('Give the place a name, e.g. “Acme HQ”.');
-    if (!where.text.trim()) return setError('Search for its address, or use “I’m here now”.');
+    if (!name.trim()) return setError(t('Give the place a name, e.g. “Acme HQ”.'));
+    if (!where.text.trim()) return setError(t('Search for its address, or use “I’m here now”.'));
     setError(null);
     setSaving(true);
     try {
@@ -320,7 +328,7 @@ function AddPlace({ onAdded }: { onAdded: () => void }) {
       setWhere(EMPTY_PLACE);
       onAdded();
     } catch (saveError) {
-      setError(saveError instanceof Error ? saveError.message : 'Couldn’t save the place. Please try again.');
+      setError(saveError instanceof Error ? saveError.message : t('Couldn’t save the place. Please try again.'));
     } finally {
       setSaving(false);
     }
@@ -329,19 +337,19 @@ function AddPlace({ onAdded }: { onAdded: () => void }) {
   return (
     <View style={styles.addPlace}>
       <TextInput
-        accessibilityLabel="Place name"
+        accessibilityLabel={t('Place name')}
         value={name}
         onChangeText={setName}
-        placeholder="Name, e.g. Acme HQ"
+        placeholder={t('Name, e.g. Acme HQ')}
         placeholderTextColor={theme.textSecondary}
         style={[styles.nameInput, { color: theme.text, backgroundColor: theme.background }]}
       />
       <Segmented
-        options={(['home', 'work', 'client', 'other'] as const).map((value) => ({ value, label: KIND_LABELS[value] }))}
+        options={(['home', 'work', 'client', 'other'] as const).map((value) => ({ value, label: t(KIND_LABELS[value]) }))}
         value={kind}
         onChange={setKind}
       />
-      <PlaceField label="Address" placeholder="Search an address or place" value={where} onChange={setWhere} />
+      <PlaceField label={t('Address')} placeholder={t('Search an address or place')} value={where} onChange={setWhere} />
       {error && (
         <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
           {error}
@@ -350,7 +358,7 @@ function AddPlace({ onAdded }: { onAdded: () => void }) {
       <View style={styles.rowBetween}>
         <Pressable accessibilityRole="button" hitSlop={8} onPress={() => setOpen(false)}>
           <ThemedText type="small" themeColor="textSecondary">
-            Cancel
+            {t('Cancel')}
           </ThemedText>
         </Pressable>
         <Pressable
@@ -359,7 +367,7 @@ function AddPlace({ onAdded }: { onAdded: () => void }) {
           onPress={save}
           style={[styles.smallButton, { backgroundColor: theme.accent, opacity: saving ? 0.6 : 1 }]}>
           <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-            {saving ? 'Saving…' : 'Save place'}
+            {saving ? t('Saving…') : t('Save place')}
           </ThemedText>
         </Pressable>
       </View>
@@ -370,6 +378,7 @@ function AddPlace({ onAdded }: { onAdded: () => void }) {
 function ReminderSection() {
   const db = useSQLiteContext();
   const theme = useTheme();
+  const t = useT();
   const { region } = useRegion();
   const [on, setOn] = useState<boolean | null>(null);
   const [note, setNote] = useState<string | null>(null);
@@ -382,7 +391,7 @@ function ReminderSection() {
     setNote(null);
     const scheduled = value ? await enableWeeklyReminder(region.unit) : (await disableWeeklyReminder(), false);
     if (value && !scheduled) {
-      setNote('Notifications are off for MileMint. Turn them on in iPhone Settings → Notifications.');
+      setNote(t('Notifications are off for MileMint. Turn them on in iPhone Settings → Notifications.'));
     }
     setOn(scheduled);
     await saveSettings(db, { ...(await loadSettings(db)), weeklyReminder: scheduled });
@@ -390,17 +399,17 @@ function ReminderSection() {
 
   return (
     <>
-      <ThemedText type="smallBold">Reminders</ThemedText>
+      <ThemedText type="smallBold">{t('Reminders')}</ThemedText>
       <ThemedView type="backgroundElement" style={styles.card}>
         <View style={styles.rowBetween}>
           <View style={styles.flex}>
-            <ThemedText type="smallBold">Weekly reminder</ThemedText>
+            <ThemedText type="smallBold">{t('Weekly reminder')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              A (slightly cheeky) nudge on Sunday evening to sort the week’s drives.
+              {t('A (slightly cheeky) nudge on Sunday evening to sort the week’s drives.')}
             </ThemedText>
           </View>
           <Switch
-            accessibilityLabel="Weekly reminder"
+            accessibilityLabel={t('Weekly reminder')}
             disabled={on === null}
             value={on ?? false}
             onValueChange={change}
@@ -421,6 +430,7 @@ function ReminderSection() {
 function Garage() {
   const db = useSQLiteContext();
   const theme = useTheme();
+  const t = useT();
   const { region } = useRegion();
   const { vehicles, current, choose, reload } = useVehicles();
   /** The vehicle being edited, or 'new' while adding one. */
@@ -450,10 +460,10 @@ function Garage() {
   };
 
   const remove = (vehicle: Vehicle) =>
-    Alert.alert(`Remove “${vehicle.name}”?`, 'Trips already logged in it keep it in their record.', [
-      { text: 'Cancel', style: 'cancel' },
+    Alert.alert(t('Remove “{{name}}”?', { name: vehicle.name }), t('Trips already logged in it keep it in their record.'), [
+      { text: t('Cancel'), style: 'cancel' },
       {
-        text: 'Remove',
+        text: t('Remove'),
         style: 'destructive',
         onPress: async () => {
           await removeVehicle(db, vehicle.id);
@@ -468,18 +478,24 @@ function Garage() {
     <View style={styles.vehicleEditor}>
       <VehiclePicker value={draft.type} onChange={(type) => setDraft({ ...draft, type })} />
       <TextInput
-        accessibilityLabel="Vehicle name"
+        accessibilityLabel={t('Vehicle name')}
         value={draft.name}
         onChangeText={(name) => setDraft({ ...draft, name })}
-        placeholder={`Name, e.g. ${draft.type === 'car' ? 'Golf' : draft.type === 'motorbike' ? 'Honda PCX' : 'Cargo bike'}`}
+        placeholder={
+          draft.type === 'car'
+            ? t('Name, e.g. Golf')
+            : draft.type === 'motorbike'
+              ? t('Name, e.g. Honda PCX')
+              : t('Name, e.g. Cargo bike')
+        }
         placeholderTextColor={theme.textSecondary}
         style={[styles.nameInput, { color: theme.text, backgroundColor: theme.background }]}
       />
       <TextInput
-        accessibilityLabel="Number plate (optional)"
+        accessibilityLabel={t('Number plate (optional)')}
         value={draft.registration}
         onChangeText={(registration) => setDraft({ ...draft, registration })}
-        placeholder="Number plate (optional)"
+        placeholder={t('Number plate (optional)')}
         placeholderTextColor={theme.textSecondary}
         autoCapitalize="characters"
         autoCorrect={false}
@@ -488,7 +504,7 @@ function Garage() {
       <View style={styles.rowBetween}>
         <Pressable accessibilityRole="button" hitSlop={8} onPress={() => setEditing(null)}>
           <ThemedText type="small" themeColor="textSecondary">
-            Cancel
+            {t('Cancel')}
           </ThemedText>
         </Pressable>
         <Pressable
@@ -496,7 +512,7 @@ function Garage() {
           onPress={save}
           style={[styles.smallButton, { backgroundColor: theme.accent }]}>
           <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-            Save vehicle
+            {t('Save vehicle')}
           </ThemedText>
         </Pressable>
       </View>
@@ -505,7 +521,7 @@ function Garage() {
 
   return (
     <>
-      <ThemedText type="smallBold">Your vehicles</ThemedText>
+      <ThemedText type="smallBold">{t('Your vehicles')}</ThemedText>
       {vehicles.map((vehicle) =>
         editing === vehicle.id ? (
           <View key={vehicle.id}>
@@ -513,7 +529,7 @@ function Garage() {
             {vehicles.length > 1 && (
               <Pressable accessibilityRole="button" hitSlop={8} onPress={() => remove(vehicle)}>
                 <ThemedText type="small" themeColor="danger">
-                  Remove this vehicle
+                  {t('Remove this vehicle')}
                 </ThemedText>
               </Pressable>
             )}
@@ -523,25 +539,25 @@ function Garage() {
             {/* Tapping the vehicle edits it; "Use now" is its own button beside it. */}
             <Pressable
               accessibilityRole="button"
-              accessibilityHint="Edit this vehicle"
+              accessibilityHint={t('Edit this vehicle')}
               onPress={() => open(vehicle)}
               style={styles.vehicleMain}>
               <Text style={styles.vehicleIcon}>{VEHICLE_ICONS[vehicle.type]}</Text>
               <View style={styles.flex}>
                 <ThemedText type="smallBold">{vehicle.name}</ThemedText>
                 <ThemedText type="small" themeColor="textSecondary">
-                  {[VEHICLE_LABELS[vehicle.type], vehicle.registration].filter(Boolean).join(' · ')}
+                  {[t(VEHICLE_LABELS[vehicle.type]), vehicle.registration].filter(Boolean).join(' · ')}
                 </ThemedText>
               </View>
             </Pressable>
             {current?.id === vehicle.id ? (
               <ThemedText type="small" style={{ color: theme.accent }}>
-                Driving now
+                {t('Driving now')}
               </ThemedText>
             ) : (
               <Pressable accessibilityRole="button" hitSlop={8} onPress={() => choose(vehicle)}>
                 <ThemedText type="small" themeColor="textSecondary">
-                  Use now
+                  {t('Use now')}
                 </ThemedText>
               </Pressable>
             )}
@@ -553,14 +569,18 @@ function Garage() {
       ) : (
         <Pressable accessibilityRole="button" hitSlop={8} onPress={() => open(null)}>
           <ThemedText type="smallBold" style={{ color: theme.accent }}>
-            + Add a vehicle
+            {t('+ Add a vehicle')}
           </ThemedText>
         </Pressable>
       )}
       {types.map((type) => (
         <ThemedText key={type} type="small" themeColor="textSecondary">
-          {VEHICLE_ICONS[type]} {vehicleRule(region, type)}
-          {type === 'car' ? '. Petrol, diesel, hybrid or electric: same rate for a car or van you own.' : '.'}
+          {VEHICLE_ICONS[type]}{' '}
+          {type === 'car'
+            ? t('{{rule}}. Petrol, diesel, hybrid or electric: same rate for a car or van you own.', {
+                rule: t(vehicleRule(region, type)),
+              })
+            : t('{{rule}}.', { rule: t(vehicleRule(region, type)) })}
         </ThemedText>
       ))}
     </>
@@ -571,6 +591,7 @@ function Garage() {
 function DrivingSection() {
   const db = useSQLiteContext();
   const theme = useTheme();
+  const t = useT();
   const [settings, setSettings] = useState<AppSettings | null>(null);
 
   useEffect(() => {
@@ -586,19 +607,20 @@ function DrivingSection() {
 
   return (
     <>
-      <ThemedText type="smallBold">Your driving</ThemedText>
+      <ThemedText type="smallBold">{t('Your driving')}</ThemedText>
       <ThemedView type="backgroundElement" style={styles.card}>
         <Garage />
         <View style={[styles.rowBetween, styles.spaced]}>
           <View style={styles.flex}>
-            <ThemedText type="smallBold">New drives start as business</ThemedText>
+            <ThemedText type="smallBold">{t('New drives start as business')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any
-              that were personal; only business drives should be claimed.
+              {t(
+                'Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.',
+              )}
             </ThemedText>
           </View>
           <Switch
-            accessibilityLabel="New drives start as business"
+            accessibilityLabel={t('New drives start as business')}
             value={settings.defaultBusiness}
             onValueChange={(defaultBusiness) => change({ defaultBusiness })}
             trackColor={{ true: theme.accent }}
@@ -606,14 +628,15 @@ function DrivingSection() {
         </View>
         <View style={[styles.rowBetween, styles.spaced]}>
           <View style={styles.flex}>
-            <ThemedText type="smallBold">Shift mode</ThemedText>
+            <ThemedText type="smallBold">{t('Shift mode')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              For delivery and courier work (Uber Eats, Deliveroo, Amazon Flex, Evri, DPD and the like): a Start shift button on the home screen. Every drive in a shift
-              is business, and a whole shift counts as one drive on the free plan.
+              {t(
+                'For delivery and courier work (Uber Eats, Deliveroo, Amazon Flex, Evri, DPD and the like): a Start shift button on the home screen. Every drive in a shift is business, and a whole shift counts as one drive on the free plan.',
+              )}
             </ThemedText>
           </View>
           <Switch
-            accessibilityLabel="Shift mode"
+            accessibilityLabel={t('Shift mode')}
             value={settings.shiftMode}
             onValueChange={(shiftMode) => change({ shiftMode })}
             trackColor={{ true: theme.accent }}
@@ -626,27 +649,57 @@ function DrivingSection() {
 
 function CountrySection() {
   const theme = useTheme();
+  const t = useT();
   const { region } = useRegion();
   return (
     <>
-      <ThemedText type="smallBold">Country</ThemedText>
+      <ThemedText type="smallBold">{t('Country')}</ThemedText>
       <ThemedView type="backgroundElement" style={styles.card}>
         <View style={styles.rowBetween}>
           <View style={styles.flex}>
             <ThemedText type="smallBold">
-              {region.flag} {region.name}
+              {region.flag} {t(region.name)}
             </ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              {region.rule}
+              {t(region.rule)}
             </ThemedText>
           </View>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Change country"
+            accessibilityLabel={t('Change country')}
             hitSlop={8}
             onPress={() => router.push('/region')}>
             <ThemedText type="small" style={{ color: theme.accent }}>
-              Change
+              {t('Change')}
+            </ThemedText>
+          </Pressable>
+        </View>
+      </ThemedView>
+    </>
+  );
+}
+
+/** The app's language, shown in its own words; changed on its own screen. */
+function LanguageSection() {
+  const theme = useTheme();
+  const t = useT();
+  const code = useLanguage();
+  const language = LANGUAGES.find((l) => l.code === code) ?? LANGUAGES[0];
+  return (
+    <>
+      <ThemedText type="smallBold">{t('Language')}</ThemedText>
+      <ThemedView type="backgroundElement" style={styles.card}>
+        <View style={styles.rowBetween}>
+          <View style={styles.flex}>
+            <ThemedText type="smallBold">{language.name}</ThemedText>
+          </View>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('Change language')}
+            hitSlop={8}
+            onPress={() => router.push('/language' as Href)}>
+            <ThemedText type="small" style={{ color: theme.accent }}>
+              {t('Change')}
             </ThemedText>
           </Pressable>
         </View>
@@ -657,12 +710,13 @@ function CountrySection() {
 
 function ProSection() {
   const theme = useTheme();
+  const t = useT();
   const { isPro, storeAvailable, busy, restore, manage } = usePro();
   const onRestore = async () => {
     const found = await restore();
     Alert.alert(
-      found ? 'MileMint Pro restored' : 'No subscription found',
-      found ? 'Every drive is unlocked.' : 'This Apple Account doesn’t have MileMint Pro.',
+      found ? t('MileMint Pro restored') : t('No subscription found'),
+      found ? t('Every drive is unlocked.') : t('This Apple Account doesn’t have MileMint Pro.'),
     );
   };
   return (
@@ -671,24 +725,26 @@ function ProSection() {
       <ThemedView type="backgroundElement" style={styles.card}>
         <ThemedText type="small" themeColor="textSecondary">
           {isPro
-            ? 'Pro is active: unlimited automatic drives.'
-            : `Free plan: ${FREE_AUTO_DRIVES_PER_MONTH} automatic drives a month, unlimited manual trips and CSV export.`}
+            ? t('Pro is active: unlimited automatic drives.')
+            : t('Free plan: {{count}} automatic drives a month, unlimited manual trips and CSV export.', {
+                count: FREE_AUTO_DRIVES_PER_MONTH,
+              })}
         </ThemedText>
         {isPro ? (
           storeAvailable && (
             <Pressable accessibilityRole="button" onPress={manage} hitSlop={8}>
               <ThemedText type="small" style={{ color: theme.accent }}>
-                Manage subscription
+                {t('Manage subscription')}
               </ThemedText>
             </Pressable>
           )
         ) : (
-          <GoldButton label="Upgrade to Pro" onPress={() => router.push('/pro')} />
+          <GoldButton label={t('Upgrade to Pro')} onPress={() => router.push('/pro')} />
         )}
         {!isPro && storeAvailable && (
           <Pressable accessibilityRole="button" disabled={busy} onPress={onRestore} hitSlop={8}>
             <ThemedText type="small" style={{ color: theme.accent }}>
-              Restore purchases
+              {t('Restore purchases')}
             </ThemedText>
           </Pressable>
         )}

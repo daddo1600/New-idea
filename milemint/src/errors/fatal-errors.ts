@@ -1,5 +1,7 @@
 import { Alert } from 'react-native';
 
+import { t } from '@/i18n/i18n';
+
 /**
  * In a release build an uncaught JavaScript error closes the app without a
  * word, which tells neither the user nor us what went wrong. Show the message
@@ -30,8 +32,8 @@ export function installFatalErrorAlert(): void {
     if (!isFatal || __DEV__) return previous(error, isFatal);
     console.error(error);
     Alert.alert(
-      'MileMint hit a problem',
-      `Please send a screenshot of this to support.\n\n${describeError(error)}`,
+      t('MileMint hit a problem'),
+      `${t('Please send a screenshot of this to support.')}\n\n${describeError(error)}`,
     );
   });
 }

@@ -1,3 +1,4 @@
+import { getLanguage, type Lang, msg, translate } from '../i18n/i18n';
 import type { RegionCode } from './regions';
 
 /**
@@ -46,8 +47,25 @@ export const SHIFT_CHEERS: Record<RegionCode, readonly string[]> = {
   ],
 };
 
-/** The cheer for the `n`th shift: cycles through the region's list. */
-export function shiftCheer(code: RegionCode, n: number): string {
-  const cheers = SHIFT_CHEERS[code];
-  return cheers[((n % cheers.length) + cheers.length) % cheers.length];
+/**
+ * For other languages: the regional slang doesn't travel, so a plain,
+ * friendly set that translates well.
+ */
+export const NEUTRAL_CHEERS: readonly string[] = [
+  msg('Let’s go! 🚀'),
+  msg('Here we go! 🙌'),
+  msg('Time to roll! 🚗'),
+  msg('Game on! 🎯'),
+  msg('Let’s do this! 💪'),
+  msg('Off we go! 👋'),
+];
+
+const pick = (list: readonly string[], n: number) => list[((n % list.length) + list.length) % list.length];
+
+/**
+ * The cheer for the `n`th shift: cycles through the region's list in
+ * English, or the neutral list, translated, in other languages.
+ */
+export function shiftCheer(code: RegionCode, n: number, lang: Lang = getLanguage()): string {
+  return lang === 'en' ? pick(SHIFT_CHEERS[code], n) : translate(lang, pick(NEUTRAL_CHEERS, n));
 }

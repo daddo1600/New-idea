@@ -6,20 +6,24 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { msg, useT } from '@/i18n/i18n';
 
 /** The usual reasons for a business drive, as tax authorities expect them described. */
 export const COMMON_PURPOSES = [
-  ['🤝', 'Client meeting'],
-  ['🏗️', 'Site visit'],
-  ['📦', 'Delivery or collection'],
-  ['🛒', 'Buying supplies'],
-  ['🏢', 'Between workplaces'],
-  ['🎓', 'Training or conference'],
-  ['🏦', 'Bank or post office'],
-  ['🧾', 'Business errand'],
+  ['🤝', msg('Client meeting')],
+  ['🏗️', msg('Site visit')],
+  ['📦', msg('Delivery or collection')],
+  ['🛒', msg('Buying supplies')],
+  ['🏢', msg('Between workplaces')],
+  ['🎓', msg('Training or conference')],
+  ['🏦', msg('Bank or post office')],
+  ['🧾', msg('Business errand')],
 ] as const;
 
 /**
+ * Common purposes are saved in English (the reports to the tax office stay in
+ * English) and shown in the app's language.
+ *
  * Business purpose as a pick list instead of typing: purposes used before
  * first, then common ones, then "Other…" for anything else.
  */
@@ -34,6 +38,7 @@ export function PurposePicker({
   recent?: readonly string[];
 }) {
   const theme = useTheme();
+  const t = useT();
   const insets = useSafeAreaInsets();
   const [open, setOpen] = useState(false);
   const [typing, setTyping] = useState(false);
@@ -41,7 +46,9 @@ export function PurposePicker({
 
   const common = COMMON_PURPOSES.map(([, text]) => text.toLowerCase());
   const recentOnly = recent.filter((text) => !common.includes(text.toLowerCase())).slice(0, 4);
-  const icon = COMMON_PURPOSES.find(([, text]) => text.toLowerCase() === value.trim().toLowerCase())?.[0];
+  const match = COMMON_PURPOSES.find(([, text]) => text.toLowerCase() === value.trim().toLowerCase());
+  const icon = match?.[0];
+  const shown = match ? t(match[1]) : value;
 
   const close = () => {
     setOpen(false);
@@ -52,7 +59,7 @@ export function PurposePicker({
     close();
   };
 
-  const row = (key: string, emoji: string, text: string) => {
+  const row = (key: string, emoji: string, text: string, label: string = text) => {
     const selected = value.trim().toLowerCase() === text.toLowerCase();
     return (
       <Pressable
@@ -67,7 +74,7 @@ export function PurposePicker({
         ]}>
         <ThemedText style={styles.emoji}>{emoji}</ThemedText>
         <ThemedText type={selected ? 'smallBold' : 'small'} style={[styles.flex, selected && { color: theme.accent }]}>
-          {text}
+          {label}
         </ThemedText>
         {selected && <ThemedText style={{ color: theme.accent }}>✓</ThemedText>}
       </Pressable>
@@ -78,8 +85,10 @@ export function PurposePicker({
     <>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel={`Business purpose: ${value || 'not chosen'}`}
-        accessibilityHint="Opens a list of purposes"
+        accessibilityLabel={
+          value ? t('Business purpose: {{purpose}}', { purpose: shown }) : t('Business purpose: not chosen')
+        }
+        accessibilityHint={t('Opens a list of purposes')}
         onPress={() => {
           setCustom('');
           setOpen(true);
@@ -88,38 +97,38 @@ export function PurposePicker({
         {value ? (
           <ThemedText style={styles.flex} numberOfLines={1}>
             {icon ? `${icon}  ` : ''}
-            {value}
+            {shown}
           </ThemedText>
         ) : (
           <ThemedText themeColor="textSecondary" style={styles.flex}>
-            Choose a purpose
+            {t('Choose a purpose')}
           </ThemedText>
         )}
         <ThemedText style={{ color: theme.accent }}>▾</ThemedText>
       </Pressable>
 
       <Modal visible={open} transparent animationType="slide" onRequestClose={close}>
-        <Pressable accessibilityLabel="Close" style={styles.backdrop} onPress={close} />
+        <Pressable accessibilityLabel={t('Close')} style={styles.backdrop} onPress={close} />
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
           <ThemedView style={[styles.sheet, { paddingBottom: insets.bottom + Spacing.three }]}>
             <View style={[styles.grabber, { backgroundColor: theme.backgroundSelected }]} />
             <ThemedText type="smallBold" style={styles.title}>
-              Business purpose
+              {t('Business purpose')}
             </ThemedText>
             <ScrollView style={styles.list} keyboardShouldPersistTaps="handled">
               {recentOnly.map((text) => row(`recent:${text}`, '🕘', text))}
               {recentOnly.length > 0 && (
                 <View style={[styles.divider, { backgroundColor: theme.backgroundSelected }]} />
               )}
-              {COMMON_PURPOSES.map(([emoji, text]) => row(text, emoji, text))}
+              {COMMON_PURPOSES.map(([emoji, text]) => row(text, emoji, text, t(text)))}
               {typing ? (
                 <View style={styles.customRow}>
                   <TextInput
-                    accessibilityLabel="Your own purpose"
+                    accessibilityLabel={t('Your own purpose')}
                     autoFocus
                     value={custom}
                     onChangeText={setCustom}
-                    placeholder="e.g. Quote for Acme Ltd"
+                    placeholder={t('e.g. Quote for Acme Ltd')}
                     placeholderTextColor={theme.textSecondary}
                     returnKeyType="done"
                     onSubmitEditing={() => custom.trim() && pick(custom.trim())}
@@ -131,7 +140,7 @@ export function PurposePicker({
                     onPress={() => pick(custom.trim())}
                     style={[styles.use, { backgroundColor: theme.accent, opacity: custom.trim() ? 1 : 0.4 }]}>
                     <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-                      Use
+                      {t('Use')}
                     </ThemedText>
                   </Pressable>
                 </View>
@@ -142,7 +151,7 @@ export function PurposePicker({
                   style={({ pressed }) => [styles.option, pressed && { backgroundColor: theme.backgroundSelected }]}>
                   <ThemedText style={styles.emoji}>✏️</ThemedText>
                   <ThemedText type="small" style={[styles.flex, { color: theme.accent }]}>
-                    Other…
+                    {t('Other…')}
                   </ThemedText>
                 </Pressable>
               )}

@@ -14,6 +14,7 @@ import Animated, {
 import { BrandGradient } from '@/components/brand-gradient';
 import { LeafMark } from '@/components/leaf-mark';
 import { Spacing } from '@/constants/theme';
+import { useT } from '@/i18n/i18n';
 
 const CONFETTI_COLORS = ['#FACC15', '#4ADE80', '#FFFFFF', '#BBF7D0', '#F59E0B'];
 const PIECES = 36;
@@ -65,6 +66,7 @@ function Piece({ index, width, height }: { index: number; width: number; height:
  * line, for a milestone reached. Share sends a ready-made brag message.
  */
 export function Celebration({ content, onClose }: { content: CelebrationContent | null; onClose: () => void }) {
+  const t = useT();
   const reduceMotion = useReducedMotion();
   const { width, height } = useWindowDimensions();
   const pop = useSharedValue(0);
@@ -95,16 +97,16 @@ export function Celebration({ content, onClose }: { content: CelebrationContent 
           <View style={styles.badge}>
             <Text style={styles.badgeEmoji}>{content.emoji}</Text>
           </View>
-          <Text style={styles.title}>{content.title}</Text>
-          <Text style={styles.message}>{content.message}</Text>
+          <Text style={styles.title}>{t(content.title)}</Text>
+          <Text style={styles.message}>{t(content.message)}</Text>
           <Pressable
             accessibilityRole="button"
             onPress={() => Share.share({ message: content.share }).catch(() => {})}
             style={styles.share}>
-            <Text style={styles.shareText}>Share it</Text>
+            <Text style={styles.shareText}>{t('Share it')}</Text>
           </Pressable>
           <Pressable accessibilityRole="button" hitSlop={8} onPress={onClose}>
-            <Text style={styles.close}>Keep going</Text>
+            <Text style={styles.close}>{t('Keep going')}</Text>
           </Pressable>
         </Animated.View>
       </View>

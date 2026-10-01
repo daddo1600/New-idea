@@ -23,6 +23,7 @@ import { toLocalIsoDate, type Trip, type VehicleType } from '@/domain/trip';
 import type { Vehicle } from '@/domain/vehicles';
 import { useKeyboardOpen } from '@/hooks/use-keyboard-open';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/i18n/i18n';
 import { drivingDistance } from '@/places/address-search';
 import { useRegion } from '@/region/region';
 
@@ -40,8 +41,9 @@ const daysAgo = (days: number) => {
 export default function AddTripScreen() {
   const db = useSQLiteContext();
   const theme = useTheme();
+  const t = useT();
   const { region } = useRegion();
-  const unitName = region.unit === 'mi' ? 'miles' : 'kilometres';
+  const miles = region.unit === 'mi';
   const today = toLocalIsoDate(new Date());
 
   const [kind, setKind] = useState<Kind>('business');
@@ -110,13 +112,19 @@ export default function AddTripScreen() {
   const save = async () => {
     const parsed = parseMiles(distance);
     const meters = parsed === null ? null : fromUnits(parsed, region);
-    if (!from.text.trim() || !to.text.trim()) return setError('Choose where you drove from and to.');
-    if (meters === null) return setError(`Enter the ${unitName} driven, e.g. 12.5.`);
+    if (!from.text.trim() || !to.text.trim()) return setError(t('Choose where you drove from and to.'));
+    if (meters === null) {
+      return setError(miles ? t('Enter the miles driven, e.g. 12.5.') : t('Enter the kilometres driven, e.g. 12.5.'));
+    }
     if (meters > MAX_TRIP_METERS) {
-      return setError(`${formatDistance(meters, region)} is more than one trip should be. Check for an extra digit.`);
+      return setError(
+        t('{{distance}} is more than one trip should be. Check for an extra digit.', {
+          distance: formatDistance(meters, region),
+        }),
+      );
     }
     if (kind === 'business' && !purpose.trim()) {
-      return setError(`${region.authority} needs a business purpose, e.g. "Client meeting".`);
+      return setError(t('{{authority}} needs a business purpose, e.g. "Client meeting".', { authority: region.authority }));
     }
     setError(null);
     setSaving(true);
@@ -145,7 +153,7 @@ export default function AddTripScreen() {
       });
       router.back();
     } catch {
-      setError('Could not save the trip. Please try again.');
+      setError(t('Could not save the trip. Please try again.'));
       setSaving(false);
     }
   };
@@ -153,7 +161,7 @@ export default function AddTripScreen() {
   const inputStyle = [styles.input, { color: theme.text, backgroundColor: theme.backgroundElement }];
 
   const dateLabel =
-    date === today ? 'Today' : date === daysAgo(1) ? 'Yesterday' : formatLongDate(date, region);
+    date === today ? t('Today') : date === daysAgo(1) ? t('Yesterday') : formatLongDate(date, region);
 
   return (
     <ThemedView style={styles.container}>
@@ -164,8 +172,8 @@ export default function AddTripScreen() {
           keyboardShouldPersistTaps="handled">
           <Segmented
             options={[
-              { value: 'business', label: 'Business' },
-              { value: 'personal', label: 'Personal' },
+              { value: 'business', label: t('Business') },
+              { value: 'personal', label: t('Personal') },
             ]}
             value={kind}
             onChange={(value) => {
@@ -177,23 +185,27 @@ export default function AddTripScreen() {
           <ThemedView type="backgroundElement" style={styles.card}>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={`Date: ${dateLabel}. ${calendarOpen ? 'Hide' : 'Show'} calendar`}
+              accessibilityLabel={
+                calendarOpen
+                  ? t('Date: {{date}}. Hide calendar', { date: dateLabel })
+                  : t('Date: {{date}}. Show calendar', { date: dateLabel })
+              }
               onPress={() => setCalendarOpen(!calendarOpen)}
               style={styles.dateRow}>
               <View>
                 <ThemedText type="small" themeColor="textSecondary">
-                  Date
+                  {t('Date')}
                 </ThemedText>
                 <ThemedText type="smallBold">{dateLabel}</ThemedText>
               </View>
               <ThemedText type="small" style={{ color: theme.accent }}>
-                📅 {calendarOpen ? 'Done' : 'Change'}
+                📅 {calendarOpen ? t('Done') : t('Change')}
               </ThemedText>
             </Pressable>
             {!calendarOpen && (
               <View style={styles.chips}>
-                <Chip label="Today" selected={date === today} onPress={() => setDate(today)} />
-                <Chip label="Yesterday" selected={date === daysAgo(1)} onPress={() => setDate(daysAgo(1))} />
+                <Chip label={t('Today')} selected={date === today} onPress={() => setDate(today)} />
+                <Chip label={t('Yesterday')} selected={date === daysAgo(1)} onPress={() => setDate(daysAgo(1))} />
               </View>
             )}
             {calendarOpen && (
@@ -213,8 +225,8 @@ export default function AddTripScreen() {
 
           <View onLayout={(e) => (fieldTops.current.from = e.nativeEvent.layout.y)}>
             <PlaceField
-              label="From"
-              placeholder="Search an address or place"
+              label={t('From')}
+              placeholder={t('Search an address or place')}
               value={from}
               onChange={(next) => {
                 clearError();
@@ -228,7 +240,7 @@ export default function AddTripScreen() {
           </View>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Swap from and to"
+            accessibilityLabel={t('Swap from and to')}
             hitSlop={8}
             onPress={() => {
               setFrom(to);
@@ -241,8 +253,8 @@ export default function AddTripScreen() {
           </Pressable>
           <View onLayout={(e) => (fieldTops.current.to = e.nativeEvent.layout.y)}>
             <PlaceField
-              label="To"
-              placeholder="Search an address or place"
+              label={t('To')}
+              placeholder={t('Search an address or place')}
               value={to}
               onChange={(next) => {
                 clearError();
@@ -270,22 +282,22 @@ export default function AddTripScreen() {
           <View style={styles.field}>
             <View style={styles.labelRow}>
               <ThemedText type="small" themeColor="textSecondary">
-                {unitName === 'miles' ? 'Miles' : 'Kilometres'}
+                {miles ? t('Miles') : t('Kilometres')}
               </ThemedText>
               {measuring ? (
                 <ThemedText type="small" themeColor="textSecondary">
-                  Measuring the route…
+                  {t('Measuring the route…')}
                 </ThemedText>
               ) : (
                 estimated && (
                   <ThemedText type="small" style={{ color: theme.accent }}>
-                    By road, from Apple Maps
+                    {t('By road, from Apple Maps')}
                   </ThemedText>
                 )
               )}
             </View>
             <TextInput
-              accessibilityLabel={unitName}
+              accessibilityLabel={miles ? t('miles') : t('kilometres')}
               style={inputStyle}
               placeholderTextColor={theme.textSecondary}
               value={distance}
@@ -295,13 +307,13 @@ export default function AddTripScreen() {
                 setDistance(value);
               }}
               inputMode="decimal"
-              placeholder={from.at && to.at ? '' : 'Pick both places to fill this in, or type it'}
+              placeholder={from.at && to.at ? '' : t('Pick both places to fill this in, or type it')}
             />
           </View>
 
           <View style={styles.field}>
             <ThemedText type="small" themeColor="textSecondary">
-              {kind === 'business' ? 'Business purpose' : 'Note (optional)'}
+              {kind === 'business' ? t('Business purpose') : t('Note (optional)')}
             </ThemedText>
             {kind === 'business' ? (
               <PurposePicker
@@ -314,7 +326,7 @@ export default function AddTripScreen() {
               />
             ) : (
               <TextInput
-                accessibilityLabel="Note"
+                accessibilityLabel={t('Note')}
                 style={inputStyle}
                 placeholderTextColor={theme.textSecondary}
                 value={purpose}
@@ -322,7 +334,7 @@ export default function AddTripScreen() {
                   clearError();
                   setPurpose(value);
                 }}
-                placeholder="Optional"
+                placeholder={t('Optional')}
               />
             )}
           </View>
@@ -338,7 +350,7 @@ export default function AddTripScreen() {
             onPress={save}
             style={[styles.save, { backgroundColor: theme.accent, opacity: saving ? 0.6 : 1 }]}>
             <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-              {saving ? 'Saving…' : 'Save trip'}
+              {saving ? t('Saving…') : t('Save trip')}
             </ThemedText>
           </Pressable>
         </ScrollView>

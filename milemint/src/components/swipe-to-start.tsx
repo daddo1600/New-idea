@@ -18,6 +18,7 @@ import { scheduleOnRN } from 'react-native-worklets';
 
 import { BrandGradient } from '@/components/brand-gradient';
 import { LeafMark } from '@/components/leaf-mark';
+import { useT } from '@/i18n/i18n';
 
 const HEIGHT = 64;
 const THUMB = 52;
@@ -33,6 +34,7 @@ const COMMIT = 0.8;
  * "activate" starts the shift directly.
  */
 export function SwipeToStart({ label, hint, onComplete }: { label: string; hint: string; onComplete: () => void }) {
+  const t = useT();
   const reduceMotion = useReducedMotion();
   const [width, setWidth] = useState(0);
   const travel = Math.max(1, width - THUMB - PAD * 2);
@@ -93,7 +95,7 @@ export function SwipeToStart({ label, hint, onComplete }: { label: string; hint:
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={label}
-      accessibilityHint={`${hint}. Swipe the button to the right, or double-tap.`}
+      accessibilityHint={t('{{hint}}. Swipe the button to the right, or double-tap.', { hint })}
       accessibilityActions={[{ name: 'activate' }]}
       onAccessibilityAction={done}
       onPress={() => {

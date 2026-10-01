@@ -16,10 +16,16 @@ import {
 } from '@/domain/regions';
 import type { VehicleType } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
+import { msg, useT } from '@/i18n/i18n';
 
-const UNIT_NAMES = { mi: 'miles', km: 'km' } as const;
+const UNIT_NAMES = { mi: msg('miles'), km: msg('km') } as const;
 /** Short enough to fit a half-width tile beside the flag. */
-const SHORT_NAMES: Record<RegionCode, string> = { US: 'USA', GB: 'UK', CA: 'Canada', AU: 'Australia' };
+const SHORT_NAMES: Record<RegionCode, string> = {
+  US: msg('USA'),
+  GB: msg('UK'),
+  CA: msg('Canada'),
+  AU: msg('Australia'),
+};
 
 /** The phone's country as a MileMint region (UK phone → GB), from its Region setting; no location permission. */
 export function phoneRegion(): RegionCode {
@@ -59,6 +65,7 @@ export function CountryOptions({
   showRate?: boolean;
 }) {
   const theme = useTheme();
+  const t = useT();
   const chosen = REGIONS[value];
   return (
     <View style={styles.container}>
@@ -70,7 +77,7 @@ export function CountryOptions({
               key={option.code}
               accessibilityRole="radio"
               accessibilityState={{ selected: active }}
-              accessibilityLabel={`${option.name}. ${option.rule}`}
+              accessibilityLabel={t('{{country}}. {{rule}}', { country: t(option.name), rule: t(option.rule) })}
               onPress={() => onChange(option.code)}
               style={({ pressed }) => [
                 styles.tile,
@@ -85,14 +92,14 @@ export function CountryOptions({
               <Text style={styles.flag}>{option.flag}</Text>
               <View style={styles.flex}>
                 <ThemedText type="smallBold" style={active && styles.onBrand} numberOfLines={1}>
-                  {SHORT_NAMES[option.code]}
+                  {t(SHORT_NAMES[option.code])}
                 </ThemedText>
                 <ThemedText
                   type="small"
                   themeColor="textSecondary"
                   numberOfLines={1}
                   style={active && styles.onBrandSoft}>
-                  {option.currencySymbol} · {UNIT_NAMES[option.unit]}
+                  {option.currencySymbol} · {t(UNIT_NAMES[option.unit])}
                 </ThemedText>
               </View>
             </Pressable>
@@ -103,7 +110,7 @@ export function CountryOptions({
         <ThemedView type="backgroundElement" style={styles.rate}>
           <View style={[styles.rateDot, { backgroundColor: theme.accent }]} />
           <ThemedText type="small" themeColor="textSecondary" style={styles.flex} accessibilityLiveRegion="polite">
-            {vehicleRule(chosen, vehicle)}
+            {t(vehicleRule(chosen, vehicle))}
           </ThemedText>
         </ThemedView>
       )}

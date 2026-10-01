@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/i18n/i18n';
 
 /** Dates are local calendar days as YYYY-MM-DD, like Trip#localDate. */
 const iso = (y: number, m: number, d: number) =>
@@ -27,6 +28,7 @@ export function CalendarPicker({
   weekStartsOn: 0 | 1;
 }) {
   const theme = useTheme();
+  const t = useT();
   const [year, month] = value.split('-').map(Number);
   const [shown, setShown] = useState({ year, month: month - 1 });
 
@@ -55,7 +57,7 @@ export function CalendarPicker({
   const arrow = (by: number, enabled: boolean) => (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={by < 0 ? 'Previous month' : 'Next month'}
+      accessibilityLabel={by < 0 ? t('Previous month') : t('Next month')}
       disabled={!enabled}
       hitSlop={10}
       onPress={() => move(by)}

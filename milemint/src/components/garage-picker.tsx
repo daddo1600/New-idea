@@ -5,6 +5,7 @@ import { Spacing } from '@/constants/theme';
 import { VEHICLE_ICONS } from '@/domain/trip';
 import type { Vehicle } from '@/domain/vehicles';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/i18n/i18n';
 
 /** Which of the user's vehicles a trip was in: one tap, icon and name. */
 export function GaragePicker({
@@ -17,8 +18,9 @@ export function GaragePicker({
   onChange: (vehicle: Vehicle) => void;
 }) {
   const theme = useTheme();
+  const t = useT();
   return (
-    <View style={styles.row} accessibilityRole="radiogroup" accessibilityLabel="Vehicle">
+    <View style={styles.row} accessibilityRole="radiogroup" accessibilityLabel={t('Vehicle')}>
       {vehicles.map((vehicle) => {
         const selected = vehicle.id === value;
         return (

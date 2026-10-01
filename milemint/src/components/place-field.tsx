@@ -8,6 +8,7 @@ import { Spacing } from '@/constants/theme';
 import type { LatLng } from '@/domain/geo';
 import type { Place, PlaceKind } from '@/domain/places';
 import { useTheme } from '@/hooks/use-theme';
+import { t as translateNow, useT } from '@/i18n/i18n';
 import { locateAddress, suggestAddresses, type AddressSuggestion } from '@/places/address-search';
 
 /**
@@ -22,7 +23,11 @@ export const EMPTY_PLACE: PlaceDraft = { text: '', at: null, placeId: null };
 export async function resolvePlace(draft: PlaceDraft): Promise<LatLng> {
   if (draft.at) return draft.at;
   const found = await locateAddress(draft.text.trim());
-  if (!found) throw new Error(`Couldn’t find “${draft.text.trim()}”. Pick a suggestion, or add the town or postcode.`);
+  if (!found) throw new Error(
+      translateNow('Couldn’t find “{{address}}”. Pick a suggestion, or add the town or postcode.', {
+        address: draft.text.trim(),
+      }),
+    );
   return found;
 }
 
@@ -30,9 +35,9 @@ export const PLACE_ICONS: Record<PlaceKind, string> = { home: '🏠', work: '�
 
 /** A short, readable label for where the phone is, e.g. "12 High Street, Bristol". */
 function describe(address: Location.LocationGeocodedAddress | undefined): string {
-  if (!address) return 'Current location';
+  if (!address) return translateNow('Current location');
   const street = [address.streetNumber, address.street].filter(Boolean).join(' ') || address.name;
-  return [street, address.city].filter(Boolean).join(', ') || 'Current location';
+  return [street, address.city].filter(Boolean).join(', ') || translateNow('Current location');
 }
 
 /** Waits for a pause in typing, so Apple Maps isn't asked about every keystroke. */
@@ -68,6 +73,7 @@ export function PlaceField({
   onFocus?: () => void;
 }) {
   const theme = useTheme();
+  const t = useT();
   const [locating, setLocating] = useState(false);
   const [note, setNote] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
@@ -99,7 +105,7 @@ export function PlaceField({
     const at = suggestion.at ?? (await locateAddress(suggestion.title, suggestion.subtitle));
     setLocating(false);
     if (at) onChange({ text: suggestion.title, at, placeId: null });
-    else setNote('Apple Maps couldn’t place that one. Try another suggestion.');
+    else setNote(t('Apple Maps couldn’t place that one. Try another suggestion.'));
   };
 
   const pickPlace = (place: Place) => {
@@ -124,7 +130,7 @@ export function PlaceField({
     try {
       const permission = await Location.getForegroundPermissionsAsync();
       if (!permission.granted && !(await Location.requestForegroundPermissionsAsync()).granted) {
-        setNote('Location is off for MileMint, so type the address instead.');
+        setNote(t('Location is off for MileMint, so type the address instead.'));
         return;
       }
       const { coords } = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
@@ -132,7 +138,7 @@ export function PlaceField({
       const [address] = await Location.reverseGeocodeAsync(at).catch(() => []);
       onChange({ text: describe(address), at, placeId: null });
     } catch {
-      setNote('Couldn’t find where you are right now. Type the address instead.');
+      setNote(t('Couldn’t find where you are right now. Type the address instead.'));
     } finally {
       setLocating(false);
     }
@@ -155,7 +161,7 @@ export function PlaceField({
         ) : (
           value.at && (
             <ThemedText type="small" style={{ color: theme.accent }}>
-              ✓ Found
+              {t('✓ Found')}
             </ThemedText>
           )
         )}
@@ -187,7 +193,7 @@ export function PlaceField({
       )}
 
       <TextInput
-        accessibilityLabel={`${label} address`}
+        accessibilityLabel={t('{{label}} address', { label })}
         value={value.text}
         onChangeText={type}
         onFocus={() => {
@@ -236,7 +242,7 @@ export function PlaceField({
       {here && (
         <Pressable accessibilityRole="button" hitSlop={8} disabled={locating} onPress={useHere} style={styles.here}>
           <ThemedText type="small" style={{ color: theme.accent }}>
-            📍 I’m here now
+            {t('📍 I’m here now')}
           </ThemedText>
         </Pressable>
       )}

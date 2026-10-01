@@ -3,6 +3,8 @@
  * good habits. Each is celebrated once, the first time it's reached.
  */
 
+import { msg } from '../i18n/i18n';
+
 export type MilestoneKind = 'money' | 'distance' | 'habit';
 
 export type Milestone = {
@@ -19,17 +21,17 @@ export const MONEY_STEPS = [50, 100, 250, 500, 1_000, 2_500, 5_000, 10_000] as c
 export const DISTANCE_STEPS = [100, 500, 1_000, 2_500, 5_000, 10_000, 25_000] as const;
 
 export const HABITS = {
-  'first-trip': { emoji: '🚗', title: 'First trip logged', message: 'MileMint is on the job. Just drive.' },
-  'first-shift': { emoji: '📦', title: 'First shift done', message: 'Every drive of it counted as business.' },
+  'first-trip': { emoji: '🚗', title: msg('First trip logged'), message: msg('MileMint is on the job. Just drive.') },
+  'first-shift': { emoji: '📦', title: msg('First shift done'), message: msg('Every drive of it counted as business.') },
   'sorted-week': {
     emoji: '✅',
-    title: 'A fully sorted week',
-    message: 'Every drive sorted. Tax time just got easier.',
+    title: msg('A fully sorted week'),
+    message: msg('Every drive sorted. Tax time just got easier.'),
   },
   'first-report': {
     emoji: '📄',
-    title: 'First report exported',
-    message: 'Your mileage log is ready for your tax return.',
+    title: msg('First report exported'),
+    message: msg('Your mileage log is ready for your tax return.'),
   },
 } as const;
 export type HabitId = keyof typeof HABITS;

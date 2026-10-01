@@ -11,27 +11,81 @@ import { useTrips } from '@/db/use-trips';
 import { FREE_AUTO_DRIVES_PER_MONTH, lockedTripIds } from '@/domain/plan';
 import { formatMoney, potentialDeduction } from '@/domain/regions';
 import { useTheme } from '@/hooks/use-theme';
+import { msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
+import type { ProPlan, ProTrial } from '@/purchases/store';
 import { useRegion } from '@/region/region';
 
 const TERMS_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
 const PRIVACY_URL =
   'https://github.com/daddo1600/New-idea/blob/claude/ios-app-ideas-market-of84qv/milemint/docs/privacy-policy.md';
 
-/** What each plan includes: `true` is a tick, a string is shown as is. */
-const COMPARISON: readonly [feature: string, free: string | boolean, pro: string | boolean][] = [
-  ['Automatic drive logging', `${FREE_AUTO_DRIVES_PER_MONTH} a month`, 'Unlimited'],
-  ['Drives over the limit', 'Kept, locked', 'Unlocked'],
-  ['Add missed trips by hand', true, true],
-  ['Swipe to sort business trips', true, true],
-  ['Work hours, places, learned routes', true, true],
-  ['Mileage log export (CSV)', true, true],
-  ['Tax-ready PDF report', false, true],
-  ['Encrypted on your iPhone, no ads', true, true],
+/**
+ * What each plan includes: `true` is a tick, a string is shown translated, and
+ * `null` is the free plan's monthly drive limit.
+ */
+const COMPARISON: readonly [feature: string, free: string | boolean | null, pro: string | boolean][] = [
+  [msg('Automatic drive logging'), null, msg('Unlimited')],
+  [msg('Drives over the limit'), msg('Kept, locked'), msg('Unlocked')],
+  [msg('Add missed trips by hand'), true, true],
+  [msg('Swipe to sort business trips'), true, true],
+  [msg('Work hours, places, learned routes'), true, true],
+  [msg('Mileage log export (CSV)'), true, true],
+  [msg('Tax-ready PDF report'), false, true],
+  [msg('Encrypted on your iPhone, no ads'), true, true],
 ];
+
+type T = ReturnType<typeof useT>;
+
+/** e.g. "30-day free trial". */
+function trialText(t: T, trial: ProTrial): string {
+  const { count } = trial;
+  if (trial.unit === 'day') return t('{{count}}-day free trial', { count });
+  if (trial.unit === 'month') return t('{{count}}-month free trial', { count });
+  return t('Free trial');
+}
+
+/** e.g. "30-day free trial, then $49.99/year". */
+function planPrice(t: T, plan: ProPlan): string {
+  const price = plan.price;
+  if (plan.trial) {
+    const trial = trialText(t, plan.trial);
+    return plan.period === 'year'
+      ? t('{{trial}}, then {{price}}/year', { trial, price })
+      : t('{{trial}}, then {{price}}/month', { trial, price });
+  }
+  return plan.period === 'year' ? t('{{price}}/year', { price }) : t('{{price}}/month', { price });
+}
+
+/** The renewal terms Apple requires next to an auto-renewing offer. */
+function renewalTerms(t: T, plan: ProPlan): string {
+  const price = plan.price;
+  if (plan.trial) {
+    const trial = trialText(t, plan.trial);
+    return plan.period === 'year'
+      ? t(
+          'After the {{trial}}, {{price}} per year is charged to your Apple Account and renews automatically unless cancelled at least 24 hours before the end of the period.',
+          { trial, price },
+        )
+      : t(
+          'After the {{trial}}, {{price}} per month is charged to your Apple Account and renews automatically unless cancelled at least 24 hours before the end of the period.',
+          { trial, price },
+        );
+  }
+  return plan.period === 'year'
+    ? t(
+        '{{price}} per year is charged to your Apple Account and renews automatically unless cancelled at least 24 hours before the end of the period.',
+        { price },
+      )
+    : t(
+        '{{price}} per month is charged to your Apple Account and renews automatically unless cancelled at least 24 hours before the end of the period.',
+        { price },
+      );
+}
 
 export default function ProScreen() {
   const theme = useTheme();
+  const t = useT();
   const { isPro, plans, plansLoaded, storeAvailable, busy, error, buy, restore, manage } = usePro();
   const { trips } = useTrips();
   const { region } = useRegion();
@@ -59,14 +113,14 @@ export default function ProScreen() {
     return (
       <ThemedView style={styles.container}>
         <ScrollView contentContainerStyle={styles.content}>
-          <ThemedText type="subtitle">MileMint Pro is active</ThemedText>
+          <ThemedText type="subtitle">{t('MileMint Pro is active')}</ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
-            Every drive is logged and unlocked. Thanks for supporting MileMint.
+            {t('Every drive is logged and unlocked. Thanks for supporting MileMint.')}
           </ThemedText>
           {storeAvailable && (
             <Pressable accessibilityRole="button" onPress={manage} hitSlop={8}>
               <ThemedText type="small" style={{ color: theme.accent }}>
-                Manage subscription
+                {t('Manage subscription')}
               </ThemedText>
             </Pressable>
           )}
@@ -75,7 +129,7 @@ export default function ProScreen() {
             onPress={close}
             style={[styles.button, { backgroundColor: theme.accent }]}>
             <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-              Done
+              {t('Done')}
             </ThemedText>
           </Pressable>
         </ScrollView>
@@ -87,21 +141,23 @@ export default function ProScreen() {
 
   const onRestore = async () => {
     const found = await restore();
-    if (!found) Alert.alert('No subscription found', 'This Apple Account doesn’t have MileMint Pro.');
+    if (!found) Alert.alert(t('No subscription found'), t('This Apple Account doesn’t have MileMint Pro.'));
   };
 
   return (
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        <ThemedText type="subtitle">Log every drive with MileMint Pro</ThemedText>
+        <ThemedText type="subtitle">{t('Log every drive with MileMint Pro')}</ThemedText>
         {locked.count > 0 && (
           <ThemedView type="backgroundElement" style={[styles.locked, { borderColor: theme.accent }]}>
             <ThemedText type="smallBold">
-              {locked.count} {locked.count === 1 ? 'drive is' : 'drives are'} waiting to be unlocked
+              {t('{{count}} drives are waiting to be unlocked', { count: locked.count })}
             </ThemedText>
             {locked.value > 0 && (
               <ThemedText type="small" themeColor="textSecondary">
-                Worth up to {formatMoney(locked.value, region)} in deductions if they were for business.
+                {t('Worth up to {{amount}} in deductions if they were for business.', {
+                  amount: formatMoney(locked.value, region),
+                })}
               </ThemedText>
             )}
           </ThemedView>
@@ -111,13 +167,14 @@ export default function ProScreen() {
 
         {!storeAvailable ? (
           <ThemedText type="small" themeColor="textSecondary">
-            Subscriptions are available in the App Store version of MileMint on iPhone.
+            {t('Subscriptions are available in the App Store version of MileMint on iPhone.')}
           </ThemedText>
         ) : plans.length === 0 ? (
           plansLoaded ? (
             <ThemedText type="small" themeColor="textSecondary">
-              Couldn’t load subscription options from the App Store. Check your connection and try again
-              later.
+              {t(
+                'Couldn’t load subscription options from the App Store. Check your connection and try again later.',
+              )}
             </ThemedText>
           ) : (
             <ActivityIndicator />
@@ -140,15 +197,14 @@ export default function ProScreen() {
                     },
                   ]}>
                   <View style={styles.flex}>
-                    <ThemedText type="smallBold">{option.period === 'year' ? 'Yearly' : 'Monthly'}</ThemedText>
+                    <ThemedText type="smallBold">{option.period === 'year' ? t('Yearly') : t('Monthly')}</ThemedText>
                     <ThemedText type="small" themeColor="textSecondary">
-                      {option.trial ? `${option.trial}, then ` : ''}
-                      {option.price}/{option.period}
+                      {planPrice(t, option)}
                     </ThemedText>
                   </View>
                   {option.period === 'year' && (
                     <ThemedText type="smallBold" style={{ color: theme.accent }}>
-                      Best value
+                      {t('Best value')}
                     </ThemedText>
                   )}
                 </Pressable>
@@ -157,29 +213,27 @@ export default function ProScreen() {
 
             {error && (
               <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
-                {error}
+                {t(error)}
               </ThemedText>
             )}
 
             <GoldButton
-              label={busy ? 'Opening the App Store…' : plan?.trial ? 'Start free trial' : 'Subscribe'}
+              label={busy ? t('Opening the App Store…') : plan?.trial ? t('Start free trial') : t('Subscribe')}
               disabled={busy || !plan}
               onPress={() => plan && buy(plan.id)}
             />
 
             {/* Terms Apple requires next to any auto-renewing subscription offer. */}
             <ThemedText type="small" themeColor="textSecondary" style={styles.legal}>
-              {plan?.trial ? `After the ${plan.trial}, ` : ''}
-              {plan ? `${plan.price} per ${plan.period} ` : ''}is charged to your Apple Account and renews
-              automatically unless cancelled at least 24 hours before the end of the period. Manage or
-              cancel anytime in your App Store account settings.
+              {plan ? `${renewalTerms(t, plan)} ` : ''}
+              {t('Manage or cancel anytime in your App Store account settings.')}
             </ThemedText>
           </>
         )}
 
         <Pressable accessibilityRole="button" onPress={close} style={styles.notNow}>
           <ThemedText type="small" themeColor="textSecondary">
-            Not now
+            {t('Not now')}
           </ThemedText>
         </Pressable>
 
@@ -187,18 +241,18 @@ export default function ProScreen() {
           {storeAvailable && (
             <Pressable accessibilityRole="button" disabled={busy} onPress={onRestore} hitSlop={8}>
               <ThemedText type="small" style={{ color: theme.accent }}>
-                Restore purchases
+                {t('Restore purchases')}
               </ThemedText>
             </Pressable>
           )}
           <Pressable accessibilityRole="link" onPress={() => WebBrowser.openBrowserAsync(TERMS_URL)} hitSlop={8}>
             <ThemedText type="small" style={{ color: theme.accent }}>
-              Terms of Use
+              {t('Terms of Use')}
             </ThemedText>
           </Pressable>
           <Pressable accessibilityRole="link" onPress={() => WebBrowser.openBrowserAsync(PRIVACY_URL)} hitSlop={8}>
             <ThemedText type="small" style={{ color: theme.accent }}>
-              Privacy Policy
+              {t('Privacy Policy')}
             </ThemedText>
           </Pressable>
         </View>
@@ -209,15 +263,16 @@ export default function ProScreen() {
 
 function Comparison() {
   const theme = useTheme();
-  const cell = (value: string | boolean, pro: boolean) =>
-    typeof value === 'string' ? (
+  const t = useT();
+  const cell = (value: string | boolean | null, pro: boolean) =>
+    value === null || typeof value === 'string' ? (
       <ThemedText type="small" style={[styles.planCell, pro && { color: theme.accent }]}>
-        {value}
+        {value === null ? t('{{count}} a month', { count: FREE_AUTO_DRIVES_PER_MONTH }) : t(value)}
       </ThemedText>
     ) : (
       <ThemedText
         type="smallBold"
-        accessibilityLabel={value ? 'Included' : 'Not included'}
+        accessibilityLabel={value ? t('Included') : t('Not included')}
         style={[styles.planCell, { color: value ? theme.accent : theme.textSecondary }]}>
         {value ? '✓' : '–'}
       </ThemedText>
@@ -226,10 +281,10 @@ function Comparison() {
     <ThemedView type="backgroundElement" style={styles.table}>
       <View style={styles.tableRow}>
         <ThemedText type="small" themeColor="textSecondary" style={styles.feature}>
-          What’s included
+          {t('What’s included')}
         </ThemedText>
         <ThemedText type="smallBold" style={styles.planCell}>
-          Free
+          {t('Free')}
         </ThemedText>
         <ThemedText type="smallBold" style={[styles.planCell, { color: theme.accent }]}>
           Pro
@@ -238,7 +293,7 @@ function Comparison() {
       {COMPARISON.map(([feature, free, pro]) => (
         <View key={feature} style={[styles.tableRow, { borderTopColor: theme.backgroundSelected }, styles.divided]}>
           <ThemedText type="small" style={styles.feature}>
-            {feature}
+            {t(feature)}
           </ThemedText>
           {cell(free, false)}
           {cell(pro, true)}

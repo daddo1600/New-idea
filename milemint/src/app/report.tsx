@@ -17,6 +17,7 @@ import { lockedTripIds } from '@/domain/plan';
 import { buildReport, reportYears } from '@/domain/report';
 import { currentTaxYear, formatDistance, formatMoney, fromUnits, taxYearLabel } from '@/domain/regions';
 import { useTheme } from '@/hooks/use-theme';
+import { msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
 import { useRegion } from '@/region/region';
 import { PDF_AVAILABLE, shareCsv, sharePdf } from '@/reports/export';
@@ -27,6 +28,7 @@ const YEARS_SHOWN = 3;
 export default function ReportScreen() {
   const db = useSQLiteContext();
   const theme = useTheme();
+  const t = useT();
   const { isPro } = usePro();
   const { region } = useRegion();
   const { trips, places } = useTrips();
@@ -81,14 +83,14 @@ export default function ReportScreen() {
       // A milestone: celebrated next time the home screen shows.
       saveSettings(db, { ...(await loadSettings(db)), exportedReport: true }).catch(() => {});
     } catch {
-      setError('Couldn’t create the file. Please try again.');
+      setError(msg('Couldn’t create the file. Please try again.'));
     } finally {
       setBusy(null);
     }
   };
 
   const empty = report.rows.length === 0;
-  const units = region.unit === 'mi' ? 'miles' : 'km';
+  const miles = region.unit === 'mi';
   const distance = (value: number) => formatDistance(fromUnits(value, region), region);
 
   return (
@@ -104,24 +106,30 @@ export default function ReportScreen() {
 
         <ThemedView type="backgroundElement" style={styles.card}>
           <ThemedText type="small" themeColor="textSecondary">
-            {report.label.length > 4 ? `${report.label} tax year` : report.label} at {region.authority} rates
+            {report.label.length > 4
+              ? t('{{year}} tax year at {{authority}} rates', { year: report.label, authority: region.authority })
+              : t('{{year}} at {{authority}} rates', { year: report.label, authority: region.authority })}
           </ThemedText>
           <ThemedText type="title">{formatMoney(report.deduction, region)}</ThemedText>
           <View style={styles.lines}>
-            <Line label={`Business ${units}`} value={distance(report.businessDistance)} />
-            <Line label={`Commuting ${units}`} value={distance(report.commutingDistance)} />
-            <Line label={`Other personal ${units}`} value={distance(report.otherDistance)} />
-            <Line label={`Total ${units}`} value={distance(report.totalDistance)} bold />
+            <Line label={miles ? t('Business miles') : t('Business km')} value={distance(report.businessDistance)} />
+            <Line label={miles ? t('Commuting miles') : t('Commuting km')} value={distance(report.commutingDistance)} />
+            <Line
+              label={miles ? t('Other personal miles') : t('Other personal km')}
+              value={distance(report.otherDistance)}
+            />
+            <Line label={miles ? t('Total miles') : t('Total km')} value={distance(report.totalDistance)} bold />
           </View>
           {region.caveat && (
             <ThemedText type="small" themeColor="textSecondary">
-              {region.caveat}
+              {t(region.caveat)}
             </ThemedText>
           )}
           {report.unclassifiedCount > 0 && (
             <ThemedText type="small" themeColor="danger">
-              {report.unclassifiedCount} trip{report.unclassifiedCount === 1 ? ' isn’t' : 's aren’t'} classified yet.
-              Sort {report.unclassifiedCount === 1 ? 'it' : 'them'} first so the report is complete.
+              {t('{{count}} trips aren’t classified yet. Sort them first so the report is complete.', {
+                count: report.unclassifiedCount,
+              })}
             </ThemedText>
           )}
         </ThemedView>
@@ -140,15 +148,20 @@ export default function ReportScreen() {
 
         {error && (
           <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
-            {error}
+            {t(error)}
           </ThemedText>
         )}
 
         <View style={styles.option}>
-          <ThemedText type="smallBold">Mileage log (CSV)</ThemedText>
+          <ThemedText type="smallBold">{t('Mileage log (CSV)')}</ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
-            Every trip with date, places, {units === 'km' ? 'kilometres' : 'miles'}, purpose and deduction. Opens in Excel, Numbers or Google
-            Sheets. Always free: it’s your data.
+            {miles
+              ? t(
+                  'Every trip with date, places, miles, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.',
+                )
+              : t(
+                  'Every trip with date, places, kilometres, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.',
+                )}
           </ThemedText>
           <Pressable
             accessibilityRole="button"
@@ -156,22 +169,29 @@ export default function ReportScreen() {
             onPress={() => run('csv')}
             style={[styles.outline, { borderColor: theme.accent, opacity: empty || busy ? 0.5 : 1 }]}>
             <ThemedText type="smallBold" style={{ color: theme.accent }}>
-              {busy === 'csv' ? 'Preparing…' : 'Export CSV'}
+              {busy === 'csv' ? t('Preparing…') : t('Export CSV')}
             </ThemedText>
           </Pressable>
         </View>
 
         <View style={styles.option}>
-          <ThemedText type="smallBold">{region.authority} mileage report (PDF) · Pro</ThemedText>
+          <ThemedText type="smallBold">
+            {t('{{authority}} mileage report (PDF) · Pro', { authority: region.authority })}
+          </ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
-            A ready-to-file report for you or your accountant: your{' '}
-            {region.code === 'US' ? 'Schedule C Part IV' : 'mileage'} totals, the deduction at each{' '}
-            {region.authority} rate, and the full trip log showing which trips were recorded while
-            driving and which were edited.
+            {region.code === 'US'
+              ? t(
+                  'A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.',
+                  { authority: region.authority },
+                )
+              : t(
+                  'A ready-to-file report for you or your accountant: your mileage totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.',
+                  { authority: region.authority },
+                )}
           </ThemedText>
           {!PDF_AVAILABLE ? (
             <ThemedText type="small" themeColor="textSecondary">
-              PDF reports are created on iPhone.
+              {t('PDF reports are created on iPhone.')}
             </ThemedText>
           ) : (
             <Pressable
@@ -180,7 +200,7 @@ export default function ReportScreen() {
               onPress={() => (isPro ? run('pdf') : router.push('/pro'))}
               style={[styles.filled, { backgroundColor: theme.accent, opacity: empty || busy ? 0.5 : 1 }]}>
               <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-                {busy === 'pdf' ? 'Preparing…' : isPro ? 'Create PDF report' : 'Unlock with Pro'}
+                {busy === 'pdf' ? t('Preparing…') : isPro ? t('Create PDF report') : t('Unlock with Pro')}
               </ThemedText>
             </Pressable>
           )}
@@ -188,12 +208,11 @@ export default function ReportScreen() {
 
         {empty && (
           <ThemedText type="small" themeColor="textSecondary">
-            No trips in {taxYearLabel(Number(year), region)} yet.
+            {t('No trips in {{year}} yet.', { year: taxYearLabel(Number(year), region) })}
           </ThemedText>
         )}
         <ThemedText type="small" themeColor="textSecondary">
-          Files are shared straight from your iPhone. MileMint never uploads them. Deductions are estimates,
-          not tax advice.
+          {t('Files are shared straight from your iPhone. MileMint never uploads them. Deductions are estimates, not tax advice.')}
         </ThemedText>
       </ScrollView>
     </ThemedView>
@@ -211,10 +230,12 @@ function OdometerCard({
   onSave: (readings: OdometerReadings) => Promise<void>;
 }) {
   const theme = useTheme();
+  const t = useT();
   const { region } = useRegion();
   const show = (value: number | null) => (value === null ? '' : String(value));
   const [start, setStart] = useState(show(readings.start));
   const [end, setEnd] = useState(show(readings.end));
+  // `text` is English, marked with msg() and shown with t().
   const [message, setMessage] = useState<{ error: boolean; text: string } | null>(null);
 
   const parse = (text: string): number | null | undefined => {
@@ -226,32 +247,32 @@ function OdometerCard({
     const s = parse(start);
     const e = parse(end);
     if (s === undefined || e === undefined) {
-      return setMessage({ error: true, text: 'Enter odometer readings as numbers, e.g. 48210.' });
+      return setMessage({ error: true, text: msg('Enter odometer readings as numbers, e.g. 48210.') });
     }
     if (s !== null && e !== null && e < s) {
-      return setMessage({ error: true, text: 'The end reading must be higher than the start reading.' });
+      return setMessage({ error: true, text: msg('The end reading must be higher than the start reading.') });
     }
     await onSave({ start: s, end: e });
-    setMessage({ error: false, text: 'Saved. The PDF report includes these readings.' });
+    setMessage({ error: false, text: msg('Saved. The PDF report includes these readings.') });
   };
 
   const inputStyle = [styles.input, { color: theme.text, backgroundColor: theme.background }];
   const unit = region.unit;
   return (
     <ThemedView type="backgroundElement" style={styles.card}>
-      <ThemedText type="smallBold">Odometer readings</ThemedText>
+      <ThemedText type="smallBold">{t('Odometer readings')}</ThemedText>
       <ThemedText type="small" themeColor="textSecondary">
         {region.report.askForOdometer
-          ? 'CRA needs your total distance driven to work out your business-use share.'
-          : 'Optional. Shows your total driving and the business share on the report.'}
+          ? t('CRA needs your total distance driven to work out your business-use share.')
+          : t('Optional. Shows your total driving and the business share on the report.')}
       </ThemedText>
       <View style={styles.odoRow}>
         <View style={styles.odoField}>
           <ThemedText type="small" themeColor="textSecondary">
-            Start of {report.label}
+            {t('Start of {{year}}', { year: report.label })}
           </ThemedText>
           <TextInput
-            accessibilityLabel={`Odometer at the start of ${report.label}, in ${unit}`}
+            accessibilityLabel={t('Odometer at the start of {{year}}, in {{unit}}', { year: report.label, unit })}
             style={inputStyle}
             value={start}
             onChangeText={(text) => {
@@ -265,10 +286,10 @@ function OdometerCard({
         </View>
         <View style={styles.odoField}>
           <ThemedText type="small" themeColor="textSecondary">
-            End of {report.label}
+            {t('End of {{year}}', { year: report.label })}
           </ThemedText>
           <TextInput
-            accessibilityLabel={`Odometer at the end of ${report.label}, in ${unit}`}
+            accessibilityLabel={t('Odometer at the end of {{year}}, in {{unit}}', { year: report.label, unit })}
             style={inputStyle}
             value={end}
             onChangeText={(text) => {
@@ -283,8 +304,10 @@ function OdometerCard({
       </View>
       {report.drivenDistance !== null && report.drivenDistance > 0 && (
         <ThemedText type="small" themeColor="textSecondary">
-          {formatDistance(fromUnits(report.drivenDistance, region), region)} driven ·{' '}
-          {Math.round((report.businessDistance / report.drivenDistance) * 100)}% business
+          {t('{{distance}} driven · {{percent}}% business', {
+            distance: formatDistance(fromUnits(report.drivenDistance, region), region),
+            percent: Math.round((report.businessDistance / report.drivenDistance) * 100),
+          })}
         </ThemedText>
       )}
       {message && (
@@ -292,12 +315,12 @@ function OdometerCard({
           type="small"
           themeColor={message.error ? 'danger' : 'textSecondary'}
           accessibilityRole={message.error ? 'alert' : undefined}>
-          {message.text}
+          {t(message.text)}
         </ThemedText>
       )}
       <Pressable accessibilityRole="button" onPress={save} hitSlop={8} style={styles.odoSave}>
         <ThemedText type="smallBold" style={{ color: theme.accent }}>
-          Save readings
+          {t('Save readings')}
         </ThemedText>
       </Pressable>
     </ThemedView>

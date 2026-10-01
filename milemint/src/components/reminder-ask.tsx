@@ -6,6 +6,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { loadSettings, saveSettings } from '@/db/settings-repo';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/i18n/i18n';
 import { useRegion } from '@/region/region';
 import { enableWeeklyReminder, REMINDERS_SUPPORTED } from '@/reminders/weekly';
 
@@ -16,6 +17,7 @@ import { enableWeeklyReminder, REMINDERS_SUPPORTED } from '@/reminders/weekly';
 export function ReminderAsk() {
   const db = useSQLiteContext();
   const theme = useTheme();
+  const t = useT();
   const { region } = useRegion();
   const [show, setShow] = useState(false);
 
@@ -35,10 +37,11 @@ export function ReminderAsk() {
     <View style={[styles.card, { borderColor: theme.accent, backgroundColor: theme.accent + '14' }]}>
       <Text style={styles.icon}>📅</Text>
       <View style={styles.flex}>
-        <ThemedText type="smallBold">Want a Sunday nudge?</ThemedText>
+        <ThemedText type="smallBold">{t('Want a Sunday nudge?')}</ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
-          A quick (slightly cheeky) reminder each Sunday evening to sort the week’s drives, so nothing goes
-          unclaimed.
+          {t(
+            'A quick (slightly cheeky) reminder each Sunday evening to sort the week’s drives, so nothing goes unclaimed.',
+          )}
         </ThemedText>
         <View style={styles.buttons}>
           <Pressable
@@ -46,12 +49,12 @@ export function ReminderAsk() {
             onPress={() => answer(true)}
             style={[styles.yes, { backgroundColor: theme.accent }]}>
             <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-              Yes, remind me
+              {t('Yes, remind me')}
             </ThemedText>
           </Pressable>
           <Pressable accessibilityRole="button" hitSlop={8} onPress={() => answer(false)}>
             <ThemedText type="small" themeColor="textSecondary">
-              No thanks
+              {t('No thanks')}
             </ThemedText>
           </Pressable>
         </View>

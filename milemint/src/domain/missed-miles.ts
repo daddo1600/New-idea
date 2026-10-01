@@ -1,11 +1,12 @@
+import { msg } from '../i18n/i18n';
 import type { DeductionTrip } from './regions';
 
 export type Period = 'this-week' | 'this-month' | 'last-month';
 
 export const PERIOD_LABELS: Record<Period, string> = {
-  'this-week': 'This week',
-  'this-month': 'This month',
-  'last-month': 'Last month',
+  'this-week': msg('This week'),
+  'this-month': msg('This month'),
+  'last-month': msg('Last month'),
 };
 
 const iso = (date: Date) =>

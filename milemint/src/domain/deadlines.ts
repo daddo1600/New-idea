@@ -1,3 +1,4 @@
+import { msg, t } from '../i18n/i18n';
 import { formatLongDate, type Region, type RegionCode, taxYearBounds, taxYearLabel, taxYearOf } from './regions';
 
 /**
@@ -25,6 +26,12 @@ import { formatLongDate, type Region, type RegionCode, taxYearBounds, taxYearLab
 export type FilingGuide = {
   /** The yearly return, as people call it. */
   returnName: string;
+  /** "Your {{year}} tax return is due", a whole sentence so it translates well. */
+  returnIsDue: string;
+  /** Reminder a month before the return is due ({{year}} is the tax year label). */
+  returnDueInMonth: string;
+  /** Reminder a week before the return is due. */
+  returnDueInWeek: string;
   /** "31 January", shown in sentences. */
   dueText: string;
   /** Month and day the return for a tax year is due, in the year after the tax year ends. */
@@ -41,52 +48,64 @@ export type FilingGuide = {
 
 export const FILING: Record<RegionCode, FilingGuide> = {
   GB: {
-    returnName: 'Self Assessment return',
-    dueText: '31 January',
+    returnName: msg('Self Assessment return'),
+    returnIsDue: msg('Your {{year}} Self Assessment return is due'),
+    returnDueInMonth: msg('Your {{year}} Self Assessment return is due in a month'),
+    returnDueInWeek: msg('Self Assessment return due in a week 📄'),
+    dueText: msg('31 January'),
     due: { month: 1, day: 31 },
     weekendRolls: false,
     yearly:
-      'Self-employed: once a year, online by 31 January after the tax year ends (5 April). Your mileage goes in Car, van and travel expenses.',
+      msg('Self-employed: once a year, online by 31 January after the tax year ends (5 April). Your mileage goes in Car, van and travel expenses.'),
     quarterly:
-      'Making Tax Digital: if your self-employed and property income is over £50,000 (£30,000 from April 2027, £20,000 from April 2028), you also send quarterly updates through MTD software by 7 August, 7 November, 7 February and 7 May. Your mileage counts towards each update.',
+      msg('Making Tax Digital: if your self-employed and property income is over £50,000 (£30,000 from April 2027, £20,000 from April 2028), you also send quarterly updates through MTD software by 7 August, 7 November, 7 February and 7 May. Your mileage counts towards each update.'),
     employees:
-      'Employees: if your employer pays less than 55p a mile (or nothing), claim the difference with form P87 or on Self Assessment. You can go back 4 tax years.',
+      msg('Employees: if your employer pays less than 55p a mile (or nothing), claim the difference with form P87 or on Self Assessment. You can go back 4 tax years.'),
   },
   US: {
-    returnName: 'tax return (Form 1040)',
-    dueText: 'April 15',
+    returnName: msg('tax return (Form 1040)'),
+    returnIsDue: msg('Your {{year}} tax return (Form 1040) is due'),
+    returnDueInMonth: msg('Your {{year}} tax return (Form 1040) is due in a month'),
+    returnDueInWeek: msg('Tax return (Form 1040) due in a week 📄'),
+    dueText: msg('April 15'),
     due: { month: 4, day: 15 },
     weekendRolls: true,
     yearly:
-      'Self-employed: once a year on Form 1040 with Schedule C, due April 15 (October 15 with an extension, but tax owed is still due in April).',
+      msg('Self-employed: once a year on Form 1040 with Schedule C, due April 15 (October 15 with an extension, but tax owed is still due in April).'),
     quarterly:
-      'Estimated tax: if you expect to owe $1,000 or more, pay quarterly with Form 1040-ES by April 15, June 15, September 15 and January 15. Your mileage lowers your profit, so keep it up to date to avoid overpaying.',
+      msg('Estimated tax: if you expect to owe $1,000 or more, pay quarterly with Form 1040-ES by April 15, June 15, September 15 and January 15. Your mileage lowers your profit, so keep it up to date to avoid overpaying.'),
     employees:
-      'Employees: unreimbursed mileage can’t be deducted on your federal return. Use your log to get paid back by your employer; a few states still allow a deduction.',
+      msg('Employees: unreimbursed mileage can’t be deducted on your federal return. Use your log to get paid back by your employer; a few states still allow a deduction.'),
   },
   CA: {
-    returnName: 'tax return',
-    dueText: 'April 30',
+    returnName: msg('tax return'),
+    returnIsDue: msg('Your {{year}} tax return is due'),
+    returnDueInMonth: msg('Your {{year}} tax return is due in a month'),
+    returnDueInWeek: msg('Tax return due in a week 📄'),
+    dueText: msg('April 30'),
     due: { month: 4, day: 30 },
     weekendRolls: false,
     yearly:
-      'Once a year: by April 30, or June 15 if you’re self-employed (any tax owing is still due April 30). Self-employed claim vehicle costs on form T2125.',
+      msg('Once a year: by April 30, or June 15 if you’re self-employed (any tax owing is still due April 30). Self-employed claim vehicle costs on form T2125.'),
     quarterly:
-      'Instalments: if your net tax owing is over $3,000 ($1,800 in Quebec), CRA asks for quarterly payments by March 15, June 15, September 15 and December 15.',
+      msg('Instalments: if your net tax owing is over $3,000 ($1,800 in Quebec), CRA asks for quarterly payments by March 15, June 15, September 15 and December 15.'),
     employees:
-      'Employees: with a signed T2200 from your employer, claim vehicle expenses on form T777. Otherwise, use your log to get reimbursed at the per-km rate.',
+      msg('Employees: with a signed T2200 from your employer, claim vehicle expenses on form T777. Otherwise, use your log to get reimbursed at the per-km rate.'),
   },
   AU: {
-    returnName: 'tax return',
-    dueText: '31 October',
+    returnName: msg('tax return'),
+    returnIsDue: msg('Your {{year}} tax return is due'),
+    returnDueInMonth: msg('Your {{year}} tax return is due in a month'),
+    returnDueInWeek: msg('Tax return due in a week 📄'),
+    dueText: msg('31 October'),
     due: { month: 10, day: 31 },
     weekendRolls: false,
     yearly:
-      'Once a year: lodge by 31 October after the income year ends (30 June), or later if you use a registered tax agent and sign up with them before 31 October.',
+      msg('Once a year: lodge by 31 October after the income year ends (30 June), or later if you use a registered tax agent and sign up with them before 31 October.'),
     quarterly:
-      'BAS: if you’re registered for GST or pay PAYG instalments, you lodge quarterly by 28 October, 28 February, 28 April and 28 July. Rideshare drivers must register for GST from their first ride; delivery riders only once turnover reaches $75,000.',
+      msg('BAS: if you’re registered for GST or pay PAYG instalments, you lodge quarterly by 28 October, 28 February, 28 April and 28 July. Rideshare drivers must register for GST from their first ride; delivery riders only once turnover reaches $75,000.'),
     employees:
-      'Employees: claim work-related car expenses at D1 on your return, up to 5,000 km per car with the cents per km method.',
+      msg('Employees: claim work-related car expenses at D1 on your return, up to 5,000 km per car with the cents per km method.'),
   },
 };
 
@@ -170,10 +189,10 @@ export function activeCountdown(region: Region, today: Date = new Date()): Count
   return null;
 }
 
-/** "23 days", "1 day", "today". */
+/** "23 days", "1 day", "today", in the current language. */
 export function daysText(days: number): string {
-  if (days <= 0) return 'today';
-  return days === 1 ? '1 day' : `${days} days`;
+  if (days <= 0) return t('today');
+  return t('{{count}} days', { count: days });
 }
 
 /** Reminder notifications ahead of the next year end and the next return deadline. */
@@ -184,26 +203,31 @@ export function countdownReminders(
   const now = toIso(today);
   const year = taxYearOf(now, region);
   const end = taxYearBounds(year, region).end;
-  const units = region.unit === 'mi' ? 'miles' : 'kilometres';
+  const km = region.unit === 'km';
   const label = taxYearLabel(year, region);
   const guide = FILING[region.code];
   const minus = (date: string, days: number) => new Date(utc(date) - days * DAY).toISOString().slice(0, 10);
-  // Year end: two months, one month and one week out.
+  const endDate = formatLongDate(end, region);
+  // Year end: two months, one month and one week out. Built now, in the current language.
   const yearEnd = [
     {
       before: 60,
-      title: `2 months left in the ${label} tax year ⏳`,
-      body: `Time to get your ${units} up to date. Add any drives you missed so you claim everything you’re owed.`,
+      title: t('2 months left in the {{year}} tax year ⏳', { year: label }),
+      body: km
+        ? t('Time to get your kilometres up to date. Add any drives you missed so you claim everything you’re owed.')
+        : t('Time to get your miles up to date. Add any drives you missed so you claim everything you’re owed.'),
     },
     {
       before: 30,
-      title: `1 month left in the ${label} tax year`,
-      body: `Sort your drives and add any you missed before ${formatLongDate(end, region)}. Every business ${units === 'miles' ? 'mile' : 'kilometre'} is money back.`,
+      title: t('1 month left in the {{year}} tax year', { year: label }),
+      body: km
+        ? t('Sort your drives and add any you missed before {{date}}. Every business kilometre is money back.', { date: endDate })
+        : t('Sort your drives and add any you missed before {{date}}. Every business mile is money back.', { date: endDate }),
     },
     {
       before: 7,
-      title: `One week left in the ${label} tax year 🏁`,
-      body: `Last call: make sure every business drive is in MileMint before ${formatLongDate(end, region)}.`,
+      title: t('One week left in the {{year}} tax year 🏁', { year: label }),
+      body: t('Last call: make sure every business drive is in MileMint before {{date}}.', { date: endDate }),
     },
   ].map((r, i) => ({
     id: `year-end-${i}`,
@@ -219,13 +243,13 @@ export function countdownReminders(
   const returnDue = [
     {
       before: 30,
-      title: `Your ${dueLabel} ${guide.returnName} is due in a month`,
-      body: `Your mileage report is ready. Export it now so the figures are to hand.`,
+      title: t(guide.returnDueInMonth, { year: dueLabel }),
+      body: t('Your mileage report is ready. Export it now so the figures are to hand.'),
     },
     {
       before: 7,
-      title: `${guide.returnName[0].toUpperCase()}${guide.returnName.slice(1)} due in a week 📄`,
-      body: `Export your ${dueLabel} mileage report from MileMint and you’re one step closer.`,
+      title: t(guide.returnDueInWeek),
+      body: t('Export your {{year}} mileage report from MileMint and you’re one step closer.', { year: dueLabel }),
     },
   ].map((r, i) => ({
     id: `return-${i}`,

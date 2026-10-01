@@ -10,6 +10,7 @@ import { LeafMark } from '@/components/leaf-mark';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
 import { INVITE_MESSAGE } from '@/referral/links';
 import { useRegion } from '@/region/region';
@@ -42,12 +43,13 @@ type MenuItem = {
 /** Home's top-left button: the logo, which opens the app's other screens. */
 export function MenuButton() {
   const theme = useTheme();
+  const t = useT();
   const [open, setOpen] = useState(false);
   return (
     <>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Menu"
+        accessibilityLabel={t('Menu')}
         hitSlop={10}
         onPress={() => setOpen(true)}
         style={[styles.headerButton, styles.logoButton]}>
@@ -63,6 +65,7 @@ export function MenuButton() {
 
 function Menu({ onClose }: { onClose: () => void }) {
   const theme = useTheme();
+  const t = useT();
   const insets = useSafeAreaInsets();
   const { isPro } = usePro();
   const { region } = useRegion();
@@ -92,23 +95,23 @@ function Menu({ onClose }: { onClose: () => void }) {
     {
       icon: 'doc.text.fill',
       glyph: '📄',
-      title: 'Reports & export',
-      detail: `Your mileage log for ${region.authority}`,
+      title: t('Reports & export'),
+      detail: t('Your mileage log for {{authority}}', { authority: region.authority }),
       onPress: () => go('/report'),
     },
     {
       icon: 'star.fill',
       glyph: '⭐',
-      title: isPro ? 'MileMint Pro' : 'Go Pro',
-      detail: isPro ? 'Active · thank you!' : 'Unlimited drives and PDF reports',
+      title: isPro ? 'MileMint Pro' : t('Go Pro'),
+      detail: isPro ? t('Active · thank you!') : t('Unlimited drives and PDF reports'),
       highlight: !isPro,
       onPress: () => go('/pro'),
     },
     {
       icon: 'gift.fill',
       glyph: '🎁',
-      title: 'Invite a friend',
-      detail: 'Share MileMint on WhatsApp and more',
+      title: t('Invite a friend'),
+      detail: t('Share MileMint on WhatsApp and more'),
       onPress: () => {
         onClose();
         Share.share({ message: INVITE_MESSAGE }).catch(() => {});
@@ -117,36 +120,36 @@ function Menu({ onClose }: { onClose: () => void }) {
     {
       icon: 'trophy.fill',
       glyph: '🏆',
-      title: 'Milestones',
-      detail: 'Your money back and badges',
+      title: t('Milestones'),
+      detail: t('Your money back and badges'),
       onPress: () => go('/milestones'),
     },
     {
       icon: 'calendar',
       glyph: '🗓️',
-      title: 'Tax dates',
-      detail: `When and how to claim with ${region.authority}`,
+      title: t('Tax dates'),
+      detail: t('When and how to claim with {{authority}}', { authority: region.authority }),
       onPress: () => go('/tax-dates'),
     },
     {
       icon: 'chart.bar.fill',
       glyph: '📊',
-      title: 'Missed miles check',
-      detail: 'Compare with your delivery app',
+      title: t('Missed miles check'),
+      detail: t('Compare with your delivery app'),
       onPress: () => go('/compare'),
     },
     {
       icon: 'gearshape.fill',
       glyph: '⚙️',
-      title: 'Settings',
-      detail: 'Work hours, places and reminders',
+      title: t('Settings'),
+      detail: t('Work hours, places and reminders'),
       onPress: () => go('/settings'),
     },
     {
       icon: 'envelope.fill',
       glyph: '✉️',
-      title: 'Help & feedback',
-      detail: 'We read every message',
+      title: t('Help & feedback'),
+      detail: t('We read every message'),
       onPress: () => {
         onClose();
         Linking.openURL(`mailto:${SUPPORT_EMAIL}?subject=MileMint`).catch(() => {});
@@ -155,7 +158,7 @@ function Menu({ onClose }: { onClose: () => void }) {
   ];
 
   return (
-    <Pressable accessibilityLabel="Close menu" style={styles.backdrop} onPress={onClose}>
+    <Pressable accessibilityLabel={t('Close menu')} style={styles.backdrop} onPress={onClose}>
       <Animated.View
         accessibilityRole="menu"
         style={[
@@ -173,7 +176,7 @@ function Menu({ onClose }: { onClose: () => void }) {
             Mile<Text style={styles.heroMint}>Mint</Text>
           </Text>
           <View style={styles.heroBadge}>
-            <Text style={styles.heroBadgeText}>{isPro ? '★ Pro · unlimited drives' : 'Free plan'}</Text>
+            <Text style={styles.heroBadgeText}>{isPro ? t('★ Pro · unlimited drives') : t('Free plan')}</Text>
           </View>
         </View>
 
@@ -215,10 +218,11 @@ function Menu({ onClose }: { onClose: () => void }) {
 /** Home's add-trip button, floating bottom right where a thumb reaches most easily. */
 export function AddTripButton({ bottom }: { bottom: number }) {
   const theme = useTheme();
+  const t = useT();
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel="Add a missed trip"
+      accessibilityLabel={t('Add a missed trip')}
       onPress={() => router.push('/add-trip')}
       style={({ pressed }) => [
         styles.fab,

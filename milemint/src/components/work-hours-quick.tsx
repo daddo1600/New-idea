@@ -5,6 +5,7 @@ import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import type { WorkWeek } from '@/domain/classify-rules';
 import { useTheme } from '@/hooks/use-theme';
+import { useLanguage, useT } from '@/i18n/i18n';
 
 /** One shift, the same on each chosen day: the quick version of Settings → Work hours. */
 export type SimpleWeek = { days: readonly boolean[]; start: number; end: number };
@@ -19,15 +20,18 @@ export const DEFAULT_SIMPLE_WEEK: SimpleWeek = {
 const STEP = 30;
 const DAY_MINUTES = 24 * 60;
 /** Shown Monday first; values are Date#getDay indexes. */
-const DAY_CHIPS = [
-  [1, 'M', 'Monday'],
-  [2, 'T', 'Tuesday'],
-  [3, 'W', 'Wednesday'],
-  [4, 'T', 'Thursday'],
-  [5, 'F', 'Friday'],
-  [6, 'S', 'Saturday'],
-  [0, 'S', 'Sunday'],
-] as const;
+const DAY_ORDER = [1, 2, 3, 4, 5, 6, 0] as const;
+
+/** A weekday's name in the app's language: 'narrow' (M) for the chip, 'long' (Monday) for VoiceOver. */
+function weekdayName(day: number, lang: string, weekday: 'narrow' | 'long'): string {
+  // 2023-01-01 was a Sunday.
+  const date = new Date(2023, 0, 1 + day);
+  try {
+    return new Intl.DateTimeFormat(lang, { weekday }).format(date);
+  } catch {
+    return date.toLocaleDateString('en', { weekday });
+  }
+}
 
 const hhmm = (minutes: number) =>
   `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
@@ -54,6 +58,8 @@ export function WorkHoursQuick({
   locale: string;
 }) {
   const theme = useTheme();
+  const t = useT();
+  const lang = useLanguage();
   const shift = (key: 'start' | 'end', by: number) => {
     const next = (value[key] + by + DAY_MINUTES) % DAY_MINUTES;
     const other = key === 'start' ? value.end : value.start;
@@ -61,10 +67,10 @@ export function WorkHoursQuick({
     onChange({ ...value, [key]: next === other ? (next + by + DAY_MINUTES) % DAY_MINUTES : next });
   };
 
-  const stepButton = (key: 'start' | 'end', label: string, by: number) => (
+  const stepButton = (key: 'start' | 'end', accessibilityLabel: string, by: number) => (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${label} ${by < 0 ? 'earlier' : 'later'}`}
+      accessibilityLabel={accessibilityLabel}
       hitSlop={6}
       onPress={() => shift(key, by)}
       style={[styles.stepButton, { backgroundColor: theme.accent + '1F' }]}>
@@ -74,17 +80,17 @@ export function WorkHoursQuick({
     </Pressable>
   );
 
-  const stepper = (key: 'start' | 'end', label: string) => (
+  const stepper = (key: 'start' | 'end', label: string, earlier: string, later: string) => (
     <View style={styles.stepperRow}>
       <ThemedText type="small" themeColor="textSecondary" style={styles.stepperLabel}>
         {label}
       </ThemedText>
       <View style={styles.stepper}>
-        {stepButton(key, label, -STEP)}
+        {stepButton(key, earlier, -STEP)}
         <ThemedText type="smallBold" style={styles.time} accessibilityLiveRegion="polite">
           {formatTime(value[key], locale)}
         </ThemedText>
-        {stepButton(key, label, STEP)}
+        {stepButton(key, later, STEP)}
       </View>
     </View>
   );
@@ -92,13 +98,13 @@ export function WorkHoursQuick({
   return (
     <ThemedView type="backgroundElement" style={styles.card}>
       <View style={styles.days} accessibilityRole="toolbar">
-        {DAY_CHIPS.map(([day, letter, name]) => {
+        {DAY_ORDER.map((day) => {
           const on = value.days[day];
           return (
             <Pressable
               key={day}
               accessibilityRole="checkbox"
-              accessibilityLabel={name}
+              accessibilityLabel={weekdayName(day, lang, 'long')}
               accessibilityState={{ checked: on }}
               onPress={() => onChange({ ...value, days: value.days.map((d, i) => (i === day ? !d : d)) })}
               style={[
@@ -108,14 +114,14 @@ export function WorkHoursQuick({
                   : { backgroundColor: 'transparent', borderColor: theme.backgroundSelected },
               ]}>
               <ThemedText type="smallBold" style={{ color: on ? theme.onAccent : theme.textSecondary }}>
-                {letter}
+                {weekdayName(day, lang, 'narrow')}
               </ThemedText>
             </Pressable>
           );
         })}
       </View>
-      {stepper('start', 'Start')}
-      {stepper('end', 'Finish')}
+      {stepper('start', t('Start'), t('Start earlier'), t('Start later'))}
+      {stepper('end', t('Finish'), t('Finish earlier'), t('Finish later'))}
     </ThemedView>
   );
 }

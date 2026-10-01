@@ -9,7 +9,7 @@ import { DATABASE_NAME, initDatabase } from '@/db/database';
 import { DEMO_MODE, seedDemoTrips } from '@/dev/demo';
 import { describeError } from '@/errors/fatal-errors';
 import { ProProvider } from '@/purchases/pro';
-import { loadLanguage } from '@/i18n/i18n';
+import { loadLanguage, useT } from '@/i18n/i18n';
 import { RegionProvider } from '@/region/region';
 // Registers the background location tasks; must run before the app renders.
 import '@/tracking/background';
@@ -24,6 +24,7 @@ async function onInit(db: SQLiteDatabase) {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const t = useT();
   // The web demo (store screenshots) opens straight onto the app.
   const [intro, setIntro] = useState(!DEMO_MODE);
   const endIntro = useCallback(() => setIntro(false), []);
@@ -41,20 +42,20 @@ export default function RootLayout() {
                     name="welcome"
                     options={{ headerShown: false, gestureEnabled: false, animation: 'fade' }}
                   />
-                  <Stack.Screen name="add-trip" options={{ title: 'Add missed trip', presentation: 'modal' }} />
+                  <Stack.Screen name="add-trip" options={{ title: t('Add missed trip'), presentation: 'modal' }} />
                   <Stack.Screen
                     name="setup-tracking"
-                    options={{ title: 'Automatic tracking', presentation: 'modal' }}
+                    options={{ title: t('Automatic tracking'), presentation: 'modal' }}
                   />
-                  <Stack.Screen name="settings" options={{ title: 'Settings' }} />
-                  <Stack.Screen name="trip/[id]" options={{ title: 'Trip' }} />
-                  <Stack.Screen name="report" options={{ title: 'Reports' }} />
-                  <Stack.Screen name="region" options={{ title: 'Your country', presentation: 'modal' }} />
+                  <Stack.Screen name="settings" options={{ title: t('Settings') }} />
+                  <Stack.Screen name="trip/[id]" options={{ title: t('Trip') }} />
+                  <Stack.Screen name="report" options={{ title: t('Reports') }} />
+                  <Stack.Screen name="region" options={{ title: t('Your country'), presentation: 'modal' }} />
                   <Stack.Screen name="pro" options={{ title: 'MileMint Pro', presentation: 'modal' }} />
-                  <Stack.Screen name="compare" options={{ title: 'Missed miles check', presentation: 'modal' }} />
-                  <Stack.Screen name="milestones" options={{ title: 'Milestones' }} />
-                  <Stack.Screen name="tax-dates" options={{ title: 'Tax dates' }} />
-                  <Stack.Screen name="language" options={{ title: 'Language', presentation: 'modal' }} />
+                  <Stack.Screen name="compare" options={{ title: t('Missed miles check'), presentation: 'modal' }} />
+                  <Stack.Screen name="milestones" options={{ title: t('Milestones') }} />
+                  <Stack.Screen name="tax-dates" options={{ title: t('Tax dates') }} />
+                  <Stack.Screen name="language" options={{ title: t('Language'), presentation: 'modal' }} />
                 </Stack>
               </ProProvider>
             </RegionProvider>
@@ -72,18 +73,21 @@ export default function RootLayout() {
  * views only: the themed components may be what failed.
  */
 export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
+  const t = useT();
   return (
     <ScrollView contentContainerStyle={styles.errorPage}>
-      <Text style={styles.errorTitle}>Something went wrong</Text>
+      <Text style={styles.errorTitle}>{t('Something went wrong')}</Text>
       <Text style={styles.errorBody}>
-        MileMint couldn’t open this screen. Your trips are safe. Please send a screenshot of this page to
-        milemint.support@gmail.com so we can fix it.
+        {t(
+          'MileMint couldn’t open this screen. Your trips are safe. Please send a screenshot of this page to {{email}} so we can fix it.',
+          { email: 'milemint.support@gmail.com' },
+        )}
       </Text>
       <Text selectable style={styles.errorDetail}>
         {describeError(error)}
       </Text>
       <Pressable accessibilityRole="button" onPress={retry} style={styles.errorButton}>
-        <Text style={styles.errorButtonText}>Try again</Text>
+        <Text style={styles.errorButtonText}>{t('Try again')}</Text>
       </Pressable>
     </ScrollView>
   );

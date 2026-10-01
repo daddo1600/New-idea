@@ -1,3 +1,4 @@
+import { msg, t } from '../i18n/i18n';
 import type { VehicleType } from './trip';
 
 /** A vehicle in the user's garage. Trips record which one they were driven in. */
@@ -11,10 +12,20 @@ export type Vehicle = {
 };
 
 export const DEFAULT_VEHICLE_NAMES: Record<VehicleType, string> = {
-  car: 'My car',
-  motorbike: 'My motorbike',
-  bicycle: 'My bike',
+  car: msg('My car'),
+  motorbike: msg('My motorbike'),
+  bicycle: msg('My bike'),
 };
+
+/** The name a new vehicle gets when the user doesn't type one, in the current language. */
+export function defaultVehicleName(type: VehicleType): string {
+  return t(DEFAULT_VEHICLE_NAMES[type]);
+}
+
+/** Whether `name` is still a default name (in English or the current language), i.e. never renamed. */
+export function isDefaultVehicleName(name: string, type: VehicleType): boolean {
+  return name === DEFAULT_VEHICLE_NAMES[type] || name === defaultVehicleName(type);
+}
 
 /** Tidy a typed number plate: upper case, single spaces ("ab12 cde" → "AB12 CDE"). Empty → null. */
 export function normaliseRegistration(input: string): string | null {

@@ -7,6 +7,7 @@ import { Spacing } from '@/constants/theme';
 import { VEHICLE_ICONS, VEHICLE_LABELS } from '@/domain/trip';
 import type { Vehicle } from '@/domain/vehicles';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/i18n/i18n';
 
 /** Pick one of the garage's vehicles from a sheet that slides up. */
 export function VehicleSheet({
@@ -25,10 +26,11 @@ export function VehicleSheet({
   onClose: () => void;
 }) {
   const theme = useTheme();
+  const t = useT();
   const insets = useSafeAreaInsets();
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <Pressable accessibilityLabel="Close" style={styles.backdrop} onPress={onClose} />
+      <Pressable accessibilityLabel={t('Close')} style={styles.backdrop} onPress={onClose} />
       <ThemedView style={[styles.sheet, { paddingBottom: insets.bottom + Spacing.three }]}>
         <View style={[styles.grabber, { backgroundColor: theme.backgroundSelected }]} />
         <ThemedText type="smallBold" style={styles.title}>
@@ -52,7 +54,7 @@ export function VehicleSheet({
               <View style={styles.flex}>
                 <ThemedText type="smallBold">{vehicle.name}</ThemedText>
                 <ThemedText type="small" themeColor="textSecondary">
-                  {[VEHICLE_LABELS[vehicle.type], vehicle.registration].filter(Boolean).join(' · ')}
+                  {[t(VEHICLE_LABELS[vehicle.type]), vehicle.registration].filter(Boolean).join(' · ')}
                 </ThemedText>
               </View>
               {selected && <ThemedText style={{ color: theme.accent }}>✓</ThemedText>}

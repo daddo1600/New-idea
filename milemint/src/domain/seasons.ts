@@ -1,3 +1,4 @@
+import { msg, t } from '../i18n/i18n';
 import type { RegionCode } from './regions';
 
 /**
@@ -18,7 +19,7 @@ export type SeasonId =
 
 export type Season = {
   id: SeasonId;
-  /** A short line above the total. */
+  /** A short line above the total, in the current language. */
   greeting: string;
 };
 
@@ -28,21 +29,21 @@ const SOUTHERN: ReadonlySet<RegionCode> = new Set(['AU']);
 const md = (date: Date) => (date.getMonth() + 1) * 100 + date.getDate();
 
 const GREETINGS: Record<SeasonId, (code: RegionCode) => string> = {
-  festive: () => 'Happy holidays from MileMint 🎁',
-  'new-year': () => 'Happy New Year 🎆',
-  halloween: () => 'Happy Halloween 🎃',
-  'aussie-summer': () => 'G’day! Summer on the road ☀️',
-  winter: () => 'Wrap up warm out there ❄️',
-  spring: () => 'Spring has sprung 🌸',
-  summer: () => 'Sunny days, business miles ☀️',
-  autumn: (code) => (code === 'US' || code === 'CA' ? 'Fall miles add up 🍂' : 'Autumn miles add up 🍂'),
+  festive: () => msg('Happy holidays from MileMint 🎁'),
+  'new-year': () => msg('Happy New Year 🎆'),
+  halloween: () => msg('Happy Halloween 🎃'),
+  'aussie-summer': () => msg('G’day! Summer on the road ☀️'),
+  winter: () => msg('Wrap up warm out there ❄️'),
+  spring: () => msg('Spring has sprung 🌸'),
+  summer: () => msg('Sunny days, business miles ☀️'),
+  autumn: (code) => (code === 'US' || code === 'CA' ? msg('Fall miles add up 🍂') : msg('Autumn miles add up 🍂')),
 };
 
 /** The season to dress the opening in on `date`, or null for the everyday look. */
 export function seasonFor(date: Date, code: RegionCode): Season | null {
   const day = md(date);
   const id = seasonId(day, SOUTHERN.has(code));
-  return id ? { id, greeting: GREETINGS[id](code) } : null;
+  return id ? { id, greeting: t(GREETINGS[id](code)) } : null;
 }
 
 function seasonId(day: number, southern: boolean): SeasonId | null {

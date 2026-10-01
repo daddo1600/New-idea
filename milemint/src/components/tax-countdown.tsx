@@ -7,6 +7,7 @@ import { DEMO_TODAY } from '@/dev/demo';
 import { activeCountdown, FILING } from '@/domain/deadlines';
 import { formatLongDate, formatMoney } from '@/domain/regions';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/i18n/i18n';
 import { useRegion } from '@/region/region';
 
 /** Gold from two weeks out. */
@@ -28,24 +29,34 @@ export function TaxCountdown({
   onSortUnsorted: () => void;
 }) {
   const theme = useTheme();
+  const t = useT();
   const { region } = useRegion();
   const countdown = activeCountdown(region, DEMO_TODAY ? new Date(`${DEMO_TODAY}T12:00:00`) : new Date());
   if (!countdown) return null;
 
-  const units = region.unit === 'mi' ? 'miles' : 'kilometres';
   const urgent = countdown.days <= URGENT_DAYS;
   const color = urgent ? '#CA8A04' : theme.accent;
   const yearEnd = countdown.kind === 'year-end';
-  const count = countdown.days <= 0 ? 'Today' : String(countdown.days);
-  const unit = countdown.days <= 0 ? '' : countdown.days === 1 ? 'day' : 'days';
+  const today = countdown.days <= 0;
+  const count = today ? t('Today') : String(countdown.days);
+  // The word under the number in the box: "day" or "days".
+  const unit = today ? '' : t('days', { count: countdown.days });
+  const year = countdown.label;
+  const returnName = t(FILING[region.code].returnName);
+  const date = formatLongDate(countdown.date, region);
+  const amount = formatMoney(foundMinor, region);
 
   return (
     <View
       style={[styles.card, { borderColor: color, backgroundColor: color + '14' }]}
       accessibilityLabel={
         yearEnd
-          ? `${count} ${unit} left in the ${countdown.label} tax year`
-          : `${count} ${unit} until your ${countdown.label} ${FILING[region.code].returnName} is due`
+          ? today
+            ? t('Last day of the {{year}} tax year', { year })
+            : t('{{count}} days left in the {{year}} tax year', { count: countdown.days, year })
+          : today
+            ? t('Your {{year}} {{returnName}} is due today', { year, returnName })
+            : t('{{count}} days until your {{year}} {{returnName}} is due', { count: countdown.days, year, returnName })
       }>
       <View style={[styles.count, { backgroundColor: color }]}>
         <Text style={styles.countNumber} adjustsFontSizeToFit numberOfLines={1}>
@@ -57,14 +68,22 @@ export function TaxCountdown({
         <ThemedText type="smallBold">
           {yearEnd
             ? urgent
-              ? `Last days of the ${countdown.label} tax year`
-              : `The ${countdown.label} tax year ends soon`
-            : `Your ${countdown.label} ${FILING[region.code].returnName} is due`}
+              ? t('Last days of the {{year}} tax year', { year })
+              : t('The {{year}} tax year ends soon', { year })
+            : t('Your {{year}} {{returnName}} is due', { year, returnName })}
         </ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
           {yearEnd
-            ? `Get your ${units} up to date before ${formatLongDate(countdown.date, region)} so you claim everything you’re owed. ${formatMoney(foundMinor, region)} found so far.`
-            : `Due ${formatLongDate(countdown.date, region)}. Your mileage report for ${countdown.label} is ready to export.`}
+            ? region.unit === 'mi'
+              ? t(
+                  'Get your miles up to date before {{date}} so you claim everything you’re owed. {{amount}} found so far.',
+                  { date, amount },
+                )
+              : t(
+                  'Get your kilometres up to date before {{date}} so you claim everything you’re owed. {{amount}} found so far.',
+                  { date, amount },
+                )
+            : t('Due {{date}}. Your mileage report for {{year}} is ready to export.', { date, year })}
         </ThemedText>
         <View style={styles.buttons}>
           {yearEnd ? (
@@ -74,15 +93,13 @@ export function TaxCountdown({
                 onPress={() => (unsortedCount > 0 ? onSortUnsorted() : router.push('/add-trip'))}
                 style={[styles.primary, { backgroundColor: color }]}>
                 <ThemedText type="smallBold" style={{ color: '#FFFFFF' }}>
-                  {unsortedCount > 0
-                    ? `Sort ${unsortedCount} ${unsortedCount === 1 ? 'drive' : 'drives'}`
-                    : 'Add a missed drive'}
+                  {unsortedCount > 0 ? t('Sort {{count}} drives', { count: unsortedCount }) : t('Add a missed drive')}
                 </ThemedText>
               </Pressable>
               {unsortedCount > 0 && (
                 <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/add-trip')}>
                   <ThemedText type="small" style={{ color }}>
-                    Add a missed drive
+                    {t('Add a missed drive')}
                   </ThemedText>
                 </Pressable>
               )}
@@ -93,13 +110,13 @@ export function TaxCountdown({
               onPress={() => router.push('/report')}
               style={[styles.primary, { backgroundColor: color }]}>
               <ThemedText type="smallBold" style={{ color: '#FFFFFF' }}>
-                Get my report
+                {t('Get my report')}
               </ThemedText>
             </Pressable>
           )}
           <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/tax-dates')}>
             <ThemedText type="small" style={{ color }}>
-              Tax dates ›
+              {t('Tax dates ›')}
             </ThemedText>
           </Pressable>
         </View>
