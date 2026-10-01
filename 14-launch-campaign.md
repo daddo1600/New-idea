@@ -4,6 +4,14 @@
 
 This builds on [`12-launch-plan.md`](12-launch-plan.md) (who to reach and when) and [`11-growth-ideas.md`](11-growth-ideas.md) (referral and perks). This doc is the **campaign**: the message, the share loop built into the app, the offer and the calendar to go from zero to thousands of users by the 31 January Self Assessment deadline.
 
+> ### ⭐ The product promise: "You'll know if a mile was missed"
+>
+> Every competitor says "automatic". Real app-store reviews show the angriest drivers are the ones whose app **stopped tracking without telling them** and lost days or months of miles ([`reports/Gig driver mileage app sentiment.md`](reports/Gig%20driver%20mileage%20app%20sentiment.md)). So MileMint's promise is the opposite of silence:
+> - **"You'll know if a mile was missed."** MileMint tells you the moment tracking stops (permission changed, app closed, a drive cut short) and helps you add what was missed.
+> - Lead every channel with this, not with "automatic". For gig workers, pair it with "Uber only sees Uber" below: the missed-miles check shows the miles the delivery apps didn't count.
+> - Only say it once the tracking-health alerts are in the TestFlight build, and test it on real phones first.
+> - App Store promotional text (all four countries) now opens with it; see `milemint/store.config.json`.
+
 > ### ⭐ Must do at App Store launch: "Uber only sees Uber"
 >
 > **The lead message for every gig-worker channel** (couriers, multi-app drivers, US gig drivers):
