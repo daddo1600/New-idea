@@ -608,7 +608,7 @@ function DrivingSection() {
           <View style={styles.flex}>
             <ThemedText type="smallBold">Shift mode</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              For delivery and gig drivers: a Start shift button on the home screen. Every drive in a shift
+              For delivery and courier work (Uber Eats, Deliveroo, Amazon Flex, Evri, DPD and the like): a Start shift button on the home screen. Every drive in a shift
               is business, and a whole shift counts as one drive on the free plan.
             </ThemedText>
           </View>

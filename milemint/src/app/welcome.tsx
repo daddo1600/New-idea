@@ -54,7 +54,7 @@ import { addVehicle, ensureVehicles, listVehicles, updateVehicle } from '@/db/ve
 const STEPS = 6;
 const EXTRA_LABELS: Record<VehicleType, string> = {
   car: 'Car or van',
-  motorbike: 'Moped',
+  motorbike: 'Moped or motorbike',
   bicycle: 'Bicycle',
 };
 const HOURS = 3;
@@ -390,15 +390,16 @@ export default function WelcomeScreen() {
               )}
               <WorkStyleOption
                 selected={workStyle === 'shifts'}
-                emoji="🛵"
-                title="Shifts: delivery & rideshare apps"
-                detail="Uber Eats, Deliveroo, Just Eat, Amazon Flex, Uber. Tap Start shift and every drive until you end it is business, stop-start and waiting included."
+                emoji="📦"
+                title="Shifts & rounds: delivery and driving apps"
+                detail="Uber Eats, Deliveroo, Just Eat, Amazon Flex, Evri, DPD, Uber. In a car, van, moped or on a bike. Tap Start shift and every drive until you end it is business, stop-start and waiting included."
                 onPress={() => setWorkStyle('shifts')}
               />
               {workStyle === 'shifts' && (
                 <View style={styles.vehicles}>
                   <ThemedText type="small" themeColor="textSecondary">
-                    Use other vehicles for deliveries too? Tap to add. You’ll pick one when you start a shift.
+                    You drive: {VEHICLE_ICONS[vehicle]} {EXTRA_LABELS[vehicle]}. Use other vehicles too? Tap
+                    to add; you’ll pick one when you start a shift.
                   </ThemedText>
                   <View style={styles.extraRow}>
                     {(['car', 'motorbike', 'bicycle'] as const)
