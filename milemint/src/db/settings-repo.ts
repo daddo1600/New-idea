@@ -15,8 +15,10 @@ export type AppSettings = {
   weeklyReminder: boolean;
   /** The first-launch welcome flow has been completed. */
   onboarded: boolean;
-  /** What new trips are driven in, unless changed on the trip. */
+  /** The type of the vehicle being driven now (mirrors the current vehicle; seeds the first one). */
   vehicle: VehicleType;
+  /** The garage vehicle new drives are recorded against. */
+  currentVehicleId: string | null;
   /** Couriers and gig drivers: a Start shift / End shift button instead of (or as well as) work hours. */
   shiftMode: boolean;
   /** Drives no rule decides start as business (swipe left if personal); off leaves them unsorted. */
@@ -32,6 +34,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   weeklyReminder: false,
   onboarded: false,
   vehicle: 'car',
+  currentVehicleId: null,
   shiftMode: false,
   defaultBusiness: true,
 };

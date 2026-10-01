@@ -40,7 +40,9 @@ import { useRegion } from '@/region/region';
 import { enableWeeklyReminder, REMINDERS_SUPPORTED, scheduleWorkHoursNudge } from '@/reminders/weekly';
 import type { TrackingStatus } from '@/tracking/background';
 import { useTracking } from '@/tracking/use-tracking';
-import type { VehicleType } from '@/domain/trip';
+import { VEHICLE_ICONS, type VehicleType } from '@/domain/trip';
+import { DEFAULT_VEHICLE_NAMES } from '@/domain/vehicles';
+import { addVehicle, ensureVehicles, listVehicles, updateVehicle } from '@/db/vehicles-repo';
 
 /**
  * First launch, as one full-screen flow instead of a chain of pop-ups:
@@ -50,6 +52,11 @@ import type { VehicleType } from '@/domain/trip';
  */
 
 const STEPS = 6;
+const EXTRA_LABELS: Record<VehicleType, string> = {
+  car: 'Car or van',
+  motorbike: 'Moped',
+  bicycle: 'Bicycle',
+};
 const HOURS = 3;
 const PLACES = 4;
 const DONE = 5;
@@ -77,6 +84,7 @@ export default function WelcomeScreen() {
   const [hoursSet, setHoursSet] = useState(false);
   const [vehicle, setVehicle] = useState<VehicleType>('car');
   const [workStyle, setWorkStyle] = useState<'hours' | 'shifts'>('hours');
+  const [extraVehicles, setExtraVehicles] = useState<VehicleType[]>([]);
   /** Chose shifts (delivery apps) instead of set hours. */
   const [shifts, setShifts] = useState(false);
   const [home, setHome] = useState<PlaceDraft>(EMPTY_PLACE);
@@ -90,6 +98,16 @@ export default function WelcomeScreen() {
   const saveCountry = async () => {
     await setRegion(country);
     await saveSettings(db, { ...(await loadSettings(db)), vehicle });
+    // The first vehicle in the garage. Going back and changing the choice updates it.
+    const { current } = await ensureVehicles(db);
+    if (current.type !== vehicle) {
+      const renamed = current.name === DEFAULT_VEHICLE_NAMES[current.type];
+      await updateVehicle(db, {
+        ...current,
+        type: vehicle,
+        name: renamed ? DEFAULT_VEHICLE_NAMES[vehicle] : current.name,
+      });
+    }
     setStep(2);
   };
 
@@ -125,6 +143,11 @@ export default function WelcomeScreen() {
 
   const chooseShifts = async () => {
     await saveSettings(db, { ...(await loadSettings(db)), shiftMode: true, workHoursEnabled: false });
+    // Couriers often switch between a car and a moped: add the others they ticked.
+    const garage = await listVehicles(db);
+    for (const type of extraVehicles) {
+      if (!garage.some((v) => v.type === type)) await addVehicle(db, { type });
+    }
     setShifts(true);
     setStep(PLACES);
   };
@@ -371,6 +394,41 @@ export default function WelcomeScreen() {
                 detail="Uber Eats, Deliveroo, Just Eat, Amazon Flex, Uber. Tap Start shift and every drive until you end it is business, stop-start and waiting included."
                 onPress={() => setWorkStyle('shifts')}
               />
+              {workStyle === 'shifts' && (
+                <View style={styles.vehicles}>
+                  <ThemedText type="small" themeColor="textSecondary">
+                    Use other vehicles for deliveries too? Tap to add. You’ll pick one when you start a shift.
+                  </ThemedText>
+                  <View style={styles.extraRow}>
+                    {(['car', 'motorbike', 'bicycle'] as const)
+                      .filter((type) => type !== vehicle)
+                      .map((type) => {
+                        const on = extraVehicles.includes(type);
+                        return (
+                          <Pressable
+                            key={type}
+                            accessibilityRole="checkbox"
+                            accessibilityState={{ checked: on }}
+                            onPress={() =>
+                              setExtraVehicles(
+                                on ? extraVehicles.filter((t) => t !== type) : [...extraVehicles, type],
+                              )
+                            }
+                            style={[
+                              styles.extraChip,
+                              on
+                                ? { backgroundColor: theme.accent, borderColor: theme.accent }
+                                : { borderColor: theme.backgroundSelected },
+                            ]}>
+                            <ThemedText type="smallBold" style={{ color: on ? theme.onAccent : theme.text }}>
+                              {on ? '✓' : '+'} {VEHICLE_ICONS[type]} {EXTRA_LABELS[type]}
+                            </ThemedText>
+                          </Pressable>
+                        );
+                      })}
+                  </View>
+                </View>
+              )}
             </>
           )}
 
@@ -617,6 +675,13 @@ const styles = StyleSheet.create({
   flexFill: { flex: 1 },
   vehicles: { gap: Spacing.two },
   roomToScroll: { paddingBottom: 420 },
+  extraRow: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
+  extraChip: {
+    borderWidth: 1.5,
+    borderRadius: 999,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
+  },
   reminderRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three },
   card: { borderRadius: 12, padding: Spacing.three, gap: Spacing.one },
   actions: { gap: Spacing.two, width: '100%', maxWidth: MaxContentWidth, alignSelf: 'center' },

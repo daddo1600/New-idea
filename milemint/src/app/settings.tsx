@@ -8,6 +8,7 @@ import {
   ScrollView,
   StyleSheet,
   Switch,
+  Text,
   TextInput,
   View,
 } from 'react-native';
@@ -15,6 +16,7 @@ import {
 import { GoldButton } from '@/components/gold-button';
 import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { Segmented } from '@/components/segmented';
+import { VehiclePicker } from '@/components/vehicle-picker';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
@@ -23,6 +25,10 @@ import { loadSettings, saveSettings, type AppSettings } from '@/db/settings-repo
 import { isValidShift, type WorkShift } from '@/domain/classify-rules';
 import { FREE_AUTO_DRIVES_PER_MONTH } from '@/domain/plan';
 import { vehicleRule } from '@/domain/regions';
+import { VEHICLE_ICONS, VEHICLE_LABELS, type VehicleType } from '@/domain/trip';
+import { DEFAULT_VEHICLE_NAMES, normaliseRegistration, type Vehicle } from '@/domain/vehicles';
+import { addVehicle, removeVehicle, updateVehicle } from '@/db/vehicles-repo';
+import { useVehicles } from '@/vehicles/use-vehicles';
 import type { Place, PlaceKind } from '@/domain/places';
 import { useTheme } from '@/hooks/use-theme';
 import { usePro } from '@/purchases/pro';
@@ -411,11 +417,160 @@ function ReminderSection() {
   );
 }
 
+/** Your vehicles: add, edit (name, type, number plate), remove, and which one you're driving now. */
+function Garage() {
+  const db = useSQLiteContext();
+  const theme = useTheme();
+  const { region } = useRegion();
+  const { vehicles, current, choose, reload } = useVehicles();
+  /** The vehicle being edited, or 'new' while adding one. */
+  const [editing, setEditing] = useState<string | null>(null);
+  const [draft, setDraft] = useState<{ name: string; type: VehicleType; registration: string }>({
+    name: '',
+    type: 'car',
+    registration: '',
+  });
+
+  const open = (vehicle: Vehicle | null) => {
+    setEditing(vehicle?.id ?? 'new');
+    setDraft({
+      name: vehicle?.name ?? '',
+      type: vehicle?.type ?? 'car',
+      registration: vehicle?.registration ?? '',
+    });
+  };
+
+  const save = async () => {
+    const registration = normaliseRegistration(draft.registration);
+    const name = draft.name.trim() || DEFAULT_VEHICLE_NAMES[draft.type];
+    if (editing === 'new') await addVehicle(db, { type: draft.type, name, registration });
+    else if (editing) await updateVehicle(db, { id: editing, type: draft.type, name, registration });
+    setEditing(null);
+    await reload();
+  };
+
+  const remove = (vehicle: Vehicle) =>
+    Alert.alert(`Remove “${vehicle.name}”?`, 'Trips already logged in it keep it in their record.', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Remove',
+        style: 'destructive',
+        onPress: async () => {
+          await removeVehicle(db, vehicle.id);
+          setEditing(null);
+          await reload();
+        },
+      },
+    ]);
+
+  const types = [...new Set(vehicles.map((vehicle) => vehicle.type))];
+  const editor = (
+    <View style={styles.vehicleEditor}>
+      <VehiclePicker value={draft.type} onChange={(type) => setDraft({ ...draft, type })} />
+      <TextInput
+        accessibilityLabel="Vehicle name"
+        value={draft.name}
+        onChangeText={(name) => setDraft({ ...draft, name })}
+        placeholder={`Name, e.g. ${draft.type === 'car' ? 'Golf' : draft.type === 'motorbike' ? 'Honda PCX' : 'Cargo bike'}`}
+        placeholderTextColor={theme.textSecondary}
+        style={[styles.nameInput, { color: theme.text, backgroundColor: theme.background }]}
+      />
+      <TextInput
+        accessibilityLabel="Number plate (optional)"
+        value={draft.registration}
+        onChangeText={(registration) => setDraft({ ...draft, registration })}
+        placeholder="Number plate (optional)"
+        placeholderTextColor={theme.textSecondary}
+        autoCapitalize="characters"
+        autoCorrect={false}
+        style={[styles.nameInput, { color: theme.text, backgroundColor: theme.background }]}
+      />
+      <View style={styles.rowBetween}>
+        <Pressable accessibilityRole="button" hitSlop={8} onPress={() => setEditing(null)}>
+          <ThemedText type="small" themeColor="textSecondary">
+            Cancel
+          </ThemedText>
+        </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          onPress={save}
+          style={[styles.smallButton, { backgroundColor: theme.accent }]}>
+          <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
+            Save vehicle
+          </ThemedText>
+        </Pressable>
+      </View>
+    </View>
+  );
+
+  return (
+    <>
+      <ThemedText type="smallBold">Your vehicles</ThemedText>
+      {vehicles.map((vehicle) =>
+        editing === vehicle.id ? (
+          <View key={vehicle.id}>
+            {editor}
+            {vehicles.length > 1 && (
+              <Pressable accessibilityRole="button" hitSlop={8} onPress={() => remove(vehicle)}>
+                <ThemedText type="small" themeColor="danger">
+                  Remove this vehicle
+                </ThemedText>
+              </Pressable>
+            )}
+          </View>
+        ) : (
+          <View key={vehicle.id} style={[styles.vehicleRow, { backgroundColor: theme.background }]}>
+            {/* Tapping the vehicle edits it; "Use now" is its own button beside it. */}
+            <Pressable
+              accessibilityRole="button"
+              accessibilityHint="Edit this vehicle"
+              onPress={() => open(vehicle)}
+              style={styles.vehicleMain}>
+              <Text style={styles.vehicleIcon}>{VEHICLE_ICONS[vehicle.type]}</Text>
+              <View style={styles.flex}>
+                <ThemedText type="smallBold">{vehicle.name}</ThemedText>
+                <ThemedText type="small" themeColor="textSecondary">
+                  {[VEHICLE_LABELS[vehicle.type], vehicle.registration].filter(Boolean).join(' · ')}
+                </ThemedText>
+              </View>
+            </Pressable>
+            {current?.id === vehicle.id ? (
+              <ThemedText type="small" style={{ color: theme.accent }}>
+                Driving now
+              </ThemedText>
+            ) : (
+              <Pressable accessibilityRole="button" hitSlop={8} onPress={() => choose(vehicle)}>
+                <ThemedText type="small" themeColor="textSecondary">
+                  Use now
+                </ThemedText>
+              </Pressable>
+            )}
+          </View>
+        ),
+      )}
+      {editing === 'new' ? (
+        editor
+      ) : (
+        <Pressable accessibilityRole="button" hitSlop={8} onPress={() => open(null)}>
+          <ThemedText type="smallBold" style={{ color: theme.accent }}>
+            + Add a vehicle
+          </ThemedText>
+        </Pressable>
+      )}
+      {types.map((type) => (
+        <ThemedText key={type} type="small" themeColor="textSecondary">
+          {VEHICLE_ICONS[type]} {vehicleRule(region, type)}
+          {type === 'car' ? '. Petrol, diesel, hybrid or electric: same rate for a car or van you own.' : '.'}
+        </ThemedText>
+      ))}
+    </>
+  );
+}
+
 /** What you drive (priced per vehicle) and shift mode for couriers. */
 function DrivingSection() {
   const db = useSQLiteContext();
   const theme = useTheme();
-  const { region } = useRegion();
   const [settings, setSettings] = useState<AppSettings | null>(null);
 
   useEffect(() => {
@@ -433,24 +588,7 @@ function DrivingSection() {
     <>
       <ThemedText type="smallBold">Your driving</ThemedText>
       <ThemedView type="backgroundElement" style={styles.card}>
-        <ThemedText type="smallBold">Vehicle</ThemedText>
-        <Segmented
-          options={(['car', 'motorbike', 'bicycle'] as const).map((value) => ({
-            value,
-            label: value === 'car' ? 'Car or van' : value === 'motorbike' ? 'Motorbike' : 'Bicycle',
-          }))}
-          value={settings.vehicle}
-          onChange={(vehicle) => change({ vehicle })}
-        />
-        <ThemedText type="small" themeColor="textSecondary">
-          {vehicleRule(region, settings.vehicle)}. New drives use this; change any trip on its own screen.
-        </ThemedText>
-        {settings.vehicle === 'car' && (
-          <ThemedText type="small" themeColor="textSecondary">
-            Petrol, diesel, hybrid or electric: the same rate applies to a car or van you own. Company cars
-            follow different rules.
-          </ThemedText>
-        )}
+        <Garage />
         <View style={[styles.rowBetween, styles.spaced]}>
           <View style={styles.flex}>
             <ThemedText type="smallBold">New drives start as business</ThemedText>
@@ -560,6 +698,10 @@ function ProSection() {
 }
 
 const styles = StyleSheet.create({
+  vehicleRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three, borderRadius: 12, padding: Spacing.three },
+  vehicleIcon: { fontSize: 24, lineHeight: 30 },
+  vehicleMain: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: Spacing.three },
+  vehicleEditor: { gap: Spacing.two },
   spaced: { marginTop: Spacing.two },
   addPlace: { gap: Spacing.two },
   nameInput: { borderRadius: 8, paddingHorizontal: Spacing.three, paddingVertical: Spacing.two, fontSize: 16 },

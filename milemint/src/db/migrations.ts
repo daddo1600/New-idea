@@ -103,6 +103,19 @@ const MIGRATIONS: readonly string[] = [
   -- like auto_reason when the user classifies the trip.
   ALTER TABLE trips ADD COLUMN auto_default INTEGER NOT NULL DEFAULT 0;
   `,
+  `
+  -- The user's vehicles; each trip records the one it was driven in (couriers
+  -- often have a car and a moped). Removing a vehicle hides it, trips keep it.
+  CREATE TABLE vehicles (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    type TEXT NOT NULL CHECK (type IN ('car', 'motorbike', 'bicycle')),
+    registration TEXT,
+    archived INTEGER NOT NULL DEFAULT 0,
+    created_at TEXT NOT NULL
+  );
+  ALTER TABLE trips ADD COLUMN vehicle_id TEXT REFERENCES vehicles (id) ON DELETE SET NULL;
+  `,
 ];
 
 export async function migrate(db: SQLiteDatabase): Promise<void> {

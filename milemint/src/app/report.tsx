@@ -9,6 +9,8 @@ import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { getOdometer, saveOdometer, type OdometerReadings } from '@/db/odometer-repo';
 import { listEditedTripIds } from '@/db/trips-repo';
+import { listAllVehicles } from '@/db/vehicles-repo';
+import type { Vehicle } from '@/domain/vehicles';
 import { useTrips } from '@/db/use-trips';
 import { lockedTripIds } from '@/domain/plan';
 import { buildReport, reportYears } from '@/domain/report';
@@ -28,12 +30,14 @@ export default function ReportScreen() {
   const { region } = useRegion();
   const { trips, places } = useTrips();
   const [editedIds, setEditedIds] = useState<Set<string>>(new Set());
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [year, setYear] = useState(() => String(currentTaxYear(region)));
   const [busy, setBusy] = useState<'csv' | 'pdf' | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     listEditedTripIds(db).then(setEditedIds, () => setEditedIds(new Set()));
+    listAllVehicles(db).then(setVehicles, () => {});
   }, [db]);
 
   // Readings for the chosen country and tax year, tagged so a stale load never shows for another year.
@@ -58,8 +62,13 @@ export default function ReportScreen() {
   const report = useMemo(() => {
     const locked = lockedTripIds(trips ?? [], isPro);
     const visible = (trips ?? []).filter((trip) => !locked.has(trip.id));
-    return buildReport(visible, region, Number(year), { places, editedIds, odometer: odometer ?? undefined });
-  }, [trips, isPro, region, year, places, editedIds, odometer]);
+    return buildReport(visible, region, Number(year), {
+      places,
+      editedIds,
+      odometer: odometer ?? undefined,
+      vehicles,
+    });
+  }, [trips, isPro, region, year, places, editedIds, odometer, vehicles]);
 
   if (!trips) return <ActivityIndicator style={styles.loading} />;
 

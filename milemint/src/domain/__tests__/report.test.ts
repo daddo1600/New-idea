@@ -28,6 +28,7 @@ function trip(overrides: Partial<Trip> & { units?: number }, region: Region = US
     endPlaceId: null,
     autoReason: null,
     vehicle: 'car',
+    vehicleId: null,
     shiftId: null,
     ...rest,
   };
@@ -215,3 +216,14 @@ describe('odometer readings', () => {
   });
 });
 
+
+describe('vehicles in the log', () => {
+  it('names the vehicle, with its number plate, in the CSV', () => {
+    const moped = { id: 'v2', name: 'Honda PCX', type: 'motorbike' as const, registration: 'AB12 CDE' };
+    const car = { id: 'v1', name: 'Golf', type: 'car' as const, registration: null };
+    const csv = toCsv(
+      buildReport([trip({ vehicle: 'motorbike', vehicleId: 'v2' })], US, 2026, { vehicles: [car, moped] }),
+    );
+    expect(csv).toContain('Honda PCX (AB12 CDE)');
+  });
+});

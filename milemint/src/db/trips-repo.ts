@@ -22,6 +22,7 @@ type TripRow = {
   auto_reason: Exclude<AutoReason, 'default'> | null;
   auto_default: number | null;
   vehicle: VehicleType | null;
+  vehicle_id: string | null;
   shift_id: string | null;
 };
 
@@ -42,11 +43,12 @@ function fromRow(row: TripRow): Trip {
     endPlaceId: row.end_place_id,
     autoReason: row.auto_reason ?? (row.auto_default ? 'default' : null),
     vehicle: row.vehicle ?? 'car',
+    vehicleId: row.vehicle_id ?? null,
     shiftId: row.shift_id ?? null,
   };
 }
 
-type AutoFields = 'startPlaceId' | 'endPlaceId' | 'autoReason' | 'vehicle' | 'shiftId';
+type AutoFields = 'startPlaceId' | 'endPlaceId' | 'autoReason' | 'vehicle' | 'vehicleId' | 'shiftId';
 export type NewTrip = Omit<Trip, 'id' | 'createdAt' | AutoFields> & Partial<Pick<Trip, AutoFields>>;
 
 export async function listTrips(db: SQLiteDatabase): Promise<Trip[]> {
@@ -148,6 +150,7 @@ export async function insertTrip(
     endPlaceId: null,
     autoReason: null,
     vehicle: 'car',
+    vehicleId: null,
     shiftId: null,
     ...input,
     id: Crypto.randomUUID(),
@@ -157,8 +160,8 @@ export async function insertTrip(
     await db.runAsync(
       `INSERT INTO trips (id, started_at, local_date, ended_at, start_label, end_label,
          distance_meters, classification, purpose, source, created_at,
-         start_place_id, end_place_id, auto_reason, auto_default, vehicle, shift_id)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+         start_place_id, end_place_id, auto_reason, auto_default, vehicle, vehicle_id, shift_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
       trip.id,
       trip.startedAt,
       trip.localDate,
@@ -175,6 +178,7 @@ export async function insertTrip(
       trip.autoReason === 'default' ? null : trip.autoReason,
       trip.autoReason === 'default' ? 1 : 0,
       trip.vehicle,
+      trip.vehicleId,
       trip.shiftId,
     );
     if (route.length > 1) {
@@ -222,13 +226,14 @@ export async function setClassification(
 export async function updateTripDetails(
   db: SQLiteDatabase,
   trip: Trip,
-  changes: Partial<Pick<Trip, 'purpose' | 'startLabel' | 'endLabel' | 'vehicle'>>,
+  changes: Partial<Pick<Trip, 'purpose' | 'startLabel' | 'endLabel' | 'vehicle' | 'vehicleId'>>,
 ): Promise<void> {
   const columns = {
     purpose: 'purpose',
     startLabel: 'start_label',
     endLabel: 'end_label',
     vehicle: 'vehicle',
+    vehicleId: 'vehicle_id',
   } as const;
   const changed = (Object.keys(columns) as (keyof typeof columns)[]).filter(
     (key) => changes[key] !== undefined && changes[key] !== trip[key],

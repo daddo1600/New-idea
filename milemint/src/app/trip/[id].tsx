@@ -3,6 +3,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, TextInput } from 'react-native';
 
+import { GaragePicker } from '@/components/garage-picker';
 import { PurposePicker } from '@/components/purpose-picker';
 import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
@@ -22,7 +23,9 @@ import type { LatLng } from '@/domain/geo';
 import type { PlaceKind } from '@/domain/places';
 import { formatDistance } from '@/domain/regions';
 import { frequentPurposes } from '@/domain/suggestions';
-import { type Classification, type Trip, VEHICLE_ICONS, type VehicleType } from '@/domain/trip';
+import { type Classification, type Trip, type VehicleType } from '@/domain/trip';
+import type { Vehicle } from '@/domain/vehicles';
+import { listVehicles } from '@/db/vehicles-repo';
 import { useTheme } from '@/hooks/use-theme';
 import { useRegion } from '@/region/region';
 
@@ -51,9 +54,12 @@ export default function TripScreen() {
   const [endLabel, setEndLabel] = useState('');
   const [purpose, setPurpose] = useState('');
   const [vehicle, setVehicle] = useState<VehicleType>('car');
+  const [vehicleId, setVehicleId] = useState<string | null>(null);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [purposes, setPurposes] = useState<string[]>([]);
   useEffect(() => {
     listTrips(db).then((trips) => setPurposes(frequentPurposes(trips, 6)), () => {});
+    listVehicles(db).then(setVehicles, () => {});
   }, [db]);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -70,6 +76,7 @@ export default function TripScreen() {
         setEndLabel(loaded.endLabel);
         setPurpose(loaded.purpose);
         setVehicle(loaded.vehicle);
+        setVehicleId(loaded.vehicleId);
       }
     })();
     return () => {
@@ -135,6 +142,7 @@ export default function TripScreen() {
         endLabel: endLabel.trim(),
         purpose: purpose.trim(),
         vehicle,
+        vehicleId,
       });
       router.back();
     } catch {
@@ -159,16 +167,18 @@ export default function TripScreen() {
           value={trip.classification === 'unclassified' ? null : trip.classification}
           onChange={classify}
         />
-        <Field label="Vehicle">
-          <Segmented
-            options={(['car', 'motorbike', 'bicycle'] as const).map((value) => ({
-              value,
-              label: `${VEHICLE_ICONS[value]} ${value === 'car' ? 'Car or van' : value === 'motorbike' ? 'Motorbike' : 'Bicycle'}`,
-            }))}
-            value={vehicle}
-            onChange={setVehicle}
-          />
-        </Field>
+        {vehicles.length > 1 && (
+          <Field label="Vehicle">
+            <GaragePicker
+              vehicles={vehicles}
+              value={vehicleId}
+              onChange={(picked) => {
+                setVehicleId(picked.id);
+                setVehicle(picked.type);
+              }}
+            />
+          </Field>
+        )}
         <Field label="From">
           <TextInput style={inputStyle} value={startLabel} onChangeText={setStartLabel} />
         </Field>

@@ -38,6 +38,8 @@ export type Trip = {
   /** Why the classification was set automatically; null once the user sets it. */
   autoReason: AutoReason | null;
   vehicle: VehicleType;
+  /** The garage vehicle, when known (trips from before the garage only have a type). */
+  vehicleId: string | null;
   /** The shift the drive was part of (shift mode), or null. */
   shiftId: string | null;
 };

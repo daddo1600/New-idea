@@ -12,6 +12,7 @@ import { AddTripButton, MenuButton } from '@/components/header-menu';
 import { BrandGradient } from '@/components/brand-gradient';
 import { LeafMark } from '@/components/leaf-mark';
 import { Segmented } from '@/components/segmented';
+import { VehicleSheet } from '@/components/vehicle-sheet';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
@@ -30,7 +31,7 @@ import {
   taxYearOf,
   type TaxYearSummary,
 } from '@/domain/regions';
-import { type Classification, toLocalIsoDate, type Trip } from '@/domain/trip';
+import { type Classification, toLocalIsoDate, type Trip, VEHICLE_ICONS } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { usePro } from '@/purchases/pro';
 import { useRegion } from '@/region/region';
@@ -39,6 +40,7 @@ import type { TrackingStatus } from '@/tracking/background';
 import { useShift } from '@/tracking/use-shift';
 import { type LiveDrive, useLiveDrive } from '@/tracking/use-live-drive';
 import { useTracking } from '@/tracking/use-tracking';
+import { useVehicles } from '@/vehicles/use-vehicles';
 
 const CLASSIFY_OPTIONS = [
   { value: 'business', label: 'Business' },
@@ -68,6 +70,10 @@ export default function HomeScreen() {
   useReminders(region.unit);
   const shiftMode = useShift();
   const liveDrive = useLiveDrive();
+  const garage = useVehicles();
+  const theme = useTheme();
+  /** Choosing a vehicle: before starting a shift, or switching from the chip on home. */
+  const [picking, setPicking] = useState<'shift' | 'switch' | null>(null);
   const locked = useMemo(() => lockedTripIds(trips ?? [], isPro), [trips, isPro]);
   // Locked drives don't count towards the total (or a tier limit) until they're unlocked.
   const visible = useMemo(() => (trips ?? []).filter((trip) => !locked.has(trip.id)), [trips, locked]);
@@ -149,13 +155,30 @@ export default function HomeScreen() {
                   shiftTrips.reduce((sum, t) => sum + (deductions.get(t.id) ?? 0), 0),
                   region,
                 )}
-                onStart={shiftMode.start}
+                onStart={() => (garage.vehicles.length > 1 ? setPicking('shift') : shiftMode.start())}
                 onEnd={shiftMode.end}
               />
             )}
             {liveDrive && <LiveDriveBanner drive={liveDrive} />}
             <SummaryCard summary={summary} commuteCents={commuteCents} />
             <TrackingCard status={status} />
+            {garage.vehicles.length > 1 && garage.current && (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`Driving ${garage.current.name}. Change vehicle`}
+                onPress={() => setPicking('switch')}
+                style={[styles.vehicleChip, { backgroundColor: theme.backgroundElement }]}>
+                <ThemedText type="small" themeColor="textSecondary">
+                  Driving:
+                </ThemedText>
+                <ThemedText type="smallBold">
+                  {VEHICLE_ICONS[garage.current.type]} {garage.current.name}
+                </ThemedText>
+                <ThemedText type="small" style={{ color: theme.accent }}>
+                  ▾
+                </ThemedText>
+              </Pressable>
+            )}
             {!isPro && <PlanCard trips={trips} lockedCount={locked.size} />}
             {visible.length > 0 && (
               <SelectBar
@@ -199,6 +222,19 @@ export default function HomeScreen() {
         }
       />
       {!selecting && <AddTripButton bottom={insets.bottom} />}
+      <VehicleSheet
+        visible={picking !== null}
+        title={picking === 'shift' ? 'Which vehicle today?' : 'What are you driving?'}
+        vehicles={garage.vehicles}
+        currentId={garage.current?.id ?? null}
+        onClose={() => setPicking(null)}
+        onPick={async (vehicle) => {
+          const startShift = picking === 'shift';
+          setPicking(null);
+          await garage.choose(vehicle);
+          if (startShift) await shiftMode.start();
+        }}
+      />
       {selecting && (
         <BulkActions
           count={selected.size}
@@ -813,6 +849,15 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.one,
   },
   liveDot: { width: 8, height: 8 },
+  vehicleChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    gap: Spacing.one + 2,
+    borderRadius: 999,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.one + 2,
+  },
   liveDrive: {
     flexDirection: 'row',
     alignItems: 'center',

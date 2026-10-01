@@ -17,6 +17,7 @@ import {
   type Region,
 } from './regions';
 import { type Trip, VEHICLE_LABELS } from './trip';
+import { type Vehicle, vehicleLabel } from './vehicles';
 
 /**
  * The tax-year mileage log: what tax offices ask a driver to keep (date,
@@ -36,6 +37,10 @@ export type ReportRow = {
   deduction: number;
   /** Changed after it was recorded (the edit history keeps the originals). */
   edited: boolean;
+  /** What it was driven in, e.g. "Honda PCX (AB12 CDE)" or "Car or van". */
+  vehicle: string;
+  /** Logged in a vehicle other than the user's only car: worth showing in the trip log. */
+  showVehicle: boolean;
 };
 
 export type RateTotal = { label: string; distance: number; deduction: number };
@@ -74,9 +79,15 @@ export function buildReport(
     places?: readonly Place[];
     editedIds?: ReadonlySet<string>;
     odometer?: { start: number | null; end: number | null };
+    /** The garage (removed vehicles included), to name each trip's vehicle. */
+    vehicles?: readonly Vehicle[];
   } = {},
 ): MileageReport {
   const kindOf = (id: string | null) => options.places?.find((place) => place.id === id)?.kind ?? null;
+  const vehicleOf = (trip: Trip) => {
+    const vehicle = options.vehicles?.find((v) => v.id === trip.vehicleId);
+    return vehicle ? vehicleLabel(vehicle) : VEHICLE_LABELS[trip.vehicle ?? 'car'];
+  };
   // Tiers depend on every business trip of the year, so price them all first.
   const allParts = computeDeductionParts(trips, region);
   const rows: ReportRow[] = trips
@@ -91,6 +102,8 @@ export function buildReport(
         parts,
         deduction: Math.round(parts.reduce((sum, part) => sum + part.units * part.rate, 0) / 10),
         edited: options.editedIds?.has(trip.id) ?? false,
+        vehicle: vehicleOf(trip),
+        showVehicle: (options.vehicles?.length ?? 0) > 1 || (trip.vehicle ?? 'car') !== 'car',
       };
     });
 
@@ -204,7 +217,7 @@ export function toCsv(report: MileageReport): string {
         trip.startLabel,
         trip.endLabel,
         row.distance.toFixed(1),
-        VEHICLE_LABELS[trip.vehicle ?? 'car'],
+        row.vehicle,
         CLASSIFICATION_LABELS[trip.classification],
         trip.purpose,
         business ? ratesText(row.parts, region) : '',
@@ -288,7 +301,7 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
         `<td>${escapeHtml(trip.startLabel)} → ${escapeHtml(trip.endLabel)}</td>` +
         `<td class="num">${row.distance.toFixed(1)}</td>` +
         `<td>${CLASSIFICATION_LABELS[trip.classification]}${row.commute ? ' (commute)' : ''}` +
-        `${(trip.vehicle ?? 'car') === 'car' ? '' : ` · ${VEHICLE_LABELS[trip.vehicle]}`}</td>` +
+        `${row.showVehicle ? ` · ${escapeHtml(row.vehicle)}` : ''}</td>` +
         `<td>${escapeHtml(trip.purpose)}</td>` +
         `<td class="num">${business ? money(row.deduction) : ''}</td>` +
         `<td>${trip.source === 'auto' ? 'Auto' : 'Manual'}${row.edited ? ', edited' : ''}</td>` +

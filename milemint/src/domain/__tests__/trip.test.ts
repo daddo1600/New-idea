@@ -24,6 +24,7 @@ function trip(overrides: Partial<Trip>): Trip {
     endPlaceId: null,
     autoReason: null,
     vehicle: 'car',
+    vehicleId: null,
     shiftId: null,
     ...overrides,
   };
@@ -120,5 +121,28 @@ describe('vehicles', () => {
     const bike = trip({ id: 'b', vehicle: 'bicycle' });
     expect(computeDeductions([bike], US).get('b')).toBe(0);
     expect(US.vehicleNote).toMatch(/cars/);
+  });
+});
+
+describe('limits per vehicle', () => {
+  const AU = REGIONS.AU;
+  const km = (n: number) => n * 1000;
+  const inAU = (id: string, vehicleId: string, kms: number, day: string) =>
+    trip({ id, vehicleId, distanceMeters: km(kms), localDate: day, startedAt: `${day}T09:00:00.000Z` });
+
+  it("gives each Australian car its own 5,000 km", () => {
+    const values = computeDeductions(
+      [inAU('a', 'ute', 5000, '2026-08-01'), inAU('b', 'hatch', 1000, '2026-08-02')],
+      AU,
+    );
+    expect(values.get('b')).toBeGreaterThan(0);
+  });
+
+  it('still caps one car at 5,000 km', () => {
+    const values = computeDeductions(
+      [inAU('a', 'ute', 5000, '2026-08-01'), inAU('b', 'ute', 1000, '2026-08-02')],
+      AU,
+    );
+    expect(values.get('b')).toBe(0);
   });
 });

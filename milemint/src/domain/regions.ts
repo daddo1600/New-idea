@@ -47,6 +47,11 @@ export type Region = {
   otherVehicleRates: Partial<Record<Exclude<VehicleType, 'car'>, readonly RatePeriod[]>>;
   /** Shown when a two-wheeler has no official rate here. */
   vehicleNote: string | null;
+  /**
+   * The distance limits apply to each vehicle separately (the ATO's 5,000 km
+   * is per car), rather than to all of the user's driving together.
+   */
+  limitsPerVehicle: boolean;
   /** One line on how the figure is worked out, shown when choosing a region. */
   rule: string;
   /** Anything the user should know about what the figure means. */
@@ -84,6 +89,7 @@ export const REGIONS: Record<RegionCode, Region> = {
     caveat: null,
     otherVehicleRates: {},
     vehicleNote: 'The IRS standard mileage rate is for cars, vans and pickups. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.',
+    limitsPerVehicle: false,
     report: {
       summaryHeading: 'Vehicle use (Schedule C, Part IV)',
       guidance: [
@@ -115,6 +121,7 @@ export const REGIONS: Record<RegionCode, Region> = {
       bicycle: [{ from: '2011-04-06', tiers: [{ upTo: null, rate: 200 }] }],
     },
     vehicleNote: null,
+    limitsPerVehicle: false,
     report: {
       summaryHeading: 'Business mileage (HMRC simplified expenses)',
       guidance: [
@@ -145,6 +152,7 @@ export const REGIONS: Record<RegionCode, Region> = {
       'This is CRA’s reimbursement rate for employees. If you’re self-employed, CRA usually wants your actual car costs, so treat the figure as an estimate.',
     otherVehicleRates: {},
     vehicleNote: 'The CRA per-km rate is for cars. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.',
+    limitsPerVehicle: false,
     report: {
       summaryHeading: 'Business use of your vehicle',
       guidance: [
@@ -174,6 +182,7 @@ export const REGIONS: Record<RegionCode, Region> = {
     caveat: null,
     otherVehicleRates: {},
     vehicleNote: 'The ATO cents per km method is for cars only. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.',
+    limitsPerVehicle: true,
     report: {
       summaryHeading: 'Work-related car use (cents per km method)',
       guidance: [
@@ -396,7 +405,8 @@ export function computeDeductionParts(
   for (const trip of business) {
     const vehicle = trip.vehicle ?? 'car';
     const period = ratePeriodFor(trip.localDate, region, vehicle);
-    const key = `${taxYearOf(trip.localDate, region)}:${vehicle}`;
+    const own = region.limitsPerVehicle ? (trip.vehicleId ?? '') : '';
+    const key = `${taxYearOf(trip.localDate, region)}:${vehicle}:${own}`;
     const already = driven.get(key) ?? 0;
     const units = toUnits(trip.distanceMeters, region);
     driven.set(key, already + units);
@@ -424,6 +434,8 @@ export function describeTier(period: RatePeriod, tier: number, region: Region): 
 export type DeductionTrip = Pick<Trip, 'id' | 'localDate' | 'startedAt' | 'distanceMeters' | 'classification'> & {
   /** Cars when missing. */
   vehicle?: VehicleType;
+  /** Which of the user's vehicles, where limits are per vehicle. */
+  vehicleId?: string | null;
 };
 
 /**
@@ -458,6 +470,7 @@ export function potentialDeduction(
         t.classification === 'business' &&
         t.id !== trip.id &&
         (t.vehicle ?? 'car') === vehicle &&
+        (!region.limitsPerVehicle || (t.vehicleId ?? null) === (trip.vehicleId ?? null)) &&
         taxYearOf(t.localDate, region) === year,
     )
     .reduce((sum, t) => sum + toUnits(t.distanceMeters, region), 0);

@@ -155,6 +155,7 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
             ? 'default'
             : null,
       vehicle: settings.vehicle,
+      vehicleId: settings.currentVehicleId,
       shiftId: shift?.id ?? null,
     },
     trip.route,

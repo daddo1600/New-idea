@@ -7,12 +7,12 @@ import { CalendarPicker } from '@/components/calendar-picker';
 import { Chip, EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { PurposePicker } from '@/components/purpose-picker';
 import { Segmented } from '@/components/segmented';
-import { VehiclePicker } from '@/components/vehicle-picker';
+import { GaragePicker } from '@/components/garage-picker';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { listPlaces } from '@/db/places-repo';
-import { loadSettings } from '@/db/settings-repo';
+import { ensureVehicles } from '@/db/vehicles-repo';
 import { insertTrip, listTrips } from '@/db/trips-repo';
 import { parseMiles } from '@/domain/format';
 import type { LatLng } from '@/domain/geo';
@@ -20,6 +20,7 @@ import { matchPlace, type Place } from '@/domain/places';
 import { earliestDate, formatDistance, formatLongDate, fromUnits, toUnits } from '@/domain/regions';
 import { frequentPurposes, frequentSpots } from '@/domain/suggestions';
 import { toLocalIsoDate, type Trip, type VehicleType } from '@/domain/trip';
+import type { Vehicle } from '@/domain/vehicles';
 import { useKeyboardOpen } from '@/hooks/use-keyboard-open';
 import { useTheme } from '@/hooks/use-theme';
 import { drivingDistance } from '@/places/address-search';
@@ -51,6 +52,8 @@ export default function AddTripScreen() {
   const scrollFieldUp = (field: 'from' | 'to') =>
     setTimeout(() => scroller.current?.scrollTo({ y: Math.max(0, fieldTops.current[field] - 8), animated: true }), 250);
   const [vehicle, setVehicle] = useState<VehicleType>('car');
+  const [vehicleId, setVehicleId] = useState<string | null>(null);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [date, setDate] = useState(today);
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [from, setFrom] = useState<PlaceDraft>(EMPTY_PLACE);
@@ -66,7 +69,11 @@ export default function AddTripScreen() {
 
   useEffect(() => {
     listPlaces(db).then(setPlaces, () => {});
-    loadSettings(db).then((settings) => setVehicle(settings.vehicle), () => {});
+    ensureVehicles(db).then(({ vehicles: garage, current }) => {
+      setVehicles(garage);
+      setVehicle(current.type);
+      setVehicleId(current.id);
+    }, () => {});
     listTrips(db).then(setHistory, () => {});
   }, [db]);
 
@@ -132,6 +139,7 @@ export default function AddTripScreen() {
         purpose: purpose.trim(),
         source: 'manual',
         vehicle,
+        vehicleId,
         startPlaceId: await placeFor(from),
         endPlaceId: await placeFor(to),
       });
@@ -248,7 +256,16 @@ export default function AddTripScreen() {
             />
           </View>
 
-          <VehiclePicker value={vehicle} onChange={setVehicle} />
+          {vehicles.length > 1 && (
+            <GaragePicker
+              vehicles={vehicles}
+              value={vehicleId}
+              onChange={(picked) => {
+                setVehicleId(picked.id);
+                setVehicle(picked.type);
+              }}
+            />
+          )}
 
           <View style={styles.field}>
             <View style={styles.labelRow}>
