@@ -8,6 +8,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { getOdometer, saveOdometer, type OdometerReadings } from '@/db/odometer-repo';
+import { loadSettings, saveSettings } from '@/db/settings-repo';
 import { listEditedTripIds } from '@/db/trips-repo';
 import { listAllVehicles } from '@/db/vehicles-repo';
 import type { Vehicle } from '@/domain/vehicles';
@@ -77,6 +78,8 @@ export default function ReportScreen() {
     setBusy(kind);
     try {
       await (kind === 'csv' ? shareCsv(report) : sharePdf(report));
+      // A milestone: celebrated next time the home screen shows.
+      saveSettings(db, { ...(await loadSettings(db)), exportedReport: true }).catch(() => {});
     } catch {
       setError('Couldn’t create the file. Please try again.');
     } finally {

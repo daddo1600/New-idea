@@ -11,6 +11,8 @@ import ReanimatedSwipeable, {
 import { AddTripButton, MenuButton } from '@/components/header-menu';
 import { BrandGradient } from '@/components/brand-gradient';
 import { LeafMark } from '@/components/leaf-mark';
+import { Celebration } from '@/components/celebration';
+import { ReminderAsk } from '@/components/reminder-ask';
 import { Segmented } from '@/components/segmented';
 import { VehicleSheet } from '@/components/vehicle-sheet';
 import { ThemedText } from '@/components/themed-text';
@@ -43,6 +45,7 @@ import { useShift } from '@/tracking/use-shift';
 import { type LiveDrive, useLiveDrive } from '@/tracking/use-live-drive';
 import { useTracking } from '@/tracking/use-tracking';
 import { useVehicles } from '@/vehicles/use-vehicles';
+import { useMilestoneCelebration } from '@/milestones/use-milestones';
 
 const CLASSIFY_OPTIONS = [
   { value: 'business', label: 'Business' },
@@ -88,6 +91,7 @@ export default function HomeScreen() {
     () => summarizeTaxYear(visible, region, taxYear, deductions),
     [visible, region, taxYear, deductions],
   );
+  const celebration = useMilestoneCelebration(trips ? visible : null, deductions, region);
   // For the quick opening next time: this tax year's total, counted up from what was last seen.
   useEffect(() => {
     if (trips && onboarded && !DEMO_MODE) rememberTotal(summary.deduction).catch(() => {});
@@ -169,6 +173,7 @@ export default function HomeScreen() {
             {liveDrive && <LiveDriveBanner drive={liveDrive} />}
             <SummaryCard summary={summary} commuteCents={commuteCents} />
             <TrackingCard status={status} />
+            {visible.length > 0 && <ReminderAsk />}
             {garage.vehicles.length > 1 && garage.current && (
               <Pressable
                 accessibilityRole="button"
@@ -229,6 +234,7 @@ export default function HomeScreen() {
         }
       />
       {!selecting && <AddTripButton bottom={insets.bottom} />}
+      <Celebration content={celebration.content} onClose={celebration.close} />
       <VehicleSheet
         visible={picking !== null}
         title={picking === 'shift' ? 'Which vehicle today?' : 'What are you driving?'}
@@ -498,7 +504,13 @@ function TripRow({
           </ThemedText>
           {trip.autoReason && (
             <ThemedText type="small" themeColor="textSecondary">
-              {trip.shiftId ? 'Auto: on shift' : AUTO_NOTES[trip.autoReason]}
+              {trip.shiftId
+                ? 'Auto: on shift'
+                : trip.autoReason === 'work-hours'
+                  ? trip.classification === 'business'
+                    ? 'Auto: in your work hours'
+                    : 'Auto: outside your work hours · swipe right if it was work'
+                  : AUTO_NOTES[trip.autoReason]}
             </ThemedText>
           )}
           {business && commute && (

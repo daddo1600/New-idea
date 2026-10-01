@@ -9,7 +9,6 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  Switch,
   Text,
   View,
 } from 'react-native';
@@ -37,7 +36,7 @@ import { formatRate, REGIONS, vehicleRule, type RegionCode } from '@/domain/regi
 import { useKeyboardOpen } from '@/hooks/use-keyboard-open';
 import { useTheme } from '@/hooks/use-theme';
 import { useRegion } from '@/region/region';
-import { enableWeeklyReminder, REMINDERS_SUPPORTED, scheduleWorkHoursNudge } from '@/reminders/weekly';
+import { scheduleWorkHoursNudge } from '@/reminders/weekly';
 import type { TrackingStatus } from '@/tracking/background';
 import { useTracking } from '@/tracking/use-tracking';
 import { VEHICLE_ICONS, type VehicleType } from '@/domain/trip';
@@ -90,7 +89,6 @@ export default function WelcomeScreen() {
   const [home, setHome] = useState<PlaceDraft>(EMPTY_PLACE);
   const [work, setWork] = useState<PlaceDraft>(EMPTY_PLACE);
   const [placeError, setPlaceError] = useState<string | null>(null);
-  const [reminder, setReminder] = useState(REMINDERS_SUPPORTED);
 
   const picked = REGIONS[country];
   const topRate = formatRate(picked.rates[picked.rates.length - 1].tiers[0].rate, picked);
@@ -187,8 +185,7 @@ export default function WelcomeScreen() {
   const finish = async () => {
     setBusy(true);
     try {
-      const scheduled = reminder ? await enableWeeklyReminder(picked.unit).catch(() => false) : false;
-      await saveSettings(db, { ...(await loadSettings(db)), weeklyReminder: scheduled });
+      // Notifications are asked for later, when the first trip shows up (more yeses in context).
       if (!hoursSet && !shifts) await scheduleWorkHoursNudge().catch(() => {});
     } finally {
       setBusy(false);
@@ -382,7 +379,7 @@ export default function WelcomeScreen() {
                 selected={workStyle === 'hours'}
                 emoji="🗓️"
                 title="Set hours"
-                detail="Trades, sales, care and office work. Drives in your hours count as business."
+                detail="Trades, sales, care, office. Drives in your hours are business."
                 onPress={() => setWorkStyle('hours')}
               />
               {workStyle === 'hours' && (
@@ -391,8 +388,8 @@ export default function WelcomeScreen() {
               <WorkStyleOption
                 selected={workStyle === 'shifts'}
                 emoji="📦"
-                title="Shifts & rounds: delivery and driving apps"
-                detail="Uber Eats, Deliveroo, Just Eat, Amazon Flex, Evri, DPD, Uber. In a car, van, moped or on a bike. Tap Start shift and every drive until you end it is business, stop-start and waiting included."
+                title="Shifts & rounds (delivery apps)"
+                detail="Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber. Car, van, moped or bike."
                 onPress={() => setWorkStyle('shifts')}
               />
               {workStyle === 'shifts' && (
@@ -435,7 +432,7 @@ export default function WelcomeScreen() {
                 selected={workStyle === 'neither'}
                 emoji="✋"
                 title="Neither"
-                detail="No set hours. I’ll swipe each drive business or personal myself."
+                detail="I’ll swipe each drive myself."
                 onPress={() => setWorkStyle('neither')}
               />
             </>
@@ -443,10 +440,16 @@ export default function WelcomeScreen() {
 
           {step === PLACES && (
             <>
-              <StepHeader glyph="home" eyebrow="Step 4 · Places" title="Where are home and work?">
-                Trips then read “Home → Work” instead of street names, and commutes are flagged for you. Both
-                are optional.
-              </StepHeader>
+              {shifts ? (
+                <StepHeader glyph="home" eyebrow="Step 4 · Places" title="Where’s home?">
+                  So trips read “Home → …” instead of a street name. Optional.
+                </StepHeader>
+              ) : (
+                <StepHeader glyph="home" eyebrow="Step 4 · Places" title="Where are home and work?">
+                  Trips then read “Home → Work” instead of street names, and commutes are flagged for you. Both
+                  are optional.
+                </StepHeader>
+              )}
               <View onLayout={(e) => (fieldTops.current.home = e.nativeEvent.layout.y)}>
                 <PlaceField
                   label="Home"
@@ -457,16 +460,19 @@ export default function WelcomeScreen() {
                   onFocus={() => scrollFieldUp('home')}
                 />
               </View>
-              <View onLayout={(e) => (fieldTops.current.work = e.nativeEvent.layout.y)}>
-                <PlaceField
-                  label="Work"
-                  icon="💼"
-                  placeholder="Address or postcode"
-                  value={work}
-                  onChange={setWork}
-                  onFocus={() => scrollFieldUp('work')}
-                />
-              </View>
+              {/* Couriers have no single workplace: no Work question, and no commute rule. */}
+              {!shifts && (
+                <View onLayout={(e) => (fieldTops.current.work = e.nativeEvent.layout.y)}>
+                  <PlaceField
+                    label="Work"
+                    icon="💼"
+                    placeholder="Address or postcode"
+                    value={work}
+                    onChange={setWork}
+                    onFocus={() => scrollFieldUp('work')}
+                  />
+                </View>
+              )}
               {placeError && (
                 <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
                   {placeError}
@@ -514,25 +520,16 @@ export default function WelcomeScreen() {
                   </View>
                 ))}
               </View>
-              {REMINDERS_SUPPORTED && (
-                <View style={[styles.glass, styles.reminderRow]}>
-                  <View style={styles.flex}>
-                    <Text style={styles.pointTitle}>Sunday evening check-in</Text>
-                    <Text style={styles.pointBody}>
-                      A (slightly cheeky) weekly nudge to sort your drives, so no business mile goes
-                      unclaimed.
-                    </Text>
-                  </View>
-                  <Switch
-                    accessibilityLabel="Sunday evening check-in"
-                    value={reminder}
-                    onValueChange={setReminder}
-                    trackColor={{ true: '#FACC15', false: 'rgba(255,255,255,0.3)' }}
-                    thumbColor="#FFFFFF"
-                    ios_backgroundColor="rgba(255,255,255,0.3)"
-                  />
+              <View style={[styles.glass, styles.reminderRow]}>
+                <Text style={styles.tipIcon}>🎁</Text>
+                <View style={styles.flex}>
+                  <Text style={styles.pointTitle}>Free to start</Text>
+                  <Text style={styles.pointBody}>
+                    40 automatic drives a month{shifts ? ' (a whole shift counts as one)' : ''}, unlimited trips by
+                    hand and CSV reports. Go Pro any time for unlimited drives.
+                  </Text>
                 </View>
-              )}
+              </View>
             </>
           )}
         </ScrollView>

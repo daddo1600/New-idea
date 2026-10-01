@@ -13,6 +13,12 @@ export type AppSettings = {
   region: RegionCode | null;
   /** Sunday-evening "sort this week's drives" notification. */
   weeklyReminder: boolean;
+  /** The "Sunday nudge?" card has been answered (asked once the first trip appears). */
+  reminderAsked: boolean;
+  /** Milestones already celebrated (ids), so each pat on the back happens once. */
+  celebrated: string[];
+  /** A report has been exported (a milestone). */
+  exportedReport: boolean;
   /** The first-launch welcome flow has been completed. */
   onboarded: boolean;
   /** The type of the vehicle being driven now (mirrors the current vehicle; seeds the first one). */
@@ -32,6 +38,9 @@ export const DEFAULT_SETTINGS: AppSettings = {
   workWeek: [[], WEEKDAY_9_TO_5, WEEKDAY_9_TO_5, WEEKDAY_9_TO_5, WEEKDAY_9_TO_5, WEEKDAY_9_TO_5, []],
   region: null,
   weeklyReminder: false,
+  reminderAsked: false,
+  celebrated: [],
+  exportedReport: false,
   onboarded: false,
   vehicle: 'car',
   currentVehicleId: null,

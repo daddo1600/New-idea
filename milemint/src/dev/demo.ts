@@ -33,6 +33,9 @@ export const DEMO_REGION =
 export const DEMO_TRACKING_STATUS =
   demoParam === 'setup' ? 'needs-permission' : demoParam === 'always' ? 'needs-always' : 'on';
 
+/** `?demo=celebrate`: shows the milestone celebration for the demo trips. */
+export const DEMO_CELEBRATE = demoParam === 'celebrate';
+
 /** `?demo=driving`: the home screen shows a drive being recorded. */
 export const DEMO_DRIVING = demoParam === 'driving';
 

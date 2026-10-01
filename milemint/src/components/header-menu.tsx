@@ -104,6 +104,13 @@ function Menu({ onClose }: { onClose: () => void }) {
       onPress: () => go('/pro'),
     },
     {
+      icon: 'trophy.fill',
+      glyph: '🏆',
+      title: 'Milestones',
+      detail: 'Your money back and badges',
+      onPress: () => go('/milestones'),
+    },
+    {
       icon: 'chart.bar.fill',
       glyph: '📊',
       title: 'Missed miles check',

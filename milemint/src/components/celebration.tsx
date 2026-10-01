@@ -1,0 +1,158 @@
+import * as Haptics from 'expo-haptics';
+import { useEffect, useMemo } from 'react';
+import { Modal, Platform, Pressable, Share, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useReducedMotion,
+  useSharedValue,
+  withDelay,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
+
+import { BrandGradient } from '@/components/brand-gradient';
+import { LeafMark } from '@/components/leaf-mark';
+import { Spacing } from '@/constants/theme';
+
+const CONFETTI_COLORS = ['#FACC15', '#4ADE80', '#FFFFFF', '#BBF7D0', '#F59E0B'];
+const PIECES = 36;
+
+export type CelebrationContent = { emoji: string; title: string; message: string; share: string };
+
+/** One falling piece of confetti. */
+function Piece({ index, width, height }: { index: number; width: number; height: number }) {
+  // Deterministic "random" spread so it looks scattered but never jumps between renders.
+  const seed = (n: number) => {
+    const x = Math.sin(index * 97.13 + n * 13.7) * 10_000;
+    return x - Math.floor(x);
+  };
+  const fall = useSharedValue(0);
+  const left = seed(1) * width;
+  const drift = (seed(2) - 0.5) * 120;
+  const spin = (seed(3) - 0.5) * 720;
+  const color = CONFETTI_COLORS[index % CONFETTI_COLORS.length];
+  const size = 6 + seed(4) * 6;
+
+  useEffect(() => {
+    fall.value = withDelay(
+      seed(5) * 400,
+      withTiming(1, { duration: 1800 + seed(6) * 1200, easing: Easing.out(Easing.quad) }),
+    );
+    // seed only depends on index, which never changes for a piece.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fall]);
+
+  const style = useAnimatedStyle(() => ({
+    opacity: 1 - Math.max(0, fall.value - 0.75) * 4,
+    transform: [
+      { translateY: -40 + fall.value * (height + 80) },
+      { translateX: drift * fall.value },
+      { rotate: `${spin * fall.value}deg` },
+    ],
+  }));
+
+  return (
+    <Animated.View
+      pointerEvents="none"
+      style={[styles.piece, { left, width: size, height: size * 1.6, backgroundColor: color }, style]}
+    />
+  );
+}
+
+/**
+ * A pat on the back: confetti in the brand colours, a gold badge and a warm
+ * line, for a milestone reached. Share sends a ready-made brag message.
+ */
+export function Celebration({ content, onClose }: { content: CelebrationContent | null; onClose: () => void }) {
+  const reduceMotion = useReducedMotion();
+  const { width, height } = useWindowDimensions();
+  const pop = useSharedValue(0);
+  const pieces = useMemo(() => Array.from({ length: PIECES }, (_, i) => i), []);
+
+  useEffect(() => {
+    if (!content) return;
+    pop.value = 0;
+    pop.value = withSpring(1, { damping: 12, stiffness: 160 });
+    if (Platform.OS !== 'web') Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+  }, [content, pop]);
+
+  const cardStyle = useAnimatedStyle(() => ({
+    opacity: Math.min(1, pop.value * 1.5),
+    transform: [{ scale: 0.8 + 0.2 * pop.value }],
+  }));
+
+  if (!content) return null;
+  return (
+    <Modal visible transparent animationType="fade" onRequestClose={onClose}>
+      <View style={styles.backdrop}>
+        {!reduceMotion && pieces.map((i) => <Piece key={i} index={i} width={width} height={height} />)}
+        <Animated.View style={[styles.card, cardStyle]} accessibilityRole="alert">
+          <BrandGradient />
+          <View style={styles.leaf} pointerEvents="none">
+            <LeafMark size={170} opacity={0.18} />
+          </View>
+          <View style={styles.badge}>
+            <Text style={styles.badgeEmoji}>{content.emoji}</Text>
+          </View>
+          <Text style={styles.title}>{content.title}</Text>
+          <Text style={styles.message}>{content.message}</Text>
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => Share.share({ message: content.share }).catch(() => {})}
+            style={styles.share}>
+            <Text style={styles.shareText}>Share it</Text>
+          </Pressable>
+          <Pressable accessibilityRole="button" hitSlop={8} onPress={onClose}>
+            <Text style={styles.close}>Keep going</Text>
+          </Pressable>
+        </Animated.View>
+      </View>
+    </Modal>
+  );
+}
+
+const styles = StyleSheet.create({
+  backdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(1,28,20,0.6)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: Spacing.four,
+    overflow: 'hidden',
+  },
+  piece: { position: 'absolute', top: 0, borderRadius: 2 },
+  card: {
+    width: '100%',
+    maxWidth: 360,
+    borderRadius: 24,
+    padding: Spacing.four,
+    alignItems: 'center',
+    gap: Spacing.two,
+    overflow: 'hidden',
+  },
+  leaf: { position: 'absolute', right: -40, bottom: -50 },
+  badge: {
+    width: 84,
+    height: 84,
+    borderRadius: 42,
+    backgroundColor: '#FACC15',
+    borderWidth: 3,
+    borderColor: '#FEF3C7',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: Spacing.two,
+  },
+  badgeEmoji: { fontSize: 40, lineHeight: 48 },
+  title: { color: '#FFFFFF', fontSize: 24, fontWeight: '800', textAlign: 'center' },
+  message: { color: '#D1FAE5', fontSize: 16, lineHeight: 22, textAlign: 'center' },
+  share: {
+    marginTop: Spacing.three,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 999,
+    paddingHorizontal: Spacing.five,
+    paddingVertical: Spacing.two + 2,
+  },
+  shareText: { color: '#064E3B', fontSize: 16, fontWeight: '800' },
+  close: { color: '#D1FAE5', fontSize: 15, marginTop: Spacing.two },
+});
