@@ -128,12 +128,42 @@ const COUNTRY_NAMES = new Set([
   'australia',
 ]);
 
+/** Last words that make a part of an address a street rather than a town ("Otley Road", "King St W"). */
+const STREET_WORDS = [
+  'road', 'rd', 'street', 'st', 'lane', 'ln', 'avenue', 'ave', 'av', 'drive', 'dr', 'close', 'cl', 'grove', 'gr',
+  'way', 'court', 'ct', 'crescent', 'cres', 'place', 'pl', 'gardens', 'gdns', 'terrace', 'tce', 'terr', 'hill',
+  'row', 'walk', 'square', 'sq', 'mews', 'parade', 'pde', 'rise', 'view', 'green', 'park', 'boulevard', 'blvd',
+  'highway', 'hwy', 'parkway', 'pkwy', 'circle', 'cir', 'trail', 'trl', 'loop', 'esplanade', 'esp', 'crest',
+  'chase', 'wynd', 'gate', 'fold', 'croft', 'vale', 'approach', 'bank', 'yard', 'alley', 'broadway', 'circuit', 'cct',
+].join('|');
+const STREET = new RegExp(`(?:^|\\s)(?:${STREET_WORDS})\\.?(?:\\s+(?:n|s|e|w|ne|nw|se|sw|north|south|east|west))?$`, 'i');
+/** Streets that lead with their kind: "The Avenue", "Rue de la Paix". */
+const STREET_START = /^(?:the\s+(?:avenue|drive|close|crescent|grove|green|parade|mews|square|street|lane|walk)|rue|via|calle|avenida)(?:\s|$)/i;
+/** A person's title or a dwelling: "Mrs Smith", "Flat 2", "Rose Cottage", "Patel Residence". */
+const PERSONAL =
+  /(?:^|\s)(?:mr|mrs|ms|miss|mx|dr|prof|sir|lady|lord|rev|dame|flat|apartment|apt|unit|suite|house|cottage|residence|farm|lodge|barn|bungalow|villa|manor|hall|block|floor|room|home|c\/o)\.?(?=\s|$)/i;
+
+/**
+ * Whether a part of an address can stand as the town or locality ("Leeds",
+ * "Headingley", "Parramatta"): letters only, not a street, not a name or a
+ * building. Without a gazetteer this can only rule things out, so it errs on
+ * the side of dropping a real town rather than keeping a street.
+ */
+export function looksLikeTown(part: string): boolean {
+  const text = part.trim();
+  if (!text || text.length > 40 || !/^\p{L}[\p{L}\s'’.-]*$/u.test(text)) return false;
+  return !STREET.test(text) && !STREET_START.test(text) && !PERSONAL.test(text);
+}
+
 /**
  * The area of a label already saved as text, e.g. "12 High Street, Leeds" →
- * "Leeds", "1 Infinite Loop, Cupertino, CA 95014" → "Cupertino 95014", for
- * tidying up past trips without looking anything up again. Careful rather than
- * clever: when it can't tell a town from a name or a street, it returns null
- * (the label becomes "Client visit").
+ * "Leeds", "1 Infinite Loop, Cupertino, CA 95014" → "Cupertino 95014",
+ * "Elm Grove LS6 2AA" → "LS6", for tidying up past trips without looking
+ * anything up again. Only ever the postcode district (UK outward code, US
+ * 5-digit ZIP, Canadian FSA, Australian postcode) and the town or suburb
+ * beside it, never a street, a building or a name. Careful rather than
+ * clever: when it can't tell a town from a name or a street, the town is left
+ * out, and with nothing left it returns null (the label becomes "Client visit").
  *
  * The first part of a label with several parts is never used: it's the street,
  * the building or the client's name.
@@ -166,13 +196,15 @@ export function areaFromLabel(label: string, region: RegionCode | null): string 
   // One part and no postcode: "Mrs Smith" or "Acme Ltd" can't be told from a town.
   if (single && postcode === null) return null;
 
-  let town: string | null = null;
-  for (let i = candidates.length - 1; i >= 0 && town === null; i--) {
-    // A state or province code beside the postcode ("CA 95014", "NSW 2150") isn't the town.
-    const text = (i === postcodePart ? rest : candidates[i]).replace(/(?:^|\s)[A-Z]{2,3}$/, '').trim();
-    if (text && !/\d/.test(text)) town = text;
-  }
-  const area = [town, postcode].filter(Boolean).join(' ');
+  // A state or province code beside the postcode ("CA 95014", "NSW 2150") isn't the town.
+  const withoutState = (text: string | undefined) => (text ?? '').replace(/(?:^|\s)[A-Z]{2,3}$/, '').trim();
+  // The town is beside the postcode ("Leeds LS6 3AB", "Leeds, LS6 3AB"), or the last part when there's none.
+  const beside =
+    postcode === null
+      ? candidates[candidates.length - 1]
+      : withoutState(rest) || candidates[postcodePart - 1];
+  const town = withoutState(beside);
+  const area = [looksLikeTown(town) ? town : null, postcode].filter(Boolean).join(' ');
   return area || null;
 }
 
@@ -181,20 +213,29 @@ export function privateLabel(label: string, region: RegionCode | null): string {
   return isPrivateLabel(label) ? label.trim() : clientVisitLabel(areaFromLabel(label, region));
 }
 
+/** The names of the places the user saved, trimmed and lower-cased, for comparing labels. */
+export function placeNameSet(places: readonly { name: string }[]): Set<string> {
+  return new Set(places.map((place) => place.name.trim().toLowerCase()));
+}
+
 /**
- * Whether a label is one the user chose: a place they saved themselves
- * (Home, Work, "Day centre") keeps its name in privacy mode.
+ * Whether a label is one the user chose: the name of a place they saved
+ * themselves (Home, Work, "Day centre") keeps its name in privacy mode.
+ *
+ * Only the text counts, not the trip's link to a place: the two can disagree
+ * (a label edited after the trip was linked, or a typed address linked to a
+ * saved place nearby), and then the label is an address.
  */
-export function isNamedPlace(label: string, placeId: string | null, placeNames: ReadonlySet<string>): boolean {
-  return placeId !== null || placeNames.has(label.trim().toLowerCase());
+export function isNamedPlace(label: string, placeNames: ReadonlySet<string>): boolean {
+  return placeNames.has(label.trim().toLowerCase());
+}
+
+/** Whether privacy mode would keep a label as it is: a saved place's name, or the area only. */
+export function isAreaOnly(label: string, placeNames: ReadonlySet<string>): boolean {
+  return isPrivateLabel(label) || isNamedPlace(label, placeNames);
 }
 
 /** A label as privacy mode stores it: the saved place's name, or the area only. */
-export function redactLabel(
-  label: string,
-  placeId: string | null,
-  placeNames: ReadonlySet<string>,
-  region: RegionCode | null,
-): string {
-  return isNamedPlace(label, placeId, placeNames) ? label : privateLabel(label, region);
+export function redactLabel(label: string, placeNames: ReadonlySet<string>, region: RegionCode | null): string {
+  return isNamedPlace(label, placeNames) ? label : privateLabel(label, region);
 }

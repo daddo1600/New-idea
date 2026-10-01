@@ -89,7 +89,40 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 const isCell = (value: unknown): value is Cell =>
   value === null || typeof value === 'string' || (typeof value === 'number' && Number.isFinite(value));
 
-function checkRows(table: string, value: unknown): Row[] {
+/**
+ * The numeric columns of each table: a backup with anything but a finite
+ * number in one (or null where the column allows it) is damaged, and would
+ * otherwise be restored as text and turn into NaN in the totals.
+ */
+const NUMERIC: Partial<Record<BackupTable, Record<string, { nullable: boolean; min?: number }>>> = {
+  settings: { id: { nullable: false } },
+  vehicles: { archived: { nullable: false } },
+  places: { latitude: { nullable: false }, longitude: { nullable: false }, radius_m: { nullable: false, min: 0 } },
+  trips: { distance_meters: { nullable: false, min: 0 }, auto_default: { nullable: false } },
+  trip_edits: { id: { nullable: true } },
+  odometer_readings: {
+    tax_year: { nullable: false },
+    start_reading: { nullable: true, min: 0 },
+    end_reading: { nullable: true, min: 0 },
+  },
+  logbooks: { odometer_start: { nullable: true, min: 0 }, odometer_end: { nullable: true, min: 0 } },
+  car_expenses: { tax_year: { nullable: false } },
+};
+
+function checkNumbers(table: BackupTable, row: Record<string, unknown>) {
+  for (const [column, rule] of Object.entries(NUMERIC[table] ?? {})) {
+    // Missing: a backup from before the column existed, which then takes its default.
+    if (!(column in row)) continue;
+    const cell = row[column];
+    const ok =
+      cell === null
+        ? rule.nullable
+        : typeof cell === 'number' && Number.isFinite(cell) && (rule.min === undefined || cell >= rule.min);
+    if (!ok) throw new BackupError('not-a-backup', `${table}.${column} is not a number`);
+  }
+}
+
+function checkRows(table: BackupTable, value: unknown): Row[] {
   if (value === undefined) return [];
   if (!Array.isArray(value)) throw new BackupError('not-a-backup', `${table} is not a list`);
   for (const row of value) {
@@ -99,6 +132,7 @@ function checkRows(table: string, value: unknown): Row[] {
         throw new BackupError('not-a-backup', `${table}.${column} is not a plain value`);
       }
     }
+    checkNumbers(table, row);
   }
   return value as Row[];
 }
@@ -134,6 +168,7 @@ export function validateSnapshot(value: unknown, currentSchema = SCHEMA_VERSION)
   if (typeof version !== 'number' || typeof schemaVersion !== 'number') {
     throw new BackupError('not-a-backup', 'No version');
   }
+  if (!Number.isInteger(version) || version < 1) throw new BackupError('not-a-backup', 'Bad snapshot version');
   if (version > SNAPSHOT_VERSION) throw new BackupError('newer-app', 'Made by a newer version of MileMint');
   if (!Number.isInteger(schemaVersion) || schemaVersion < 1) {
     throw new BackupError('not-a-backup', 'Bad schema version');
@@ -149,6 +184,12 @@ export function validateSnapshot(value: unknown, currentSchema = SCHEMA_VERSION)
   for (const table of BACKUP_TABLES) checked[table] = checkRows(table, tables[table]);
   if (checked.trips.some((trip) => typeof trip.id !== 'string')) {
     throw new BackupError('not-a-backup', 'A trip has no id');
+  }
+  // Rows that others point at need their id too, or the whole restore fails on them.
+  for (const table of ['vehicles', 'places', 'shifts', 'logbooks'] as const) {
+    if (checked[table].some((row) => typeof row.id !== 'string')) {
+      throw new BackupError('not-a-backup', `A row in ${table} has no id`);
+    }
   }
   return upgradeSnapshot(
     {
@@ -176,10 +217,11 @@ export function parseSnapshot(json: string, currentSchema = SCHEMA_VERSION): Sna
 // ─── Restoring ─────────────────────────────────────────────────────────────
 
 /**
- * Drops what would break a foreign key on restore. Tables are read one after
- * another while the app may be saving a drive, so a route can outlive its
- * trip, or a trip point at a place deleted a moment later. Deleting a place
- * or vehicle only unlinks trips in the app too.
+ * Drops what would break a foreign key on restore. Backups from before they
+ * were read in one transaction can have a route that outlived its trip, or a
+ * trip pointing at a place deleted a moment later. Deleting a place or
+ * vehicle only unlinks trips in the app too. A logbook or a year's car costs
+ * can't exist without their vehicle, so those are dropped with it.
  */
 export function consistentTables(tables: Tables): Tables {
   const ids = (rows: Row[], key: string) => new Set(rows.map((row) => row[key]));
@@ -201,6 +243,8 @@ export function consistentTables(tables: Tables): Tables {
       return fixed;
     }),
     trip_routes: tables.trip_routes.filter((route) => trips.has(route.trip_id)),
+    logbooks: tables.logbooks.filter((logbook) => vehicles.has(logbook.vehicle_id)),
+    car_expenses: tables.car_expenses.filter((expenses) => vehicles.has(expenses.vehicle_id)),
   };
 }
 

@@ -45,3 +45,21 @@ export function withWriteLock<T>(task: () => Promise<T>): Promise<T> {
   writeQueue = run.catch(() => {});
   return run;
 }
+
+/**
+ * Runs `task`'s reads as one read transaction, so they all see the database
+ * as it was at one moment (a backup whose trips and edit history agree).
+ * Takes its turn in the same queue as writes.
+ */
+export function inReadTransaction<T>(db: Pick<SQLiteDatabase, 'execAsync'>, task: () => Promise<T>): Promise<T> {
+  return withWriteLock(async () => {
+    if (Platform.OS === 'web') return task();
+    await db.execAsync('BEGIN DEFERRED;');
+    try {
+      return await task();
+    } finally {
+      // Nothing to undo in a read; COMMIT also keeps any write that slipped in on this connection.
+      await db.execAsync('COMMIT;').catch(() => db.execAsync('ROLLBACK;').catch(() => {}));
+    }
+  });
+}

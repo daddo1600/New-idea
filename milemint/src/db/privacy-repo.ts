@@ -1,7 +1,10 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
 
-import { redactLabel } from '@/domain/privacy';
+import { noteScrubbed } from '@/backup/after-scrub';
+import { isAreaOnly, placeNameSet, redactLabel } from '@/domain/privacy';
 import type { RegionCode } from '@/domain/regions';
+
+import { inWriteTransaction } from './transaction';
 
 type Db = Pick<SQLiteDatabase, 'getAllAsync' | 'getFirstAsync' | 'runAsync' | 'execAsync' | 'withTransactionAsync'>;
 
@@ -9,24 +12,46 @@ type TripLabels = {
   id: string;
   start_label: string;
   end_label: string;
-  start_place_id: string | null;
-  end_place_id: string | null;
 };
 
 type LabelEdit = { id: number; action: string; field: string | null; old_value: string | null; new_value: string | null };
 
-/** How many trips there are to tidy up when client privacy is switched on. */
-export async function countPastTrips(db: Db): Promise<number> {
-  const row = await db.getFirstAsync<{ count: number }>('SELECT COUNT(*) AS count FROM trips;');
-  return row?.count ?? 0;
+async function savedPlaceNames(db: Db): Promise<Set<string>> {
+  return placeNameSet(await db.getAllAsync<{ name: string }>('SELECT name FROM places;'));
 }
 
 /**
- * Client privacy, applied to the past: every trip label that isn't a place the
- * user saved becomes "Client visit · area", every stored GPS route is deleted,
- * and addresses in the edit history (old labels, deleted trips) are reduced
- * the same way. Dates, distances and purposes stay as they are, so the claim
- * doesn't change. Can't be undone: the addresses are gone from the phone.
+ * How many trips there are to tidy up when client privacy is switched on:
+ * those with a GPS route or a label that is more than a saved place's name or
+ * the area (trips already reduced aren't counted again).
+ */
+export async function countPastTrips(db: Db): Promise<number> {
+  const [placeNames, trips] = await Promise.all([
+    savedPlaceNames(db),
+    db.getAllAsync<TripLabels & { has_route: number }>(
+      `SELECT id, start_label, end_label,
+         EXISTS (SELECT 1 FROM trip_routes WHERE trip_routes.trip_id = trips.id) AS has_route
+       FROM trips;`,
+    ),
+  ]);
+  return trips.filter(
+    (trip) =>
+      Boolean(trip.has_route) || !isAreaOnly(trip.start_label, placeNames) || !isAreaOnly(trip.end_label, placeNames),
+  ).length;
+}
+
+/**
+ * Client privacy, applied to the past: every trip label that isn't the name
+ * of a place the user saved becomes "Client visit · area", every stored GPS
+ * route is deleted, and addresses in the edit history (old labels, deleted
+ * trips) are reduced the same way. Dates, distances and purposes stay as they
+ * are, so the claim doesn't change. Can't be undone: the addresses are gone
+ * from the phone, and the next iCloud backup replaces the older ones that
+ * still have them (see backup/after-scrub.ts).
+ *
+ * A trip linked to a saved place keeps its label only when the label is that
+ * name: the link and the label can disagree (a label edited after the trip
+ * was linked, a typed address linked to a saved place nearby).
  *
  * Each change is logged as 'redact' with no old value: an auditor can see the
  * destination was reduced for privacy, and it doesn't count as "Edited later"
@@ -34,24 +59,24 @@ export async function countPastTrips(db: Db): Promise<number> {
  * had a label changed.
  */
 export async function scrubPastTrips(db: Db, region: RegionCode | null): Promise<number> {
-  const [places, trips, edits] = await Promise.all([
-    db.getAllAsync<{ name: string }>('SELECT name FROM places;'),
-    db.getAllAsync<TripLabels>('SELECT id, start_label, end_label, start_place_id, end_place_id FROM trips;'),
-    db.getAllAsync<LabelEdit>(
-      `SELECT id, action, field, old_value, new_value FROM trip_edits
-       WHERE field IN ('start_label', 'end_label') OR action = 'delete';`,
-    ),
-  ]);
-  const placeNames = new Set(places.map((place) => place.name.trim().toLowerCase()));
-  // Edit history doesn't say whether a label was a saved place; a saved place's name still is.
-  const redactText = (text: string | null) => (text === null ? null : redactLabel(text, null, placeNames, region));
-
   let changed = 0;
-  await db.withTransactionAsync(async () => {
+  // One write transaction, waiting its turn with the others on this connection (a restore, a backup's read).
+  await inWriteTransaction(db, async () => {
+    // Read inside the transaction, so a trip saved meanwhile isn't missed or overwritten.
+    const [placeNames, trips, edits] = await Promise.all([
+      savedPlaceNames(db),
+      db.getAllAsync<TripLabels>('SELECT id, start_label, end_label FROM trips;'),
+      db.getAllAsync<LabelEdit>(
+        `SELECT id, action, field, old_value, new_value FROM trip_edits
+         WHERE field IN ('start_label', 'end_label') OR action = 'delete';`,
+      ),
+    ]);
+    const redactText = (text: string | null) => (text === null ? null : redactLabel(text, placeNames, region));
+
     const now = new Date().toISOString();
     for (const trip of trips) {
-      const start = redactLabel(trip.start_label, trip.start_place_id, placeNames, region);
-      const end = redactLabel(trip.end_label, trip.end_place_id, placeNames, region);
+      const start = redactLabel(trip.start_label, placeNames, region);
+      const end = redactLabel(trip.end_label, placeNames, region);
       if (start === trip.start_label && end === trip.end_label) continue;
       changed++;
       await db.runAsync('UPDATE trips SET start_label = ?, end_label = ? WHERE id = ?;', start, end, trip.id);
@@ -86,6 +111,8 @@ export async function scrubPastTrips(db: Db, region: RegionCode | null): Promise
   // Rewrites the file so the old pages (with the addresses) don't linger. Best effort:
   // it can't run while a background wake-up holds the database, and the data is already gone.
   await db.execAsync('VACUUM;').catch(() => {});
+  // The older iCloud backups still have the addresses: replace them with a fresh one now.
+  await noteScrubbed().catch(() => {});
   return changed;
 }
 
@@ -94,12 +121,9 @@ function redactDeletedTrip(json: string | null, placeNames: ReadonlySet<string>,
   if (!json) return json;
   try {
     const trip = JSON.parse(json) as Record<string, unknown>;
-    for (const [label, placeId] of [
-      ['startLabel', 'startPlaceId'],
-      ['endLabel', 'endPlaceId'],
-    ] as const) {
+    for (const label of ['startLabel', 'endLabel'] as const) {
       if (typeof trip[label] !== 'string') continue;
-      trip[label] = redactLabel(trip[label], (trip[placeId] as string | null) ?? null, placeNames, region);
+      trip[label] = redactLabel(trip[label], placeNames, region);
     }
     return JSON.stringify(trip);
   } catch {

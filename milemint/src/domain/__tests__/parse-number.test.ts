@@ -16,6 +16,10 @@ describe('parseNumber', () => {
     ['37,5', 37.5],
     ['$1,200', 1200],
     ['0', 0],
+    ['0,001', 0.001],
+    ['0.001', 0.001],
+    ['1,500.25', 1500.25],
+    ['1.500', 1.5],
   ])('reads %s as %d', (text, value) => {
     expect(parseNumber(text)).toBe(value);
   });
@@ -24,7 +28,14 @@ describe('parseNumber', () => {
     expect(parseNumber('  ')).toBeNull();
   });
 
-  it.each(['abc', '12a', '-5', '1,2,3', '1.', ',5', '1,234,56.7.8'])('rejects %s', (text) => {
-    expect(parseNumber(text)).toBeUndefined();
+  it.each(['abc', '12a', '-5', '1,2,3', '1.', ',5', '1,234,56.7.8', '1..2', '1,,2', '1.,2', '1.2.3,4', '1,2,3.4', '1,000,0', '1.2.3', '1,500.25.3'])(
+    'rejects %s',
+    (text) => {
+      expect(parseNumber(text)).toBeUndefined();
+    },
+  );
+
+  it('rejects numbers too big to be one', () => {
+    expect(parseNumber('9'.repeat(400))).toBeUndefined();
   });
 });

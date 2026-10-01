@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { AppState } from 'react-native';
 
 import { ICloudBackup } from '../../modules/icloud-backup';
+import { onScrubbed } from './after-scrub';
 import { backUp } from './backup';
 
 /** Opening the app: wait for the home screen to settle before reading the whole database. */
@@ -26,9 +27,12 @@ export function useAutoBackup(enabled: boolean) {
     const subscription = AppState.addEventListener('change', (state) => {
       if (state === 'background' || state === 'active') attempt();
     });
+    // Addresses just removed from past trips: replace the older backups that still have them, now.
+    const stopWatching = onScrubbed(attempt);
     return () => {
       clearTimeout(opening);
       subscription.remove();
+      stopWatching();
     };
   }, [db, enabled]);
 }
