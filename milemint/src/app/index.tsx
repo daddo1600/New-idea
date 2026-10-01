@@ -18,6 +18,7 @@ import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import type { Shift } from '@/db/shifts-repo';
 import { useTrips } from '@/db/use-trips';
+import { DEMO_MODE } from '@/dev/demo';
 import { isCommute, type AutoReason } from '@/domain/classify-rules';
 import { autoDrivesInMonth, FREE_AUTO_DRIVES_PER_MONTH, lockedTripIds } from '@/domain/plan';
 import type { Place } from '@/domain/places';
@@ -35,6 +36,7 @@ import { type Classification, toLocalIsoDate, type Trip, VEHICLE_ICONS } from '@
 import { useTheme } from '@/hooks/use-theme';
 import { usePro } from '@/purchases/pro';
 import { useRegion } from '@/region/region';
+import { rememberTotal } from '@/region/remembered-region';
 import { useReminders } from '@/reminders/use-reminders';
 import type { TrackingStatus } from '@/tracking/background';
 import { useShift } from '@/tracking/use-shift';
@@ -86,6 +88,11 @@ export default function HomeScreen() {
     () => summarizeTaxYear(visible, region, taxYear, deductions),
     [visible, region, taxYear, deductions],
   );
+  // For the quick opening next time: this tax year's total, counted up from what was last seen.
+  useEffect(() => {
+    if (trips && onboarded && !DEMO_MODE) rememberTotal(summary.deduction).catch(() => {});
+  }, [trips, onboarded, summary.deduction]);
+
   // Home ↔ work drives the user marked business anyway. Kept in the total (a
   // home office can make them deductible), but called out so they get a second look.
   const commuteCents = useMemo(() => {

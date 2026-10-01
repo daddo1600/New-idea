@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedProps,
@@ -17,9 +17,16 @@ import { ROAD_PATH } from '@/brand/leaf';
 import { phoneRegion } from '@/components/country-options';
 import { IntroScenery } from '@/components/intro-scenery';
 import { LeafMark } from '@/components/leaf-mark';
-import { formatDistance, formatMoney, fromUnits, ratePeriodFor, REGIONS, type RegionCode } from '@/domain/regions';
+import {
+  formatDistance,
+  formatMoney,
+  fromUnits,
+  ratePeriodFor,
+  REGIONS,
+  type RegionCode,
+} from '@/domain/regions';
 import { toLocalIsoDate } from '@/domain/trip';
-import { recallRegion } from '@/region/remembered-region';
+import { type LaunchTotals, markTotalSeen, recallRegion, recallTotals } from '@/region/remembered-region';
 
 /**
  * Plays on every launch while the app opens underneath: the car (the logo's
@@ -37,6 +44,8 @@ const GROWN_SCALE = 1.5;
 
 const DRIVE_MS = 3200;
 const HOLD_MS = 500;
+const QUICK_DRIVE_MS = 850;
+const QUICK_HOLD_MS = 550;
 const FADE_MS = 300;
 /** The drive the counter shows. */
 const DEMO_UNITS = 12.4;
@@ -54,7 +63,10 @@ function sampleRoad() {
     const t = i / fine;
     const u = 1 - t;
     const at = (k: 0 | 1) =>
-      u * u * u * ROAD.p0[k] + 3 * u * u * t * ROAD.p1[k] + 3 * u * t * t * ROAD.p2[k] + t * t * t * ROAD.p3[k];
+      u * u * u * ROAD.p0[k] +
+      3 * u * u * t * ROAD.p1[k] +
+      3 * u * t * t * ROAD.p2[k] +
+      t * t * t * ROAD.p3[k];
     points.push([at(0), at(1)]);
     if (i > 0) {
       const [px, py] = points[i - 1];
@@ -86,17 +98,146 @@ function roadAt(t: number) {
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
+/**
+ * Opening sequence. Before set-up: the full demo drive (about 3.5 s) that
+ * shows what MileMint does. Once set up: a quick one (under 2 s) with the
+ * user's own tax-year total counting up from what they last saw, so every
+ * launch is a reminder of the money coming back. A tap skips either.
+ */
 export function LaunchIntro({ onDone }: { onDone: () => void }) {
-  const reduceMotion = useReducedMotion();
-  // The phone's country until the one chosen in set-up has been read (a few milliseconds).
-  const [code, setCode] = useState<RegionCode>(phoneRegion);
+  const [mode, setMode] = useState<{ quick: LaunchTotals | null; code: RegionCode } | null>(null);
+  const [skip, setSkip] = useState(false);
   useEffect(() => {
     let current = true;
-    recallRegion().then((remembered) => current && remembered && setCode(remembered));
+    // Both are read from the keychain in milliseconds; the splash screen covers the wait.
+    Promise.all([recallRegion(), recallTotals()]).then(
+      ([remembered, totals]) =>
+        current &&
+        setMode({
+          code: remembered ?? phoneRegion(),
+          // Real money to show: until the first business trip, keep the demo drive.
+          quick: remembered && totals && totals.total > 0 ? totals : null,
+        }),
+      () => current && setMode({ code: phoneRegion(), quick: null }),
+    );
     return () => {
       current = false;
     };
   }, []);
+
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="MileMint. Tap to skip"
+      onPress={() => setSkip(true)}
+      style={[StyleSheet.absoluteFill, styles.layer]}>
+      {mode === null ? (
+        <View style={[StyleSheet.absoluteFill, styles.container]}>
+          <LeafMark size={SPLASH_SIZE} />
+        </View>
+      ) : mode.quick ? (
+        <QuickIntro code={mode.code} totals={mode.quick} skip={skip} onDone={onDone} />
+      ) : (
+        <FullIntro code={mode.code} skip={skip} onDone={onDone} />
+      )}
+    </Pressable>
+  );
+}
+
+/** After set-up: the car zips up the leaf while their own total counts up. */
+function QuickIntro({
+  code,
+  totals,
+  skip,
+  onDone,
+}: {
+  code: RegionCode;
+  totals: LaunchTotals;
+  skip: boolean;
+  onDone: () => void;
+}) {
+  const reduceMotion = useReducedMotion();
+  const region = REGIONS[code];
+  const from = Math.max(0, Math.min(totals.seen, totals.total));
+  const gained = totals.total - from;
+  const drive = useSharedValue(reduceMotion ? 1 : 0);
+  const fade = useSharedValue(1);
+  const [shown, setShown] = useState(reduceMotion ? totals.total : from);
+
+  useEffect(() => {
+    const easing = Easing.out(Easing.cubic);
+    drive.value = withDelay(80, withTiming(1, { duration: reduceMotion ? 0 : QUICK_DRIVE_MS, easing }));
+    fade.value = withDelay(
+      80 + (reduceMotion ? 0 : QUICK_DRIVE_MS) + QUICK_HOLD_MS,
+      withTiming(0, { duration: FADE_MS }, (finished) => {
+        if (finished) scheduleOnRN(onDone);
+      }),
+    );
+    markTotalSeen(totals);
+  }, [drive, fade, onDone, reduceMotion, totals]);
+
+  useEffect(() => {
+    if (!skip) return;
+    fade.set(
+      withTiming(0, { duration: 180 }, (finished) => {
+        if (finished) scheduleOnRN(onDone);
+      }),
+    );
+  }, [skip, fade, onDone]);
+
+  useAnimatedReaction(
+    () => Math.round(from + gained * drive.value),
+    (minor, previous) => {
+      if (minor !== previous) scheduleOnRN(setShown, minor);
+    },
+  );
+
+  const carProps = useAnimatedProps(() => {
+    const at = drive.value * SAMPLES;
+    const i = Math.min(SAMPLES - 1, Math.floor(at));
+    const f = at - i;
+    return {
+      cx: roadXs[i] + (roadXs[i + 1] - roadXs[i]) * f,
+      cy: roadYs[i] + (roadYs[i + 1] - roadYs[i]) * f,
+    };
+  });
+  const unpavedProps = useAnimatedProps(() => ({ strokeDashoffset: -drive.value * roadLength }));
+  const logoStyle = useAnimatedStyle(() => {
+    const grow = Math.min(1, drive.value * 2);
+    return { transform: [{ translateY: -56 * grow }, { scale: 1 + (GROWN_SCALE - 1) * grow }] };
+  });
+  const counterStyle = useAnimatedStyle(() => ({ opacity: Math.min(1, drive.value * 3) }));
+  const fadeStyle = useAnimatedStyle(() => ({ opacity: fade.value }));
+
+  return (
+    <Animated.View style={[StyleSheet.absoluteFill, styles.container, fadeStyle]}>
+      <Animated.View style={logoStyle}>
+        <LeafMark size={SPLASH_SIZE} car={false}>
+          <AnimatedPath
+            d={ROAD_PATH}
+            stroke="#064E3B"
+            strokeWidth={16}
+            fill="none"
+            strokeDasharray={[roadLength, roadLength]}
+            animatedProps={unpavedProps}
+          />
+          <AnimatedCircle r={58} fill="#FACC15" stroke="#FFFFFF" strokeWidth={16} animatedProps={carProps} />
+        </LeafMark>
+      </Animated.View>
+      <Animated.View style={[styles.counter, counterStyle]}>
+        <Text style={styles.money}>{formatMoney(shown, region)}</Text>
+        <Text style={styles.distance}>found this tax year</Text>
+        {gained > 0 && (
+          <Text style={styles.gained}>+{formatMoney(gained, region)} since you last looked</Text>
+        )}
+      </Animated.View>
+    </Animated.View>
+  );
+}
+
+/** Before set-up: the full demo drive past a petrol station, shops and a café. */
+function FullIntro({ code, skip, onDone }: { code: RegionCode; skip: boolean; onDone: () => void }) {
+  const reduceMotion = useReducedMotion();
   const region = REGIONS[code];
   const ratePerUnit = useMemo(() => {
     const period = ratePeriodFor(toLocalIsoDate(new Date()), region) ?? region.rates[region.rates.length - 1];
@@ -122,6 +263,15 @@ export function LaunchIntro({ onDone }: { onDone: () => void }) {
       }),
     );
   }, [drive, grow, fade, onDone, reduceMotion]);
+
+  useEffect(() => {
+    if (!skip) return;
+    fade.set(
+      withTiming(0, { duration: 180 }, (finished) => {
+        if (finished) scheduleOnRN(onDone);
+      }),
+    );
+  }, [skip, fade, onDone]);
 
   // The counter ticks in tenths, so only re-render when the shown value changes.
   useAnimatedReaction(
@@ -153,11 +303,7 @@ export function LaunchIntro({ onDone }: { onDone: () => void }) {
 
   const units = shown * DEMO_UNITS;
   return (
-    <Animated.View
-      accessible
-      accessibilityLabel="MileMint"
-      pointerEvents="none"
-      style={[StyleSheet.absoluteFill, styles.container, fadeStyle]}>
+    <Animated.View style={[StyleSheet.absoluteFill, styles.container, fadeStyle]}>
       <Animated.View style={logoStyle}>
         <LeafMark size={SPLASH_SIZE} car={false}>
           <AnimatedPath
@@ -181,7 +327,14 @@ export function LaunchIntro({ onDone }: { onDone: () => void }) {
 }
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: INTRO_BACKGROUND, alignItems: 'center', justifyContent: 'center', zIndex: 10 },
+  layer: { zIndex: 10 },
+  gained: { color: '#FACC15', fontSize: 15, fontWeight: '700', marginTop: 6 },
+  container: {
+    backgroundColor: INTRO_BACKGROUND,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10,
+  },
   counter: { position: 'absolute', top: '50%', marginTop: 88, alignItems: 'center', gap: 2 },
   money: { color: '#FFFFFF', fontSize: 34, fontWeight: '700', fontVariant: ['tabular-nums'] },
   distance: { color: '#D1FAE5', fontSize: 15, fontWeight: '500', fontVariant: ['tabular-nums'] },
