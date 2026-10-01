@@ -10,7 +10,7 @@ import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTrips } from '@/db/use-trips';
 import { lockedTripIds } from '@/domain/plan';
-import { formatMoney, potentialDeduction } from '@/domain/regions';
+import { formatMoney, potentialDeductions } from '@/domain/regions';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
@@ -101,7 +101,8 @@ export default function ProScreen() {
     const ids = lockedTripIds(trips ?? [], false, allowance);
     const visible = (trips ?? []).filter((trip) => !ids.has(trip.id));
     const drives = (trips ?? []).filter((trip) => ids.has(trip.id));
-    const value = drives.reduce((sum, trip) => sum + potentialDeduction(trip, visible, region), 0);
+    const potentialOf = potentialDeductions(visible, region);
+    const value = drives.reduce((sum, trip) => sum + potentialOf(trip), 0);
     return { count: drives.length, value };
   }, [trips, region, allowance]);
 

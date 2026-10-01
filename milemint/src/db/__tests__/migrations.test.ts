@@ -1,6 +1,7 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
 import { DatabaseTooNewError, migrate, SCHEMA_VERSION } from '../migrations';
+import { available, openTestDatabase, type TestDatabase } from '../testing/node-sqlite';
 
 // Hoisted above the import by babel-jest: migrate() sees an iPhone.
 jest.mock('react-native', () => ({ Platform: { OS: 'ios' } }));
@@ -55,5 +56,50 @@ describe('migrate on a device', () => {
     };
     await expect(migrate(db as never)).rejects.toThrow('disk full');
     expect(db.statements.at(-1)).toBe('ROLLBACK;');
+  });
+});
+
+const describeSqlite = available ? describe : describe.skip;
+
+describeSqlite('migration 10: indexes and the drive-in-progress route', () => {
+  const plan = (db: TestDatabase, sql: string, ...params: unknown[]) =>
+    db
+      .rows<{ detail: string }>(`EXPLAIN QUERY PLAN ${sql}`, ...params)
+      .map((row) => row.detail)
+      .join(' | ');
+
+  it('upgrades a version 9 database, keeping its trips, and the frequent lookups use the indexes', async () => {
+    const db = openTestDatabase();
+    await migrate(db as never);
+    // Back to how version 9 left it.
+    db.raw.exec(`
+      DROP TABLE tracker_route;
+      DROP INDEX trips_started_at;
+      DROP INDEX trips_local_date_started_at;
+      DROP INDEX trips_shift;
+      DROP INDEX trip_edits_updates;
+      CREATE INDEX trips_local_date ON trips (local_date);
+      PRAGMA user_version = 9;
+      INSERT INTO trips (id, started_at, local_date, start_label, end_label, distance_meters, classification, source, created_at)
+        VALUES ('t1', '2026-05-01T08:00:00.000Z', '2026-05-01', 'A', 'B', 1000, 'business', 'auto', '2026-05-01T08:30:00.000Z');
+    `);
+    await migrate(db as never);
+    expect(db.rows<{ user_version: number }>('PRAGMA user_version;')[0].user_version).toBe(SCHEMA_VERSION);
+    expect(db.rows('SELECT id FROM trips;')).toEqual([{ id: 't1' }]);
+    expect(db.rows('SELECT * FROM tracker_route;')).toEqual([]);
+
+    expect(plan(db, 'SELECT * FROM trips ORDER BY local_date DESC, started_at DESC;')).not.toContain('TEMP B-TREE');
+    expect(plan(db, "SELECT 1 FROM trips WHERE source = 'auto' AND started_at = ? LIMIT 1;", 'x')).toContain(
+      'trips_started_at',
+    );
+    expect(plan(db, 'SELECT id FROM trips WHERE shift_id = ? AND ended_at IS NOT NULL;', 's')).toContain('trips_shift');
+    expect(
+      plan(
+        db,
+        `SELECT trip_id, MAX(at) AS at FROM trip_edits
+          WHERE action = 'update' AND field = 'classification' AND old_value = 'personal' GROUP BY trip_id;`,
+      ),
+    ).toContain('trip_edits_updates');
+    expect(plan(db, "SELECT DISTINCT trip_id FROM trip_edits WHERE action = 'update';")).toContain('trip_edits_updates');
   });
 });

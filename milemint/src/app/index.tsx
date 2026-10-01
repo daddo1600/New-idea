@@ -45,7 +45,7 @@ import {
   formatDistance,
   formatLongDate,
   formatMoney,
-  potentialDeduction,
+  potentialDeductions,
   summarizeTaxYear,
   taxYearOf,
   type Region,
@@ -172,6 +172,8 @@ export default function HomeScreen() {
   if (!trips) return <ActivityIndicator style={styles.loading} />;
 
   const kindOf = (id: string | null) => places.find((place: Place) => place.id === id)?.kind ?? null;
+  // "Worth up to" on unsorted rows: the year's business distance added up once, not once per row.
+  const potentialOf = potentialDeductions(visible, region);
 
   // The shift is the row: a shift's drives are one row that opens to them.
   // Selecting works on drives, so it lists them one by one as before.
@@ -405,7 +407,7 @@ export default function HomeScreen() {
             <TripRow
               trip={item}
               deduction={deductions.get(item.id) ?? 0}
-              potential={item.classification === 'unclassified' ? potentialDeduction(item, visible, region) : 0}
+              potential={item.classification === 'unclassified' ? potentialOf(item) : 0}
               commute={isCommute(kindOf(item.startPlaceId), kindOf(item.endPlaceId))}
               offShift={offShiftKind(item, shiftMode.shifts)}
               onClassify={(c) => sort([item], c)}
