@@ -45,6 +45,13 @@ export const INTRO_BACKGROUND = '#0B7A55';
 /** The splash icon is drawn 120pt wide. */
 const SPLASH_SIZE = 120;
 const GROWN_SCALE = 1.5;
+/**
+ * The grown leaf and the total under it are centred as one group: the leaf
+ * rises this far and the total starts COUNTER_TOP below the middle, so the
+ * gap between them is small and the pair sits in the middle of the screen.
+ */
+const LOGO_LIFT = 66;
+const COUNTER_TOP = 40;
 
 const DRIVE_MS = 3200;
 const HOLD_MS = 500;
@@ -225,7 +232,7 @@ function QuickIntro({
   const unpavedProps = useAnimatedProps(() => ({ strokeDashoffset: -drive.value * roadLength }));
   const logoStyle = useAnimatedStyle(() => {
     const grow = Math.min(1, drive.value * 2);
-    return { transform: [{ translateY: -56 * grow }, { scale: 1 + (GROWN_SCALE - 1) * grow }] };
+    return { transform: [{ translateY: -LOGO_LIFT * grow }, { scale: 1 + (GROWN_SCALE - 1) * grow }] };
   });
   const counterStyle = useAnimatedStyle(() => ({ opacity: Math.min(1, drive.value * 3) }));
   const fadeStyle = useAnimatedStyle(() => ({ opacity: fade.value }));
@@ -322,7 +329,7 @@ function FullIntro({
   // Hides the lane markings the car hasn't reached yet.
   const unpavedProps = useAnimatedProps(() => ({ strokeDashoffset: -drive.value * roadLength }));
   const logoStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: -56 * grow.value }, { scale: 1 + (GROWN_SCALE - 1) * grow.value }],
+    transform: [{ translateY: -LOGO_LIFT * grow.value }, { scale: 1 + (GROWN_SCALE - 1) * grow.value }],
   }));
   const counterStyle = useAnimatedStyle(() => ({
     opacity: grow.value,
@@ -407,7 +414,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: 10,
   },
-  counter: { position: 'absolute', top: '50%', marginTop: 88, alignItems: 'center', gap: 2 },
+  counter: { position: 'absolute', top: '50%', marginTop: COUNTER_TOP, alignItems: 'center', gap: 2 },
   money: { color: '#FFFFFF', fontSize: 40, fontWeight: '800', fontVariant: ['tabular-nums'] },
   distance: {
     color: '#FACC15',
