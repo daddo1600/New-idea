@@ -4,6 +4,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { msg, useT } from '@/i18n/i18n';
 
 /**
  * Shown when iOS granted location only "While Using" (or not at all): iOS's
@@ -11,25 +12,32 @@ import { useTheme } from '@/hooks/use-theme';
  * sometimes never, so the reliable way is Settings. A small replica of the
  * Settings screen shows exactly what to tap.
  */
-const OPTIONS = ['Never', 'Ask Next Time Or When I Share', 'While Using the App', 'Always'] as const;
+const OPTIONS = [
+  msg('Never'),
+  msg('Ask Next Time Or When I Share'),
+  msg('While Using the App'),
+  msg('Always'),
+] as const;
+
+const STEPS = [msg('Tap “Open Settings” below'), msg('Tap “Location”'), msg('Choose “Always”')] as const;
 
 export function AlwaysGuide({ current }: { current: 'While Using the App' | 'Never' }) {
   const theme = useTheme();
+  const t = useT();
   return (
     <ThemedView type="backgroundElement" style={styles.card} accessibilityRole="alert">
-      <ThemedText type="smallBold">One quick switch in Settings</ThemedText>
+      <ThemedText type="smallBold">{t('One quick switch in Settings')}</ThemedText>
       <ThemedText type="small" themeColor="textSecondary">
-        iOS only offers “Always” in Settings. It takes ten seconds, and MileMint carries on by itself when you
-        come back.
+        {t('iOS only offers “Always” in Settings. It takes ten seconds, and MileMint carries on by itself when you come back.')}
       </ThemedText>
 
       <View style={styles.steps}>
-        {['Tap “Open Settings” below', 'Tap “Location”', 'Choose “Always”'].map((step, i) => (
+        {STEPS.map((step, i) => (
           <View key={step} style={styles.step}>
             <View style={[styles.number, { backgroundColor: theme.accent }]}>
               <Text style={[styles.numberText, { color: theme.onAccent }]}>{i + 1}</Text>
             </View>
-            <ThemedText type="small">{step}</ThemedText>
+            <ThemedText type="small">{t(step)}</ThemedText>
           </View>
         ))}
       </View>
@@ -37,9 +45,11 @@ export function AlwaysGuide({ current }: { current: 'While Using the App' | 'Nev
       {/* What they'll see in Settings → MileMint → Location. */}
       <View
         accessible
-        accessibilityLabel="In Settings, under Allow Location Access, choose Always"
+        accessibilityLabel={t('In Settings, under Allow Location Access, choose Always')}
         style={[styles.mock, { backgroundColor: theme.background, borderColor: theme.backgroundSelected }]}>
-        <Text style={[styles.mockHeader, { color: theme.textSecondary }]}>ALLOW LOCATION ACCESS</Text>
+        <Text style={[styles.mockHeader, { color: theme.textSecondary }]}>
+          {t('ALLOW LOCATION ACCESS')}
+        </Text>
         {OPTIONS.map((option, i) => {
           const target = option === 'Always';
           return (
@@ -58,12 +68,12 @@ export function AlwaysGuide({ current }: { current: 'While Using the App' | 'Nev
                   styles.mockText,
                   { color: target ? theme.accent : theme.textSecondary, fontWeight: target ? '700' : '400' },
                 ]}>
-                {option}
+                {t(option)}
               </Text>
               {option === current && <Text style={[styles.mockText, { color: theme.textSecondary }]}>✓</Text>}
               {target && (
                 <View style={styles.tapBadge}>
-                  <Text style={styles.tapText}>Tap here</Text>
+                  <Text style={styles.tapText}>{t('Tap here')}</Text>
                 </View>
               )}
             </View>

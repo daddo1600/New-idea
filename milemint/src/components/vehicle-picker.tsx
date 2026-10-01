@@ -4,14 +4,20 @@ import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { VEHICLE_ICONS, type VehicleType } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
+import { msg, useT } from '@/i18n/i18n';
 
-const SHORT_LABELS: Record<VehicleType, string> = { car: 'Car or van', motorbike: 'Motorbike', bicycle: 'Bicycle' };
+const SHORT_LABELS: Record<VehicleType, string> = {
+  car: msg('Car or van'),
+  motorbike: msg('Motorbike'),
+  bicycle: msg('Bicycle'),
+};
 
 /** Car, motorbike or bicycle as three equal buttons on one line, icon above the name. */
 export function VehiclePicker({ value, onChange }: { value: VehicleType; onChange: (vehicle: VehicleType) => void }) {
   const theme = useTheme();
+  const t = useT();
   return (
-    <View style={styles.row} accessibilityRole="radiogroup" accessibilityLabel="Vehicle">
+    <View style={styles.row} accessibilityRole="radiogroup" accessibilityLabel={t('Vehicle')}>
       {(['car', 'motorbike', 'bicycle'] as const).map((vehicle) => {
         const selected = vehicle === value;
         return (
@@ -19,7 +25,7 @@ export function VehiclePicker({ value, onChange }: { value: VehicleType; onChang
             key={vehicle}
             accessibilityRole="radio"
             accessibilityState={{ selected }}
-            accessibilityLabel={SHORT_LABELS[vehicle]}
+            accessibilityLabel={t(SHORT_LABELS[vehicle])}
             onPress={() => onChange(vehicle)}
             style={[
               styles.option,
@@ -29,7 +35,7 @@ export function VehiclePicker({ value, onChange }: { value: VehicleType; onChang
             ]}>
             <Text style={styles.icon}>{VEHICLE_ICONS[vehicle]}</Text>
             <ThemedText type="smallBold" numberOfLines={1} style={{ color: selected ? theme.onAccent : theme.text }}>
-              {SHORT_LABELS[vehicle]}
+              {t(SHORT_LABELS[vehicle])}
             </ThemedText>
           </Pressable>
         );

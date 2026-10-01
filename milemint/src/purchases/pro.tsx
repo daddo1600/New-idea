@@ -3,6 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import { AppState, Platform } from 'react-native';
 
 import { DEMO_MODE, DEMO_PRO } from '@/dev/demo';
+import { msg } from '@/i18n/i18n';
 
 import {
   buy as storeBuy,
@@ -24,7 +25,7 @@ const CACHE_KEY = 'milemint.pro-active';
 
 /** The web demo has no App Store; these stand in so the paywall can be previewed. */
 const DEMO_PLANS: ProPlan[] = [
-  { id: 'demo.yearly', price: '$49.99', period: 'year', trial: '30-day free trial' },
+  { id: 'demo.yearly', price: '$49.99', period: 'year', trial: { count: 30, unit: 'day' } },
   { id: 'demo.monthly', price: '$5.99', period: 'month', trial: null },
 ];
 const canCache = Platform.OS !== 'web';
@@ -38,6 +39,7 @@ type Pro = {
   storeAvailable: boolean;
   /** A purchase or restore is in progress. */
   busy: boolean;
+  /** English text, marked with msg(); show it with t(error). */
   error: string | null;
   buy: (planId: string) => Promise<void>;
   /** Resolves to whether a subscription was found. */
@@ -93,7 +95,7 @@ export function ProProvider({ children }: { children: ReactNode }) {
         },
         error: (purchaseError) => {
           setBusy(false);
-          if (!isCancelled(purchaseError)) setError('The purchase didn’t go through. Please try again.');
+          if (!isCancelled(purchaseError)) setError(msg('The purchase didn’t go through. Please try again.'));
         },
       });
     } catch (listenError) {
@@ -116,7 +118,7 @@ export function ProProvider({ children }: { children: ReactNode }) {
       // Resolves once Apple's sheet closes; the purchase itself arrives via the listener.
       await storeBuy(planId);
     } catch (purchaseError) {
-      if (!isCancelled(purchaseError)) setError('The App Store couldn’t start the purchase. Please try again.');
+      if (!isCancelled(purchaseError)) setError(msg('The App Store couldn’t start the purchase. Please try again.'));
     } finally {
       setBusy(false);
     }
@@ -130,7 +132,7 @@ export function ProProvider({ children }: { children: ReactNode }) {
       remember(active);
       return active;
     } catch {
-      setError('Couldn’t reach the App Store. Check your connection and try again.');
+      setError(msg('Couldn’t reach the App Store. Check your connection and try again.'));
       return false;
     } finally {
       setBusy(false);

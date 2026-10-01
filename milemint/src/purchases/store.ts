@@ -42,18 +42,21 @@ export type ProPlan = {
   /** Localized, e.g. "$49.99". */
   price: string;
   period: 'month' | 'year';
-  /** e.g. "30-day free trial", when the user is eligible for one. */
-  trial: string | null;
+  /** The free trial the user is eligible for, if any; worded on screen (e.g. "30-day free trial"). */
+  trial: ProTrial | null;
 };
 
-function trialOf(product: ProductSubscription): string | null {
+/** A free trial's length; `unit: null` when the App Store gives no length we word. */
+export type ProTrial = { count: number; unit: 'day' | 'month' | null };
+
+function trialOf(product: ProductSubscription): ProTrial | null {
   if (product.platform !== 'ios' || product.introductoryPricePaymentModeIOS !== 'free-trial') return null;
   const count = Number(product.introductoryPriceNumberOfPeriodsIOS ?? 1);
   const unit = product.introductoryPriceSubscriptionPeriodIOS;
-  if (unit === 'day') return `${count}-day free trial`;
-  if (unit === 'week') return `${count * 7}-day free trial`;
-  if (unit === 'month') return count === 1 ? '1-month free trial' : `${count}-month free trial`;
-  return 'Free trial';
+  if (unit === 'day') return { count, unit: 'day' };
+  if (unit === 'week') return { count: count * 7, unit: 'day' };
+  if (unit === 'month') return { count, unit: 'month' };
+  return { count, unit: null };
 }
 
 export async function loadPlans(): Promise<ProPlan[]> {
