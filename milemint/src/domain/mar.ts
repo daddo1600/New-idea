@@ -61,10 +61,19 @@ export const YEARS_BACK = 4;
 /** HMRC's page for claiming tax relief on employment expenses (P87). */
 export const P87_URL = 'https://www.gov.uk/guidance/claim-income-tax-relief-for-your-employment-expenses-p87';
 
-/** Pence a mile as typed ("45", "37.5", "45p") → tenths of a penny; null if it isn't a sensible rate (up to £2). */
+/**
+ * Pence a mile as typed ("45", "37.5", "45p") → tenths of a penny; null if it
+ * isn't a sensible rate (up to £2). Pounds are understood too ("£0.45" or
+ * "0.45" is 45p: nobody is paid under a penny a mile).
+ */
 export function parsePence(text: string): number | null {
   // A decimal comma ("37,5p") is as good as a point.
   const trimmed = text.trim().replace(/p$/i, '').trim().replace(',', '.');
+  const pounds = /^£?\s*(\d)\.(\d{2,3})$/.exec(trimmed);
+  if (pounds && (trimmed.startsWith('£') || pounds[1] === '0')) {
+    const tenths = Math.round(Number(`${pounds[1]}.${pounds[2]}`) * 1000);
+    return tenths > 0 && tenths <= 2000 ? tenths : null;
+  }
   if (!/^\d{1,3}(\.\d)?$/.test(trimmed)) return null;
   const tenths = Math.round(Number(trimmed) * 10);
   return tenths <= 2000 ? tenths : null;

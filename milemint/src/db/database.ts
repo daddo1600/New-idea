@@ -43,7 +43,19 @@ async function getOrCreateKeyHex(): Promise<string> {
  * `PRAGMA key` is silently ignored by plain SQLite, so we confirm SQLCipher
  * is really active and refuse to continue rather than write trips in the clear.
  */
-export async function initDatabase(db: SQLiteDatabase): Promise<void> {
+export function initDatabase(db: SQLiteDatabase): Promise<void> {
+  // The app and a background wake-up can open the database at the same moment
+  // (e.g. the first launch after an update is a geofence exit mid-drive). They
+  // share one native connection, so unlocking and migrating run one at a time;
+  // the second finds the schema already up to date.
+  const run = initQueue.then(() => unlockAndMigrate(db));
+  initQueue = run.catch(() => {});
+  return run;
+}
+
+let initQueue: Promise<void> = Promise.resolve();
+
+async function unlockAndMigrate(db: SQLiteDatabase): Promise<void> {
   // Web is a development preview only: no SQLCipher and no Keychain there.
   if (Platform.OS !== 'web') {
     const keyHex = await getOrCreateKeyHex();

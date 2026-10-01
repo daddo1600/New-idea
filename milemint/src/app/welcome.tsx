@@ -232,20 +232,31 @@ export default function WelcomeScreen() {
       if (!garage.some((v) => v.type === type)) await addVehicle(db, { type });
     }
     setShifts(true);
+    setHoursSet(false);
     setStep(PLACES);
   };
 
   const saveHours = async () => {
     await saveEmployment();
     const settings = await loadSettings(db);
-    await saveSettings(db, { ...settings, workHoursEnabled: true, workWeek: toWorkWeek(week), clientPrivacy });
+    // Going back from "Shifts" and choosing hours instead turns shift mode off again.
+    await saveSettings(db, {
+      ...settings,
+      shiftMode: false,
+      workHoursEnabled: true,
+      workWeek: toWorkWeek(week),
+      clientPrivacy,
+    });
+    setShifts(false);
     setHoursSet(true);
     setStep(PLACES);
   };
 
   const chooseNeither = async () => {
     await saveEmployment();
-    await saveSettings(db, { ...(await loadSettings(db)), clientPrivacy });
+    await saveSettings(db, { ...(await loadSettings(db)), shiftMode: false, workHoursEnabled: false, clientPrivacy });
+    setShifts(false);
+    setHoursSet(false);
     setStep(PLACES);
   };
 
@@ -640,6 +651,11 @@ export default function WelcomeScreen() {
                         </ThemedText>
                       </Pressable>
                     </View>
+                  )}
+                  {employed && !employerPaysNothing && parsePence(employerRateText) === null && (
+                    <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
+                      {t('Enter pence a mile as a number, e.g. 45.')}
+                    </ThemedText>
                   )}
                 </View>
               )}

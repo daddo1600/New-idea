@@ -14,15 +14,34 @@ export type Writer = Pick<SQLiteDatabase, 'execAsync' | 'withTransactionAsync'>;
  * it can't read the encrypted file ("file is not a database") and the app
  * failed on launch.
  */
-export async function inWriteTransaction(db: Writer, task: () => Promise<void>): Promise<void> {
-  // The web preview has a single connection and no locking to worry about.
-  if (Platform.OS === 'web') return db.withTransactionAsync(task);
-  await db.execAsync('BEGIN IMMEDIATE;');
-  try {
-    await task();
-    await db.execAsync('COMMIT;');
-  } catch (error) {
-    await db.execAsync('ROLLBACK;').catch(() => {});
-    throw error;
-  }
+export function inWriteTransaction(db: Writer, task: () => Promise<void>): Promise<void> {
+  return withWriteLock(async () => {
+    // The web preview has a single connection and no locking to worry about.
+    if (Platform.OS === 'web') return db.withTransactionAsync(task);
+    await db.execAsync('BEGIN IMMEDIATE;');
+    try {
+      await task();
+      await db.execAsync('COMMIT;');
+    } catch (error) {
+      await db.execAsync('ROLLBACK;').catch(() => {});
+      throw error;
+    }
+  });
+}
+
+/**
+ * expo-sqlite gives the app (SQLiteProvider) and the background location task
+ * the same native connection for the same file, so busy_timeout never comes
+ * into play: a second BEGIN on that connection fails straight away ("cannot
+ * start a transaction within a transaction"), and its ROLLBACK would undo the
+ * first one's work. Both run in the same JavaScript runtime, so one queue here
+ * keeps their transactions one after another. Never call inWriteTransaction
+ * from inside another one's task: it would wait for itself.
+ */
+let writeQueue: Promise<unknown> = Promise.resolve();
+
+export function withWriteLock<T>(task: () => Promise<T>): Promise<T> {
+  const run = writeQueue.then(task, task);
+  writeQueue = run.catch(() => {});
+  return run;
 }

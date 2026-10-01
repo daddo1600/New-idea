@@ -206,7 +206,9 @@ export default function LogbookScreen() {
             car={car}
             taxYear={taxYear}
             businessPercent={
-              logbookForYear(summaries, car.id, taxYear)?.businessPercent ?? current?.businessPercent ?? null
+              logbookForYear(summaries, car.id, taxYear)?.businessPercent ??
+              // A logbook ended early can't be used, not even as an estimate.
+              (current?.status === 'closed-early' ? null : (current?.businessPercent ?? null))
             }
             percentIsFinal={logbookForYear(summaries, car.id, taxYear) !== null}
             centsPerKm={centsPerKmForVehicle(visible, car.id, taxYear, region).deduction}

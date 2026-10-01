@@ -7,7 +7,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import { listLogbooks } from '@/db/logbooks-repo';
-import { carsOverKmLimit, CENTS_PER_KM_LIMIT_KM, logbookTaxYear, type Logbook } from '@/domain/logbook';
+import { carsOverKmLimit, CENTS_PER_KM_LIMIT_KM, logbookTaxYear, plannedEndDate, type Logbook } from '@/domain/logbook';
 import { currentTaxYear, formatDistance } from '@/domain/regions';
 import { toLocalIsoDate, type Trip } from '@/domain/trip';
 import type { Vehicle } from '@/domain/vehicles';
@@ -39,9 +39,15 @@ export function LogbookNudge({ trips, vehicles }: { trips: readonly Trip[]; vehi
   if (!australia || !logbooks) return null;
 
   const year = currentTaxYear(region);
-  // A logbook started in the last 5 income years (running, done, or waiting for readings) answers the nudge.
+  // A logbook started in the last 5 income years (running, done, or waiting for readings) answers the nudge;
+  // one ended early doesn't, as it can't be used.
   const covered = (vehicleId: string) =>
-    logbooks.some((logbook) => logbook.vehicleId === vehicleId && year - logbookTaxYear(logbook) < 5);
+    logbooks.some(
+      (logbook) =>
+        logbook.vehicleId === vehicleId &&
+        year - logbookTaxYear(logbook) < 5 &&
+        logbook.endDate >= plannedEndDate(logbook.startDate),
+    );
   const car = cars.find((candidate) => !covered(candidate.vehicleId));
   if (!car) return null;
   const vehicle = vehicles.find((v) => v.id === car.vehicleId)?.name ?? '';

@@ -1,5 +1,5 @@
 import { type Href, Redirect, router, Stack } from 'expo-router';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming, ZoomIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -92,6 +92,8 @@ export default function HomeScreen() {
   const t = useT();
   /** Choosing a vehicle: before starting a shift, or switching from the chip on home. */
   const [picking, setPicking] = useState<'shift' | 'switch' | null>(null);
+  /** Bumped when a swipe didn't start or end a shift (picker dismissed, or it failed), so the switch snaps back. */
+  const [shiftRevision, bumpShiftRevision] = useReducer((n: number) => n + 1, 0);
   const locked = useMemo(() => lockedTripIds(trips ?? [], isPro), [trips, isPro]);
   // Locked drives don't count towards the total (or a tier limit) until they're unlocked.
   const visible = useMemo(() => (trips ?? []).filter((trip) => !locked.has(trip.id)), [trips, locked]);
@@ -197,8 +199,11 @@ export default function HomeScreen() {
                   shiftTrips.reduce((sum, trip) => sum + (deductions.get(trip.id) ?? 0), 0),
                   region,
                 )}
-                onStart={() => (garage.vehicles.length > 1 ? setPicking('shift') : shiftMode.start())}
-                onEnd={shiftMode.end}
+                revision={shiftRevision}
+                onStart={() =>
+                  garage.vehicles.length > 1 ? setPicking('shift') : shiftMode.start().catch(bumpShiftRevision)
+                }
+                onEnd={() => shiftMode.end().catch(bumpShiftRevision)}
               />
             )}
             {liveDrive && <LiveDriveBanner drive={liveDrive} />}
@@ -286,12 +291,20 @@ export default function HomeScreen() {
         title={picking === 'shift' ? t('Which vehicle today?') : t('What are you driving?')}
         vehicles={garage.vehicles}
         currentId={garage.current?.id ?? null}
-        onClose={() => setPicking(null)}
+        onClose={() => {
+          // Dismissed without choosing: the shift didn't start.
+          if (picking === 'shift') bumpShiftRevision();
+          setPicking(null);
+        }}
         onPick={async (vehicle) => {
           const startShift = picking === 'shift';
           setPicking(null);
-          await garage.choose(vehicle);
-          if (startShift) await shiftMode.start();
+          try {
+            await garage.choose(vehicle);
+            if (startShift) await shiftMode.start();
+          } catch {
+            if (startShift) bumpShiftRevision();
+          }
         }}
       />
       {selecting && (
@@ -872,9 +885,11 @@ function ShiftBar({
   drives,
   distance,
   value,
+  revision,
   onStart,
   onEnd,
 }: {
+  revision: number;
   shift: Shift | null;
   drives: number;
   distance: string;
@@ -902,6 +917,7 @@ function ShiftBar({
     <View style={styles.shiftStart}>
       <ShiftSwitch
         on={!!shift}
+        revision={revision}
         startLabel={t('Swipe to start shift')}
         startHint={t('Every drive until you end it counts as business')}
         endLabel={t('On shift for {{elapsed}}, {{count}} drives', { elapsed, count: drives })}

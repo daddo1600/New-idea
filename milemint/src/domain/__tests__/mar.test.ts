@@ -188,3 +188,21 @@ describe('P87 summary', () => {
     expect(html).toContain('Total relief claimable: £30.00');
   });
 });
+
+describe('parsePence with pounds', () => {
+  it('reads pounds as pence', () => {
+    expect(parsePence('0.45')).toBe(450);
+    expect(parsePence('£0.45')).toBe(450);
+    expect(parsePence('£0,25')).toBe(250);
+    expect(parsePence('£1.10')).toBe(1100);
+    expect(parsePence('0.375')).toBe(375);
+  });
+
+  it('still reads pence', () => {
+    expect(parsePence('45')).toBe(450);
+    expect(parsePence('37.5')).toBe(375);
+    expect(parsePence('1.5')).toBe(15);
+    expect(parsePence('0')).toBe(0);
+  });
+});
+

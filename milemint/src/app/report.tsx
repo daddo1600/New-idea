@@ -18,6 +18,7 @@ import { lockedTripIds } from '@/domain/plan';
 import { EXPORT_FORMATS, PRO_FORMATS, type ExportFormat } from '@/domain/accounting-export';
 import { logbooksForReport, summarizeLogbook, type CarExpenses, type Logbook } from '@/domain/logbook';
 import { buildReport, reportYears } from '@/domain/report';
+import { parseNumber } from '@/domain/parse-number';
 import { currentTaxYear, formatDistance, formatMoney, fromUnits, taxYearLabel } from '@/domain/regions';
 import { toLocalIsoDate } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
@@ -388,11 +389,8 @@ function OdometerCard({
   // `text` is English, marked with msg() and shown with t().
   const [message, setMessage] = useState<{ error: boolean; text: string } | null>(null);
 
-  const parse = (text: string): number | null | undefined => {
-    const trimmed = text.trim().replace(/,/g, '');
-    if (!trimmed) return null;
-    return /^\d+(\.\d+)?$/.test(trimmed) ? Number(trimmed) : undefined;
-  };
+  // "48,210" and "48210,5" (a decimal comma) both read correctly.
+  const parse = parseNumber;
   const save = async () => {
     const s = parse(start);
     const e = parse(end);

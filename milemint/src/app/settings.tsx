@@ -503,7 +503,11 @@ function BackupSection() {
     try {
       await restoreBackup(db, { ...found, snapshot });
       await reload();
-      setNote({ error: false, text: t('Restored {{count}} trips from iCloud.', { count: tripCount(snapshot) }) });
+      // Every section on this screen loaded the old data: open it afresh so
+      // nothing stale (work hours, places) gets saved over what was restored.
+      Alert.alert(t('Restored {{count}} trips from iCloud.', { count: tripCount(snapshot) }));
+      router.replace('/settings');
+      return;
     } catch {
       setNote({ error: true, text: t('Couldn’t restore. Nothing on this iPhone was changed.') });
     } finally {
@@ -1018,10 +1022,14 @@ function MileagePayForm({
                 accessibilityLabel={t('Pence per mile your employer pays')}
                 style={[styles.time, { color: theme.text, backgroundColor: theme.background }]}
                 value={rateText}
-                onChangeText={(text) => {
-                  setRateText(text);
-                  const rate = parsePence(text);
-                  if (rate !== null) update({ employerRate: rate });
+                onChangeText={setRateText}
+                // Saved once typing is done, so "0.45" isn't stored as 0p then 0.4p on the way.
+                onEndEditing={() => {
+                  const rate = parsePence(rateText);
+                  if (rate !== null) {
+                    update({ employerRate: rate });
+                    setRateText(show(rate));
+                  }
                 }}
                 placeholder="45"
                 placeholderTextColor={theme.textSecondary}

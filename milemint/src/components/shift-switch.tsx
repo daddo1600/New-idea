@@ -1,7 +1,7 @@
-import * as Haptics from "expo-haptics";
-import { useEffect, useId, useState, type ReactNode } from "react";
-import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import * as Haptics from 'expo-haptics';
+import { useEffect, useId, useState, type ReactNode } from 'react';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   Easing,
   interpolate,
@@ -16,13 +16,13 @@ import Animated, {
   withSpring,
   withTiming,
   type SharedValue,
-} from "react-native-reanimated";
-import Svg, { Defs, LinearGradient, Rect, Stop } from "react-native-svg";
-import { scheduleOnRN } from "react-native-worklets";
+} from 'react-native-reanimated';
+import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import { scheduleOnRN } from 'react-native-worklets';
 
-import { BrandGradient } from "@/components/brand-gradient";
-import { LeafMark } from "@/components/leaf-mark";
-import { useT } from "@/i18n/i18n";
+import { BrandGradient } from '@/components/brand-gradient';
+import { LeafMark } from '@/components/leaf-mark';
+import { useT } from '@/i18n/i18n';
 
 const HEIGHT = 64;
 const THUMB = 52;
@@ -36,10 +36,7 @@ const NONE = 0;
 const STAR = 1;
 const BURST = 2;
 const EMBER = 3;
-const LIFE = { [STAR]: 700, [BURST]: 650, [EMBER]: 1100 } as Record<
-  number,
-  number
->;
+const LIFE = { [STAR]: 700, [BURST]: 650, [EMBER]: 1100 } as Record<number, number>;
 
 type Spark = {
   x: number;
@@ -54,7 +51,7 @@ const EMPTY: Spark = { x: 0, y: 0, dx: 0, dy: 0, t: 0, kind: NONE, size: 0 };
 
 /** A gold star thrown off behind the thumb, floating up as it twinkles out. */
 function star(x: number, t: number): Spark {
-  "worklet";
+  'worklet';
   return {
     x: PAD + x + 8,
     y: 12 + Math.random() * (HEIGHT - 24),
@@ -68,7 +65,7 @@ function star(x: number, t: number): Spark {
 
 /** A soft ember left behind when ending, drifting down to settle. */
 function ember(x: number, t: number): Spark {
-  "worklet";
+  'worklet';
   return {
     x: PAD + x + THUMB - 8,
     y: 14 + Math.random() * (HEIGHT - 28),
@@ -93,6 +90,7 @@ function ember(x: number, t: number): Spark {
  */
 export function ShiftSwitch({
   on,
+  revision = 0,
   startLabel,
   startHint,
   endLabel,
@@ -101,6 +99,8 @@ export function ShiftSwitch({
   onEnd,
 }: {
   on: boolean;
+  /** Bump when a swipe didn't take effect (e.g. the vehicle picker was dismissed) to snap back to `on`. */
+  revision?: number;
   startLabel: string;
   startHint: string;
   /** What the bar says while on, for VoiceOver (the visible content is `children`). */
@@ -124,9 +124,7 @@ export function ShiftSwitch({
   /** The idle glint around the thumb: draws the eye to where to swipe. */
   const twinkle = useSharedValue(0);
   const halo = useSharedValue(0);
-  const sparks = useSharedValue<Spark[]>(
-    Array.from({ length: SLOTS }, () => EMPTY),
-  );
+  const sparks = useSharedValue<Spark[]>(Array.from({ length: SLOTS }, () => EMPTY));
   const next = useSharedValue(0);
   const ripple = useSharedValue(-1e9);
   const now = useSharedValue(0);
@@ -137,8 +135,7 @@ export function ShiftSwitch({
   // until they've faded.
   const clock = useFrameCallback((frame) => {
     now.set(frame.timestamp);
-    if (!dragging.value && frame.timestamp - lastActive.value > 1500)
-      scheduleOnRN(setLive, false);
+    if (!dragging.value && frame.timestamp - lastActive.value > 1500) scheduleOnRN(setLive, false);
   }, false);
 
   // Follow the shift if it starts or ends some other way (another screen, VoiceOver).
@@ -150,37 +147,16 @@ export function ShiftSwitch({
         easing: Easing.out(Easing.cubic),
       }),
     );
-  }, [on, travel, x, engaged]);
+  }, [on, revision, travel, x, engaged]);
 
   useEffect(() => {
     if (reduceMotion) return;
-    shimmer.set(
-      withRepeat(
-        withTiming(1, { duration: 1400, easing: Easing.linear }),
-        -1,
-        false,
-      ),
-    );
-    twinkle.set(
-      withRepeat(
-        withTiming(1, { duration: 2400, easing: Easing.linear }),
-        -1,
-        false,
-      ),
-    );
-    halo.set(
-      withRepeat(
-        withTiming(1, { duration: 1800, easing: Easing.out(Easing.quad) }),
-        -1,
-        false,
-      ),
-    );
+    shimmer.set(withRepeat(withTiming(1, { duration: 1400, easing: Easing.linear }), -1, false));
+    twinkle.set(withRepeat(withTiming(1, { duration: 2400, easing: Easing.linear }), -1, false));
+    halo.set(withRepeat(withTiming(1, { duration: 1800, easing: Easing.out(Easing.quad) }), -1, false));
     nudge.value = withRepeat(
       withSequence(
-        withDelay(
-          2200,
-          withTiming(1, { duration: 260, easing: Easing.out(Easing.quad) }),
-        ),
+        withDelay(2200, withTiming(1, { duration: 260, easing: Easing.out(Easing.quad) })),
         withSpring(0, { damping: 6, stiffness: 180 }),
       ),
       -1,
@@ -190,23 +166,19 @@ export function ShiftSwitch({
 
   useEffect(() => clock.setActive(live), [clock, live]);
   const tick = () => {
-    if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});
+    if (Platform.OS !== 'web') Haptics.selectionAsync().catch(() => {});
   };
   const started = () => {
-    if (Platform.OS !== "web")
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(
-        () => {},
-      );
+    if (Platform.OS !== 'web') Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     onStart();
   };
   const ended = () => {
-    if (Platform.OS !== "web")
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft).catch(() => {});
+    if (Platform.OS !== 'web') Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft).catch(() => {});
     onEnd();
   };
 
   const spawn = (spark: Spark) => {
-    "worklet";
+    'worklet';
     const list = sparks.value.slice();
     list[next.value % SLOTS] = spark;
     next.set((next.value + 1) % SLOTS);
@@ -234,9 +206,7 @@ export function ShiftSwitch({
       if (!sparkle || Math.abs(x.value - lastSpawn.value) < 9) return;
       lastSpawn.set(x.value);
       // Starting throws off gold stars; ending leaves embers that settle.
-      spawn(
-        engaged.value ? ember(x.value, now.value) : star(x.value, now.value),
-      );
+      spawn(engaged.value ? ember(x.value, now.value) : star(x.value, now.value));
     })
     .onFinalize(() => {
       dragging.set(false);
@@ -264,9 +234,7 @@ export function ShiftSwitch({
         }
         scheduleOnRN(started);
       } else if (engaged.value && progress <= 1 - COMMIT) {
-        x.set(
-          withTiming(0, { duration: 160, easing: Easing.out(Easing.cubic) }),
-        );
+        x.set(withTiming(0, { duration: 160, easing: Easing.out(Easing.cubic) }));
         engaged.set(false);
         ripple.set(now.value);
         scheduleOnRN(ended);
@@ -281,41 +249,39 @@ export function ShiftSwitch({
     });
 
   const progress = (value: number) => {
-    "worklet";
+    'worklet';
     return Math.min(1, Math.max(0, value / travel));
   };
   const thumbStyle = useAnimatedStyle(() => {
     const p = progress(x.value);
     return {
-      backgroundColor: interpolateColor(p, [0, 1], ["#FACC15", "#FFFFFF"]),
+      backgroundColor: interpolateColor(p, [0, 1], ['#FACC15', '#FFFFFF']),
       // Nudges towards the way it can go.
-      transform: [
-        { translateX: x.value + Math.max(0, nudge.value) * (engaged.value ? -18 : 18) },
-      ],
+      transform: [{ translateX: x.value + Math.max(0, nudge.value) * (engaged.value ? -18 : 18) }],
     };
   });
   // Play turns to stop at the halfway point.
   const playStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(progress(x.value), [0.4, 0.55], [1, 0], "clamp"),
+    opacity: interpolate(progress(x.value), [0.4, 0.55], [1, 0], 'clamp'),
   }));
   const stopStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(progress(x.value), [0.45, 0.6], [0, 1], "clamp"),
+    opacity: interpolate(progress(x.value), [0.45, 0.6], [0, 1], 'clamp'),
   }));
   // The bar warms behind the thumb as it travels: amber fills in from the left,
   // and drains away again on the way back.
   const warmStyle = useAnimatedStyle(() => ({
     width: x.value + THUMB + PAD * 2,
-    opacity: interpolate(x.value, [0, 14], [0, 1], "clamp"),
+    opacity: interpolate(x.value, [0, 14], [0, 1], 'clamp'),
   }));
   const offLabelStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(progress(x.value), [0, 0.5], [1, 0], "clamp"),
+    opacity: interpolate(progress(x.value), [0, 0.5], [1, 0], 'clamp'),
   }));
   const onLabelStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(progress(x.value), [0.5, 1], [0, 1], "clamp"),
+    opacity: interpolate(progress(x.value), [0.5, 1], [0, 1], 'clamp'),
   }));
   // The glint follows the thumb and fades once it moves or the shift is on.
   const glintStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(progress(x.value), [0, 0.12], [1, 0], "clamp"),
+    opacity: interpolate(progress(x.value), [0, 0.12], [1, 0], 'clamp'),
     transform: [{ translateX: x.value + Math.max(0, nudge.value) * 18 }],
   }));
   const haloStyle = useAnimatedStyle(() => ({
@@ -339,27 +305,21 @@ export function ShiftSwitch({
       accessibilityLabel={on ? endLabel : startLabel}
       accessibilityHint={
         on
-          ? t("{{hint}}. Swipe the button to the left, or double-tap.", {
-              hint: t("End shift"),
+          ? t('{{hint}}. Swipe the button to the left, or double-tap.', {
+              hint: t('End shift'),
             })
-          : t("{{hint}}. Swipe the button to the right, or double-tap.", {
+          : t('{{hint}}. Swipe the button to the right, or double-tap.', {
               hint: startHint,
             })
       }
-      accessibilityActions={[{ name: "activate" }]}
+      accessibilityActions={[{ name: 'activate' }]}
       onAccessibilityAction={activate}
       onPress={() => {
         if (reduceMotion) return;
-        nudge.set(
-          withSequence(
-            withTiming(1.6, { duration: 180 }),
-            withSpring(0, { damping: 6, stiffness: 180 }),
-          ),
-        );
+        nudge.set(withSequence(withTiming(1.6, { duration: 180 }), withSpring(0, { damping: 6, stiffness: 180 })));
       }}
       onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
-      style={styles.track}
-    >
+      style={styles.track}>
       <BrandGradient />
       <Animated.View style={[styles.warm, warmStyle]} pointerEvents="none">
         <View style={{ width: Math.max(width, HEIGHT), height: HEIGHT }}>
@@ -370,10 +330,7 @@ export function ShiftSwitch({
         <LeafMark size={110} opacity={0.16} />
       </View>
 
-      <Animated.View
-        pointerEvents="none"
-        style={[styles.offLabels, offLabelStyle]}
-      >
+      <Animated.View pointerEvents="none" style={[styles.offLabels, offLabelStyle]}>
         <Text style={styles.label}>{startLabel}</Text>
         <View style={styles.chevrons}>
           {[0, 1, 2].map((i) => (
@@ -381,10 +338,7 @@ export function ShiftSwitch({
           ))}
         </View>
       </Animated.View>
-      <Animated.View
-        pointerEvents="none"
-        style={[styles.onLabels, onLabelStyle]}
-      >
+      <Animated.View pointerEvents="none" style={[styles.onLabels, onLabelStyle]}>
         <View style={styles.onContent}>{children}</View>
         <View style={styles.chevrons}>
           {[2, 1, 0].map((i) => (
@@ -396,10 +350,7 @@ export function ShiftSwitch({
       {Array.from({ length: SLOTS }, (_, i) => (
         <SparkView key={i} index={i} sparks={sparks} now={now} />
       ))}
-      <Animated.View
-        pointerEvents="none"
-        style={[styles.ripple, rippleStyle]}
-      />
+      <Animated.View pointerEvents="none" style={[styles.ripple, rippleStyle]} />
 
       {!reduceMotion && !on && (
         <Animated.View pointerEvents="none" style={[styles.glint, glintStyle]}>
@@ -411,9 +362,7 @@ export function ShiftSwitch({
       )}
       <GestureDetector gesture={pan}>
         <Animated.View style={[styles.thumb, thumbStyle]}>
-          <Animated.Text style={[styles.glyph, styles.play, playStyle]}>
-            ▶
-          </Animated.Text>
+          <Animated.Text style={[styles.glyph, styles.play, playStyle]}>▶</Animated.Text>
           <Animated.View style={[styles.glyph, stopStyle]}>
             <View style={styles.stop} />
           </Animated.View>
@@ -425,14 +374,9 @@ export function ShiftSwitch({
 
 /** The "on shift" amber, laid over the green as the thumb travels. */
 function WarmGradient() {
-  const id = `warm${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
+  const id = `warm${useId().replace(/[^a-zA-Z0-9]/g, '')}`;
   return (
-    <Svg
-      width="100%"
-      height="100%"
-      preserveAspectRatio="none"
-      viewBox="0 0 100 100"
-    >
+    <Svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 100 100">
       <Defs>
         <LinearGradient id={id} x1="0" y1="0" x2="1" y2="1">
           <Stop offset="0" stopColor="#D97706" />
@@ -445,12 +389,7 @@ function WarmGradient() {
 }
 
 /** Where one sparkle slot's star (or ember) is now, drawn from the shared list. */
-function useSparkStyle(
-  index: number,
-  sparks: SharedValue<Spark[]>,
-  now: SharedValue<number>,
-  ember: boolean,
-) {
+function useSparkStyle(index: number, sparks: SharedValue<Spark[]>, now: SharedValue<number>, ember: boolean) {
   return useAnimatedStyle(() => {
     const spark = sparks.value[index];
     const isEmber = spark.kind === EMBER;
@@ -459,11 +398,7 @@ function useSparkStyle(
     if (age < 0 || age > 1) return { opacity: 0 };
     // Stars burst out fast and twinkle; embers glide and fade slowly.
     const eased = isEmber ? age : 1 - (1 - age) * (1 - age);
-    const scale =
-      (spark.size / 16) *
-      (isEmber
-        ? 1 - age * 0.5
-        : Math.sin(Math.PI * Math.min(1, age * 1.3)) + 0.2);
+    const scale = (spark.size / 16) * (isEmber ? 1 - age * 0.5 : Math.sin(Math.PI * Math.min(1, age * 1.3)) + 0.2);
     return {
       opacity: isEmber ? 0.9 * (1 - age) : 1 - age * age,
       transform: [
@@ -477,29 +412,15 @@ function useSparkStyle(
 }
 
 /** One sparkle slot: a gold star or a mint ember. */
-function SparkView({
-  index,
-  sparks,
-  now,
-}: {
-  index: number;
-  sparks: SharedValue<Spark[]>;
-  now: SharedValue<number>;
-}) {
+function SparkView({ index, sparks, now }: { index: number; sparks: SharedValue<Spark[]>; now: SharedValue<number> }) {
   const star = useSparkStyle(index, sparks, now, false);
   const ember = useSparkStyle(index, sparks, now, true);
   return (
     <>
-      <Animated.Text
-        pointerEvents="none"
-        style={[styles.spark, styles.star, star]}
-      >
+      <Animated.Text pointerEvents="none" style={[styles.spark, styles.star, star]}>
         ✦
       </Animated.Text>
-      <Animated.Text
-        pointerEvents="none"
-        style={[styles.spark, styles.ember, ember]}
-      >
+      <Animated.Text pointerEvents="none" style={[styles.spark, styles.ember, ember]}>
         ●
       </Animated.Text>
     </>
@@ -546,23 +467,14 @@ function Glint({
           height: spot.size + 6,
         },
         style,
-      ]}
-    >
+      ]}>
       ✦
     </Animated.Text>
   );
 }
 
 /** One of the three arrows, lighting up in turn in the direction to swipe. */
-function Chevron({
-  index,
-  shimmer,
-  glyph,
-}: {
-  index: number;
-  shimmer: SharedValue<number>;
-  glyph: string;
-}) {
+function Chevron({ index, shimmer, glyph }: { index: number; shimmer: SharedValue<number>; glyph: string }) {
   const style = useAnimatedStyle(() => {
     const phase = (shimmer.value * 3 - index + 3) % 3;
     return {
@@ -576,118 +488,118 @@ const styles = StyleSheet.create({
   track: {
     height: HEIGHT,
     borderRadius: HEIGHT / 2,
-    overflow: "hidden",
-    justifyContent: "center",
-    shadowColor: "#064E3B",
+    overflow: 'hidden',
+    justifyContent: 'center',
+    shadowColor: '#064E3B',
     shadowOpacity: 0.25,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 4 },
     elevation: 4,
   },
-  leaf: { position: "absolute", right: -44, top: -8 },
+  leaf: { position: 'absolute', right: -44, top: -8 },
   warm: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     top: 0,
     bottom: 0,
     borderRadius: HEIGHT / 2,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   offLabels: {
-    position: "absolute",
+    position: 'absolute',
     left: THUMB + PAD * 2,
-    right: Platform.OS === "web" ? 16 : 12,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    right: Platform.OS === 'web' ? 16 : 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 8,
   },
   onLabels: {
-    position: "absolute",
+    position: 'absolute',
     left: 18,
     right: THUMB + PAD * 2,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 6,
   },
-  onContent: { flex: 1, flexDirection: "row", alignItems: "center", gap: 10 },
-  label: { color: "#FFFFFF", fontSize: 17, fontWeight: "800" },
-  chevrons: { flexDirection: "row" },
+  onContent: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 },
+  label: { color: '#FFFFFF', fontSize: 17, fontWeight: '800' },
+  chevrons: { flexDirection: 'row' },
   chevron: {
-    color: "#FACC15",
+    color: '#FACC15',
     fontSize: 26,
     lineHeight: 28,
-    fontWeight: "800",
+    fontWeight: '800',
     marginLeft: -2,
   },
   spark: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     top: 0,
     width: 16,
     height: 20,
     fontSize: 16,
     lineHeight: 20,
-    textAlign: "center",
+    textAlign: 'center',
   },
   glintStar: {
-    color: "#FFFBEB",
-    textShadowColor: "#FACC15",
+    color: '#FFFBEB',
+    textShadowColor: '#FACC15',
     textShadowRadius: 8,
   },
   star: {
-    color: "#FDE68A",
-    textShadowColor: "rgba(250,204,21,0.9)",
+    color: '#FDE68A',
+    textShadowColor: 'rgba(250,204,21,0.9)',
     textShadowRadius: 6,
   },
   ember: {
-    color: "#D1FAE5",
+    color: '#D1FAE5',
     fontSize: 12,
-    textShadowColor: "rgba(167,243,208,0.8)",
+    textShadowColor: 'rgba(167,243,208,0.8)',
     textShadowRadius: 4,
   },
   glint: {
-    position: "absolute",
+    position: 'absolute',
     left: PAD,
     top: PAD,
     width: THUMB,
     height: THUMB,
   },
   halo: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     top: 0,
     width: THUMB,
     height: THUMB,
     borderRadius: THUMB / 2,
     borderWidth: 3,
-    borderColor: "#FDE68A",
+    borderColor: '#FDE68A',
   },
   ripple: {
-    position: "absolute",
+    position: 'absolute',
     left: PAD,
     width: THUMB,
     height: THUMB,
     borderRadius: THUMB / 2,
     borderWidth: 2,
-    borderColor: "#A7F3D0",
+    borderColor: '#A7F3D0',
   },
   thumb: {
-    position: "absolute",
+    position: 'absolute',
     left: PAD,
     width: THUMB,
     height: THUMB,
     borderRadius: THUMB / 2,
     borderWidth: 3,
-    borderColor: "#FFFFFF",
-    alignItems: "center",
-    justifyContent: "center",
+    borderColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   glyph: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  play: { color: "#064E3B", fontSize: 18, marginLeft: 3 },
-  stop: { width: 16, height: 16, borderRadius: 3, backgroundColor: "#B45309" },
+  play: { color: '#064E3B', fontSize: 18, marginLeft: 3 },
+  stop: { width: 16, height: 16, borderRadius: 3, backgroundColor: '#B45309' },
 });
