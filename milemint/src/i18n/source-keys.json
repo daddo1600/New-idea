@@ -91,12 +91,6 @@
     ]
   },
   {
-    "key": "{{count}} days until your {{year}} {{returnName}} is due",
-    "files": [
-      "components/tax-countdown.tsx"
-    ]
-  },
-  {
     "key": "{{count}} drives are locked. Upgrade for unlimited drives.",
     "files": [
       "app/index.tsx"
@@ -252,6 +246,18 @@
     "key": "{{distance}} of business driving",
     "files": [
       "app/milestones.tsx"
+    ]
+  },
+  {
+    "key": "{{dueLine}}: {{count}} days to go",
+    "files": [
+      "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "{{dueLine}}: today",
+    "files": [
+      "components/tax-countdown.tsx"
     ]
   },
   {
@@ -537,6 +543,12 @@
     ]
   },
   {
+    "key": "Add another time",
+    "files": [
+      "app/settings.tsx"
+    ]
+  },
+  {
     "key": "Add business purpose",
     "files": [
       "app/index.tsx"
@@ -552,12 +564,6 @@
     "key": "Add missed trips by hand",
     "files": [
       "app/pro.tsx"
-    ]
-  },
-  {
-    "key": "Add shift",
-    "files": [
-      "app/settings.tsx"
     ]
   },
   {
@@ -1906,6 +1912,12 @@
     "key": "Last day of the {{year}} tax year",
     "files": [
       "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "Last day today",
+    "files": [
+      "app/tax-dates.tsx"
     ]
   },
   {
@@ -3482,12 +3494,6 @@
     ]
   },
   {
-    "key": "today left",
-    "files": [
-      "app/tax-dates.tsx"
-    ]
-  },
-  {
     "key": "Total km",
     "files": [
       "app/report.tsx"
@@ -3671,6 +3677,12 @@
     "key": "Use now",
     "files": [
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Use other vehicles for work too?",
+    "files": [
+      "app/welcome.tsx"
     ]
   },
   {
@@ -3894,7 +3906,7 @@
     ]
   },
   {
-    "key": "You drive: {{vehicle}}. Use other vehicles too? Tap to add; you’ll pick one when you start a shift.",
+    "key": "You’ll choose which one when you start a shift.",
     "files": [
       "app/welcome.tsx"
     ]
@@ -3903,19 +3915,6 @@
     "key": "You’re all set.",
     "files": [
       "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "Your {{year}} {{returnName}} is due",
-    "files": [
-      "app/tax-dates.tsx",
-      "components/tax-countdown.tsx"
-    ]
-  },
-  {
-    "key": "Your {{year}} {{returnName}} is due today",
-    "files": [
-      "components/tax-countdown.tsx"
     ]
   },
   {

@@ -42,7 +42,7 @@ export function TaxCountdown({
   // The word under the number in the box: "day" or "days".
   const unit = today ? '' : t('days', { count: countdown.days });
   const year = countdown.label;
-  const returnName = t(FILING[region.code].returnName);
+  const returnIsDue = t(FILING[region.code].returnIsDue, { year: countdown.label });
   const date = formatLongDate(countdown.date, region);
   const amount = formatMoney(foundMinor, region);
 
@@ -55,8 +55,8 @@ export function TaxCountdown({
             ? t('Last day of the {{year}} tax year', { year })
             : t('{{count}} days left in the {{year}} tax year', { count: countdown.days, year })
           : today
-            ? t('Your {{year}} {{returnName}} is due today', { year, returnName })
-            : t('{{count}} days until your {{year}} {{returnName}} is due', { count: countdown.days, year, returnName })
+            ? t('{{dueLine}}: today', { dueLine: returnIsDue })
+            : t('{{dueLine}}: {{count}} days to go', { dueLine: returnIsDue, count: countdown.days })
       }>
       <View style={[styles.count, { backgroundColor: color }]}>
         <Text style={styles.countNumber} adjustsFontSizeToFit numberOfLines={1}>
@@ -70,7 +70,7 @@ export function TaxCountdown({
             ? urgent
               ? t('Last days of the {{year}} tax year', { year })
               : t('The {{year}} tax year ends soon', { year })
-            : t('Your {{year}} {{returnName}} is due', { year, returnName })}
+            : returnIsDue}
         </ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
           {yearEnd

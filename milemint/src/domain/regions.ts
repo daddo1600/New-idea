@@ -1,4 +1,4 @@
-import { msg, t, translate } from '../i18n/i18n';
+import { getLanguage, msg, t, translate } from '../i18n/i18n';
 import { METERS_PER_MILE, type Trip, type VehicleType } from './trip';
 
 /**
@@ -282,9 +282,18 @@ export function formatDate(localDate: string, region: Region): string {
 }
 
 /** e.g. "1 Jul 2026" (or "Jul 1, 2026" in the US). */
+/**
+ * The locale for dates and times on screen: the country's own English, or the
+ * app's language with the country's conventions ("es-US", "pa-CA").
+ */
+export function displayLocale(region: Region): string {
+  const lang = getLanguage();
+  return lang === 'en' ? region.locale : `${lang}-${region.code}`;
+}
+
 export function formatLongDate(localDate: string, region: Region): string {
   const [y, m, d] = localDate.slice(0, 10).split('-').map(Number);
-  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(region.locale, {
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(displayLocale(region), {
     day: 'numeric',
     month: 'short',
     year: 'numeric',

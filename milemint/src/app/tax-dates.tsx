@@ -48,15 +48,12 @@ export default function TaxDatesScreen() {
             {region.flag} {t('{{year}} tax year', { year: taxYearLabel(year, region) })}
           </Text>
           <Text style={styles.heroBig}>
-            {daysLeft <= 0 ? t('today left') : t('{{count}} days left', { count: daysLeft })}
+            {daysLeft <= 0 ? t('Last day today') : t('{{count}} days left', { count: daysLeft })}
           </Text>
           <Text style={styles.heroLabel}>{t('Ends {{date}}', { date: formatLongDate(end, region) })}</Text>
           <View style={styles.divider} />
           <Text style={styles.heroLabel}>
-            {t('Your {{year}} {{returnName}} is due', {
-              year: taxYearLabel(nextDue.year, region),
-              returnName: t(guide.returnName),
-            })}
+            {t(guide.returnIsDue, { year: taxYearLabel(nextDue.year, region) })}
           </Text>
           <Text style={styles.heroMid}>{formatLongDate(nextDue.date, region)}</Text>
         </View>

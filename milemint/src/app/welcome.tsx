@@ -32,7 +32,7 @@ import {
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, saveSettings } from '@/db/settings-repo';
-import { formatRate, REGIONS, vehicleRule, type RegionCode } from '@/domain/regions';
+import { displayLocale, formatRate, REGIONS, vehicleRule, type RegionCode } from '@/domain/regions';
 import { useKeyboardOpen } from '@/hooks/use-keyboard-open';
 import { useTheme } from '@/hooks/use-theme';
 import { LANGUAGES, msg, useLanguage, useT } from '@/i18n/i18n';
@@ -42,7 +42,7 @@ import { enableWeeklyReminder, scheduleWorkHoursNudge } from '@/reminders/weekly
 import type { TrackingStatus } from '@/tracking/background';
 import { useTracking } from '@/tracking/use-tracking';
 import { VEHICLE_ICONS, type VehicleType } from '@/domain/trip';
-import { DEFAULT_VEHICLE_NAMES } from '@/domain/vehicles';
+import { defaultVehicleName, isDefaultVehicleName } from '@/domain/vehicles';
 import { addVehicle, ensureVehicles, listVehicles, updateVehicle } from '@/db/vehicles-repo';
 
 /**
@@ -106,11 +106,11 @@ export default function WelcomeScreen() {
     // The first vehicle in the garage. Going back and changing the choice updates it.
     const { current } = await ensureVehicles(db);
     if (current.type !== vehicle) {
-      const renamed = current.name === DEFAULT_VEHICLE_NAMES[current.type];
+      const renamed = isDefaultVehicleName(current.name, current.type);
       await updateVehicle(db, {
         ...current,
         type: vehicle,
-        name: renamed ? DEFAULT_VEHICLE_NAMES[vehicle] : current.name,
+        name: renamed ? defaultVehicleName(vehicle) : current.name,
       });
     }
     setStep(2);
@@ -195,7 +195,7 @@ export default function WelcomeScreen() {
     try {
       // The Sunday check-in is on by default: iOS asks once, here. Turning it off is in Settings.
       const scheduled = await enableWeeklyReminder(picked.unit).catch(() => false);
-      await saveSettings(db, { ...(await loadSettings(db)), weeklyReminder: scheduled, reminderAsked: true });
+      await saveSettings(db, { ...(await loadSettings(db)), weeklyReminder: scheduled, reminderAsked: true, reminderDefaulted: true });
       if (!hoursSet && !shifts) await scheduleWorkHoursNudge().catch(() => {});
     } finally {
       setBusy(false);
@@ -428,7 +428,7 @@ export default function WelcomeScreen() {
                 onPress={() => setWorkStyle('hours')}
               />
               {workStyle === 'hours' && (
-                <WorkHoursQuick value={week} onChange={setWeek} locale={picked.locale} />
+                <WorkHoursQuick value={week} onChange={setWeek} locale={displayLocale(picked)} />
               )}
               <WorkStyleOption
                 selected={workStyle === 'shifts'}
@@ -743,7 +743,8 @@ const styles = StyleSheet.create({
     maxWidth: 180,
   },
   languagePillText: { color: '#FFFFFF', fontSize: 13, fontWeight: '600' },
-  dots: { flexDirection: 'row', gap: Spacing.one },
+  // Centred on the screen whatever sits either side (Back, the language button).
+  dots: { position: 'absolute', left: 0, right: 0, flexDirection: 'row', justifyContent: 'center', gap: Spacing.one },
   dot: { width: 8, height: 8, borderRadius: 4 },
   dotCurrent: { width: 24 },
   content: {

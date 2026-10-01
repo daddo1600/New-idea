@@ -26,7 +26,7 @@ import { isValidShift, type WorkShift } from '@/domain/classify-rules';
 import { FREE_AUTO_DRIVES_PER_MONTH } from '@/domain/plan';
 import { vehicleRule } from '@/domain/regions';
 import { VEHICLE_ICONS, VEHICLE_LABELS, type VehicleType } from '@/domain/trip';
-import { DEFAULT_VEHICLE_NAMES, normaliseRegistration, type Vehicle } from '@/domain/vehicles';
+import { defaultVehicleName, normaliseRegistration, type Vehicle } from '@/domain/vehicles';
 import { addVehicle, removeVehicle, updateVehicle } from '@/db/vehicles-repo';
 import { useVehicles } from '@/vehicles/use-vehicles';
 import type { Place, PlaceKind } from '@/domain/places';
@@ -226,7 +226,7 @@ export default function SettingsScreen() {
                       hitSlop={8}
                       onPress={() => updateDay(weekday, [...shifts, { ...EXTRA_SHIFT }])}>
                       <ThemedText type="small" style={{ color: theme.accent }}>
-                        {t('Add shift')}
+                        {t('Add another time')}
                       </ThemedText>
                     </Pressable>
                   )}
@@ -452,7 +452,7 @@ function Garage() {
 
   const save = async () => {
     const registration = normaliseRegistration(draft.registration);
-    const name = draft.name.trim() || DEFAULT_VEHICLE_NAMES[draft.type];
+    const name = draft.name.trim() || defaultVehicleName(draft.type);
     if (editing === 'new') await addVehicle(db, { type: draft.type, name, registration });
     else if (editing) await updateVehicle(db, { id: editing, type: draft.type, name, registration });
     setEditing(null);

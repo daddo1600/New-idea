@@ -3,10 +3,10 @@ import { router, type Href } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect } from 'react';
 
-import { loadSettings } from '@/db/settings-repo';
+import { loadSettings, saveSettings } from '@/db/settings-repo';
 import type { Region } from '@/domain/regions';
 
-import { refreshCountdownReminders, refreshWeeklyReminder, REMINDERS_SUPPORTED } from './weekly';
+import { enableWeeklyReminder, refreshCountdownReminders, refreshWeeklyReminder, REMINDERS_SUPPORTED } from './weekly';
 
 /** The last notification tap already acted on, so a relaunch doesn't repeat it. */
 let handledResponse: string | null = null;
@@ -33,7 +33,18 @@ export function useReminders(region: Region) {
   useEffect(() => {
     if (!REMINDERS_SUPPORTED) return;
     loadSettings(db)
-      .then((settings) => (settings.weeklyReminder ? refreshWeeklyReminder(unit) : undefined))
+      .then(async (settings) => {
+        if (settings.weeklyReminder) return refreshWeeklyReminder(unit);
+        if (settings.reminderDefaulted || !settings.onboarded) return;
+        // On by default: switch it on once for people who set up before it was.
+        const scheduled = await enableWeeklyReminder(unit).catch(() => false);
+        await saveSettings(db, {
+          ...(await loadSettings(db)),
+          weeklyReminder: scheduled,
+          reminderAsked: true,
+          reminderDefaulted: true,
+        });
+      })
       .catch(() => {});
   }, [db, unit]);
 

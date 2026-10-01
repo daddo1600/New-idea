@@ -15,6 +15,11 @@ export type AppSettings = {
   weeklyReminder: boolean;
   /** The "Sunday nudge?" card has been answered (asked once the first trip appears). */
   reminderAsked: boolean;
+  /**
+   * The Sunday reminder has had its one-time switch-on (it's on by default, also
+   * for people who set up before that). After this, turning it off sticks.
+   */
+  reminderDefaulted: boolean;
   /** Milestones already celebrated (ids), so each pat on the back happens once. */
   celebrated: string[];
   /** A report has been exported (a milestone). */
@@ -39,6 +44,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   region: null,
   weeklyReminder: false,
   reminderAsked: false,
+  reminderDefaulted: false,
   celebrated: [],
   exportedReport: false,
   onboarded: false,

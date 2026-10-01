@@ -4,6 +4,56 @@ import type { Dictionary } from '../i18n';
  * English needs entries only where a line changes with a number (plurals);
  * everything else is the key itself.
  */
-const en: Dictionary = {};
+const en: Dictionary = {
+  days: { one: 'day', other: 'days' },
+  '{{count}} days': { one: '{{count}} day', other: '{{count}} days' },
+  '{{count}} days left': { one: '{{count}} day left', other: '{{count}} days left' },
+  '{{count}} days left in the {{year}} tax year': {
+    one: '{{count}} day left in the {{year}} tax year',
+    other: '{{count}} days left in the {{year}} tax year',
+  },
+  '{{count}} days until your {{year}} {{returnName}} is due': {
+    one: '{{count}} day until your {{year}} {{returnName}} is due',
+    other: '{{count}} days until your {{year}} {{returnName}} is due',
+  },
+  '{{dueLine}}: {{count}} days to go': {
+    one: '{{dueLine}}: {{count}} day to go',
+    other: '{{dueLine}}: {{count}} days to go',
+  },
+  '{{count}} a month': { one: '{{count}} a month', other: '{{count}} a month' },
+  '{{count}} drives are waiting to be unlocked': {
+    one: '{{count}} drive is waiting to be unlocked',
+    other: '{{count}} drives are waiting to be unlocked',
+  },
+  '{{count}} drives are locked. Upgrade for unlimited drives.': {
+    one: '{{count}} drive is locked. Upgrade for unlimited drives.',
+    other: '{{count}} drives are locked. Upgrade for unlimited drives.',
+  },
+  '{{count}} trips aren’t classified yet. Sort them first so the report is complete.': {
+    one: '{{count}} trip isn’t classified yet. Sort it first so the report is complete.',
+    other: '{{count}} trips aren’t classified yet. Sort them first so the report is complete.',
+  },
+  '{{count}}-day free trial': { one: '{{count}}-day free trial', other: '{{count}}-day free trial' },
+  '{{count}}-month free trial': { one: '{{count}}-month free trial', other: '{{count}}-month free trial' },
+  'Free plan: {{count}} automatic drives a month, unlimited manual trips and CSV export.': {
+    one: 'Free plan: {{count}} automatic drive a month, unlimited manual trips and CSV export.',
+    other: 'Free plan: {{count}} automatic drives a month, unlimited manual trips and CSV export.',
+  },
+  'Sort {{count}} drives': { one: 'Sort {{count}} drive', other: 'Sort {{count}} drives' },
+  'Select {{count}} unsorted': { one: 'Select {{count}} unsorted', other: 'Select {{count}} unsorted' },
+  '{{count}} selected': { one: '{{count}} selected', other: '{{count}} selected' },
+  '{{distance}} business · {{count}} to review': {
+    one: '{{distance}} business · {{count}} to review',
+    other: '{{distance}} business · {{count}} to review',
+  },
+  'On shift for {{elapsed}}, {{count}} drives': {
+    one: 'On shift for {{elapsed}}, {{count}} drive',
+    other: 'On shift for {{elapsed}}, {{count}} drives',
+  },
+  '{{distance}} · {{value}} · {{count}} drives': {
+    one: '{{distance}} · {{value}} · {{count}} drive',
+    other: '{{distance}} · {{value}} · {{count}} drives',
+  },
+};
 
 export default en;

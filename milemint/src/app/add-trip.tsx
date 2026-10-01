@@ -17,7 +17,7 @@ import { insertTrip, listTrips } from '@/db/trips-repo';
 import { parseMiles } from '@/domain/format';
 import type { LatLng } from '@/domain/geo';
 import { matchPlace, type Place } from '@/domain/places';
-import { earliestDate, formatDistance, formatLongDate, fromUnits, toUnits } from '@/domain/regions';
+import { displayLocale, earliestDate, formatDistance, formatLongDate, fromUnits, toUnits } from '@/domain/regions';
 import { frequentPurposes, frequentSpots } from '@/domain/suggestions';
 import { toLocalIsoDate, type Trip, type VehicleType } from '@/domain/trip';
 import type { Vehicle } from '@/domain/vehicles';
@@ -213,7 +213,7 @@ export default function AddTripScreen() {
                 value={date}
                 min={earliestDate(region)}
                 max={today}
-                locale={region.locale}
+                locale={displayLocale(region)}
                 weekStartsOn={region.code === 'US' || region.code === 'CA' ? 0 : 1}
                 onChange={(picked) => {
                   setDate(picked);

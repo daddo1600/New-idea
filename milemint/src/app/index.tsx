@@ -29,6 +29,7 @@ import { autoDrivesInMonth, FREE_AUTO_DRIVES_PER_MONTH, lockedTripIds } from '@/
 import type { Place } from '@/domain/places';
 import {
   computeDeductions,
+  displayLocale,
   currentTaxYear,
   formatDistance,
   formatMoney,
@@ -626,12 +627,13 @@ function LockedTripRow({ trip, worth }: { trip: Trip; worth: number }) {
 function PlanCard({ trips, lockedCount }: { trips: readonly Trip[]; lockedCount: number }) {
   const theme = useTheme();
   const t = useT();
+  const { region } = useRegion();
   const now = new Date();
   const used = Math.min(
     autoDrivesInMonth(trips, toLocalIsoDate(now).slice(0, 7)),
     FREE_AUTO_DRIVES_PER_MONTH,
   );
-  const month = now.toLocaleDateString('en-US', { month: 'long' });
+  const month = now.toLocaleDateString(displayLocale(region), { month: 'long' });
   const full = used >= FREE_AUTO_DRIVES_PER_MONTH;
   return (
     <Pressable accessibilityRole="button" onPress={() => router.push('/pro')}>
@@ -707,7 +709,7 @@ function LiveDriveBanner({ drive }: { drive: LiveDrive }) {
   const t = useT();
   const { region } = useRegion();
   const distance = formatDistance(drive.distanceMeters, region);
-  const since = new Date(drive.startedAt).toLocaleTimeString(region.locale, { hour: 'numeric', minute: '2-digit' });
+  const since = new Date(drive.startedAt).toLocaleTimeString(displayLocale(region), { hour: 'numeric', minute: '2-digit' });
   return (
     <View
       accessibilityRole="text"
