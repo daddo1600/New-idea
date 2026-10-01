@@ -45,6 +45,15 @@ describe('translations', () => {
 });
 
 describe('translate', () => {
+  it('uses a zero form when a language gives one', () => {
+    const lang = 'pt-BR';
+    const key = '{{distance}} miles';
+    const entry = DICTIONARIES[lang][key];
+    if (typeof entry === 'object' && entry.zero) {
+      expect(translate(lang, key, { distance: '0', count: 0 })).toBe(entry.zero.replace('{{distance}}', '0'));
+    }
+  });
+
   it('fills placeholders and falls back to English', () => {
     expect(translate('es', 'Hello {{name}}', { name: 'Ana' })).toBe('Hello Ana');
   });

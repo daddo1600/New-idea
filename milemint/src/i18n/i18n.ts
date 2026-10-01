@@ -76,6 +76,8 @@ export function translate(lang: Lang, key: string, params?: Params): string {
   const entry = DICTIONARIES[lang]?.[key] ?? DICTIONARIES.en[key] ?? key;
   if (typeof entry === 'string') return fill(entry, params);
   const count = typeof params?.count === 'number' ? params.count : 0;
+  // A language can word zero its own way ("0 milhas", where its rules would pick the singular).
+  if (count === 0 && entry.zero) return fill(entry.zero, params);
   let category: Intl.LDMLPluralRule = 'other';
   try {
     category = new Intl.PluralRules(lang).select(count);
