@@ -13,6 +13,7 @@
 | [`08-feature-gap-analysis.md`](08-feature-gap-analysis.md) | Feature-by-feature comparison with competitors: what to add, what to skip, and why |
 | [`09-social-campaigns.md`](09-social-campaigns.md) | Social media campaign ideas, creator programme, launch timeline |
 | [`15-persona-panel.md`](15-persona-panel.md) | **500-person simulated panel:** would they download, keep and pay, by segment; what sells it, what kills it (Android, backup, actual-cost/logbook methods, pricing), and the fix list before launch |
+| [`16-gig-day-simulation.md`](16-gig-day-simulation.md) | 500 simulated gig workers' days through the real drive detection: how a day should be logged |
 | [`14-launch-campaign.md`](14-launch-campaign.md) | **The growth campaign: "Don't leave money on the road".** Share loop built into the app, give-a-month-get-a-month referral, Founding 1,000, audiences, calendar to 31 Jan, weekly numbers, budget |
 | [`13-courier-week-1.md`](13-courier-week-1.md) | **Next week's courier push, day by day:** targets, set-up, where to go and when, scripts, message templates, card artwork, FAQs, budget |
 | [`12-launch-plan.md`](12-launch-plan.md) | **Launch plan: first users and momentum.** UK-first, local and personal, timed for the 31 Jan Self Assessment deadline; weekly measures, budget, week-by-week checklist |
