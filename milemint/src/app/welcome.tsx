@@ -104,6 +104,23 @@ export default function WelcomeScreen() {
   const { status, enable } = useTracking(undefined, { watch: step === 2 });
   const [country, setCountry] = useState<RegionCode>(() => (chosen ? region.code : phoneRegion()));
   const [busy, setBusy] = useState(false);
+  /**
+   * One tap at a time: a second tap while the first is still saving is ignored,
+   * and so is one landing in the next ~half second on the button that replaced it
+   * (a triple-tap on "Get started" used to skip choosing the country).
+   */
+  const tapping = useRef(false);
+  const once = (onPress: () => void | Promise<void>) => async () => {
+    if (tapping.current) return;
+    tapping.current = true;
+    try {
+      await onPress();
+    } finally {
+      setTimeout(() => {
+        tapping.current = false;
+      }, 450);
+    }
+  };
   // iOS asks only once; after a "Don't Allow" the only way back is Settings.
   const [asked, setAsked] = useState(false);
   /** Which of iOS's two location questions is on screen, to say what to tap. */
@@ -221,6 +238,9 @@ export default function WelcomeScreen() {
   }, [cameBackWithAlways]);
 
   /** Saved with whichever way of working is chosen; going back and changing it overwrites it. */
+  /** An employer rate that can't be read: the error under the field says so, and set-up waits for it. */
+  const rateInvalid = marApplies(picked) && employed && !employerPaysNothing && parsePence(employerRateText) === null;
+
   const saveEmployment = async () => {
     if (!marApplies(picked)) return;
     const employerRate = employerPaysNothing ? 0 : (parsePence(employerRateText) ?? 450);
@@ -231,6 +251,7 @@ export default function WelcomeScreen() {
   };
 
   const chooseShifts = async () => {
+    if (rateInvalid) return;
     await saveEmployment();
     await updateSettings(db, { shiftMode: true, workHoursEnabled: false, clientPrivacy });
     // Couriers often switch between a car and a moped: add the others they ticked.
@@ -244,6 +265,7 @@ export default function WelcomeScreen() {
   };
 
   const saveHours = async () => {
+    if (rateInvalid) return;
     await saveEmployment();
     // Going back from "Shifts" and choosing hours instead turns shift mode off again.
     await updateSettings(db, {
@@ -258,6 +280,7 @@ export default function WelcomeScreen() {
   };
 
   const chooseNeither = async () => {
+    if (rateInvalid) return;
     await saveEmployment();
     await updateSettings(db, { shiftMode: false, workHoursEnabled: false, clientPrivacy });
     setShifts(false);
@@ -323,12 +346,12 @@ export default function WelcomeScreen() {
       250,
     );
 
-  const primary = (label: string, onPress: () => void, enabled = true) => (
+  const primary = (label: string, onPress: () => void | Promise<void>, enabled = true) => (
     <Pressable
       accessibilityRole="button"
       accessibilityState={{ disabled: busy || !enabled }}
       disabled={busy || !enabled}
-      onPress={onPress}
+      onPress={once(onPress)}
       style={[
         styles.primary,
         { backgroundColor: onBrand ? '#FFFFFF' : theme.accent, opacity: busy ? 0.6 : enabled ? 1 : 0.35 },
@@ -368,7 +391,7 @@ export default function WelcomeScreen() {
         ) : (
           <View />
         )}
-        <View accessibilityLabel={t('Step {{step}} of {{total}}', { step: step + 1, total: STEPS })} style={styles.dots}>
+        <View accessibilityLabel={t('Step {{step}} of {{total}}', { step: step + 1, total: STEPS })} style={styles.dots} pointerEvents="none">
           {Array.from({ length: STEPS }, (_, i) => (
             <View
               key={i}

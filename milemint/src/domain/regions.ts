@@ -290,7 +290,16 @@ export function formatDate(localDate: string, region: Region): string {
  */
 export function displayLocale(region: Region): string {
   const lang = getLanguage();
-  return lang === 'en' ? region.locale : `${lang}-${region.code}`;
+  if (lang === 'en') return region.locale;
+  // A language tag can already carry a country ("pt-BR"): swap it for this one ("pt-GB"),
+  // since "pt-BR-GB" isn't a valid tag and Intl throws on it. A script stays ("zh-Hans-AU").
+  const parts = lang.split('-').filter((part) => !/^[A-Z]{2}$/.test(part));
+  const tag = [...parts, region.code].join('-');
+  try {
+    return Intl.getCanonicalLocales(tag)[0] ?? region.locale;
+  } catch {
+    return region.locale;
+  }
 }
 
 export function formatLongDate(localDate: string, region: Region): string {

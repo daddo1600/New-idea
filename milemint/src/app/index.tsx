@@ -42,6 +42,7 @@ import {
   potentialDeduction,
   summarizeTaxYear,
   taxYearOf,
+  type Region,
   type TaxYearSummary,
 } from '@/domain/regions';
 import { type Classification, toLocalIsoDate, type Trip, VEHICLE_ICONS } from '@/domain/trip';
@@ -645,7 +646,7 @@ function TripRow({
   const business = trip.classification === 'business';
   const details = [
     trip.localDate,
-    trip.source === 'auto' ? formatTime(trip.startedAt) : t('Added manually'),
+    trip.source === 'auto' ? formatTime(trip.startedAt, region) : t('Added manually'),
     shownPurpose(trip.purpose, t),
     deduction > 0 ? formatMoney(deduction, region) : '',
   ].filter(Boolean);
@@ -760,7 +761,7 @@ function LockedTripRow({ trip, worth }: { trip: Trip; worth: number }) {
         <ThemedText type="small" themeColor="textSecondary">
           {[
             trip.localDate,
-            formatTime(trip.startedAt),
+            formatTime(trip.startedAt, region),
             worth > 0 ? t('worth up to {{amount}}', { amount: formatMoney(worth, region) }) : '',
           ]
             .filter(Boolean)
@@ -861,8 +862,9 @@ function SwipeAction({
   );
 }
 
-function formatTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+/** A trip's start time the way the user's country and language write it ("4:12 PM", "16:12"). */
+function formatTime(iso: string, region: Region): string {
+  return new Date(iso).toLocaleTimeString(displayLocale(region), { hour: 'numeric', minute: '2-digit' });
 }
 
 /** A drive being recorded right now, so nobody has to wait until parking to know it's working. */

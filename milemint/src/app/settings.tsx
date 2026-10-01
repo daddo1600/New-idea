@@ -1,6 +1,6 @@
 import { router, useFocusEffect, type Href } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -642,13 +642,21 @@ function Garage() {
     });
   };
 
+  // A double tap on Save would add the vehicle twice.
+  const saving = useRef(false);
   const save = async () => {
-    const registration = normaliseRegistration(draft.registration);
-    const name = draft.name.trim() || defaultVehicleName(draft.type);
-    if (editing === 'new') await addVehicle(db, { type: draft.type, name, registration });
-    else if (editing) await updateVehicle(db, { id: editing, type: draft.type, name, registration });
-    setEditing(null);
-    await reload();
+    if (saving.current) return;
+    saving.current = true;
+    try {
+      const registration = normaliseRegistration(draft.registration);
+      const name = draft.name.trim() || defaultVehicleName(draft.type);
+      if (editing === 'new') await addVehicle(db, { type: draft.type, name, registration });
+      else if (editing) await updateVehicle(db, { id: editing, type: draft.type, name, registration });
+      setEditing(null);
+      await reload();
+    } finally {
+      saving.current = false;
+    }
   };
 
   const remove = (vehicle: Vehicle) =>

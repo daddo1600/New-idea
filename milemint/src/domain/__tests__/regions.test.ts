@@ -1,7 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
 
+import { LANGUAGES, setLanguage } from '../../i18n/i18n';
 import {
   computeDeductions,
+  displayLocale,
   formatDistance,
   formatMoney,
   formatRate,
@@ -135,5 +137,22 @@ describe('formatting', () => {
     expect(regionFromLocale('en_AU')).toBe('AU');
     expect(regionFromLocale('fr-CA')).toBe('CA');
     expect(regionFromLocale('de-DE')).toBeNull();
+  });
+});
+
+describe('displayLocale', () => {
+  it('makes a valid tag for every language and country', () => {
+    for (const { code } of LANGUAGES) {
+      setLanguage(code);
+      for (const region of Object.values(REGIONS)) {
+        const tag = displayLocale(region);
+        expect(() => new Date(Date.UTC(2026, 9, 1)).toLocaleDateString(tag)).not.toThrow();
+      }
+    }
+    setLanguage('pt-BR');
+    expect(displayLocale(REGIONS.GB)).toBe('pt-GB');
+    setLanguage('zh-Hans');
+    expect(displayLocale(REGIONS.AU)).toBe('zh-Hans-AU');
+    setLanguage('en');
   });
 });
