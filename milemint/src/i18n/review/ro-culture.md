@@ -280,3 +280,8 @@ Tracking health: home card, Settings “Starea înregistrării” row and backgr
 | None: ask me each time | Niciunul: întreabă-mă de fiecare dată | None: ask me every time | Natural, fits its place. |
 | What are most of your work drives for? | Pentru ce sunt majoritatea curselor tale de lucru? | What are most of your work drives for? | Natural, fits its place. |
 | Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip. | Autoritățile fiscale cer un scop pentru fiecare cursă de lucru. Îl completăm noi, iar tu îl poți schimba la orice cursă. | Tax authorities ask for a purpose for each work drive. We fill it in, and you can change it on any drive. | Natural, fits its place. |
+
+
+## Round 8c: work purpose tiles
+
+Back-translations: Choose everything that fits. We fill in the first one chosen. / We fill it in / Usual. "Default" is rendered with the same word as the existing "Usual purpose" line, so the badge and the trip note match.

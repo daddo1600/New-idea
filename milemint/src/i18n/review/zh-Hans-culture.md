@@ -259,3 +259,8 @@ Tracking health: home card, Settings “追踪检查” row and background notif
 | None: ask me each time | 不设置：每次问我 | Don’t set: ask me each time | Natural, fits its place. |
 | What are most of your work drives for? | 你的工作行程大多是做什么？ | What are your work trips mostly for? | Natural, fits its place. |
 | Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip. | 税务机关要求每次工作行程都有事由。我们会帮你填好，任何行程都可以修改。 | Tax authorities require every work trip to have a reason. We’ll fill it in for you; any trip can be changed. | Natural, fits its place. |
+
+
+## Round 8c: work purpose tiles
+
+Back-translations: Multiple choice allowed. The first one chosen is filled in for you automatically. / Filled in for you automatically / Common (usual). "Default" is rendered with the same word as the existing "Usual purpose" line, so the badge and the trip note match.

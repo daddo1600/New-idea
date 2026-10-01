@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 import { loadSettings, type AppSettings } from '@/db/settings-repo';
 import { usualPurpose } from '@/domain/auto-classify';
 
-type PurposeSettings = Pick<AppSettings, 'defaultPurpose' | 'shiftMode' | 'clientPrivacy'>;
+type PurposeSettings = Pick<AppSettings, 'defaultPurpose' | 'workPurposes' | 'shiftMode' | 'clientPrivacy'>;
 
 /**
  * What the trip list needs to offer business purposes: the usual purpose
@@ -31,6 +31,7 @@ export function usePurposeSettings() {
 
   return {
     usual: stored ? usualPurpose(stored) : null,
+    chosen: stored?.workPurposes ?? [],
     shiftMode: stored?.shiftMode ?? false,
     clientPrivacy: stored?.clientPrivacy ?? false,
   };

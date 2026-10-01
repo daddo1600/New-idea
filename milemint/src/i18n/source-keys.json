@@ -1680,6 +1680,12 @@
     ]
   },
   {
+    "key": "Default",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Delete",
     "files": [
       "app/index.tsx",
@@ -2262,6 +2268,12 @@
     "key": "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.",
     "files": [
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Filled in for you",
+    "files": [
+      "app/welcome.tsx"
     ]
   },
   {
@@ -3992,6 +4004,12 @@
     "key": "Pick 12 weeks that are typical of how you use the car through the year. MileMint logs each drive; you add the reason for each work trip.",
     "files": [
       "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Pick all that apply. The first one you pick is filled in for you.",
+    "files": [
+      "app/welcome.tsx"
     ]
   },
   {

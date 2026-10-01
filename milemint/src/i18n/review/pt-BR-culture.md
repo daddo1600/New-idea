@@ -292,3 +292,8 @@ Tracking health: home card, Settings “Status do rastreamento” row and backgr
 | None: ask me each time | Nenhuma: perguntar sempre | None: always ask | Shorter than “cada vez” and natural. |
 | What are most of your work drives for? | Qual a finalidade da maioria dos seus trajetos profissionais? | What is the purpose of most of your work trips? | Rephrased: “Para que são…” sounds clumsy in pt-BR. |
 | Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip. | O fisco exige uma finalidade para cada trajeto profissional. Vamos preencher para você, e dá para mudar em qualquer trajeto. | The tax office requires a purpose for each work trip. We’ll fill it in for you, and you can change it on any trip. | *O fisco* is the everyday word for the tax office. |
+
+
+## Round 8c: work purpose tiles
+
+Back-translations: Choose all that apply. The first you choose is filled in for you. / Filled in for you / Usual. "Default" is rendered with the same word as the existing "Usual purpose" line, so the badge and the trip note match.

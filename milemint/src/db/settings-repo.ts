@@ -49,6 +49,8 @@ export type AppSettings = {
    * none chosen ("Deliveries" in shift mode, see domain/auto-classify).
    */
   defaultPurpose: string | null;
+  /** The kinds of work drive chosen at set-up (the first is defaultPurpose): offered first when a trip needs a purpose. */
+  workPurposes: string[];
   /**
    * How the user is paid for business mileage (UK only for now). Employees
    * don't deduct mileage themselves: they claim Mileage Allowance Relief on
@@ -102,6 +104,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   shiftMode: false,
   defaultBusiness: true,
   defaultPurpose: null,
+  workPurposes: [],
   employment: 'self-employed',
   employerRate: 450,
   taxBand: 'unsure',
@@ -170,6 +173,13 @@ const CHECKS: { [K in keyof AppSettings]-?: Check<AppSettings[K]> } = {
     // Blank means none; an over-long one (a damaged value) is cut to a phrase.
     return value.trim().slice(0, MAX_PURPOSE_LENGTH).trim() || null;
   },
+  workPurposes: (value) =>
+    Array.isArray(value)
+      ? value
+          .filter((text): text is string => typeof text === 'string' && text.trim() !== '')
+          .map((text) => text.trim().slice(0, MAX_PURPOSE_LENGTH).trim())
+          .slice(0, 12)
+      : undefined,
   employment: oneOf(['self-employed', 'employee'] as const),
   employerRate: (value) => (typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : undefined),
   taxBand: oneOf(TAX_BANDS),

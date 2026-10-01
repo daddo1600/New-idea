@@ -1219,7 +1219,10 @@ const dictionary: Dictionary = {
   "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.": "Se completează la cursele de lucru care nu au unul, ca evidența fiscală să fie completă. Îl poți schimba la orice cursă.",
   "None: ask me each time": "Niciunul: întreabă-mă de fiecare dată",
   "What are most of your work drives for?": "Pentru ce sunt majoritatea curselor tale de lucru?",
-  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "Autoritățile fiscale cer un scop pentru fiecare cursă de lucru. Îl completăm noi, iar tu îl poți schimba la orice cursă."
+  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "Autoritățile fiscale cer un scop pentru fiecare cursă de lucru. Îl completăm noi, iar tu îl poți schimba la orice cursă.",
+  "Pick all that apply. The first one you pick is filled in for you.": "Alege tot ce se potrivește. Primul ales îl completăm noi.",
+  "Filled in for you": "Îl completăm noi",
+  "Default": "Obișnuit",
 };
 
 export default dictionary;

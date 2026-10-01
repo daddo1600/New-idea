@@ -150,8 +150,8 @@ export default function WelcomeScreen() {
   const [employed, setEmployed] = useState(false);
   const [employerPaysNothing, setEmployerPaysNothing] = useState(false);
   const [employerRateText, setEmployerRateText] = useState('45');
-  /** The usual business purpose tapped; undefined until one is (shift workers then see Deliveries chosen). */
-  const [usualChoice, setUsualChoice] = useState<string | undefined>(undefined);
+  /** The kinds of work drive picked, in the order tapped; undefined until one is (shift workers then see Deliveries chosen). */
+  const [workChoices, setWorkChoices] = useState<string[] | undefined>(undefined);
 
   // A new iPhone: look for a backup in iCloud while the welcome is read.
   useEffect(() => {
@@ -302,10 +302,20 @@ export default function WelcomeScreen() {
    * going back and choosing set hours instead leaves nothing behind: in shift
    * mode no usual purpose already means "Deliveries" (domain/auto-classify).
    */
-  const shownUsual = usualChoice ?? (shifts ? SHIFT_PURPOSE : null);
-  const saveUsual = async (purpose: string | undefined) => {
-    await updateSettings(db, { defaultPurpose: purpose ?? null });
-    setUsualChoice(purpose);
+  const shownChoices = workChoices ?? (shifts ? [SHIFT_PURPOSE] : []);
+  /** Several can be picked: the first is filled in on work drives, all of them are offered first on a trip. */
+  const toggleWork = (purpose: string) =>
+    setWorkChoices(
+      shownChoices.includes(purpose) ? shownChoices.filter((other) => other !== purpose) : [...shownChoices, purpose],
+    );
+  const saveWork = async (choices: string[]) => {
+    const first = choices[0] ?? null;
+    await updateSettings(db, {
+      // Deliveries first for a shift worker is what no setting already means.
+      defaultPurpose: shifts && first === SHIFT_PURPOSE ? null : first,
+      workPurposes: choices,
+    });
+    setWorkChoices(choices);
     setStep(PLACES);
   };
   const purposeOptions = quickPurposes({ shiftMode: shifts, clientPrivacy }, 10);
@@ -724,24 +734,38 @@ export default function WelcomeScreen() {
                   'Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.',
                 )}
               </StepHeader>
-              <View style={styles.extraRow} accessibilityRole="radiogroup">
+              <ThemedText type="small" themeColor="textSecondary">
+                {t('Pick all that apply. The first one you pick is filled in for you.')}
+              </ThemedText>
+              <View style={styles.tiles}>
                 {purposeOptions.map((purpose) => {
-                  const on = shownUsual === purpose;
+                  const order = shownChoices.indexOf(purpose);
+                  const on = order >= 0;
                   return (
                     <Pressable
                       key={purpose}
-                      accessibilityRole="radio"
-                      accessibilityState={{ selected: on }}
-                      onPress={once(() => saveUsual(purpose))}
+                      accessibilityRole="checkbox"
+                      accessibilityState={{ checked: on }}
+                      accessibilityHint={order === 0 ? t('Filled in for you') : undefined}
+                      onPress={() => toggleWork(purpose)}
                       style={[
-                        styles.extraChip,
+                        styles.tile,
                         on
                           ? { backgroundColor: theme.accent, borderColor: theme.accent }
                           : { borderColor: theme.backgroundSelected, backgroundColor: theme.backgroundElement },
                       ]}>
-                      <ThemedText type="smallBold" style={{ color: on ? theme.onAccent : theme.text }}>
-                        {purposeIcon(purpose)} {shownPurpose(purpose, t)}
+                      <ThemedText style={styles.tileIcon}>{purposeIcon(purpose)}</ThemedText>
+                      <ThemedText
+                        type="smallBold"
+                        numberOfLines={2}
+                        style={[styles.tileLabel, { color: on ? theme.onAccent : theme.text }]}>
+                        {shownPurpose(purpose, t)}
                       </ThemedText>
+                      {order === 0 && (
+                        <View style={[styles.tileBadge, { backgroundColor: theme.onAccent }]}>
+                          <ThemedText style={[styles.tileBadgeText, { color: theme.accent }]}>{t('Default')}</ThemedText>
+                        </View>
+                      )}
                     </Pressable>
                   );
                 })}
@@ -897,8 +921,8 @@ export default function WelcomeScreen() {
                 : workStyle === 'neither'
                   ? primary(t('Continue'), chooseNeither)
                   : primary(t('Choose one to continue'), () => {}, false))}
-          {step === PURPOSE && shownUsual !== null && primary(t('Continue'), () => saveUsual(usualChoice))}
-          {step === PURPOSE && secondary(t('Skip for now'), () => saveUsual(undefined))}
+          {step === PURPOSE && shownChoices.length > 0 && primary(t('Continue'), () => saveWork(shownChoices))}
+          {step === PURPOSE && secondary(t('Skip for now'), () => saveWork([]))}
           {step === PLACES &&
             primary(
               busy ? t('Saving…') : home.text || work.text ? t('Save and continue') : t('Continue'),
@@ -1108,6 +1132,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     paddingVertical: Spacing.two,
   },
+  tiles: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
+  tile: {
+    flexBasis: '47%',
+    flexGrow: 1,
+    minHeight: 96,
+    borderWidth: 1.5,
+    borderRadius: 16,
+    padding: Spacing.three,
+    gap: Spacing.one,
+    justifyContent: 'center',
+  },
+  tileIcon: { fontSize: 28, lineHeight: 34 },
+  tileLabel: { lineHeight: 19 },
+  tileBadge: {
+    position: 'absolute',
+    top: Spacing.two,
+    right: Spacing.two,
+    borderRadius: 999,
+    paddingHorizontal: Spacing.two,
+    paddingVertical: 2,
+  },
+  tileBadgeText: { fontSize: 11, lineHeight: 14, fontWeight: '800' },
   employed: { borderWidth: 1.5, borderRadius: 16, padding: Spacing.three, gap: Spacing.two },
   employedRow: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: Spacing.two },
   penceInput: {

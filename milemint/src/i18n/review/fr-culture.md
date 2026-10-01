@@ -259,3 +259,8 @@ Tracking health: home card, Settings “État du suivi” row and background not
 | None: ask me each time | Aucun : me demander à chaque fois | None: ask me each time | Natural, fits its place. |
 | What are most of your work drives for? | À quoi servent la plupart de vos trajets d’affaires ? | What do most of your business trips serve? | Idiomatic “À quoi servent…”. |
 | Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip. | Le fisc exige un motif pour chaque trajet d’affaires. Nous le remplirons pour vous, et vous pourrez le changer sur n’importe quel trajet. | The tax office requires a reason for each business trip. We’ll fill it in for you, and you can change it on any trip. | *Le fisc* is the everyday term in France and Quebec. |
+
+
+## Round 8c: work purpose tiles
+
+Back-translations: Choose everything that applies. The first chosen is filled in for you. / Filled in for you / Usual. "Default" is rendered with the same word as the existing "Usual purpose" line, so the badge and the trip note match.

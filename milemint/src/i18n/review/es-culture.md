@@ -272,3 +272,8 @@ Tracking health: the home card that says when tracking stopped (and offers to ad
 | None: ask me each time | Ninguno: preguntarme cada vez | None: ask me each time | Placeholder in the picker field. |
 | What are most of your work drives for? | ¿Para qué son la mayoría de tus viajes de trabajo? | What are most of your work trips for? | Onboarding title; natural question form. |
 | Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip. | Las autoridades fiscales piden un motivo para cada viaje de trabajo. Lo completaremos por ti y podrás cambiarlo en cualquier viaje. | Tax authorities ask for a reason for every work trip. We’ll fill it in for you and you can change it on any trip. | Generic “autoridades fiscales”: no country named before the region is known in every case. |
+
+
+## Round 8c: work purpose tiles
+
+Back-translations: Choose all that apply. The first you choose is filled in for you. / Filled in for you / Usual. "Default" is rendered with the same word as the existing "Usual purpose" line, so the badge and the trip note match.

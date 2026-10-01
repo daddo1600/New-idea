@@ -1216,7 +1216,10 @@ const dictionary: Dictionary = {
   "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.": "Preenchida nos trajetos profissionais sem finalidade, para seus registros fiscais ficarem completos. Você pode mudar em qualquer trajeto.",
   "None: ask me each time": "Nenhuma: perguntar sempre",
   "What are most of your work drives for?": "Qual a finalidade da maioria dos seus trajetos profissionais?",
-  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "O fisco exige uma finalidade para cada trajeto profissional. Vamos preencher para você, e dá para mudar em qualquer trajeto."
+  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "O fisco exige uma finalidade para cada trajeto profissional. Vamos preencher para você, e dá para mudar em qualquer trajeto.",
+  "Pick all that apply. The first one you pick is filled in for you.": "Escolha todas as que se aplicam. A primeira que você escolher é preenchida para você.",
+  "Filled in for you": "Preenchida para você",
+  "Default": "Habitual",
 };
 
 export default dictionary;

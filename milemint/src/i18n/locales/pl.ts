@@ -1273,7 +1273,10 @@ const dictionary: Dictionary = {
   "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.": "Wpisywany w przejazdach służbowych bez celu, żeby ewidencja podatkowa była kompletna. Możesz go zmienić w każdym przejeździe.",
   "None: ask me each time": "Brak: pytaj mnie za każdym razem",
   "What are most of your work drives for?": "W jakim celu najczęściej jeździsz służbowo?",
-  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "Urząd skarbowy wymaga celu każdego przejazdu służbowego. Wpiszemy go za Ciebie, a zmienisz go w każdym przejeździe."
+  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "Urząd skarbowy wymaga celu każdego przejazdu służbowego. Wpiszemy go za Ciebie, a zmienisz go w każdym przejeździe.",
+  "Pick all that apply. The first one you pick is filled in for you.": "Wybierz wszystkie pasujące. Pierwszy wybrany wpiszemy za Ciebie.",
+  "Filled in for you": "Wpiszemy go za Ciebie",
+  "Default": "Zwykły",
 };
 
 export default dictionary;

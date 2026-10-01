@@ -1091,7 +1091,10 @@ const dictionary: Dictionary = {
   "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.": "自动填入没有事由的工作行程，让报税记录完整。任何行程都可以单独修改。",
   "None: ask me each time": "不设置：每次问我",
   "What are most of your work drives for?": "你的工作行程大多是做什么？",
-  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "税务机关要求每次工作行程都有事由。我们会帮你填好，任何行程都可以修改。"
+  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "税务机关要求每次工作行程都有事由。我们会帮你填好，任何行程都可以修改。",
+  "Pick all that apply. The first one you pick is filled in for you.": "可多选。第一个选中的会自动帮你填好。",
+  "Filled in for you": "自动帮你填好",
+  "Default": "常用",
 };
 
 export default dictionary;

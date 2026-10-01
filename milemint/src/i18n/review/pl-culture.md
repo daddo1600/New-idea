@@ -284,3 +284,8 @@ Tracking health: home card, Settings “Stan śledzenia” row and background no
 | None: ask me each time | Brak: pytaj mnie za każdym razem | None: ask me every time | Natural, fits its place. |
 | What are most of your work drives for? | W jakim celu najczęściej jeździsz służbowo? | For what purpose do you most often drive for work? | Rephrased for natural Polish. |
 | Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip. | Urząd skarbowy wymaga celu każdego przejazdu służbowego. Wpiszemy go za Ciebie, a zmienisz go w każdym przejeździe. | The tax office requires the purpose of every business drive. We’ll enter it for you, and you can change it on any drive. | *Ciebie* capitalised, as in the file’s direct address. |
+
+
+## Round 8c: work purpose tiles
+
+Back-translations: Choose all that fit. We'll enter the first one chosen for you. / We'll enter it for you / Usual. "Default" is rendered with the same word as the existing "Usual purpose" line, so the badge and the trip note match.

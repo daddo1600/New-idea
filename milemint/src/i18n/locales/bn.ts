@@ -1129,7 +1129,10 @@ const dictionary: Dictionary = {
   "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.": "যেসব ব্যবসায়িক ট্রিপে উদ্দেশ্য নেই সেগুলোতে এটি বসানো হয়, যাতে আপনার ট্যাক্স রেকর্ড সম্পূর্ণ থাকে। আপনি যেকোনো ট্রিপে এটি বদলাতে পারেন।",
   "None: ask me each time": "কোনোটি নয়: প্রতিবার জিজ্ঞেস করুন",
   "What are most of your work drives for?": "আপনার বেশিরভাগ ব্যবসায়িক ট্রিপ কীসের জন্য?",
-  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "ট্যাক্স কর্তৃপক্ষ প্রতিটি ব্যবসায়িক ট্রিপের উদ্দেশ্য চায়। আমরা এটি আপনার হয়ে বসিয়ে দেব, আর আপনি যেকোনো ট্রিপে এটি বদলাতে পারবেন।"
+  "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.": "ট্যাক্স কর্তৃপক্ষ প্রতিটি ব্যবসায়িক ট্রিপের উদ্দেশ্য চায়। আমরা এটি আপনার হয়ে বসিয়ে দেব, আর আপনি যেকোনো ট্রিপে এটি বদলাতে পারবেন।",
+  "Pick all that apply. The first one you pick is filled in for you.": "যেগুলো খাটে সবগুলো বেছে নিন। প্রথমটি আমরা আপনার হয়ে বসিয়ে দেব।",
+  "Filled in for you": "আপনার হয়ে বসানো হবে",
+  "Default": "সাধারণ",
 };
 
 export default dictionary;

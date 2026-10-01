@@ -49,10 +49,11 @@ export function purposeIcon(purpose: string): string {
 export function quickPurposes(
   {
     usual = null,
+    chosen = [],
     recent = [],
     shiftMode = false,
     clientPrivacy = false,
-  }: { usual?: string | null; recent?: readonly string[]; shiftMode?: boolean; clientPrivacy?: boolean },
+  }: { usual?: string | null; chosen?: readonly string[]; recent?: readonly string[]; shiftMode?: boolean; clientPrivacy?: boolean },
   limit = 3,
 ): string[] {
   const common = [
@@ -61,7 +62,7 @@ export function quickPurposes(
     ...COMMON_PURPOSES,
   ].map(([, text]) => text);
   const picked: string[] = [];
-  for (const text of [usual ?? '', ...recent, ...common]) {
+  for (const text of [usual ?? '', ...chosen, ...recent, ...common]) {
     if (text.trim() && !picked.some((other) => sameText(other, text))) picked.push(text.trim());
   }
   return picked.slice(0, limit);

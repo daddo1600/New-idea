@@ -157,11 +157,12 @@ export default function HomeScreen() {
     () =>
       quickPurposes({
         usual: purposeSettings.usual,
+        chosen: purposeSettings.chosen,
         recent: frequentPurposes(trips ?? []),
         shiftMode: purposeSettings.shiftMode,
         clientPrivacy: purposeSettings.clientPrivacy,
       }),
-    [trips, purposeSettings.usual, purposeSettings.shiftMode, purposeSettings.clientPrivacy],
+    [trips, purposeSettings.usual, purposeSettings.chosen, purposeSettings.shiftMode, purposeSettings.clientPrivacy],
   );
   // Drives past the free allowance are left out, as in the report's count: their value isn't claimed yet.
   const needPurpose = useMemo(

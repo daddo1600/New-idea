@@ -285,3 +285,8 @@ Tracking health: home card, Settings “ट्रैकिंग की जा�
 | None: ask me each time | कोई नहीं: हर बार पूछें | None: ask every time | Natural, fits its place. |
 | What are most of your work drives for? | आपकी ज़्यादातर बिज़नेस ट्रिप किस काम के लिए होती हैं? | What work are most of your business trips for? | Natural, fits its place. |
 | Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip. | टैक्स विभाग हर बिज़नेस ट्रिप का मकसद मांगता है। हम इसे आपके लिए भर देंगे, और आप इसे किसी भी ट्रिप में बदल सकते हैं। | The tax department asks for every business trip’s purpose. We’ll fill it in for you, and you can change it in any trip. | Natural, fits its place. |
+
+
+## Round 8c: work purpose tiles
+
+Back-translations: Choose all that apply. Whichever you choose first, we'll fill in for you. / Will be filled in for you / Usual. "Default" is rendered with the same word as the existing "Usual purpose" line, so the badge and the trip note match.
