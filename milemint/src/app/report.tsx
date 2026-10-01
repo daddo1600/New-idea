@@ -14,6 +14,7 @@ import { listAllVehicles } from '@/db/vehicles-repo';
 import type { Vehicle } from '@/domain/vehicles';
 import { useTrips } from '@/db/use-trips';
 import { lockedTripIds } from '@/domain/plan';
+import { EXPORT_FORMATS, PRO_FORMATS, type ExportFormat } from '@/domain/accounting-export';
 import { buildReport, reportYears } from '@/domain/report';
 import { currentTaxYear, formatDistance, formatMoney, fromUnits, taxYearLabel } from '@/domain/regions';
 import { useTheme } from '@/hooks/use-theme';
@@ -21,6 +22,29 @@ import { msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
 import { useRegion } from '@/region/region';
 import { PDF_AVAILABLE, shareCsv, sharePdf } from '@/reports/export';
+
+const FORMAT_LABELS: Record<ExportFormat, string> = {
+  spreadsheet: msg('Spreadsheet'),
+  xero: 'Xero',
+  quickbooks: 'QuickBooks',
+  freeagent: 'FreeAgent',
+  'expense-claim': msg('Expense claim'),
+};
+
+const FORMAT_NOTES: Record<Exclude<ExportFormat, 'spreadsheet'>, string> = {
+  xero: msg(
+    'A manual journal for each month of business mileage, ready to import in Xero (Accounting › Manual journals › Import). Check the account codes match your chart of accounts.',
+  ),
+  quickbooks: msg(
+    'A journal entry for each month of business mileage, ready to import in QuickBooks Online (Settings › Import data › Journal entries). Check the account names match yours.',
+  ),
+  freeagent: msg(
+    'Your business trips with date, description, distance and vehicle: everything FreeAgent’s mileage form asks for.',
+  ),
+  'expense-claim': msg(
+    'A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.',
+  ),
+};
 
 /** How many years to offer at once; older logs are rarely needed and still in the CSV of that year. */
 const YEARS_SHOWN = 3;
@@ -37,6 +61,16 @@ export default function ReportScreen() {
   const [year, setYear] = useState(() => String(currentTaxYear(region)));
   const [busy, setBusy] = useState<'csv' | 'pdf' | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [format, setFormat] = useState<ExportFormat>('spreadsheet');
+  useEffect(() => {
+    loadSettings(db).then((settings) => setFormat(settings.exportFormat), () => {});
+  }, [db]);
+  const chooseFormat = (next: ExportFormat) => {
+    setFormat(next);
+    loadSettings(db)
+      .then((settings) => saveSettings(db, { ...settings, exportFormat: next }))
+      .catch(() => {});
+  };
 
   useEffect(() => {
     listEditedTripIds(db).then(setEditedIds, () => setEditedIds(new Set()));
@@ -79,7 +113,7 @@ export default function ReportScreen() {
     setError(null);
     setBusy(kind);
     try {
-      await (kind === 'csv' ? shareCsv(report) : sharePdf(report));
+      await (kind === 'csv' ? shareCsv(report, format) : sharePdf(report));
       // A milestone: celebrated next time the home screen shows.
       saveSettings(db, { ...(await loadSettings(db)), exportedReport: true }).catch(() => {});
     } catch {
@@ -153,23 +187,55 @@ export default function ReportScreen() {
         )}
 
         <View style={styles.option}>
-          <ThemedText type="smallBold">{t('Mileage log (CSV)')}</ThemedText>
+          <ThemedText type="smallBold">{t('Export your mileage')}</ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
-            {miles
-              ? t(
-                  'Every trip with date, places, miles, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.',
-                )
-              : t(
-                  'Every trip with date, places, kilometres, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.',
-                )}
+            {t('Where is it going?')}
+          </ThemedText>
+          <View style={styles.formats} accessibilityRole="radiogroup">
+            {EXPORT_FORMATS.map((option) => {
+              const selected = option === format;
+              return (
+                <Pressable
+                  key={option}
+                  accessibilityRole="radio"
+                  accessibilityState={{ selected }}
+                  onPress={() => chooseFormat(option)}
+                  style={[
+                    styles.format,
+                    selected
+                      ? { backgroundColor: theme.accent, borderColor: theme.accent }
+                      : { borderColor: theme.backgroundSelected },
+                  ]}>
+                  <ThemedText type="smallBold" style={{ color: selected ? theme.onAccent : theme.text }}>
+                    {t(FORMAT_LABELS[option])}
+                    {PRO_FORMATS.has(option) && !isPro ? ' · Pro' : ''}
+                  </ThemedText>
+                </Pressable>
+              );
+            })}
+          </View>
+          <ThemedText type="small" themeColor="textSecondary">
+            {format === 'spreadsheet'
+              ? miles
+                ? t(
+                    'Every trip with date, places, miles, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.',
+                  )
+                : t(
+                    'Every trip with date, places, kilometres, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.',
+                  )
+              : t(FORMAT_NOTES[format])}
           </ThemedText>
           <Pressable
             accessibilityRole="button"
             disabled={empty || busy !== null}
-            onPress={() => run('csv')}
+            onPress={() => (PRO_FORMATS.has(format) && !isPro ? router.push('/pro') : run('csv'))}
             style={[styles.outline, { borderColor: theme.accent, opacity: empty || busy ? 0.5 : 1 }]}>
             <ThemedText type="smallBold" style={{ color: theme.accent }}>
-              {busy === 'csv' ? t('Preparing…') : t('Export CSV')}
+              {busy === 'csv'
+                ? t('Preparing…')
+                : PRO_FORMATS.has(format) && !isPro
+                  ? t('Unlock with Pro')
+                  : t('Export')}
             </ThemedText>
           </Pressable>
         </View>
@@ -352,6 +418,8 @@ const styles = StyleSheet.create({
   lines: { gap: Spacing.one, marginTop: Spacing.one },
   line: { flexDirection: 'row', justifyContent: 'space-between', gap: Spacing.two },
   option: { gap: Spacing.two },
+  formats: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
+  format: { borderWidth: 1.5, borderRadius: 999, paddingHorizontal: Spacing.three, paddingVertical: Spacing.two },
   odoRow: { flexDirection: 'row', gap: Spacing.two },
   odoField: { flex: 1, gap: Spacing.one },
   odoSave: { alignSelf: 'flex-start' },

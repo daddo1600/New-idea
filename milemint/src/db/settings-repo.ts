@@ -1,5 +1,6 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
 
+import type { ExportFormat } from '@/domain/accounting-export';
 import type { WorkWeek } from '@/domain/classify-rules';
 import { REGIONS, type RegionCode } from '@/domain/regions';
 import type { VehicleType } from '@/domain/trip';
@@ -24,6 +25,8 @@ export type AppSettings = {
   celebrated: string[];
   /** A report has been exported (a milestone). */
   exportedReport: boolean;
+  /** Where exports go: a spreadsheet, accounting software or an expense claim. Remembered between exports. */
+  exportFormat: ExportFormat;
   /** The first-launch welcome flow has been completed. */
   onboarded: boolean;
   /** The type of the vehicle being driven now (mirrors the current vehicle; seeds the first one). */
@@ -47,6 +50,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   reminderDefaulted: false,
   celebrated: [],
   exportedReport: false,
+  exportFormat: 'spreadsheet',
   onboarded: false,
   vehicle: 'car',
   currentVehicleId: null,

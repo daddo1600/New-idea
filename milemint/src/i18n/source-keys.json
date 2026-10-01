@@ -489,6 +489,12 @@
     ]
   },
   {
+    "key": "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
     "key": "A few swipes tonight beats a shoebox of receipts at tax time.",
     "files": [
       "domain/reminders.ts"
@@ -498,6 +504,18 @@
     "key": "A fully sorted week",
     "files": [
       "domain/milestones.ts"
+    ]
+  },
+  {
+    "key": "A journal entry for each month of business mileage, ready to import in QuickBooks Online (Settings › Import data › Journal entries). Check the account names match yours.",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "A manual journal for each month of business mileage, ready to import in Xero (Accounting › Manual journals › Import). Check the account codes match your chart of accounts.",
+    "files": [
+      "app/report.tsx"
     ]
   },
   {
@@ -1472,7 +1490,13 @@
     ]
   },
   {
-    "key": "Export CSV",
+    "key": "Expense claim",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Export",
     "files": [
       "app/report.tsx"
     ]
@@ -1487,6 +1511,12 @@
     "key": "Export your {{year}} mileage report from MileMint and you’re one step closer.",
     "files": [
       "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Export your mileage",
+    "files": [
+      "app/report.tsx"
     ]
   },
   {
@@ -2039,12 +2069,6 @@
     "key": "Menu",
     "files": [
       "components/header-menu.tsx"
-    ]
-  },
-  {
-    "key": "Mileage log (CSV)",
-    "files": [
-      "app/report.tsx"
     ]
   },
   {
@@ -3082,6 +3106,12 @@
     ]
   },
   {
+    "key": "Spreadsheet",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
     "key": "Spring has sprung 🌸",
     "files": [
       "domain/seasons.ts"
@@ -3778,6 +3808,12 @@
     ]
   },
   {
+    "key": "Where is it going?",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
     "key": "Where’s home?",
     "files": [
       "app/welcome.tsx"
@@ -3957,6 +3993,12 @@
     "key": "Your app counted as much as MileMint logged. Check your trips are sorted as business.",
     "files": [
       "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "Your business trips with date, description, distance and vehicle: everything FreeAgent’s mileage form asks for.",
+    "files": [
+      "app/report.tsx"
     ]
   },
   {

@@ -328,7 +328,6 @@ const dictionary: Dictionary = {
   "Every trip with date, places, kilometres, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.": "Cada trajeto com data, locais, quilômetros, finalidade e dedução. Abre no Excel, Numbers ou Google Sheets. Sempre grátis: os dados são seus.",
   "Every trip with date, places, miles, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.": "Cada trajeto com data, locais, milhas, finalidade e dedução. Abre no Excel, Numbers ou Google Sheets. Sempre grátis: os dados são seus.",
   "Every year": "Todo ano",
-  "Export CSV": "Exportar CSV",
   "Export report": "Exportar relatório",
   "Export your {{year}} mileage report from MileMint and you’re one step closer.": "Exporte do MileMint seu relatório de quilometragem de {{year}} e fique um passo mais perto.",
   "Fall miles add up 🍂": "No outono, cada trajeto conta 🍂",
@@ -427,7 +426,6 @@ const dictionary: Dictionary = {
   "Mark {{from}} to {{to}} as personal": "Marcar trajeto de {{from}} a {{to}} como pessoal",
   "Measuring the route…": "Medindo a rota…",
   "Menu": "Menu",
-  "Mileage log (CSV)": "Registro de quilometragem (CSV)",
   "Mileage log export (CSV)": "Exportar registro de quilometragem (CSV)",
   "MileMint couldn’t open this screen. Your trips are safe. Please send a screenshot of this page to {{email}} so we can fix it.": "O MileMint não conseguiu abrir esta tela. Seus trajetos estão seguros. Envie uma captura de tela desta página para {{email}} para a gente corrigir.",
   "MileMint has now found {{amount}} in business mileage for you. Hard work, properly rewarded.": "O MileMint já encontrou {{amount}} em quilometragem profissional para você. Muito trabalho, tudo bem registrado.",
@@ -769,6 +767,15 @@ const dictionary: Dictionary = {
   "Your own purpose": "Sua própria finalidade",
   "Your trips are stored encrypted on your phone, not on our servers.": "Seus trajetos ficam criptografados no seu celular, não nos nossos servidores.",
   "Your vehicles": "Seus veículos",
+  "Export your mileage": "Exporte sua quilometragem",
+  "Where is it going?": "Para onde vai?",
+  "Spreadsheet": "Planilha",
+  "Expense claim": "Reembolso",
+  "Export": "Exportar",
+  "A manual journal for each month of business mileage, ready to import in Xero (Accounting › Manual journals › Import). Check the account codes match your chart of accounts.": "Um lançamento manual para cada mês de quilometragem profissional, pronto para importar no Xero (Accounting › Manual journals › Import). Confira se os códigos das contas batem com o seu plano de contas.",
+  "A journal entry for each month of business mileage, ready to import in QuickBooks Online (Settings › Import data › Journal entries). Check the account names match yours.": "Um lançamento contábil para cada mês de quilometragem profissional, pronto para importar no QuickBooks Online (Settings › Import data › Journal entries). Confira se os nomes das contas batem com os seus.",
+  "Your business trips with date, description, distance and vehicle: everything FreeAgent’s mileage form asks for.": "Seus trajetos profissionais com data, descrição, distância e veículo: tudo o que o formulário de quilometragem do FreeAgent pede.",
+  "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.": "Uma linha de reembolso para cada trajeto profissional (data, origem, destino, finalidade, distância, taxa e valor) para o sistema de despesas do seu empregador."
 };
 
 export default dictionary;

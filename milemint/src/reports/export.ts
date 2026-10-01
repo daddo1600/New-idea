@@ -3,7 +3,8 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { Platform } from 'react-native';
 
-import { pageSize, toCsv, toReportHtml, type MileageReport } from '@/domain/report';
+import { exportFile, type ExportFormat } from '@/domain/accounting-export';
+import { pageSize, toReportHtml, type MileageReport } from '@/domain/report';
 
 /**
  * Hands a report to the iOS share sheet (Mail, Files, AirDrop, the
@@ -29,9 +30,9 @@ function download(name: string, text: string, type: string) {
   URL.revokeObjectURL(url);
 }
 
-export async function shareCsv(report: MileageReport): Promise<void> {
-  const name = `MileMint ${report.label.replace('/', '-')} mileage log.csv`;
-  const csv = toCsv(report);
+/** The trip log as a spreadsheet, or laid out for accounting software or an expense claim. */
+export async function shareCsv(report: MileageReport, format: ExportFormat = 'spreadsheet'): Promise<void> {
+  const { name, text: csv } = exportFile(report, format);
   if (Platform.OS === 'web') return download(name, csv, 'text/csv');
   const file = cacheFile(name);
   file.write(csv);

@@ -242,7 +242,6 @@ const dictionary: Dictionary = {
   "Every trip with date, places, kilometres, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.": "Fiecare cursă cu data, locurile, kilometrii, scopul și deducerea. Se deschide în Excel, Numbers sau Google Sheets. Mereu gratuit: sunt datele tale.",
   "Every trip with date, places, miles, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.": "Fiecare cursă cu data, locurile, milele, scopul și deducerea. Se deschide în Excel, Numbers sau Google Sheets. Mereu gratuit: sunt datele tale.",
   "Every year": "În fiecare an",
-  "Export CSV": "Exportă CSV",
   "Export report": "Exportă raportul",
   "Export your {{year}} mileage report from MileMint and you’re one step closer.": "Exportă din MileMint raportul de kilometraj pentru {{year}} și ești cu un pas mai aproape.",
   "Fall miles add up 🍂": "Milele de toamnă se adună 🍂",
@@ -336,7 +335,6 @@ const dictionary: Dictionary = {
   "Mark {{from}} to {{to}} as personal": "Marchează {{from}} – {{to}} ca personală",
   "Measuring the route…": "Se măsoară traseul…",
   "Menu": "Meniu",
-  "Mileage log (CSV)": "Jurnal de kilometraj (CSV)",
   "Mileage log export (CSV)": "Export jurnal de kilometraj (CSV)",
   "MileMint couldn’t open this screen. Your trips are safe. Please send a screenshot of this page to {{email}} so we can fix it.": "MileMint nu a putut deschide acest ecran. Cursele tale sunt în siguranță. Te rugăm să trimiți o captură de ecran a acestei pagini la {{email}}, ca să rezolvăm problema.",
   "MileMint has now found {{amount}} in business mileage for you. Hard work, properly rewarded.": "MileMint a găsit până acum {{amount}} din milele tale de lucru. Muncă grea, răsplătită cum trebuie.",
@@ -663,6 +661,15 @@ const dictionary: Dictionary = {
   "Your own purpose": "Scopul tău",
   "Your trips are stored encrypted on your phone, not on our servers.": "Cursele tale sunt stocate criptat pe telefon, nu pe serverele noastre.",
   "Your vehicles": "Vehiculele tale",
+  "Export your mileage": "Exportă-ți kilometrajul",
+  "Where is it going?": "Unde îl trimiți?",
+  "Spreadsheet": "Foaie de calcul",
+  "Expense claim": "Decont",
+  "Export": "Exportă",
+  "A manual journal for each month of business mileage, ready to import in Xero (Accounting › Manual journals › Import). Check the account codes match your chart of accounts.": "O notă contabilă manuală pentru fiecare lună de curse de lucru, gata de importat în Xero (Accounting › Manual journals › Import). Verifică dacă simbolurile conturilor se potrivesc cu planul tău de conturi.",
+  "A journal entry for each month of business mileage, ready to import in QuickBooks Online (Settings › Import data › Journal entries). Check the account names match yours.": "O notă contabilă pentru fiecare lună de curse de lucru, gata de importat în QuickBooks Online (Settings › Import data › Journal entries). Verifică dacă denumirile conturilor se potrivesc cu ale tale.",
+  "Your business trips with date, description, distance and vehicle: everything FreeAgent’s mileage form asks for.": "Cursele tale de lucru cu dată, descriere, distanță și vehicul: tot ce cere formularul de kilometraj din FreeAgent.",
+  "A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.": "Câte o linie de decont pentru fiecare cursă de lucru (dată, de la, până la, scop, distanță, tarif și sumă) pentru sistemul de deconturi al angajatorului tău."
 };
 
 export default dictionary;

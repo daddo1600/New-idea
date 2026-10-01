@@ -242,7 +242,6 @@ const dictionary: Dictionary = {
   'Every trip with date, places, kilometres, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.': '每次行程的日期、地点、公里数、事由和抵扣额。可用 Excel、Numbers 或 Google 表格打开。永久免费：这是你自己的数据。',
   'Every trip with date, places, miles, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.': '每次行程的日期、地点、英里数、事由和抵扣额。可用 Excel、Numbers 或 Google 表格打开。永久免费：这是你自己的数据。',
   'Every year': '每年',
-  'Export CSV': '导出 CSV',
   'Export report': '导出报告',
   'Export your {{year}} mileage report from MileMint and you’re one step closer.': '从 MileMint 导出你的 {{year}} 里程报告，离完成又近了一步。',
   'Fall miles add up 🍂': '秋天的里程，积少成多 🍂',
@@ -336,7 +335,6 @@ const dictionary: Dictionary = {
   'Mark {{from}} to {{to}} as personal': '将 {{from}} 到 {{to}} 标为私人',
   'Measuring the route…': '正在测量路线…',
   'Menu': '菜单',
-  'Mileage log (CSV)': '里程记录（CSV）',
   'Mileage log export (CSV)': '导出里程记录（CSV）',
   'MileMint couldn’t open this screen. Your trips are safe. Please send a screenshot of this page to {{email}} so we can fix it.': 'MileMint 无法打开此页面。你的行程完好无损。请将此页面截图发送至 {{email}}，以便我们修复。',
   'MileMint has now found {{amount}} in business mileage for you. Hard work, properly rewarded.': 'MileMint 已为你找到价值 {{amount}} 的工作里程。辛苦付出，理应有回报。',
@@ -663,6 +661,15 @@ const dictionary: Dictionary = {
   'Your own purpose': '自定义事由',
   'Your trips are stored encrypted on your phone, not on our servers.': '你的行程加密保存在手机上，不在我们的服务器上。',
   'Your vehicles': '你的车辆',
+  'Export your mileage': '导出里程',
+  'Where is it going?': '要导出到哪里？',
+  'Spreadsheet': '电子表格',
+  'Expense claim': '费用报销',
+  'Export': '导出',
+  'A manual journal for each month of business mileage, ready to import in Xero (Accounting › Manual journals › Import). Check the account codes match your chart of accounts.': '每月一张工作里程的手工记账凭证，可直接导入 Xero（Accounting › Manual journals › Import）。请核对科目代码是否与你的会计科目表一致。',
+  'A journal entry for each month of business mileage, ready to import in QuickBooks Online (Settings › Import data › Journal entries). Check the account names match yours.': '每月一笔工作里程的会计分录，可直接导入 QuickBooks Online（Settings › Import data › Journal entries）。请核对科目名称是否与你的一致。',
+  'Your business trips with date, description, distance and vehicle: everything FreeAgent’s mileage form asks for.': '你的工作行程，含日期、说明、距离和车辆：FreeAgent 里程表单要填的都在这里。',
+  'A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.': '每段工作行程一行报销明细（日期、起点、终点、事由、距离、费率和金额），用于提交到雇主的报销系统。'
 };
 
 export default dictionary;

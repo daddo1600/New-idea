@@ -180,9 +180,10 @@ function ratesText(parts: readonly DeductionPart[], region: Region): string {
  * One CSV cell. Quotes when needed, and defuses text a spreadsheet would run
  * as a formula (a place named "=HYPERLINK(…)" stays text).
  */
-function csvCell(value: string | number): string {
+export function csvCell(value: string | number): string {
   let text = String(value);
-  if (typeof value === 'string' && /^[=+\-@\t\r]/.test(text)) text = `'${text}`;
+  // A plain number ("-16.50") can't run as a formula, so it stays a number.
+  if (typeof value === 'string' && /^[=+\-@\t\r]/.test(text) && !/^-?\d+(\.\d+)?$/.test(text)) text = `'${text}`;
   return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 }
 

@@ -242,7 +242,6 @@ const dictionary: Dictionary = {
   'Every trip with date, places, kilometres, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.': 'हर ट्रिप, तारीख, जगहों, किलोमीटर, मकसद और टैक्स कटौती के साथ। फ़ाइल Excel, Numbers या Google Sheets में खुलती है। हमेशा फ़्री: यह आपका डेटा है।',
   'Every trip with date, places, miles, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.': 'हर ट्रिप, तारीख, जगहों, मील, मकसद और टैक्स कटौती के साथ। फ़ाइल Excel, Numbers या Google Sheets में खुलती है। हमेशा फ़्री: यह आपका डेटा है।',
   'Every year': 'हर साल',
-  'Export CSV': 'CSV एक्सपोर्ट करें',
   'Export report': 'रिपोर्ट एक्सपोर्ट करें',
   'Export your {{year}} mileage report from MileMint and you’re one step closer.': 'MileMint से अपनी {{year}} की माइलेज रिपोर्ट एक्सपोर्ट करें, और काम एक कदम और आगे बढ़ जाएगा।',
   'Fall miles add up 🍂': 'पतझड़ में भी ट्रिप जुड़ती जाती हैं 🍂',
@@ -336,7 +335,6 @@ const dictionary: Dictionary = {
   'Mark {{from}} to {{to}} as personal': '{{from}} से {{to}} को पर्सनल मार्क करें',
   'Measuring the route…': 'रास्ता मापा जा रहा है…',
   'Menu': 'मेन्यू',
-  'Mileage log (CSV)': 'माइलेज लॉग (CSV)',
   'Mileage log export (CSV)': 'माइलेज लॉग एक्सपोर्ट (CSV)',
   'MileMint couldn’t open this screen. Your trips are safe. Please send a screenshot of this page to {{email}} so we can fix it.': 'MileMint यह स्क्रीन नहीं खोल पाया। आपकी ट्रिप सुरक्षित हैं। कृपया इस पेज का स्क्रीनशॉट {{email}} पर भेजें, ताकि हम इसे ठीक कर सकें।',
   'MileMint has now found {{amount}} in business mileage for you. Hard work, properly rewarded.': 'MileMint अब तक आपके लिए {{amount}} का बिज़नेस माइलेज ढूँढ चुका है। मेहनत का सही इनाम।',
@@ -663,6 +661,15 @@ const dictionary: Dictionary = {
   'Your own purpose': 'आपका अपना मकसद',
   'Your trips are stored encrypted on your phone, not on our servers.': 'आपकी ट्रिप आपके फ़ोन पर एन्क्रिप्टेड रहती हैं, हमारे सर्वर पर नहीं।',
   'Your vehicles': 'आपकी गाड़ियाँ',
+  'Export your mileage': 'अपना माइलेज एक्सपोर्ट करें',
+  'Where is it going?': 'इसे कहाँ भेजना है?',
+  'Spreadsheet': 'स्प्रेडशीट',
+  'Expense claim': 'खर्च क्लेम',
+  'Export': 'एक्सपोर्ट करें',
+  'A manual journal for each month of business mileage, ready to import in Xero (Accounting › Manual journals › Import). Check the account codes match your chart of accounts.': 'बिज़नेस माइलेज के हर महीने के लिए एक मैनुअल जर्नल, Xero में इंपोर्ट करने के लिए तैयार (Accounting › Manual journals › Import)। जाँच लें कि अकाउंट कोड आपके चार्ट ऑफ़ अकाउंट्स (खातों की सूची) से मेल खाते हैं।',
+  'A journal entry for each month of business mileage, ready to import in QuickBooks Online (Settings › Import data › Journal entries). Check the account names match yours.': 'बिज़नेस माइलेज के हर महीने के लिए एक जर्नल एंट्री, QuickBooks Online में इंपोर्ट करने के लिए तैयार (Settings › Import data › Journal entries)। जाँच लें कि अकाउंट के नाम आपके अकाउंट के नामों से मेल खाते हैं।',
+  'Your business trips with date, description, distance and vehicle: everything FreeAgent’s mileage form asks for.': 'तारीख, विवरण, दूरी और गाड़ी के साथ आपकी बिज़नेस ट्रिप: FreeAgent के माइलेज फ़ॉर्म में जो कुछ माँगा जाता है, सब।',
+  'A claim line for every business trip (date, from, to, purpose, distance, rate and amount) for your employer’s expense system.': 'हर बिज़नेस ट्रिप के लिए एक क्लेम लाइन (तारीख, कहाँ से, कहाँ तक, मकसद, दूरी, रेट और रकम), आपके एम्प्लॉयर के खर्च सिस्टम के लिए।'
 };
 
 export default dictionary;
