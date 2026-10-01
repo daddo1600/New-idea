@@ -1068,6 +1068,7 @@ const dictionary: Dictionary = {
   "Drives can’t be measured from a rough position. Tap to fix it.": "仅凭大致位置无法测量行程。轻点即可修复。",
   "New drives aren’t being logged. Tap to turn tracking back on.": "新行程没有被记录。轻点即可重新开启追踪。",
   "No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up.": "行程途中，自 {{time}} 起没有位置信息。打开 MileMint 即可继续追踪。",
+  "Where your shift started": "开工地点",
 };
 
 export default dictionary;

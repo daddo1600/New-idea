@@ -88,10 +88,11 @@ describe('the shift is the row', () => {
     expect(offShiftKind(morning, [shift])).toBeNull();
   });
 
-  it('free plan: the shift is one drive; the drive home cut off it is a drive of its own', () => {
+  it('free plan: the shift is one drive, and the drive home cut off it goes with it', () => {
     const many = Array.from({ length: 40 }, (_, i) => trip(at(2, 8, i)));
-    const locked = lockedTripIds([...many, ...legs, home], false, 41);
-    // 40 drives + the shift = 41: the drive home is the 42nd, so it's the one locked.
-    expect([...locked]).toEqual([home.id]);
+    // 40 drives + the shift day = 41: the drive home cut off the shift is the same drive, not a 42nd.
+    expect([...lockedTripIds([...many, ...legs, home], false, 41)]).toEqual([]);
+    // With one slot fewer, the shift day (its legs and the drive home together) waits for Pro.
+    expect([...lockedTripIds([...many, ...legs, home], false, 40)].sort()).toEqual([...legs, home].map((t) => t.id).sort());
   });
 });

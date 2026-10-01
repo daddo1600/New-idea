@@ -254,3 +254,19 @@ describe('personal drives', () => {
     expect([...lockedTripIds(odd, false)]).toEqual([`d${FREE}`]);
   });
 });
+
+describe('a drive cut at the end of a shift', () => {
+  it('takes one free slot, not two', () => {
+    const base = Date.UTC(2026, 9, 20, 9, 0);
+    const part = (id: string, start: number, extra: object) => ({
+      id,
+      startedAt: new Date(base + start * 60_000).toISOString(),
+      localDate: '2026-10-20',
+      source: 'auto' as const,
+      classification: 'unclassified' as const,
+      ...extra,
+    });
+    const trips = [part('a', 0, { shiftId: 'S', classification: 'business' }), part('b', 20, { offShiftId: 'S' })];
+    expect(autoDrivesInMonth(trips, '2026-10')).toBe(1);
+  });
+});

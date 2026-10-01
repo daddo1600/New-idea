@@ -124,8 +124,8 @@ export default function HomeScreen() {
   const visible = useMemo(() => (trips ?? []).filter((trip) => !locked.has(trip.id)), [trips, locked]);
   const deductions = useMemo(() => computeDeductions(visible, region), [visible, region]);
   const shiftTrips = useMemo(
-    () => (shiftMode.shift ? visible.filter((trip) => trip.shiftId === shiftMode.shift?.id) : []),
-    [visible, shiftMode.shift],
+    () => (shiftMode.shift ? (trips ?? []).filter((trip) => trip.shiftId === shiftMode.shift?.id) : []),
+    [trips, shiftMode.shift],
   );
   const summary = useMemo(
     () => summarizeTaxYear(visible, region, taxYear, deductions),
@@ -192,10 +192,10 @@ export default function HomeScreen() {
   const offer = !shiftMode.enabled
     ? null
     : runningSince === null
-      ? backdateStart(visible, now, { notBefore: lastShiftEnd })
+      ? backdateStart(trips, now, { notBefore: lastShiftEnd })
       : // Started late: offered for the first two hours of the shift.
         now - runningSince < 2 * 3_600_000
-        ? backdateStart(visible, runningSince, { notBefore: lastShiftEnd, minDrives: 1 })
+        ? backdateStart(trips, runningSince, { notBefore: lastShiftEnd, minDrives: 1 })
         : null;
   const showOffer = offer && !dismissed.has(`offer:${offer.from}`) ? offer : null;
   // "End shift?": the shift's last drive ended at Home a while ago and nothing's moved since.

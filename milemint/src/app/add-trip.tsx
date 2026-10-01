@@ -163,7 +163,18 @@ export default function AddTripScreen() {
           ),
         );
 
+  /** One save at a time: the checks before `saving` is set await (area lookup), so a double tap could save twice. */
+  const busy = useRef(false);
   const save = async () => {
+    if (busy.current) return;
+    busy.current = true;
+    try {
+      await saveTrip();
+    } finally {
+      busy.current = false;
+    }
+  };
+  const saveTrip = async () => {
     const parsed = parseMiles(distance);
     const meters = parsed === null ? null : fromUnits(parsed, region);
     if (!from.text.trim() || !to.text.trim()) return setError(t('Choose where you drove from and to.'));

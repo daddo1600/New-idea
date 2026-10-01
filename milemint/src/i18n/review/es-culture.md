@@ -240,3 +240,10 @@ Tracking health: the home card that says when tracking stopped (and offers to ad
 | No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up. | Sin ubicación desde {{time}}, a mitad de un viaje. Abre MileMint para retomarlo. | “No location since {{time}}, midway through a trip. Open MileMint to pick it back up.” Notification. |
 
 **Sign-off:** approved, pending an on-device check that the iOS toggle reads *Ubicación exacta* on es-419.
+
+
+## Round 8: pre-release fixes
+
+| English | es | Back-translation | Note |
+|---|---|---|---|
+| Where your shift started | Donde empezó tu turno | Where your shift started | Mirrors the existing "Where your shift ended" line, same length and register. |

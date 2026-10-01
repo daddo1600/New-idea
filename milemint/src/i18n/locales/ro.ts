@@ -1192,6 +1192,7 @@ const dictionary: Dictionary = {
   "Drives can’t be measured from a rough position. Tap to fix it.": "Cu o poziție aproximativă, cursele nu pot fi măsurate. Atinge ca să rezolvi.",
   "New drives aren’t being logged. Tap to turn tracking back on.": "Cursele noi nu se înregistrează. Atinge ca să repornești înregistrarea.",
   "No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up.": "Nicio localizare de la {{time}}, în mijlocul unei curse. Deschide MileMint ca să reia înregistrarea.",
+  "Where your shift started": "Unde a început tura",
 };
 
 export default dictionary;

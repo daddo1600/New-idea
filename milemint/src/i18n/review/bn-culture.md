@@ -239,3 +239,10 @@ Tracking health: home card, Settings “ট্র্যাকিং যাচা
 | No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up. | ট্রিপের মাঝখানে {{time}} থেকে কোনো লোকেশন পাওয়া যায়নি। আবার ট্র্যাকিং শুরু করতে MileMint খুলুন। | “In the middle of the trip, no location found since {{time}}. Open MileMint to start tracking again.” |
 
 **Sign-off:** approved, pending an on-device check of *সুনির্দিষ্ট লোকেশন*.
+
+
+## Round 8: pre-release fixes
+
+| English | bn | Back-translation | Note |
+|---|---|---|---|
+| Where your shift started | যেখানে শিফট শুরু হয়েছে | Where the shift started | Mirrors the existing "Where your shift ended" line, same length and register. |

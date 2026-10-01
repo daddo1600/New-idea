@@ -227,3 +227,10 @@ Tracking health: home card, Settings “État du suivi” row and background not
 | No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up. | Aucune position depuis {{time}}, en plein trajet. Ouvrez MileMint pour reprendre le suivi. | “No position since {{time}}, mid-trip. Open MileMint to resume tracking.” |
 
 **Sign-off:** approved.
+
+
+## Round 8: pre-release fixes
+
+| English | fr | Back-translation | Note |
+|---|---|---|---|
+| Where your shift started | Lieu de début du quart | Place where the shift started | Mirrors the existing "Where your shift ended" line, same length and register. |

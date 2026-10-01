@@ -248,3 +248,10 @@ Tracking health: home card, Settings “Starea înregistrării” row and backgr
 | No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up. | Nicio localizare de la {{time}}, în mijlocul unei curse. Deschide MileMint ca să reia înregistrarea. | “No location since {{time}}, in the middle of a trip. Open MileMint so it resumes recording.” |
 
 **Sign-off:** approved, pending an on-device check of *Localizare precisă*.
+
+
+## Round 8: pre-release fixes
+
+| English | ro | Back-translation | Note |
+|---|---|---|---|
+| Where your shift started | Unde a început tura | Where the shift started | Mirrors the existing "Where your shift ended" line, same length and register. |

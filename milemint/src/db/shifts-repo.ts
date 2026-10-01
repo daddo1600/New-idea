@@ -1,7 +1,7 @@
 import * as Crypto from 'expo-crypto';
 import type { SQLiteDatabase } from 'expo-sqlite';
 
-import { legsOf, SHIFT_END_LABEL, workSpans, type ShiftPause } from '@/domain/shift-split';
+import { legsOf, SHIFT_END_LABEL, SHIFT_START_LABEL, workSpans, type ShiftPause } from '@/domain/shift-split';
 
 import { inWriteTransaction } from './transaction';
 import { setTripShiftUnlocked, splitTripUnlocked } from './trips-repo';
@@ -270,7 +270,8 @@ export async function editShiftTimes(
       start = Math.min(start, end - minute);
       end = Math.min(Math.max(end, start + minute), start + MAX_SHIFT_MS);
     } else {
-      start = Math.min(start, now.getTime());
+      // An open shift can't be moved back past 16 hours: it would end itself, in the past, unannounced.
+      start = Math.min(Math.max(start, now.getTime() - MAX_SHIFT_MS + minute), now.getTime());
     }
     const saved: Shift = {
       id,
@@ -306,9 +307,21 @@ async function rederiveUnlocked(db: SQLiteDatabase, shift: Shift, now: Date): Pr
   const pauses = await listPauses(db, shift.id);
   const spans = workSpans(shift, pauses, end);
   const working = (at: number) => spans.some((span) => at >= span.start && at < span.end);
+  // A drive running across the start (it was moved into it) is cut there: the part after is work.
+  const across = await db.getAllAsync<{ id: string }>(
+    `SELECT id FROM trips
+     WHERE source = 'auto' AND off_shift_id IS NULL AND (shift_id IS NULL OR shift_id = ?)
+       AND started_at < ? AND ended_at > ?;`,
+    shift.id,
+    shift.startedAt,
+    shift.startedAt,
+  );
+  for (const row of across) {
+    await splitTripUnlocked(db, row.id, new Date(start), SHIFT_START_LABEL, { shiftId: shift.id });
+  }
   const rows = await db.getAllAsync<{ id: string; started_at: string; shift_id: string | null }>(
     `SELECT id, started_at, shift_id FROM trips
-     WHERE source = 'auto' AND (shift_id = ? OR off_shift_id = ? OR (shift_id IS NULL AND started_at >= ? AND started_at < ?));`,
+     WHERE source = 'auto' AND (shift_id = ? OR off_shift_id = ? OR (shift_id IS NULL AND off_shift_id IS NULL AND started_at >= ? AND started_at < ?));`,
     shift.id,
     shift.id,
     shift.startedAt,

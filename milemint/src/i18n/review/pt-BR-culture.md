@@ -260,3 +260,10 @@ Tracking health: home card, Settings “Status do rastreamento” row and backgr
 | No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up. | Sem localização desde {{time}}, no meio de um trajeto. Abra o MileMint para retomar o rastreamento. | “No location since {{time}}, in the middle of a trip. Open MileMint to resume tracking.” |
 
 **Sign-off:** approved.
+
+
+## Round 8: pre-release fixes
+
+| English | pt-BR | Back-translation | Note |
+|---|---|---|---|
+| Where your shift started | Onde seu turno começou | Where your shift started | Mirrors the existing "Where your shift ended" line, same length and register. |

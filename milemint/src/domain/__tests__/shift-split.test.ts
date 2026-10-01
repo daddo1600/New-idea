@@ -258,3 +258,22 @@ describe('"Start shift from 10:40?"', () => {
     expect(backdateStart(trips, now, { notBefore: min(-60) })).toBeNull();
   });
 });
+
+describe('“Start shift from…?” after a shift ended', () => {
+  it('never offers the last shift’s drive home', () => {
+    const end = Date.UTC(2026, 9, 20, 12, 0);
+    const mk = (id: string, start: number, extra: object = {}) => ({
+      id,
+      startedAt: new Date(end + start * 60_000).toISOString(),
+      endedAt: new Date(end + (start + 20) * 60_000).toISOString(),
+      classification: 'unclassified',
+      source: 'auto',
+      shiftId: null,
+      ...extra,
+    });
+    const offer = backdateStart([mk('home', 0, { offShiftId: 'A' }), mk('n1', 50), mk('n2', 80)], end + 105 * 60_000, {
+      notBefore: end,
+    });
+    expect(offer?.tripIds).toEqual(['n2', 'n1']);
+  });
+});

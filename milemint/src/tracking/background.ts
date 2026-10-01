@@ -398,9 +398,13 @@ export async function reconcileTracking(db: SQLiteDatabase): Promise<void> {
       // last fix can be far behind. The detector decides whether the drive
       // carried on or ended back there, and tracking restarts from here
       // rather than from a stale point that would look like a jump.
-      const here = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High })
-        .then(toSample)
-        .catch(() => null);
+      // Capped, so drive points queued behind this (indoors, no GPS yet) aren't held up long.
+      const here = await Promise.race([
+        Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High })
+          .then(toSample)
+          .catch(() => null),
+        new Promise<null>((resolve) => setTimeout(() => resolve(null), 8000)),
+      ]);
       const decision = onReconcile(record, here, Date.now());
       for (const trip of decision.completed) await saveDetectedTrip(db, trip);
       await saveTrackerRecord(db, decision.record);

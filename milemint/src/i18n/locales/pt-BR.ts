@@ -1187,6 +1187,7 @@ const dictionary: Dictionary = {
   "Drives can’t be measured from a rough position. Tap to fix it.": "Com uma localização aproximada não dá para medir os trajetos. Toque para corrigir.",
   "New drives aren’t being logged. Tap to turn tracking back on.": "Os novos trajetos não estão sendo registrados. Toque para reativar o rastreamento.",
   "No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up.": "Sem localização desde {{time}}, no meio de um trajeto. Abra o MileMint para retomar o rastreamento.",
+  "Where your shift started": "Onde seu turno começou",
 };
 
 export default dictionary;

@@ -301,3 +301,10 @@ Tracking health: home card, Settings “ਟ੍ਰੈਕਿੰਗ ਦੀ ਜਾ�
 | No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up. | ਟ੍ਰਿਪ ਦੇ ਵਿਚਕਾਰ {{time}} ਤੋਂ ਕੋਈ ਟਿਕਾਣਾ ਨਹੀਂ ਮਿਲਿਆ। ਟ੍ਰੈਕਿੰਗ ਮੁੜ ਸ਼ੁਰੂ ਕਰਨ ਲਈ MileMint ਖੋਲ੍ਹੋ। | “In the middle of the trip, no location since {{time}}. Open MileMint to start tracking again.” |
 
 **Sign-off:** approved, pending an on-device check of the iOS wording.
+
+
+## Round 8: pre-release fixes
+
+| English | pa | Back-translation | Note |
+|---|---|---|---|
+| Where your shift started | ਜਿੱਥੇ ਸ਼ਿਫਟ ਸ਼ੁਰੂ ਹੋਈ | Where the shift started | Mirrors the existing "Where your shift ended" line, same length and register. |

@@ -47,7 +47,7 @@ function monthOf(trip: Pick<Trip, 'localDate'>): string {
  * callers (and tests) without them treat every automatic drive as counting.
  */
 export type Countable = Pick<Trip, 'id' | 'localDate' | 'startedAt' | 'source'> &
-  Partial<Pick<Trip, 'classification' | 'rejoinedAt'>> & { shiftId?: string | null };
+  Partial<Pick<Trip, 'classification' | 'rejoinedAt'>> & { shiftId?: string | null; offShiftId?: string | null };
 
 /** Whether a drive uses the free allowance: automatic and not sorted personal. */
 export function counts(trip: Pick<Countable, 'source' | 'classification'>): boolean {
@@ -57,10 +57,14 @@ export function counts(trip: Pick<Countable, 'source' | 'classification'>): bool
 /**
  * What uses up the allowance: each drive on its own, or a shift's drives on
  * one day together. Per day, so a shift that's never ended can't make every
- * later drive free.
+ * later drive free. The part of a drive cut off a shift's end goes with that
+ * shift, so one drive never takes two slots.
  */
-function allowanceKey(trip: Pick<Countable, 'id' | 'localDate'> & { shiftId?: string | null }): string {
-  return trip.shiftId ? `shift:${trip.shiftId}:${trip.localDate}` : trip.id;
+function allowanceKey(
+  trip: Pick<Countable, 'id' | 'localDate'> & { shiftId?: string | null; offShiftId?: string | null },
+): string {
+  const shift = trip.shiftId ?? trip.offShiftId;
+  return shift ? `shift:${shift}:${trip.localDate}` : trip.id;
 }
 
 /**

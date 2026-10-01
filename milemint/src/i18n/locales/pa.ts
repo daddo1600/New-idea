@@ -1116,6 +1116,7 @@ const dictionary: Dictionary = {
   "Drives can’t be measured from a rough position. Tap to fix it.": "ਅੰਦਾਜ਼ਨ ਟਿਕਾਣੇ ਨਾਲ ਟ੍ਰਿਪ ਮਾਪੇ ਨਹੀਂ ਜਾ ਸਕਦੇ। ਠੀਕ ਕਰਨ ਲਈ ਟੈਪ ਕਰੋ।",
   "New drives aren’t being logged. Tap to turn tracking back on.": "ਨਵੇਂ ਟ੍ਰਿਪ ਦਰਜ ਨਹੀਂ ਹੋ ਰਹੇ। ਟ੍ਰੈਕਿੰਗ ਮੁੜ ਚਾਲੂ ਕਰਨ ਲਈ ਟੈਪ ਕਰੋ।",
   "No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up.": "ਟ੍ਰਿਪ ਦੇ ਵਿਚਕਾਰ {{time}} ਤੋਂ ਕੋਈ ਟਿਕਾਣਾ ਨਹੀਂ ਮਿਲਿਆ। ਟ੍ਰੈਕਿੰਗ ਮੁੜ ਸ਼ੁਰੂ ਕਰਨ ਲਈ MileMint ਖੋਲ੍ਹੋ।",
+  "Where your shift started": "ਜਿੱਥੇ ਸ਼ਿਫਟ ਸ਼ੁਰੂ ਹੋਈ",
 };
 
 export default dictionary;

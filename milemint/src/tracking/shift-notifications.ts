@@ -53,7 +53,8 @@ export async function cancelEndShiftPrompt(): Promise<void> {
 
 /** A shift started (or its start moved): tell the user when it ends by itself at 16 hours. */
 export async function scheduleShiftAutoEnd(shift: Shift, now = Date.now()): Promise<void> {
-  await cancelShiftAutoEnd();
+  // Only the 16-hour one: a pending "End your shift?" still stands when the start moves.
+  if (SUPPORTED) await Notifications.cancelScheduledNotificationAsync(AUTO_END_ID).catch(() => {});
   const at = Date.parse(shift.startedAt) + MAX_SHIFT_MS;
   if (shift.endedAt || at <= now || !(await allowed())) return;
   await Notifications.scheduleNotificationAsync({

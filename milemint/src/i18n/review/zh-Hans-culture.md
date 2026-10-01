@@ -227,3 +227,10 @@ Tracking health: home card, Settings “追踪检查” row and background notif
 | No location since {{time}}, in the middle of a drive. Open MileMint to pick it back up. | 行程途中，自 {{time}} 起没有位置信息。打开 MileMint 即可继续追踪。 | “During the trip, no location information since {{time}}. Open MileMint to continue tracking.” |
 
 **Sign-off:** approved.
+
+
+## Round 8: pre-release fixes
+
+| English | zh-Hans | Back-translation | Note |
+|---|---|---|---|
+| Where your shift started | 开工地点 | Place where work started | Mirrors the existing "Where your shift ended" line, same length and register. |

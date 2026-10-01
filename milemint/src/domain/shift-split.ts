@@ -17,6 +17,8 @@ import type { DetectedTrip } from './trip-detector';
  * shouldn't) look the spot up; shown translated (domain/privacy shownLabel).
  */
 export const SHIFT_END_LABEL = msg('Where your shift ended');
+/** Where a drive was cut because the shift's start was moved into it. */
+export const SHIFT_START_LABEL = msg('Where your shift started');
 
 /** A break in a shift (a personal errand): drives in it aren't work. */
 export type ShiftPause = { id: string; shiftId: string; startedAt: string; endedAt: string | null };
@@ -163,6 +165,8 @@ type Drive = {
   classification: string;
   source: string;
   shiftId: string | null;
+  /** Set on the part of a drive cut off a shift's end: that drive home is never offered back to work. */
+  offShiftId?: string | null;
 };
 
 /**
@@ -184,7 +188,8 @@ export function backdateStart(
         trip.source === 'auto' &&
         trip.shiftId === null &&
         trip.classification === 'unclassified' &&
-        Date.parse(trip.startedAt) >= notBefore &&
+        !trip.offShiftId &&
+        Date.parse(trip.startedAt) > notBefore &&
         Date.parse(trip.startedAt) < before,
     )
     .sort((a, b) => b.startedAt.localeCompare(a.startedAt));

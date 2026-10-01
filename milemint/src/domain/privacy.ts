@@ -1,5 +1,5 @@
 import type { RegionCode } from './regions';
-import { SHIFT_END_LABEL } from './shift-split';
+import { SHIFT_END_LABEL, SHIFT_START_LABEL } from './shift-split';
 
 /**
  * Client privacy mode, for care workers, community nurses, home-health aides,
@@ -249,6 +249,7 @@ export function redactLabel(label: string, placeNames: ReadonlySet<string>, regi
 export function shownLabel(label: string, translate: (key: string) => string): string {
   // Where a drive was cut at the end of a shift, when the spot wasn't looked up.
   if (label === SHIFT_END_LABEL) return translate(SHIFT_END_LABEL);
+  if (label === SHIFT_START_LABEL) return translate(SHIFT_START_LABEL);
   if (label === CLIENT_VISIT || label.startsWith(`${CLIENT_VISIT} · `)) {
     return translate(CLIENT_VISIT) + label.slice(CLIENT_VISIT.length);
   }
