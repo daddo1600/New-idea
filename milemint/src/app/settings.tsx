@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -155,7 +156,8 @@ export default function SettingsScreen() {
 
         {REMINDERS_SUPPORTED && <ReminderSection />}
 
-        <BackupSection />
+        {/* Hidden on iPhone until iCloud is enabled for the app; the web preview explains it. */}
+        {(ICloudBackup.supported || Platform.OS === 'web') && <BackupSection />}
 
         <ThemedText type="smallBold">{t('Work hours')}</ThemedText>
         <ThemedView type="backgroundElement" style={styles.card}>

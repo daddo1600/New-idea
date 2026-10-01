@@ -12,11 +12,6 @@
       "supportsTablet": false,
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
-      },
-      "entitlements": {
-        "com.apple.developer.icloud-container-identifiers": ["iCloud.com.milemint.app"],
-        "com.apple.developer.icloud-services": ["CloudDocuments"],
-        "com.apple.developer.ubiquity-container-identifiers": ["iCloud.com.milemint.app"]
       }
     },
     "android": {
@@ -78,6 +73,7 @@
     },
     "owner": "get-mile-mint",
     "extra": {
+      "icloudBackup": false,
       "eas": {
         "projectId": "f7b2a4a4-a643-4b9a-a09f-101f566e0414"
       }

@@ -1,4 +1,5 @@
 import { requireOptionalNativeModule } from 'expo';
+import Constants from 'expo-constants';
 
 /** A backup file in iCloud. `modified` is milliseconds since 1970 (0 when iCloud hasn't said). */
 export type BackupFile = { name: string; modified: number; size: number };
@@ -31,8 +32,11 @@ function missing(): Promise<never> {
  * need no platform checks.
  */
 export const ICloudBackup = {
-  /** This build can back up to iCloud at all (an iPhone build with the module). */
-  supported: native !== null,
+  /**
+   * This build can back up to iCloud at all: an iPhone build with the module,
+   * signed with the iCloud entitlements (`extra.icloudBackup` in app.json).
+   */
+  supported: native !== null && Constants.expoConfig?.extra?.icloudBackup === true,
   isAvailable: (): Promise<boolean> => (native ? native.isAvailable().catch(() => false) : Promise.resolve(false)),
   keyInfo: (): Promise<BackupKeyInfo> =>
     native ? native.keyInfo() : Promise.resolve({ exists: false, synchronizable: false }),
