@@ -873,16 +873,12 @@ const dictionary: Dictionary = {
   "{{hint}}. Swipe the button to the left, or double-tap.": "{{hint}}. Glisează butonul spre stânga sau atinge de două ori.",
   "Invite friends": "Invită prieteni",
   "More free drives for every friend": "Mai multe curse gratuite pentru fiecare prieten",
-  "When a friend joins MileMint with your code, you both get 10 extra free automatic drives a month. For every friend, with no limit.": "Când un prieten se alătură MileMint cu codul tău, primiți amândoi 10 curse automate gratuite în plus pe lună. Pentru fiecare prieten, fără limită.",
-  "Your code": "Codul tău",
-  "Share my code": "Distribuie codul meu",
   "Friends joined: {{count}} · +{{drives}} free drives a month": {
     "one": "Prieteni care s-au alăturat: {{count}} · Curse gratuite în plus pe lună: +{{drives}}",
     "few": "Prieteni care s-au alăturat: {{count}} · Curse gratuite în plus pe lună: +{{drives}}",
     "other": "Prieteni care s-au alăturat: {{count}} · Curse gratuite în plus pe lună: +{{drives}}"
   },
   "Friends count once they’ve logged a few drives.": "Prietenii contează după ce au înregistrat câteva curse.",
-  "Your friends get their extra drives as soon as they enter your code. Yours are added when MileMint can count the friends who joined, coming in an update.": "Prietenii tăi primesc cursele în plus imediat ce introduc codul tău. Ale tale se adaugă când MileMint va putea număra prietenii care s-au alăturat, într-o actualizare viitoare.",
   "You have Pro, so your drives are already unlimited. Your friends still get their extra drives.": "Ai Pro, deci cursele tale sunt deja nelimitate. Prietenii tăi primesc oricum cursele în plus.",
   "Your free plan: {{count}} automatic drives a month.": {
     "one": "Planul tău gratuit: {{count}} cursă automată pe lună.",
@@ -897,7 +893,6 @@ const dictionary: Dictionary = {
   "How it works": "Cum funcționează",
   "Share it · friends get +10 drives": "Distribuie · +10 curse pentru prieteni",
   "That doesn’t look like a MileMint code. It’s 4 letters, a dash and 3 more, like TRVB-7K2.": "Nu pare un cod MileMint. Are 4 litere, o cratimă și încă 3 caractere, de exemplu TRVB-7K2.",
-  "That’s your own code. Share it with friends instead.": "Acesta e chiar codul tău. Mai bine trimite-l prietenilor.",
   "A friend’s code has already been used on this iPhone.": "Pe acest iPhone s-a folosit deja codul unui prieten.",
   "A friend’s code can only be entered in the first 30 days after installing MileMint.": "Codul unui prieten poate fi introdus doar în primele 30 de zile după instalarea MileMint.",
   "Code {{code}} added": "Codul {{code}} a fost adăugat",
@@ -906,7 +901,25 @@ const dictionary: Dictionary = {
   "Enter it for 10 extra free drives every month.": "Introdu-l și primești 10 curse gratuite în plus în fiecare lună.",
   "Friend’s code": "Codul prietenului",
   "Redeem": "Aplică",
-  "Enter my code {{code}} when you set up MileMint for 10 extra free drives a month.": "Folosește codul meu {{code}} când configurezi MileMint și primești 10 curse gratuite în plus pe lună.",
+  "Send a friend an invite. When they join MileMint with it, you both get 10 extra free automatic drives a month. For every friend, with no limit.": "Trimite-i unui prieten o invitație. Când se alătură MileMint cu ea, primiți amândoi 10 curse automate gratuite în plus pe lună. Pentru fiecare prieten, fără limită.",
+  "Send an invite": "Trimite invitație",
+  "Every invite has its own code, for one friend.": "Fiecare invitație are codul ei, pentru un singur prieten.",
+  "Invites sent: {{count}}": {
+    "one": "Invitații trimise: {{count}}",
+    "few": "Invitații trimise: {{count}}",
+    "other": "Invitații trimise: {{count}}",
+  },
+  "Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you.": "Invitațiile se confirmă prin iCloud, care vine într-o actualizare viitoare. Prietenii care se alătură până atunci primesc cursele în plus când e activat, iar tu la fel.",
+  "You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed.": "Ai introdus {{code}}. Cele 10 curse în plus vin imediat ce invitația e confirmată.",
+  "Code {{code}} saved": "Codul {{code}} a fost salvat",
+  "Your 10 extra drives are on their way once the invite is confirmed.": "Cele 10 curse în plus vin imediat ce invitația e confirmată.",
+  "Your invite code is {{code}}. Enter it when you set up MileMint for 10 extra free drives a month.": "Codul tău de invitație este {{code}}. Introdu-l când configurezi MileMint și primești 10 curse gratuite în plus pe lună.",
+  "We couldn’t find that invite. Check the code with your friend.": "Nu am găsit invitația. Verifică codul cu prietenul tău.",
+  "That invite has already been used. Ask your friend to send you a new one.": "Invitația a fost deja folosită. Roagă-ți prietenul să-ți trimită una nouă.",
+  "That’s one of your own invites. Send it to a friend instead.": "Aceasta e una dintre invitațiile tale. Mai bine trimite-o unui prieten.",
+  "This Apple Account has already joined with a friend’s invite.": "Acest cont Apple s-a alăturat deja cu invitația unui prieten.",
+  "🎉 Your friend’s invite is confirmed": "🎉 Invitația prietenului tău e confirmată",
+  "Your friend’s invite couldn’t be used": "Invitația prietenului tău nu a putut fi folosită",
 };
 
 export default dictionary;

@@ -5,6 +5,7 @@ import type { WorkWeek } from '@/domain/classify-rules';
 import type { TaxBand } from '@/domain/mar';
 import { REGIONS, type RegionCode } from '@/domain/regions';
 import type { VehicleType } from '@/domain/trip';
+import { cleanInvites, type ClaimRefusal, type IssuedInvite, type RedeemStatus } from '@/referral/invites';
 
 export type AppSettings = {
   /** Off by default: guessing from the clock is wrong for anyone without set hours. */
@@ -55,15 +56,19 @@ export type AppSettings = {
    * area of stops the user hasn't named, and no GPS route. See domain/privacy.
    */
   clientPrivacy: boolean;
-  /** This user's own referral code ("TRVB-7K2"), made once (src/referral/code.ts). */
-  referralCode: string | null;
-  /** A friend's code redeemed on this install: +10 free automatic drives a month. */
+  /** Invites this user has sent, each with its own single-use code (src/referral/invites.ts). */
+  invites: IssuedInvite[];
+  /** A friend's invite code entered on this install. */
   redeemedCode: string | null;
-  /** ISO time the friend's code was redeemed. */
+  /** ISO time the friend's code was entered. */
   redeemedAt: string | null;
-  /** ISO time the friend's redemption was saved to iCloud, crediting the sharer. */
-  referralRecordedAt: string | null;
-  /** Friends who joined with this user's code, as iCloud last counted them (+10 drives each). */
+  /** 'pending' until iCloud confirms the invite; 'granted' (+10 free drives a month) after. */
+  redeemStatus: RedeemStatus | null;
+  /** Why iCloud last turned down a pending code, shown by the code box until another is entered. */
+  redeemRefusal: ClaimRefusal | null;
+  /** ISO time this user's claim was marked qualified in iCloud (3 real drives), crediting the sharer. */
+  qualifiedAt: string | null;
+  /** Friends who joined with this user's invites, as iCloud last counted them (+10 drives each). */
   friendsJoined: number;
   /** ISO time the app was first set up: a friend's code can be entered for 30 days after. */
   installedAt: string | null;
@@ -91,10 +96,12 @@ export const DEFAULT_SETTINGS: AppSettings = {
   taxBand: 'unsure',
   claimedReliefYears: [],
   clientPrivacy: false,
-  referralCode: null,
+  invites: [],
   redeemedCode: null,
   redeemedAt: null,
-  referralRecordedAt: null,
+  redeemStatus: null,
+  redeemRefusal: null,
+  qualifiedAt: null,
   friendsJoined: 0,
   installedAt: null,
 };
@@ -109,6 +116,16 @@ export async function loadSettings(db: SQLiteDatabase): Promise<AppSettings> {
     if (!Number.isFinite(settings.employerRate) || settings.employerRate < 0) settings.employerRate = DEFAULT_SETTINGS.employerRate;
     if (!Array.isArray(settings.claimedReliefYears)) settings.claimedReliefYears = [];
     if (!Number.isFinite(settings.friendsJoined) || settings.friendsJoined < 0) settings.friendsJoined = 0;
+    settings.invites = cleanInvites(settings.invites);
+    // A code entered before invites were checked in iCloud waits, pending, to be confirmed.
+    if (!settings.redeemedCode) settings.redeemStatus = null;
+    else if (settings.redeemStatus !== 'granted') settings.redeemStatus = 'pending';
+    if (!['not-found', 'used', 'own', 'already-claimed'].includes(settings.redeemRefusal as string)) {
+      settings.redeemRefusal = null;
+    }
+    // From before single-use invites: one permanent code, and the old iCloud record time.
+    delete (settings as Partial<Record<'referralCode' | 'referralRecordedAt', unknown>>).referralCode;
+    delete (settings as Partial<Record<'referralCode' | 'referralRecordedAt', unknown>>).referralRecordedAt;
     // A damaged week would silently classify nothing; fall back instead.
     return Array.isArray(settings.workWeek) && settings.workWeek.length === 7
       ? settings

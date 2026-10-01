@@ -24,9 +24,9 @@ Ads stop when the money stops. Growth that comes from people using the app keeps
 
 | Moment in the app | What the user sees | What gets shared |
 |---|---|---|
-| **Milestone reached** (£50, £100, £250… / 100, 500, 1,000 miles) | Confetti, a gold badge, **Share it · friends get +10 drives** | "MileMint has found me £250 in mileage this year 💰" + App Store link + your code |
-| **Missed miles** (couriers) | "+38 miles your delivery app missed, worth about £20" | The comparison + link. Couriers love proving the apps short-change them |
-| **Invite friends** (logo menu, Settings) | Your code, Share my code, friends joined | "Tracks your business mileage automatically… free to start" + link + "Enter my code TRVB-7K2… for 10 extra free drives a month" |
+| **Milestone reached** (£50, £100, £250… / 100, 500, 1,000 miles) | Confetti, a gold badge, **Share it · friends get +10 drives** | "MileMint has found me £250 in mileage this year 💰" + App Store link + a fresh invite code |
+| **Missed miles** (couriers) | "+38 miles your delivery app missed, worth about £20" | The comparison + link + a fresh invite code. Couriers love proving the apps short-change them |
+| **Invite friends** (logo menu, Settings) | Send an invite, invites sent, friends joined | "Tracks your business mileage automatically… free to start" + link + "Your invite code is TRVB-7K2. Enter it when you set up MileMint for 10 extra free drives a month." |
 | **Every app opening** | Their real total counting up | Nothing, but it keeps "this app makes me money" front of mind, so they stay and share later |
 
 **The maths that matters:** if each user brings in **0.3 new users** within their first two months, every 1,000 users you win yourself become ~1,400. Get it to **0.5** and they become ~2,000. Track it every week (section 6). Push it up by making the shareable moments more frequent and the message more brag-worthy, not by nagging.
@@ -41,12 +41,12 @@ Ads stop when the money stops. Growth that comes from people using the app keeps
 
 ## 2. The offer: more free drives for every friend
 
-Simple enough to say in one breath: **"Use my code and we both get 10 more free drives a month. Every friend, no limit."** It's Dropbox's "more space for every friend", in drives.
+Simple enough to say in one breath: **"Use my invite and we both get 10 more free drives a month. Every friend, no limit."** It's Dropbox's "more space for every friend", in drives. Each invite is single-use: every share makes a new code for one friend, and each Apple Account can join with one invite, ever, so deleting the app and starting over earns nothing.
 
 | Who | Gets | When |
 |---|---|---|
-| **Friend** (new user) | **+10 free automatic drives a month** (50 instead of 40) | At once, when they enter the code in the welcome or in Settings (first 30 days) |
-| **You** (the sharer) | **+10 free automatic drives a month per friend** | When the friend has joined and made 3 real automatic drives |
+| **Friend** (new user) | **+10 free automatic drives a month** (50 instead of 40) | When iCloud confirms the invite they entered in the welcome or in Settings (first 30 days). Pending until then |
+| **You** (the sharer) | **+10 free automatic drives a month per friend** | When the friend has claimed your invite and made 3 real automatic drives |
 | Five friends | +50 a month, for good | Uncapped |
 
 Why drives: they cost nothing, can't be cashed in, and every friend makes the free plan visibly bigger, so heavy free users have a reason to share before they pay. Pro stays the answer for unlimited. Full design: [`11-growth-ideas.md`](11-growth-ideas.md) §1.
@@ -54,15 +54,27 @@ Why drives: they cost nothing, can't be cashed in, and every friend makes the fr
 ### How it's built
 
 **Ready now (no server):**
-- Every user has a personal code (e.g. `TRVB-7K2`) on the **Invite friends** screen (logo menu and Settings) with a **Share my code** button.
-- Every share (invite, milestone celebrations) carries the App Store link **and the code**. Celebrations say "Share it · friends get +10 drives" and "You both get +10 free drives a month when a friend joins".
-- New users enter a friend's code on the welcome's last step ("Got a code from a friend?") or in Settings for 30 days; `milemint://invite/CODE` links fill it in.
-- The friend's +10 works immediately. The home counter shows the real allowance ("2 of 50 free drives in October").
+- The **Invite friends** screen (logo menu and Settings) has a **Send an invite** button, "Every invite has its own code, for one friend." and "Invites sent: N".
+- Every share makes a **new single-use code** and carries it with the App Store link: Send an invite, Settings → Share, milestone celebrations ("Share it · friends get +10 drives") and the missed-miles share.
+- New users enter a friend's code on the welcome's last step ("Got a code from a friend?") or in Settings for 30 days. `milemint://invite/CODE` links fill it in.
+- The phone refuses your own invites and allows one code per iPhone. The keychain keeps that, and the 30-day window, through a reinstall.
+- The home counter shows the real allowance ("2 of 50 free drives in October").
 
-**Switches on with CloudKit (sharer's reward):**
-- No server: the friend's app writes an anonymous record for the code to CloudKit's public database, and the sharer's app counts the distinct iCloud accounts that did. Design: `milemint/modules/referral-cloud/README.md`.
-- To switch on: set up the container `iCloud.com.milemint.app` with CloudKit in the Apple Developer portal, deploy the `Referral` schema, add the small Swift module, and turn on `extra.icloudBackup` in `app.json` (shared with iCloud backup). Then "Friends joined: N · +X free drives a month" appears, and friends who joined earlier are credited.
-- Until then, say it honestly: the friend's bonus is instant, the sharer's comes "when a friend joins". For the first few hundred users, thank the best sharers **by hand** too.
+**Switches on with CloudKit (both sides' rewards):**
+- No server. CloudKit's public database holds:
+  - an `Invite` record named by each code, owned by the sharer;
+  - a `claim-<code>` record, so each invite is used once;
+  - a `claimer-<iCloud user id>` record, so each Apple Account claims once, across reinstalls and new phones.
+
+  The friend's app marks its claim qualified after 3 real drives, and the sharer's app counts qualified claims. Design: `milemint/modules/referral-cloud/README.md`.
+- To switch on:
+  - set up the container `iCloud.com.milemint.app` with CloudKit in the Apple Developer portal;
+  - deploy the `Invite`/`Claim`/`Claimer` schema;
+  - add the small Swift module;
+  - turn on `extra.icloudBackup` in `app.json` (shared with iCloud backup).
+
+  Then pending codes are confirmed (+10 for the friend, with a small 🎉) and "Friends joined: N · +X free drives a month" appears.
+- **Until then nobody gets referral drives.** A friend's code is saved as pending ("Your 10 extra drives are on their way once the invite is confirmed."), and the Invite friends screen says invites are confirmed through iCloud, coming in an update. Plan the referral push for **after** the CloudKit build ships. For the first few hundred users, thank the best sharers **by hand** too.
 
 **Also, once the app is live:** create one Apple **offer code** for "1 month Pro free" in App Store Connect and put it in `src/referral/links.ts` (`FRIEND_OFFER_CODE`). Shares then also carry a one-tap "redeem your free month" link for friends who want Pro. (Apple only allows offer codes after the app is on the store.)
 
@@ -101,7 +113,7 @@ Always say **"estimated"** and **"based on HMRC rates"**; never promise a tax sa
 | **Launch week** | Personal WhatsApp messages to everyone you know who drives for work. Founder post on LinkedIn and Facebook. Courier week ([`13-courier-week-1.md`](13-courier-week-1.md)). Create the friend offer code on day one | 150 installs, the first 10 ratings |
 | **November** "Founding 1,000" | Local Facebook groups, trade counters, the first 3 accountant partners, the first 3 courier ambassadors (free Pro for life for an active one who brings in 25 drivers) | 500 installs, a share rate above 10% of users |
 | **December** "What are your miles worth?" | Short videos with real numbers. 5–10 micro-creators paid per video plus per paying user. Apple Search Ads at £5–10 a day | 1,000 installs, Founding 1,000 sold out |
-| **January** "Deadline month" | "31 January: don't leave money on the road". Accountant January push. Referral push: "Give a mate 10 free drives a month, get 10 back". Sharer credit live if CloudKit is switched on | 2,500+ installs, 150 paying |
+| **January** "Deadline month" | "31 January: don't leave money on the road". Accountant January push. Referral push: "Give a mate 10 free drives a month, get 10 back", only once the CloudKit build is out (before it, invites stay pending for both sides) | 2,500+ installs, 150 paying |
 | **February on** | Keep what worked and drop what didn't. Turn to the US tax season ([`09-social-campaigns.md`](09-social-campaigns.md)) and Teams | |
 
 ### Stunts worth trying (cheap, memorable)
@@ -118,7 +130,7 @@ Always say **"estimated"** and **"based on HMRC rates"**; never promise a tax sa
 | Installs | App Store Connect | Up week on week |
 | Day-7 still tracking | App analytics (later) / App Store Connect retention | 40%+ |
 | **Share rate** (users who shared at least once) | Share button taps (add simple counting) | 10%+ |
-| **Referral factor** (new users from shares ÷ active users) | Referral codes redeemed (CloudKit `Referral` records) + "how did you hear?" | 0.3+, aiming for 0.5 |
+| **Referral factor** (new users from shares ÷ active users) | Invites claimed (CloudKit `Claim` records; qualified ones = friends joined) ÷ invites sent, + "how did you hear?" | 0.3+, aiming for 0.5 |
 | Paying users | App Store Connect | 5%+ of installs |
 | Ratings | App Store | 4.7★+ |
 | Cost per paying user | Spend ÷ new paying | Under £18 (3 months of Pro) |
@@ -149,4 +161,4 @@ Always say **"estimated"** and **"based on HMRC rates"**; never promise a tax sa
 3. One-page site with the Founding 1,000 counter.
 4. Record the three videos from the latest TestFlight build.
 5. Book three accountant conversations and plan courier week.
-6. Set up the iCloud container with CloudKit in the Apple Developer portal, add the referral-cloud module and turn on `extra.icloudBackup`, so sharers are credited (+10 drives a month per friend) by January. See `milemint/modules/referral-cloud/README.md`.
+6. Set up the iCloud container with CloudKit in the Apple Developer portal, deploy the `Invite`/`Claim`/`Claimer` schema, add the referral-cloud module and turn on `extra.icloudBackup`, so invites are confirmed (+10 for the friend) and sharers credited (+10 drives a month per friend) by January. Until it ships, no one gets referral drives. See `milemint/modules/referral-cloud/README.md`.

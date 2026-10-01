@@ -1001,16 +1001,12 @@ const dictionary: Dictionary = {
   "{{hint}}. Swipe the button to the left, or double-tap.": "{{hint}}. Desliza el botón hacia la izquierda o toca dos veces.",
   "Invite friends": "Invita a tus amigos",
   "More free drives for every friend": "Más viajes gratis por cada amigo",
-  "When a friend joins MileMint with your code, you both get 10 extra free automatic drives a month. For every friend, with no limit.": "Cuando un amigo se une a MileMint con tu código, los dos reciben 10 viajes automáticos gratis más al mes. Por cada amigo, sin límite.",
-  "Your code": "Tu código",
-  "Share my code": "Compartir mi código",
   "Friends joined: {{count}} · +{{drives}} free drives a month": {
     "one": "Amigos que se unieron: {{count}} · +{{drives}} viajes gratis al mes",
     "many": "Amigos que se unieron: {{count}} · +{{drives}} viajes gratis al mes",
     "other": "Amigos que se unieron: {{count}} · +{{drives}} viajes gratis al mes"
   },
   "Friends count once they’ve logged a few drives.": "Tus amigos cuentan una vez que registren algunos viajes.",
-  "Your friends get their extra drives as soon as they enter your code. Yours are added when MileMint can count the friends who joined, coming in an update.": "Tus amigos reciben sus viajes extra en cuanto ingresan tu código. Los tuyos se sumarán cuando MileMint pueda contar a los amigos que se unieron, en una próxima actualización.",
   "You have Pro, so your drives are already unlimited. Your friends still get their extra drives.": "Tienes Pro, así que tus viajes ya son ilimitados. Tus amigos reciben sus viajes extra de todos modos.",
   "Your free plan: {{count}} automatic drives a month.": {
     "one": "Tu plan gratis: {{count}} viaje automático al mes.",
@@ -1025,7 +1021,6 @@ const dictionary: Dictionary = {
   "How it works": "Cómo funciona",
   "Share it · friends get +10 drives": "Compartir · +10 viajes para tus amigos",
   "That doesn’t look like a MileMint code. It’s 4 letters, a dash and 3 more, like TRVB-7K2.": "Eso no parece un código de MileMint. Son 4 letras, un guion y 3 caracteres más, como TRVB-7K2.",
-  "That’s your own code. Share it with friends instead.": "Ese es tu propio código. Mejor compártelo con tus amigos.",
   "A friend’s code has already been used on this iPhone.": "Ya se usó el código de un amigo en este iPhone.",
   "A friend’s code can only be entered in the first 30 days after installing MileMint.": "El código de un amigo solo se puede ingresar en los primeros 30 días después de instalar MileMint.",
   "Code {{code}} added": "Código {{code}} agregado",
@@ -1034,7 +1029,25 @@ const dictionary: Dictionary = {
   "Enter it for 10 extra free drives every month.": "Ingrésalo para recibir 10 viajes gratis más cada mes.",
   "Friend’s code": "Código de tu amigo",
   "Redeem": "Canjear",
-  "Enter my code {{code}} when you set up MileMint for 10 extra free drives a month.": "Usa mi código {{code}} al configurar MileMint y recibe 10 viajes gratis más al mes.",
+  "Send a friend an invite. When they join MileMint with it, you both get 10 extra free automatic drives a month. For every friend, with no limit.": "Envía una invitación a un amigo. Cuando se una a MileMint con ella, los dos reciben 10 viajes automáticos gratis más al mes. Por cada amigo, sin límite.",
+  "Send an invite": "Enviar invitación",
+  "Every invite has its own code, for one friend.": "Cada invitación tiene su propio código y sirve para un solo amigo.",
+  "Invites sent: {{count}}": {
+    "one": "Invitaciones enviadas: {{count}}",
+    "many": "Invitaciones enviadas: {{count}}",
+    "other": "Invitaciones enviadas: {{count}}",
+  },
+  "Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you.": "Las invitaciones se confirman a través de iCloud, que llegará en una próxima actualización. Los amigos que se unan antes recibirán sus viajes extra cuando se active, y tú también.",
+  "You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed.": "Ingresaste {{code}}. Tus 10 viajes extra llegarán en cuanto se confirme la invitación.",
+  "Code {{code}} saved": "Código {{code}} guardado",
+  "Your 10 extra drives are on their way once the invite is confirmed.": "Tus 10 viajes extra llegarán en cuanto se confirme la invitación.",
+  "Your invite code is {{code}}. Enter it when you set up MileMint for 10 extra free drives a month.": "Tu código de invitación es {{code}}. Ingrésalo al configurar MileMint y recibe 10 viajes gratis más al mes.",
+  "We couldn’t find that invite. Check the code with your friend.": "No encontramos esa invitación. Revisa el código con tu amigo.",
+  "That invite has already been used. Ask your friend to send you a new one.": "Esa invitación ya se usó. Pídele a tu amigo que te envíe una nueva.",
+  "That’s one of your own invites. Send it to a friend instead.": "Esa es una de tus propias invitaciones. Mejor envíasela a un amigo.",
+  "This Apple Account has already joined with a friend’s invite.": "Esta Cuenta de Apple ya se unió con la invitación de un amigo.",
+  "🎉 Your friend’s invite is confirmed": "🎉 Se confirmó la invitación de tu amigo",
+  "Your friend’s invite couldn’t be used": "No se pudo usar la invitación de tu amigo",
 };
 
 export default dictionary;

@@ -1,23 +1,21 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { APP_STORE_URL, setShareCode, withInvite } from '../links';
+import { APP_STORE_URL, inviteText, withInvite } from '../links';
 
 describe('withInvite', () => {
-  it('adds the App Store link, and the referral code once there is one', () => {
-    setShareCode(null);
-    const plain = withInvite('Hi');
+  it('adds the App Store link, and the invite code when there is one', () => {
+    const plain = withInvite('Hi', null);
     expect(plain).toContain(APP_STORE_URL);
     expect(plain).not.toContain('code');
 
-    setShareCode('TRVB-7K2');
-    const coded = withInvite('Hi');
+    const coded = withInvite('Hi', 'TRVB-7K2');
     expect(coded.startsWith('Hi\n')).toBe(true);
     expect(coded).toContain('TRVB-7K2');
     expect(coded).toContain('10 extra free drives a month');
-    setShareCode(null);
   });
 
-  it('can be given a code directly', () => {
-    expect(withInvite('Hi', 'MNPQ-4X9')).toContain('MNPQ-4X9');
+  it('carries the code it is given, so each share has its own', () => {
+    expect(withInvite(inviteText(), 'MNPQ-4X9')).toContain('MNPQ-4X9');
+    expect(withInvite(inviteText(), 'BCDF-234')).not.toContain('MNPQ-4X9');
   });
 });

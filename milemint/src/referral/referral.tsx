@@ -2,74 +2,105 @@ import * as Crypto from 'expo-crypto';
 import * as SecureStore from 'expo-secure-store';
 import { useSQLiteContext, type SQLiteDatabase } from 'expo-sqlite';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { AppState, Platform } from 'react-native';
+import { Alert, AppState, Platform, Share } from 'react-native';
 
 import { loadSettings, saveSettings, type AppSettings } from '@/db/settings-repo';
-import { monthlyAllowance } from '@/domain/plan';
+import { msg, t } from '@/i18n/i18n';
 
 import { DRIVES_BEFORE_RECORDING, ReferralCloud } from './cloud';
+import { canRedeem as canRedeemNow, firstInstall, type RedeemProblem } from './code';
 import {
-  canRedeem as canRedeemNow,
-  checkRedeem,
-  generateReferralCode,
-  isReferralCode,
-  normalizeReferralCode,
-  type RedeemProblem,
-} from './code';
-import { setShareCode } from './links';
+  issueInvite,
+  mergeRedemption,
+  nextFriendsJoined,
+  parseKeptRedemption,
+  publishPending,
+  redeemInvite,
+  referralAllowance,
+  submitPendingClaim,
+  type ClaimRefusal,
+  type ClaimResult,
+  type Redemption,
+  type RedeemStatus,
+} from './invites';
+import { inviteText, withInvite } from './links';
 
 /**
- * Referrals, Dropbox style: every user has a code; a new user who enters a
- * friend's code gets 10 extra free automatic drives a month, and so does the
- * friend, for every friend, with no cap. Everything is kept in settings (so
- * it's in the iCloud backup). The sharer's side is counted in CloudKit (see
- * ./cloud.ts), which is off until the iCloud container is set up; until then
- * friendsJoined stays 0.
+ * Referrals with single-use invites. Every share makes a new code
+ * (./invites.ts), published to iCloud as this user's; a new user who enters
+ * one gets 10 extra free automatic drives a month once iCloud confirms it,
+ * and so does the sharer once that friend has made 3 real drives: for every
+ * friend, with no cap. One invite per Apple Account, ever, so deleting the
+ * app and starting over earns nothing. Everything is kept in settings (so
+ * it's in the iCloud backup). iCloud (./cloud.ts) is off until the container
+ * is set up; until then invites wait to be published and a friend's code
+ * waits, pending, without its bonus.
  */
 
 /**
- * Also kept in the iPhone's keychain, which survives deleting the app: the
- * same code after a reinstall, and a friend's code can't be redeemed twice by
- * reinstalling.
+ * Also kept in the iPhone's keychain, which survives deleting the app: a
+ * friend's code (and whether it was confirmed) can't be entered again by
+ * reinstalling, and nor can the 30 days be restarted.
  */
-const CODE_KEY = 'milemint.referral-code';
 const REDEEMED_KEY = 'milemint.referral-redeemed';
 const INSTALLED_KEY = 'milemint.installed-at';
+/** The permanent personal code from before single-use invites, cleared out. */
+const OLD_CODE_KEY = 'milemint.referral-code';
 const useKeychain = Platform.OS !== 'web';
 /** CloudKit is asked for the sharer's count at most this often. */
 const COUNT_EVERY_MS = 60 * 60 * 1000;
 
+/** Why a pending code was turned down, as a whole sentence. */
+export const REFUSAL_MESSAGES: Record<ClaimRefusal, string> = {
+  'not-found': msg('We couldn’t find that invite. Check the code with your friend.'),
+  used: msg('That invite has already been used. Ask your friend to send you a new one.'),
+  own: msg('That’s one of your own invites. Send it to a friend instead.'),
+  'already-claimed': msg('This Apple Account has already joined with a friend’s invite.'),
+};
+
+export type RedeemResult = { ok: true; status: RedeemStatus } | { ok: false; problem: RedeemProblem };
+
 type Referral = {
   /** Settings have been read. */
   loaded: boolean;
-  /** This user's own code. */
-  code: string | null;
-  /** The friend's code this user joined with. */
+  /** Invites this user has sent. */
+  invitesSent: number;
+  /** The friend's code this user entered (pending or granted). */
   redeemedCode: string | null;
-  /** Friends who joined with this user's code (0 until iCloud counts them). */
+  /** Whether that code has been confirmed in iCloud (only 'granted' earns the +10). */
+  redeemStatus: RedeemStatus | null;
+  /** Why iCloud last turned a pending code down, until another is entered. */
+  redeemRefusal: ClaimRefusal | null;
+  /** Friends who joined with this user's invites (0 until iCloud counts them). */
   friendsJoined: number;
-  /** This build can count friends who joined (CloudKit is switched on). */
+  /** This build can check invites and count friends (CloudKit is switched on). */
   counting: boolean;
   /** Free automatic drives a month, with every referral bonus. */
   allowance: number;
   /** A friend's code can still be entered (none yet, within 30 days of install). */
   canRedeem: boolean;
-  /** Redeems a friend's code: null when it worked, otherwise why not. */
-  redeem: (input: string) => Promise<RedeemProblem | null>;
+  /** Redeems a friend's code: granted, pending, or why not. */
+  redeem: (input: string) => Promise<RedeemResult>;
+  /** Makes a new single-use invite and opens the share sheet with it. `message`: already translated. */
+  shareInvite: (message?: string) => Promise<void>;
+  /** An invite is being made. */
+  sharing: boolean;
   /** Re-reads the settings, after restoring a backup replaced them. */
   reload: () => Promise<void>;
 };
 
 type Saved = Pick<
   AppSettings,
-  'referralCode' | 'redeemedCode' | 'redeemedAt' | 'referralRecordedAt' | 'friendsJoined' | 'installedAt'
+  'invites' | 'redeemedCode' | 'redeemedAt' | 'redeemStatus' | 'redeemRefusal' | 'qualifiedAt' | 'friendsJoined' | 'installedAt'
 >;
 
 const EMPTY: Saved = {
-  referralCode: null,
+  invites: [],
   redeemedCode: null,
   redeemedAt: null,
-  referralRecordedAt: null,
+  redeemStatus: null,
+  redeemRefusal: null,
+  qualifiedAt: null,
   friendsJoined: 0,
   installedAt: null,
 };
@@ -83,46 +114,54 @@ function keychainSet(key: string, value: string): void {
   if (useKeychain) SecureStore.setItemAsync(key, value).catch(() => {});
 }
 
+function keychainDelete(key: string): void {
+  if (useKeychain) SecureStore.deleteItemAsync(key).catch(() => {});
+}
+
+const keepRedemption = (redemption: Redemption) => keychainSet(REDEEMED_KEY, JSON.stringify(redemption));
+
 const pickSaved = (settings: AppSettings): Saved => ({
-  referralCode: settings.referralCode,
+  invites: settings.invites,
   redeemedCode: settings.redeemedCode,
   redeemedAt: settings.redeemedAt,
-  referralRecordedAt: settings.referralRecordedAt,
+  redeemStatus: settings.redeemStatus,
+  redeemRefusal: settings.redeemRefusal,
+  qualifiedAt: settings.qualifiedAt,
   friendsJoined: settings.friendsJoined,
   installedAt: settings.installedAt,
 });
 
-/** Reads the referral settings, making the user's code (and noting the install date) the first time. */
+const redemptionOf = (saved: Saved): Redemption | null =>
+  saved.redeemedCode
+    ? { code: saved.redeemedCode, at: saved.redeemedAt ?? new Date().toISOString(), status: saved.redeemStatus ?? 'pending' }
+    : null;
+
+const redeemState = (saved: Saved) => ({
+  myInvites: saved.invites.map((invite) => invite.code),
+  redeemedCode: saved.redeemedCode,
+  installedAt: saved.installedAt,
+});
+
+/** Reads the referral settings, squaring them with what this iPhone's keychain remembers. */
 async function prepare(db: SQLiteDatabase): Promise<Saved> {
   const settings = await loadSettings(db);
   const changes: Partial<AppSettings> = {};
-  // The first install date is kept in the keychain too, so reinstalling doesn't reopen the 30 days.
   const keptInstall = await keychainGet(INSTALLED_KEY);
-  if (keptInstall && (!settings.installedAt || keptInstall < settings.installedAt)) changes.installedAt = keptInstall;
-  else if (!settings.installedAt) changes.installedAt = new Date().toISOString();
-  // This iPhone's own code wins over one brought in by a restored backup.
-  const keptCode = await keychainGet(CODE_KEY);
-  if (keptCode && isReferralCode(keptCode)) {
-    if (settings.referralCode !== keptCode) changes.referralCode = keptCode;
-  } else if (!settings.referralCode || !isReferralCode(settings.referralCode)) {
-    changes.referralCode = generateReferralCode(Crypto.getRandomBytes);
-  }
-  if (!settings.redeemedCode) {
-    try {
-      const kept = JSON.parse((await keychainGet(REDEEMED_KEY)) ?? 'null') as { code?: string; at?: string } | null;
-      const code = kept?.code ? normalizeReferralCode(kept.code) : null;
-      if (code) {
-        changes.redeemedCode = code;
-        changes.redeemedAt = kept?.at ?? new Date().toISOString();
-      }
-    } catch {
-      // Nothing usable kept.
-    }
+  const installedAt = firstInstall(settings.installedAt, keptInstall, new Date());
+  if (installedAt !== settings.installedAt) changes.installedAt = installedAt;
+  const kept = parseKeptRedemption(await keychainGet(REDEEMED_KEY));
+  const current = redemptionOf(pickSaved(settings));
+  const merged = mergeRedemption(current, kept);
+  if (merged && (merged.code !== current?.code || merged.status !== current?.status)) {
+    changes.redeemedCode = merged.code;
+    changes.redeemedAt = merged.at;
+    changes.redeemStatus = merged.status;
   }
   const next = { ...settings, ...changes };
   if (Object.keys(changes).length > 0) await saveSettings(db, { ...(await loadSettings(db)), ...changes });
-  if (next.referralCode && next.referralCode !== keptCode) keychainSet(CODE_KEY, next.referralCode);
-  if (next.installedAt && next.installedAt !== keptInstall) keychainSet(INSTALLED_KEY, next.installedAt);
+  if (installedAt !== keptInstall) keychainSet(INSTALLED_KEY, installedAt);
+  if (merged && (merged.code !== kept?.code || merged.status !== kept?.status)) keepRedemption(merged);
+  if (await keychainGet(OLD_CODE_KEY)) keychainDelete(OLD_CODE_KEY);
   return pickSaved(next);
 }
 
@@ -132,11 +171,13 @@ export function ReferralProvider({ children }: { children: ReactNode }) {
   const db = useSQLiteContext();
   const [saved, setSaved] = useState<Saved>(EMPTY);
   const [loaded, setLoaded] = useState(false);
+  const [sharing, setSharing] = useState(false);
   const lastCount = useRef(0);
+  /** Referral changes run one at a time, each on the latest settings, so none overwrites another. */
+  const queue = useRef<Promise<unknown>>(Promise.resolve());
 
   const apply = useCallback((next: Saved) => {
     setSaved(next);
-    setShareCode(next.referralCode);
     setLoaded(true);
   }, []);
 
@@ -153,31 +194,79 @@ export function ReferralProvider({ children }: { children: ReactNode }) {
     };
   }, [db, apply]);
 
-  const update = useCallback(
-    async (changes: Partial<Saved>) => {
-      setSaved((current) => ({ ...current, ...changes }));
-      await saveSettings(db, { ...(await loadSettings(db)), ...changes });
+  /** Runs `change` on the current referral settings and saves what it returns. */
+  const mutate = useCallback(
+    <R,>(change: (current: Saved) => Promise<{ changes: Partial<Saved>; result: R }>): Promise<R> => {
+      const run = queue.current.then(async () => {
+        const { changes, result } = await change(pickSaved(await loadSettings(db)));
+        if (Object.keys(changes).length > 0) {
+          const next = { ...(await loadSettings(db)), ...changes };
+          await saveSettings(db, next);
+          setSaved(pickSaved(next));
+        }
+        return result;
+      });
+      queue.current = run.catch(() => {});
+      return run;
     },
     [db],
   );
 
-  // CloudKit, once it's on: credit the friend who shared the code, and count the friends who used ours.
+  // CloudKit, once it's on: publish waiting invites, check a pending code,
+  // credit the friend who invited us, and count the friends who joined.
   const syncCloud = useCallback(async () => {
     if (!ReferralCloud.supported || !loaded) return;
-    if (saved.redeemedCode && !saved.referralRecordedAt) {
-      // Only after a few real drives, so installing and deleting doesn't count.
-      const row = await db.getFirstAsync<{ n: number }>("SELECT COUNT(*) AS n FROM trips WHERE source = 'auto';");
-      if ((row?.n ?? 0) >= DRIVES_BEFORE_RECORDING && (await ReferralCloud.recordReferral(saved.redeemedCode))) {
-        await update({ referralRecordedAt: new Date().toISOString() });
+    const now = new Date();
+    await mutate(async (current) => {
+      const published = await publishPending(current.invites, ReferralCloud, now);
+      return { changes: published.changed ? { invites: published.invites } : {}, result: null };
+    });
+
+    const settled = await mutate<ClaimResult | null>(async (current) => {
+      const pending = redemptionOf(current);
+      if (!pending || pending.status !== 'pending') return { changes: {}, result: null };
+      const result = await submitPendingClaim(pending, ReferralCloud, now);
+      if (result.kind === 'granted') {
+        keepRedemption({ ...pending, status: 'granted' });
+        return { changes: { redeemStatus: 'granted', redeemRefusal: null }, result };
       }
+      if (result.kind === 'cleared') {
+        // Turned down: the box opens again (within the 30 days) for another friend's code.
+        keychainDelete(REDEEMED_KEY);
+        return {
+          changes: { redeemedCode: null, redeemedAt: null, redeemStatus: null, redeemRefusal: result.reason },
+          result,
+        };
+      }
+      return { changes: {}, result: null };
+    });
+    if (settled?.kind === 'granted') {
+      Alert.alert(t('🎉 Your friend’s invite is confirmed'), t('You get 10 extra free drives every month.'));
+    } else if (settled?.kind === 'cleared') {
+      Alert.alert(t('Your friend’s invite couldn’t be used'), t(REFUSAL_MESSAGES[settled.reason]));
     }
-    if (saved.referralCode && Date.now() - lastCount.current > COUNT_EVERY_MS) {
+
+    await mutate(async (current) => {
+      if (current.redeemStatus !== 'granted' || !current.redeemedCode || current.qualifiedAt) {
+        return { changes: {}, result: null };
+      }
+      // Only after a few real drives, so installing and deleting doesn't count for the sharer.
+      const row = await db.getFirstAsync<{ n: number }>("SELECT COUNT(*) AS n FROM trips WHERE source = 'auto';");
+      if ((row?.n ?? 0) < DRIVES_BEFORE_RECORDING || !(await ReferralCloud.markQualified(current.redeemedCode))) {
+        return { changes: {}, result: null };
+      }
+      return { changes: { qualifiedAt: new Date().toISOString() }, result: null };
+    });
+
+    if (Date.now() - lastCount.current > COUNT_EVERY_MS) {
       lastCount.current = Date.now();
-      const count = await ReferralCloud.countReferrals(saved.referralCode);
-      // Never goes down: a bonus once given stays, even if iCloud answers oddly one day.
-      if (count !== null && count > saved.friendsJoined) await update({ friendsJoined: count });
+      const counted = await ReferralCloud.countQualifiedClaims();
+      await mutate(async (current) => {
+        const friendsJoined = nextFriendsJoined(current.friendsJoined, counted);
+        return { changes: friendsJoined !== current.friendsJoined ? { friendsJoined } : {}, result: null };
+      });
     }
-  }, [db, loaded, saved, update]);
+  }, [db, loaded, mutate]);
 
   useEffect(() => {
     if (!ReferralCloud.supported) return;
@@ -193,39 +282,74 @@ export function ReferralProvider({ children }: { children: ReactNode }) {
   }, [syncCloud]);
 
   const redeem = useCallback(
-    async (input: string): Promise<RedeemProblem | null> => {
-      const result = checkRedeem(
-        input,
-        { myCode: saved.referralCode, redeemedCode: saved.redeemedCode, installedAt: saved.installedAt },
-        new Date(),
-      );
-      if (!result.ok) return result.problem;
-      const redeemedAt = new Date().toISOString();
-      keychainSet(REDEEMED_KEY, JSON.stringify({ code: result.code, at: redeemedAt }));
-      await update({ redeemedCode: result.code, redeemedAt });
-      return null;
+    (input: string): Promise<RedeemResult> =>
+      mutate<RedeemResult>(async (current) => {
+        const result = await redeemInvite(input, redeemState(current), ReferralCloud, new Date());
+        if (!result.ok) return { changes: {}, result };
+        keepRedemption(result.redemption);
+        return {
+          changes: {
+            redeemedCode: result.redemption.code,
+            redeemedAt: result.redemption.at,
+            redeemStatus: result.redemption.status,
+            redeemRefusal: null,
+          },
+          result: { ok: true, status: result.redemption.status },
+        };
+      }),
+    [mutate],
+  );
+
+  const shareInvite = useCallback(
+    async (message?: string) => {
+      setSharing(true);
+      try {
+        const invite = await mutate(async (current) => {
+          const made = await issueInvite({
+            issued: current.invites,
+            avoid: [current.redeemedCode],
+            cloud: ReferralCloud,
+            randomBytes: Crypto.getRandomBytes,
+            now: new Date(),
+          });
+          return { changes: { invites: [...current.invites, made] }, result: made };
+        });
+        setSharing(false);
+        const shared = await Share.share({ message: withInvite(message ?? inviteText(), invite.code) }).catch(
+          () => null,
+        );
+        // Closed without sending: it isn't an invite sent (the code is simply never used).
+        if (!shared || shared.action === Share.dismissedAction) {
+          await mutate(async (current) => ({
+            changes: { invites: current.invites.filter((sent) => sent.code !== invite.code) },
+            result: null,
+          }));
+        }
+      } finally {
+        setSharing(false);
+      }
     },
-    [saved, update],
+    [mutate],
   );
 
   const value = useMemo<Referral>(
     () => ({
       loaded,
-      code: saved.referralCode,
+      invitesSent: saved.invites.length,
       redeemedCode: saved.redeemedCode,
+      redeemStatus: saved.redeemStatus,
+      redeemRefusal: saved.redeemRefusal,
       friendsJoined: saved.friendsJoined,
       counting: ReferralCloud.supported,
-      allowance: monthlyAllowance({ redeemed: saved.redeemedCode !== null, friendsJoined: saved.friendsJoined }),
-      canRedeem:
-        loaded &&
-        canRedeemNow(
-          { myCode: saved.referralCode, redeemedCode: saved.redeemedCode, installedAt: saved.installedAt },
-          new Date(),
-        ),
+      // A pending code earns nothing until iCloud confirms it.
+      allowance: referralAllowance(saved),
+      canRedeem: loaded && canRedeemNow(redeemState(saved), new Date()),
       redeem,
+      shareInvite,
+      sharing,
       reload,
     }),
-    [loaded, saved, redeem, reload],
+    [loaded, saved, redeem, shareInvite, sharing, reload],
   );
 
   return <ReferralContext.Provider value={value}>{children}</ReferralContext.Provider>;

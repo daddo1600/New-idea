@@ -137,3 +137,27 @@ Each line was translated, back-translated cold, then checked for culture and len
 | Redeem | Resgatar | Apple pt-BR wording (“Resgatar cartão-presente ou código”). |
 | Got a code from a friend? It adds 10 free drives a month. | Tem o código de um amigo? Ele soma 10 trajetos grátis por mês. | Back: “Do you have a friend’s code? It adds 10 free trips a month.” ✓ |
 | Enter my code {{code}} when you set up MileMint… | Use meu código {{code}} ao configurar o MileMint e ganhe 10 trajetos grátis a mais por mês. | “o MileMint” with the article, as the glossary sets. |
+
+## Round 5: single-use invites
+
+Referrals now use single-use invites: every share makes a new code that works for one friend, and a friend’s code stays **pending** (no bonus yet) until iCloud confirms it. 15 new lines (the Invite friends screen and Settings, the pending and confirmed states of the friend’s-code box, the reasons a code is turned down, the share message) and 6 removed (Your code, Share my code, the old hero line, the old “friends get their drives at once” note, the old own-code message and the old share line). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: nothing implies one permanent personal code, and nothing promises drives before the invite is confirmed. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Send a friend an invite. When they join MileMint with it, you both get 10 extra free automatic drives a month. For every friend, with no limit. | Mande um convite para um amigo. Quando ele entrar no MileMint com o convite, vocês dois ganham 10 trajetos automáticos grátis a mais por mês. Para cada amigo, sem limite. | “Send an invite to a friend. When they join MileMint with the invite, you two get 10 more free automatic trips a month. For each friend, no limit.” *trajetos*, *vocês dois ganham* as in Round 4. |
+| Send an invite | Enviar convite | “Send invite” Button, 1.0×. |
+| Every invite has its own code, for one friend. | Cada convite tem seu próprio código e vale para um amigo. | “Each invite has its own code and is good for one friend.” *vale para* = is valid for. |
+| Invites sent: {{count}} | Convites enviados: {{count}} | “Invites sent: {{count}}” Counter label. |
+| Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you. | Os convites são confirmados pelo iCloud, que chega em uma próxima atualização. Os amigos que entrarem antes disso ganham os trajetos extras quando ele for ativado, e você também. | “Invites are confirmed by iCloud, which comes in a next update. Friends who join before that get the extra trips when it’s turned on, and you too.” No promise of drives today. |
+| You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed. | Você digitou {{code}}. Seus 10 trajetos extras chegam assim que o convite for confirmado. | “You typed {{code}}. Your 10 extra trips arrive as soon as the invite is confirmed.” *digitou*: everyday Brazilian verb for typing. |
+| Code {{code}} saved | Código {{code}} salvo | “Code {{code}} saved” Mirrors “Código {{code}} adicionado”. |
+| Your 10 extra drives are on their way once the invite is confirmed. | Seus 10 trajetos extras chegam assim que o convite for confirmado. | “Your 10 extra trips arrive as soon as the invite is confirmed.” |
+| Your invite code is {{code}}. Enter it when you set up MileMint for 10 extra free drives a month. | Seu código de convite é {{code}}. Digite-o ao configurar o MileMint e ganhe 10 trajetos grátis a mais por mês. | “Your invite code is {{code}}. Type it when setting up MileMint and get 10 more free trips a month.” Sent to a friend; você. |
+| We couldn’t find that invite. Check the code with your friend. | Não encontramos esse convite. Confira o código com seu amigo. | “We didn’t find that invite. Check the code with your friend.” *Confira*: friendly imperative. |
+| That invite has already been used. Ask your friend to send you a new one. | Esse convite já foi usado. Peça ao seu amigo para mandar um novo. | “That invite has already been used. Ask your friend to send a new one.” |
+| That’s one of your own invites. Send it to a friend instead. | Esse é um dos seus próprios convites. Mande para um amigo. | “That’s one of your own invites. Send it to a friend.” |
+| This Apple Account has already joined with a friend’s invite. | Esta Conta Apple já entrou com o convite de um amigo. | “This Apple Account already joined with a friend’s invite.” *Conta Apple*: Apple’s pt-BR name. |
+| 🎉 Your friend’s invite is confirmed | 🎉 O convite do seu amigo foi confirmado | “🎉 Your friend’s invite was confirmed” |
+| Your friend’s invite couldn’t be used | Não foi possível usar o convite do seu amigo | “It wasn’t possible to use your friend’s invite” Alert title. |
+
+**Sign-off:** approved, pending an on-device check of the new alert titles.

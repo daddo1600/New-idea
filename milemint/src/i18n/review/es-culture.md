@@ -117,3 +117,27 @@ Each line was translated, back-translated cold, then checked for culture and len
 | Redeem | Canjear | Apple es-419 wording for codes and gift cards. |
 | Enter my code {{code}} when you set up MileMint… | Usa mi código {{code}} al configurar MileMint y recibe 10 viajes gratis más al mes. | Sent to a friend: tú, first person. Back: “Use my code … and get 10 more free trips a month.” |
 | Friends count once they’ve logged a few drives. | Tus amigos cuentan una vez que registren algunos viajes. | Subjunctive keeps it neutral and future-facing. |
+
+## Round 5: single-use invites
+
+Referrals now use single-use invites: every share makes a new code that works for one friend, and a friend’s code stays **pending** (no bonus yet) until iCloud confirms it. 15 new lines (the Invite friends screen and Settings, the pending and confirmed states of the friend’s-code box, the reasons a code is turned down, the share message) and 6 removed (Your code, Share my code, the old hero line, the old “friends get their drives at once” note, the old own-code message and the old share line). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: nothing implies one permanent personal code, and nothing promises drives before the invite is confirmed. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Send a friend an invite. When they join MileMint with it, you both get 10 extra free automatic drives a month. For every friend, with no limit. | Envía una invitación a un amigo. Cuando se una a MileMint con ella, los dos reciben 10 viajes automáticos gratis más al mes. Por cada amigo, sin límite. | “Send an invitation to a friend. When they join MileMint with it, you both receive 10 more free automatic trips a month. For each friend, no limit.” *viajes*, *Los dos reciben* as in Round 4 (es-419 ustedes). |
+| Send an invite | Enviar invitación | “Send invitation” Hero pill button, 1.21×. |
+| Every invite has its own code, for one friend. | Cada invitación tiene su propio código y sirve para un solo amigo. | “Each invitation has its own code and works for just one friend.” “sirve para un solo amigo” makes the single use explicit. |
+| Invites sent: {{count}} | Invitaciones enviadas: {{count}} | “Invitations sent: {{count}}” Counter label; same text for one/many/other. |
+| Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you. | Las invitaciones se confirman a través de iCloud, que llegará en una próxima actualización. Los amigos que se unan antes recibirán sus viajes extra cuando se active, y tú también. | “Invitations are confirmed through iCloud, which will arrive in a coming update. Friends who join before will get their extra trips when it’s turned on, and you too.” Honest: nobody is promised drives today. Same “próxima actualización” as before. |
+| You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed. | Ingresaste {{code}}. Tus 10 viajes extra llegarán en cuanto se confirme la invitación. | “You entered {{code}}. Your 10 extra trips will arrive as soon as the invitation is confirmed.” *Ingresaste*: es-419 verb for typing a code. |
+| Code {{code}} saved | Código {{code}} guardado | “Code {{code}} saved” Mirrors “Código {{code}} agregado”. |
+| Your 10 extra drives are on their way once the invite is confirmed. | Tus 10 viajes extra llegarán en cuanto se confirme la invitación. | “Your 10 extra trips will arrive as soon as the invitation is confirmed.” Future tense keeps it a promise on confirmation only. |
+| Your invite code is {{code}}. Enter it when you set up MileMint for 10 extra free drives a month. | Tu código de invitación es {{code}}. Ingrésalo al configurar MileMint y recibe 10 viajes gratis más al mes. | “Your invitation code is {{code}}. Enter it when setting up MileMint and get 10 more free trips a month.” Sent to a friend: tú, like the old line. |
+| We couldn’t find that invite. Check the code with your friend. | No encontramos esa invitación. Revisa el código con tu amigo. | “We didn’t find that invitation. Check the code with your friend.” Neutral, no blame. |
+| That invite has already been used. Ask your friend to send you a new one. | Esa invitación ya se usó. Pídele a tu amigo que te envíe una nueva. | “That invitation was already used. Ask your friend to send you a new one.” *Pídele* (tú). |
+| That’s one of your own invites. Send it to a friend instead. | Esa es una de tus propias invitaciones. Mejor envíasela a un amigo. | “That’s one of your own invitations. Better send it to a friend.” Keeps the light “Mejor…” from Round 4. |
+| This Apple Account has already joined with a friend’s invite. | Esta Cuenta de Apple ya se unió con la invitación de un amigo. | “This Apple Account already joined with a friend’s invitation.” *Cuenta de Apple*: Apple’s es-419 name (glossary). |
+| 🎉 Your friend’s invite is confirmed | 🎉 Se confirmó la invitación de tu amigo | “🎉 Your friend’s invitation was confirmed” Alert title. |
+| Your friend’s invite couldn’t be used | No se pudo usar la invitación de tu amigo | “Your friend’s invitation couldn’t be used” Alert title; impersonal *No se pudo*. |
+
+**Sign-off:** approved, pending an on-device check of the new alert titles.

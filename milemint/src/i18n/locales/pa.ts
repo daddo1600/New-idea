@@ -975,15 +975,11 @@ const dictionary: Dictionary = {
   "{{hint}}. Swipe the button to the left, or double-tap.": "{{hint}}। ਬਟਨ ਨੂੰ ਖੱਬੇ ਪਾਸੇ ਸਵਾਈਪ ਕਰੋ, ਜਾਂ ਦੋ ਵਾਰ ਟੈਪ ਕਰੋ।",
   "Invite friends": "ਦੋਸਤਾਂ ਨੂੰ ਸੱਦੋ",
   "More free drives for every friend": "ਹਰ ਦੋਸਤ ਲਈ ਹੋਰ ਮੁਫ਼ਤ ਟ੍ਰਿਪ",
-  "When a friend joins MileMint with your code, you both get 10 extra free automatic drives a month. For every friend, with no limit.": "ਤੁਹਾਡੇ ਕੋਡ ਨਾਲ ਕਿਸੇ ਦੋਸਤ ਦੇ MileMint ’ਤੇ ਆਉਣ ’ਤੇ ਤੁਹਾਨੂੰ ਦੋਵਾਂ ਨੂੰ ਹਰ ਮਹੀਨੇ 10 ਵਾਧੂ ਮੁਫ਼ਤ ਆਟੋਮੈਟਿਕ ਟ੍ਰਿਪ ਮਿਲਦੇ ਹਨ। ਹਰ ਦੋਸਤ ਲਈ, ਬਿਨਾਂ ਕਿਸੇ ਹੱਦ ਦੇ।",
-  "Your code": "ਤੁਹਾਡਾ ਕੋਡ",
-  "Share my code": "ਮੇਰਾ ਕੋਡ ਸਾਂਝਾ ਕਰੋ",
   "Friends joined: {{count}} · +{{drives}} free drives a month": {
     "one": "ਜੁੜੇ ਦੋਸਤ: {{count}} · ਹਰ ਮਹੀਨੇ +{{drives}} ਮੁਫ਼ਤ ਟ੍ਰਿਪ",
     "other": "ਜੁੜੇ ਦੋਸਤ: {{count}} · ਹਰ ਮਹੀਨੇ +{{drives}} ਮੁਫ਼ਤ ਟ੍ਰਿਪ"
   },
   "Friends count once they’ve logged a few drives.": "ਦੋਸਤ ਕੁਝ ਟ੍ਰਿਪ ਦਰਜ ਹੋਣ ਤੋਂ ਬਾਅਦ ਗਿਣੇ ਜਾਂਦੇ ਹਨ।",
-  "Your friends get their extra drives as soon as they enter your code. Yours are added when MileMint can count the friends who joined, coming in an update.": "ਤੁਹਾਡਾ ਕੋਡ ਭਰਦੇ ਹੀ ਦੋਸਤਾਂ ਨੂੰ ਵਾਧੂ ਟ੍ਰਿਪ ਮਿਲ ਜਾਂਦੇ ਹਨ। ਤੁਹਾਡੇ ਟ੍ਰਿਪ ਉਦੋਂ ਜੁੜਨਗੇ ਜਦੋਂ MileMint ਜੁੜੇ ਦੋਸਤਾਂ ਨੂੰ ਗਿਣ ਸਕੇਗਾ, ਜੋ ਆਉਣ ਵਾਲੇ ਕਿਸੇ ਅੱਪਡੇਟ ਵਿੱਚ ਹੋਵੇਗਾ।",
   "You have Pro, so your drives are already unlimited. Your friends still get their extra drives.": "ਤੁਹਾਡੇ ਕੋਲ Pro ਹੈ, ਇਸ ਲਈ ਤੁਹਾਡੇ ਟ੍ਰਿਪ ਪਹਿਲਾਂ ਹੀ ਅਨਲਿਮਟਿਡ ਹਨ। ਤੁਹਾਡੇ ਦੋਸਤਾਂ ਨੂੰ ਫਿਰ ਵੀ ਵਾਧੂ ਟ੍ਰਿਪ ਮਿਲਣਗੇ।",
   "Your free plan: {{count}} automatic drives a month.": {
     "one": "ਤੁਹਾਡਾ ਮੁਫ਼ਤ ਪਲਾਨ: ਮਹੀਨੇ ਵਿੱਚ {{count}} ਆਟੋਮੈਟਿਕ ਟ੍ਰਿਪ।",
@@ -997,7 +993,6 @@ const dictionary: Dictionary = {
   "How it works": "ਇਹ ਕਿਵੇਂ ਕੰਮ ਕਰਦਾ ਹੈ",
   "Share it · friends get +10 drives": "ਸਾਂਝਾ ਕਰੋ · ਦੋਸਤਾਂ ਨੂੰ +10 ਟ੍ਰਿਪ",
   "That doesn’t look like a MileMint code. It’s 4 letters, a dash and 3 more, like TRVB-7K2.": "ਇਹ MileMint ਕੋਡ ਨਹੀਂ ਲੱਗਦਾ। ਇਸ ਵਿੱਚ 4 ਅੱਖਰ, ਇੱਕ ਡੈਸ਼ ਅਤੇ 3 ਹੋਰ ਅੱਖਰ ਜਾਂ ਅੰਕ ਹੁੰਦੇ ਹਨ, ਜਿਵੇਂ TRVB-7K2।",
-  "That’s your own code. Share it with friends instead.": "ਇਹ ਤੁਹਾਡਾ ਆਪਣਾ ਕੋਡ ਹੈ। ਇਸ ਨੂੰ ਦੋਸਤਾਂ ਨਾਲ ਸਾਂਝਾ ਕਰੋ।",
   "A friend’s code has already been used on this iPhone.": "ਇਸ iPhone ’ਤੇ ਕਿਸੇ ਦੋਸਤ ਦਾ ਕੋਡ ਪਹਿਲਾਂ ਹੀ ਵਰਤਿਆ ਜਾ ਚੁੱਕਾ ਹੈ।",
   "A friend’s code can only be entered in the first 30 days after installing MileMint.": "ਦੋਸਤ ਦਾ ਕੋਡ MileMint ਇੰਸਟਾਲ ਕਰਨ ਤੋਂ ਬਾਅਦ ਪਹਿਲੇ 30 ਦਿਨਾਂ ਵਿੱਚ ਹੀ ਭਰਿਆ ਜਾ ਸਕਦਾ ਹੈ।",
   "Code {{code}} added": "ਕੋਡ {{code}} ਜੁੜ ਗਿਆ",
@@ -1006,7 +1001,24 @@ const dictionary: Dictionary = {
   "Enter it for 10 extra free drives every month.": "ਇਸ ਨੂੰ ਭਰੋ ਅਤੇ ਹਰ ਮਹੀਨੇ 10 ਵਾਧੂ ਮੁਫ਼ਤ ਟ੍ਰਿਪ ਪਾਓ।",
   "Friend’s code": "ਦੋਸਤ ਦਾ ਕੋਡ",
   "Redeem": "ਰਿਡੀਮ ਕਰੋ",
-  "Enter my code {{code}} when you set up MileMint for 10 extra free drives a month.": "MileMint ਸੈੱਟ ਕਰਦੇ ਸਮੇਂ ਮੇਰਾ ਕੋਡ {{code}} ਭਰੋ ਅਤੇ ਹਰ ਮਹੀਨੇ 10 ਵਾਧੂ ਮੁਫ਼ਤ ਟ੍ਰਿਪ ਪਾਓ।",
+  "Send a friend an invite. When they join MileMint with it, you both get 10 extra free automatic drives a month. For every friend, with no limit.": "ਕਿਸੇ ਦੋਸਤ ਨੂੰ ਸੱਦਾ ਭੇਜੋ। ਜਦੋਂ ਉਹ ਇਸ ਰਾਹੀਂ MileMint ’ਤੇ ਆਵੇਗਾ, ਤਾਂ ਤੁਹਾਨੂੰ ਦੋਵਾਂ ਨੂੰ ਹਰ ਮਹੀਨੇ 10 ਵਾਧੂ ਮੁਫ਼ਤ ਆਟੋਮੈਟਿਕ ਟ੍ਰਿਪ ਮਿਲਣਗੇ। ਹਰ ਦੋਸਤ ਲਈ, ਬਿਨਾਂ ਕਿਸੇ ਹੱਦ ਦੇ।",
+  "Send an invite": "ਸੱਦਾ ਭੇਜੋ",
+  "Every invite has its own code, for one friend.": "ਹਰ ਸੱਦੇ ਦਾ ਆਪਣਾ ਕੋਡ ਹੁੰਦਾ ਹੈ, ਇੱਕ ਦੋਸਤ ਲਈ।",
+  "Invites sent: {{count}}": {
+    "one": "ਭੇਜੇ ਸੱਦੇ: {{count}}",
+    "other": "ਭੇਜੇ ਸੱਦੇ: {{count}}",
+  },
+  "Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you.": "ਸੱਦੇ iCloud ਰਾਹੀਂ ਪੱਕੇ ਹੁੰਦੇ ਹਨ, ਜੋ ਆਉਣ ਵਾਲੇ ਕਿਸੇ ਅੱਪਡੇਟ ਵਿੱਚ ਆਵੇਗਾ। ਉਸ ਤੋਂ ਪਹਿਲਾਂ ਜੁੜਨ ਵਾਲੇ ਦੋਸਤਾਂ ਨੂੰ ਇਸ ਦੇ ਚਾਲੂ ਹੁੰਦੇ ਹੀ ਵਾਧੂ ਟ੍ਰਿਪ ਮਿਲਣਗੇ, ਅਤੇ ਤੁਹਾਨੂੰ ਵੀ।",
+  "You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed.": "ਤੁਸੀਂ {{code}} ਭਰਿਆ ਹੈ। ਸੱਦਾ ਪੱਕਾ ਹੁੰਦੇ ਹੀ ਤੁਹਾਡੇ 10 ਵਾਧੂ ਟ੍ਰਿਪ ਮਿਲ ਜਾਣਗੇ।",
+  "Code {{code}} saved": "ਕੋਡ {{code}} ਸੇਵ ਹੋ ਗਿਆ",
+  "Your 10 extra drives are on their way once the invite is confirmed.": "ਸੱਦਾ ਪੱਕਾ ਹੁੰਦੇ ਹੀ ਤੁਹਾਡੇ 10 ਵਾਧੂ ਟ੍ਰਿਪ ਮਿਲ ਜਾਣਗੇ।",
+  "Your invite code is {{code}}. Enter it when you set up MileMint for 10 extra free drives a month.": "ਤੁਹਾਡਾ ਸੱਦਾ ਕੋਡ {{code}} ਹੈ। MileMint ਸੈੱਟ ਕਰਦੇ ਸਮੇਂ ਇਸ ਨੂੰ ਭਰੋ ਅਤੇ ਹਰ ਮਹੀਨੇ 10 ਵਾਧੂ ਮੁਫ਼ਤ ਟ੍ਰਿਪ ਪਾਓ।",
+  "We couldn’t find that invite. Check the code with your friend.": "ਇਹ ਸੱਦਾ ਨਹੀਂ ਮਿਲਿਆ। ਆਪਣੇ ਦੋਸਤ ਨਾਲ ਕੋਡ ਮਿਲਾ ਕੇ ਦੇਖੋ।",
+  "That invite has already been used. Ask your friend to send you a new one.": "ਇਹ ਸੱਦਾ ਪਹਿਲਾਂ ਹੀ ਵਰਤਿਆ ਜਾ ਚੁੱਕਾ ਹੈ। ਆਪਣੇ ਦੋਸਤ ਨੂੰ ਨਵਾਂ ਸੱਦਾ ਭੇਜਣ ਲਈ ਕਹੋ।",
+  "That’s one of your own invites. Send it to a friend instead.": "ਇਹ ਤੁਹਾਡਾ ਆਪਣਾ ਸੱਦਾ ਹੈ। ਇਸ ਨੂੰ ਕਿਸੇ ਦੋਸਤ ਨੂੰ ਭੇਜੋ।",
+  "This Apple Account has already joined with a friend’s invite.": "ਇਹ Apple ਖਾਤਾ ਪਹਿਲਾਂ ਹੀ ਕਿਸੇ ਦੋਸਤ ਦੇ ਸੱਦੇ ਨਾਲ ਜੁੜ ਚੁੱਕਾ ਹੈ।",
+  "🎉 Your friend’s invite is confirmed": "🎉 ਤੁਹਾਡੇ ਦੋਸਤ ਦਾ ਸੱਦਾ ਪੱਕਾ ਹੋ ਗਿਆ",
+  "Your friend’s invite couldn’t be used": "ਤੁਹਾਡੇ ਦੋਸਤ ਦਾ ਸੱਦਾ ਵਰਤਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ",
 };
 
 export default dictionary;

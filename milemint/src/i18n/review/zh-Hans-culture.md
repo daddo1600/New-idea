@@ -104,3 +104,27 @@ Each line was translated, back-translated cold, then checked for culture and len
 | Redeem | 兑换 | Apple’s 兑换 for codes. |
 | How it works | 了解规则 | “See the rules”: natural for a referral link; 如何运作 sounds technical. |
 | Share it · friends get +10 drives | 分享 · 朋友多得 10 次行程 | Short; fits the pill. |
+
+## Round 5: single-use invites
+
+Referrals now use single-use invites: every share makes a new code that works for one friend, and a friend’s code stays **pending** (no bonus yet) until iCloud confirms it. 15 new lines (the Invite friends screen and Settings, the pending and confirmed states of the friend’s-code box, the reasons a code is turned down, the share message) and 6 removed (Your code, Share my code, the old hero line, the old “friends get their drives at once” note, the old own-code message and the old share line). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: nothing implies one permanent personal code, and nothing promises drives before the invite is confirmed. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Send a friend an invite. When they join MileMint with it, you both get 10 extra free automatic drives a month. For every friend, with no limit. | 给朋友发一份邀请。朋友用它加入 MileMint 后，你们俩每月都能多得 10 次免费自动记录的行程。每位朋友都算，没有上限。 | “Send a friend an invitation. After the friend joins MileMint with it, you both get 10 more free auto-recorded trips a month. Every friend counts, no limit.” Same phrasing as Round 4’s hero line. |
+| Send an invite | 发送邀请 | “Send invitation” 4 characters. |
+| Every invite has its own code, for one friend. | 每份邀请都有专属邀请码，仅限一位朋友使用。 | “Every invitation has its own invite code, for one friend only.” *专属* = exclusive; *仅限一位* makes the single use clear. |
+| Invites sent: {{count}} | 已发送邀请：{{count}} 份 | “Invitations sent: {{count}}” Measure word *份* for invitations. |
+| Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you. | 邀请需通过 iCloud 确认，这项功能将在后续更新中推出。在此之前加入的朋友，会在功能开启后获得额外行程，你也一样。 | “Invitations need confirming through iCloud; this feature will come in a later update. Friends who join before then get extra trips once it’s on, and so do you.” Mirrors Round 4’s “这项功能将在后续更新中推出”. |
+| You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed. | 你已输入 {{code}}。邀请确认后，你的 10 次额外行程就会到账。 | “You’ve entered {{code}}. After the invitation is confirmed, your 10 extra trips will arrive.” *到账* = credited; common in Chinese apps. |
+| Code {{code}} saved | 已保存邀请码 {{code}} | “Invite code {{code}} saved” Mirrors “已添加邀请码 {{code}}”. |
+| Your 10 extra drives are on their way once the invite is confirmed. | 邀请确认后，你的 10 次额外行程就会到账。 | “After the invitation is confirmed, your 10 extra trips will arrive.” |
+| Your invite code is {{code}}. Enter it when you set up MileMint for 10 extra free drives a month. | 你的邀请码是 {{code}}。设置 MileMint 时输入它，每月可多得 10 次免费行程。 | “Your invite code is {{code}}. Enter it when setting up MileMint and get 10 more free trips a month.” |
+| We couldn’t find that invite. Check the code with your friend. | 找不到这个邀请。请和朋友核对一下邀请码。 | “Can’t find this invitation. Please check the invite code with your friend.” |
+| That invite has already been used. Ask your friend to send you a new one. | 这个邀请已经被使用过了。请朋友再发一份新的给你。 | “This invitation has already been used. Ask your friend to send you a new one.” |
+| That’s one of your own invites. Send it to a friend instead. | 这是你自己发出的邀请，发给朋友吧。 | “This is an invitation you sent yourself; send it to a friend.” |
+| This Apple Account has already joined with a friend’s invite. | 此 Apple 账户已经通过朋友的邀请加入过了。 | “This Apple Account has already joined through a friend’s invitation.” *Apple 账户* as in existing lines. |
+| 🎉 Your friend’s invite is confirmed | 🎉 朋友的邀请已确认 | “🎉 Friend’s invitation confirmed” |
+| Your friend’s invite couldn’t be used | 无法使用朋友的邀请 | “Can’t use the friend’s invitation” |
+
+**Sign-off:** approved, pending an on-device check of the new alert titles.

@@ -6,20 +6,24 @@ import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import type { RedeemProblem } from '@/referral/code';
-import { useReferral } from '@/referral/referral';
+import { REFUSAL_MESSAGES, useReferral } from '@/referral/referral';
 
 const PROBLEMS: Record<RedeemProblem, string> = {
   format: msg('That doesn’t look like a MileMint code. It’s 4 letters, a dash and 3 more, like TRVB-7K2.'),
-  own: msg('That’s your own code. Share it with friends instead.'),
+  own: REFUSAL_MESSAGES.own,
   already: msg('A friend’s code has already been used on this iPhone.'),
   expired: msg('A friend’s code can only be entered in the first 30 days after installing MileMint.'),
+  'not-found': REFUSAL_MESSAGES['not-found'],
+  used: REFUSAL_MESSAGES.used,
+  'claimed-before': REFUSAL_MESSAGES['already-claimed'],
 };
 
 /**
- * "Got a code from a friend?": a link that opens a box for a friend's
- * referral code. `onBrand` for the green welcome screen. `initialCode` (from
- * an invite link) opens it already filled in. Renders nothing
- * (not even `style`'s box) once a code can't be entered any more.
+ * "Got a code from a friend?": a link that opens a box for a friend's invite
+ * code. `onBrand` for the green welcome screen. `initialCode` (from an
+ * invite link) opens it already filled in. A code iCloud can't check yet is
+ * saved as pending, and says so: its drives come once it's confirmed. Renders
+ * nothing (not even `style`'s box) once a code can't be entered any more.
  */
 export function RedeemCode({
   onBrand = false,
@@ -32,7 +36,7 @@ export function RedeemCode({
 }) {
   const t = useT();
   const theme = useTheme();
-  const { canRedeem, redeemedCode, redeem } = useReferral();
+  const { canRedeem, redeemedCode, redeemStatus, redeemRefusal, redeem } = useReferral();
   const [open, setOpen] = useState(!!initialCode);
   const [text, setText] = useState(String(initialCode ?? ''));
   const [problem, setProblem] = useState<RedeemProblem | null>(null);
@@ -47,16 +51,35 @@ export function RedeemCode({
   if (done && redeemedCode) {
     return (
       <View style={[styles.box, style]} accessibilityLiveRegion="polite">
-        <Text style={[styles.title, { color }]}>🎉 {t('Code {{code}} added', { code: redeemedCode })}</Text>
-        <Text style={[styles.body, { color: soft }]}>{t('You get 10 extra free drives every month.')}</Text>
+        {redeemStatus === 'granted' ? (
+          <>
+            <Text style={[styles.title, { color }]}>🎉 {t('Code {{code}} added', { code: redeemedCode })}</Text>
+            <Text style={[styles.body, { color: soft }]}>{t('You get 10 extra free drives every month.')}</Text>
+          </>
+        ) : (
+          <>
+            <Text style={[styles.title, { color }]}>{t('Code {{code}} saved', { code: redeemedCode })}</Text>
+            <Text style={[styles.body, { color: soft }]}>
+              {t('Your 10 extra drives are on their way once the invite is confirmed.')}
+            </Text>
+          </>
+        )}
       </View>
     );
   }
   if (!canRedeem) return null;
 
+  /** A code entered earlier that iCloud turned down, until another is tried. */
+  const refusal = redeemRefusal && !problem && (
+    <Text accessibilityRole="alert" style={[styles.body, { color: onBrand ? '#FDE68A' : theme.danger }]}>
+      {t(REFUSAL_MESSAGES[redeemRefusal])}
+    </Text>
+  );
+
   if (!open) {
     return (
-      <View style={style}>
+      <View style={[refusal ? styles.box : null, style]}>
+        {refusal}
         <Pressable accessibilityRole="button" hitSlop={8} onPress={() => setOpen(true)}>
           <Text style={[styles.link, { color: link }]}>{t('Got a code from a friend?')}</Text>
         </Pressable>
@@ -68,8 +91,8 @@ export function RedeemCode({
     setBusy(true);
     try {
       const result = await redeem(text);
-      setProblem(result);
-      if (!result) setDone(true);
+      setProblem(result.ok ? null : result.problem);
+      if (result.ok) setDone(true);
     } finally {
       setBusy(false);
     }
@@ -79,6 +102,7 @@ export function RedeemCode({
     <View style={[styles.box, style]}>
       <Text style={[styles.title, { color }]}>{t('Got a code from a friend?')}</Text>
       <Text style={[styles.body, { color: soft }]}>{t('Enter it for 10 extra free drives every month.')}</Text>
+      {refusal}
       <View style={styles.row}>
         <TextInput
           accessibilityLabel={t('Friend’s code')}

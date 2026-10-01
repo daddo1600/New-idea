@@ -1,5 +1,6 @@
 /**
- * Personal referral codes, like "TRVB-7K2": four letters, a dash and three
+ * Invite codes, like "TRVB-7K2": a new one for every invite sent, each good
+ * for one friend (see ./invites.ts). Four letters, a dash and three
  * letters or digits. Easy to read out and type: no vowels (so no words,
  * rude or otherwise), and none of the look-alikes 0/O, 1/I/L or 5/S.
  * Pure (randomness is passed in), so it's unit-tested.
@@ -51,13 +52,26 @@ export function normalizeReferralCode(input: string): string | null {
 
 export const isReferralCode = (code: string): boolean => PATTERN.test(code);
 
-/** What stops a code from being redeemed, if anything. */
-export type RedeemProblem = 'format' | 'own' | 'already' | 'expired';
+/**
+ * What stops a code from being redeemed, if anything. The first four are
+ * checked on the iPhone; the last three come from iCloud (./cloud.ts).
+ */
+export type RedeemProblem =
+  | 'format'
+  | 'own'
+  | 'already'
+  | 'expired'
+  /** No invite with that code. */
+  | 'not-found'
+  /** Someone else already used that invite. */
+  | 'used'
+  /** This Apple Account has already joined with a friend's invite. */
+  | 'claimed-before';
 
 export type RedeemState = {
-  /** This user's own code. */
-  myCode: string | null;
-  /** A code already redeemed on this install (or this iPhone, after a reinstall). */
+  /** Invite codes this user has sent. */
+  myInvites: readonly string[];
+  /** A code already redeemed (pending or granted) on this install (or this iPhone, after a reinstall). */
   redeemedCode: string | null;
   /** ISO time the app was first set up. */
   installedAt: string | null;
@@ -69,6 +83,15 @@ export function inRedeemWindow(installedAt: string | null, now: Date): boolean {
   const since = now.getTime() - new Date(installedAt).getTime();
   // An unreadable install date, or one in the future (the clock set back), closes the window.
   return Number.isFinite(since) && since >= 0 && since < REDEEM_WINDOW_DAYS * DAY_MS;
+}
+
+/**
+ * The install date to keep: the earlier of settings' and the keychain's (which
+ * survives deleting the app), so reinstalling doesn't reopen the 30 days.
+ */
+export function firstInstall(fromSettings: string | null, kept: string | null, now: Date): string {
+  if (kept && (!fromSettings || kept < fromSettings)) return kept;
+  return fromSettings ?? now.toISOString();
 }
 
 /** Whether to offer "Got a code from a friend?" at all. */
@@ -86,6 +109,6 @@ export function checkRedeem(
   if (!inRedeemWindow(state.installedAt, now)) return { ok: false, problem: 'expired' };
   const code = normalizeReferralCode(input);
   if (!code) return { ok: false, problem: 'format' };
-  if (code === state.myCode) return { ok: false, problem: 'own' };
+  if (state.myInvites.includes(code)) return { ok: false, problem: 'own' };
   return { ok: true, code };
 }

@@ -104,3 +104,27 @@ Each line was translated, back-translated cold, then checked for culture and len
 | Friends joined: {{count}} · … | Amis qui vous ont rejoint : {{count}} · … | “inscrits” was dropped in pass 2: it implies an account, and MileMint has none. |
 | Redeem | Valider | Short, and what French apps say for a promo code; Apple’s “Utiliser” reads oddly alone on a button. |
 | Got a code from a friend? | Un ami vous a donné un code ? | Narrow no-break space before “?” and no-break space before “:”, as in the rest of the file. |
+
+## Round 5: single-use invites
+
+Referrals now use single-use invites: every share makes a new code that works for one friend, and a friend’s code stays **pending** (no bonus yet) until iCloud confirms it. 15 new lines (the Invite friends screen and Settings, the pending and confirmed states of the friend’s-code box, the reasons a code is turned down, the share message) and 6 removed (Your code, Share my code, the old hero line, the old “friends get their drives at once” note, the old own-code message and the old share line). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: nothing implies one permanent personal code, and nothing promises drives before the invite is confirmed. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Send a friend an invite. When they join MileMint with it, you both get 10 extra free automatic drives a month. For every friend, with no limit. | Envoyez une invitation à un ami. Quand il rejoint MileMint grâce à elle, vous recevez chacun 10 trajets automatiques gratuits de plus par mois. Pour chaque ami, sans limite. | “Send an invitation to a friend. When they join MileMint thanks to it, you each get 10 more free automatic trips a month. For every friend, no limit.” *grâce à elle* reads more naturally than *avec elle*. |
+| Send an invite | Inviter un ami | “Invite a friend” Button: “Envoyer une invitation” was 1.57×; this is 1.0× and says the same thing. |
+| Every invite has its own code, for one friend. | Chaque invitation a son propre code, valable pour un seul ami. | “Each invitation has its own code, valid for a single friend.” |
+| Invites sent: {{count}} | Invitations envoyées : {{count}} | “Invitations sent: {{count}}” No-break space before the colon, as elsewhere in fr.ts. |
+| Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you. | Les invitations sont confirmées via iCloud, qui arrive dans une prochaine mise à jour. Les amis qui vous rejoignent d’ici là recevront leurs trajets en plus dès son activation, et vous aussi. | “Invitations are confirmed via iCloud, which arrives in a coming update. Friends who join you by then will receive their extra trips as soon as it’s activated, and so will you.” No promise of drives today. |
+| You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed. | Vous avez saisi {{code}}. Vos 10 trajets en plus arriveront dès que l’invitation sera confirmée. | “You entered {{code}}. Your 10 extra trips will arrive as soon as the invitation is confirmed.” *saisi*: standard verb for typing a code. |
+| Code {{code}} saved | Code {{code}} enregistré | “Code {{code}} saved” Mirrors “Code {{code}} ajouté”. |
+| Your 10 extra drives are on their way once the invite is confirmed. | Vos 10 trajets en plus arriveront dès que l’invitation sera confirmée. | “Your 10 extra trips will arrive as soon as the invitation is confirmed.” |
+| Your invite code is {{code}}. Enter it when you set up MileMint for 10 extra free drives a month. | Ton code d’invitation : {{code}}. Saisis-le en configurant MileMint pour avoir 10 trajets gratuits de plus par mois. | “Your invitation code: {{code}}. Enter it while setting up MileMint to get 10 more free trips a month.” Share message to a friend: *tu*, like the old “Entre mon code” line. |
+| We couldn’t find that invite. Check the code with your friend. | Invitation introuvable. Vérifiez le code avec votre ami. | “Invitation not found. Check the code with your friend.” Short, neutral. |
+| That invite has already been used. Ask your friend to send you a new one. | Cette invitation a déjà été utilisée. Demandez à votre ami de vous en envoyer une nouvelle. | “This invitation has already been used. Ask your friend to send you a new one.” |
+| That’s one of your own invites. Send it to a friend instead. | C’est l’une de vos propres invitations. Envoyez-la plutôt à un ami. | “It’s one of your own invitations. Send it to a friend instead.” |
+| This Apple Account has already joined with a friend’s invite. | Ce compte Apple a déjà rejoint MileMint avec l’invitation d’un ami. | “This Apple account has already joined MileMint with a friend’s invitation.” *compte Apple* as in the existing Pro lines. |
+| 🎉 Your friend’s invite is confirmed | 🎉 L’invitation de votre ami est confirmée | “🎉 Your friend’s invitation is confirmed” |
+| Your friend’s invite couldn’t be used | L’invitation de votre ami n’a pas pu être utilisée | “Your friend’s invitation couldn’t be used” |
+
+**Sign-off:** approved, pending an on-device check of the new alert titles.

@@ -129,3 +129,27 @@ Each line was translated, back-translated cold, then checked for culture and len
 | Your friends get their extra drives… coming in an update. | …gdy MileMint zacznie liczyć znajomych… | “będzie mógł” would give MileMint a gender; “zacznie” avoids it. |
 | Redeem | Użyj | Short; Apple’s “Zrealizuj” sounds formal on a small button. |
 | Share it · friends get +10 drives | Udostępnij · +10 przejazdów dla znajomych | 41 chars (1.24×). |
+
+## Round 5: single-use invites
+
+Referrals now use single-use invites: every share makes a new code that works for one friend, and a friend’s code stays **pending** (no bonus yet) until iCloud confirms it. 15 new lines (the Invite friends screen and Settings, the pending and confirmed states of the friend’s-code box, the reasons a code is turned down, the share message) and 6 removed (Your code, Share my code, the old hero line, the old “friends get their drives at once” note, the old own-code message and the old share line). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rule for all of them: nothing implies one permanent personal code, and nothing promises drives before the invite is confirmed. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| Send a friend an invite. When they join MileMint with it, you both get 10 extra free automatic drives a month. For every friend, with no limit. | Wyślij znajomemu zaproszenie. Gdy dołączy z nim do MileMint, obie strony dostają 10 dodatkowych darmowych przejazdów automatycznych miesięcznie. Za każdego znajomego, bez limitu. | “Send a friend an invitation. When they join MileMint with it, both sides get 10 extra free automatic trips a month. For every friend, no limit.” *obie strony*, *przejazdy* as in Round 4. |
+| Send an invite | Wyślij zaproszenie | “Send invitation” Button, 1.29×. |
+| Every invite has its own code, for one friend. | Każde zaproszenie ma własny kod, dla jednego znajomego. | “Each invitation has its own code, for one friend.” |
+| Invites sent: {{count}} | Wysłane zaproszenia: {{count}} | “Sent invitations: {{count}}” Label form avoids number agreement; same in all four forms. |
+| Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you. | Zaproszenia są potwierdzane przez iCloud, które pojawi się w jednej z kolejnych aktualizacji. Znajomi, którzy dołączą wcześniej, dostaną dodatkowe przejazdy po jego włączeniu – Ty też. | “Invitations are confirmed through iCloud, which will appear in one of the next updates. Friends who join earlier will get extra trips once it’s on – you too.” No promise of drives today. En dash as in Round 4. |
+| You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed. | Wpisano kod {{code}}. Twoje 10 dodatkowych przejazdów pojawi się, gdy zaproszenie zostanie potwierdzone. | “Code {{code}} entered. Your 10 extra trips will appear when the invitation is confirmed.” Impersonal *Wpisano* avoids gendered past tense. |
+| Code {{code}} saved | Zapisano kod {{code}} | “Code {{code}} saved” Mirrors “Dodano kod {{code}}”. |
+| Your 10 extra drives are on their way once the invite is confirmed. | Twoje 10 dodatkowych przejazdów pojawi się, gdy zaproszenie zostanie potwierdzone. | “Your 10 extra trips will appear when the invitation is confirmed.” |
+| Your invite code is {{code}}. Enter it when you set up MileMint for 10 extra free drives a month. | Twój kod zaproszenia to {{code}}. Wpisz go przy konfiguracji MileMint, a dostaniesz 10 dodatkowych darmowych przejazdów miesięcznie. | “Your invitation code is {{code}}. Enter it when setting up MileMint and you’ll get 10 extra free trips a month.” Share message: informal *ty*. |
+| We couldn’t find that invite. Check the code with your friend. | Nie znaleźliśmy tego zaproszenia. Sprawdź kod ze znajomym. | “We didn’t find this invitation. Check the code with your friend.” |
+| That invite has already been used. Ask your friend to send you a new one. | To zaproszenie zostało już użyte. Poproś znajomego o nowe. | “This invitation has already been used. Ask your friend for a new one.” |
+| That’s one of your own invites. Send it to a friend instead. | To jedno z Twoich zaproszeń. Lepiej wyślij je znajomemu. | “It’s one of your invitations. Better send it to a friend.” Capital *Twoich* as in the app. |
+| This Apple Account has already joined with a friend’s invite. | To Konto Apple dołączyło już z zaproszeniem od znajomego. | “This Apple Account has already joined with an invitation from a friend.” *Konto Apple*: Apple’s Polish name. |
+| 🎉 Your friend’s invite is confirmed | 🎉 Zaproszenie od znajomego potwierdzone | “🎉 Invitation from a friend confirmed” Alert title, no verb needed. |
+| Your friend’s invite couldn’t be used | Nie można użyć zaproszenia od znajomego | “Can’t use the invitation from a friend” |
+
+**Sign-off:** approved, pending an on-device check of the new alert titles.

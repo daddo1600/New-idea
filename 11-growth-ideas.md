@@ -1,34 +1,57 @@
 # Growth ideas (to review later for marketing)
 
-Two ideas to grow MileMint and keep drivers coming back. The referral scheme is built and needs no server (the sharer's credit waits for CloudKit). Partner perks aren't started and need the same foundation as Teams (a domain and a small server, see [`10-roadmap-teams.md`](10-roadmap-teams.md)).
+Two ideas to grow MileMint and keep drivers coming back. The referral scheme (single-use invites) is built and needs no server; confirming invites and crediting sharers waits for CloudKit. Partner perks aren't started and need the same foundation as Teams (a domain and a small server, see [`10-roadmap-teams.md`](10-roadmap-teams.md)).
 
 ---
 
 ## 1. Referral scheme: "more for every friend you bring" (built)
 
-Dropbox style, and **uncapped**: every friend who joins with your code earns you both more free automatic drives, for good.
+Dropbox style, and **uncapped**: every friend who joins with one of your invites earns you both more free automatic drives, for good. Each invite is **single-use**: every share makes a new code, and a code works for one friend.
+
+The founder's two rules:
+- "Make each referral a unique code each time, and it's reset once used."
+- "Prevent people from getting a referral code and deleting and starting over."
+
+The first is met by a new code per share, published in iCloud and claimable once. The second is met by one claim per **Apple Account**, ever, checked in iCloud, so it holds across reinstalls and new iPhones.
 
 | Who | Gets | When |
 |---|---|---|
-| **Friend** (new user) | **+10 free automatic drives a month** | At once, when they enter your code (in the welcome's last step, or in Settings / Invite friends for 30 days after installing) |
-| **You** (the sharer) | **+10 free automatic drives a month per friend** | When the friend joins: they've redeemed your code and made 3 real automatic drives |
+| **Friend** (new user) | **+10 free automatic drives a month** | When iCloud confirms the invite they entered (in the welcome's last step, or in Settings / Invite friends, for 30 days after installing). Until then it shows as pending: "Your 10 extra drives are on their way once the invite is confirmed." |
+| **You** (the sharer) | **+10 free automatic drives a month per friend** | When the friend joins: they claimed one of your invites and made 3 real automatic drives |
 | Ten friends | +100 a month | No cap. Pro stays unlimited anyway |
 
-Free plan allowance = **40 + 10 × (joined with a code ? 1 : 0) + 10 × friends joined** (`monthlyAllowance` in `milemint/src/domain/plan.ts`). It drives the home counter ("2 of 50 free drives in October"), which drives lock, and the paywall's free column.
+Free plan allowance = **40 + 10 × (friend's invite confirmed ? 1 : 0) + 10 × friends joined** (`referralAllowance` in `milemint/src/referral/invites.ts`, which uses `monthlyAllowance` in `milemint/src/domain/plan.ts`). A pending code adds nothing. The allowance drives the home counter ("2 of 50 free drives in October"), which drives lock, and the paywall's free column.
 
 Why drives, not free months: drives cost nothing to give, can't be turned into money, and make the free plan visibly better the more you share, which is the loop that made Dropbox grow. Pro (unlimited) is still the upgrade.
 
 **In the app (built):**
-- **Your code**: short and readable, e.g. `TRVB-7K2` (4 consonants, a dash, 3 letters or digits; no vowels so no words, no look-alikes 0/O, 1/I/L, 5/S). Made once, kept in settings (so it's in the iCloud backup) and in the iPhone keychain (same code after a reinstall).
-- **Invite friends** screen (logo menu, Settings): the code, **Share my code**, and "Friends joined: N · +X free drives a month" once friends can be counted.
-- **Redeeming**: optional "Got a code from a friend?" on the welcome's last step and in Settings for 30 days after install. Checks the format, refuses your own code, once per iPhone (a keychain flag survives reinstalling).
+- **Invite codes**: short and readable, e.g. `TRVB-7K2`: 4 consonants, a dash, then 3 letters or digits. There are no vowels, so no words, and none of the look-alikes 0/O, 1/I/L, 5/S. A **new code for every share**:
+  - kept in settings as an invite sent, with the date (so it's in the iCloud backup);
+  - published in iCloud as the sharer's, so it's unique across all users.
+- **Invite friends** screen (logo menu, Settings): **Send an invite**, "Every invite has its own code, for one friend.", "Invites sent: N", and "Friends joined: N · +X free drives a month" once iCloud can count them. There's no permanent "your code" anywhere.
+- **Redeeming**: optional "Got a code from a friend?" on the welcome's last step and in Settings for 30 days after install.
+  - The phone checks the format, refuses the user's own invites, and allows one code per iPhone. The keychain keeps that, and the install date, through a reinstall.
+  - Then iCloud checks the invite. **Confirmed** gives +10 at once. **Can't check yet** saves it as **pending** with no bonus, and it's confirmed automatically later. **Turned down** says why: "We couldn't find that invite…", "That invite has already been used…", "That's one of your own invites…" or "This Apple Account has already joined with a friend's invite."
+  - When a pending code is turned down later, it's cleared with the same message and the box opens again inside the 30 days. When it's confirmed, a small 🎉 alert appears.
 - **Invite links**: `milemint://invite/TRVB-7K2` opens the app with the code filled in.
-- **Every share carries the code**: milestone celebrations ("Share it · friends get +10 drives", "You both get +10 free drives a month when a friend joins") and the invite message ("Enter my code TRVB-7K2 when you set up MileMint for 10 extra free drives a month").
+- **Every share makes a fresh invite**: Send an invite, Settings → Share, milestone celebrations ("Share it · friends get +10 drives") and the compare-your-miles share. The message says "Your invite code is TRVB-7K2. Enter it when you set up MileMint for 10 extra free drives a month." Closing the share sheet without sending doesn't count as an invite sent.
 
-**Crediting the sharer without a server: CloudKit (designed, switched off).**
-- The friend's app saves one anonymous `Referral` record (`code`, `createdAt`) in CloudKit's **public** database once they have 3 real automatic drives. The sharer's app counts the **distinct iCloud accounts** (`creatorUserRecordID`) that saved one for their code.
-- JS side ready in `milemint/src/referral/cloud.ts`; the native design is in `milemint/modules/referral-cloud/README.md`.
-- **It switches on when** the iCloud container `iCloud.com.milemint.app` is set up in the Apple Developer portal (with CloudKit), the `Referral` schema is deployed in the CloudKit Dashboard, the small Swift module is written, and `extra.icloudBackup` in `app.json` is turned on (the same switch as iCloud backup). Until then friends still get their +10 straight away and the sharer's counter is hidden; friends who joined before are recorded and credited on the first build with CloudKit.
+**Confirming invites and crediting the sharer without a server: CloudKit (designed, switched off).**
+- Three record types in CloudKit's **public** database:
+  - `Invite`: the record name is the code, and the owner is the sharer's iCloud account.
+  - `claim-<code>`: one per invite, so it can be used once.
+  - `claimer-<iCloud user id>`: one per Apple Account, ever.
+
+  Everyone can read them, only their creator can write them, and no one can change or delete someone else's.
+- The friend's app marks its claim **qualified** after 3 real automatic drives. The sharer's app counts the qualified claims on the invites it published.
+- The JS side is ready in `milemint/src/referral/cloud.ts` and `invites.ts` (unit-tested with a fake CloudKit). The native design is in `milemint/modules/referral-cloud/README.md`.
+- **It switches on when**:
+  - the iCloud container `iCloud.com.milemint.app` is set up in the Apple Developer portal, with CloudKit;
+  - the schema is deployed in the CloudKit Dashboard;
+  - the small Swift module is written;
+  - `extra.icloudBackup` in `app.json` is turned on (the same switch as iCloud backup).
+
+  Until then, invites wait on the sharer's phone to be published and friends' codes stay pending, so **nobody gets referral drives yet**. The screen says so honestly. On the first build with CloudKit, everything waiting is published and confirmed, and both sides get their drives.
 
 **Later, with a server (Teams):** keep the drives scheme, and add a reward for a **business that signs up to MileMint Teams** (a year of Pro free for the referrer), confirmed by the first paid invoice. A branded link (`milemint.app/r/TRVB-7K2`) with a WhatsApp preview card can replace the plain App Store link.
 

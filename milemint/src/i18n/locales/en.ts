@@ -101,6 +101,7 @@ const en: Dictionary = {
       other:
         'Restore the backup from {{date}} with {{count}} trips. The trips, places, vehicles and settings on this iPhone are replaced by the ones in the backup.',
     },
+  'Invites sent: {{count}}': { one: 'Invites sent: {{count}}', other: 'Invites sent: {{count}}' },
   'Friends joined: {{count}} · +{{drives}} free drives a month': {
     one: 'Friends joined: {{count}} · +{{drives}} free drives a month',
     other: 'Friends joined: {{count}} · +{{drives}} free drives a month',
