@@ -12,23 +12,51 @@ const dictionary: Dictionary = {
   "{{authority}} needs a business purpose, e.g. \"Client meeting\".": "{{authority}}-এর জন্য একটি ব্যবসায়িক উদ্দেশ্য লাগবে, যেমন “ক্লায়েন্ট মিটিং”।",
   "{{authority}} rate for bicycles: {{rate}}": "সাইকেলের জন্য {{authority}} রেট: {{rate}}",
   "{{authority}} rate for motorbikes and scooters: {{rate}}": "মোটরবাইক ও স্কুটারের জন্য {{authority}} রেট: {{rate}}",
-  "{{count}} a month": { one: "মাসে {{count}}টি", other: "মাসে {{count}}টি" },
-  "{{count}} days": { one: "{{count}} দিন", other: "{{count}} দিন" },
-  "{{count}} days left": { one: "আর {{count}} দিন বাকি", other: "আর {{count}} দিন বাকি" },
-  "{{count}} days left in the {{year}} tax year": { one: "{{year}} ট্যাক্স বছরের আর {{count}} দিন বাকি", other: "{{year}} ট্যাক্স বছরের আর {{count}} দিন বাকি" },
-  "{{count}} drives are locked. Upgrade for unlimited drives.": { one: "{{count}}টি ট্রিপ লক করা আছে। আনলিমিটেড ট্রিপের জন্য আপগ্রেড করুন।", other: "{{count}}টি ট্রিপ লক করা আছে। আনলিমিটেড ট্রিপের জন্য আপগ্রেড করুন।" },
-  "{{count}} drives are waiting to be unlocked": { one: "{{count}}টি ট্রিপ আনলকের অপেক্ষায় আছে", other: "{{count}}টি ট্রিপ আনলকের অপেক্ষায় আছে" },
-  "{{count}} selected": { one: "{{count}}টি নির্বাচিত", other: "{{count}}টি নির্বাচিত" },
-  "{{count}} trips aren’t classified yet. Sort them first so the report is complete.": { one: "{{count}}টি ট্রিপ এখনও বাছাই হয়নি। রিপোর্ট সম্পূর্ণ করতে আগে সেটি বাছাই করুন।", other: "{{count}}টি ট্রিপ এখনও বাছাই হয়নি। রিপোর্ট সম্পূর্ণ করতে আগে সেগুলো বাছাই করুন।" },
-  "{{count}}-day free trial": { one: "{{count}} দিনের ফ্রি ট্রায়াল", other: "{{count}} দিনের ফ্রি ট্রায়াল" },
-  "{{count}}-month free trial": { one: "{{count}} মাসের ফ্রি ট্রায়াল", other: "{{count}} মাসের ফ্রি ট্রায়াল" },
+  "{{count}} a month": {
+    "one": "মাসে {{count}}টি",
+    "other": "মাসে {{count}}টি"
+  },
+  "{{count}} days": {
+    "one": "{{count}} দিন",
+    "other": "{{count}} দিন"
+  },
+  "{{count}} days left": {
+    "one": "আর {{count}} দিন বাকি",
+    "other": "আর {{count}} দিন বাকি"
+  },
+  "{{count}} days left in the {{year}} tax year": {
+    "one": "{{year}} ট্যাক্স বছরের আর {{count}} দিন বাকি",
+    "other": "{{year}} ট্যাক্স বছরের আর {{count}} দিন বাকি"
+  },
+  "{{count}} selected": {
+    "one": "{{count}}টি নির্বাচিত",
+    "other": "{{count}}টি নির্বাচিত"
+  },
+  "{{count}} trips aren’t classified yet. Sort them first so the report is complete.": {
+    "one": "{{count}}টি ট্রিপ এখনও বাছাই হয়নি। রিপোর্ট সম্পূর্ণ করতে আগে সেটি বাছাই করুন।",
+    "other": "{{count}}টি ট্রিপ এখনও বাছাই হয়নি। রিপোর্ট সম্পূর্ণ করতে আগে সেগুলো বাছাই করুন।"
+  },
+  "{{count}}-day free trial": {
+    "one": "{{count}} দিনের ফ্রি ট্রায়াল",
+    "other": "{{count}} দিনের ফ্রি ট্রায়াল"
+  },
+  "{{count}}-month free trial": {
+    "one": "{{count}} মাসের ফ্রি ট্রায়াল",
+    "other": "{{count}} মাসের ফ্রি ট্রায়াল"
+  },
   "{{country}}. {{rule}}": "{{country}}। {{rule}}",
   "{{date}} · {{distance}} · Added manually": "{{date}} · {{distance}} · নিজে যোগ করা",
   "{{day}} shift {{number}} end": "{{day}} শিফট {{number}} শেষ",
   "{{day}} shift {{number}} start": "{{day}} শিফট {{number}} শুরু",
-  "{{distance}} · {{value}} · {{count}} drives": { one: "{{distance}} · {{value}} · {{count}}টি ট্রিপ", other: "{{distance}} · {{value}} · {{count}}টি ট্রিপ" },
+  "{{distance}} · {{value}} · {{count}} drives": {
+    "one": "{{distance}} · {{value}} · {{count}}টি ট্রিপ",
+    "other": "{{distance}} · {{value}} · {{count}}টি ট্রিপ"
+  },
   "{{distance}} business": "{{distance}} ব্যবসায়িক",
-  "{{distance}} business · {{count}} to review": { one: "{{distance}} ব্যবসায়িক · {{count}}টি দেখা বাকি", other: "{{distance}} ব্যবসায়িক · {{count}}টি দেখা বাকি" },
+  "{{distance}} business · {{count}} to review": {
+    "one": "{{distance}} ব্যবসায়িক · {{count}}টি দেখা বাকি",
+    "other": "{{distance}} ব্যবসায়িক · {{count}}টি দেখা বাকি"
+  },
   "{{distance}} business km": "{{distance}} ব্যবসায়িক কিমি",
   "{{distance}} business km logged with MileMint 🛣️ Every one counted.": "MileMint দিয়ে {{distance}} ব্যবসায়িক কিমি রেকর্ড হয়েছে 🛣️ প্রতিটিই গোনা হয়েছে।",
   "{{distance}} business miles": "{{distance}} ব্যবসায়িক মাইল",
@@ -42,7 +70,10 @@ const dictionary: Dictionary = {
   "{{distance}} miles · a typical month of business driving": "{{distance}} মাইল · সাধারণ এক মাসের ব্যবসায়িক ড্রাইভিং",
   "{{distance}} miles logged for work, every one counted. That’s a lot of road.": "কাজের জন্য {{distance}} মাইল রেকর্ড হয়েছে, প্রতিটিই গোনা। অনেকটা পথ!",
   "{{distance}} of business driving": "{{distance}} ব্যবসায়িক ড্রাইভিং",
-  "{{dueLine}}: {{count}} days to go": { one: "{{dueLine}}: আর {{count}} দিন বাকি", other: "{{dueLine}}: আর {{count}} দিন বাকি" },
+  "{{dueLine}}: {{count}} days to go": {
+    "one": "{{dueLine}}: আর {{count}} দিন বাকি",
+    "other": "{{dueLine}}: আর {{count}} দিন বাকি"
+  },
   "{{dueLine}}: today": "{{dueLine}}: আজই",
   "{{from}} to {{to}}, {{date}}, {{status}}": "{{from}} থেকে {{to}}, {{date}}, {{status}}",
   "{{hint}}. Swipe the button to the right, or double-tap.": "{{hint}}। বোতামটি ডানে সোয়াইপ করুন, বা দুবার ট্যাপ করুন।",
@@ -60,7 +91,6 @@ const dictionary: Dictionary = {
   "{{rule}}. Petrol, diesel, hybrid or electric: same rate.": "{{rule}}। পেট্রোল, ডিজেল, হাইব্রিড বা ইলেকট্রিক: একই রেট।",
   "{{trial}}, then {{price}}/month": "{{trial}}, তারপর {{price}}/মাস",
   "{{trial}}, then {{price}}/year": "{{trial}}, তারপর {{price}}/বছর",
-  "{{used}} of {{limit}} free drives in {{month}}": "{{month}}-এ {{limit}}টির মধ্যে {{used}}টি ফ্রি ট্রিপ",
   "{{year}} at {{authority}} rates": "{{authority}} রেটে {{year}}",
   "{{year}} tax year": "{{year}} ট্যাক্স বছর",
   "{{year}} tax year at {{authority}} rates": "{{authority}} রেটে {{year}} ট্যাক্স বছর",
@@ -79,8 +109,6 @@ const dictionary: Dictionary = {
   "24-hour times. A shift like 22:00 to 02:00 runs past midnight.": "24-ঘণ্টার সময়। 22:00 থেকে 02:00-এর মতো শিফট মধ্যরাত পেরিয়ে যায়।",
   "31 January": "31 জানুয়ারি",
   "31 October": "31 অক্টোবর",
-  "40 automatic drives a month (a whole shift counts as one), plus unlimited trips by hand. Go Pro any time for unlimited.": "মাসে 40টি অটোমেটিক ট্রিপ (পুরো একটি শিফট একটি ট্রিপ হিসেবে গোনা হয়), সাথে নিজে যোগ করা আনলিমিটেড ট্রিপ। আনলিমিটেডের জন্য যেকোনো সময় Pro নিন।",
-  "40 automatic drives a month, plus unlimited trips by hand. Go Pro any time for unlimited.": "মাসে 40টি অটোমেটিক ট্রিপ, সাথে নিজে যোগ করা আনলিমিটেড ট্রিপ। আনলিমিটেডের জন্য যেকোনো সময় Pro নিন।",
   "A (slightly cheeky) nudge on Sunday evening to sort the week’s drives.": "সপ্তাহের ট্রিপ বাছাই করতে রবিবার সন্ধ্যায় একটা (একটু মজার) তাগাদা।",
   "A few swipes tonight beats a shoebox of receipts at tax time.": "ট্যাক্সের সময় এক বাক্স রসিদ ঘাঁটার চেয়ে আজ রাতে কয়েকটা সোয়াইপ অনেক ভালো।",
   "A fully sorted week": "পুরো সপ্তাহ বাছাই শেষ",
@@ -187,7 +215,10 @@ const dictionary: Dictionary = {
   "Date: {{date}}. Hide calendar": "তারিখ: {{date}}। ক্যালেন্ডার লুকান",
   "Date: {{date}}. Show calendar": "তারিখ: {{date}}। ক্যালেন্ডার দেখান",
   "Dates are a guide; deadlines can move for weekends and holidays. Check with {{authority}} or your accountant. Not tax advice.": "তারিখগুলো শুধু ধারণা দেওয়ার জন্য; সপ্তাহান্ত আর ছুটির কারণে সময়সীমা সরে যেতে পারে। {{authority}} বা আপনার অ্যাকাউন্ট্যান্টের সাথে মিলিয়ে নিন। এটি ট্যাক্স পরামর্শ নয়।",
-  "days": { one: "দিন", other: "দিন" },
+  "days": {
+    "one": "দিন",
+    "other": "দিন"
+  },
   "Deductions found in {{year}}": "{{year}}-এ পাওয়া ট্যাক্স ছাড়",
   "Deductions found in {{year}} tax year": "{{year}} ট্যাক্স বছরে পাওয়া ট্যাক্স ছাড়",
   "Delete": "মুছুন",
@@ -202,7 +233,6 @@ const dictionary: Dictionary = {
   "Drives are logged in the background. No buttons to press.": "ট্রিপ ব্যাকগ্রাউন্ডে রেকর্ড হয়। কোনো বোতাম চাপতে হয় না।",
   "Drives are logged when you park.": "পার্ক করলেই ট্রিপ রেকর্ড হয়।",
   "Drives may be missed": "কিছু ট্রিপ বাদ পড়তে পারে",
-  "Drives over the limit": "সীমার বেশি ট্রিপ",
   "Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.": "আপনার কাজের সময়ে শুরু হওয়া ট্রিপ ব্যবসায়িক হিসেবে চিহ্নিত হয়, বাকিগুলো ব্যক্তিগত। আপনার নিয়মিত রুট আর যাতায়াত অগ্রাধিকার পায়।",
   "Driving {{vehicle}}. Change vehicle": "{{vehicle}} চালাচ্ছেন। যানবাহন বদলান",
   "Driving now": "এখন চালাচ্ছেন",
@@ -258,7 +288,6 @@ const dictionary: Dictionary = {
   "Free": "ফ্রি",
   "Free money alert 💸": "টাকা ফেলে রাখবেন না 💸",
   "Free plan": "ফ্রি প্ল্যান",
-  "Free plan: {{count}} automatic drives a month, unlimited manual trips and CSV export.": { one: "ফ্রি প্ল্যান: মাসে {{count}}টি অটোমেটিক ট্রিপ, নিজে যোগ করা আনলিমিটেড ট্রিপ আর CSV এক্সপোর্ট।", other: "ফ্রি প্ল্যান: মাসে {{count}}টি অটোমেটিক ট্রিপ, নিজে যোগ করা আনলিমিটেড ট্রিপ আর CSV এক্সপোর্ট।" },
   "Free to start": "ফ্রিতে শুরু",
   "Free trial": "ফ্রি ট্রায়াল",
   "Fri": "শুক্র",
@@ -301,7 +330,6 @@ const dictionary: Dictionary = {
   "Just drive. Each trip appears after you park, and business drives count at {{authority}}’s {{rate}} rate.": "শুধু ড্রাইভ করুন। পার্ক করার পর প্রতিটি ট্রিপ দেখা যায়, আর ব্যবসায়িক ট্রিপ {{authority}}-এর {{rate}} রেটে গোনা হয়।",
   "Just drive. Each trip appears here after you park, ready to swipe business or personal.": "শুধু ড্রাইভ করুন। পার্ক করার পর প্রতিটি ট্রিপ এখানে দেখা যাবে, ব্যবসায়িক বা ব্যক্তিগত সোয়াইপ করার জন্য তৈরি।",
   "Keep going": "এগিয়ে চলুন",
-  "Kept, locked": "রাখা হয়, তবে লক",
   "kilometres": "কিলোমিটার",
   "Kilometres": "কিলোমিটার",
   "Kilometres don’t sort themselves…": "কিলোমিটার নিজে নিজে বাছাই হয় না…",
@@ -322,8 +350,6 @@ const dictionary: Dictionary = {
   "Literally. We counted them. Come and sort this week’s.": "সত্যিই। আমরা গুনে দেখেছি। এসে এই সপ্তাহেরগুলো বাছাই করুন।",
   "Location is off for MileMint, so type the address instead.": "MileMint-এর জন্য লোকেশন বন্ধ আছে, তাই ঠিকানাটি লিখুন।",
   "Location is set to “While Using”. Switch it to “Always” so drives are logged when the app is closed.": "লোকেশন “অ্যাপ ব্যবহার করার সময়” সেট করা আছে। অ্যাপ বন্ধ থাকলেও ট্রিপ রেকর্ড করতে এটি “সবসময়”-তে বদলান।",
-  "Locked drive": "লক করা ট্রিপ",
-  "Locked drive on {{date}}, {{distance}}": "{{date}}-এর লক করা ট্রিপ, {{distance}}",
   "Log every drive automatically": "প্রতিটি ট্রিপ অটোমেটিক রেকর্ড করুন",
   "Log every drive with MileMint Pro": "MileMint Pro দিয়ে প্রতিটি ট্রিপ রেকর্ড করুন",
   "Low effort, high reward": "কম খাটুনি, বেশি লাভ",
@@ -381,7 +407,6 @@ const dictionary: Dictionary = {
   "Never": "কখনও না",
   "Never miss a mile.": "একটা ট্রিপও বাদ যাবে না।",
   "New drives start as business": "নতুন ট্রিপ ব্যবসায়িক হিসেবে শুরু হয়",
-  "New drives this month are saved but locked until you upgrade.": "এই মাসের নতুন ট্রিপ সেভ হয়, কিন্তু আপগ্রেড না করা পর্যন্ত লক থাকে।",
   "New to Pro? Your first month is on me: {{url}}": "Pro-তে নতুন? আপনার প্রথম মাস আমার তরফ থেকে: {{url}}",
   "Next month": "পরের মাস",
   "No account. Your trips stay encrypted on your iPhone.": "কোনো অ্যাকাউন্ট লাগে না। আপনার ট্রিপ আপনার iPhone-এ এনক্রিপ্ট করা থাকে।",
@@ -406,7 +431,10 @@ const dictionary: Dictionary = {
   "of business driving this week": "এই সপ্তাহের ব্যবসায়িক ড্রাইভিং",
   "Off we go! 👋": "চলুন রওনা দিই! 👋",
   "On shift · {{elapsed}}": "শিফটে · {{elapsed}}",
-  "On shift for {{elapsed}}, {{count}} drives": { one: "{{elapsed}} ধরে শিফটে, {{count}}টি ট্রিপ", other: "{{elapsed}} ধরে শিফটে, {{count}}টি ট্রিপ" },
+  "On shift for {{elapsed}}, {{count}} drives": {
+    "one": "{{elapsed}} ধরে শিফটে, {{count}}টি ট্রিপ",
+    "other": "{{elapsed}} ধরে শিফটে, {{count}}টি ট্রিপ"
+  },
   "Once a year: by April 30, or June 15 if you’re self-employed (any tax owing is still due April 30). Self-employed claim vehicle costs on form T2125.": "বছরে একবার: 30 এপ্রিলের মধ্যে, অথবা স্বনিযুক্ত হলে 15 জুনের মধ্যে (তবে বকেয়া ট্যাক্স 30 এপ্রিলের মধ্যেই দিতে হবে)। স্বনিযুক্তরা T2125 ফর্মে যানবাহনের খরচ দাবি করেন।",
   "Once a year: lodge by 31 October after the income year ends (30 June), or later if you use a registered tax agent and sign up with them before 31 October.": "বছরে একবার: আয়-বছর (30 জুন) শেষ হওয়ার পর 31 অক্টোবরের মধ্যে জমা দিন, অথবা রেজিস্টার্ড ট্যাক্স এজেন্ট ব্যবহার করলে এবং 31 অক্টোবরের আগে তাঁদের কাছে নাম লেখালে আরও পরে।",
   "One quick switch in Settings": "সেটিংসে ছোট্ট একটা পরিবর্তন",
@@ -414,7 +442,6 @@ const dictionary: Dictionary = {
   "Open Settings": "সেটিংস খুলুন",
   "Opening the App Store…": "App Store খোলা হচ্ছে…",
   "Opens a list of purposes": "উদ্দেশ্যের একটি তালিকা খোলে",
-  "Opens MileMint Pro to unlock it": "আনলক করতে MileMint Pro খোলে",
   "Opens trip details. Long press to delete": "ট্রিপের বিস্তারিত খোলে। মুছতে চেপে ধরে রাখুন",
   "Optional": "ঐচ্ছিক",
   "Optional. Shows your total driving and the business share on the report.": "ঐচ্ছিক। রিপোর্টে আপনার মোট ড্রাইভিং আর ব্যবসায়িক অংশ দেখায়।",
@@ -471,7 +498,10 @@ const dictionary: Dictionary = {
   "Search for its address, or use “I’m here now”.": "এর ঠিকানা খুঁজুন, অথবা “আমি এখন এখানে” ব্যবহার করুন।",
   "See what each business drive saves you at tax time.": "দেখুন ট্যাক্সের সময় প্রতিটি ব্যবসায়িক ট্রিপের মূল্য কত।",
   "Select": "নির্বাচন",
-  "Select {{count}} unsorted": { one: "বাছাই-বাকি {{count}}টি নির্বাচন", other: "বাছাই-বাকি {{count}}টি নির্বাচন" },
+  "Select {{count}} unsorted": {
+    "one": "বাছাই-বাকি {{count}}টি নির্বাচন",
+    "other": "বাছাই-বাকি {{count}}টি নির্বাচন"
+  },
   "Select several trips to sort at once": "একসাথে বাছাই করতে কয়েকটি ট্রিপ নির্বাচন করুন",
   "Self Assessment return": "Self Assessment রিটার্ন",
   "Self Assessment return due in a week 📄": "Self Assessment রিটার্ন জমার আর এক সপ্তাহ বাকি 📄",
@@ -495,7 +525,10 @@ const dictionary: Dictionary = {
   "Skip for now": "আপাতত এড়িয়ে যান",
   "So trips read “Home → …” instead of a street name. Optional.": "যাতে ট্রিপে রাস্তার নামের বদলে “বাড়ি → …” লেখা থাকে। ঐচ্ছিক।",
   "Something went wrong": "কিছু একটা ভুল হয়েছে",
-  "Sort {{count}} drives": { one: "{{count}}টি ট্রিপ বাছাই করুন", other: "{{count}}টি ট্রিপ বাছাই করুন" },
+  "Sort {{count}} drives": {
+    "one": "{{count}}টি ট্রিপ বাছাই করুন",
+    "other": "{{count}}টি ট্রিপ বাছাই করুন"
+  },
   "Sort this week’s drives and bank the deduction. Done in a minute.": "এই সপ্তাহের ট্রিপ বাছাই করে ট্যাক্স ছাড়ের হিসাব পাকা করে রাখুন। এক মিনিটেই শেষ।",
   "Sort this week’s drives now and tax time becomes a two-minute job.": "এখনই এই সপ্তাহের ট্রিপ বাছাই করুন, ট্যাক্সের সময় কাজটা দুই মিনিটের হয়ে যাবে।",
   "Sort your drives and add any you missed before {{date}}. Every business kilometre is money back.": "{{date}}-এর আগে আপনার ট্রিপ বাছাই করুন আর বাদ পড়াগুলো যোগ করুন। প্রতিটি ব্যবসায়িক কিলোমিটারেরই দাম আছে।",
@@ -592,9 +625,7 @@ const dictionary: Dictionary = {
   "United States": "যুক্তরাষ্ট্র",
   "Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.": "যদি না কোনো নিয়ম অন্য কিছু বলে (কাজের সময়, যাতায়াত, বা আপনার শেখানো কোনো রুট)। যেগুলো ব্যক্তিগত ছিল সেগুলো বাঁয়ে সোয়াইপ করুন; শুধু ব্যবসায়িক ট্রিপই দাবি করা উচিত।",
   "Unlimited": "আনলিমিটেড",
-  "Unlock with MileMint Pro": "MileMint Pro দিয়ে আনলক করুন",
   "Unlock with Pro": "Pro দিয়ে আনলক করুন",
-  "Unlocked": "আনলক করা",
   "Upgrade to Pro": "Pro-তে আপগ্রেড করুন",
   "USA": "যুক্তরাষ্ট্র",
   "Use": "নিন",
@@ -628,7 +659,6 @@ const dictionary: Dictionary = {
   "Work-related car use (cents per km method)": "কাজের জন্য গাড়ির ব্যবহার (cents per km method)",
   "worth about {{amount}}": "মূল্য প্রায় {{amount}}",
   "Worth money": "আর্থিক মূল্য",
-  "worth up to {{amount}}": "মূল্য সর্বোচ্চ {{amount}}",
   "Worth up to {{amount}} in deductions if they were for business.": "ব্যবসার কাজে হলে সর্বোচ্চ {{amount}} পর্যন্ত ট্যাক্স ছাড় হতে পারে।",
   "Wrap up warm out there ❄️": "বাইরে গরম কাপড় পরে থাকুন ❄️",
   "Yearly": "বার্ষিক",
@@ -707,7 +737,10 @@ const dictionary: Dictionary = {
   "About {{amount}} tax back": "প্রায় {{amount}} ট্যাক্স ফেরত",
   "Mileage logged for your expense claims": "আপনার খরচের দাবির জন্য রেকর্ড করা মাইলেজ",
   "{{amount}} relief unclaimed from {{year}}": "{{year}}-এর {{amount}} রিলিফ এখনো দাবি করা হয়নি",
-  "Claim it before {{date}}. {{total}} unclaimed across {{count}} earlier tax years.": { one: "{{date}}-এর আগে দাবি করুন। আগের {{count}}টি ট্যাক্স বছর মিলিয়ে {{total}} দাবি করা বাকি।", other: "{{date}}-এর আগে দাবি করুন। আগের {{count}}টি ট্যাক্স বছর মিলিয়ে {{total}} দাবি করা বাকি।" },
+  "Claim it before {{date}}. {{total}} unclaimed across {{count}} earlier tax years.": {
+    "one": "{{date}}-এর আগে দাবি করুন। আগের {{count}}টি ট্যাক্স বছর মিলিয়ে {{total}} দাবি করা বাকি।",
+    "other": "{{date}}-এর আগে দাবি করুন। আগের {{count}}টি ট্যাক্স বছর মিলিয়ে {{total}} দাবি করা বাকি।"
+  },
   "Claim it before {{date}}.": "{{date}}-এর আগে দাবি করুন।",
   "See how to claim ›": "কীভাবে দাবি করবেন দেখুন ›",
   "The logbook method is for Australian tax returns. Change your country in Settings to use it.": "লগবুক পদ্ধতি অস্ট্রেলিয়ার ট্যাক্স রিটার্নের জন্য। এটি ব্যবহার করতে সেটিংসে আপনার দেশ বদলান।",
@@ -733,7 +766,10 @@ const dictionary: Dictionary = {
   "Ended early": "আগেই শেষ হয়েছে",
   "Starts {{date}}": "{{date}} থেকে শুরু",
   "Week {{week}} of {{weeks}}": "সপ্তাহ {{week}} / {{weeks}}",
-  "{{count}} days to go": { one: "আর {{count}} দিন বাকি", other: "আর {{count}} দিন বাকি" },
+  "{{count}} days to go": {
+    "one": "আর {{count}} দিন বাকি",
+    "other": "আর {{count}} দিন বাকি"
+  },
   "{{percent}}% business use": "{{percent}}% ব্যবসায়িক ব্যবহার",
   "{{percent}}% business use so far": "এ পর্যন্ত {{percent}}% ব্যবসায়িক ব্যবহার",
   "Total km (odometer)": "মোট কিমি (ওডোমিটার)",
@@ -742,8 +778,14 @@ const dictionary: Dictionary = {
   "This logbook ended before 12 weeks, so it can’t be used for the logbook method. Start a new one.": "এই লগবুক 12 সপ্তাহের আগেই শেষ হয়েছে, তাই এটি লগবুক পদ্ধতিতে ব্যবহার করা যাবে না। নতুন একটি শুরু করুন।",
   "Worked out from the km MileMint logged. Add both odometer readings so any driving MileMint missed is counted too.": "MileMint-এর রেকর্ড করা কিমি থেকে হিসাব করা। দুটো ওডোমিটার রিডিংই যোগ করুন, যাতে MileMint-এর বাদ পড়া ড্রাইভিংও গোনা হয়।",
   "Your odometer readings show less driving than the business drives logged. Please check them.": "আপনার ওডোমিটার রিডিংয়ে রেকর্ড হওয়া ব্যবসায়িক ট্রিপের চেয়ে কম ড্রাইভিং দেখা যাচ্ছে। রিডিংগুলো একবার দেখে নিন।",
-  "{{count}} drives in this period aren’t sorted yet. They count as private until you sort them.": { one: "এই সময়ের {{count}}টি ট্রিপ এখনো বাছাই হয়নি। বাছাই না করা পর্যন্ত এটি ব্যক্তিগত হিসেবে ধরা হবে।", other: "এই সময়ের {{count}}টি ট্রিপ এখনো বাছাই হয়নি। বাছাই না করা পর্যন্ত এগুলো ব্যক্তিগত হিসেবে ধরা হবে।" },
-  "{{count}} business drives have no reason yet. The ATO asks for the reason for each journey.": { one: "{{count}}টি ব্যবসায়িক ট্রিপের কারণ এখনো লেখা হয়নি। ATO প্রতিটি ট্রিপের কারণ চায়।", other: "{{count}}টি ব্যবসায়িক ট্রিপের কারণ এখনো লেখা হয়নি। ATO প্রতিটি ট্রিপের কারণ চায়।" },
+  "{{count}} drives in this period aren’t sorted yet. They count as private until you sort them.": {
+    "one": "এই সময়ের {{count}}টি ট্রিপ এখনো বাছাই হয়নি। বাছাই না করা পর্যন্ত এটি ব্যক্তিগত হিসেবে ধরা হবে।",
+    "other": "এই সময়ের {{count}}টি ট্রিপ এখনো বাছাই হয়নি। বাছাই না করা পর্যন্ত এগুলো ব্যক্তিগত হিসেবে ধরা হবে।"
+  },
+  "{{count}} business drives have no reason yet. The ATO asks for the reason for each journey.": {
+    "one": "{{count}}টি ব্যবসায়িক ট্রিপের কারণ এখনো লেখা হয়নি। ATO প্রতিটি ট্রিপের কারণ চায়।",
+    "other": "{{count}}টি ব্যবসায়িক ট্রিপের কারণ এখনো লেখা হয়নি। ATO প্রতিটি ট্রিপের কারণ চায়।"
+  },
   "Valid for the {{first}} to {{last}} income years, unless your work or your car changes.": "{{first}} থেকে {{last}} আয়-বছর পর্যন্ত বৈধ, যদি না আপনার কাজ বা গাড়ি বদলায়।",
   "These 12 weeks run into the next income year. MileMint counts the logbook as kept in the year it started; check with your tax agent if unsure.": "এই 12 সপ্তাহ পরের আয়-বছরে গিয়ে পড়ছে। লগবুক যে বছরে শুরু হয়েছে, MileMint সেটিকে সেই বছরের লগবুক হিসেবেই ধরে; নিশ্চিত না হলে আপনার ট্যাক্স এজেন্টকে জিজ্ঞাসা করুন।",
   "First day (km)": "প্রথম দিন (কিমি)",
@@ -777,12 +819,18 @@ const dictionary: Dictionary = {
   "Nothing to back up yet. Your trips are backed up once you have some.": "এখনো ব্যাকআপ করার মতো কিছু নেই। ট্রিপ রেকর্ড হলেই সেগুলোর ব্যাকআপ হবে।",
   "iCloud isn’t available. Sign in to iCloud and turn on iCloud Drive in iPhone Settings.": "iCloud পাওয়া যাচ্ছে না। iPhone-এর সেটিংসে iCloud-এ সাইন ইন করে iCloud Drive চালু করুন।",
   "Couldn’t back up. Check your connection and try again.": "ব্যাকআপ করা যায়নি। কানেকশন দেখে আবার চেষ্টা করুন।",
-  "Restored {{count}} trips from iCloud.": { one: "iCloud থেকে {{count}}টি ট্রিপ পুনরুদ্ধার হয়েছে।", other: "iCloud থেকে {{count}}টি ট্রিপ পুনরুদ্ধার হয়েছে।" },
+  "Restored {{count}} trips from iCloud.": {
+    "one": "iCloud থেকে {{count}}টি ট্রিপ পুনরুদ্ধার হয়েছে।",
+    "other": "iCloud থেকে {{count}}টি ট্রিপ পুনরুদ্ধার হয়েছে।"
+  },
   "Couldn’t restore. Nothing on this iPhone was changed.": "পুনরুদ্ধার করা যায়নি। এই iPhone-এর কিছুই বদলানো হয়নি।",
   "Couldn’t reach your iCloud backups. Check your connection and try again.": "iCloud-এ আপনার ব্যাকআপগুলোতে পৌঁছানো যায়নি। কানেকশন দেখে আবার চেষ্টা করুন।",
   "There’s no backup in iCloud yet.": "iCloud-এ এখনো কোনো ব্যাকআপ নেই।",
   "Replace what’s on this iPhone?": "এই iPhone-এ যা আছে, তা বদলে দেবেন?",
-  "Restore the backup from {{date}} with {{count}} trips. The trips, places, vehicles and settings on this iPhone are replaced by the ones in the backup.": { one: "{{date}}-এর ব্যাকআপটি ({{count}}টি ট্রিপ) পুনরুদ্ধার করুন। এই iPhone-এ থাকা ট্রিপ, জায়গা, যানবাহন আর সেটিংসের বদলে ব্যাকআপে থাকা সবকিছু বসবে।", other: "{{date}}-এর ব্যাকআপটি ({{count}}টি ট্রিপ) পুনরুদ্ধার করুন। এই iPhone-এ থাকা ট্রিপ, জায়গা, যানবাহন আর সেটিংসের বদলে ব্যাকআপে থাকা সবকিছু বসবে।" },
+  "Restore the backup from {{date}} with {{count}} trips. The trips, places, vehicles and settings on this iPhone are replaced by the ones in the backup.": {
+    "one": "{{date}}-এর ব্যাকআপটি ({{count}}টি ট্রিপ) পুনরুদ্ধার করুন। এই iPhone-এ থাকা ট্রিপ, জায়গা, যানবাহন আর সেটিংসের বদলে ব্যাকআপে থাকা সবকিছু বসবে।",
+    "other": "{{date}}-এর ব্যাকআপটি ({{count}}টি ট্রিপ) পুনরুদ্ধার করুন। এই iPhone-এ থাকা ট্রিপ, জায়গা, যানবাহন আর সেটিংসের বদলে ব্যাকআপে থাকা সবকিছু বসবে।"
+  },
   "Restore": "পুনরুদ্ধার",
   "Backups to iCloud work in the iPhone app.": "iCloud-এ ব্যাকআপ iPhone অ্যাপে কাজ করে।",
   "Checking iCloud…": "iCloud দেখা হচ্ছে…",
@@ -797,13 +845,19 @@ const dictionary: Dictionary = {
   "Restore from iCloud backup": "iCloud ব্যাকআপ থেকে পুনরুদ্ধার করুন",
   "Backing up…": "ব্যাকআপ হচ্ছে…",
   "Back up now": "এখনই ব্যাকআপ নিন",
-  "Done. {{count}} past trips now show only the area.": { one: "সম্পন্ন। আগের {{count}}টি ট্রিপে এখন শুধু এলাকা দেখায়।", other: "সম্পন্ন। আগের {{count}}টি ট্রিপে এখন শুধু এলাকা দেখায়।" },
+  "Done. {{count}} past trips now show only the area.": {
+    "one": "সম্পন্ন। আগের {{count}}টি ট্রিপে এখন শুধু এলাকা দেখায়।",
+    "other": "সম্পন্ন। আগের {{count}}টি ট্রিপে এখন শুধু এলাকা দেখায়।"
+  },
   "Couldn’t change past trips. Please try again.": "আগের ট্রিপগুলো বদলানো যায়নি। আবার চেষ্টা করুন।",
   "Remove addresses from past trips?": "আগের ট্রিপ থেকে ঠিকানা সরাবেন?",
   "This can’t be undone. Dates, distances and purposes stay as they are; places you saved keep their names.": "এটি আর ফেরানো যাবে না। তারিখ, দূরত্ব আর উদ্দেশ্য যেমন আছে তেমনই থাকবে; আপনার সেভ করা জায়গাগুলোর নামও থাকবে।",
   "Remove addresses": "ঠিকানা সরান",
   "Past trips too?": "আগের ট্রিপগুলোও?",
-  "{{count}} past trips may still have addresses and routes. Replace them with the area only and delete the routes?": { one: "আগের {{count}}টি ট্রিপে এখনো ঠিকানা আর রুট থাকতে পারে। সেটিতে শুধু এলাকা রেখে রুট মুছে দেবেন?", other: "আগের {{count}}টি ট্রিপে এখনো ঠিকানা আর রুট থাকতে পারে। সেগুলোতে শুধু এলাকা রেখে রুট মুছে দেবেন?" },
+  "{{count}} past trips may still have addresses and routes. Replace them with the area only and delete the routes?": {
+    "one": "আগের {{count}}টি ট্রিপে এখনো ঠিকানা আর রুট থাকতে পারে। সেটিতে শুধু এলাকা রেখে রুট মুছে দেবেন?",
+    "other": "আগের {{count}}টি ট্রিপে এখনো ঠিকানা আর রুট থাকতে পারে। সেগুলোতে শুধু এলাকা রেখে রুট মুছে দেবেন?"
+  },
   "Keep them": "রেখে দিন",
   "Replace…": "বদলান…",
   "Client privacy": "ক্লায়েন্টের গোপনীয়তা",
@@ -834,7 +888,10 @@ const dictionary: Dictionary = {
   "🔒 Client privacy": "🔒 ক্লায়েন্টের গোপনীয়তা",
   "No route or address was kept for this drive, only the area and the distance: {{distance}}.": "এই ট্রিপের কোনো রুট বা ঠিকানা রাখা হয়নি, শুধু এলাকা আর দূরত্ব: {{distance}}।",
   "Restore your trips from iCloud": "iCloud থেকে আপনার ট্রিপ পুনরুদ্ধার করুন",
-  "Backup from {{date}} with {{count}} trips": { one: "{{date}}-এর ব্যাকআপ, {{count}}টি ট্রিপ", other: "{{date}}-এর ব্যাকআপ, {{count}}টি ট্রিপ" },
+  "Backup from {{date}} with {{count}} trips": {
+    "one": "{{date}}-এর ব্যাকআপ, {{count}}টি ট্রিপ",
+    "other": "{{date}}-এর ব্যাকআপ, {{count}}টি ট্রিপ"
+  },
   "Backup from {{date}}": "{{date}}-এর ব্যাকআপ",
   "Employed, in your own vehicle?": "কর্মচারী, আর নিজের যানবাহনে কাজ করেন?",
   "MileMint works out the tax relief you can claim. Optional.": "আপনি কত ট্যাক্স রিলিফ দাবি করতে পারেন, MileMint হিসাব করে দেবে। ঐচ্ছিক।",
@@ -848,9 +905,18 @@ const dictionary: Dictionary = {
   "The backup hasn’t downloaded from iCloud yet. Check your connection and try again.": "ব্যাকআপটি এখনো iCloud থেকে ডাউনলোড হয়নি। কানেকশন দেখে আবার চেষ্টা করুন।",
   "This backup couldn’t be read. It may be damaged.": "এই ব্যাকআপটি পড়া যায়নি। এটি নষ্ট হয়ে থাকতে পারে।",
   "Backed up just now": "এইমাত্র ব্যাকআপ হয়েছে",
-  "Backed up {{count}} minutes ago": { one: "{{count}} মিনিট আগে ব্যাকআপ হয়েছে", other: "{{count}} মিনিট আগে ব্যাকআপ হয়েছে" },
-  "Backed up {{count}} hours ago": { one: "{{count}} ঘণ্টা আগে ব্যাকআপ হয়েছে", other: "{{count}} ঘণ্টা আগে ব্যাকআপ হয়েছে" },
-  "Backed up {{count}} days ago": { one: "{{count}} দিন আগে ব্যাকআপ হয়েছে", other: "{{count}} দিন আগে ব্যাকআপ হয়েছে" },
+  "Backed up {{count}} minutes ago": {
+    "one": "{{count}} মিনিট আগে ব্যাকআপ হয়েছে",
+    "other": "{{count}} মিনিট আগে ব্যাকআপ হয়েছে"
+  },
+  "Backed up {{count}} hours ago": {
+    "one": "{{count}} ঘণ্টা আগে ব্যাকআপ হয়েছে",
+    "other": "{{count}} ঘণ্টা আগে ব্যাকআপ হয়েছে"
+  },
+  "Backed up {{count}} days ago": {
+    "one": "{{count}} দিন আগে ব্যাকআপ হয়েছে",
+    "other": "{{count}} দিন আগে ব্যাকআপ হয়েছে"
+  },
   "For employees: P87 or Self Assessment": "কর্মচারীদের জন্য: P87 বা Self Assessment",
   "Opens the logbook method": "লগবুক পদ্ধতি খোলে",
   "Over 5,000 km? The logbook method could claim more": "5,000 কিমির বেশি? লগবুক পদ্ধতিতে বেশি দাবি করা যেতে পারে",
@@ -904,7 +970,7 @@ const dictionary: Dictionary = {
   "Every invite has its own code, for one friend.": "প্রতিটি আমন্ত্রণের নিজস্ব কোড থাকে, একজন বন্ধুর জন্য।",
   "Invites sent: {{count}}": {
     "one": "পাঠানো আমন্ত্রণ: {{count}}টি",
-    "other": "পাঠানো আমন্ত্রণ: {{count}}টি",
+    "other": "পাঠানো আমন্ত্রণ: {{count}}টি"
   },
   "Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you.": "আমন্ত্রণগুলো iCloud-এর মাধ্যমে নিশ্চিত হয়, যা আসবে পরের কোনো আপডেটে। তার আগে যোগ দেওয়া বন্ধুরা এটি চালু হলেই বাড়তি ট্রিপ পাবেন, আপনিও পাবেন।",
   "You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed.": "আপনি {{code}} দিয়েছেন। আমন্ত্রণ নিশ্চিত হলেই আপনার 10টি বাড়তি ট্রিপ চলে আসবে।",
@@ -917,6 +983,53 @@ const dictionary: Dictionary = {
   "This Apple Account has already joined with a friend’s invite.": "এই Apple অ্যাকাউন্ট আগেই একজন বন্ধুর আমন্ত্রণে যোগ দিয়েছে।",
   "🎉 Your friend’s invite is confirmed": "🎉 আপনার বন্ধুর আমন্ত্রণ নিশ্চিত হয়েছে",
   "Your friend’s invite couldn’t be used": "আপনার বন্ধুর আমন্ত্রণটি ব্যবহার করা যায়নি",
+  "Opens MileMint Pro": "MileMint Pro খোলে",
+  "Saved · value unlocks with Pro": "সেভ হয়েছে · মূল্য Pro-তে আনলক হবে",
+  "Business or personal? Personal drives don’t use your free drives.": "ব্যবসায়িক না ব্যক্তিগত? ব্যক্তিগত ট্রিপ আপনার ফ্রি ট্রিপ থেকে কাটে না।",
+  "Closes this message": "এই মেসেজ বন্ধ করে",
+  "Saved. This month’s free drives are used, so a drive sorted back from personal waits for Pro to show its value. Drives already showing their value keep it.": "সেভ হয়েছে। এই মাসের ফ্রি ট্রিপ শেষ, তাই ব্যক্তিগত থেকে আবার ব্যবসায়িক করা ট্রিপের মূল্য Pro-তে দেখা যাবে। যেসব ট্রিপের মূল্য আগে থেকেই দেখা যাচ্ছে, সেগুলো তা রাখবে।",
+  "{{used}} of {{limit}} free work drives in {{month}}": "{{month}}-এ {{limit}}টির মধ্যে {{used}}টি ফ্রি ব্যবসায়িক ট্রিপ",
+  "{{count}} drives are saved and shown in full. Their value unlocks with Pro.": {
+    "one": "{{count}}টি ট্রিপ সেভ আছে এবং পুরোটা দেখা যায়। এর মূল্য Pro-তে আনলক হবে।",
+    "other": "{{count}}টি ট্রিপ সেভ আছে এবং পুরোটা দেখা যায়। এগুলোর মূল্য Pro-তে আনলক হবে।"
+  },
+  "New work drives are still saved and shown in full. Their value unlocks with Pro.": "নতুন ব্যবসায়িক ট্রিপ এখনও সেভ হয় এবং পুরোটা দেখা যায়। এগুলোর মূল্য Pro-তে আনলক হবে।",
+  "Personal drives don’t count.": "ব্যক্তিগত ট্রিপ গোনা হয় না।",
+  "What counts?": "কী গোনা হয়?",
+  "Drives past the limit, saved and shown in full": "লিমিটের বেশি ট্রিপ, সেভ ও পুরোটা দেখা যায়",
+  "The value of drives past the limit": "লিমিটের বেশি ট্রিপের মূল্য",
+  "{{count}} saved drives have their value waiting for Pro": {
+    "one": "{{count}}টি সেভ করা ট্রিপের মূল্য Pro-র অপেক্ষায়",
+    "other": "{{count}}টি সেভ করা ট্রিপের মূল্য Pro-র অপেক্ষায়"
+  },
+  "{{count}} drives past the free plan’s monthly limit aren’t in these totals. They’re in the spreadsheet; their value unlocks with Pro.": {
+    "one": "ফ্রি প্ল্যানের মাসিক লিমিটের বেশি {{count}}টি ট্রিপ এই মোট হিসাবে নেই। এটি স্প্রেডশিটে আছে; এর মূল্য Pro-তে আনলক হবে।",
+    "other": "ফ্রি প্ল্যানের মাসিক লিমিটের বেশি {{count}}টি ট্রিপ এই মোট হিসাবে নেই। এগুলো স্প্রেডশিটে আছে; এগুলোর মূল্য Pro-তে আনলক হবে।"
+  },
+  "Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.": {
+    "one": "ফ্রি প্ল্যান: মাসে {{count}}টি ব্যবসায়িক ট্রিপ (ব্যক্তিগত ট্রিপ গোনা হয় না), নিজে যোগ করা আনলিমিটেড ট্রিপ আর স্প্রেডশিট এক্সপোর্ট।",
+    "other": "ফ্রি প্ল্যান: মাসে {{count}}টি ব্যবসায়িক ট্রিপ (ব্যক্তিগত ট্রিপ গোনা হয় না), নিজে যোগ করা আনলিমিটেড ট্রিপ আর স্প্রেডশিট এক্সপোর্ট।"
+  },
+  "Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.": {
+    "one": "ফ্রি: মাসে {{count}}টি ব্যবসায়িক ট্রিপ। ব্যক্তিগত ট্রিপ গোনা হয় না, আর একটি শিফট দিনে একবার গোনা হয়। নিজে যোগ করা ট্রিপ সবসময় ফ্রি। Pro: আনলিমিটেড।",
+    "other": "ফ্রি: মাসে {{count}}টি ব্যবসায়িক ট্রিপ। ব্যক্তিগত ট্রিপ গোনা হয় না, আর একটি শিফট দিনে একবার গোনা হয়। নিজে যোগ করা ট্রিপ সবসময় ফ্রি। Pro: আনলিমিটেড।"
+  },
+  "Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.": {
+    "one": "ফ্রি: মাসে {{count}}টি ব্যবসায়িক ট্রিপ। ব্যক্তিগত ট্রিপ গোনা হয় না, আর নিজে যোগ করা ট্রিপ সবসময় ফ্রি। Pro: আনলিমিটেড।",
+    "other": "ফ্রি: মাসে {{count}}টি ব্যবসায়িক ট্রিপ। ব্যক্তিগত ট্রিপ গোনা হয় না, আর নিজে যোগ করা ট্রিপ সবসময় ফ্রি। Pro: আনলিমিটেড।"
+  },
+  "Each automatic work drive counts once. Unsorted drives count until you sort them.": "প্রতিটি অটোমেটিক ব্যবসায়িক ট্রিপ একবার গোনা হয়। বাছাই না হওয়া ট্রিপ বাছাই না করা পর্যন্ত গোনা হয়।",
+  "Personal drives don’t count. Sort one personal and the next drive gets its place.": "ব্যক্তিগত ট্রিপ গোনা হয় না। একটিকে ব্যক্তিগত বাছাই করলে তার জায়গা পরের ট্রিপ পায়।",
+  "On shift, a whole shift counts as one drive a day.": "শিফটে থাকলে, পুরো শিফট দিনে একটি ট্রিপ হিসেবে গোনা হয়।",
+  "Trips you add by hand never count.": "নিজে যোগ করা ট্রিপ কখনও গোনা হয় না।",
+  "Past the limit nothing is hidden or lost: every drive is saved, shown in full, can be sorted and is in your spreadsheet export. Only its value waits for Pro.": "লিমিটের পরেও কিছু লুকানো হয় না বা হারায় না: প্রতিটি ট্রিপ সেভ হয়, পুরোটা দেখা যায়, বাছাই করা যায় এবং আপনার স্প্রেডশিট এক্সপোর্টে থাকে। শুধু এর মূল্য Pro-র অপেক্ষায় থাকে।",
+  "The month’s earliest drives go first, so a drive showing its value keeps it. The count starts again on the 1st.": "মাসের সবচেয়ে আগের ট্রিপগুলো আগে গোনা হয়, তাই যে ট্রিপের মূল্য দেখা যাচ্ছে, সেটি তা রাখে। প্রতি মাসের 1 তারিখে গোনা আবার শুরু হয়।",
+  "Free: {{count}} work drives a month. Pro: unlimited.": {
+    "one": "ফ্রি: মাসে {{count}}টি ব্যবসায়িক ট্রিপ। Pro: আনলিমিটেড।",
+    "other": "ফ্রি: মাসে {{count}}টি ব্যবসায়িক ট্রিপ। Pro: আনলিমিটেড।"
+  },
+  "Got it": "বুঝেছি",
+  "See Pro": "Pro দেখুন",
 };
 
 export default dictionary;

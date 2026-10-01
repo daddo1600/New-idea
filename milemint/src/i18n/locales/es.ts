@@ -32,16 +32,6 @@ const dictionary: Dictionary = {
     "many": "Quedan {{count}} días del año fiscal {{year}}",
     "other": "Quedan {{count}} días del año fiscal {{year}}"
   },
-  "{{count}} drives are locked. Upgrade for unlimited drives.": {
-    "one": "{{count}} viaje está bloqueado. Mejora tu plan para tener viajes ilimitados.",
-    "many": "{{count}} viajes están bloqueados. Mejora tu plan para tener viajes ilimitados.",
-    "other": "{{count}} viajes están bloqueados. Mejora tu plan para tener viajes ilimitados."
-  },
-  "{{count}} drives are waiting to be unlocked": {
-    "one": "Tienes {{count}} viaje por desbloquear",
-    "many": "Tienes {{count}} viajes por desbloquear",
-    "other": "Tienes {{count}} viajes por desbloquear"
-  },
   "{{count}} selected": {
     "one": "{{count}} seleccionado",
     "many": "{{count}} seleccionados",
@@ -120,7 +110,6 @@ const dictionary: Dictionary = {
   "{{rule}}. Petrol, diesel, hybrid or electric: same rate.": "{{rule}}. Gasolina, diésel, híbrido o eléctrico: la misma tarifa.",
   "{{trial}}, then {{price}}/month": "{{trial}}, luego {{price}}/mes",
   "{{trial}}, then {{price}}/year": "{{trial}}, luego {{price}}/año",
-  "{{used}} of {{limit}} free drives in {{month}}": "{{used}} de {{limit}} viajes gratis en {{month}}",
   "{{year}} at {{authority}} rates": "{{year}} con tarifas de {{authority}}",
   "{{year}} tax year": "Año fiscal {{year}}",
   "{{year}} tax year at {{authority}} rates": "Año fiscal {{year}} con tarifas de {{authority}}",
@@ -139,8 +128,6 @@ const dictionary: Dictionary = {
   "24-hour times. A shift like 22:00 to 02:00 runs past midnight.": "Formato de 24 horas. Un turno como de 22:00 a 02:00 pasa de la medianoche.",
   "31 January": "31 de enero",
   "31 October": "31 de octubre",
-  "40 automatic drives a month (a whole shift counts as one), plus unlimited trips by hand. Go Pro any time for unlimited.": "40 viajes automáticos al mes (un turno completo cuenta como uno), más viajes ilimitados agregados a mano. Hazte Pro cuando quieras para tener viajes ilimitados.",
-  "40 automatic drives a month, plus unlimited trips by hand. Go Pro any time for unlimited.": "40 viajes automáticos al mes, más viajes ilimitados agregados a mano. Hazte Pro cuando quieras para tener viajes ilimitados.",
   "A (slightly cheeky) nudge on Sunday evening to sort the week’s drives.": "Un aviso (con un toque de humor) el domingo por la noche para clasificar los viajes de la semana.",
   "A few swipes tonight beats a shoebox of receipts at tax time.": "Deslizar un poco esta noche es mejor que pelearte con una caja llena de recibos cuando lleguen los impuestos.",
   "A fully sorted week": "Una semana totalmente clasificada",
@@ -266,7 +253,6 @@ const dictionary: Dictionary = {
   "Drives are logged in the background. No buttons to press.": "Los viajes se registran en segundo plano. Sin tocar ningún botón.",
   "Drives are logged when you park.": "Los viajes se registran cuando te estacionas.",
   "Drives may be missed": "Es posible que falten viajes",
-  "Drives over the limit": "Viajes por encima del límite",
   "Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.": "Los viajes que empiezan en tu horario se marcan como de trabajo; los demás, como personales. Tus rutas habituales y trayectos casa-trabajo tienen prioridad.",
   "Driving {{vehicle}}. Change vehicle": "Conduciendo: {{vehicle}}. Cambiar vehículo",
   "Driving now": "En uso",
@@ -322,11 +308,6 @@ const dictionary: Dictionary = {
   "Free": "Gratis",
   "Free money alert 💸": "Hablemos de dinero 💸",
   "Free plan": "Plan gratis",
-  "Free plan: {{count}} automatic drives a month, unlimited manual trips and CSV export.": {
-    "one": "Plan gratis: {{count}} viaje automático al mes, viajes manuales ilimitados y exportación CSV.",
-    "many": "Plan gratis: {{count}} viajes automáticos al mes, viajes manuales ilimitados y exportación CSV.",
-    "other": "Plan gratis: {{count}} viajes automáticos al mes, viajes manuales ilimitados y exportación CSV."
-  },
   "Free to start": "Empieza gratis",
   "Free trial": "Prueba gratis",
   "Fri": "Vie",
@@ -369,7 +350,6 @@ const dictionary: Dictionary = {
   "Just drive. Each trip appears after you park, and business drives count at {{authority}}’s {{rate}} rate.": "Solo conduce. Cada viaje aparece cuando te estacionas, y los de trabajo cuentan con la tarifa de {{authority}} de {{rate}}.",
   "Just drive. Each trip appears here after you park, ready to swipe business or personal.": "Solo conduce. Cada viaje aparece aquí cuando te estacionas, listo para deslizarlo como de trabajo o personal.",
   "Keep going": "Sigue así",
-  "Kept, locked": "Guardados, bloqueados",
   "kilometres": "kilómetros",
   "Kilometres": "Kilómetros",
   "Kilometres don’t sort themselves…": "Los kilómetros no se clasifican solos…",
@@ -390,8 +370,6 @@ const dictionary: Dictionary = {
   "Literally. We counted them. Come and sort this week’s.": "Literalmente: llevamos la cuenta. Ven a clasificar los viajes de esta semana.",
   "Location is off for MileMint, so type the address instead.": "La ubicación está desactivada para MileMint, así que escribe la dirección.",
   "Location is set to “While Using”. Switch it to “Always” so drives are logged when the app is closed.": "La ubicación está en “Al usar la app”. Cámbiala a “Siempre” para que los viajes se registren aunque la app esté cerrada.",
-  "Locked drive": "Viaje bloqueado",
-  "Locked drive on {{date}}, {{distance}}": "Viaje bloqueado el {{date}}, {{distance}}",
   "Log every drive automatically": "Registra cada viaje automáticamente",
   "Log every drive with MileMint Pro": "Registra cada viaje con MileMint Pro",
   "Low effort, high reward": "Poco esfuerzo, gran recompensa",
@@ -449,7 +427,6 @@ const dictionary: Dictionary = {
   "Never": "Nunca",
   "Never miss a mile.": "No pierdas ni un viaje.",
   "New drives start as business": "Los viajes nuevos empiezan como de trabajo",
-  "New drives this month are saved but locked until you upgrade.": "Los viajes nuevos de este mes se guardan, pero quedan bloqueados hasta que mejores tu plan.",
   "New to Pro? Your first month is on me: {{url}}": "¿Aún no tienes Pro? Tu primer mes va por mi cuenta: {{url}}",
   "Next month": "Mes siguiente",
   "No account. Your trips stay encrypted on your iPhone.": "Sin cuenta. Tus viajes se quedan cifrados en tu iPhone.",
@@ -486,7 +463,6 @@ const dictionary: Dictionary = {
   "Open Settings": "Abrir Configuración",
   "Opening the App Store…": "Abriendo la App Store…",
   "Opens a list of purposes": "Abre una lista de motivos",
-  "Opens MileMint Pro to unlock it": "Abre MileMint Pro para desbloquearlo",
   "Opens trip details. Long press to delete": "Abre los detalles del viaje. Mantén presionado para eliminar",
   "Optional": "Opcional",
   "Optional. Shows your total driving and the business share on the report.": "Opcional. Muestra en el informe tu distancia total y la parte de trabajo.",
@@ -672,9 +648,7 @@ const dictionary: Dictionary = {
   "United States": "Estados Unidos",
   "Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.": "A menos que una regla diga lo contrario (horario de trabajo, un trayecto casa-trabajo, una ruta que le enseñaste). Desliza a la izquierda los que fueron personales; solo se deben reclamar los viajes de trabajo.",
   "Unlimited": "Ilimitados",
-  "Unlock with MileMint Pro": "Desbloquear con MileMint Pro",
   "Unlock with Pro": "Desbloquear con Pro",
-  "Unlocked": "Desbloqueados",
   "Upgrade to Pro": "Mejorar a Pro",
   "USA": "EE. UU.",
   "Use": "Usar",
@@ -708,7 +682,6 @@ const dictionary: Dictionary = {
   "Work-related car use (cents per km method)": "Uso del auto para trabajar (cents per km method)",
   "worth about {{amount}}": "vale alrededor de {{amount}}",
   "Worth money": "Vale dinero",
-  "worth up to {{amount}}": "vale hasta {{amount}}",
   "Worth up to {{amount}} in deductions if they were for business.": "Valen hasta {{amount}} en deducciones si fueron de trabajo.",
   "Wrap up warm out there ❄️": "Abrígate bien ❄️",
   "Yearly": "Anual",
@@ -1035,7 +1008,7 @@ const dictionary: Dictionary = {
   "Invites sent: {{count}}": {
     "one": "Invitaciones enviadas: {{count}}",
     "many": "Invitaciones enviadas: {{count}}",
-    "other": "Invitaciones enviadas: {{count}}",
+    "other": "Invitaciones enviadas: {{count}}"
   },
   "Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you.": "Las invitaciones se confirman a través de iCloud, que llegará en una próxima actualización. Los amigos que se unan antes recibirán sus viajes extra cuando se active, y tú también.",
   "You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed.": "Ingresaste {{code}}. Tus 10 viajes extra llegarán en cuanto se confirme la invitación.",
@@ -1048,6 +1021,60 @@ const dictionary: Dictionary = {
   "This Apple Account has already joined with a friend’s invite.": "Esta Cuenta de Apple ya se unió con la invitación de un amigo.",
   "🎉 Your friend’s invite is confirmed": "🎉 Se confirmó la invitación de tu amigo",
   "Your friend’s invite couldn’t be used": "No se pudo usar la invitación de tu amigo",
+  "Opens MileMint Pro": "Abre MileMint Pro",
+  "Saved · value unlocks with Pro": "Guardado · el valor llega con Pro",
+  "Business or personal? Personal drives don’t use your free drives.": "¿Trabajo o personal? Los viajes personales no usan tus viajes gratis.",
+  "Closes this message": "Cierra este mensaje",
+  "Saved. This month’s free drives are used, so a drive sorted back from personal waits for Pro to show its value. Drives already showing their value keep it.": "Guardado. Ya usaste los viajes gratis de este mes, así que un viaje que vuelves a clasificar de personal a trabajo espera a Pro para mostrar su valor. Los viajes que ya muestran su valor lo conservan.",
+  "{{used}} of {{limit}} free work drives in {{month}}": "{{used}} de {{limit}} viajes de trabajo gratis en {{month}}",
+  "{{count}} drives are saved and shown in full. Their value unlocks with Pro.": {
+    "one": "{{count}} viaje está guardado y se ve completo. Su valor se desbloquea con Pro.",
+    "many": "{{count}} viajes están guardados y se ven completos. Su valor se desbloquea con Pro.",
+    "other": "{{count}} viajes están guardados y se ven completos. Su valor se desbloquea con Pro."
+  },
+  "New work drives are still saved and shown in full. Their value unlocks with Pro.": "Los nuevos viajes de trabajo se siguen guardando y se ven completos. Su valor se desbloquea con Pro.",
+  "Personal drives don’t count.": "Los viajes personales no cuentan.",
+  "What counts?": "¿Qué cuenta?",
+  "Drives past the limit, saved and shown in full": "Viajes sobre el límite, guardados y completos",
+  "The value of drives past the limit": "El valor de los viajes sobre el límite",
+  "{{count}} saved drives have their value waiting for Pro": {
+    "one": "{{count}} viaje guardado espera a Pro para mostrar su valor",
+    "many": "{{count}} viajes guardados esperan a Pro para mostrar su valor",
+    "other": "{{count}} viajes guardados esperan a Pro para mostrar su valor"
+  },
+  "{{count}} drives past the free plan’s monthly limit aren’t in these totals. They’re in the spreadsheet; their value unlocks with Pro.": {
+    "one": "{{count}} viaje que pasa el límite mensual del plan gratis no está en estos totales. Está en la hoja de cálculo; su valor se desbloquea con Pro.",
+    "many": "{{count}} viajes que pasan el límite mensual del plan gratis no están en estos totales. Están en la hoja de cálculo; su valor se desbloquea con Pro.",
+    "other": "{{count}} viajes que pasan el límite mensual del plan gratis no están en estos totales. Están en la hoja de cálculo; su valor se desbloquea con Pro."
+  },
+  "Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.": {
+    "one": "Plan gratis: {{count}} viaje de trabajo al mes (los personales no cuentan), viajes a mano ilimitados y la exportación a hoja de cálculo.",
+    "many": "Plan gratis: {{count}} viajes de trabajo al mes (los personales no cuentan), viajes a mano ilimitados y la exportación a hoja de cálculo.",
+    "other": "Plan gratis: {{count}} viajes de trabajo al mes (los personales no cuentan), viajes a mano ilimitados y la exportación a hoja de cálculo."
+  },
+  "Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.": {
+    "one": "Gratis: {{count}} viaje de trabajo al mes. Los viajes personales no cuentan y un turno cuenta una vez al día. Los viajes que agregas a mano siempre son gratis. Pro: ilimitados.",
+    "many": "Gratis: {{count}} viajes de trabajo al mes. Los viajes personales no cuentan y un turno cuenta una vez al día. Los viajes que agregas a mano siempre son gratis. Pro: ilimitados.",
+    "other": "Gratis: {{count}} viajes de trabajo al mes. Los viajes personales no cuentan y un turno cuenta una vez al día. Los viajes que agregas a mano siempre son gratis. Pro: ilimitados."
+  },
+  "Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.": {
+    "one": "Gratis: {{count}} viaje de trabajo al mes. Los viajes personales no cuentan y los que agregas a mano siempre son gratis. Pro: ilimitados.",
+    "many": "Gratis: {{count}} viajes de trabajo al mes. Los viajes personales no cuentan y los que agregas a mano siempre son gratis. Pro: ilimitados.",
+    "other": "Gratis: {{count}} viajes de trabajo al mes. Los viajes personales no cuentan y los que agregas a mano siempre son gratis. Pro: ilimitados."
+  },
+  "Each automatic work drive counts once. Unsorted drives count until you sort them.": "Cada viaje de trabajo automático cuenta una vez. Los viajes sin clasificar cuentan hasta que los clasifiques.",
+  "Personal drives don’t count. Sort one personal and the next drive gets its place.": "Los viajes personales no cuentan. Clasifica uno como personal y el siguiente viaje ocupa su lugar.",
+  "On shift, a whole shift counts as one drive a day.": "En turno, un turno completo cuenta como un viaje por día.",
+  "Trips you add by hand never count.": "Los viajes que agregas a mano nunca cuentan.",
+  "Past the limit nothing is hidden or lost: every drive is saved, shown in full, can be sorted and is in your spreadsheet export. Only its value waits for Pro.": "Pasado el límite no se oculta ni se pierde nada: cada viaje se guarda, se ve completo, se puede clasificar y está en tu exportación a hoja de cálculo. Solo su valor espera a Pro.",
+  "The month’s earliest drives go first, so a drive showing its value keeps it. The count starts again on the 1st.": "Los primeros viajes del mes van primero, así que un viaje que muestra su valor lo conserva. La cuenta vuelve a empezar el día 1.",
+  "Free: {{count}} work drives a month. Pro: unlimited.": {
+    "one": "Gratis: {{count}} viaje de trabajo al mes. Pro: ilimitados.",
+    "many": "Gratis: {{count}} viajes de trabajo al mes. Pro: ilimitados.",
+    "other": "Gratis: {{count}} viajes de trabajo al mes. Pro: ilimitados."
+  },
+  "Got it": "Entendido",
+  "See Pro": "Ver Pro",
 };
 
 export default dictionary;

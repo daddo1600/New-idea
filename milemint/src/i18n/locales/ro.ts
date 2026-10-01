@@ -12,37 +12,119 @@ const dictionary: Dictionary = {
   "{{authority}} needs a business purpose, e.g. \"Client meeting\".": "{{authority}} cere un scop de lucru, de ex. „Întâlnire cu un client”.",
   "{{authority}} rate for bicycles: {{rate}}": "Tariful {{authority}} pentru biciclete: {{rate}}",
   "{{authority}} rate for motorbikes and scooters: {{rate}}": "Tariful {{authority}} pentru motociclete și scutere: {{rate}}",
-  "{{count}} a month": { one: "{{count}} pe lună", few: "{{count}} pe lună", other: "{{count}} pe lună" },
-  "{{count}} days": { one: "{{count}} zi", few: "{{count}} zile", other: "{{count}} de zile" },
-  "{{count}} days left": { one: "A mai rămas {{count}} zi", few: "Au mai rămas {{count}} zile", other: "Au mai rămas {{count}} de zile" },
-  "{{count}} days left in the {{year}} tax year": { one: "A mai rămas {{count}} zi din anul fiscal {{year}}", few: "Au mai rămas {{count}} zile din anul fiscal {{year}}", other: "Au mai rămas {{count}} de zile din anul fiscal {{year}}" },
-  "{{count}} drives are locked. Upgrade for unlimited drives.": { one: "{{count}} cursă e blocată. Treci la Pro pentru curse nelimitate.", few: "{{count}} curse sunt blocate. Treci la Pro pentru curse nelimitate.", other: "{{count}} de curse sunt blocate. Treci la Pro pentru curse nelimitate." },
-  "{{count}} drives are waiting to be unlocked": { one: "{{count}} cursă așteaptă să fie deblocată", few: "{{count}} curse așteaptă să fie deblocate", other: "{{count}} de curse așteaptă să fie deblocate" },
-  "{{count}} selected": { one: "{{count}} selectată", few: "{{count}} selectate", other: "{{count}} selectate" },
-  "{{count}} trips aren’t classified yet. Sort them first so the report is complete.": { one: "{{count}} cursă nu e sortată încă. Sortează-o mai întâi, ca raportul să fie complet.", few: "{{count}} curse nu sunt sortate încă. Sortează-le mai întâi, ca raportul să fie complet.", other: "{{count}} de curse nu sunt sortate încă. Sortează-le mai întâi, ca raportul să fie complet." },
-  "{{count}}-day free trial": { one: "Probă gratuită de {{count}} zi", few: "Probă gratuită de {{count}} zile", other: "Probă gratuită de {{count}} de zile" },
-  "{{count}}-month free trial": { one: "Probă gratuită de {{count}} lună", few: "Probă gratuită de {{count}} luni", other: "Probă gratuită de {{count}} de luni" },
+  "{{count}} a month": {
+    "one": "{{count}} pe lună",
+    "few": "{{count}} pe lună",
+    "other": "{{count}} pe lună"
+  },
+  "{{count}} days": {
+    "one": "{{count}} zi",
+    "few": "{{count}} zile",
+    "other": "{{count}} de zile"
+  },
+  "{{count}} days left": {
+    "one": "A mai rămas {{count}} zi",
+    "few": "Au mai rămas {{count}} zile",
+    "other": "Au mai rămas {{count}} de zile"
+  },
+  "{{count}} days left in the {{year}} tax year": {
+    "one": "A mai rămas {{count}} zi din anul fiscal {{year}}",
+    "few": "Au mai rămas {{count}} zile din anul fiscal {{year}}",
+    "other": "Au mai rămas {{count}} de zile din anul fiscal {{year}}"
+  },
+  "{{count}} selected": {
+    "one": "{{count}} selectată",
+    "few": "{{count}} selectate",
+    "other": "{{count}} selectate"
+  },
+  "{{count}} trips aren’t classified yet. Sort them first so the report is complete.": {
+    "one": "{{count}} cursă nu e sortată încă. Sortează-o mai întâi, ca raportul să fie complet.",
+    "few": "{{count}} curse nu sunt sortate încă. Sortează-le mai întâi, ca raportul să fie complet.",
+    "other": "{{count}} de curse nu sunt sortate încă. Sortează-le mai întâi, ca raportul să fie complet."
+  },
+  "{{count}}-day free trial": {
+    "one": "Probă gratuită de {{count}} zi",
+    "few": "Probă gratuită de {{count}} zile",
+    "other": "Probă gratuită de {{count}} de zile"
+  },
+  "{{count}}-month free trial": {
+    "one": "Probă gratuită de {{count}} lună",
+    "few": "Probă gratuită de {{count}} luni",
+    "other": "Probă gratuită de {{count}} de luni"
+  },
   "{{country}}. {{rule}}": "{{country}}. {{rule}}",
   "{{date}} · {{distance}} · Added manually": "{{date}} · {{distance}} · Adăugată manual",
   "{{day}} shift {{number}} end": "{{day}}, tura {{number}}, sfârșit",
   "{{day}} shift {{number}} start": "{{day}}, tura {{number}}, început",
-  "{{distance}} · {{value}} · {{count}} drives": { one: "{{distance}} · {{value}} · {{count}} cursă", few: "{{distance}} · {{value}} · {{count}} curse", other: "{{distance}} · {{value}} · {{count}} de curse" },
+  "{{distance}} · {{value}} · {{count}} drives": {
+    "one": "{{distance}} · {{value}} · {{count}} cursă",
+    "few": "{{distance}} · {{value}} · {{count}} curse",
+    "other": "{{distance}} · {{value}} · {{count}} de curse"
+  },
   "{{distance}} business": "{{distance}} de lucru",
-  "{{distance}} business · {{count}} to review": { one: "{{distance}} de lucru · {{count}} de verificat", few: "{{distance}} de lucru · {{count}} de verificat", other: "{{distance}} de lucru · {{count}} de verificat" },
-  "{{distance}} business km": { one: "{{distance}} km de lucru", few: "{{distance}} km de lucru", other: "{{distance}} km de lucru" },
-  "{{distance}} business km logged with MileMint 🛣️ Every one counted.": { one: "{{distance}} km de lucru înregistrat cu MileMint 🛣️ Numărat cu grijă.", few: "{{distance}} km de lucru înregistrați cu MileMint 🛣️ Fiecare a fost numărat.", other: "{{distance}} km de lucru înregistrați cu MileMint 🛣️ Fiecare a fost numărat." },
-  "{{distance}} business miles": { one: "{{distance}} milă de lucru", few: "{{distance}} mile de lucru", other: "{{distance}} de mile de lucru" },
-  "{{distance}} business miles logged with MileMint 🛣️ Every one counted.": { one: "{{distance}} milă de lucru înregistrată cu MileMint 🛣️ Numărată cu grijă.", few: "{{distance}} mile de lucru înregistrate cu MileMint 🛣️ Fiecare a fost numărată.", other: "{{distance}} de mile de lucru înregistrate cu MileMint 🛣️ Fiecare a fost numărată." },
+  "{{distance}} business · {{count}} to review": {
+    "one": "{{distance}} de lucru · {{count}} de verificat",
+    "few": "{{distance}} de lucru · {{count}} de verificat",
+    "other": "{{distance}} de lucru · {{count}} de verificat"
+  },
+  "{{distance}} business km": {
+    "one": "{{distance}} km de lucru",
+    "few": "{{distance}} km de lucru",
+    "other": "{{distance}} km de lucru"
+  },
+  "{{distance}} business km logged with MileMint 🛣️ Every one counted.": {
+    "one": "{{distance}} km de lucru înregistrat cu MileMint 🛣️ Numărat cu grijă.",
+    "few": "{{distance}} km de lucru înregistrați cu MileMint 🛣️ Fiecare a fost numărat.",
+    "other": "{{distance}} km de lucru înregistrați cu MileMint 🛣️ Fiecare a fost numărat."
+  },
+  "{{distance}} business miles": {
+    "one": "{{distance}} milă de lucru",
+    "few": "{{distance}} mile de lucru",
+    "other": "{{distance}} de mile de lucru"
+  },
+  "{{distance}} business miles logged with MileMint 🛣️ Every one counted.": {
+    "one": "{{distance}} milă de lucru înregistrată cu MileMint 🛣️ Numărată cu grijă.",
+    "few": "{{distance}} mile de lucru înregistrate cu MileMint 🛣️ Fiecare a fost numărată.",
+    "other": "{{distance}} de mile de lucru înregistrate cu MileMint 🛣️ Fiecare a fost numărată."
+  },
   "{{distance}} driven · {{percent}}% business": "Distanță totală {{distance}} · {{percent}}% de lucru",
   "{{distance}} is more than one trip should be. Check for an extra digit.": "{{distance}} e prea mult pentru o singură cursă. Verifică dacă nu ai o cifră în plus.",
-  "{{distance}} km": { one: "{{distance}} km", few: "{{distance}} km", other: "{{distance}} km" },
-  "{{distance}} km · a typical month of business driving": { one: "{{distance}} km · o lună obișnuită de condus pentru lucru", few: "{{distance}} km · o lună obișnuită de condus pentru lucru", other: "{{distance}} km · o lună obișnuită de condus pentru lucru" },
-  "{{distance}} km logged for work, every one counted. That’s a lot of road.": { one: "{{distance}} km înregistrat pentru lucru, numărat. E un început!", few: "{{distance}} km înregistrați pentru lucru, fiecare numărat. E drum lung!", other: "{{distance}} km înregistrați pentru lucru, fiecare numărat. E drum lung!" },
-  "{{distance}} miles": { one: "{{distance}} milă", few: "{{distance}} mile", other: "{{distance}} de mile" },
-  "{{distance}} miles · a typical month of business driving": { one: "{{distance}} milă · o lună obișnuită de condus pentru lucru", few: "{{distance}} mile · o lună obișnuită de condus pentru lucru", other: "{{distance}} de mile · o lună obișnuită de condus pentru lucru" },
-  "{{distance}} miles logged for work, every one counted. That’s a lot of road.": { one: "{{distance}} milă înregistrată pentru lucru, numărată. E un început!", few: "{{distance}} mile înregistrate pentru lucru, fiecare numărată. E drum lung!", other: "{{distance}} de mile înregistrate pentru lucru, fiecare numărată. E drum lung!" },
+  "{{distance}} km": {
+    "one": "{{distance}} km",
+    "few": "{{distance}} km",
+    "other": "{{distance}} km"
+  },
+  "{{distance}} km · a typical month of business driving": {
+    "one": "{{distance}} km · o lună obișnuită de condus pentru lucru",
+    "few": "{{distance}} km · o lună obișnuită de condus pentru lucru",
+    "other": "{{distance}} km · o lună obișnuită de condus pentru lucru"
+  },
+  "{{distance}} km logged for work, every one counted. That’s a lot of road.": {
+    "one": "{{distance}} km înregistrat pentru lucru, numărat. E un început!",
+    "few": "{{distance}} km înregistrați pentru lucru, fiecare numărat. E drum lung!",
+    "other": "{{distance}} km înregistrați pentru lucru, fiecare numărat. E drum lung!"
+  },
+  "{{distance}} miles": {
+    "one": "{{distance}} milă",
+    "few": "{{distance}} mile",
+    "other": "{{distance}} de mile"
+  },
+  "{{distance}} miles · a typical month of business driving": {
+    "one": "{{distance}} milă · o lună obișnuită de condus pentru lucru",
+    "few": "{{distance}} mile · o lună obișnuită de condus pentru lucru",
+    "other": "{{distance}} de mile · o lună obișnuită de condus pentru lucru"
+  },
+  "{{distance}} miles logged for work, every one counted. That’s a lot of road.": {
+    "one": "{{distance}} milă înregistrată pentru lucru, numărată. E un început!",
+    "few": "{{distance}} mile înregistrate pentru lucru, fiecare numărată. E drum lung!",
+    "other": "{{distance}} de mile înregistrate pentru lucru, fiecare numărată. E drum lung!"
+  },
   "{{distance}} of business driving": "{{distance}} de condus pentru lucru",
-  "{{dueLine}}: {{count}} days to go": { one: "{{dueLine}}: mai este {{count}} zi", few: "{{dueLine}}: mai sunt {{count}} zile", other: "{{dueLine}}: mai sunt {{count}} de zile" },
+  "{{dueLine}}: {{count}} days to go": {
+    "one": "{{dueLine}}: mai este {{count}} zi",
+    "few": "{{dueLine}}: mai sunt {{count}} zile",
+    "other": "{{dueLine}}: mai sunt {{count}} de zile"
+  },
   "{{dueLine}}: today": "{{dueLine}}: astăzi",
   "{{from}} to {{to}}, {{date}}, {{status}}": "{{from}} – {{to}}, {{date}}, {{status}}",
   "{{hint}}. Swipe the button to the right, or double-tap.": "{{hint}}. Glisează butonul spre dreapta sau atinge de două ori.",
@@ -60,7 +142,6 @@ const dictionary: Dictionary = {
   "{{rule}}. Petrol, diesel, hybrid or electric: same rate.": "{{rule}}. Benzină, motorină, hibrid sau electric: același tarif.",
   "{{trial}}, then {{price}}/month": "{{trial}}, apoi {{price}}/lună",
   "{{trial}}, then {{price}}/year": "{{trial}}, apoi {{price}}/an",
-  "{{used}} of {{limit}} free drives in {{month}}": "Curse gratuite în {{month}}: {{used}} din {{limit}}",
   "{{year}} at {{authority}} rates": "{{year}} la tarifele {{authority}}",
   "{{year}} tax year": "Anul fiscal {{year}}",
   "{{year}} tax year at {{authority}} rates": "Anul fiscal {{year}} la tarifele {{authority}}",
@@ -68,8 +149,16 @@ const dictionary: Dictionary = {
   "+ Add a place": "+ Adaugă un loc",
   "+ Add a vehicle": "+ Adaugă un vehicul",
   "+{{amount}} since you last looked": "+{{amount}} de când te-ai uitat ultima dată",
-  "+{{distance}} km your app missed": { one: "+{{distance}} km ratat de aplicația ta", few: "+{{distance}} km ratați de aplicația ta", other: "+{{distance}} km ratați de aplicația ta" },
-  "+{{distance}} miles your app missed": { one: "+{{distance}} milă ratată de aplicația ta", few: "+{{distance}} mile ratate de aplicația ta", other: "+{{distance}} de mile ratate de aplicația ta" },
+  "+{{distance}} km your app missed": {
+    "one": "+{{distance}} km ratat de aplicația ta",
+    "few": "+{{distance}} km ratați de aplicația ta",
+    "other": "+{{distance}} km ratați de aplicația ta"
+  },
+  "+{{distance}} miles your app missed": {
+    "one": "+{{distance}} milă ratată de aplicația ta",
+    "few": "+{{distance}} mile ratate de aplicația ta",
+    "other": "+{{distance}} de mile ratate de aplicația ta"
+  },
   "★ Pro · unlimited drives": "★ Pro · curse nelimitate",
   "✓ Found": "✓ Găsită",
   "📍 I’m here now": "📍 Sunt aici acum",
@@ -79,8 +168,6 @@ const dictionary: Dictionary = {
   "24-hour times. A shift like 22:00 to 02:00 runs past midnight.": "Format de 24 de ore. O tură ca 22:00 – 02:00 trece de miezul nopții.",
   "31 January": "31 ianuarie",
   "31 October": "31 octombrie",
-  "40 automatic drives a month (a whole shift counts as one), plus unlimited trips by hand. Go Pro any time for unlimited.": "40 de curse automate pe lună (o tură întreagă contează ca una), plus curse adăugate manual nelimitate. Treci oricând la Pro pentru curse nelimitate.",
-  "40 automatic drives a month, plus unlimited trips by hand. Go Pro any time for unlimited.": "40 de curse automate pe lună, plus curse adăugate manual nelimitate. Treci oricând la Pro pentru curse nelimitate.",
   "A (slightly cheeky) nudge on Sunday evening to sort the week’s drives.": "Un mesaj (puțin glumeț) duminică seara, ca să sortezi cursele săptămânii.",
   "A few swipes tonight beats a shoebox of receipts at tax time.": "Câteva glisări în seara asta sunt mai bune decât o cutie plină de bonuri la vremea taxelor.",
   "A fully sorted week": "O săptămână sortată complet",
@@ -187,7 +274,11 @@ const dictionary: Dictionary = {
   "Date: {{date}}. Hide calendar": "Data: {{date}}. Ascunde calendarul",
   "Date: {{date}}. Show calendar": "Data: {{date}}. Arată calendarul",
   "Dates are a guide; deadlines can move for weekends and holidays. Check with {{authority}} or your accountant. Not tax advice.": "Datele sunt orientative; termenele se pot muta din cauza weekendurilor și a sărbătorilor. Verifică la {{authority}} sau cu contabilul tău. Nu e consultanță fiscală.",
-  "days": { one: "zi", few: "zile", other: "zile" },
+  "days": {
+    "one": "zi",
+    "few": "zile",
+    "other": "zile"
+  },
   "Deductions found in {{year}}": "Deduceri găsite în {{year}}",
   "Deductions found in {{year}} tax year": "Deduceri găsite în anul fiscal {{year}}",
   "Delete": "Șterge",
@@ -202,7 +293,6 @@ const dictionary: Dictionary = {
   "Drives are logged in the background. No buttons to press.": "Cursele se înregistrează în fundal. Fără butoane de apăsat.",
   "Drives are logged when you park.": "Cursele se înregistrează când parchezi.",
   "Drives may be missed": "Unele curse pot fi ratate",
-  "Drives over the limit": "Curse peste limită",
   "Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.": "Cursele care încep în orele tale de lucru sunt marcate de lucru, celelalte personale. Traseele obișnuite și navetele au prioritate.",
   "Driving {{vehicle}}. Change vehicle": "Conduci {{vehicle}}. Schimbă vehiculul",
   "Driving now": "În uz acum",
@@ -258,7 +348,6 @@ const dictionary: Dictionary = {
   "Free": "Gratuit",
   "Free money alert 💸": "Bani uitați pe drum? 💸",
   "Free plan": "Plan gratuit",
-  "Free plan: {{count}} automatic drives a month, unlimited manual trips and CSV export.": { one: "Plan gratuit: {{count}} cursă automată pe lună, curse manuale nelimitate și export CSV.", few: "Plan gratuit: {{count}} curse automate pe lună, curse manuale nelimitate și export CSV.", other: "Plan gratuit: {{count}} de curse automate pe lună, curse manuale nelimitate și export CSV." },
   "Free to start": "Începi gratuit",
   "Free trial": "Probă gratuită",
   "Fri": "Vin",
@@ -301,7 +390,6 @@ const dictionary: Dictionary = {
   "Just drive. Each trip appears after you park, and business drives count at {{authority}}’s {{rate}} rate.": "Doar condu. Fiecare cursă apare după ce parchezi, iar cursele de lucru se calculează la tariful {{authority}} de {{rate}}.",
   "Just drive. Each trip appears here after you park, ready to swipe business or personal.": "Doar condu. Fiecare cursă apare aici după ce parchezi, gata s-o glisezi: de lucru sau personală.",
   "Keep going": "Continuă",
-  "Kept, locked": "Păstrate, blocate",
   "kilometres": "kilometri",
   "Kilometres": "Kilometri",
   "Kilometres don’t sort themselves…": "Kilometrii nu se sortează singuri…",
@@ -322,8 +410,6 @@ const dictionary: Dictionary = {
   "Literally. We counted them. Come and sort this week’s.": "La propriu. Am verificat. Hai să sortezi cursele din săptămâna asta.",
   "Location is off for MileMint, so type the address instead.": "Localizarea e oprită pentru MileMint, așa că scrie adresa.",
   "Location is set to “While Using”. Switch it to “Always” so drives are logged when the app is closed.": "Localizarea e setată pe „Când se folosește aplicația”. Schimb-o pe „Întotdeauna”, ca să se înregistreze cursele și când aplicația e închisă.",
-  "Locked drive": "Cursă blocată",
-  "Locked drive on {{date}}, {{distance}}": "Cursă blocată pe {{date}}, {{distance}}",
   "Log every drive automatically": "Înregistrează automat fiecare cursă",
   "Log every drive with MileMint Pro": "Înregistrează fiecare cursă cu MileMint Pro",
   "Low effort, high reward": "Efort mic, folos mare",
@@ -381,7 +467,6 @@ const dictionary: Dictionary = {
   "Never": "Niciodată",
   "Never miss a mile.": "Nu mai rata nicio milă.",
   "New drives start as business": "Cursele noi pornesc ca de lucru",
-  "New drives this month are saved but locked until you upgrade.": "Cursele noi din luna asta sunt salvate, dar blocate până treci la Pro.",
   "New to Pro? Your first month is on me: {{url}}": "Nou pe Pro? Prima lună e din partea mea: {{url}}",
   "Next month": "Luna următoare",
   "No account. Your trips stay encrypted on your iPhone.": "Fără cont. Cursele tale rămân criptate pe iPhone.",
@@ -406,7 +491,11 @@ const dictionary: Dictionary = {
   "of business driving this week": "de condus pentru lucru săptămâna asta",
   "Off we go! 👋": "La drum! 👋",
   "On shift · {{elapsed}}": "În tură · {{elapsed}}",
-  "On shift for {{elapsed}}, {{count}} drives": { one: "În tură de {{elapsed}}, {{count}} cursă", few: "În tură de {{elapsed}}, {{count}} curse", other: "În tură de {{elapsed}}, {{count}} de curse" },
+  "On shift for {{elapsed}}, {{count}} drives": {
+    "one": "În tură de {{elapsed}}, {{count}} cursă",
+    "few": "În tură de {{elapsed}}, {{count}} curse",
+    "other": "În tură de {{elapsed}}, {{count}} de curse"
+  },
   "Once a year: by April 30, or June 15 if you’re self-employed (any tax owing is still due April 30). Self-employed claim vehicle costs on form T2125.": "O dată pe an: până la 30 aprilie, sau 15 iunie dacă lucrezi pe cont propriu (dar impozitul datorat se plătește tot până la 30 aprilie). Cei pe cont propriu deduc costurile vehiculului pe formularul T2125.",
   "Once a year: lodge by 31 October after the income year ends (30 June), or later if you use a registered tax agent and sign up with them before 31 October.": "O dată pe an: depui până la 31 octombrie după sfârșitul anului de venit (30 iunie), sau mai târziu dacă folosești un consultant fiscal înregistrat și te înscrii la el înainte de 31 octombrie.",
   "One quick switch in Settings": "O singură schimbare rapidă în Configurări",
@@ -414,7 +503,6 @@ const dictionary: Dictionary = {
   "Open Settings": "Deschide Configurări",
   "Opening the App Store…": "Se deschide App Store…",
   "Opens a list of purposes": "Deschide o listă de scopuri",
-  "Opens MileMint Pro to unlock it": "Deschide MileMint Pro ca s-o deblochezi",
   "Opens trip details. Long press to delete": "Deschide detaliile cursei. Apasă lung ca s-o ștergi",
   "Optional": "Opțional",
   "Optional. Shows your total driving and the business share on the report.": "Opțional. Arată pe raport distanța totală condusă și partea de lucru.",
@@ -471,7 +559,11 @@ const dictionary: Dictionary = {
   "Search for its address, or use “I’m here now”.": "Caută-i adresa sau folosește „Sunt aici acum”.",
   "See what each business drive saves you at tax time.": "Vezi cât valorează fiecare cursă de lucru la vremea taxelor.",
   "Select": "Selectează",
-  "Select {{count}} unsorted": { one: "Selectează {{count}} cursă nesortată", few: "Selectează {{count}} curse nesortate", other: "Selectează {{count}} de curse nesortate" },
+  "Select {{count}} unsorted": {
+    "one": "Selectează {{count}} cursă nesortată",
+    "few": "Selectează {{count}} curse nesortate",
+    "other": "Selectează {{count}} de curse nesortate"
+  },
   "Select several trips to sort at once": "Selectează mai multe curse ca să le sortezi deodată",
   "Self Assessment return": "Declarația Self Assessment",
   "Self Assessment return due in a week 📄": "Declarația Self Assessment e scadentă peste o săptămână 📄",
@@ -495,7 +587,11 @@ const dictionary: Dictionary = {
   "Skip for now": "Sari peste acum",
   "So trips read “Home → …” instead of a street name. Optional.": "Ca să scrie „Acasă → …” în loc de numele străzii. Opțional.",
   "Something went wrong": "Ceva n-a mers bine",
-  "Sort {{count}} drives": { one: "Sortează {{count}} cursă", few: "Sortează {{count}} curse", other: "Sortează {{count}} de curse" },
+  "Sort {{count}} drives": {
+    "one": "Sortează {{count}} cursă",
+    "few": "Sortează {{count}} curse",
+    "other": "Sortează {{count}} de curse"
+  },
   "Sort this week’s drives and bank the deduction. Done in a minute.": "Sortează cursele săptămânii și ține-ți deducerile la zi. Gata într-un minut.",
   "Sort this week’s drives now and tax time becomes a two-minute job.": "Sortează acum cursele săptămânii și pregătirea pentru taxe devine o treabă de două minute.",
   "Sort your drives and add any you missed before {{date}}. Every business kilometre is money back.": "Sortează-ți cursele și adaugă-le pe cele ratate înainte de {{date}}. Fiecare kilometru de lucru înseamnă bani înapoi.",
@@ -592,9 +688,7 @@ const dictionary: Dictionary = {
   "United States": "Statele Unite",
   "Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.": "Dacă nu se aplică o regulă (ore de lucru, navetă, un traseu pe care i l-ai arătat). Glisează la stânga pe cele care au fost personale; doar cursele de lucru se pot deduce.",
   "Unlimited": "Nelimitat",
-  "Unlock with MileMint Pro": "Deblochează cu MileMint Pro",
   "Unlock with Pro": "Deblochează cu Pro",
-  "Unlocked": "Deblocate",
   "Upgrade to Pro": "Treci la Pro",
   "USA": "SUA",
   "Use": "Folosește",
@@ -628,7 +722,6 @@ const dictionary: Dictionary = {
   "Work-related car use (cents per km method)": "Folosirea mașinii pentru muncă (cents per km method)",
   "worth about {{amount}}": "valorează cam {{amount}}",
   "Worth money": "Valorează bani",
-  "worth up to {{amount}}": "valorează până la {{amount}}",
   "Worth up to {{amount}} in deductions if they were for business.": "Valorează până la {{amount}} în deduceri, dacă au fost de lucru.",
   "Wrap up warm out there ❄️": "Îmbracă-te gros, e frig afară ❄️",
   "Yearly": "Anual",
@@ -707,7 +800,11 @@ const dictionary: Dictionary = {
   "About {{amount}} tax back": "Aprox. {{amount}} impozit înapoi",
   "Mileage logged for your expense claims": "Kilometraj înregistrat pentru deconturile tale",
   "{{amount}} relief unclaimed from {{year}}": "Deducere necerută din {{year}}: {{amount}}",
-  "Claim it before {{date}}. {{total}} unclaimed across {{count}} earlier tax years.": { one: "Cere-o înainte de {{date}}. Total necerut: {{total}}, din {{count}} an fiscal anterior.", few: "Cere-o înainte de {{date}}. Total necerut: {{total}}, din {{count}} ani fiscali anteriori.", other: "Cere-o înainte de {{date}}. Total necerut: {{total}}, din {{count}} de ani fiscali anteriori." },
+  "Claim it before {{date}}. {{total}} unclaimed across {{count}} earlier tax years.": {
+    "one": "Cere-o înainte de {{date}}. Total necerut: {{total}}, din {{count}} an fiscal anterior.",
+    "few": "Cere-o înainte de {{date}}. Total necerut: {{total}}, din {{count}} ani fiscali anteriori.",
+    "other": "Cere-o înainte de {{date}}. Total necerut: {{total}}, din {{count}} de ani fiscali anteriori."
+  },
   "Claim it before {{date}}.": "Cere-o înainte de {{date}}.",
   "See how to claim ›": "Vezi cum o ceri ›",
   "The logbook method is for Australian tax returns. Change your country in Settings to use it.": "Metoda jurnalului de bord e pentru declarațiile fiscale din Australia. Schimbă-ți țara în Setări ca s-o folosești.",
@@ -733,7 +830,11 @@ const dictionary: Dictionary = {
   "Ended early": "Încheiat mai devreme",
   "Starts {{date}}": "Începe pe {{date}}",
   "Week {{week}} of {{weeks}}": "Săptămâna {{week}} din {{weeks}}",
-  "{{count}} days to go": { one: "Mai e {{count}} zi", few: "Mai sunt {{count}} zile", other: "Mai sunt {{count}} de zile" },
+  "{{count}} days to go": {
+    "one": "Mai e {{count}} zi",
+    "few": "Mai sunt {{count}} zile",
+    "other": "Mai sunt {{count}} de zile"
+  },
   "{{percent}}% business use": "{{percent}}% folosire pentru lucru",
   "{{percent}}% business use so far": "{{percent}}% folosire pentru lucru până acum",
   "Total km (odometer)": "Total km (kilometraj)",
@@ -742,8 +843,16 @@ const dictionary: Dictionary = {
   "This logbook ended before 12 weeks, so it can’t be used for the logbook method. Start a new one.": "Acest jurnal s-a încheiat înainte de 12 săptămâni, deci nu poate fi folosit pentru metoda jurnalului de bord. Începe unul nou.",
   "Worked out from the km MileMint logged. Add both odometer readings so any driving MileMint missed is counted too.": "Calculat din km înregistrați de MileMint. Adaugă ambele citiri ale kilometrajului ca să fie numărată și distanța pe care MileMint n-a prins-o.",
   "Your odometer readings show less driving than the business drives logged. Please check them.": "Citirile kilometrajului arată mai puțini km decât cursele de lucru înregistrate. Te rugăm să le verifici.",
-  "{{count}} drives in this period aren’t sorted yet. They count as private until you sort them.": { one: "{{count}} cursă din această perioadă nu e sortată încă. Contează ca personală până o sortezi.", few: "{{count}} curse din această perioadă nu sunt sortate încă. Contează ca personale până le sortezi.", other: "{{count}} de curse din această perioadă nu sunt sortate încă. Contează ca personale până le sortezi." },
-  "{{count}} business drives have no reason yet. The ATO asks for the reason for each journey.": { one: "{{count}} cursă de lucru nu are încă un scop. ATO cere scopul fiecărei curse.", few: "{{count}} curse de lucru nu au încă un scop. ATO cere scopul fiecărei curse.", other: "{{count}} de curse de lucru nu au încă un scop. ATO cere scopul fiecărei curse." },
+  "{{count}} drives in this period aren’t sorted yet. They count as private until you sort them.": {
+    "one": "{{count}} cursă din această perioadă nu e sortată încă. Contează ca personală până o sortezi.",
+    "few": "{{count}} curse din această perioadă nu sunt sortate încă. Contează ca personale până le sortezi.",
+    "other": "{{count}} de curse din această perioadă nu sunt sortate încă. Contează ca personale până le sortezi."
+  },
+  "{{count}} business drives have no reason yet. The ATO asks for the reason for each journey.": {
+    "one": "{{count}} cursă de lucru nu are încă un scop. ATO cere scopul fiecărei curse.",
+    "few": "{{count}} curse de lucru nu au încă un scop. ATO cere scopul fiecărei curse.",
+    "other": "{{count}} de curse de lucru nu au încă un scop. ATO cere scopul fiecărei curse."
+  },
   "Valid for the {{first}} to {{last}} income years, unless your work or your car changes.": "Valabil pentru anii de venit de la {{first}} la {{last}}, dacă nu se schimbă munca sau mașina ta.",
   "These 12 weeks run into the next income year. MileMint counts the logbook as kept in the year it started; check with your tax agent if unsure.": "Aceste 12 săptămâni trec în următorul an de venit. MileMint consideră jurnalul ținut în anul în care a început; dacă ai dubii, întreabă-ți consultantul fiscal.",
   "First day (km)": "Prima zi (km)",
@@ -777,12 +886,20 @@ const dictionary: Dictionary = {
   "Nothing to back up yet. Your trips are backed up once you have some.": "Nimic de salvat încă. Cursele tale intră în backup după ce ai câteva.",
   "iCloud isn’t available. Sign in to iCloud and turn on iCloud Drive in iPhone Settings.": "iCloud nu e disponibil. Conectează-te la iCloud și pornește iCloud Drive din Configurări pe iPhone.",
   "Couldn’t back up. Check your connection and try again.": "Backupul n-a reușit. Verifică-ți conexiunea și încearcă din nou.",
-  "Restored {{count}} trips from iCloud.": { one: "S-a restaurat {{count}} cursă din iCloud.", few: "S-au restaurat {{count}} curse din iCloud.", other: "S-au restaurat {{count}} de curse din iCloud." },
+  "Restored {{count}} trips from iCloud.": {
+    "one": "S-a restaurat {{count}} cursă din iCloud.",
+    "few": "S-au restaurat {{count}} curse din iCloud.",
+    "other": "S-au restaurat {{count}} de curse din iCloud."
+  },
   "Couldn’t restore. Nothing on this iPhone was changed.": "Restaurarea n-a reușit. Nu s-a schimbat nimic pe acest iPhone.",
   "Couldn’t reach your iCloud backups. Check your connection and try again.": "Backupurile tale din iCloud nu pot fi accesate acum. Verifică-ți conexiunea și încearcă din nou.",
   "There’s no backup in iCloud yet.": "Încă nu există niciun backup în iCloud.",
   "Replace what’s on this iPhone?": "Înlocuiești ce e pe acest iPhone?",
-  "Restore the backup from {{date}} with {{count}} trips. The trips, places, vehicles and settings on this iPhone are replaced by the ones in the backup.": { one: "Restaurezi backupul din {{date}}, cu {{count}} cursă. Cursele, locurile, vehiculele și setările de pe acest iPhone vor fi înlocuite cu cele din backup.", few: "Restaurezi backupul din {{date}}, cu {{count}} curse. Cursele, locurile, vehiculele și setările de pe acest iPhone vor fi înlocuite cu cele din backup.", other: "Restaurezi backupul din {{date}}, cu {{count}} de curse. Cursele, locurile, vehiculele și setările de pe acest iPhone vor fi înlocuite cu cele din backup." },
+  "Restore the backup from {{date}} with {{count}} trips. The trips, places, vehicles and settings on this iPhone are replaced by the ones in the backup.": {
+    "one": "Restaurezi backupul din {{date}}, cu {{count}} cursă. Cursele, locurile, vehiculele și setările de pe acest iPhone vor fi înlocuite cu cele din backup.",
+    "few": "Restaurezi backupul din {{date}}, cu {{count}} curse. Cursele, locurile, vehiculele și setările de pe acest iPhone vor fi înlocuite cu cele din backup.",
+    "other": "Restaurezi backupul din {{date}}, cu {{count}} de curse. Cursele, locurile, vehiculele și setările de pe acest iPhone vor fi înlocuite cu cele din backup."
+  },
   "Restore": "Restaurează",
   "Backups to iCloud work in the iPhone app.": "Backupul în iCloud funcționează în aplicația de iPhone.",
   "Checking iCloud…": "Se verifică iCloud…",
@@ -797,13 +914,21 @@ const dictionary: Dictionary = {
   "Restore from iCloud backup": "Restaurează din backupul iCloud",
   "Backing up…": "Se face backup…",
   "Back up now": "Fă backup acum",
-  "Done. {{count}} past trips now show only the area.": { one: "Gata. {{count}} cursă trecută arată acum doar zona.", few: "Gata. {{count}} curse trecute arată acum doar zona.", other: "Gata. {{count}} de curse trecute arată acum doar zona." },
+  "Done. {{count}} past trips now show only the area.": {
+    "one": "Gata. {{count}} cursă trecută arată acum doar zona.",
+    "few": "Gata. {{count}} curse trecute arată acum doar zona.",
+    "other": "Gata. {{count}} de curse trecute arată acum doar zona."
+  },
   "Couldn’t change past trips. Please try again.": "Cursele trecute nu au putut fi modificate. Te rugăm să încerci din nou.",
   "Remove addresses from past trips?": "Ștergi adresele din cursele trecute?",
   "This can’t be undone. Dates, distances and purposes stay as they are; places you saved keep their names.": "Acțiunea nu poate fi anulată. Datele, distanțele și scopurile rămân la fel; locurile salvate de tine își păstrează numele.",
   "Remove addresses": "Șterge adresele",
   "Past trips too?": "Și cursele trecute?",
-  "{{count}} past trips may still have addresses and routes. Replace them with the area only and delete the routes?": { one: "{{count}} cursă trecută poate avea încă o adresă și un traseu. O înlocuiești doar cu zona și ștergi traseul?", few: "{{count}} curse trecute pot avea încă adrese și trasee. Le înlocuiești doar cu zona și ștergi traseele?", other: "{{count}} de curse trecute pot avea încă adrese și trasee. Le înlocuiești doar cu zona și ștergi traseele?" },
+  "{{count}} past trips may still have addresses and routes. Replace them with the area only and delete the routes?": {
+    "one": "{{count}} cursă trecută poate avea încă o adresă și un traseu. O înlocuiești doar cu zona și ștergi traseul?",
+    "few": "{{count}} curse trecute pot avea încă adrese și trasee. Le înlocuiești doar cu zona și ștergi traseele?",
+    "other": "{{count}} de curse trecute pot avea încă adrese și trasee. Le înlocuiești doar cu zona și ștergi traseele?"
+  },
   "Keep them": "Păstrează-le",
   "Replace…": "Înlocuiește…",
   "Client privacy": "Confidențialitate clienți",
@@ -834,7 +959,11 @@ const dictionary: Dictionary = {
   "🔒 Client privacy": "🔒 Confidențialitate clienți",
   "No route or address was kept for this drive, only the area and the distance: {{distance}}.": "Pentru această cursă nu s-a păstrat niciun traseu sau adresă, doar zona și distanța: {{distance}}.",
   "Restore your trips from iCloud": "Restaurează-ți cursele din iCloud",
-  "Backup from {{date}} with {{count}} trips": { one: "Backup din {{date}}, cu {{count}} cursă", few: "Backup din {{date}}, cu {{count}} curse", other: "Backup din {{date}}, cu {{count}} de curse" },
+  "Backup from {{date}} with {{count}} trips": {
+    "one": "Backup din {{date}}, cu {{count}} cursă",
+    "few": "Backup din {{date}}, cu {{count}} curse",
+    "other": "Backup din {{date}}, cu {{count}} de curse"
+  },
   "Backup from {{date}}": "Backup din {{date}}",
   "Employed, in your own vehicle?": "Lucrezi ca angajat, cu vehiculul tău?",
   "MileMint works out the tax relief you can claim. Optional.": "MileMint calculează deducerea fiscală pe care o poți cere. Opțional.",
@@ -848,9 +977,21 @@ const dictionary: Dictionary = {
   "The backup hasn’t downloaded from iCloud yet. Check your connection and try again.": "Backupul nu s-a descărcat încă din iCloud. Verifică-ți conexiunea și încearcă din nou.",
   "This backup couldn’t be read. It may be damaged.": "Acest backup nu a putut fi citit. Poate fi deteriorat.",
   "Backed up just now": "Backup făcut chiar acum",
-  "Backed up {{count}} minutes ago": { one: "Backup făcut acum {{count}} minut", few: "Backup făcut acum {{count}} minute", other: "Backup făcut acum {{count}} de minute" },
-  "Backed up {{count}} hours ago": { one: "Backup făcut acum {{count}} oră", few: "Backup făcut acum {{count}} ore", other: "Backup făcut acum {{count}} de ore" },
-  "Backed up {{count}} days ago": { one: "Backup făcut acum {{count}} zi", few: "Backup făcut acum {{count}} zile", other: "Backup făcut acum {{count}} de zile" },
+  "Backed up {{count}} minutes ago": {
+    "one": "Backup făcut acum {{count}} minut",
+    "few": "Backup făcut acum {{count}} minute",
+    "other": "Backup făcut acum {{count}} de minute"
+  },
+  "Backed up {{count}} hours ago": {
+    "one": "Backup făcut acum {{count}} oră",
+    "few": "Backup făcut acum {{count}} ore",
+    "other": "Backup făcut acum {{count}} de ore"
+  },
+  "Backed up {{count}} days ago": {
+    "one": "Backup făcut acum {{count}} zi",
+    "few": "Backup făcut acum {{count}} zile",
+    "other": "Backup făcut acum {{count}} de zile"
+  },
   "For employees: P87 or Self Assessment": "Pentru angajați: P87 sau Self Assessment",
   "Opens the logbook method": "Deschide metoda jurnalului de bord",
   "Over 5,000 km? The logbook method could claim more": "Peste 5.000 km? Metoda jurnalului de bord ar putea aduce mai mult",
@@ -907,7 +1048,7 @@ const dictionary: Dictionary = {
   "Invites sent: {{count}}": {
     "one": "Invitații trimise: {{count}}",
     "few": "Invitații trimise: {{count}}",
-    "other": "Invitații trimise: {{count}}",
+    "other": "Invitații trimise: {{count}}"
   },
   "Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you.": "Invitațiile se confirmă prin iCloud, care vine într-o actualizare viitoare. Prietenii care se alătură până atunci primesc cursele în plus când e activat, iar tu la fel.",
   "You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed.": "Ai introdus {{code}}. Cele 10 curse în plus vin imediat ce invitația e confirmată.",
@@ -920,6 +1061,60 @@ const dictionary: Dictionary = {
   "This Apple Account has already joined with a friend’s invite.": "Acest cont Apple s-a alăturat deja cu invitația unui prieten.",
   "🎉 Your friend’s invite is confirmed": "🎉 Invitația prietenului tău e confirmată",
   "Your friend’s invite couldn’t be used": "Invitația prietenului tău nu a putut fi folosită",
+  "Opens MileMint Pro": "Deschide MileMint Pro",
+  "Saved · value unlocks with Pro": "Salvată · valoarea vine cu Pro",
+  "Business or personal? Personal drives don’t use your free drives.": "De lucru sau personală? Cursele personale nu-ți consumă cursele gratuite.",
+  "Closes this message": "Închide mesajul",
+  "Saved. This month’s free drives are used, so a drive sorted back from personal waits for Pro to show its value. Drives already showing their value keep it.": "Salvată. Cursele gratuite din luna asta s-au terminat, așa că o cursă mutată înapoi de la personală la de lucru așteaptă Pro ca să-și arate valoarea. Cursele care își arată deja valoarea o păstrează.",
+  "{{used}} of {{limit}} free work drives in {{month}}": "Curse de lucru gratuite în {{month}}: {{used}} din {{limit}}",
+  "{{count}} drives are saved and shown in full. Their value unlocks with Pro.": {
+    "one": "{{count}} cursă e salvată și afișată complet. Valoarea ei se deblochează cu Pro.",
+    "few": "{{count}} curse sunt salvate și afișate complet. Valoarea lor se deblochează cu Pro.",
+    "other": "{{count}} de curse sunt salvate și afișate complet. Valoarea lor se deblochează cu Pro."
+  },
+  "New work drives are still saved and shown in full. Their value unlocks with Pro.": "Cursele de lucru noi sunt în continuare salvate și afișate complet. Valoarea lor se deblochează cu Pro.",
+  "Personal drives don’t count.": "Cursele personale nu contează.",
+  "What counts?": "Ce contează?",
+  "Drives past the limit, saved and shown in full": "Cursele peste limită, salvate și afișate complet",
+  "The value of drives past the limit": "Valoarea curselor peste limită",
+  "{{count}} saved drives have their value waiting for Pro": {
+    "one": "{{count}} cursă salvată așteaptă Pro ca să-și arate valoarea",
+    "few": "{{count}} curse salvate așteaptă Pro ca să-și arate valoarea",
+    "other": "{{count}} de curse salvate așteaptă Pro ca să-și arate valoarea"
+  },
+  "{{count}} drives past the free plan’s monthly limit aren’t in these totals. They’re in the spreadsheet; their value unlocks with Pro.": {
+    "one": "{{count}} cursă peste limita lunară a planului gratuit nu e inclusă în aceste totaluri. E în foaia de calcul; valoarea ei se deblochează cu Pro.",
+    "few": "{{count}} curse peste limita lunară a planului gratuit nu sunt incluse în aceste totaluri. Sunt în foaia de calcul; valoarea lor se deblochează cu Pro.",
+    "other": "{{count}} de curse peste limita lunară a planului gratuit nu sunt incluse în aceste totaluri. Sunt în foaia de calcul; valoarea lor se deblochează cu Pro."
+  },
+  "Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.": {
+    "one": "Plan gratuit: {{count}} cursă de lucru pe lună (cursele personale nu contează), curse adăugate manual nelimitate și exportul în foaie de calcul.",
+    "few": "Plan gratuit: {{count}} curse de lucru pe lună (cursele personale nu contează), curse adăugate manual nelimitate și exportul în foaie de calcul.",
+    "other": "Plan gratuit: {{count}} de curse de lucru pe lună (cursele personale nu contează), curse adăugate manual nelimitate și exportul în foaie de calcul."
+  },
+  "Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.": {
+    "one": "Gratuit: {{count}} cursă de lucru pe lună. Cursele personale nu contează, iar o tură contează o dată pe zi. Cursele adăugate manual sunt mereu gratuite. Pro: nelimitat.",
+    "few": "Gratuit: {{count}} curse de lucru pe lună. Cursele personale nu contează, iar o tură contează o dată pe zi. Cursele adăugate manual sunt mereu gratuite. Pro: nelimitat.",
+    "other": "Gratuit: {{count}} de curse de lucru pe lună. Cursele personale nu contează, iar o tură contează o dată pe zi. Cursele adăugate manual sunt mereu gratuite. Pro: nelimitat."
+  },
+  "Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.": {
+    "one": "Gratuit: {{count}} cursă de lucru pe lună. Cursele personale nu contează, iar cele adăugate manual sunt mereu gratuite. Pro: nelimitat.",
+    "few": "Gratuit: {{count}} curse de lucru pe lună. Cursele personale nu contează, iar cele adăugate manual sunt mereu gratuite. Pro: nelimitat.",
+    "other": "Gratuit: {{count}} de curse de lucru pe lună. Cursele personale nu contează, iar cele adăugate manual sunt mereu gratuite. Pro: nelimitat."
+  },
+  "Each automatic work drive counts once. Unsorted drives count until you sort them.": "Fiecare cursă de lucru automată contează o dată. Cursele nesortate contează până le sortezi.",
+  "Personal drives don’t count. Sort one personal and the next drive gets its place.": "Cursele personale nu contează. Sortează una ca personală și următoarea cursă îi ia locul.",
+  "On shift, a whole shift counts as one drive a day.": "În tură, o tură întreagă contează ca o singură cursă pe zi.",
+  "Trips you add by hand never count.": "Cursele adăugate manual nu contează niciodată.",
+  "Past the limit nothing is hidden or lost: every drive is saved, shown in full, can be sorted and is in your spreadsheet export. Only its value waits for Pro.": "Peste limită nu se ascunde și nu se pierde nimic: fiecare cursă e salvată, afișată complet, poate fi sortată și apare în exportul în foaia de calcul. Doar valoarea ei așteaptă Pro.",
+  "The month’s earliest drives go first, so a drive showing its value keeps it. The count starts again on the 1st.": "Primele curse din lună au prioritate, așa că o cursă care își arată valoarea o păstrează. Numărătoarea o ia de la capăt pe 1 ale lunii.",
+  "Free: {{count}} work drives a month. Pro: unlimited.": {
+    "one": "Gratuit: {{count}} cursă de lucru pe lună. Pro: nelimitat.",
+    "few": "Gratuit: {{count}} curse de lucru pe lună. Pro: nelimitat.",
+    "other": "Gratuit: {{count}} de curse de lucru pe lună. Pro: nelimitat."
+  },
+  "Got it": "Am înțeles",
+  "See Pro": "Vezi Pro",
 };
 
 export default dictionary;

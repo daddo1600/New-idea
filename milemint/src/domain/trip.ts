@@ -45,6 +45,12 @@ export type Trip = {
   vehicleId: string | null;
   /** The shift the drive was part of (shift mode), or null. */
   shiftId: string | null;
+  /**
+   * When the user last sorted it back from personal (from the edit log), if
+   * ever. Such a drive rejoins the free plan's monthly queue from then, so it
+   * can't take a slot from a drive already showing its value (domain/plan).
+   */
+  rejoinedAt?: string | null;
 };
 
 export const METERS_PER_MILE = 1609.344;

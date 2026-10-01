@@ -110,11 +110,9 @@ export default function ReportScreen() {
     return (withTrips.includes(current) ? withTrips : [current, ...withTrips]).slice(0, YEARS_SHOWN);
   }, [trips, region]);
 
-  // Drives over the free limit stay out until they're unlocked, as on the home screen.
-  const visible = useMemo(() => {
-    const locked = lockedTripIds(trips ?? [], isPro, allowance);
-    return (trips ?? []).filter((trip) => !locked.has(trip.id));
-  }, [trips, isPro, allowance]);
+  // Drives past the free allowance are in the trip log, but their value (and every total) waits for Pro.
+  const locked = useMemo(() => lockedTripIds(trips ?? [], isPro, allowance), [trips, isPro, allowance]);
+  const visible = useMemo(() => (trips ?? []).filter((trip) => !locked.has(trip.id)), [trips, locked]);
   const today = toLocalIsoDate(new Date());
   const yearLogbooks = useMemo(
     () =>
@@ -143,7 +141,8 @@ export default function ReportScreen() {
 
   const report = useMemo(
     () =>
-      buildReport(visible, region, Number(year), {
+      buildReport(trips ?? [], region, Number(year), {
+        locked,
         places,
         editedIds,
         odometer: odometer ?? undefined,
@@ -153,7 +152,7 @@ export default function ReportScreen() {
           expenses: expenses?.get(summary.logbook.vehicleId) ?? null,
         })),
       }),
-    [visible, region, year, places, editedIds, odometer, vehicles, yearLogbooks, expenses],
+    [trips, locked, region, year, places, editedIds, odometer, vehicles, yearLogbooks, expenses],
   );
 
   if (!trips) return <ActivityIndicator style={styles.loading} />;
@@ -207,6 +206,16 @@ export default function ReportScreen() {
             <ThemedText type="small" themeColor="textSecondary">
               {t(region.caveat)}
             </ThemedText>
+          )}
+          {report.lockedCount > 0 && (
+            <Pressable accessibilityRole="button" onPress={() => router.push('/pro')} hitSlop={8}>
+              <ThemedText type="small" style={{ color: theme.accent }}>
+                {t(
+                  '{{count}} drives past the free plan’s monthly limit aren’t in these totals. They’re in the spreadsheet; their value unlocks with Pro.',
+                  { count: report.lockedCount },
+                )}
+              </ThemedText>
+            </Pressable>
           )}
           {report.unclassifiedCount > 0 && (
             <ThemedText type="small" themeColor="danger">

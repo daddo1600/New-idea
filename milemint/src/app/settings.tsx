@@ -1202,7 +1202,7 @@ function ProSection() {
         <ThemedText type="small" themeColor="textSecondary">
           {isPro
             ? t('Pro is active: unlimited automatic drives.')
-            : t('Free plan: {{count}} automatic drives a month, unlimited manual trips and CSV export.', {
+            : t('Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.', {
                 count: allowance,
               })}
         </ThemedText>

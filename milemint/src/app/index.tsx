@@ -13,6 +13,7 @@ import { AddTripButton, MenuButton } from '@/components/header-menu';
 import { BrandGradient } from '@/components/brand-gradient';
 import { LeafMark } from '@/components/leaf-mark';
 import { LogbookNudge } from '@/components/logbook-nudge';
+import { PlanSheet } from '@/components/plan-rules';
 import { Celebration } from '@/components/celebration';
 import { ReminderAsk } from '@/components/reminder-ask';
 import { shownPurpose } from '@/components/purpose-picker';
@@ -100,7 +101,10 @@ export default function HomeScreen() {
   /** Bumped when a swipe didn't start or end a shift (picker dismissed, or it failed), so the switch snaps back. */
   const [shiftRevision, bumpShiftRevision] = useReducer((n: number) => n + 1, 0);
   const locked = useMemo(() => lockedTripIds(trips ?? [], isPro, allowance), [trips, isPro, allowance]);
-  // Locked drives don't count towards the total (or a tier limit) until they're unlocked.
+  /** Drives just sorted back from personal: if the month's free drives are used, their value waits (domain/plan). */
+  const [rejoined, setRejoined] = useState<readonly string[] | null>(null);
+  const rejoinedTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  // Drives past the free allowance are listed in full, but their value isn't in any total until Pro.
   const visible = useMemo(() => (trips ?? []).filter((trip) => !locked.has(trip.id)), [trips, locked]);
   const deductions = useMemo(() => computeDeductions(visible, region), [visible, region]);
   const shiftTrips = useMemo(
@@ -153,7 +157,8 @@ export default function HomeScreen() {
 
   const kindOf = (id: string | null) => places.find((place: Place) => place.id === id)?.kind ?? null;
 
-  const unsorted = visible.filter((trip) => trip.classification === 'unclassified');
+  // Drives past the free allowance can be sorted too (sorting one personal frees a slot).
+  const unsorted = trips.filter((trip) => trip.classification === 'unclassified');
   const stopSelecting = () => {
     setSelecting(false);
     setSelected(new Set());
@@ -165,10 +170,21 @@ export default function HomeScreen() {
       else next.add(trip.id);
       return next;
     });
+  /** Sorts trips, and says so if one sorted back from personal now has to wait for Pro. */
+  const sort = async (many: readonly Trip[], classification: Classification) => {
+    const back = many.filter((trip) => trip.classification === 'personal' && classification !== 'personal');
+    await (many.length === 1 ? classify(many[0], classification) : classifyMany(many, classification));
+    if (!isPro && back.length > 0) {
+      setRejoined(back.map((trip) => trip.id));
+      clearTimeout(rejoinedTimer.current);
+      rejoinedTimer.current = setTimeout(() => setRejoined(null), 8000);
+    }
+  };
   const markSelected = async (classification: Classification) => {
-    await classifyMany(visible.filter((trip) => selected.has(trip.id)), classification);
+    await sort(trips.filter((trip) => selected.has(trip.id)), classification);
     stopSelecting();
   };
+  const waiting = rejoined?.some((id) => locked.has(id)) ?? false;
 
   const confirmDelete = (trip: Trip) =>
     Alert.alert(t('Delete trip?'), `${trip.startLabel} → ${trip.endLabel}`, [
@@ -247,7 +263,7 @@ export default function HomeScreen() {
                 </ThemedText>
               </Pressable>
             )}
-            {!isPro && <PlanCard trips={trips} lockedCount={locked.size} />}
+            {!isPro && <PlanCard trips={trips} locked={locked} />}
             {visible.length > 0 && (
               <SelectBar
                 selecting={selecting}
@@ -272,24 +288,27 @@ export default function HomeScreen() {
         }
         renderItem={({ item }) =>
           selecting ? (
-            locked.has(item.id) ? null : (
-              <SelectableTripRow trip={item} selected={selected.has(item.id)} onToggle={() => toggle(item)} />
-            )
+            <SelectableTripRow trip={item} selected={selected.has(item.id)} onToggle={() => toggle(item)} />
           ) : locked.has(item.id) ? (
-            <LockedTripRow trip={item} worth={potentialDeduction(item, visible, region)} />
+            <LockedTripRow
+              trip={item}
+              onClassify={(c) => sort([item], c)}
+              onLongPress={() => confirmDelete(item)}
+            />
           ) : (
             <TripRow
               trip={item}
               deduction={deductions.get(item.id) ?? 0}
               potential={item.classification === 'unclassified' ? potentialDeduction(item, visible, region) : 0}
               commute={isCommute(kindOf(item.startPlaceId), kindOf(item.endPlaceId))}
-              onClassify={(c) => classify(item, c)}
+              onClassify={(c) => sort([item], c)}
               onLongPress={() => confirmDelete(item)}
             />
           )
         }
       />
       {!selecting && <AddTripButton bottom={insets.bottom} />}
+      {waiting && <ValueWaitsNotice bottom={insets.bottom} onClose={() => setRejoined(null)} />}
       <Celebration content={celebration.content} onClose={celebration.close} />
       <VehicleSheet
         visible={picking !== null}
@@ -736,66 +755,137 @@ function TripRow({
 }
 
 /**
- * A drive over the free monthly limit: recorded and kept, but its details and
- * classification wait for Pro. Distance and date stay visible so the user can
- * see it's real.
+ * A drive past the free plan's monthly allowance: saved and shown in full
+ * (route, distance, time, purpose) and sortable like any other. Only its
+ * value waits for Pro, and the row says so instead of hiding anything.
  */
-function LockedTripRow({ trip, worth }: { trip: Trip; worth: number }) {
+function LockedTripRow({
+  trip,
+  onClassify,
+  onLongPress,
+}: {
+  trip: Trip;
+  onClassify: (classification: Classification) => void;
+  onLongPress: () => void;
+}) {
   const theme = useTheme();
   const t = useT();
   const { region } = useRegion();
-  const distance = formatDistance(trip.distanceMeters, region);
+  const swipeable = useRef<SwipeableMethods>(null);
+  const unclassified = trip.classification === 'unclassified';
+  const details = [trip.localDate, formatTime(trip.startedAt, region), shownPurpose(trip.purpose, t)].filter(Boolean);
+  const openDetails = () => router.push({ pathname: '/trip/[id]', params: { id: trip.id } });
+  return (
+    <ReanimatedSwipeable
+      ref={swipeable}
+      friction={2}
+      leftThreshold={SWIPE_THRESHOLD}
+      rightThreshold={SWIPE_THRESHOLD}
+      renderLeftActions={() => (
+        <SwipeAction label={t('Business')} color={theme.accent} textColor={theme.onAccent} side="left" />
+      )}
+      renderRightActions={() => (
+        <SwipeAction label={t('Personal')} color={theme.backgroundSelected} textColor={theme.text} side="right" />
+      )}
+      onSwipeableOpen={(direction) => {
+        swipeable.current?.close();
+        onClassify(direction === SwipeDirection.RIGHT ? 'business' : 'personal');
+      }}>
+      <Pressable
+        onPress={openDetails}
+        onLongPress={onLongPress}
+        accessibilityHint={t('Opens trip details. Long press to delete')}>
+        <ThemedView type="backgroundElement" style={styles.row}>
+          <View style={styles.rowHeader}>
+            <ThemedText type="smallBold" style={styles.route} numberOfLines={1}>
+              {shownLabel(trip.startLabel, t)} → {shownLabel(trip.endLabel, t)}
+            </ThemedText>
+            <ThemedText type="smallBold">{formatDistance(trip.distanceMeters, region)}</ThemedText>
+          </View>
+          <ThemedText type="small" themeColor="textSecondary">
+            {details.join(' · ')}
+          </ThemedText>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityHint={t('Opens MileMint Pro')}
+            hitSlop={8}
+            onPress={() => router.push('/pro')}
+            style={styles.savedLine}>
+            <ThemedText type="smallBold" style={{ color: theme.accent }}>
+              🔒 {t('Saved · value unlocks with Pro')}
+            </ThemedText>
+          </Pressable>
+          {unclassified && (
+            <ThemedText type="small" themeColor="textSecondary">
+              {t('Business or personal? Personal drives don’t use your free drives.')}
+            </ThemedText>
+          )}
+          <Segmented
+            options={CLASSIFY_OPTIONS.map((option) => ({ ...option, label: t(option.label) }))}
+            value={unclassified ? null : trip.classification}
+            onChange={onClassify}
+            accessibilityLabelFor={(option) =>
+              option.value === 'business'
+                ? t('Mark {{from}} to {{to}} as business', { from: trip.startLabel, to: trip.endLabel })
+                : t('Mark {{from}} to {{to}} as personal', { from: trip.startLabel, to: trip.endLabel })
+            }
+          />
+        </ThemedView>
+      </Pressable>
+    </ReanimatedSwipeable>
+  );
+}
+
+/**
+ * Said when a drive sorted back from personal has to wait for Pro because the
+ * month's free drives are used: the one case where a drive the user touches
+ * doesn't show its value (domain/plan explains why it's this drive and not
+ * one already showing its value).
+ */
+function ValueWaitsNotice({ bottom, onClose }: { bottom: number; onClose: () => void }) {
+  const theme = useTheme();
+  const t = useT();
   return (
     <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={t('Locked drive on {{date}}, {{distance}}', { date: trip.localDate, distance })}
-      accessibilityHint={t('Opens MileMint Pro to unlock it')}
-      onPress={() => router.push('/pro')}>
-      <ThemedView type="backgroundElement" style={styles.row}>
-        <View style={styles.rowHeader}>
-          <ThemedText type="smallBold" themeColor="textSecondary" style={styles.route}>
-            🔒 {t('Locked drive')}
-          </ThemedText>
-          <ThemedText type="smallBold">{distance}</ThemedText>
-        </View>
-        <ThemedText type="small" themeColor="textSecondary">
-          {[
-            trip.localDate,
-            formatTime(trip.startedAt, region),
-            worth > 0 ? t('worth up to {{amount}}', { amount: formatMoney(worth, region) }) : '',
-          ]
-            .filter(Boolean)
-            .join(' · ')}
-        </ThemedText>
-        <ThemedText type="smallBold" style={{ color: theme.accent }}>
-          {t('Unlock with MileMint Pro')}
-        </ThemedText>
-      </ThemedView>
+      accessibilityRole="alert"
+      accessibilityLiveRegion="polite"
+      accessibilityHint={t('Closes this message')}
+      onPress={onClose}
+      style={[styles.notice, { bottom: bottom + 96, backgroundColor: theme.text }]}>
+      <Text style={[styles.noticeText, { color: theme.background }]}>
+        {t(
+          'Saved. This month’s free drives are used, so a drive sorted back from personal waits for Pro to show its value. Drives already showing their value keep it.',
+        )}
+      </Text>
     </Pressable>
   );
 }
 
-/** Free plan meter: how much of this month's allowance is used. */
-function PlanCard({ trips, lockedCount }: { trips: readonly Trip[]; lockedCount: number }) {
+/** Free plan meter: how much of this month's allowance is used, shown from the first drive. */
+function PlanCard({ trips, locked }: { trips: readonly Trip[]; locked: ReadonlySet<string> }) {
   const theme = useTheme();
   const t = useT();
   const { region } = useRegion();
   // 40 a month, plus 10 for joining with a friend's code and 10 for each friend who joined with yours.
   const limit = useAllowance();
   const { counting, canRedeem } = useReferral();
+  const [explaining, setExplaining] = useState(false);
   const now = new Date();
-  const used = Math.min(autoDrivesInMonth(trips, toLocalIsoDate(now).slice(0, 7)), limit);
+  const thisMonth = toLocalIsoDate(now).slice(0, 7);
+  const used = Math.min(autoDrivesInMonth(trips, thisMonth), limit);
+  // This month's drives whose value waits (earlier months' are counted on the Pro screen).
+  const lockedCount = trips.filter((trip) => locked.has(trip.id) && trip.localDate.startsWith(thisMonth)).length;
   const month = now.toLocaleDateString(displayLocale(region), { month: 'long' });
   const full = used >= limit;
   return (
-    // The card opens Pro; the friend's-code link is its own button beside it, not nested inside.
+    // The card opens Pro; "What counts?" and the friend's-code link are their own buttons, not nested inside.
     <ThemedView
       type="backgroundElement"
       style={[styles.planCard, lockedCount > 0 && { borderColor: theme.accent, borderWidth: 1 }]}>
       <Pressable accessibilityRole="button" onPress={() => router.push('/pro')} style={styles.planMain}>
         <View style={styles.rowHeader}>
-          <ThemedText type="smallBold">
-            {t('{{used}} of {{limit}} free drives in {{month}}', { used, limit, month })}
+          <ThemedText type="smallBold" style={styles.route}>
+            {t('{{used}} of {{limit}} free work drives in {{month}}', { used, limit, month })}
           </ThemedText>
           <View style={styles.goPro}>
             <Text style={styles.goProText}>★ {t('Go Pro')}</Text>
@@ -812,17 +902,18 @@ function PlanCard({ trips, lockedCount }: { trips: readonly Trip[]; lockedCount:
             ]}
           />
         </View>
-        {lockedCount > 0 ? (
-          <ThemedText type="small" themeColor="textSecondary">
-            {t('{{count}} drives are locked. Upgrade for unlimited drives.', { count: lockedCount })}
-          </ThemedText>
-        ) : (
-          full && (
-            <ThemedText type="small" themeColor="textSecondary">
-              {t('New drives this month are saved but locked until you upgrade.')}
-            </ThemedText>
-          )
-        )}
+        <ThemedText type="small" themeColor="textSecondary">
+          {lockedCount > 0
+            ? t('{{count}} drives are saved and shown in full. Their value unlocks with Pro.', { count: lockedCount })
+            : full
+              ? t('New work drives are still saved and shown in full. Their value unlocks with Pro.')
+              : t('Personal drives don’t count.')}
+        </ThemedText>
+      </Pressable>
+      <Pressable accessibilityRole="button" hitSlop={8} onPress={() => setExplaining(true)} style={styles.savedLine}>
+        <ThemedText type="small" style={{ color: theme.accent }}>
+          {t('What counts?')}
+        </ThemedText>
       </Pressable>
       {/* The sharer's own bonus needs iCloud to count friends; until then only a friend's code helps. */}
       {(full || lockedCount > 0) && (counting || canRedeem) && (
@@ -834,6 +925,7 @@ function PlanCard({ trips, lockedCount }: { trips: readonly Trip[]; lockedCount:
           </ThemedText>
         </Pressable>
       )}
+      <PlanSheet visible={explaining} allowance={limit} onClose={() => setExplaining(false)} />
     </ThemedView>
   );
 }
@@ -1158,6 +1250,17 @@ const styles = StyleSheet.create({
   bulkButton: { flex: 1, alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12 },
   planCard: { borderRadius: 16, padding: Spacing.three, gap: Spacing.two },
   planMain: { gap: Spacing.two },
+  savedLine: { alignSelf: 'flex-start' },
+  notice: {
+    position: 'absolute',
+    left: Spacing.three,
+    right: Spacing.three,
+    maxWidth: MaxContentWidth,
+    alignSelf: 'center',
+    borderRadius: 14,
+    padding: Spacing.three,
+  },
+  noticeText: { fontSize: 14, lineHeight: 20, fontWeight: '600' },
   meter: { height: 6, borderRadius: 3, overflow: 'hidden' },
   meterFill: { height: '100%', borderRadius: 3 },
   trackingOn: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, paddingHorizontal: Spacing.one },
