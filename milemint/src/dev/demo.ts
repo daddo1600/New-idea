@@ -22,6 +22,7 @@ import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/tri
  *   ?demo=stopped / ?demo=precise  tracking not running / Precise Location off
  *   ?demo=free   a free-plan user, with sample App Store prices on the paywall
  *   ?demo=courier shift mode on (the swipe-to-start shift bar)
+ *   ?demo=motion Motion & Fitness not asked yet: set-up offers it after location
  *   &region=GB   preview another country's currency, units and rules
  */
 const demoParam =
@@ -78,6 +79,13 @@ export const DEMO_COURIER = demoParam === 'courier';
 
 /** `?demo=driving`: the home screen shows a drive being recorded. */
 export const DEMO_DRIVING = demoParam === 'driving';
+
+/**
+ * `?demo=motion`: Motion & Fitness is available and not asked yet, so set-up
+ * shows the motion step after location; tapping its button keeps the coaching
+ * that sits behind iOS's question on screen (there's no real question on the web).
+ */
+export const DEMO_MOTION = demoParam === 'motion';
 
 /**
  * `?today=2027-03-20`: the tax-year countdown and the seasonal opening as they

@@ -25,6 +25,10 @@ All of this is stored **on your device**, in a database encrypted with AES-256. 
 
 MileMint asks for "Always" location access so it can detect drives automatically in the background. You can change this at any time in **Settings → MileMint → Location**. If you choose "While Using", you can still add trips manually.
 
+## Motion & Fitness permission
+
+If you allow it, MileMint reads your iPhone's motion activity (whether it was in a vehicle, walking, running, cycling or still) for the minutes around each detected drive, so a walk isn't logged as a drive. iOS keeps this activity on your phone; MileMint reads it there, doesn't store it with your trips and never sends it anywhere. You can change this at any time in **Settings → MileMint → Motion & Fitness**. Without it, drives are detected from location alone.
+
 ## Keeping and deleting your data
 
 Your records stay on your phone until you delete them. Deleting a trip removes it from the app (and from backups made after that); deleting the app removes all of its data from your phone. MileMint's encrypted backups stay in your iCloud until you delete them there. Because we don't hold your data, there is nothing for us to delete on our side.

@@ -861,6 +861,12 @@
     ]
   },
   {
+    "key": "Allow",
+    "files": [
+      "components/motion-ask.tsx"
+    ]
+  },
+  {
     "key": "ALLOW LOCATION ACCESS",
     "files": [
       "components/always-guide.tsx"
@@ -1777,6 +1783,12 @@
     "key": "Did your shift start at {{time}}?",
     "files": [
       "components/shift-prompts.tsx"
+    ]
+  },
+  {
+    "key": "Don’t Allow",
+    "files": [
+      "components/motion-ask.tsx"
     ]
   },
   {
@@ -3005,6 +3017,13 @@
     ]
   },
   {
+    "key": "Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone.",
+    "files": [
+      "app/setup-tracking.tsx",
+      "components/motion-ask.tsx"
+    ]
+  },
+  {
     "key": "Light on battery",
     "files": [
       "app/setup-tracking.tsx"
@@ -3352,6 +3371,12 @@
     ]
   },
   {
+    "key": "Motion & Fitness",
+    "files": [
+      "components/tracking-health-card.tsx"
+    ]
+  },
+  {
     "key": "Motorbike",
     "files": [
       "components/vehicle-picker.tsx"
@@ -3696,9 +3721,21 @@
     ]
   },
   {
+    "key": "Off",
+    "files": [
+      "components/tracking-health-card.tsx"
+    ]
+  },
+  {
     "key": "Off we go! 👋",
     "files": [
       "domain/cheers.ts"
+    ]
+  },
+  {
+    "key": "On",
+    "files": [
+      "components/tracking-health-card.tsx"
     ]
   },
   {
@@ -3741,6 +3778,13 @@
     "key": "Once the logbook has some drives, MileMint compares the two methods here.",
     "files": [
       "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "One more for accuracy: Motion & Fitness",
+    "files": [
+      "app/setup-tracking.tsx",
+      "components/motion-ask.tsx"
     ]
   },
   {
@@ -4884,7 +4928,8 @@
   {
     "key": "STEP 2 · TRACKING",
     "files": [
-      "app/welcome.tsx"
+      "app/welcome.tsx",
+      "components/motion-ask.tsx"
     ]
   },
   {
@@ -4992,6 +5037,7 @@
   {
     "key": "Tap “{{button}}”",
     "files": [
+      "components/motion-ask.tsx",
       "components/permission-preview.tsx"
     ]
   },
@@ -5498,7 +5544,8 @@
   {
     "key": "Turn on",
     "files": [
-      "app/index.tsx"
+      "app/index.tsx",
+      "components/tracking-health-card.tsx"
     ]
   },
   {
@@ -5516,6 +5563,13 @@
   {
     "key": "Turn on automatic tracking from the home screen whenever you’re ready, or add trips with the + button.",
     "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Turn on Motion & Fitness",
+    "files": [
+      "app/setup-tracking.tsx",
       "app/welcome.tsx"
     ]
   },

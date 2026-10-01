@@ -1099,6 +1099,14 @@ const dictionary: Dictionary = {
   "Change to Always Allow": "更改为始终允许",
   "Tap “{{button}}”": "轻点“{{button}}”",
   "{{step}} OF 2": "第 {{step}} 步（共 2 步）",
+  "One more for accuracy: Motion & Fitness": "再开一项，记录更准确：运动与健身",
+  "Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone.": "让 MileMint 分辨开车和步行，散步绝不会被记成行程。数据只留在你的手机上。",
+  "Turn on Motion & Fitness": "开启运动与健身",
+  "Allow": "允许",
+  "Don’t Allow": "不允许",
+  "Motion & Fitness": "运动与健身",
+  "On": "已开启",
+  "Off": "已关闭",
 };
 
 export default dictionary;

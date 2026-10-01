@@ -269,3 +269,19 @@ Back-translations: Multiple choice allowed. The first one chosen is filled in fo
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+
+## Round 8f: motion activity
+
+iOS’s own names: “运动与健身” (设置), “允许” / “不允许” (alert). “行程” and “你” as everywhere else. The alert’s own title and body come from iOS (the body is the English NSMotionUsageDescription), so the preview shows them as grey bars.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| One more for accuracy: Motion & Fitness | 再开一项，记录更准确：运动与健身 | Turn on one more, for more accurate records: Motion & Fitness | |
+| Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone. | 让 MileMint 分辨开车和步行，散步绝不会被记成行程。数据只留在你的手机上。 | Lets MileMint tell driving from walking; a walk will never be recorded as a trip. The data only stays on your phone. | |
+| Turn on Motion & Fitness | 开启运动与健身 | Turn on Motion & Fitness | |
+| Allow | 允许 | Allow | |
+| Don’t Allow | 不允许 | Don’t allow | |
+| Motion & Fitness | 运动与健身 | Motion & Fitness | |
+| On | 已开启 | On | |
+| Off | 已关闭 | Off | |

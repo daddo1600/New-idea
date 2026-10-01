@@ -1,6 +1,6 @@
 import { router, type Href } from 'expo-router';
-import { useState } from 'react';
-import { Linking, Pressable, StyleSheet, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { AppState, Linking, Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -12,6 +12,7 @@ import { toLocalIsoDate } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { useRegion } from '@/region/region';
+import { askForMotion, motionStatus } from '@/tracking/motion';
 import { useTrackingAlerts, useTrackingHealth } from '@/tracking/use-tracking-health';
 
 /**
@@ -226,7 +227,51 @@ export function TrackingCheckRow() {
           </ThemedText>
         </ThemedText>
       </ThemedView>
+      <MotionRow />
     </>
+  );
+}
+
+/**
+ * Motion & Fitness, under the tracking check: on or off, with the one tap
+ * that changes it. Hidden where there's none (web, Android, older builds).
+ */
+function MotionRow() {
+  const theme = useTheme();
+  const t = useT();
+  const [status, setStatus] = useState(motionStatus);
+  useEffect(() => {
+    // Back from Settings, where it may have been switched.
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state === 'active') setStatus(motionStatus());
+    });
+    return () => subscription.remove();
+  }, []);
+  if (status === null) return null;
+  const on = status === 'authorized';
+  const action =
+    status === 'denied'
+      ? { label: t('Open Settings'), run: () => Linking.openSettings() }
+      : status === 'notDetermined'
+        ? { label: t('Turn on'), run: async () => setStatus(await askForMotion().catch(() => motionStatus())) }
+        : null;
+  return (
+    <ThemedView type="backgroundElement" style={[styles.row, styles.motionRow]}>
+      <ThemedText type="small" themeColor="textSecondary" style={styles.flex}>
+        {t('Motion & Fitness')}
+        {': '}
+        <ThemedText type="smallBold" style={{ color: on ? theme.accent : theme.textSecondary }}>
+          {on ? t('On') : t('Off')}
+        </ThemedText>
+      </ThemedText>
+      {action && (
+        <Pressable accessibilityRole="button" hitSlop={8} onPress={action.run}>
+          <ThemedText type="smallBold" style={{ color: theme.accent }}>
+            {action.label}
+          </ThemedText>
+        </Pressable>
+      )}
+    </ThemedView>
   );
 }
 
@@ -249,4 +294,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   row: { borderRadius: 12, padding: Spacing.three },
+  motionRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
+  flex: { flex: 1 },
 });

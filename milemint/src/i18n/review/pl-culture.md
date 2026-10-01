@@ -294,3 +294,19 @@ Back-translations: Choose all that fit. We'll enter the first one chosen for you
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+
+## Round 8f: motion activity
+
+“Pozwól” / “Nie pozwalaj” are iOS’s alert buttons. “Ruch i sprawność” is iOS’s Settings item as best known: Unsure, please check against a Polish iPhone. “Przejazd” as everywhere else. The alert’s own title and body come from iOS (the body is the English NSMotionUsageDescription), so the preview shows them as grey bars.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| One more for accuracy: Motion & Fitness | Jeszcze jedno, dla dokładności: Ruch i sprawność | One more, for accuracy: Motion & Fitness | |
+| Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone. | Pozwala MileMint odróżnić jazdę od chodzenia, więc spacer nigdy nie zostanie zapisany jako przejazd. Zostaje na Twoim telefonie. | Lets MileMint tell driving from walking, so a walk is never saved as a trip. It stays on your phone. | |
+| Turn on Motion & Fitness | Włącz Ruch i sprawność | Turn on Motion & Fitness | |
+| Allow | Pozwól | Allow | |
+| Don’t Allow | Nie pozwalaj | Don’t allow | |
+| Motion & Fitness | Ruch i sprawność | Motion & Fitness | |
+| On | Włączone | On | |
+| Off | Wyłączone | Off | |

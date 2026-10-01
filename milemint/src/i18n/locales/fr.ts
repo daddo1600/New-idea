@@ -1227,6 +1227,14 @@ const dictionary: Dictionary = {
   "Change to Always Allow": "Passer à Toujours autoriser",
   "Tap “{{button}}”": "Touchez « {{button}} »",
   "{{step}} OF 2": "{{step}} SUR 2",
+  "One more for accuracy: Motion & Fitness": "Une de plus, pour la précision : Mouvements et forme physique",
+  "Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone.": "Permet à MileMint de distinguer la conduite de la marche, pour qu’une balade ne soit jamais enregistrée comme un trajet. Tout reste sur votre téléphone.",
+  "Turn on Motion & Fitness": "Activer Mouvements et forme physique",
+  "Allow": "Autoriser",
+  "Don’t Allow": "Ne pas autoriser",
+  "Motion & Fitness": "Mouvements et forme physique",
+  "On": "Activé",
+  "Off": "Désactivé",
 };
 
 export default dictionary;

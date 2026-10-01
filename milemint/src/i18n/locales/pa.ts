@@ -1149,6 +1149,14 @@ const dictionary: Dictionary = {
   "Change to Always Allow": "ਹਮੇਸ਼ਾਂ ਇਜਾਜ਼ਤ ਦੇਣ ’ਤੇ ਬਦਲੋ",
   "Tap “{{button}}”": "“{{button}}” ’ਤੇ ਟੈਪ ਕਰੋ",
   "{{step}} OF 2": "2 ਵਿੱਚੋਂ {{step}}",
+  "One more for accuracy: Motion & Fitness": "ਸ਼ੁੱਧਤਾ ਲਈ ਇੱਕ ਹੋਰ: ਮੋਸ਼ਨ ਅਤੇ ਫਿਟਨੈੱਸ",
+  "Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone.": "ਇਸ ਨਾਲ MileMint ਗੱਡੀ ਚਲਾਉਣ ਅਤੇ ਪੈਦਲ ਚੱਲਣ ਵਿੱਚ ਫ਼ਰਕ ਕਰ ਸਕਦਾ ਹੈ, ਤਾਂ ਜੋ ਸੈਰ ਕਦੇ ਵੀ ਟ੍ਰਿਪ ਵਜੋਂ ਦਰਜ ਨਾ ਹੋਵੇ। ਇਹ ਤੁਹਾਡੇ ਫ਼ੋਨ ’ਤੇ ਹੀ ਰਹਿੰਦਾ ਹੈ।",
+  "Turn on Motion & Fitness": "ਮੋਸ਼ਨ ਅਤੇ ਫਿਟਨੈੱਸ ਚਾਲੂ ਕਰੋ",
+  "Allow": "ਇਜਾਜ਼ਤ ਦਿਓ",
+  "Don’t Allow": "ਇਜਾਜ਼ਤ ਨਾ ਦਿਓ",
+  "Motion & Fitness": "ਮੋਸ਼ਨ ਅਤੇ ਫਿਟਨੈੱਸ",
+  "On": "ਚਾਲੂ",
+  "Off": "ਬੰਦ",
 };
 
 export default dictionary;

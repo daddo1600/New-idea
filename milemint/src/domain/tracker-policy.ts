@@ -31,7 +31,12 @@ export type TrackerRecord = {
   gaps?: TrackingGap[];
   /** Tracking-health notifications: the day each issue last alerted, so it's once a day at most. */
   alerts?: AlertLog;
+  /** Detected drives that Motion & Fitness showed were walks, so weren't saved (newest last, a few kept for debugging). */
+  droppedWalks?: DroppedWalk[];
 };
+
+/** A detected "drive" not saved because the phone was walking: when, and how far the GPS made it. */
+export type DroppedWalk = { startedAt: number; endedAt: number; distanceM: number };
 
 /**
  * A stretch where tracking lost the phone: it was last seen at `from` and

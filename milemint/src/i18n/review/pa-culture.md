@@ -343,3 +343,19 @@ Back-translations: Choose all that apply. Whichever you choose first, we'll fill
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+
+## Round 8f: motion activity
+
+Unsure: iOS’s Punjabi button and Settings names aren’t known for certain; “ਇਜਾਜ਼ਤ ਦਿਓ” matches this file’s “Allow While Using App”. Please check against a Punjabi iPhone. “ਟ੍ਰਿਪ” as everywhere else. The alert’s own title and body come from iOS (the body is the English NSMotionUsageDescription), so the preview shows them as grey bars.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| One more for accuracy: Motion & Fitness | ਸ਼ੁੱਧਤਾ ਲਈ ਇੱਕ ਹੋਰ: ਮੋਸ਼ਨ ਅਤੇ ਫਿਟਨੈੱਸ | One more for accuracy: Motion & Fitness | |
+| Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone. | ਇਸ ਨਾਲ MileMint ਗੱਡੀ ਚਲਾਉਣ ਅਤੇ ਪੈਦਲ ਚੱਲਣ ਵਿੱਚ ਫ਼ਰਕ ਕਰ ਸਕਦਾ ਹੈ, ਤਾਂ ਜੋ ਸੈਰ ਕਦੇ ਵੀ ਟ੍ਰਿਪ ਵਜੋਂ ਦਰਜ ਨਾ ਹੋਵੇ। ਇਹ ਤੁਹਾਡੇ ਫ਼ੋਨ ’ਤੇ ਹੀ ਰਹਿੰਦਾ ਹੈ। | With this MileMint can tell driving from walking, so a stroll is never recorded as a trip. It stays on your phone. | |
+| Turn on Motion & Fitness | ਮੋਸ਼ਨ ਅਤੇ ਫਿਟਨੈੱਸ ਚਾਲੂ ਕਰੋ | Turn on Motion & Fitness | |
+| Allow | ਇਜਾਜ਼ਤ ਦਿਓ | Give permission | |
+| Don’t Allow | ਇਜਾਜ਼ਤ ਨਾ ਦਿਓ | Don’t give permission | |
+| Motion & Fitness | ਮੋਸ਼ਨ ਅਤੇ ਫਿਟਨੈੱਸ | Motion & Fitness | |
+| On | ਚਾਲੂ | On | |
+| Off | ਬੰਦ | Off | |

@@ -23,6 +23,7 @@ import { AlwaysGuide } from '@/components/always-guide';
 import { BrandGradient } from '@/components/brand-gradient';
 import { CountryOptions, phoneRegion } from '@/components/country-options';
 import { LeafMark } from '@/components/leaf-mark';
+import { MotionCoach, MotionStep } from '@/components/motion-ask';
 import { PermissionPreview } from '@/components/permission-preview';
 import { purposeIcon, quickPurposes, shownPurpose } from '@/components/purpose-picker';
 import { MintWash, StepHeader, StepIcon } from '@/components/step-header';
@@ -52,6 +53,7 @@ import { useReferral } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 import { enableWeeklyReminder, scheduleWorkHoursNudge } from '@/reminders/weekly';
 import type { TrackingStatus } from '@/tracking/background';
+import { askForMotion, motionAskable } from '@/tracking/motion';
 import { useTracking } from '@/tracking/use-tracking';
 import { VEHICLE_ICONS, type VehicleType } from '@/domain/trip';
 import { defaultVehicleName, isDefaultVehicleName } from '@/domain/vehicles';
@@ -132,6 +134,8 @@ export default function WelcomeScreen() {
   const [asked, setAsked] = useState(false);
   /** Which of iOS's two location questions is on screen, to say what to tap. */
   const [asking, setAsking] = useState<1 | 2 | null>(null);
+  /** After location, still on the tracking step: Motion & Fitness offered, or iOS's question for it up. */
+  const [motion, setMotion] = useState<'offer' | 'asking' | null>(null);
   /** Sent to Settings to choose "Always": carry on by ourselves once it's chosen. */
   const [inSettings, setInSettings] = useState(false);
   const db = useSQLiteContext();
@@ -215,11 +219,27 @@ export default function WelcomeScreen() {
     setStep(2);
   };
 
+  /** Location is done: offer Motion & Fitness when iOS hasn't asked for it yet, else move on. */
+  const afterLocation = () => {
+    if (motionAskable()) setMotion('offer');
+    else setStep(afterTracking);
+  };
+
+  const allowMotion = async () => {
+    setMotion('asking');
+    try {
+      await askForMotion();
+    } finally {
+      setMotion(null);
+      setStep(afterTracking);
+    }
+  };
+
   const allowLocation = async () => {
     setBusy(true);
     try {
       const next = await enable(setAsking);
-      if (next === 'on') setStep(afterTracking);
+      if (next === 'on') afterLocation();
     } finally {
       setAsking(null);
       setAsked(true);
@@ -235,7 +255,7 @@ export default function WelcomeScreen() {
       (next) => {
         if (!current) return;
         setInSettings(false);
-        if (next === 'on') setStep(afterTracking);
+        if (next === 'on') afterLocation();
       },
       () => {},
     );
@@ -547,7 +567,10 @@ export default function WelcomeScreen() {
             </>
           )}
 
+          {step === 2 && motion && (motion === 'asking' ? <MotionCoach /> : <MotionStep />)}
+
           {step === 2 &&
+            !motion &&
             (asking ? (
               // Shown behind iOS's own question (it dims the screen but this still reads).
               <View style={styles.coach} accessibilityLiveRegion="polite">
@@ -897,9 +920,17 @@ export default function WelcomeScreen() {
               : primary(t('Get started'), () => setStep(1)))}
           {step === 0 && backup && secondary(t('Start fresh instead'), () => setStep(1))}
           {step === 1 && primary(t('Continue'), saveCountry)}
+          {step === 2 && motion === 'offer' && primary(t('Turn on Motion & Fitness'), allowMotion)}
           {step === 2 &&
+            motion === 'offer' &&
+            secondary(t('Not now'), () => {
+              setMotion(null);
+              setStep(afterTracking);
+            })}
+          {step === 2 &&
+            !motion &&
             (status === 'on' || status === 'unsupported'
-              ? primary(t('Continue'), () => setStep(afterTracking))
+              ? primary(t('Continue'), status === 'on' ? afterLocation : () => setStep(afterTracking))
               : status === 'needs-always' || (status === 'needs-permission' && asked)
                 ? primary(t('Open Settings'), () => {
                     setInSettings(true);
@@ -910,6 +941,7 @@ export default function WelcomeScreen() {
                   : primary(t('Set up auto-logging'), allowLocation))}
           {step === 2 &&
             !asking &&
+            !motion &&
             status !== 'on' &&
             status !== 'unsupported' &&
             secondary(status === 'needs-always' ? t('Continue without “Always”') : t('Not now'), () =>

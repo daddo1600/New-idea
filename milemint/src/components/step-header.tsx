@@ -36,9 +36,11 @@ const GLYPHS: Record<StepGlyph, ReactNode> = {
       <Path d="M9 7V4.5h6V7M3 12.5h18" />
     </>
   ),
+  // Motion & Fitness: an activity trace.
+  motion: <Path d="M3 12h4l2.5-6 5 12 2.5-6h4" />,
 };
 
-export type StepGlyph = 'globe' | 'location' | 'clock' | 'home' | 'briefcase';
+export type StepGlyph = 'globe' | 'location' | 'clock' | 'home' | 'briefcase' | 'motion';
 
 /**
  * The top of each set-up step: a green brand card like the home screen's,

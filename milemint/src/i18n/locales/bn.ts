@@ -1137,6 +1137,14 @@ const dictionary: Dictionary = {
   "Change to Always Allow": "সবসময় অনুমতি দিন-এ পরিবর্তন করুন",
   "Tap “{{button}}”": "“{{button}}” ট্যাপ করুন",
   "{{step}} OF 2": "ধাপ {{step}}/2",
+  "One more for accuracy: Motion & Fitness": "নির্ভুলতার জন্য আরও একটি: মোশন ও ফিটনেস",
+  "Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone.": "এতে MileMint গাড়ি চালানো আর হাঁটার পার্থক্য বুঝতে পারে, তাই হাঁটাহাঁটি কখনও ট্রিপ হিসেবে লগ হয় না। এটি আপনার ফোনেই থাকে।",
+  "Turn on Motion & Fitness": "মোশন ও ফিটনেস চালু করুন",
+  "Allow": "অনুমতি দিন",
+  "Don’t Allow": "অনুমতি দেবেন না",
+  "Motion & Fitness": "মোশন ও ফিটনেস",
+  "On": "চালু",
+  "Off": "বন্ধ",
 };
 
 export default dictionary;

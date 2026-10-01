@@ -3,12 +3,14 @@ import { useEffect, useState } from 'react';
 import { Linking, Pressable, ScrollView, StyleSheet } from 'react-native';
 
 import { AlwaysGuide } from '@/components/always-guide';
+import { MotionCoach, MotionPreview } from '@/components/motion-ask';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import type { TrackingStatus } from '@/tracking/background';
+import { askForMotion, motionAskable } from '@/tracking/motion';
 import { useTracking } from '@/tracking/use-tracking';
 
 const POINTS = [
@@ -24,6 +26,23 @@ export default function SetupTrackingScreen() {
   const [busy, setBusy] = useState(false);
   /** Sent to Settings to choose "Always": finish by ourselves once it's chosen. */
   const [inSettings, setInSettings] = useState(false);
+  /** Tracking is on: Motion & Fitness offered, or iOS's question for it up. */
+  const [motion, setMotion] = useState<'offer' | 'asking' | null>(null);
+
+  /** Location is done: offer Motion & Fitness when iOS hasn't asked for it yet, else close. */
+  const done = () => {
+    if (motionAskable()) setMotion('offer');
+    else router.back();
+  };
+
+  const allowMotion = async () => {
+    setMotion('asking');
+    try {
+      await askForMotion();
+    } finally {
+      router.back();
+    }
+  };
 
   // Back from Settings with "Always" chosen: switch tracking on and close, no extra tap.
   const cameBackWithAlways = inSettings && (status === 'off' || status === 'on');
@@ -32,7 +51,7 @@ export default function SetupTrackingScreen() {
     let current = true;
     (status === 'on' ? Promise.resolve<TrackingStatus>('on') : enable()).then(
       (next) => {
-        if (current && next === 'on') router.back();
+        if (current && next === 'on') done();
       },
       () => {},
     );
@@ -47,7 +66,7 @@ export default function SetupTrackingScreen() {
     setBusy(true);
     try {
       const next = await enable();
-      if (next === 'on') router.back();
+      if (next === 'on') done();
     } finally {
       setBusy(false);
     }
@@ -55,6 +74,41 @@ export default function SetupTrackingScreen() {
 
   // iOS only offers "Always" from Settings once "While Using" has been chosen.
   const needsSettings = status === 'needs-always';
+
+  if (motion === 'asking') {
+    return (
+      <ThemedView style={[styles.container, styles.content]}>
+        <MotionCoach />
+      </ThemedView>
+    );
+  }
+
+  if (motion === 'offer') {
+    return (
+      <ThemedView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.content}>
+          <ThemedText type="subtitle">{t('One more for accuracy: Motion & Fitness')}</ThemedText>
+          <ThemedText themeColor="textSecondary">
+            {t('Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone.')}
+          </ThemedText>
+          <MotionPreview style={[styles.preview, { backgroundColor: theme.accent }]} />
+          <Pressable
+            accessibilityRole="button"
+            onPress={allowMotion}
+            style={[styles.button, { backgroundColor: theme.accent }]}>
+            <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
+              {t('Turn on Motion & Fitness')}
+            </ThemedText>
+          </Pressable>
+          <Pressable accessibilityRole="button" onPress={() => router.back()} style={styles.later}>
+            <ThemedText type="small" themeColor="textSecondary">
+              {t('Not now')}
+            </ThemedText>
+          </Pressable>
+        </ScrollView>
+      </ThemedView>
+    );
+  }
 
   return (
     <ThemedView style={styles.container}>
@@ -124,4 +178,5 @@ const styles = StyleSheet.create({
   point: { borderRadius: 12, padding: Spacing.three, gap: Spacing.half },
   button: { alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12 },
   later: { alignItems: 'center', paddingVertical: Spacing.two },
+  preview: { borderRadius: 16, paddingVertical: Spacing.four },
 });

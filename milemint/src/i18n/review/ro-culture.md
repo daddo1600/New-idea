@@ -290,3 +290,19 @@ Back-translations: Choose everything that fits. We fill in the first one chosen.
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+
+## Round 8f: motion activity
+
+“Permite” / “Nu permite” are iOS’s alert buttons. “Mișcare și fitness” is iOS’s Settings item as best known: Unsure, please check against a Romanian iPhone. “Cursă” as everywhere else. The alert’s own title and body come from iOS (the body is the English NSMotionUsageDescription), so the preview shows them as grey bars.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| One more for accuracy: Motion & Fitness | Încă una, pentru precizie: Mișcare și fitness | One more, for accuracy: Motion & Fitness | |
+| Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone. | Permite MileMint să deosebească mersul cu mașina de mersul pe jos, ca o plimbare să nu fie niciodată înregistrată drept cursă. Rămâne pe telefonul tău. | Lets MileMint tell driving from walking, so a walk is never recorded as a trip. It stays on your phone. | |
+| Turn on Motion & Fitness | Pornește Mișcare și fitness | Turn on Motion & Fitness | |
+| Allow | Permite | Allow | |
+| Don’t Allow | Nu permite | Don’t allow | |
+| Motion & Fitness | Mișcare și fitness | Motion & Fitness | |
+| On | Activat | On | |
+| Off | Dezactivat | Off | |

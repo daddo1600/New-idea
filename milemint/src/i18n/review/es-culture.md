@@ -282,3 +282,19 @@ Back-translations: Choose all that apply. The first you choose is filled in for 
 ## Round 8d: permission preview
 
 The four new lines reuse this file's existing wording: the two iOS button names are taken from the quoted part of "Tap “Allow While Using App”" and "Tap “Change to Always Allow”", "Tap “{{button}}”" keeps that line's frame, and "{{step}} OF 2" is "↑ {{step}} OF 2" without the arrow. No new terms.
+
+
+## Round 8f: motion activity
+
+iOS’s own names: “Movimiento y forma física” is the Settings item; “Permitir” / “No permitir” are iOS’s alert buttons. “Viaje” as everywhere else. The alert’s own title and body come from iOS (the body is the English NSMotionUsageDescription), so the preview shows them as grey bars.
+
+| English | Translation | Back-translation | Notes |
+|---|---|---|---|
+| One more for accuracy: Motion & Fitness | Una más, para más precisión: Movimiento y forma física | One more, for more accuracy: Motion & Fitness | |
+| Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone. | Permite que MileMint distinga entre conducir y caminar, para que un paseo nunca se registre como viaje. Se queda en tu teléfono. | Lets MileMint tell driving from walking, so a walk is never logged as a trip. It stays on your phone. | |
+| Turn on Motion & Fitness | Activar Movimiento y forma física | Turn on Motion & Fitness | |
+| Allow | Permitir | Allow | |
+| Don’t Allow | No permitir | Don’t allow | |
+| Motion & Fitness | Movimiento y forma física | Motion & Fitness | |
+| On | Activado | On | |
+| Off | Desactivado | Off | |
