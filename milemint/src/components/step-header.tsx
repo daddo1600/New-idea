@@ -1,8 +1,9 @@
 import { useId, type ReactNode } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle, Defs, G, LinearGradient, Path, Rect, Stop } from 'react-native-svg';
 
 import { BrandGradient } from '@/components/brand-gradient';
+import { LeafMark } from '@/components/leaf-mark';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
@@ -34,8 +35,10 @@ const GLYPHS: Record<StepGlyph, ReactNode> = {
 export type StepGlyph = 'globe' | 'location' | 'clock' | 'home';
 
 /**
- * The top of each white set-up step: a small tile in the logo's green with the
- * step's icon, a step label, the title and one line of explanation.
+ * The top of each set-up step: a green brand card like the home screen's,
+ * with the leaf behind, the step's icon, a gold step label, the title and one
+ * line of explanation. Keeps every step on brand between the green welcome
+ * and done screens.
  */
 export function StepHeader({
   glyph,
@@ -48,32 +51,34 @@ export function StepHeader({
   title: string;
   children?: ReactNode;
 }) {
-  const theme = useTheme();
   return (
     <View style={styles.header}>
-      <View style={styles.tile}>
-        <BrandGradient />
-        {/* Its own layer, so it always sits above the gradient. */}
-        <View style={styles.glyph}>
-          <Svg width={26} height={26} viewBox="0 0 24 24">
-            <G fill="none" stroke="#FFFFFF" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round">
-              {GLYPHS[glyph]}
-            </G>
-          </Svg>
-        </View>
+      <BrandGradient />
+      <View style={styles.leaf} pointerEvents="none">
+        <LeafMark size={150} opacity={0.18} />
       </View>
-      <ThemedText type="smallBold" style={[styles.eyebrow, { color: theme.accent }]}>
-        {eyebrow.toUpperCase()}
-      </ThemedText>
-      <ThemedText type="subtitle" accessibilityRole="header">
+      <View style={styles.headRow}>
+        <View style={styles.tile}>
+          <StepIcon glyph={glyph} />
+        </View>
+        <Text style={styles.eyebrow}>{eyebrow.toUpperCase()}</Text>
+      </View>
+      <Text style={styles.title} accessibilityRole="header">
         {title}
-      </ThemedText>
-      {children ? (
-        <ThemedText type="small" themeColor="textSecondary" style={styles.body}>
-          {children}
-        </ThemedText>
-      ) : null}
+      </Text>
+      {children ? <Text style={styles.body}>{children}</Text> : null}
     </View>
+  );
+}
+
+/** A step's white line icon. */
+export function StepIcon({ glyph, size = 24 }: { glyph: StepGlyph; size?: number }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24">
+      <G fill="none" stroke="#FFFFFF" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round">
+        {GLYPHS[glyph]}
+      </G>
+    </Svg>
   );
 }
 
@@ -118,19 +123,28 @@ export function NumberedSteps({ steps }: { steps: readonly string[] }) {
 }
 
 const styles = StyleSheet.create({
-  header: { gap: Spacing.one + 2, marginBottom: Spacing.one },
-  tile: {
-    width: 52,
-    height: 52,
-    borderRadius: 16,
+  header: {
+    gap: Spacing.one + 2,
+    marginBottom: Spacing.one,
+    borderRadius: 20,
+    padding: Spacing.four,
     overflow: 'hidden',
+  },
+  leaf: { position: 'absolute', right: -34, bottom: -44 },
+  headRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, marginBottom: Spacing.one },
+  tile: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: Spacing.two,
+    backgroundColor: 'rgba(255,255,255,0.16)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(255,255,255,0.3)',
   },
-  glyph: { position: 'relative', zIndex: 1 },
-  eyebrow: { fontSize: 12, letterSpacing: 1.2 },
-  body: { marginTop: 2 },
+  eyebrow: { color: '#FACC15', fontSize: 12, fontWeight: '800', letterSpacing: 1.2 },
+  title: { color: '#FFFFFF', fontSize: 30, lineHeight: 36, fontWeight: '800', letterSpacing: -0.3 },
+  body: { color: '#D1FAE5', fontSize: 15, lineHeight: 21, marginTop: 2 },
   wash: { position: 'absolute', top: 0, left: 0, right: 0 },
   steps: { gap: Spacing.two + 2 },
   step: { flexDirection: 'row', alignItems: 'flex-start', gap: Spacing.three },

@@ -19,7 +19,7 @@ import { BrandGradient } from '@/components/brand-gradient';
 import { CountryOptions, phoneRegion } from '@/components/country-options';
 import { LeafMark } from '@/components/leaf-mark';
 import { IosPromptMock } from '@/components/ios-prompt-mock';
-import { MintWash, StepHeader } from '@/components/step-header';
+import { MintWash, StepHeader, StepIcon } from '@/components/step-header';
 import { VehiclePicker } from '@/components/vehicle-picker';
 import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
 import { ThemedText } from '@/components/themed-text';
@@ -195,9 +195,9 @@ export default function WelcomeScreen() {
     router.replace('/');
   };
 
-  // The first and last screens are on the brand green: the first flows on from the launch
-  // animation, the last bookends the set-up.
-  const onBrand = step === 0 || step === DONE;
+  // Full brand green for the welcome, the tracking ask (the one that matters most) and the
+  // finish; the steps in between open with a green header card.
+  const onBrand = step === 0 || step === 2 || step === DONE;
   // While typing, the buttons would ride up above the keyboard, right over the address
   // suggestions, so a tap meant for a suggestion could save and move on. Hide them meanwhile.
   const typing = useKeyboardOpen();
@@ -249,7 +249,7 @@ export default function WelcomeScreen() {
             accessibilityLabel="Back"
             hitSlop={12}
             onPress={() => setStep(step - 1)}>
-            <ThemedText type="small" style={{ color: theme.accent }}>
+            <ThemedText type="small" style={{ color: onBrand ? '#D1FAE5' : theme.accent }}>
               Back
             </ThemedText>
           </Pressable>
@@ -344,37 +344,41 @@ export default function WelcomeScreen() {
 
           {step === 2 && (
             <>
-              <StepHeader glyph="location" eyebrow="Step 2 · Tracking" title="Never miss a mile">
-                To log drives while MileMint is closed, it needs location set to “Always”. Miss that and you miss
-                miles, which is money. iOS asks twice; here’s what to tap.
-              </StepHeader>
+              <View style={styles.brandIcon}>
+                <StepIcon glyph="location" size={30} />
+              </View>
+              <Text style={styles.brandEyebrow}>STEP 2 · TRACKING</Text>
+              <Text style={styles.brandTitleSmall}>Never miss a mile.</Text>
+              <Text style={styles.brandBody}>
+                To log drives while MileMint is closed, location needs to be set to “Always”.
+              </Text>
+              <Text style={styles.brandCallout}>Every drive it misses is money you don’t get back.</Text>
               {status === 'needs-always' || (status === 'needs-permission' && asked) ? (
                 <AlwaysGuide current={status === 'needs-always' ? 'While Using the App' : 'Never'} />
               ) : (
-                status !== 'unsupported' && (
-                  <View style={styles.mocks}>
-                    <IosPromptMock
-                      step="1"
-                      title="Allow “MileMint” to use your location?"
-                      buttons={['Allow Once', 'Allow While Using App', 'Don’t Allow']}
-                      tap={1}
-                    />
-                    <IosPromptMock
-                      step="2"
-                      title="Allow “MileMint” to also use your location even when you are not using the app?"
-                      buttons={['Keep Only While Using', 'Change to Always Allow']}
-                      tap={1}
-                    />
-                    <ThemedText type="small" themeColor="textSecondary">
-                      🔒 GPS only runs while you drive. Your trips never leave your iPhone.
-                    </ThemedText>
-                  </View>
-                )
+                <View style={styles.mocks}>
+                  <Text style={styles.pointTitle}>iOS asks twice. Here’s what to tap:</Text>
+                  <IosPromptMock
+                    step="1"
+                    title="Allow “MileMint” to use your location?"
+                    buttons={['Allow Once', 'Allow While Using App', 'Don’t Allow']}
+                    tap={1}
+                  />
+                  <IosPromptMock
+                    step="2"
+                    title="Allow “MileMint” to also use your location even when you are not using the app?"
+                    buttons={['Keep Only While Using', 'Change to Always Allow']}
+                    tap={1}
+                  />
+                  <Text style={styles.pointBody}>
+                    🔒 GPS only runs while you drive. Your trips never leave your iPhone.
+                  </Text>
+                </View>
               )}
               {status === 'unsupported' && (
-                <ThemedText type="small" themeColor="textSecondary">
+                <Text style={styles.pointBody}>
                   Automatic tracking runs on your iPhone. You can still add trips by hand here.
-                </ThemedText>
+                </Text>
               )}
             </>
           )}
@@ -658,6 +662,19 @@ const styles = StyleSheet.create({
   },
   pointTickText: { color: '#064E3B', fontSize: 12, fontWeight: '800' },
   pointTitle: { color: '#FFFFFF', fontSize: 15, fontWeight: '700' },
+  brandIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255,0.16)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(255,255,255,0.3)',
+  },
+  brandEyebrow: { color: '#FACC15', fontSize: 12, fontWeight: '800', letterSpacing: 1.2, marginTop: Spacing.one },
+  brandTitleSmall: { color: '#FFFFFF', fontSize: 34, lineHeight: 40, fontWeight: '800', letterSpacing: -0.5 },
+  brandCallout: { color: '#FACC15', fontSize: 17, lineHeight: 23, fontWeight: '800' },
   pointBody: { color: '#D1FAE5', fontSize: 14, lineHeight: 20 },
   brandSoft: { color: '#D1FAE5' },
   glass: {

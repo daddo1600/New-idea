@@ -25,8 +25,8 @@ export function IosPromptMock({
   const dark = theme.background === '#000000';
   return (
     <View style={styles.wrap} accessible accessibilityLabel={`iOS will ask: ${title}. Tap ${buttons[tap]}.`}>
-      <View style={[styles.stepBadge, { backgroundColor: theme.accent }]}>
-        <Text style={[styles.stepText, { color: theme.onAccent }]}>{step}</Text>
+      <View style={styles.stepBadge}>
+        <Text style={styles.stepText}>{step}</Text>
       </View>
       <View style={[styles.alert, { backgroundColor: dark ? '#2C2C2E' : '#F2F2F7' }]}>
         <Text style={[styles.title, { color: theme.text }]}>{title}</Text>
@@ -62,8 +62,17 @@ export function IosPromptMock({
 
 const styles = StyleSheet.create({
   wrap: { flexDirection: 'row', alignItems: 'flex-start', gap: Spacing.two },
-  stepBadge: { width: 24, height: 24, borderRadius: 12, alignItems: 'center', justifyContent: 'center', marginTop: 10 },
-  stepText: { fontSize: 13, fontWeight: '800' },
+  // Gold, so it reads on the brand green as well as on white.
+  stepBadge: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    backgroundColor: '#FACC15',
+  },
+  stepText: { fontSize: 13, fontWeight: '800', color: '#064E3B' },
   alert: { flex: 1, borderRadius: 14, overflow: 'hidden' },
   title: { fontSize: 13, fontWeight: '600', textAlign: 'center', paddingHorizontal: Spacing.three, paddingVertical: 10 },
   button: {

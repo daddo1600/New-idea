@@ -343,6 +343,14 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   counter: { position: 'absolute', top: '50%', marginTop: 88, alignItems: 'center', gap: 2 },
-  money: { color: '#FFFFFF', fontSize: 34, fontWeight: '700', fontVariant: ['tabular-nums'] },
-  distance: { color: '#D1FAE5', fontSize: 15, fontWeight: '500', fontVariant: ['tabular-nums'], textAlign: 'center', maxWidth: 300 },
+  money: { color: '#FFFFFF', fontSize: 40, fontWeight: '800', fontVariant: ['tabular-nums'] },
+  distance: {
+    color: '#FACC15',
+    fontSize: 17,
+    lineHeight: 23,
+    fontWeight: '700',
+    fontVariant: ['tabular-nums'],
+    textAlign: 'center',
+    maxWidth: 300,
+  },
 });
