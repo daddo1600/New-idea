@@ -1,4 +1,4 @@
-import { Redirect, router, Stack } from 'expo-router';
+import { type Href, Redirect, router, Stack } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming, ZoomIn } from 'react-native-reanimated';
@@ -25,6 +25,7 @@ import { useTrips } from '@/db/use-trips';
 import { DEMO_MODE } from '@/dev/demo';
 import { shiftCheer } from '@/domain/cheers';
 import { isCommute, type AutoReason } from '@/domain/classify-rules';
+import { employerPaysLess, marForYear, marSummary, type MarYear, unclaimedNudge, type UnclaimedNudge } from '@/domain/mar';
 import { autoDrivesInMonth, FREE_AUTO_DRIVES_PER_MONTH, lockedTripIds } from '@/domain/plan';
 import type { Place } from '@/domain/places';
 import {
@@ -32,6 +33,7 @@ import {
   displayLocale,
   currentTaxYear,
   formatDistance,
+  formatLongDate,
   formatMoney,
   potentialDeduction,
   summarizeTaxYear,
@@ -39,6 +41,7 @@ import {
   type TaxYearSummary,
 } from '@/domain/regions';
 import { type Classification, toLocalIsoDate, type Trip, VEHICLE_ICONS } from '@/domain/trip';
+import { useMileagePay } from '@/hooks/use-mileage-pay';
 import { useTheme } from '@/hooks/use-theme';
 import { getLanguage, msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
@@ -98,10 +101,25 @@ export default function HomeScreen() {
     [visible, region, taxYear, deductions],
   );
   const celebration = useMilestoneCelebration(trips ? visible : null, deductions, region);
+  // UK employees don't deduct mileage: they claim Mileage Allowance Relief on what the employer didn't pay.
+  const { pay } = useMileagePay();
+  const employee = pay?.employee ?? false;
+  const employerRate = pay?.employerRate ?? 0;
+  const band = pay?.band ?? 'unsure';
+  const claimedYears = pay?.claimedYears;
+  const relief = useMemo(
+    () => (employee ? marForYear(visible, region, taxYear, { employerRate, band }, deductions) : null),
+    [employee, visible, region, taxYear, employerRate, band, deductions],
+  );
+  const nudge = useMemo(() => {
+    if (!employee || !claimedYears) return null;
+    return unclaimedNudge(marSummary(visible, region, { employerRate, band }, new Date(), deductions), region, claimedYears);
+  }, [employee, claimedYears, visible, region, employerRate, band, deductions]);
   // For the quick opening next time: this tax year's total, counted up from what was last seen.
+  const launchTotal = relief ? relief.relief : summary.deduction;
   useEffect(() => {
-    if (trips && onboarded && !DEMO_MODE) rememberTotal(summary.deduction).catch(() => {});
-  }, [trips, onboarded, summary.deduction]);
+    if (trips && onboarded && !DEMO_MODE) rememberTotal(launchTotal).catch(() => {});
+  }, [trips, onboarded, launchTotal]);
 
   // Home ↔ work drives the user marked business anyway. Kept in the total (a
   // home office can make them deductible), but called out so they get a second look.
@@ -180,10 +198,15 @@ export default function HomeScreen() {
               />
             )}
             {liveDrive && <LiveDriveBanner drive={liveDrive} />}
-            <SummaryCard summary={summary} commuteCents={commuteCents} />
+            <SummaryCard
+              summary={summary}
+              commuteCents={commuteCents}
+              relief={relief && { year: relief, paysLess: employerPaysLess(relief, region, employerRate) }}
+            />
+            {nudge && <ReliefNudge nudge={nudge} />}
             <TrackingCard status={status} />
             <TaxCountdown
-              foundMinor={summary.deduction}
+              foundMinor={launchTotal}
               unsortedCount={unsorted.length}
               onSortUnsorted={() => {
                 setSelecting(true);
@@ -425,11 +448,21 @@ function BulkActions({
   );
 }
 
-function SummaryCard({ summary, commuteCents }: { summary: TaxYearSummary; commuteCents: number }) {
+function SummaryCard({
+  summary,
+  commuteCents,
+  relief,
+}: {
+  summary: TaxYearSummary;
+  commuteCents: number;
+  /** UK employees: this tax year's Mileage Allowance Relief instead of a deduction. */
+  relief: { year: MarYear; paysLess: boolean } | null;
+}) {
   const t = useT();
   const { region } = useRegion();
   const total = formatMoney(summary.deduction, region);
   const distance = formatDistance(summary.businessMeters, region);
+  if (relief) return <EmployeeSummaryCard summary={summary} year={relief.year} paysLess={relief.paysLess} />;
   return (
     <View style={styles.card}>
       {/* The app icon's gradient, with the leaf growing out of the corner. */}
@@ -466,6 +499,101 @@ function SummaryCard({ summary, commuteCents }: { summary: TaxYearSummary; commu
         </Text>
       )}
     </View>
+  );
+}
+
+/**
+ * The hero card for UK employees: relief to claim when the employer pays less
+ * than HMRC's rate, otherwise the business mileage for their expense claims.
+ */
+function EmployeeSummaryCard({ summary, year, paysLess }: { summary: TaxYearSummary; year: MarYear; paysLess: boolean }) {
+  const t = useT();
+  const { region } = useRegion();
+  const distance = formatDistance(summary.businessMeters, region);
+  const total = formatMoney(year.relief, region);
+  return (
+    <View style={styles.card}>
+      <BrandGradient />
+      <View style={styles.watermark} pointerEvents="none">
+        <LeafMark size={190} opacity={0.22} />
+      </View>
+      {paysLess ? (
+        <>
+          <Text style={styles.heroLabel}>
+            {t('Mileage Allowance Relief to claim, {{year}} tax year', { year: summary.label })}
+          </Text>
+          <Text style={styles.heroTotal} accessibilityLabel={t('{{amount}} relief to claim', { amount: total })}>
+            {total}
+          </Text>
+          <Text style={styles.heroLabel}>
+            {t('About {{amount}} tax back', { amount: formatMoney(year.taxBack, region) })}
+          </Text>
+        </>
+      ) : (
+        <>
+          <Text style={styles.heroLabel}>{t('Mileage logged for your expense claims')}</Text>
+          <Text style={styles.heroTotal} adjustsFontSizeToFit numberOfLines={1}>
+            {distance}
+          </Text>
+          <Text style={styles.heroLabel}>{t('{{year}} tax year', { year: summary.label })}</Text>
+        </>
+      )}
+      <Text style={styles.heroLabel}>
+        {summary.unclassifiedCount > 0
+          ? t('{{distance}} business · {{count}} to review', { distance, count: summary.unclassifiedCount })
+          : t('{{distance}} business', { distance })}
+      </Text>
+      <View style={styles.heroButtons}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('Reports: export your mileage log')}
+          hitSlop={8}
+          onPress={() => router.push('/report')}
+          style={styles.reportLink}>
+          <Text style={styles.reportLinkText}>{t('Export report')}</Text>
+        </Pressable>
+        {paysLess && (
+          <Pressable
+            accessibilityRole="button"
+            hitSlop={8}
+            onPress={() => router.push('/claim-relief' as Href)}
+            style={styles.reportLink}>
+            <Text style={styles.reportLinkText}>{t('How to claim')}</Text>
+          </Pressable>
+        )}
+      </View>
+    </View>
+  );
+}
+
+/** Relief left in an earlier tax year, before its 4-year window closes. */
+function ReliefNudge({ nudge }: { nudge: UnclaimedNudge }) {
+  const theme = useTheme();
+  const t = useT();
+  const { region } = useRegion();
+  const params = {
+    amount: formatMoney(nudge.oldest.relief, region),
+    year: nudge.oldest.label,
+    date: formatLongDate(nudge.oldest.claimBy, region),
+  };
+  return (
+    <Pressable accessibilityRole="button" onPress={() => router.push('/claim-relief' as Href)}>
+      <ThemedView type="backgroundElement" style={[styles.trackingCard, { borderColor: '#CA8A04' }]}>
+        <ThemedText type="smallBold">{t('{{amount}} relief unclaimed from {{year}}', params)}</ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          {nudge.yearCount > 1
+            ? t('Claim it before {{date}}. {{total}} unclaimed across {{count}} earlier tax years.', {
+                date: params.date,
+                total: formatMoney(nudge.totalRelief, region),
+                count: nudge.yearCount,
+              })
+            : t('Claim it before {{date}}.', { date: params.date })}
+        </ThemedText>
+        <ThemedText type="smallBold" style={{ color: theme.accent }}>
+          {t('See how to claim ›')}
+        </ThemedText>
+      </ThemedView>
+    </Pressable>
   );
 }
 
@@ -921,6 +1049,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.two,
   },
   reportLinkText: { color: '#064E3B', fontSize: 14, fontWeight: '700' },
+  heroButtons: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
   empty: { alignItems: 'center', gap: Spacing.two, marginTop: Spacing.five, paddingHorizontal: Spacing.four },
   emptyBody: { textAlign: 'center' },
   brand: { flexDirection: 'row', alignItems: 'center', gap: 6 },

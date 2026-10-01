@@ -9,7 +9,9 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
+  TextInput,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -32,6 +34,7 @@ import {
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, saveSettings } from '@/db/settings-repo';
+import { marApplies, parsePence } from '@/domain/mar';
 import { displayLocale, formatRate, REGIONS, vehicleRule, type RegionCode } from '@/domain/regions';
 import { useKeyboardOpen } from '@/hooks/use-keyboard-open';
 import { useTheme } from '@/hooks/use-theme';
@@ -96,6 +99,10 @@ export default function WelcomeScreen() {
   const [home, setHome] = useState<PlaceDraft>(EMPTY_PLACE);
   const [work, setWork] = useState<PlaceDraft>(EMPTY_PLACE);
   const [placeError, setPlaceError] = useState<string | null>(null);
+  /** UK: employed and using their own vehicle, so home shows Mileage Allowance Relief. Optional. */
+  const [employed, setEmployed] = useState(false);
+  const [employerPaysNothing, setEmployerPaysNothing] = useState(false);
+  const [employerRateText, setEmployerRateText] = useState('45');
 
   const picked = REGIONS[country];
   const topRate = formatRate(picked.rates[picked.rates.length - 1].tiers[0].rate, picked);
@@ -147,7 +154,19 @@ export default function WelcomeScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cameBackWithAlways]);
 
+  /** Saved with whichever way of working is chosen; going back and changing it overwrites it. */
+  const saveEmployment = async () => {
+    if (!marApplies(picked)) return;
+    const employerRate = employerPaysNothing ? 0 : (parsePence(employerRateText) ?? 450);
+    await saveSettings(db, {
+      ...(await loadSettings(db)),
+      employment: employed ? 'employee' : 'self-employed',
+      employerRate,
+    });
+  };
+
   const chooseShifts = async () => {
+    await saveEmployment();
     await saveSettings(db, { ...(await loadSettings(db)), shiftMode: true, workHoursEnabled: false });
     // Couriers often switch between a car and a moped: add the others they ticked.
     const garage = await listVehicles(db);
@@ -159,6 +178,7 @@ export default function WelcomeScreen() {
   };
 
   const saveHours = async () => {
+    await saveEmployment();
     const settings = await loadSettings(db);
     await saveSettings(db, { ...settings, workHoursEnabled: true, workWeek: toWorkWeek(week) });
     setHoursSet(true);
@@ -480,6 +500,59 @@ export default function WelcomeScreen() {
                 detail={t('I’ll swipe each drive myself.')}
                 onPress={() => setWorkStyle('neither')}
               />
+              {marApplies(picked) && (
+                <View style={[styles.employed, { borderColor: theme.backgroundSelected }]}>
+                  <View style={styles.employedRow}>
+                    <View style={styles.flex}>
+                      <ThemedText type="smallBold">{t('Employed, in your own vehicle?')}</ThemedText>
+                      <ThemedText type="small" themeColor="textSecondary">
+                        {t('MileMint works out the tax relief you can claim. Optional.')}
+                      </ThemedText>
+                    </View>
+                    <Switch
+                      accessibilityLabel={t('Employed, in your own vehicle?')}
+                      value={employed}
+                      onValueChange={setEmployed}
+                      trackColor={{ true: theme.accent }}
+                    />
+                  </View>
+                  {employed && (
+                    <View style={styles.employedRow}>
+                      <ThemedText type="small">{t('Your employer pays')}</ThemedText>
+                      {!employerPaysNothing && (
+                        <>
+                          <TextInput
+                            accessibilityLabel={t('Pence per mile your employer pays')}
+                            value={employerRateText}
+                            onChangeText={setEmployerRateText}
+                            keyboardType="decimal-pad"
+                            maxLength={5}
+                            style={[styles.penceInput, { color: theme.text, backgroundColor: theme.backgroundElement }]}
+                          />
+                          <ThemedText type="small">{t('p a mile')}</ThemedText>
+                        </>
+                      )}
+                      <Pressable
+                        accessibilityRole="checkbox"
+                        accessibilityState={{ checked: employerPaysNothing }}
+                        onPress={() => setEmployerPaysNothing(!employerPaysNothing)}
+                        style={[
+                          styles.extraChip,
+                          employerPaysNothing
+                            ? { backgroundColor: theme.accent, borderColor: theme.accent }
+                            : { borderColor: theme.backgroundSelected },
+                        ]}>
+                        <ThemedText
+                          type="smallBold"
+                          style={{ color: employerPaysNothing ? theme.onAccent : theme.text }}>
+                          {employerPaysNothing ? '✓ ' : ''}
+                          {t('Nothing')}
+                        </ThemedText>
+                      </Pressable>
+                    </View>
+                  )}
+                </View>
+              )}
             </>
           )}
 
@@ -613,7 +686,10 @@ export default function WelcomeScreen() {
               : workStyle === 'shifts'
                 ? primary(t('Use shifts'), chooseShifts)
                 : workStyle === 'neither'
-                  ? primary(t('Continue'), () => setStep(PLACES))
+                  ? primary(t('Continue'), async () => {
+                      await saveEmployment();
+                      setStep(PLACES);
+                    })
                   : primary(t('Choose one to continue'), () => {}, false))}
           {step === PLACES &&
             primary(
@@ -782,6 +858,16 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     paddingHorizontal: Spacing.three,
     paddingVertical: Spacing.two,
+  },
+  employed: { borderWidth: 1.5, borderRadius: 16, padding: Spacing.three, gap: Spacing.two },
+  employedRow: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: Spacing.two },
+  penceInput: {
+    width: 64,
+    borderRadius: 8,
+    paddingHorizontal: Spacing.two,
+    paddingVertical: Spacing.one + 2,
+    fontSize: 16,
+    textAlign: 'center',
   },
   reminderRow: { flexDirection: 'row', alignItems: 'flex-start', gap: Spacing.three },
   card: { borderRadius: 12, padding: Spacing.three, gap: Spacing.one },
