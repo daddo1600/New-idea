@@ -12,6 +12,8 @@ import { autoTripExists, insertTrip, listClassificationHistory } from '@/db/trip
 import { suggestClassification } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
 import { matchPlace } from '@/domain/places';
+import { areaLabel, clientVisitLabel } from '@/domain/privacy';
+import type { RegionCode } from '@/domain/regions';
 import {
   GEOFENCE_RADIUS_M,
   INITIAL_TRACKER_RECORD,
@@ -103,6 +105,19 @@ async function labelFor(point: LatLng): Promise<string> {
   return `${point.latitude.toFixed(4)}, ${point.longitude.toFixed(4)}`;
 }
 
+/**
+ * Client privacy: the area only, e.g. "Client visit · Leeds LS6". Never the
+ * street, and never coordinates (they'd pinpoint the house) when the lookup fails.
+ */
+async function privateLabelFor(point: LatLng, region: RegionCode | null): Promise<string> {
+  try {
+    const [place] = await Location.reverseGeocodeAsync(point);
+    return clientVisitLabel(areaLabel(place, region));
+  } catch {
+    return clientVisitLabel(null);
+  }
+}
+
 async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise<void> {
   // If the app was killed after saving a trip but before saving the tracker
   // state, the same drive is detected again on the next wake-up.
@@ -114,9 +129,11 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
   ]);
   const startPlace = matchPlace(trip.start, places);
   const endPlace = matchPlace(trip.end, places);
+  // Places the user named (Home, Work, a saved office) keep their names, private or not.
+  const label = settings.clientPrivacy ? (at: LatLng) => privateLabelFor(at, settings.region) : labelFor;
   const [startLabel, endLabel] = await Promise.all([
-    startPlace?.name ?? labelFor(trip.start),
-    endPlace?.name ?? labelFor(trip.end),
+    startPlace?.name ?? label(trip.start),
+    endPlace?.name ?? label(trip.end),
   ]);
   const started = new Date(trip.startedAt);
   // Shift mode: every drive in a shift is work.
@@ -160,7 +177,8 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
       vehicleId: settings.currentVehicleId,
       shiftId: shift?.id ?? null,
     },
-    trip.route,
+    // Client privacy keeps no route at all: it would lead straight to the client's door.
+    settings.clientPrivacy ? [] : trip.route,
   );
   // Keep the opening animation's total current for the next launch.
   await refreshLaunchTotal(db).catch(() => {});

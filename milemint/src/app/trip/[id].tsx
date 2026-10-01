@@ -21,6 +21,8 @@ import {
 } from '@/db/trips-repo';
 import type { LatLng } from '@/domain/geo';
 import type { PlaceKind } from '@/domain/places';
+import { isPrivateLabel } from '@/domain/privacy';
+import { loadSettings } from '@/db/settings-repo';
 import { formatDistance } from '@/domain/regions';
 import { frequentPurposes } from '@/domain/suggestions';
 import { type Classification, type Trip, type VehicleType } from '@/domain/trip';
@@ -61,9 +63,11 @@ export default function TripScreen() {
   const [vehicleId, setVehicleId] = useState<string | null>(null);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [purposes, setPurposes] = useState<string[]>([]);
+  const [clientPrivacy, setClientPrivacy] = useState(false);
   useEffect(() => {
     listTrips(db).then((trips) => setPurposes(frequentPurposes(trips, 6)), () => {});
     listVehicles(db).then(setVehicles, () => {});
+    loadSettings(db).then((settings) => setClientPrivacy(settings.clientPrivacy), () => {});
   }, [db]);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -195,7 +199,7 @@ export default function TripScreen() {
         </Field>
         <Field label={business ? t('Business purpose') : t('Note (optional)')}>
           {business ? (
-            <PurposePicker value={purpose} onChange={setPurpose} recent={purposes} />
+            <PurposePicker value={purpose} onChange={setPurpose} recent={purposes} clientPrivacy={clientPrivacy} />
           ) : (
             <TextInput
               style={inputStyle}
@@ -220,6 +224,20 @@ export default function TripScreen() {
             {saving ? t('Saving…') : t('Save')}
           </ThemedText>
         </Pressable>
+
+        {/* Client privacy keeps no route: the record is the date, the areas, the distance and the purpose. */}
+        {route.length === 0 &&
+          trip.source === 'auto' &&
+          (clientPrivacy || isPrivateLabel(trip.startLabel) || isPrivateLabel(trip.endLabel)) && (
+            <ThemedView type="backgroundElement" style={styles.placeCard}>
+              <ThemedText type="smallBold">{t('🔒 Client privacy')}</ThemedText>
+              <ThemedText type="small" themeColor="textSecondary">
+                {t('No route or address was kept for this drive, only the area and the distance: {{distance}}.', {
+                  distance: formatDistance(trip.distanceMeters, region),
+                })}
+              </ThemedText>
+            </ThemedView>
+          )}
 
         {route.length > 0 && (
           <>
