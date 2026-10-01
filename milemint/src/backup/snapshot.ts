@@ -215,6 +215,7 @@ const UPGRADES: Partial<Record<number, (tables: Tables) => Tables>> = {
   // 5: trips.vehicle (default 'car'), trips.shift_id, shifts. 6: trips.auto_default (default 0).
   // 7: vehicles and trips.vehicle_id (null: the app links old trips to the first vehicle).
   // 8: logbooks and car_expenses. 9: shift_pauses and trips.off_shift_id (null).
+  // 10: indexes, and tracker_route (the drive in progress: never backed up).
 };
 
 export function upgradeSnapshot(snapshot: Snapshot, currentSchema = SCHEMA_VERSION): Snapshot {

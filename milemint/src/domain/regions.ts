@@ -614,6 +614,40 @@ export function potentialDeduction(
   return Math.round(tieredValue(period, already, toUnits(trip.distanceMeters, region)) / 10);
 }
 
+/**
+ * `potentialDeduction` for many trips against the same list (each row of the
+ * home list, every drive waiting for Pro). The business distance so far is
+ * added up once per tax year and vehicle, in the same order, rather than
+ * once per trip, so each value is exactly what `potentialDeduction` gives.
+ */
+export function potentialDeductions(
+  trips: readonly DeductionTrip[],
+  region: Region,
+): (trip: DeductionTrip) => number {
+  let totals: Map<string, number> | null = null;
+  const business = new Set<string>();
+  const keyOf = (year: number, vehicle: VehicleType, vehicleId: string | null) =>
+    `${year}|${vehicle}|${!region.limitsPerVehicle ? '' : vehicleId === null ? 'none' : `id:${vehicleId}`}`;
+  return (trip) => {
+    if (!totals) {
+      totals = new Map();
+      for (const t of trips) {
+        if (t.classification !== 'business') continue;
+        business.add(t.id);
+        const key = keyOf(taxYearOf(t.localDate, region), t.vehicle ?? 'car', t.vehicleId ?? null);
+        totals.set(key, (totals.get(key) ?? 0) + toUnits(t.distanceMeters, region));
+      }
+    }
+    // A business trip in the list is left out of its own year so far: worked out on its own.
+    if (business.has(trip.id)) return potentialDeduction(trip, trips, region);
+    const vehicle = trip.vehicle ?? 'car';
+    const period = ratePeriodFor(trip.localDate, region, vehicle);
+    if (!period) return 0;
+    const already = totals.get(keyOf(taxYearOf(trip.localDate, region), vehicle, trip.vehicleId ?? null)) ?? 0;
+    return Math.round(tieredValue(period, already, toUnits(trip.distanceMeters, region)) / 10);
+  };
+}
+
 export type TaxYearSummary = {
   taxYear: number;
   label: string;

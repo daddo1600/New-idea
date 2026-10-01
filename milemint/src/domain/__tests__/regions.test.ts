@@ -9,6 +9,7 @@ import {
   formatRate,
   fromUnits,
   potentialDeduction,
+  potentialDeductions,
   regionFromLocale,
   REGIONS,
   summarizeTaxYear,
@@ -108,6 +109,39 @@ describe('potentialDeduction', () => {
     const done = trip('2026-05-01', 10_000, GB);
     const unsorted = trip('2026-06-01', 100, GB, 'unclassified');
     expect(potentialDeduction(unsorted, [done, unsorted], GB)).toBe(100 * 25);
+  });
+});
+
+describe('potentialDeductions', () => {
+  it('gives exactly what potentialDeduction gives, for every trip, in every region', () => {
+    let seed = 7;
+    const random = () => {
+      seed = (seed * 1103515245 + 12345) % 2147483648;
+      return seed / 2147483648;
+    };
+    const vehicles = ['car', 'car', 'motorbike', 'bicycle'] as const;
+    const classifications = ['business', 'business', 'personal', 'unclassified'] as const;
+    for (const region of [US, GB, CA, AU]) {
+      const trips: DeductionTrip[] = Array.from({ length: 600 }, (_, i) => {
+        const day = new Date(Date.UTC(2023, 0, 1) + Math.floor(random() * 4 * 365) * 86_400_000);
+        return {
+          id: `t${i % 590}`, // a few ids twice, as a stale list can have
+          localDate: day.toISOString().slice(0, 10),
+          startedAt: day.toISOString(),
+          // Fractions of a unit, so the year's running total is a long float sum.
+          distanceMeters: Math.round(random() * 40_000) + 0.37,
+          classification: classifications[Math.floor(random() * 4)],
+          vehicle: random() < 0.2 ? undefined : vehicles[Math.floor(random() * 4)],
+          vehicleId: random() < 0.2 ? null : random() < 0.1 ? undefined : `v${Math.floor(random() * 3)}`,
+        };
+      });
+      // Trips not in the list too (the drives waiting for Pro).
+      const others = trips.slice(0, 50).map((trip, i) => ({ ...trip, id: `other${i}` }));
+      const potentialOf = potentialDeductions(trips, region);
+      for (const trip of [...trips, ...others]) {
+        expect(potentialOf(trip)).toBe(potentialDeduction(trip, trips, region));
+      }
+    }
   });
 });
 

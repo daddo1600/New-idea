@@ -156,6 +156,26 @@ const MIGRATIONS: readonly string[] = [
   -- free-plan drive); this says which shift it was cut from, for the list.
   ALTER TABLE trips ADD COLUMN off_shift_id TEXT;
   `,
+  `
+  -- The route of the drive in progress, a row per point, so a GPS wake-up
+  -- writes the points that changed rather than the whole route again (see
+  -- tracking/tracker-store). at is the point's time (epoch ms), if known.
+  CREATE TABLE tracker_route (
+    idx INTEGER PRIMARY KEY,
+    latitude REAL,
+    longitude REAL,
+    at REAL
+  );
+
+  -- Lookups that scanned every trip: a drive already saved (each background
+  -- save), the home list's order, a shift's drives, and the edit log's
+  -- user changes (read with every trip list).
+  CREATE INDEX trips_started_at ON trips (started_at);
+  DROP INDEX trips_local_date;
+  CREATE INDEX trips_local_date_started_at ON trips (local_date, started_at);
+  CREATE INDEX trips_shift ON trips (shift_id);
+  CREATE INDEX trip_edits_updates ON trip_edits (trip_id, field, old_value, at) WHERE action = 'update';
+  `,
 ];
 
 /** The schema this build creates: stored in PRAGMA user_version, and in iCloud backups. */
