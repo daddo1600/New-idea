@@ -127,6 +127,12 @@
     ]
   },
   {
+    "key": "{{count}} drives",
+    "files": [
+      "components/shift-row.tsx"
+    ]
+  },
+  {
     "key": "{{count}} drives are locked. Upgrade for unlimited drives.",
     "files": [
       "app/index.tsx"
@@ -142,6 +148,12 @@
     "key": "{{count}} drives in this period aren’t sorted yet. They count as private until you sort them.",
     "files": [
       "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} drives since then look like deliveries. They’ll be added to the shift as business.",
+    "files": [
+      "components/shift-prompts.tsx"
     ]
   },
   {
@@ -329,7 +341,8 @@
   {
     "key": "{{hours}}h {{minutes}}m",
     "files": [
-      "app/index.tsx"
+      "app/index.tsx",
+      "components/shift-row.tsx"
     ]
   },
   {
@@ -384,6 +397,12 @@
     "key": "{{price}}/year",
     "files": [
       "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "{{purpose}} · {{count}} to sort",
+    "files": [
+      "components/shift-row.tsx"
     ]
   },
   {
@@ -764,6 +783,12 @@
     "key": "After the {{trial}}, {{price}} per year is charged to your Apple Account and renews automatically unless cancelled at least 24 hours before the end of the period.",
     "files": [
       "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "After your shift ended · not counted as work unless you say so",
+    "files": [
+      "app/index.tsx"
     ]
   },
   {
@@ -1603,6 +1628,12 @@
     ]
   },
   {
+    "key": "Deliveries",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
     "key": "Delivery apps only count km with an order on board. The drive to the pickup, between orders and home again are business km too, and MileMint logs them all.",
     "files": [
       "app/compare.tsx"
@@ -1624,6 +1655,12 @@
     "key": "Depreciation",
     "files": [
       "domain/logbook.ts"
+    ]
+  },
+  {
+    "key": "Did your shift start at {{time}}?",
+    "files": [
+      "components/shift-prompts.tsx"
     ]
   },
   {
@@ -1650,6 +1687,12 @@
     "key": "Drives are logged when you park.",
     "files": [
       "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Drives join or leave the shift by when they started. A drive past the end is cut there.",
+    "files": [
+      "components/shift-row.tsx"
     ]
   },
   {
@@ -1698,6 +1741,12 @@
     "key": "Due {{date}}. Your mileage report for {{year}} is ready to export.",
     "files": [
       "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "During a pause in your shift · not counted as work unless you say so",
+    "files": [
+      "app/index.tsx"
     ]
   },
   {
@@ -1785,6 +1834,18 @@
     ]
   },
   {
+    "key": "End 15 minutes earlier",
+    "files": [
+      "components/shift-row.tsx"
+    ]
+  },
+  {
+    "key": "End 15 minutes later",
+    "files": [
+      "components/shift-row.tsx"
+    ]
+  },
+  {
     "key": "End early",
     "files": [
       "app/logbook.tsx"
@@ -1805,6 +1866,7 @@
   {
     "key": "End shift",
     "files": [
+      "components/shift-prompts.tsx",
       "components/shift-switch.tsx"
     ]
   },
@@ -1812,6 +1874,19 @@
     "key": "End the logbook early?",
     "files": [
       "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "End your shift?",
+    "files": [
+      "components/shift-prompts.tsx",
+      "tracking/shift-notifications.ts"
+    ]
+  },
+  {
+    "key": "Ended {{time}}",
+    "files": [
+      "components/shift-row.tsx"
     ]
   },
   {
@@ -2357,6 +2432,18 @@
     ]
   },
   {
+    "key": "Hide drives ▴",
+    "files": [
+      "components/shift-row.tsx"
+    ]
+  },
+  {
+    "key": "Hides the drives in this shift",
+    "files": [
+      "components/shift-row.tsx"
+    ]
+  },
+  {
     "key": "Higher",
     "files": [
       "app/settings.tsx"
@@ -2571,6 +2658,12 @@
     "key": "IRS standard mileage rate: 76¢ a mile from July 2026",
     "files": [
       "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "It was still on, so MileMint ended it. Drives from now on are left for you to sort. Tap to check the times.",
+    "files": [
+      "tracking/shift-notifications.ts"
     ]
   },
   {
@@ -2814,6 +2907,12 @@
     "files": [
       "app/pro.tsx",
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Map of the drives in this shift",
+    "files": [
+      "components/shift-row.tsx"
     ]
   },
   {
@@ -3258,7 +3357,8 @@
     "files": [
       "app/pro.tsx",
       "app/setup-tracking.tsx",
-      "app/welcome.tsx"
+      "app/welcome.tsx",
+      "components/shift-prompts.tsx"
     ]
   },
   {
@@ -3370,6 +3470,12 @@
     "key": "Off we go! 👋",
     "files": [
       "domain/cheers.ts"
+    ]
+  },
+  {
+    "key": "On shift",
+    "files": [
+      "components/shift-row.tsx"
     ]
   },
   {
@@ -3587,6 +3693,30 @@
     "key": "Past trips too?",
     "files": [
       "app/settings.tsx"
+    ]
+  },
+  {
+    "key": "Pause",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Pause the shift for a personal errand",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Paused · {{elapsed}}",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Paused: drives now are personal. Resume when you’re back to work.",
+    "files": [
+      "app/index.tsx"
     ]
   },
   {
@@ -3859,6 +3989,18 @@
     "files": [
       "app/settings.tsx",
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Resume",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
+    "key": "Resume the shift",
+    "files": [
+      "app/index.tsx"
     ]
   },
   {
@@ -4163,15 +4305,51 @@
     ]
   },
   {
+    "key": "Shift",
+    "files": [
+      "components/shift-row.tsx"
+    ]
+  },
+  {
+    "key": "Shift ended",
+    "files": [
+      "components/shift-prompts.tsx"
+    ]
+  },
+  {
     "key": "Shift mode",
     "files": [
       "app/settings.tsx"
     ]
   },
   {
+    "key": "Shift on {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}}",
+    "files": [
+      "components/shift-row.tsx"
+    ]
+  },
+  {
     "key": "Shifts & rounds (delivery apps)",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Show drives ▾",
+    "files": [
+      "components/shift-row.tsx"
+    ]
+  },
+  {
+    "key": "Shows the drives in this shift",
+    "files": [
+      "components/shift-row.tsx"
+    ]
+  },
+  {
+    "key": "Since {{time}}",
+    "files": [
+      "components/shift-row.tsx"
     ]
   },
   {
@@ -4265,6 +4443,18 @@
     ]
   },
   {
+    "key": "Start 15 minutes earlier",
+    "files": [
+      "components/shift-row.tsx"
+    ]
+  },
+  {
+    "key": "Start 15 minutes later",
+    "files": [
+      "components/shift-row.tsx"
+    ]
+  },
+  {
     "key": "Start a 12-week logbook",
     "files": [
       "app/report.tsx",
@@ -4302,6 +4492,12 @@
     ]
   },
   {
+    "key": "Start from {{time}}",
+    "files": [
+      "components/shift-prompts.tsx"
+    ]
+  },
+  {
     "key": "Start is a saved place.",
     "files": [
       "app/trip/[id].tsx"
@@ -4332,9 +4528,21 @@
     ]
   },
   {
+    "key": "Start shift from {{time}}?",
+    "files": [
+      "components/shift-prompts.tsx"
+    ]
+  },
+  {
     "key": "Start using MileMint",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Started {{time}}",
+    "files": [
+      "components/shift-row.tsx"
     ]
   },
   {
@@ -4377,6 +4585,12 @@
     "key": "Step 4 · Places",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Still working",
+    "files": [
+      "components/shift-prompts.tsx"
     ]
   },
   {
@@ -4950,6 +5164,18 @@
     ]
   },
   {
+    "key": "Undo",
+    "files": [
+      "components/shift-prompts.tsx"
+    ]
+  },
+  {
+    "key": "Undo ending the shift",
+    "files": [
+      "components/shift-prompts.tsx"
+    ]
+  },
+  {
     "key": "United Kingdom",
     "files": [
       "domain/regions.ts"
@@ -5157,6 +5383,12 @@
     ]
   },
   {
+    "key": "Where your shift ended",
+    "files": [
+      "domain/shift-split.ts"
+    ]
+  },
+  {
     "key": "Where’s home?",
     "files": [
       "app/welcome.tsx"
@@ -5344,6 +5576,18 @@
     ]
   },
   {
+    "key": "You’ve been parked at home for a while and your shift is still on. Drives after it ends aren’t counted as work.",
+    "files": [
+      "tracking/shift-notifications.ts"
+    ]
+  },
+  {
+    "key": "You’ve been parked at home since {{time}}. Drives after the shift aren’t counted as work.",
+    "files": [
+      "components/shift-prompts.tsx"
+    ]
+  },
+  {
     "key": "Your {{year}} Self Assessment return is due",
     "files": [
       "domain/deadlines.ts"
@@ -5527,6 +5771,12 @@
     "key": "Your own purpose",
     "files": [
       "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Your shift ended after 16 hours",
+    "files": [
+      "tracking/shift-notifications.ts"
     ]
   },
   {

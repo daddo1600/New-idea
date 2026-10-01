@@ -23,10 +23,12 @@ export const COMMON_PURPOSES = [
 /** Listed first in client privacy mode: the usual purpose for care and support work. */
 const CLIENT_VISIT_PURPOSE = ['🩺', msg('Client visit')] as const;
 const KNOWN_PURPOSES = [CLIENT_VISIT_PURPOSE, ...COMMON_PURPOSES];
+/** What a shift files its drives under (see auto-classify); shown translated, not offered in the list. */
+const SHOWN_PURPOSES = [...KNOWN_PURPOSES, ['🛵', msg('Deliveries')] as const];
 
 /** A saved purpose as shown: the common ones in the app's language, anything typed as it was typed. */
 export function shownPurpose(purpose: string, translate: (key: string) => string): string {
-  const match = KNOWN_PURPOSES.find(([, text]) => text.toLowerCase() === purpose.trim().toLowerCase());
+  const match = SHOWN_PURPOSES.find(([, text]) => text.toLowerCase() === purpose.trim().toLowerCase());
   return match ? translate(match[1]) : purpose;
 }
 

@@ -128,3 +128,53 @@ Referrals now use single-use invites: every share makes a new code that works fo
 | Your friend’s invite couldn’t be used | L’invitation de votre ami n’a pas pu être utilisée | “Your friend’s invitation couldn’t be used” |
 
 **Sign-off:** approved, pending an on-device check of the new alert titles.
+
+## Round 6: shift rows
+
+The home list now shows one row per shift, which opens to its drives. A drive that runs past the end of a shift is cut there, and the part after it (the drive home) is left to sort. Shifts can be paused for an errand, started late (“Start shift from 10:40?”), have their times corrected, be undone for a few seconds after ending, and say when they end by themselves at 16 hours or the car has been parked at home a while. 41 new lines (row, legs, time steppers, pause, offers, undo toast, two notifications, a stored place label). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rules for all of them: the shift, drive and sort terms from the glossary; the part after a shift is never called personal (it is *not counted as work unless you choose*); nothing promises a tax result. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| {{count}} drives | one: {{count}} trajet / many: {{count}} trajets / other: {{count}} trajets | “{{count}} trip(s)” |
+| {{count}} drives since then look like deliveries. They’ll be added to the shift as business. | one: {{count}} trajet depuis cette heure-là ressemble à une livraison. Il sera ajouté au quart comme affaires. / many: {{count}} trajets depuis cette heure-là ressemblent à des livraisons. Ils seront ajoutés au quart comme affaires. / other: {{count}} trajets depuis cette heure-là ressemblent à des livraisons. Ils seront ajoutés au quart comme affaires. | “{{count}} trips since that time look like deliveries. They’ll be added to the shift as business.” *depuis cette heure-là*: plain *depuis* alone dangles. |
+| {{purpose}} · {{count}} to sort | one: {{purpose}} · {{count}} à classer / many: {{purpose}} · {{count}} à classer / other: {{purpose}} · {{count}} à classer | “{{purpose}} · {{count}} to sort” *classer* as “Classer {{count}} trajets”. |
+| After your shift ended · not counted as work unless you say so | Après la fin de votre quart · ne compte pas comme travail, sauf si vous le choisissez | “After the end of your shift · doesn’t count as work unless you choose so” |
+| Deliveries | Livraisons | “Deliveries” |
+| Did your shift start at {{time}}? | Votre quart a commencé à {{time}} ? | “Your shift started at {{time}}?” Narrow no-break space before ?, as the rest of the file. |
+| Drives join or leave the shift by when they started. A drive past the end is cut there. | Un trajet entre dans le quart ou en sort selon son heure de départ. Un trajet qui dépasse la fin du quart est coupé à ce moment-là. | “A trip goes into the shift or out of it by its start time. A trip that goes past the end of the shift is cut at that moment.” |
+| During a pause in your shift · not counted as work unless you say so | Pendant une pause de votre quart · ne compte pas comme travail, sauf si vous le choisissez | “During a pause in your shift · doesn’t count as work unless you choose so” |
+| End 15 minutes earlier | Avancer la fin de 15 minutes | “Bring the end forward 15 minutes” VoiceOver. |
+| End 15 minutes later | Retarder la fin de 15 minutes | “Delay the end 15 minutes” |
+| End your shift? | Terminer votre quart ? | “End your shift?” |
+| Ended {{time}} | Fin à {{time}} | “End at {{time}}” |
+| Hide drives ▴ | Masquer les trajets ▴ | “Hide the trips ▴” 1.5×; fits beside the purpose line. |
+| Hides the drives in this shift | Masque les trajets de ce quart | “Hides this shift’s trips” |
+| It was still on, so MileMint ended it. Drives from now on are left for you to sort. Tap to check the times. | Il était encore en cours, alors MileMint l’a terminé. Les trajets suivants sont à classer par vous. Touchez pour vérifier les heures. | “It was still going, so MileMint ended it. The next trips are for you to sort. Tap to check the times.” *Touchez*, as elsewhere. |
+| Map of the drives in this shift | Carte des trajets de ce quart | “Map of this shift’s trips” |
+| On shift | En quart | “On shift” |
+| Pause | Pause | “Pause” |
+| Pause the shift for a personal errand | Mettre le quart en pause pour une sortie personnelle | “Put the shift on pause for a personal outing” Not *course* (also a delivery run) nor *affaire* (clashes with *affaires* = business). |
+| Paused · {{elapsed}} | En pause · {{elapsed}} | “On pause · {{elapsed}}” |
+| Paused: drives now aren’t counted as work. Resume when you’re back. | En pause : les trajets ne comptent pas comme travail. Reprenez à votre retour. | “On pause: trips don’t count as work. Resume when you’re back.” |
+| Resume | Reprendre | “Resume” |
+| Resume the shift | Reprendre le quart | “Resume the shift” |
+| Shift | Quart | “Shift” |
+| Shift ended | Quart terminé | “Shift ended” |
+| Shift on {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}} | Quart du {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}} | “Shift of the {{date}}, …” |
+| Show drives ▾ | Voir les trajets ▾ | “See the trips ▾” 1.4×; fits. |
+| Shows the drives in this shift | Affiche les trajets de ce quart | “Shows this shift’s trips” |
+| Since {{time}} | Depuis {{time}} | “Since {{time}}” |
+| Start 15 minutes earlier | Avancer le début de 15 minutes | “Bring the start forward 15 minutes” |
+| Start 15 minutes later | Retarder le début de 15 minutes | “Delay the start 15 minutes” |
+| Start from {{time}} | Commencer à {{time}} | “Start at {{time}}” |
+| Start shift from {{time}}? | Commencer le quart à partir de {{time}} ? | “Start the shift from {{time}}?” |
+| Started {{time}} | Début à {{time}} | “Start at {{time}}” Noun style, pairs with *Fin à*. |
+| Still working | Je travaille encore | “I’m still working” |
+| Undo | Annuler | “Undo” *Annuler* is iOS French for Undo. |
+| Undo ending the shift | Annuler la fin du quart | “Undo the end of the shift” |
+| Where your shift ended | Lieu de fin du quart | “Place where the shift ended” Short place-name style. |
+| You’ve been parked at home for a while and your shift is still on. Drives after it ends aren’t counted as work. | Vous êtes garé à votre domicile depuis un moment et votre quart est toujours en cours. Les trajets après sa fin ne comptent pas comme travail. | “You’ve been parked at home for a while and your shift is still going. Trips after it ends don’t count as work.” *domicile*, the app’s word for Home. |
+| You’ve been parked at home since {{time}}. Drives after the shift aren’t counted as work. | Vous êtes garé à votre domicile depuis {{time}}. Les trajets après le quart ne comptent pas comme travail. | “You’ve been parked at home since {{time}}. Trips after the shift don’t count as work.” |
+| Your shift ended after 16 hours | Votre quart s’est terminé après 16 heures | “Your shift ended after 16 hours” |
+
+**Sign-off:** approved, pending an on-device look at the shift row and the undo toast in this language.

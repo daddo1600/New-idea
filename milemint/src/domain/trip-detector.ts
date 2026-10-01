@@ -84,6 +84,12 @@ export type DetectedTrip = {
   end: LatLng;
   distanceMeters: number;
   route: LatLng[];
+  /**
+   * When the car was at each route point (epoch ms), same length as `route`.
+   * Absent for drives restored from state saved by older versions: a drive is
+   * then cut (at the end of a shift) as if driven at a steady pace.
+   */
+  routeTimes?: number[];
   /** `getTimezoneOffset()` when the drive started; null when unknown. */
   utcOffsetMin?: number | null;
 };
@@ -109,6 +115,8 @@ export type DetectorState =
       /** Fastest speed the OS itself reported (absent in state saved by older versions). */
       reportedMaxSpeedMps?: number;
       route: LatLng[];
+      /** Each route point's time; absent (or dropped) in state saved by older versions. */
+      routeTimes?: number[];
       /**
        * Where a possible stop began, and the distance driven up to it. `still`
        * is set when the phone has since moved off slowly (a walk from the
@@ -174,6 +182,15 @@ export function sanitizeDetectorState(state: unknown): DetectorState {
     const d = s as Partial<Driving>;
     if (!validFix(d.start) || !validFix(d.last)) return INITIAL_DETECTOR_STATE;
     const route = Array.isArray(d.route) ? d.route.filter(validPoint) : [];
+    // Times only line up with the points if none was dropped.
+    const routeTimes =
+      Array.isArray(d.routeTimes) &&
+      Array.isArray(d.route) &&
+      d.routeTimes.length === d.route.length &&
+      route.length === d.route.length &&
+      d.routeTimes.every((time) => Number.isFinite(time))
+        ? d.routeTimes
+        : undefined;
     if (route.length === 0) route.push(point(d.start));
     const odo = validFix(d.odo) ? d.odo : undefined;
     let distanceM = Number.isFinite(d.distanceM) ? (d.distanceM as number) : NaN;
@@ -196,6 +213,7 @@ export function sanitizeDetectorState(state: unknown): DetectorState {
       maxSpeedMps: finite(d.maxSpeedMps, 0),
       reportedMaxSpeedMps: d.reportedMaxSpeedMps === undefined ? undefined : finite(d.reportedMaxSpeedMps, 0),
       route,
+      routeTimes,
       stop,
       odo: odo ?? (Number.isFinite(d.distanceM) ? undefined : { ...route[route.length - 1], timestamp: d.last.timestamp }),
       lastSpeedMps: Number.isFinite(d.lastSpeedMps) ? d.lastSpeedMps : null,
@@ -246,9 +264,14 @@ function finish(
     (reportedDriving || (endedElsewhere && averageMps >= config.walkingPaceMps));
   if (!isDrive) return { state: idle, completed: [] };
   // Route points after the stop began (a walk from the car) aren't part of the drive.
-  const route = state.route.slice(0, Math.max(1, routeLength ?? state.route.length));
+  const kept = Math.max(1, routeLength ?? state.route.length);
+  const route = state.route.slice(0, kept);
+  const routeTimes = state.routeTimes?.slice(0, kept);
   const lastRoute = route[route.length - 1];
-  if (!lastRoute || distanceMeters(lastRoute, end) > 1) route.push(point(end));
+  if (!lastRoute || distanceMeters(lastRoute, end) > 1) {
+    route.push(point(end));
+    routeTimes?.push(end.timestamp);
+  }
   return {
     state: idle,
     completed: [
@@ -259,6 +282,7 @@ function finish(
         end: point(end),
         distanceMeters: Math.round(distanceM),
         route,
+        ...(routeTimes && routeTimes.length === route.length ? { routeTimes } : {}),
         utcOffsetMin: state.utcOffsetMin ?? null,
       },
     ],
@@ -306,6 +330,7 @@ function startDriving(
     maxSpeedMps: speed ?? 0,
     reportedMaxSpeedMps: speed ?? 0,
     route: counts ? [point(start), point(fix)] : [point(start)],
+    routeTimes: counts ? [start.timestamp, fix.timestamp] : [start.timestamp],
     odo: counts ? fix : start,
     lastSpeedMps: plausible ? speed : null,
     stop: null,
@@ -421,6 +446,7 @@ export function step(
   // Distance is measured between route points at least `routePointSpacingM`
   // apart, so jitter while stopped (lights, drops) doesn't add up.
   let route = state.route;
+  let routeTimes = state.routeTimes;
   let distanceM = state.distanceM;
   let odo = odoOf(state);
   let maxSpeedMps = state.maxSpeedMps;
@@ -438,9 +464,11 @@ export function step(
     if (a && ab > 500 && fromOdo > 500 && ab + fromOdo > 2 * ac + 500 && distanceMeters(b, odo) < 1) {
       // A→B→C where B is far off and C back near A: B was a GPS spike.
       route = [...route.slice(0, -1), point(fix)];
+      routeTimes = routeTimes && [...routeTimes.slice(0, -1), fix.timestamp];
       distanceM = distanceM - ab + ac;
     } else {
       route = [...route, point(fix)];
+      routeTimes = routeTimes && [...routeTimes, fix.timestamp];
       distanceM += fromOdo;
       // Not from the parked point, though: its time is when the geofence fired.
       const fromStart = odo.timestamp === state.start.timestamp && distanceMeters(odo, state.start) < 1;
@@ -459,6 +487,7 @@ export function step(
     maxSpeedMps,
     reportedMaxSpeedMps,
     route,
+    routeTimes,
     odo,
     lastSpeedMps: speed,
   };

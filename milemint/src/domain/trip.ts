@@ -45,6 +45,11 @@ export type Trip = {
   vehicleId: string | null;
   /** The shift the drive was part of (shift mode), or null. */
   shiftId: string | null;
+  /**
+   * The shift this drive was cut from, when it's the part after the shift
+   * ended (or during a pause): not work, and left for the user to sort.
+   */
+  offShiftId?: string | null;
 };
 
 export const METERS_PER_MILE = 1609.344;

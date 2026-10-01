@@ -149,3 +149,53 @@ Referrals now use single-use invites: every share makes a new code that works fo
 | Your friend’s invite couldn’t be used | Invitația prietenului tău nu a putut fi folosită | “Your friend’s invitation couldn’t be used” |
 
 **Sign-off:** approved, pending an on-device check of the new alert titles.
+
+## Round 6: shift rows
+
+The home list now shows one row per shift, which opens to its drives. A drive that runs past the end of a shift is cut there, and the part after it (the drive home) is left to sort. Shifts can be paused for an errand, started late (“Start shift from 10:40?”), have their times corrected, be undone for a few seconds after ending, and say when they end by themselves at 16 hours or the car has been parked at home a while. 41 new lines (row, legs, time steppers, pause, offers, undo toast, two notifications, a stored place label). Three passes per line: translate; cold back-translation against the English; culture, honesty and length. Rules for all of them: the shift, drive and sort terms from the glossary; the part after a shift is never called personal (it is *not counted as work unless you choose*); nothing promises a tax result. `npx jest src/i18n` passes.
+
+| English | Translation | Back-translation / check |
+|---|---|---|
+| {{count}} drives | one: {{count}} cursă / few: {{count}} curse / other: {{count}} de curse | “{{count}} trip(s)” one/few/other with *de* for 20+. |
+| {{count}} drives since then look like deliveries. They’ll be added to the shift as business. | one: {{count}} cursă de atunci pare o livrare. Va fi adăugată la tură ca de lucru. / few: {{count}} curse de atunci par livrări. Vor fi adăugate la tură ca de lucru. / other: {{count}} de curse de atunci par livrări. Vor fi adăugate la tură ca de lucru. | “{{count}} trips since then look like deliveries. They’ll be added to the shift as work.” |
+| {{purpose}} · {{count}} to sort | one: {{purpose}} · {{count}} de sortat / few: {{purpose}} · {{count}} de sortat / other: {{purpose}} · {{count}} de sortat | “{{purpose}} · {{count}} to sort” |
+| After your shift ended · not counted as work unless you say so | După încheierea turei · nu contează ca muncă decât dacă alegi tu | “After the shift ended · doesn’t count as work unless you choose” |
+| Deliveries | Livrări | “Deliveries” |
+| Did your shift start at {{time}}? | Tura ta a început la {{time}}? | “Your shift started at {{time}}?” |
+| Drives join or leave the shift by when they started. A drive past the end is cut there. | Cursele intră în tură sau ies din ea după ora la care au început. O cursă care continuă după final e tăiată acolo. | “Trips come into the shift or leave it by the hour they started. A trip that continues after the end is cut there.” |
+| During a pause in your shift · not counted as work unless you say so | În timpul unei pauze din tură · nu contează ca muncă decât dacă alegi tu | “During a pause in the shift · doesn’t count as work unless you choose” |
+| End 15 minutes earlier | Mută finalul cu 15 minute mai devreme | “Move the end 15 minutes earlier” |
+| End 15 minutes later | Mută finalul cu 15 minute mai târziu | “Move the end 15 minutes later” |
+| End your shift? | Închei tura? | “End the shift?” As *Încheie tura*. |
+| Ended {{time}} | Încheiată la {{time}} | “Ended at {{time}}” Feminine, agrees with *tura*. |
+| Hide drives ▴ | Ascunde cursele ▴ | “Hide the trips ▴” |
+| Hides the drives in this shift | Ascunde cursele din această tură | “Hides the trips in this shift” |
+| It was still on, so MileMint ended it. Drives from now on are left for you to sort. Tap to check the times. | Era încă pornită, așa că MileMint a încheiat-o. Cursele de acum încolo rămân să le sortezi tu. Atinge ca să verifici orele. | “It was still on, so MileMint ended it. Trips from now on are left for you to sort. Tap to check the hours.” *Atinge*, as elsewhere. |
+| Map of the drives in this shift | Harta curselor din această tură | “Map of the trips in this shift” |
+| On shift | În tură | “On shift” |
+| Pause | Pauză | “Pause” |
+| Pause the shift for a personal errand | Pune tura pe pauză pentru o treabă personală | “Put the shift on pause for a personal thing” *treabă personală*: everyday. |
+| Paused · {{elapsed}} | Pauză · {{elapsed}} | “Pause · {{elapsed}}” |
+| Paused: drives now aren’t counted as work. Resume when you’re back. | Pauză: cursele de acum nu contează ca muncă. Reia când te întorci. | “Pause: trips now don’t count as work. Resume when you’re back.” |
+| Resume | Reia | “Resume” |
+| Resume the shift | Reia tura | “Resume the shift” |
+| Shift | Tură | “Shift” |
+| Shift ended | Tura s-a încheiat | “The shift has ended” |
+| Shift on {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}} | Tura din {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}} | “The shift of {{date}}, …” |
+| Show drives ▾ | Vezi cursele ▾ | “See the trips ▾” |
+| Shows the drives in this shift | Arată cursele din această tură | “Shows the trips in this shift” |
+| Since {{time}} | De la {{time}} | “Since {{time}}” |
+| Start 15 minutes earlier | Mută începutul cu 15 minute mai devreme | “Move the start 15 minutes earlier” |
+| Start 15 minutes later | Mută începutul cu 15 minute mai târziu | “Move the start 15 minutes later” |
+| Start from {{time}} | Începe de la {{time}} | “Start from {{time}}” |
+| Start shift from {{time}}? | Începi tura de la {{time}}? | “Start the shift from {{time}}?” |
+| Started {{time}} | Începută la {{time}} | “Started at {{time}}” |
+| Still working | Încă lucrez | “Still working” |
+| Undo | Anulează | “Undo” *Anulează* is iOS Romanian for Undo. |
+| Undo ending the shift | Anulează încheierea turei | “Undo ending the shift” |
+| Where your shift ended | Unde s-a încheiat tura | “Where the shift ended” |
+| You’ve been parked at home for a while and your shift is still on. Drives after it ends aren’t counted as work. | Ești parcat acasă de ceva vreme și tura e încă pornită. Cursele de după încheierea ei nu contează ca muncă. | “You’ve been parked at home for some time and the shift is still on. Trips after it ends don’t count as work.” |
+| You’ve been parked at home since {{time}}. Drives after the shift aren’t counted as work. | Ești parcat acasă de la {{time}}. Cursele de după tură nu contează ca muncă. | “You’ve been parked at home since {{time}}. Trips after the shift don’t count as work.” |
+| Your shift ended after 16 hours | Tura s-a încheiat după 16 ore | “The shift ended after 16 hours” |
+
+**Sign-off:** approved, pending an on-device look at the shift row and the undo toast in this language.

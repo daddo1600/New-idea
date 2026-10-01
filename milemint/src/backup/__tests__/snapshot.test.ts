@@ -206,6 +206,16 @@ describe('consistentTables', () => {
     expect(fixed.car_expenses.map((expenses) => expenses.vehicle_id)).toEqual(['v1']);
   });
 
+  it('keeps shift pauses and drops one whose shift is gone', () => {
+    const tables = sampleTables();
+    tables.shifts = [{ id: 's1', started_at: '2026-09-30T16:00:00.000Z', ended_at: '2026-09-30T20:00:00.000Z' }];
+    tables.shift_pauses = [
+      { id: 'p1', shift_id: 's1', started_at: '2026-09-30T17:00:00.000Z', ended_at: '2026-09-30T17:20:00.000Z' },
+      { id: 'p2', shift_id: 'deleted', started_at: '2026-09-30T17:00:00.000Z', ended_at: null },
+    ];
+    expect(consistentTables(tables).shift_pauses.map((pause) => pause.id)).toEqual(['p1']);
+  });
+
   it('leaves trips from before vehicles existed without a vehicle_id column', () => {
     const tables = { ...emptyTables(), trips: [{ id: 'old', start_label: 'A' }] };
     expect(consistentTables(tables).trips[0]).toEqual({ id: 'old', start_label: 'A' });

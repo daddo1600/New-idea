@@ -914,6 +914,53 @@ const dictionary: Dictionary = {
   "This Apple Account has already joined with a friend’s invite.": "此 Apple 账户已经通过朋友的邀请加入过了。",
   "🎉 Your friend’s invite is confirmed": "🎉 朋友的邀请已确认",
   "Your friend’s invite couldn’t be used": "无法使用朋友的邀请",
+  "{{count}} drives": {
+    "other": "{{count}} 次行程"
+  },
+  "{{count}} drives since then look like deliveries. They’ll be added to the shift as business.": {
+    "other": "从那时起的 {{count}} 次行程看起来是在送货，会作为工作行程加入本班次。"
+  },
+  "{{purpose}} · {{count}} to sort": {
+    "other": "{{purpose}} · {{count}} 次待分类"
+  },
+  "After your shift ended · not counted as work unless you say so": "收工之后 · 除非你自己标记，否则不算工作",
+  "Deliveries": "送货",
+  "Did your shift start at {{time}}?": "你是 {{time}} 开工的吗？",
+  "Drives join or leave the shift by when they started. A drive past the end is cut there.": "行程按开始时间计入或移出班次。收工时还在进行的行程，会在收工那一刻分成两段。",
+  "During a pause in your shift · not counted as work unless you say so": "班次暂停期间 · 除非你自己标记，否则不算工作",
+  "End 15 minutes earlier": "收工时间提前 15 分钟",
+  "End 15 minutes later": "收工时间推后 15 分钟",
+  "End your shift?": "要收工吗？",
+  "Ended {{time}}": "{{time}} 收工",
+  "Hide drives ▴": "收起行程 ▴",
+  "Hides the drives in this shift": "收起这个班次的行程",
+  "It was still on, so MileMint ended it. Drives from now on are left for you to sort. Tap to check the times.": "班次一直没收工，MileMint 已帮你收工。之后的行程留给你自己分类。轻点查看时间。",
+  "Map of the drives in this shift": "这个班次的行程地图",
+  "On shift": "开工中",
+  "Pause": "暂停",
+  "Pause the shift for a personal errand": "为私事暂停班次",
+  "Paused · {{elapsed}}": "已暂停 · {{elapsed}}",
+  "Paused: drives now aren’t counted as work. Resume when you’re back.": "已暂停：现在的行程不算工作。回来后再继续。",
+  "Resume": "继续",
+  "Resume the shift": "继续班次",
+  "Shift": "班次",
+  "Shift ended": "已收工",
+  "Shift on {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}}": "{{date}} 的班次，{{span}}，{{hours}}，{{distance}}，{{drives}}，{{value}}",
+  "Show drives ▾": "查看行程 ▾",
+  "Shows the drives in this shift": "展开这个班次的行程",
+  "Since {{time}}": "从 {{time}} 起",
+  "Start 15 minutes earlier": "开工时间提前 15 分钟",
+  "Start 15 minutes later": "开工时间推后 15 分钟",
+  "Start from {{time}}": "从 {{time}} 开工",
+  "Start shift from {{time}}?": "从 {{time}} 开始算开工？",
+  "Started {{time}}": "{{time}} 开工",
+  "Still working": "还在干活",
+  "Undo": "撤销",
+  "Undo ending the shift": "撤销收工",
+  "Where your shift ended": "收工地点",
+  "You’ve been parked at home for a while and your shift is still on. Drives after it ends aren’t counted as work.": "你已在家停车一段时间，班次还没收工。收工后的行程不算工作。",
+  "You’ve been parked at home since {{time}}. Drives after the shift aren’t counted as work.": "你从 {{time}} 起就停在家里了。收工后的行程不算工作。",
+  "Your shift ended after 16 hours": "班次满 16 小时，已自动收工",
 };
 
 export default dictionary;
