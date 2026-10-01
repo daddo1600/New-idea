@@ -1812,7 +1812,8 @@
   {
     "key": "Enter pence a mile as a number, e.g. 45.",
     "files": [
-      "app/settings.tsx"
+      "app/settings.tsx",
+      "app/welcome.tsx"
     ]
   },
   {

@@ -15,10 +15,10 @@ import { listAllVehicles } from '@/db/vehicles-repo';
 import type { Vehicle } from '@/domain/vehicles';
 import { useTrips } from '@/db/use-trips';
 import { lockedTripIds } from '@/domain/plan';
-import { EXPORT_FORMATS, PRO_FORMATS, type ExportFormat } from '@/domain/accounting-export';
+import { formatsFor, PRO_FORMATS, type ExportFormat } from '@/domain/accounting-export';
 import { logbooksForReport, summarizeLogbook, type CarExpenses, type Logbook } from '@/domain/logbook';
 import { buildReport, reportYears } from '@/domain/report';
-import { parseNumber } from '@/domain/parse-number';
+import { parseOdometer } from '@/domain/parse-number';
 import { currentTaxYear, formatDistance, formatMoney, fromUnits, taxYearLabel } from '@/domain/regions';
 import { toLocalIsoDate } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
@@ -68,8 +68,12 @@ export default function ReportScreen() {
   const [error, setError] = useState<string | null>(null);
   const [format, setFormat] = useState<ExportFormat>('spreadsheet');
   useEffect(() => {
-    loadSettings(db).then((settings) => setFormat(settings.exportFormat), () => {});
-  }, [db]);
+    loadSettings(db).then(
+      // A format saved in another country (FreeAgent) falls back to the spreadsheet.
+      (settings) => setFormat(formatsFor(region).includes(settings.exportFormat) ? settings.exportFormat : 'spreadsheet'),
+      () => {},
+    );
+  }, [db, region]);
   const chooseFormat = (next: ExportFormat) => {
     setFormat(next);
     loadSettings(db)
@@ -237,7 +241,7 @@ export default function ReportScreen() {
             {t('Where is it going?')}
           </ThemedText>
           <View style={styles.formats} accessibilityRole="radiogroup">
-            {EXPORT_FORMATS.map((option) => {
+            {formatsFor(region).map((option) => {
               const selected = option === format;
               return (
                 <Pressable
@@ -389,8 +393,8 @@ function OdometerCard({
   // `text` is English, marked with msg() and shown with t().
   const [message, setMessage] = useState<{ error: boolean; text: string } | null>(null);
 
-  // "48,210" and "48210,5" (a decimal comma) both read correctly.
-  const parse = parseNumber;
+  // "48,210", "48.210" and "48210,5" (a decimal comma) all read correctly.
+  const parse = parseOdometer;
   const save = async () => {
     const s = parse(start);
     const e = parse(end);

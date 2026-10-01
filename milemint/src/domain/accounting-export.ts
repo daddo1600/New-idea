@@ -18,6 +18,11 @@ export type ExportFormat = 'spreadsheet' | 'xero' | 'quickbooks' | 'freeagent' |
 
 export const EXPORT_FORMATS: readonly ExportFormat[] = ['spreadsheet', 'xero', 'quickbooks', 'freeagent', 'expense-claim'];
 
+/** The formats offered in a country: FreeAgent is UK-only software. */
+export function formatsFor(region: Pick<Region, 'code'>): readonly ExportFormat[] {
+  return region.code === 'GB' ? EXPORT_FORMATS : EXPORT_FORMATS.filter((format) => format !== 'freeagent');
+}
+
 /** Exports for accounting software need Pro; the plain spreadsheet and the claim form are free. */
 export const PRO_FORMATS: ReadonlySet<ExportFormat> = new Set(['xero', 'quickbooks', 'freeagent']);
 
@@ -159,7 +164,8 @@ function tripLine(row: ReportRow, region: Region, describe: boolean): (string | 
 
 /** The file for a format: its contents and a name. */
 export function exportFile(report: MileageReport, format: ExportFormat): { name: string; text: string } {
-  const year = report.label.replace('/', '-');
+  // "2026/27" or "2026–27" → "2026-27": slashes and en dashes trip up some file systems and downloads.
+  const year = report.label.replace(/[/–]/g, '-');
   switch (format) {
     case 'xero':
       return { name: `MileMint ${year} Xero manual journals.csv`, text: toXeroJournals(report) };

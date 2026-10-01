@@ -82,7 +82,7 @@ export default function MilestonesScreen() {
               </View>
               <ThemedText
                 type="small"
-                numberOfLines={2}
+                numberOfLines={3}
                 style={[styles.badgeLabel, !got && { color: theme.textSecondary }]}>
                 {label(m)}
               </ThemedText>

@@ -24,6 +24,12 @@ export const COMMON_PURPOSES = [
 const CLIENT_VISIT_PURPOSE = ['🩺', msg('Client visit')] as const;
 const KNOWN_PURPOSES = [CLIENT_VISIT_PURPOSE, ...COMMON_PURPOSES];
 
+/** A saved purpose as shown: the common ones in the app's language, anything typed as it was typed. */
+export function shownPurpose(purpose: string, translate: (key: string) => string): string {
+  const match = KNOWN_PURPOSES.find(([, text]) => text.toLowerCase() === purpose.trim().toLowerCase());
+  return match ? translate(match[1]) : purpose;
+}
+
 /**
  * Common purposes are saved in English (the reports to the tax office stay in
  * English) and shown in the app's language.

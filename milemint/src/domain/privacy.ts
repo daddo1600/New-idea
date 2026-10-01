@@ -239,3 +239,16 @@ export function isAreaOnly(label: string, placeNames: ReadonlySet<string>): bool
 export function redactLabel(label: string, placeNames: ReadonlySet<string>, region: RegionCode | null): string {
   return isNamedPlace(label, placeNames) ? label : privateLabel(label, region);
 }
+
+/**
+ * A place label as shown in the app: "Client visit" in the app's language.
+ * It's saved in English (it goes into reports for the tax office), but on
+ * screen it should read like the rest of the app.
+ */
+export function shownLabel(label: string, translate: (key: string) => string): string {
+  if (label === CLIENT_VISIT || label.startsWith(`${CLIENT_VISIT} · `)) {
+    return translate(CLIENT_VISIT) + label.slice(CLIENT_VISIT.length);
+  }
+  return label;
+}
+

@@ -227,8 +227,10 @@ export function fromUnits(units: number, region: Region): number {
   return Math.round(units * metersPerUnit(region.unit));
 }
 
-export function formatDistance(meters: number, region: Region): string {
-  const value = new Intl.NumberFormat(region.locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+export function formatDistance(meters: number, region: Region, options: { whole?: boolean } = {}): string {
+  // `whole` for rounded figures ("about 13,000 km"), where ".0" would look oddly precise.
+  const digits = options.whole ? 0 : 1;
+  const value = new Intl.NumberFormat(region.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits });
   return `${value.format(toUnits(meters, region))} ${region.unit}`;
 }
 

@@ -39,7 +39,7 @@ import {
   type Logbook,
   type LogbookSummary,
 } from '@/domain/logbook';
-import { parseNumber } from '@/domain/parse-number';
+import { parseNumber, parseOdometer } from '@/domain/parse-number';
 import { lockedTripIds } from '@/domain/plan';
 import {
   currentTaxYear,
@@ -249,7 +249,7 @@ function StartCard({
   const [busy, setBusy] = useState(false);
 
   const start = async () => {
-    const reading = parseNumber(odometer);
+    const reading = parseOdometer(odometer);
     if (reading === undefined) return setMessage(msg('Enter odometer readings as numbers, e.g. 48210.'));
     setBusy(true);
     await onStart(startDate, reading);
@@ -362,8 +362,8 @@ function ProgressCard({
   const km = (value: number) => formatDistance(value * 1000, region);
 
   const saveReadings = async () => {
-    const s = parseNumber(start);
-    const e = parseNumber(end);
+    const s = parseOdometer(start);
+    const e = parseOdometer(end);
     if (s === undefined || e === undefined) {
       return setMessage({ error: true, text: msg('Enter odometer readings as numbers, e.g. 48210.') });
     }

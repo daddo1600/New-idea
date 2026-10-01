@@ -69,7 +69,7 @@ export function LogbookNudge({ trips, vehicles }: { trips: readonly Trip[]; vehi
               })
             : t('{{vehicle}} is on track for about {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.', {
                 vehicle,
-                distance: formatDistance(roundTo100(car.projectedKm) * 1000, region),
+                distance: formatDistance(roundTo100(car.projectedKm) * 1000, region, { whole: true }),
               })}
         </ThemedText>
         <ThemedText type="smallBold" style={{ color: theme.accent }}>

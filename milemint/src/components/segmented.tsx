@@ -32,9 +32,13 @@ export function Segmented<T extends string>({
             accessibilityState={{ selected }}
             accessibilityLabel={accessibilityLabelFor?.(option)}
             onPress={() => onChange(option.value)}
-            style={[styles.option, selected && { backgroundColor: theme.accent }]}>
+            // Four or more options share the width: less padding so labels stay on one line.
+            style={[styles.option, options.length > 3 && styles.tight, selected && { backgroundColor: theme.accent }]}>
             <ThemedText
               type="smallBold"
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.8}
               style={{ color: selected ? theme.onAccent : value === null ? theme.text : theme.textSecondary }}>
               {option.label}
             </ThemedText>
@@ -54,4 +58,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     borderRadius: 8,
   },
+  tight: { paddingHorizontal: Spacing.one, flexBasis: 'auto' },
 });

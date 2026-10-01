@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { parseNumber } from '../parse-number';
+import { parseNumber, parseOdometer } from '../parse-number';
 
 describe('parseNumber', () => {
   it.each([
@@ -37,5 +37,24 @@ describe('parseNumber', () => {
 
   it('rejects numbers too big to be one', () => {
     expect(parseNumber('9'.repeat(400))).toBeUndefined();
+  });
+});
+
+describe('parseOdometer', () => {
+  it.each([
+    ['48.210', 48210],
+    ['148.210', 148210],
+    ['1.048.210', 1048210],
+    ['48,210', 48210],
+    ['48 210', 48210],
+    ['48210', 48210],
+    ['48210.5', 48210.5],
+    ['48210,5', 48210.5],
+  ])('reads %s as %d', (text, value) => {
+    expect(parseOdometer(text)).toBe(value);
+  });
+
+  it('is null when empty', () => {
+    expect(parseOdometer('')).toBeNull();
   });
 });

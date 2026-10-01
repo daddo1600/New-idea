@@ -1000,7 +1000,7 @@ function MileagePayForm({
       </ThemedText>
       {pay.employee && (
         <>
-          <View style={styles.flex}>
+          <View style={styles.stack}>
             <ThemedText type="smallBold">{t('What does your employer pay?')}</ThemedText>
             <Segmented
               options={[
@@ -1050,7 +1050,7 @@ function MileagePayForm({
               {t('Enter pence a mile as a number, e.g. 45.')}
             </ThemedText>
           )}
-          <View style={styles.flex}>
+          <View style={styles.stack}>
             <ThemedText type="smallBold">{t('Your income tax rate')}</ThemedText>
             <Segmented
               options={(['basic', 'higher', 'additional', 'unsure'] as const).map((value) => ({
@@ -1237,6 +1237,8 @@ const styles = StyleSheet.create({
   card: { borderRadius: 12, padding: Spacing.three, gap: Spacing.three },
   rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.three },
   flex: { flex: 1, gap: Spacing.half },
+  // Stacked blocks in a card: not stretched, so the next one can't slide under it.
+  stack: { gap: Spacing.half },
   day: { gap: Spacing.two },
   shift: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
   time: {

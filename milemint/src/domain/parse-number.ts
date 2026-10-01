@@ -46,3 +46,15 @@ function normalise(compact: string): string | undefined {
   if (groups.length <= 2) return compact;
   return isThousands(groups) ? groups.join('') : undefined;
 }
+
+/**
+ * An odometer reading as typed. As parseNumber, except that a dot followed by
+ * exactly three digits groups thousands ("48.210" is 48,210 km, as Polish,
+ * Romanian or Brazilian drivers write it): an odometer is read in whole units,
+ * so 48.21 km was never meant.
+ */
+export function parseOdometer(text: string): number | null | undefined {
+  const compact = text.trim().replace(/[\s  ']/g, '');
+  if (/^\d{1,3}(\.\d{3})+$/.test(compact)) return Number(compact.split('.').join(''));
+  return parseNumber(text);
+}

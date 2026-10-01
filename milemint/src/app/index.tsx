@@ -15,6 +15,7 @@ import { LeafMark } from '@/components/leaf-mark';
 import { LogbookNudge } from '@/components/logbook-nudge';
 import { Celebration } from '@/components/celebration';
 import { ReminderAsk } from '@/components/reminder-ask';
+import { shownPurpose } from '@/components/purpose-picker';
 import { ShiftSwitch } from '@/components/shift-switch';
 import { TaxCountdown } from '@/components/tax-countdown';
 import { Segmented } from '@/components/segmented';
@@ -30,6 +31,7 @@ import { isCommute, type AutoReason } from '@/domain/classify-rules';
 import { employerPaysLess, marForYear, marSummary, type MarYear, unclaimedNudge, type UnclaimedNudge } from '@/domain/mar';
 import { autoDrivesInMonth, FREE_AUTO_DRIVES_PER_MONTH, lockedTripIds } from '@/domain/plan';
 import type { Place } from '@/domain/places';
+import { shownLabel } from '@/domain/privacy';
 import {
   computeDeductions,
   displayLocale,
@@ -410,7 +412,7 @@ function SelectableTripRow({
         <View style={styles.flex}>
           <View style={styles.rowHeader}>
             <ThemedText type="smallBold" style={styles.route} numberOfLines={1}>
-              {trip.startLabel} → {trip.endLabel}
+              {shownLabel(trip.startLabel, t)} → {shownLabel(trip.endLabel, t)}
             </ThemedText>
             <ThemedText type="smallBold">{formatDistance(trip.distanceMeters, region)}</ThemedText>
           </View>
@@ -642,7 +644,7 @@ function TripRow({
   const details = [
     trip.localDate,
     trip.source === 'auto' ? formatTime(trip.startedAt) : t('Added manually'),
-    trip.purpose,
+    shownPurpose(trip.purpose, t),
     deduction > 0 ? formatMoney(deduction, region) : '',
   ].filter(Boolean);
   const openDetails = () => router.push({ pathname: '/trip/[id]', params: { id: trip.id } });
@@ -677,7 +679,7 @@ function TripRow({
         <ThemedView type="backgroundElement" style={styles.row}>
           <View style={styles.rowHeader}>
             <ThemedText type="smallBold" style={styles.route} numberOfLines={1}>
-              {trip.startLabel} → {trip.endLabel}
+              {shownLabel(trip.startLabel, t)} → {shownLabel(trip.endLabel, t)}
             </ThemedText>
             <ThemedText type="smallBold">{formatDistance(trip.distanceMeters, region)}</ThemedText>
           </View>
