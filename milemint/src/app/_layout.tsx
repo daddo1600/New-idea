@@ -11,6 +11,7 @@ import { describeError } from '@/errors/fatal-errors';
 import { ProProvider } from '@/purchases/pro';
 import { loadLanguage, useT } from '@/i18n/i18n';
 import { RegionProvider } from '@/region/region';
+import { useOtaUpdates } from '@/updates/use-ota-updates';
 // Registers the background location tasks; must run before the app renders.
 import '@/tracking/background';
 
@@ -23,6 +24,7 @@ async function onInit(db: SQLiteDatabase) {
 }
 
 export default function RootLayout() {
+  useOtaUpdates();
   const colorScheme = useColorScheme();
   const t = useT();
   // The web demo (store screenshots) opens straight onto the app.
