@@ -385,6 +385,13 @@ export type DeductionPart = {
   units: number;
   rate: number;
   vehicle: VehicleType;
+  /**
+   * Minor units (pence, cents) this part contributes. The year's total is
+   * rate × distance rounded once, shared out to rate bands, vehicles and
+   * then parts by largest remainder (see `computeDeductionParts`), so the
+   * amounts shown per trip add up exactly to every total built from them.
+   */
+  amount: number;
 };
 
 /**
@@ -405,7 +412,7 @@ function tieredParts(
     const ceiling = tier.upTo ?? Infinity;
     const start = Math.max(already, floor);
     const end = Math.min(to, ceiling);
-    if (end > start) parts.push({ period, tier: index, units: end - start, rate: tier.rate, vehicle });
+    if (end > start) parts.push({ period, tier: index, units: end - start, rate: tier.rate, vehicle, amount: 0 });
     floor = ceiling;
   });
   return parts;
@@ -437,7 +444,84 @@ export function computeDeductionParts(
     driven.set(key, already + units);
     result.set(trip.id, period ? tieredParts(period, already, units, vehicle) : []);
   }
+  allocateAmounts(
+    business.map((trip) => ({
+      year: taxYearOf(trip.localDate, region),
+      own: region.limitsPerVehicle ? (trip.vehicleId ?? '') : '',
+      parts: result.get(trip.id) ?? [],
+    })),
+  );
   return result;
+}
+
+/** Exact value of a part in minor units, unrounded. */
+const exactMinor = (part: Pick<DeductionPart, 'units' | 'rate'>) => (part.units * part.rate) / 10;
+
+/**
+ * Drops floating-point noise (a 5,000 km cap summed from many trips comes to
+ * 454999.99999999994), so an amount that is exactly whole stays whole.
+ */
+const snap = (value: number) => Math.round(value * 1e6) / 1e6;
+
+/**
+ * Shares `total` whole minor units out over `values` (unrounded, minor units)
+ * by largest remainder: each gets its value rounded down or up, the biggest
+ * remainders (the earliest on a tie) get the extra units, and the shares add
+ * up to `total` exactly.
+ */
+export function largestRemainder(total: number, values: readonly number[]): number[] {
+  const shares = values.map((value) => Math.floor(snap(value)));
+  const order = values
+    .map((value, index) => ({ index, remainder: snap(value) - shares[index] }))
+    .sort((a, b) => b.remainder - a.remainder || a.index - b.index);
+  let left = total - shares.reduce((sum, share) => sum + share, 0);
+  for (let i = 0; left > 0 && order.length > 0; i = (i + 1) % order.length, left -= 1) shares[order[i].index] += 1;
+  for (let i = order.length - 1; left < 0 && order.length > 0; i = (i - 1 + order.length) % order.length) {
+    if (shares[order[i].index] > 0) {
+      shares[order[i].index] -= 1;
+      left += 1;
+    }
+  }
+  return shares;
+}
+
+/** Groups items by key, keeping first-seen order. */
+function groupBy<T>(items: readonly T[], key: (item: T) => string): T[][] {
+  const groups = new Map<string, T[]>();
+  for (const item of items) {
+    const group = groups.get(key(item));
+    if (group) group.push(item);
+    else groups.set(key(item), [item]);
+  }
+  return [...groups.values()];
+}
+
+/**
+ * Fills in each part's `amount`. Per tax year, the deduction is the exact
+ * rate × distance rounded once; that is shared out to rate bands (vehicle
+ * type, rate period, tier), within a band to each vehicle (where limits are
+ * per vehicle), and then to the parts in the order they were driven. So a
+ * year's total, a rate band's row and a car's capped amount are each the
+ * unrounded figure rounded down or up (never past a cap that is whole), and
+ * trip amounts always add up to them.
+ */
+function allocateAmounts(trips: readonly { year: number; own: string; parts: DeductionPart[] }[]): void {
+  const entries = trips.flatMap(({ year, own, parts }) => parts.map((part) => ({ year, own, part })));
+  const exact = (items: readonly { part: DeductionPart }[]) => items.reduce((sum, item) => sum + exactMinor(item.part), 0);
+  const share = <T extends { part: DeductionPart }>(total: number, groups: T[][], next: (total: number, group: T[]) => void) => {
+    const totals = largestRemainder(total, groups.map(exact));
+    groups.forEach((group, index) => next(totals[index], group));
+  };
+  for (const year of groupBy(entries, (entry) => String(entry.year))) {
+    const bands = groupBy(year, ({ part }) => `${part.vehicle}#${part.period.from}#${part.tier}`);
+    share(Math.round(snap(exact(year))), bands, (bandTotal, band) => {
+      share(bandTotal, groupBy(band, (entry) => entry.own), (ownTotal, own) => {
+        share(ownTotal, own.map((entry) => [entry]), (amount, [entry]) => {
+          entry.part.amount = amount;
+        });
+      });
+    });
+  }
 }
 
 /**
@@ -478,11 +562,17 @@ export type DeductionTrip = Pick<Trip, 'id' | 'localDate' | 'startedAt' | 'dista
  * Deduction per business trip, in minor units. Trips are taken in the order
  * they were driven, so a tier limit (10,000 miles in the UK, 5,000 km in
  * Canada and Australia) is reached by the trips that actually crossed it.
+ *
+ * Not each trip rounded on its own: a year of 0.5-mile trips at 45p would
+ * come to 23p each, £2.45 more than 45p × the miles over 500 of them. The
+ * year is rounded once and shared out (see `allocateAmounts`), so a year's
+ * trips add up to exactly rate × distance rounded once, and a rate band's or
+ * (in Australia) a car's trips to their exact figure rounded down or up.
  */
 export function computeDeductions(trips: readonly DeductionTrip[], region: Region): Map<string, number> {
   const result = new Map<string, number>();
   for (const [id, parts] of computeDeductionParts(trips, region)) {
-    result.set(id, Math.round(parts.reduce((sum, part) => sum + part.units * part.rate, 0) / 10));
+    result.set(id, parts.reduce((sum, part) => sum + part.amount, 0));
   }
   return result;
 }
