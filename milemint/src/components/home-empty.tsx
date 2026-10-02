@@ -29,7 +29,7 @@ type SetupAnswers = Pick<
 >;
 
 /** "09:00" the way the user's country and language write a time ("9:00 AM", "09:00"). */
-function clockTime(hhmm: string, region: Region): string {
+export function clockTime(hhmm: string, region: Region): string {
   const [hours, minutes] = hhmm.split(':').map(Number);
   return new Date(2024, 0, 1, hours, minutes).toLocaleTimeString(displayLocale(region), {
     hour: 'numeric',
@@ -38,7 +38,7 @@ function clockTime(hhmm: string, region: Region): string {
 }
 
 /** A weekday's short name in the user's language (0 is Sunday; 7 January 2024 was a Sunday). */
-function weekdayName(day: number, region: Region): string {
+export function weekdayName(day: number, region: Region): string {
   return new Date(2024, 0, 7 + day).toLocaleDateString(displayLocale(region), { weekday: 'short' });
 }
 

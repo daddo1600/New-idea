@@ -413,3 +413,29 @@ Parking and tolls on a drive: the “+ Parking or tolls” fields when adding a 
 | Parking and tolls are listed separately and not added to the per-km figure. Self-employed: business parking fees are deducted in full on T2125, not reduced to your business-use share. Ask your accountant whether your tolls can be claimed. | Parcarea și taxele de drum sunt trecute separat și nu se adaugă la suma pe km. Pe cont propriu: taxele de parcare de lucru se deduc integral în T2125, fără să fie reduse la partea de folosire pentru lucru. Întreabă-ți contabilul dacă taxele de drum se pot deduce. | Parking and road tolls are listed separately and aren’t added to the per-km amount. Self-employed: work parking fees are deducted in full in T2125, without being reduced to the work-use share. Ask your accountant whether road tolls can be deducted. | Canada report guidance (PDF stays English). |
 | Work parking and tolls aren’t covered by cents per km, so they’re claimed separately. Not parking at your regular workplace, or tolls on the way there. | Cents per km nu acoperă parcarea și taxele de drum de lucru, așa că se cer separat. Nu și parcarea la locul tău obișnuit de muncă sau taxele de drum până acolo. | Cents per km doesn’t cover work parking and road tolls, so they’re claimed separately. Not parking at your usual workplace or road tolls to get there. | Australia note under the fields. |
 | Parking fees and tolls for work trips aren’t covered by the cents per km rate. Claim them separately: individuals as Work-related travel expenses (D2), sole traders with business expenses. Not parking at your regular workplace, or tolls between home and work. | Cents per km nu acoperă parcarea și taxele de drum ale curselor de lucru. Cere-le separat: persoanele fizice la Work-related travel expenses (D2), cei pe cont propriu (sole traders) la cheltuielile afacerii. Nu și parcarea la locul tău obișnuit de muncă sau taxele de drum între casă și serviciu. | Cents per km doesn’t cover parking and road tolls on work trips. Claim them separately: individuals at Work-related travel expenses (D2), self-employed (sole traders) with business expenses. Not parking at your usual workplace or road tolls between home and work. | Australia report guidance (PDF stays English). |
+
+## Round 9: tabs
+
+The app now opens on four tabs (Home, Drives, Money, Settings) instead of one long home screen with a menu. The menu’s lines (Menu, Close menu, Free plan, ★ Pro · unlimited drives, Work hours, places and reminders) are gone. “Acasă” reads as the start screen in Romanian apps as well as the place, so both keys can share it.
+
+| English | Translation | Back-translation | Note |
+|---|---|---|---|
+| Home (tab) | Acasă | Home | Tab bar label for the first tab. Key is "Home (tab)" so it isn’t the place “Home” (English shows “Home”). Short: under an icon. |
+| Drives | Curse | Runs | Tab bar label: every drive, by month. Same word as the app’s “drives”. |
+| Money | Bani | Money | Tab bar label: the tax year’s money back, month by month, Pro and the tax screens. One short word. |
+| Opens the Money tab | Deschide fila Bani | Opens the Money tab | VoiceOver hint on home’s green card, which opens the Money tab. |
+| To sort | De sortat | To sort | Home: heading over the drives still to sort as business or personal. |
+| All drives sorted ✓ | Toate cursele sunt sortate ✓ | All runs are sorted ✓ | Home, when nothing is left to sort; the row opens the Drives tab. |
+| See all drives › | Arată toate cursele › | Show all runs › | Home, next to the line above: opens the Drives tab. Keep the “›”. |
+| By month | Pe luni | By month | Money tab: heading over this tax year’s months. |
+| Earlier tax years | Anii fiscali anteriori | Previous tax years | Money tab: heading over the years before this one. |
+| Tracking | Urmărire | Tracking | Settings group heading, small capitals: the tracking check, work hours and places. |
+| Driving & tax | Curse și taxe | Runs and taxes | Settings group heading: country, vehicles, how drives start, mileage pay, client privacy. |
+| Pro & friends | Pro și prieteni | Pro and friends | Settings group heading: the Pro plan and inviting friends. |
+| Backup & data | Backup și date | Backup and data | Settings group heading: iCloud backup and restore. |
+| Notifications | Notificări | Notifications | Settings group heading: the Sunday reminder. |
+| About & support | Despre și asistență | About and support | Settings group heading: language, the tutorial, help and feedback. |
+| Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here. | Înregistrarea automată funcționează pe iPhone. Adaugă o cursă din fila Curse ca să încerci aplicația aici. | Automatic recording works on iPhone. Add a run from the Runs tab to try the app here. | Web preview only (no tracking there): the + moved from home to the Drives tab. Name the tab as its label is translated. |
+| Add a drive you missed | Adaugă o cursă care lipsește | Add a run that is missing | Drives tab: dashed row under the list, opens Add missed trip. A backup for drives tracking missed. |
+| Varies by day | Diferă de la zi la zi | Differs from day to day | Settings → Work hours heading, on the right, when the days have different hours (otherwise e.g. "Mon–Fri 09:00–17:00", or Off). |
+| Free · {{used}} of {{limit}} | Gratuit · {{used}} din {{limit}} | Free · {{used}} of {{limit}} | Settings → MileMint Pro heading, on the right: this month’s free work drives used, e.g. "Free · 3 of 40". Short. |

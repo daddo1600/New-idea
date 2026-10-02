@@ -65,7 +65,7 @@ export default function ClaimReliefScreen() {
                 : t('Mileage Allowance Relief is a UK tax relief for employees.')}
             </ThemedText>
             {marApplies(region) && (
-              <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/settings' as Href)}>
+              <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.navigate('/settings' as Href)}>
                 <ThemedText type="smallBold" style={{ color: theme.accent }}>
                   {t('Open Settings')}
                 </ThemedText>

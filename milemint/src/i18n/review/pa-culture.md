@@ -466,3 +466,29 @@ Parking and tolls on a drive: the “+ Parking or tolls” fields when adding a 
 | Parking and tolls are listed separately and not added to the per-km figure. Self-employed: business parking fees are deducted in full on T2125, not reduced to your business-use share. Ask your accountant whether your tolls can be claimed. | ਪਾਰਕਿੰਗ ਅਤੇ ਟੋਲ ਵੱਖਰੇ ਦਿਖਾਏ ਗਏ ਹਨ ਅਤੇ ਪ੍ਰਤੀ km ਵਾਲੀ ਰਕਮ ਵਿੱਚ ਨਹੀਂ ਜੋੜੇ ਗਏ। ਸਵੈ-ਰੁਜ਼ਗਾਰ ਵਾਲੇ: ਬਿਜ਼ਨਸ ਪਾਰਕਿੰਗ ਫ਼ੀਸ T2125 ’ਤੇ ਪੂਰੀ ਕਟਦੀ ਹੈ, ਬਿਜ਼ਨਸ ਵਰਤੋਂ ਦੇ ਹਿੱਸੇ ਮੁਤਾਬਕ ਘੱਟ ਨਹੀਂ ਹੁੰਦੀ। ਟੋਲ ਕਲੇਮ ਹੋ ਸਕਦੇ ਹਨ ਜਾਂ ਨਹੀਂ, ਆਪਣੇ ਅਕਾਊਂਟੈਂਟ ਨੂੰ ਪੁੱਛੋ। | Parking and tolls are shown separately and not added to the per-km amount. Self-employed: business parking fees are deducted in full on T2125, not reduced by the business-use share. Ask your accountant whether tolls can be claimed. | Canada report guidance (PDF stays English). |
 | Work parking and tolls aren’t covered by cents per km, so they’re claimed separately. Not parking at your regular workplace, or tolls on the way there. | ਕੰਮ ਦੀ ਪਾਰਕਿੰਗ ਅਤੇ ਟੋਲ cents per km ਵਿੱਚ ਸ਼ਾਮਲ ਨਹੀਂ, ਇਸ ਲਈ ਇਹ ਵੱਖਰੇ ਕਲੇਮ ਹੁੰਦੇ ਹਨ। ਤੁਹਾਡੀ ਪੱਕੀ ਕੰਮ ਵਾਲੀ ਥਾਂ ਦੀ ਪਾਰਕਿੰਗ ਜਾਂ ਉੱਥੇ ਜਾਣ ਦੇ ਟੋਲ ਨਹੀਂ। | Work parking and tolls aren’t included in cents per km, so they’re claimed separately. Not parking at your regular workplace or tolls going there. | Australia note under the fields. |
 | Parking fees and tolls for work trips aren’t covered by the cents per km rate. Claim them separately: individuals as Work-related travel expenses (D2), sole traders with business expenses. Not parking at your regular workplace, or tolls between home and work. | ਕੰਮ ਵਾਲੀਆਂ ਟ੍ਰਿਪਾਂ ਦੀ ਪਾਰਕਿੰਗ ਫ਼ੀਸ ਅਤੇ ਟੋਲ cents per km ਰੇਟ ਵਿੱਚ ਸ਼ਾਮਲ ਨਹੀਂ। ਇਹ ਵੱਖਰੇ ਕਲੇਮ ਕਰੋ: ਵਿਅਕਤੀ Work-related travel expenses (D2) ਵਿੱਚ, sole traders ਬਿਜ਼ਨਸ ਖ਼ਰਚਿਆਂ ਨਾਲ। ਤੁਹਾਡੀ ਪੱਕੀ ਕੰਮ ਵਾਲੀ ਥਾਂ ਦੀ ਪਾਰਕਿੰਗ ਜਾਂ ਘਰ ਅਤੇ ਕੰਮ ਵਿਚਕਾਰ ਟੋਲ ਨਹੀਂ। | Work-trip parking fees and tolls aren’t included in the cents per km rate. Claim them separately: individuals in Work-related travel expenses (D2), sole traders with business expenses. Not parking at your regular workplace or tolls between home and work. | Australia report guidance (PDF stays English). |
+
+## Round 9: tabs
+
+The app now opens on four tabs (Home, Drives, Money, Settings) instead of one long home screen with a menu. The menu’s lines (Menu, Close menu, Free plan, ★ Pro · unlimited drives, Work hours, places and reminders) are gone. “ਹੋਮ” as in other apps; “ਘਰ” stays for the place.
+
+| English | Translation | Back-translation | Note |
+|---|---|---|---|
+| Home (tab) | ਹੋਮ | Home | Tab bar label for the first tab. Key is "Home (tab)" so it isn’t the place “Home” (English shows “Home”). Short: under an icon. |
+| Drives | ਟ੍ਰਿਪ | Trips | Tab bar label: every drive, by month. Same word as the app’s “drives”. |
+| Money | ਪੈਸਾ | Money | Tab bar label: the tax year’s money back, month by month, Pro and the tax screens. One short word. |
+| Opens the Money tab | ਪੈਸਾ ਟੈਬ ਖੋਲ੍ਹਦਾ ਹੈ | Opens the Money tab | VoiceOver hint on home’s green card, which opens the Money tab. |
+| To sort | ਛਾਂਟਣਾ ਬਾਕੀ | Still to sort | Home: heading over the drives still to sort as business or personal. |
+| All drives sorted ✓ | ਸਾਰੇ ਟ੍ਰਿਪ ਛਾਂਟੇ ਗਏ ✓ | All trips sorted ✓ | Home, when nothing is left to sort; the row opens the Drives tab. |
+| See all drives › | ਸਾਰੇ ਟ੍ਰਿਪ ਦਿਖਾਓ › | Show all trips › | Home, next to the line above: opens the Drives tab. Keep the “›”. |
+| By month | ਮਹੀਨੇ ਮੁਤਾਬਕ | By month | Money tab: heading over this tax year’s months. |
+| Earlier tax years | ਪਿਛਲੇ ਟੈਕਸ ਸਾਲ | Previous tax years | Money tab: heading over the years before this one. |
+| Tracking | ਟ੍ਰੈਕਿੰਗ | Tracking | Settings group heading, small capitals: the tracking check, work hours and places. |
+| Driving & tax | ਡਰਾਈਵਿੰਗ ਅਤੇ ਟੈਕਸ | Driving and tax | Settings group heading: country, vehicles, how drives start, mileage pay, client privacy. |
+| Pro & friends | Pro ਅਤੇ ਦੋਸਤ | Pro and friends | Settings group heading: the Pro plan and inviting friends. |
+| Backup & data | ਬੈਕਅੱਪ ਅਤੇ ਡਾਟਾ | Backup and data | Settings group heading: iCloud backup and restore. |
+| Notifications | ਸੂਚਨਾਵਾਂ | Notifications | Settings group heading: the Sunday reminder. |
+| About & support | ਐਪ ਬਾਰੇ ਅਤੇ ਮਦਦ | About the app and help | Settings group heading: language, the tutorial, help and feedback. |
+| Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here. | ਆਟੋਮੈਟਿਕ ਟ੍ਰੈਕਿੰਗ ਤੁਹਾਡੇ iPhone ’ਤੇ ਚੱਲਦੀ ਹੈ। ਇੱਥੇ ਐਪ ਅਜ਼ਮਾਉਣ ਲਈ ਟ੍ਰਿਪ ਟੈਬ ਤੋਂ ਇੱਕ ਟ੍ਰਿਪ ਜੋੜੋ। | Automatic tracking runs on your iPhone. To try the app here, add a trip from the Trips tab. | Web preview only (no tracking there): the + moved from home to the Drives tab. Name the tab as its label is translated. |
+| Add a drive you missed | ਛੁੱਟਿਆ ਟ੍ਰਿਪ ਜੋੜੋ | Add a missed trip | Drives tab: dashed row under the list, opens Add missed trip. A backup for drives tracking missed. |
+| Varies by day | ਦਿਨ ਮੁਤਾਬਕ ਵੱਖਰੇ | Different by day | Settings → Work hours heading, on the right, when the days have different hours (otherwise e.g. "Mon–Fri 09:00–17:00", or Off). |
+| Free · {{used}} of {{limit}} | ਫ਼ਰੀ · {{limit}} ਵਿੱਚੋਂ {{used}} | Free · {{used}} out of {{limit}} | Settings → MileMint Pro heading, on the right: this month’s free work drives used, e.g. "Free · 3 of 40". Short. |

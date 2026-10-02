@@ -44,7 +44,8 @@ export default function RootLayout() {
               <ProProvider>
                 <ReferralProvider>
                   <Stack>
-                    <Stack.Screen name="index" options={{ title: 'MileMint' }} />
+                    {/* Home, Drives, Money and Settings; every other screen opens over them. */}
+                    <Stack.Screen name="(tabs)" options={{ title: 'MileMint', headerShown: false }} />
                     <Stack.Screen
                       name="welcome"
                       options={{ headerShown: false, gestureEnabled: false, animation: 'fade' }}
@@ -54,7 +55,6 @@ export default function RootLayout() {
                       name="setup-tracking"
                       options={{ title: t('Automatic tracking'), presentation: 'modal' }}
                     />
-                    <Stack.Screen name="settings" options={{ title: t('Settings') }} />
                     <Stack.Screen name="trip/[id]" options={{ title: t('Trip') }} />
                     <Stack.Screen name="report" options={{ title: t('Reports') }} />
                     <Stack.Screen name="region" options={{ title: t('Your country'), presentation: 'modal' }} />

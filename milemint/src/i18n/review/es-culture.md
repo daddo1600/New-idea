@@ -405,3 +405,29 @@ Parking and tolls on a drive: the “+ Parking or tolls” fields when adding a 
 | Parking and tolls are listed separately and not added to the per-km figure. Self-employed: business parking fees are deducted in full on T2125, not reduced to your business-use share. Ask your accountant whether your tolls can be claimed. | El estacionamiento y los peajes aparecen por separado y no se suman a la cifra por km. Por cuenta propia: el estacionamiento de trabajo se deduce completo en el T2125, sin reducirlo a tu proporción de uso de trabajo. Consulta a tu contador si puedes reclamar los peajes. | Parking and tolls appear separately and aren’t added to the per-km figure. Self-employed: work parking is deducted in full on the T2125, not reduced to your work-use share. Ask your accountant whether you can claim the tolls. | Canada report guidance (PDF stays English). |
 | Work parking and tolls aren’t covered by cents per km, so they’re claimed separately. Not parking at your regular workplace, or tolls on the way there. | Los cents per km no cubren el estacionamiento ni los peajes de trabajo, así que se reclaman aparte. Salvo el estacionamiento en tu lugar de trabajo habitual o los peajes para llegar ahí. | Cents per km doesn’t cover work parking or tolls, so they’re claimed separately. Except parking at your usual workplace or tolls to get there. | Australia note under the fields. |
 | Parking fees and tolls for work trips aren’t covered by the cents per km rate. Claim them separately: individuals as Work-related travel expenses (D2), sole traders with business expenses. Not parking at your regular workplace, or tolls between home and work. | Los cents per km no cubren el estacionamiento ni los peajes de viajes de trabajo. Reclámalos aparte: particulares, como Work-related travel expenses (D2); por cuenta propia (sole traders), con los gastos del negocio. Salvo el estacionamiento en tu lugar de trabajo habitual o los peajes entre casa y trabajo. | Cents per km doesn’t cover parking or tolls on work trips. Claim them separately: individuals as Work-related travel expenses (D2); self-employed (sole traders) with business expenses. Except parking at your usual workplace or tolls between home and work. | Australia report guidance (PDF stays English). |
+
+## Round 9: tabs
+
+The app now opens on four tabs (Home, Drives, Money, Settings) instead of one long home screen with a menu. The menu’s lines (Menu, Close menu, Free plan, ★ Pro · unlimited drives, Work hours, places and reminders) are gone. “Inicio” is what Spanish iPhone apps call the first tab; “Casa” stays for the place.
+
+| English | Translation | Back-translation | Note |
+|---|---|---|---|
+| Home (tab) | Inicio | Start | Tab bar label for the first tab. Key is "Home (tab)" so it isn’t the place “Home” (English shows “Home”). Short: under an icon. |
+| Drives | Viajes | Trips | Tab bar label: every drive, by month. Same word as the app’s “drives”. |
+| Money | Dinero | Money | Tab bar label: the tax year’s money back, month by month, Pro and the tax screens. One short word. |
+| Opens the Money tab | Abre la pestaña Dinero | Opens the Money tab | VoiceOver hint on home’s green card, which opens the Money tab. |
+| To sort | Por clasificar | To classify | Home: heading over the drives still to sort as business or personal. |
+| All drives sorted ✓ | Todos los viajes clasificados ✓ | All trips classified ✓ | Home, when nothing is left to sort; the row opens the Drives tab. |
+| See all drives › | Ver todos los viajes › | See all trips › | Home, next to the line above: opens the Drives tab. Keep the “›”. |
+| By month | Por mes | By month | Money tab: heading over this tax year’s months. |
+| Earlier tax years | Años fiscales anteriores | Previous tax years | Money tab: heading over the years before this one. |
+| Tracking | Seguimiento | Tracking | Settings group heading, small capitals: the tracking check, work hours and places. |
+| Driving & tax | Viajes e impuestos | Trips and taxes | Settings group heading: country, vehicles, how drives start, mileage pay, client privacy. |
+| Pro & friends | Pro y amigos | Pro and friends | Settings group heading: the Pro plan and inviting friends. |
+| Backup & data | Respaldo y datos | Backup and data | Settings group heading: iCloud backup and restore. |
+| Notifications | Notificaciones | Notifications | Settings group heading: the Sunday reminder. |
+| About & support | Información y ayuda | Information and help | Settings group heading: language, the tutorial, help and feedback. |
+| Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here. | El seguimiento automático funciona en tu iPhone. Agrega un viaje desde la pestaña Viajes para probar la app aquí. | Automatic tracking works on your iPhone. Add a trip from the Trips tab to try the app here. | Web preview only (no tracking there): the + moved from home to the Drives tab. Name the tab as its label is translated. |
+| Add a drive you missed | Agregar un viaje que faltó | Add a trip that was missing | Drives tab: dashed row under the list, opens Add missed trip. A backup for drives tracking missed. |
+| Varies by day | Varía según el día | Varies according to the day | Settings → Work hours heading, on the right, when the days have different hours (otherwise e.g. "Mon–Fri 09:00–17:00", or Off). |
+| Free · {{used}} of {{limit}} | Gratis · {{used}} de {{limit}} | Free · {{used}} of {{limit}} | Settings → MileMint Pro heading, on the right: this month’s free work drives used, e.g. "Free · 3 of 40". Short. |

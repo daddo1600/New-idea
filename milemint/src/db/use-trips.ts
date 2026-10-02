@@ -8,6 +8,16 @@ import type { Classification, Trip } from '@/domain/trip';
 import { listPlaces } from './places-repo';
 import { deleteTrip, listTrips, setClassification, updateTripDetails } from './trips-repo';
 
+/** Told after any screen reloads its trips, so counts elsewhere (the Home tab's badge) catch up. */
+const changeListeners = new Set<() => void>();
+/** Calls `listener` after each reload; returns the unsubscribe. */
+export function onTripsChanged(listener: () => void): () => void {
+  changeListeners.add(listener);
+  return () => {
+    changeListeners.delete(listener);
+  };
+}
+
 /**
  * Trips (and the named places they refer to) from the encrypted database,
  * reloaded whenever the screen regains focus.
@@ -21,6 +31,7 @@ export function useTrips() {
     const [nextTrips, nextPlaces] = await Promise.all([listTrips(db), listPlaces(db)]);
     setPlaces(nextPlaces);
     setTrips(nextTrips);
+    for (const listener of changeListeners) listener();
   }, [db]);
 
   useFocusEffect(
