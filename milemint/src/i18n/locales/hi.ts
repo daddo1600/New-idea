@@ -596,7 +596,6 @@ const dictionary: Dictionary = {
   "Use": "जोड़ें",
   "Use now": "अभी चुनें",
   "Use other vehicles for work too?": "काम के लिए और गाड़ियाँ भी हैं?",
-  "Use shifts": "शिफ्ट इस्तेमाल करें",
   "Vehicle": "गाड़ी",
   "Vehicle name": "गाड़ी का नाम",
   "Vehicle use (Schedule C, Part IV)": "गाड़ी का इस्तेमाल (Schedule C, Part IV)",

@@ -586,7 +586,6 @@ const dictionary: Dictionary = {
   "Use": "使用",
   "Use now": "现在使用",
   "Use other vehicles for work too?": "工作时还用其他车辆吗？",
-  "Use shifts": "使用班次",
   "Vehicle": "车辆",
   "Vehicle name": "车辆名称",
   "Vehicle use (Schedule C, Part IV)": "车辆使用（Schedule C, Part IV）",

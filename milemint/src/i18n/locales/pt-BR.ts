@@ -641,7 +641,6 @@ const dictionary: Dictionary = {
   "Use": "Usar",
   "Use now": "Usar",
   "Use other vehicles for work too?": "Também usa outros veículos no trabalho?",
-  "Use shifts": "Usar turnos",
   "Vehicle": "Veículo",
   "Vehicle name": "Nome do veículo",
   "Vehicle use (Schedule C, Part IV)": "Uso do veículo (Schedule C, Part IV)",

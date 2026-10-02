@@ -919,7 +919,7 @@ export default function WelcomeScreen() {
             (workStyle === 'hours'
               ? primary(t('Save my hours'), saveHours)
               : workStyle === 'shifts'
-                ? primary(t('Use shifts'), chooseShifts)
+                ? primary(t('Continue'), chooseShifts)
                 : workStyle === 'neither'
                   ? primary(t('Continue'), chooseNeither)
                   : primary(t('Choose one to continue'), () => {}, false))}

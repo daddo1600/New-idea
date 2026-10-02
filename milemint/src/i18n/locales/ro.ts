@@ -658,7 +658,6 @@ const dictionary: Dictionary = {
   "Use": "Folosește",
   "Use now": "Folosește",
   "Use other vehicles for work too?": "Folosești și alte vehicule pentru lucru?",
-  "Use shifts": "Folosește ture",
   "Vehicle": "Vehicul",
   "Vehicle name": "Numele vehiculului",
   "Vehicle use (Schedule C, Part IV)": "Folosirea vehiculului (Schedule C, Part IV)",

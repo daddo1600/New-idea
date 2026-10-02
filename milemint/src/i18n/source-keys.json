@@ -7083,12 +7083,6 @@
     ]
   },
   {
-    "key": "Use shifts",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
     "key": "Uses little battery",
     "files": [
       "app/setup-tracking.tsx"

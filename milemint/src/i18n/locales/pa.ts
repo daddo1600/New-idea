@@ -608,7 +608,6 @@ const dictionary: Dictionary = {
   "Use": "ਵਰਤੋ",
   "Use now": "ਹੁਣ ਵਰਤੋ",
   "Use other vehicles for work too?": "ਕੰਮ ਲਈ ਹੋਰ ਗੱਡੀਆਂ ਵੀ ਹਨ?",
-  "Use shifts": "ਸ਼ਿਫਟਾਂ ਵਰਤੋ",
   "Vehicle": "ਗੱਡੀ",
   "Vehicle name": "ਗੱਡੀ ਦਾ ਨਾਂ",
   "Vehicle use (Schedule C, Part IV)": "ਗੱਡੀ ਦੀ ਵਰਤੋਂ (Schedule C, Part IV)",
