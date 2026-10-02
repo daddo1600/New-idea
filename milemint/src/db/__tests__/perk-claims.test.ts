@@ -39,10 +39,14 @@ describeSqlite('migration 14: perk claims', () => {
     await insertPerkClaim(db as never, second);
     expect(await listPerkClaims(db as never)).toEqual([second, first]);
 
-    await markPerkRedeemed(db as never, first.code, new Date('2026-10-05T12:00:00Z'));
-    await markPerkRedeemed(db as never, first.code, new Date('2026-10-06T12:00:00Z'));
-    expect((await getPerkClaim(db as never, first.code))?.redeemedAt).toBe('2026-10-05T12:00:00.000Z');
+    await markPerkRedeemed(db as never, first.code, new Date('2026-10-05T09:12:00Z'));
+    await markPerkRedeemed(db as never, first.code, new Date('2026-10-05T09:20:00Z'));
+    expect((await getPerkClaim(db as never, first.code))?.redeemedAt).toBe('2026-10-05T09:12:00.000Z');
     expect(await getPerkClaim(db as never, 'MS-XXX-0000-00')).toBeNull();
+
+    // Past its 30 minutes, a code can't be used: it's back in the pool.
+    await markPerkRedeemed(db as never, second.code, new Date('2026-10-05T10:30:00Z'));
+    expect((await getPerkClaim(db as never, second.code))?.redeemedAt).toBeNull();
 
     // A code is unique: the same one can't be saved twice.
     await expect(insertPerkClaim(db as never, first)).rejects.toThrow();

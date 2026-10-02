@@ -38,10 +38,19 @@ export async function insertPerkClaim(db: SQLiteDatabase, claim: PerkClaim): Pro
   );
 }
 
-/** Marks a code used, once: a second call keeps the first time. */
+/**
+ * Marks a code used, once: a second call keeps the first time. A code that
+ * has run out can't be used (it's back in the pool).
+ */
 export async function markPerkRedeemed(db: SQLiteDatabase, code: string, at: Date): Promise<void> {
+  const iso = at.toISOString();
   await withWriteLock(() =>
-    db.runAsync('UPDATE perk_claims SET redeemed_at = ? WHERE code = ? AND redeemed_at IS NULL;', at.toISOString(), code),
+    db.runAsync(
+      'UPDATE perk_claims SET redeemed_at = ? WHERE code = ? AND redeemed_at IS NULL AND expires_at > ?;',
+      iso,
+      code,
+      iso,
+    ),
   );
 }
 

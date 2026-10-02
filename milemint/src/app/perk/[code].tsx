@@ -12,9 +12,9 @@ import { Colors, Fonts, MaxContentWidth, Spacing } from '@/constants/theme';
 import { getPerkClaim, markPerkRedeemed } from '@/db/perks-repo';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
-import { claimStatus, timeLeft, type PerkClaim } from '@/perks/claims';
+import { claimStatus, secondsLeft, type PerkClaim } from '@/perks/claims';
 import { perkRedeemUrl } from '@/perks/code';
-import { claimDate, claimTime } from '@/perks/format';
+import { claimDate, claimTime, countdown } from '@/perks/format';
 import { findOffer } from '@/perks/offers';
 import { useRegion } from '@/region/region';
 
@@ -42,9 +42,9 @@ export default function PerkCodeScreen() {
   useEffect(() => {
     getPerkClaim(db, code ?? '').then(setClaim, () => setClaim(null));
   }, [code, db]);
-  // The countdown, to the minute.
+  // The countdown, to the second.
   useEffect(() => {
-    const timer = setInterval(() => setNow(new Date()), 15_000);
+    const timer = setInterval(() => setNow(new Date()), 1_000);
     return () => clearInterval(timer);
   }, []);
 
@@ -59,7 +59,7 @@ export default function PerkCodeScreen() {
   }
 
   const status = claimStatus(claim, now);
-  const left = timeLeft(claim, now);
+  const left = secondsLeft(claim, now) ?? 0;
   const online = offer.kind === 'online';
 
   const copy = async () => {
@@ -117,11 +117,10 @@ export default function PerkCodeScreen() {
 
         {status === 'active' && (
           <ThemedView type="backgroundElement" style={styles.card}>
-            <ThemedText type="smallBold">
-              {left && left.days >= 1
-                ? // Counted up, so a code claimed for 7 days reads "7 days left", not 6.
-                  t('{{count}} days left', { count: left.days + (left.hours > 0 || left.minutes > 0 ? 1 : 0) })
-                : t('{{hours}} h {{minutes}} min left', { hours: left?.hours ?? 0, minutes: left?.minutes ?? 0 })}
+            <ThemedText
+              style={[styles.countdown, left < 5 * 60 && { color: theme.danger }]}
+              accessibilityRole="timer">
+              {t('Use within {{time}}', { time: countdown(left) })}
             </ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
               {t('Expires {{date}} at {{time}}. Works once.', {
@@ -150,10 +149,9 @@ export default function PerkCodeScreen() {
 
         {status === 'expired' && (
           <ThemedView type="backgroundElement" style={styles.card}>
+            <ThemedText type="smallBold">{t('Expired — back in the pool')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              {t('This code expired on {{date}}. You can claim a new one from Perks.', {
-                date: claimDate(claim.expiresAt, region),
-              })}
+              {t('Not used in time, so it doesn’t count. Claim again from Perks.')}
             </ThemedText>
           </ThemedView>
         )}
@@ -250,6 +248,7 @@ const styles = StyleSheet.create({
   },
   ticketHint: { fontSize: 15, lineHeight: 20, fontWeight: '600', color: Colors.light.textSecondary, textAlign: 'center' },
   card: { borderRadius: 16, padding: Spacing.three, gap: Spacing.one },
+  countdown: { fontSize: 22, lineHeight: 28, fontWeight: '800', fontVariant: ['tabular-nums'] },
   done: { borderWidth: 1.5 },
   button: { borderRadius: 12, paddingVertical: Spacing.three, alignItems: 'center' },
   outline: { borderWidth: 1.5 },
