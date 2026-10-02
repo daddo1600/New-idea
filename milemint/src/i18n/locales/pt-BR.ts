@@ -1551,6 +1551,7 @@ const dictionary: Dictionary = {
   "Expired — back in the pool": "Vencido — voltou para o lote",
   "Not used in time, so it doesn’t count. Claim again from Perks.": "Não foi usado a tempo, então não conta. Pegue de novo em Ofertas.",
   "Claim it when you’re ready to pay: the code lasts {{hours}} h.": "Pegue quando for pagar: o código vale por {{hours}} h.",
+  "Claim it when you’re ready to pay: the code lasts {{days}} days.": "Pegue quando for pagar: o código vale por {{days}} dias.",
   "Claim it when you’re at the till: the code lasts {{minutes}} min.": "Pegue quando estiver no caixa: o código vale por {{minutes}} min.",
   "Claimed · use by {{time}}": "Pego · use até {{time}}",
   "Claimed · use by {{date}}, {{time}}": "Pego · use até {{date}}, {{time}}",

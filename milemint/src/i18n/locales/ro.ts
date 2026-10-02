@@ -1553,6 +1553,7 @@ const dictionary: Dictionary = {
   "Expired — back in the pool": "Expirat — înapoi în rezervă",
   "Not used in time, so it doesn’t count. Claim again from Perks.": "Nu a fost folosit la timp, deci nu se pune. Ia din nou din Oferte.",
   "Claim it when you’re ready to pay: the code lasts {{hours}} h.": "Ia oferta când plătești: codul merge {{hours}} h.",
+  "Claim it when you’re ready to pay: the code lasts {{days}} days.": "Ia oferta când plătești. Valabilitate cod: {{days}} zile.",
   "Claim it when you’re at the till: the code lasts {{minutes}} min.": "Ia oferta când ești la casă: codul merge {{minutes}} min.",
   "Claimed · use by {{time}}": "Luat · folosește-l până la {{time}}",
   "Claimed · use by {{date}}, {{time}}": "Luat · folosește-l până pe {{date}}, {{time}}",

@@ -1415,6 +1415,7 @@ const dictionary: Dictionary = {
   "Expired — back in the pool": "已过期 — 名额已退回",
   "Not used in time, so it doesn’t count. Claim again from Perks.": "没有按时使用，所以不算数。可以在“优惠”里再领一次。",
   "Claim it when you’re ready to pay: the code lasts {{hours}} h.": "准备付款时再领取：优惠码有效 {{hours}} 小时。",
+  "Claim it when you’re ready to pay: the code lasts {{days}} days.": "准备付款时再领取：优惠码有效 {{days}} 天。",
   "Claim it when you’re at the till: the code lasts {{minutes}} min.": "到收银台再领取：优惠码有效 {{minutes}} 分钟。",
   "Claimed · use by {{time}}": "已领取 · 请在 {{time}} 前使用",
   "Claimed · use by {{date}}, {{time}}": "已领取 · 请在 {{date}} {{time}} 前使用",

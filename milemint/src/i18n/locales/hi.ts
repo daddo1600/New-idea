@@ -1446,6 +1446,7 @@ const dictionary: Dictionary = {
   "Expired — back in the pool": "समय ख़त्म — वापस पूल में",
   "Not used in time, so it doesn’t count. Claim again from Perks.": "समय पर इस्तेमाल नहीं हुआ, इसलिए यह गिना नहीं जाता। ऑफ़र टैब से फिर से लें।",
   "Claim it when you’re ready to pay: the code lasts {{hours}} h.": "पेमेंट करने से ठीक पहले लें: कोड {{hours}} घंटे चलता है।",
+  "Claim it when you’re ready to pay: the code lasts {{days}} days.": "पेमेंट करने से ठीक पहले लें: कोड {{days}} दिन चलता है।",
   "Claim it when you’re at the till: the code lasts {{minutes}} min.": "काउंटर पर पहुँचकर लें: कोड {{minutes}} मिनट चलता है।",
   "Claimed · use by {{time}}": "ले लिया · {{time}} तक इस्तेमाल करें",
   "Claimed · use by {{date}}, {{time}}": "ले लिया · {{date}}, {{time}} तक इस्तेमाल करें",

@@ -39,6 +39,24 @@ export async function insertPerkClaim(db: SQLiteDatabase, claim: PerkClaim): Pro
 }
 
 /**
+ * Puts back a claim from the Keychain copy (after the app was deleted and
+ * reinstalled): adds it if missing, or marks it used if the copy says so.
+ */
+export async function restorePerkClaim(db: SQLiteDatabase, claim: PerkClaim): Promise<void> {
+  await withWriteLock(() =>
+    db.runAsync(
+      `INSERT INTO perk_claims (code, offer_id, claimed_at, expires_at, redeemed_at) VALUES (?, ?, ?, ?, ?)
+       ON CONFLICT(code) DO UPDATE SET redeemed_at = COALESCE(perk_claims.redeemed_at, excluded.redeemed_at);`,
+      claim.code,
+      claim.offerId,
+      claim.claimedAt,
+      claim.expiresAt,
+      claim.redeemedAt,
+    ),
+  );
+}
+
+/**
  * Marks a code used, once: a second call keeps the first time. A code that
  * has run out can't be used (it's back in the pool).
  */

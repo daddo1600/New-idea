@@ -138,7 +138,7 @@ export const DEMO_OFFERS: readonly PerkOffer[] = [
     kind: 'online',
     weeklyCap: 60,
     claimedByOthers: 18,
-    useWithinMinutes: 24 * 60,
+    useWithinMinutes: 7 * 24 * 60, // online: 7 days
     perPerson: { count: 1, period: 'month' },
   },
   {
@@ -153,7 +153,7 @@ export const DEMO_OFFERS: readonly PerkOffer[] = [
     kind: 'online',
     weeklyCap: 20,
     claimedByOthers: 6,
-    useWithinMinutes: 24 * 60,
+    useWithinMinutes: 30 * 24 * 60, // online: 30 days
     perPerson: { count: 1, period: 'month' },
   },
 ];

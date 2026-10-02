@@ -15,8 +15,11 @@ import { useT } from '@/i18n/i18n';
 import { claimStatus, secondsLeft, type PerkClaim } from '@/perks/claims';
 import { perkRedeemUrl } from '@/perks/code';
 import { claimDate, claimTime, countdown } from '@/perks/format';
+import { syncPerkLedger } from '@/perks/ledger-store';
 import { findOffer } from '@/perks/offers';
 import { useRegion } from '@/region/region';
+
+const DAY_SECONDS = 24 * 60 * 60;
 
 /** Dark modules on white, in light and dark mode alike: what till scanners read best. */
 const QR_INK = '#000000';
@@ -74,6 +77,7 @@ export default function PerkCodeScreen() {
 
   const markUsed = async () => {
     await markPerkRedeemed(db, claim.code, new Date());
+    await syncPerkLedger(db).catch(() => {});
     setNow(new Date());
     setClaim(await getPerkClaim(db, claim.code));
   };
@@ -121,12 +125,17 @@ export default function PerkCodeScreen() {
 
         {status === 'active' && (
           <ThemedView type="backgroundElement" style={styles.card}>
+            {/* A ticking clock for the next day; an online code good for days just shows its date. */}
+            {left < DAY_SECONDS ? (
+              <ThemedText
+                style={[styles.countdown, left < 5 * 60 && { color: theme.danger }]}
+                accessibilityRole="timer">
+                {t('Use within {{time}}', { time: countdown(left) })}
+              </ThemedText>
+            ) : null}
             <ThemedText
-              style={[styles.countdown, left < 5 * 60 && { color: theme.danger }]}
-              accessibilityRole="timer">
-              {t('Use within {{time}}', { time: countdown(left) })}
-            </ThemedText>
-            <ThemedText type="small" themeColor="textSecondary">
+              type={left < DAY_SECONDS ? 'small' : 'smallBold'}
+              themeColor={left < DAY_SECONDS ? 'textSecondary' : undefined}>
               {t('Expires {{date}} at {{time}}. Works once.', {
                 date: claimDate(claim.expiresAt, region),
                 time: claimTime(claim.expiresAt, region),

@@ -1787,6 +1787,12 @@
     ]
   },
   {
+    "key": "Claim it when you’re ready to pay: the code lasts {{days}} days.",
+    "files": [
+      "components/perks/offer-card.tsx"
+    ]
+  },
+  {
     "key": "Claim it when you’re ready to pay: the code lasts {{hours}} h.",
     "files": [
       "components/perks/offer-card.tsx"

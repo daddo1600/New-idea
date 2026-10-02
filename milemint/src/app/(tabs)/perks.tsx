@@ -10,6 +10,7 @@ import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
 import { offerState } from '@/perks/claims';
+import { DEMO_MODE } from '@/dev/demo';
 import { DEMO_OFFERS, type PerkOffer } from '@/perks/offers';
 import { usePerkClaims } from '@/perks/use-perk-claims';
 import { useRegion } from '@/region/region';
@@ -111,7 +112,8 @@ export default function PerksTab() {
           {t('Perks come from the partners shown. They’re not from, or endorsed by, delivery or ride apps.')}
         </ThemedText>
 
-        {claims.length > 0 && (
+        {/* Demo and development only: in the real app, clearing claims would reset every partner's limit. */}
+        {(DEMO_MODE || __DEV__) && claims.length > 0 && (
           <Pressable accessibilityRole="button" hitSlop={8} onPress={() => reset()} style={styles.reset}>
             <ThemedText type="small" themeColor="textSecondary">
               {t('Clear demo claims')}

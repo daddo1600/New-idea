@@ -1513,6 +1513,7 @@ const dictionary: Dictionary = {
   "Expired — back in the pool": "Caducado — vuelve a la bolsa",
   "Not used in time, so it doesn’t count. Claim again from Perks.": "No se usó a tiempo, así que no cuenta. Consigue otro en Ofertas.",
   "Claim it when you’re ready to pay: the code lasts {{hours}} h.": "Consíguelo cuando vayas a pagar: el código dura {{hours}} h.",
+  "Claim it when you’re ready to pay: the code lasts {{days}} days.": "Consíguelo cuando vayas a pagar: el código dura {{days}} días.",
   "Claim it when you’re at the till: the code lasts {{minutes}} min.": "Consíguelo cuando estés en caja: el código dura {{minutes}} min.",
   "Claimed · use by {{time}}": "Conseguido · úsalo antes de las {{time}}",
   "Claimed · use by {{date}}, {{time}}": "Conseguido · úsalo antes del {{date}}, {{time}}",

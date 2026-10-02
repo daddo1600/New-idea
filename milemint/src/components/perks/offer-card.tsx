@@ -12,6 +12,8 @@ import { claimAction, type OfferState } from '@/perks/claims';
 import { claimDate, claimTime, dayName, daysUntil } from '@/perks/format';
 import type { PerkOffer } from '@/perks/offers';
 
+const DAY_MINUTES = 24 * 60;
+
 /**
  * One partner's offer: who, what, the small print and how many are left this
  * week, then Claim (with when to claim it: codes last minutes), the code
@@ -87,10 +89,14 @@ export function OfferCard({
             </ThemedText>
             <ThemedText type="small" style={styles.flex}>
               {offer.kind === 'online'
-                ? // Online codes last whole hours.
-                  t('Claim it when you’re ready to pay: the code lasts {{hours}} h.', {
-                    hours: Math.round(offer.useWithinMinutes / 60),
-                  })
+                ? // Online codes last whole days (7 to 30), or whole hours.
+                  offer.useWithinMinutes % DAY_MINUTES === 0
+                  ? t('Claim it when you’re ready to pay: the code lasts {{days}} days.', {
+                      days: offer.useWithinMinutes / DAY_MINUTES,
+                    })
+                  : t('Claim it when you’re ready to pay: the code lasts {{hours}} h.', {
+                      hours: Math.round(offer.useWithinMinutes / 60),
+                    })
                 : t('Claim it when you’re at the till: the code lasts {{minutes}} min.', {
                     minutes: offer.useWithinMinutes,
                   })}

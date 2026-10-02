@@ -128,7 +128,13 @@ describe('use window', () => {
     }
     expect(findOffer('kerbside-fuel')!.useWithinMinutes).toBe(30);
     expect(findOffer('daybreak-coffee')!.useWithinMinutes).toBe(30);
-    expect(findOffer('gripmount')!.useWithinMinutes).toBe(24 * 60);
+    // Online codes last 7 to 30 days, as partners' checkouts expect.
+    expect(findOffer('gripmount')!.useWithinMinutes).toBe(7 * 24 * 60);
+    expect(findOffer('ledgerlite-tax')!.useWithinMinutes).toBe(30 * 24 * 60);
+    for (const offer of DEMO_OFFERS.filter((o) => o.kind === 'online')) {
+      expect(offer.useWithinMinutes).toBeGreaterThanOrEqual(7 * 24 * 60);
+      expect(offer.useWithinMinutes).toBeLessThanOrEqual(30 * 24 * 60);
+    }
   });
 });
 

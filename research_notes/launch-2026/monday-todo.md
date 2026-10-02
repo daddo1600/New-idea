@@ -22,3 +22,7 @@
    - The "Paid plan" row reads oddly ("Free; Pro optional") until Pro has a price. Revisit once pricing is set.
    - Keep every fact sourced (`website-comparison-sources.md`) and the "Checked October 2026" note.
    - Run it through the Monday visitor simulations.
+7. **Perks redemption server.** The user is sorting it on Monday. It checks codes at the till or online, marks each one used once, enforces weekly caps and per-person limits, and bills partners per redemption.
+   - The app now keeps a Keychain copy of claims, so reinstalling doesn't reset limits. A new phone or an erased iPhone still starts afresh.
+   - For the server-side per-person limit without an account, consider Apple's DeviceCheck: two bits per device, kept by Apple and readable only by our server. Or use an anonymous install ID stored in the Keychain.
+   - `REDEEM_URL_BASE` in `milemint/src/perks/code.ts` points at the placeholder `https://milesprout.app/r/`.

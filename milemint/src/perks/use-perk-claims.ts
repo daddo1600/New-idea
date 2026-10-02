@@ -7,18 +7,23 @@ import { clearPerkClaims, insertPerkClaim, listPerkClaims } from '@/db/perks-rep
 
 import { newClaim, type PerkClaim } from './claims';
 import { generatePerkCode } from './code';
+import { clearPerkLedger, syncPerkLedger } from './ledger-store';
 import type { PerkOffer } from './offers';
 
 /**
  * The perks claimed on this phone, re-read whenever the Perks tab comes into
  * view (the code screen marks them used); claiming one, and the demo reset.
- * Everything happens on the phone: nothing is sent anywhere.
+ * Everything happens on the phone: nothing is sent anywhere. Claims are also
+ * copied to the Keychain, so reinstalling the app doesn't reset the limits.
  */
 export function usePerkClaims() {
   const db = useSQLiteContext();
   const [claims, setClaims] = useState<PerkClaim[] | null>(null);
 
-  const load = useCallback(async () => setClaims(await listPerkClaims(db)), [db]);
+  const load = useCallback(async () => {
+    await syncPerkLedger(db).catch(() => {});
+    setClaims(await listPerkClaims(db));
+  }, [db]);
 
   useFocusEffect(
     useCallback(() => {
@@ -40,6 +45,7 @@ export function usePerkClaims() {
 
   const reset = useCallback(async () => {
     await clearPerkClaims(db);
+    await clearPerkLedger();
     await load();
   }, [db, load]);
 
