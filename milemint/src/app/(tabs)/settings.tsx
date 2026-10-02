@@ -486,6 +486,8 @@ function ReminderSection() {
   const { region } = useRegion();
   const { isPro } = usePro();
   const setAsideOpen = useCanUse('tax-set-aside');
+  // UK employees don't see set-aside or quarterly figures, so not their reminders either.
+  const employee = useMileagePay().pay?.employee ?? false;
   const [on, setOn] = useState<Record<ReminderKey, boolean> | null>(null);
   const [note, setNote] = useState<string | null>(null);
 
@@ -537,20 +539,24 @@ function ReminderSection() {
           value={on?.weeklyReminder ?? null}
           onChange={change('weeklyReminder')}
         />
-        <ReminderRow
-          title={t('Tax set-aside')}
-          detail={t('Monday morning: how much to put aside from last week’s driving.')}
-          value={on?.setAsideReminder ?? null}
-          onChange={change('setAsideReminder')}
-          locked={!setAsideOpen}
-        />
-        <ReminderRow
-          title={t('Quarterly deadlines')}
-          detail={t('Two weeks before each quarterly deadline, with your figures ready.')}
-          value={on?.quarterlyReminder ?? null}
-          onChange={change('quarterlyReminder')}
-          locked={!isPro}
-        />
+        {!employee && (
+          <ReminderRow
+            title={t('Tax set-aside')}
+            detail={t('Monday morning: how much to put aside from last week’s driving.')}
+            value={on?.setAsideReminder ?? null}
+            onChange={change('setAsideReminder')}
+            locked={!setAsideOpen}
+          />
+        )}
+        {!employee && (
+          <ReminderRow
+            title={t('Quarterly deadlines')}
+            detail={t('Two weeks before each quarterly deadline, with your figures ready.')}
+            value={on?.quarterlyReminder ?? null}
+            onChange={change('quarterlyReminder')}
+            locked={!isPro}
+          />
+        )}
         {note && (
           <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
             {note}

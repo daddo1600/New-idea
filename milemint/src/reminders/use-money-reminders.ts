@@ -48,9 +48,11 @@ export function useMoneyReminders(region: Region) {
     if (!REMINDERS_SUPPORTED) return;
     (async () => {
       const settings = await loadSettings(db);
-      if (setAsideOpen && settings.setAsideReminder) await queueSetAsideReminder(db, region);
+      // UK employees claim relief through PAYE: no set-aside or quarterly updates, so no reminders.
+      const employee = settings.employment === 'employee' && marApplies(region);
+      if (!employee && setAsideOpen && settings.setAsideReminder) await queueSetAsideReminder(db, region);
       else await cancelSetAsideReminder();
-      if (isPro && settings.quarterlyReminder) await scheduleQuarterlyReminders(region);
+      if (!employee && isPro && settings.quarterlyReminder) await scheduleQuarterlyReminders(region);
       else await cancelQuarterlyReminders();
     })().catch(() => {});
   }, [db, region, language, isPro, setAsideOpen]);
