@@ -109,6 +109,8 @@ const en: Dictionary = {
   '{{count}} hours ago': { one: '{{count}} hour ago', other: '{{count}} hours ago' },
   '{{count}} days ago': { one: '{{count}} day ago', other: '{{count}} days ago' },
   '{{count}} drives': { one: '{{count}} drive', other: '{{count}} drives' },
+  // Trips, deliveries or orders as an app counted them (earnings by platform).
+  '{{count}} jobs': { one: '{{count}} job', other: '{{count}} jobs' },
   '{{purpose}} · {{count}} to sort': { one: '{{purpose}} · {{count}} to sort', other: '{{purpose}} · {{count}} to sort' },
   '{{count}} drives since then look like deliveries. They’ll be added to the shift as work.': {
     one: '{{count}} drive since then looks like a delivery. It’ll be added to the shift as work.',

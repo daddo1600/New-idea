@@ -196,6 +196,12 @@
     ]
   },
   {
+    "key": "{{count}} jobs",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
+    ]
+  },
+  {
     "key": "{{count}} minutes ago",
     "files": [
       "components/tracking-health-card.tsx"
@@ -440,6 +446,18 @@
     ]
   },
   {
+    "key": "{{label}}: {{date}}. Hide calendar",
+    "files": [
+      "app/scan-earnings.tsx"
+    ]
+  },
+  {
+    "key": "{{label}}: {{date}}. Show calendar",
+    "files": [
+      "app/scan-earnings.tsx"
+    ]
+  },
+  {
     "key": "{{label}}: earned",
     "files": [
       "app/milestones.tsx"
@@ -485,6 +503,18 @@
     "key": "{{perk}}: unlocked",
     "files": [
       "components/invite.tsx"
+    ]
+  },
+  {
+    "key": "{{platform}} counted {{counted}} km on jobs · MileSprout tracked {{tracked}} work km",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
+    ]
+  },
+  {
+    "key": "{{platform}} counted {{counted}} mi on jobs · MileSprout tracked {{tracked}} work mi",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
     ]
   },
   {
@@ -960,6 +990,18 @@
     "key": "Add this year’s costs to compare the two methods.",
     "files": [
       "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Add to that week’s earnings for your tax set-aside",
+    "files": [
+      "app/scan-earnings.tsx"
+    ]
+  },
+  {
+    "key": "Add up to 31 days at a time. For longer, add each week or month on its own.",
+    "files": [
+      "domain/earnings-scan.ts"
     ]
   },
   {
@@ -1455,6 +1497,7 @@
       "app/add-trip.tsx",
       "app/logbook.tsx",
       "app/trip/[id].tsx",
+      "components/money/platform-earnings-card.tsx",
       "components/trips/list-bars.tsx",
       "hooks/use-trip-list.ts"
     ]
@@ -1484,6 +1527,7 @@
     "files": [
       "app/(tabs)/settings.tsx",
       "app/add-trip.tsx",
+      "app/scan-earnings.tsx",
       "components/trips/purpose-line.tsx",
       "components/work-style-card.tsx"
     ]
@@ -1519,9 +1563,21 @@
     ]
   },
   {
+    "key": "Check your earnings",
+    "files": [
+      "app/_layout.tsx"
+    ]
+  },
+  {
     "key": "Checking iCloud…",
     "files": [
       "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Choose",
+    "files": [
+      "app/scan-earnings.tsx"
     ]
   },
   {
@@ -1541,6 +1597,18 @@
     "key": "Choose one to continue",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Choose the app these earnings are from.",
+    "files": [
+      "app/scan-earnings.tsx"
+    ]
+  },
+  {
+    "key": "Choose the first and last day.",
+    "files": [
+      "app/scan-earnings.tsx"
     ]
   },
   {
@@ -1670,7 +1738,7 @@
     ]
   },
   {
-    "key": "Coming to Pro: earnings by platform, and bringing in your log from another app.",
+    "key": "Coming to Pro: bringing in your log from another app.",
     "files": [
       "app/pro.tsx"
     ]
@@ -1753,6 +1821,12 @@
     ]
   },
   {
+    "key": "Couldn’t delete. Please try again.",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
+    ]
+  },
+  {
     "key": "Couldn’t find where you are right now. Type the address instead.",
     "files": [
       "components/place-field.tsx"
@@ -1777,6 +1851,12 @@
     ]
   },
   {
+    "key": "Couldn’t read that screenshot",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
+    ]
+  },
+  {
     "key": "Couldn’t restore. Nothing on this iPhone was changed.",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -1791,6 +1871,7 @@
   {
     "key": "Couldn’t save. Please try again.",
     "files": [
+      "app/scan-earnings.tsx",
       "components/money/earnings-sheet.tsx"
     ]
   },
@@ -1896,6 +1977,7 @@
       "app/(tabs)/settings.tsx",
       "app/logbook.tsx",
       "app/trip/[id].tsx",
+      "components/money/platform-earnings-card.tsx",
       "hooks/use-trip-list.ts"
     ]
   },
@@ -1909,6 +1991,12 @@
     "key": "Delete {{name}}",
     "files": [
       "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Delete these earnings?",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
     ]
   },
   {
@@ -1978,6 +2066,7 @@
       "app/add-trip.tsx",
       "app/friends.tsx",
       "app/pro.tsx",
+      "app/scan-earnings.tsx",
       "components/trips/list-bars.tsx"
     ]
   },
@@ -2148,12 +2237,21 @@
   {
     "key": "Earnings by platform",
     "files": [
+      "app/scan-earnings.tsx",
+      "components/money/platform-earnings-card.tsx",
       "referral/perks.ts"
+    ]
+  },
+  {
+    "key": "Earnings by platform, read from your screenshots",
+    "files": [
+      "app/pro.tsx"
     ]
   },
   {
     "key": "Earnings, in {{currency}}",
     "files": [
+      "app/scan-earnings.tsx",
       "components/money/earnings-sheet.tsx"
     ]
   },
@@ -2350,6 +2448,20 @@
     ]
   },
   {
+    "key": "Enter the distance as a number, or leave it empty.",
+    "files": [
+      "app/scan-earnings.tsx",
+      "domain/earnings-scan.ts"
+    ]
+  },
+  {
+    "key": "Enter the jobs as a whole number, or leave it empty.",
+    "files": [
+      "app/scan-earnings.tsx",
+      "domain/earnings-scan.ts"
+    ]
+  },
+  {
     "key": "Enter the kilometres driven, e.g. 12.5.",
     "files": [
       "app/add-trip.tsx"
@@ -2388,7 +2500,9 @@
   {
     "key": "Enter your earnings as an amount, e.g. 450 or 450.50.",
     "files": [
-      "components/money/earnings-sheet.tsx"
+      "app/scan-earnings.tsx",
+      "components/money/earnings-sheet.tsx",
+      "domain/earnings-scan.ts"
     ]
   },
   {
@@ -2666,7 +2780,8 @@
   {
     "key": "First day",
     "files": [
-      "app/logbook.tsx"
+      "app/logbook.tsx",
+      "app/scan-earnings.tsx"
     ]
   },
   {
@@ -2885,6 +3000,7 @@
     "key": "Go Pro",
     "files": [
       "app/(tabs)/money.tsx",
+      "app/scan-earnings.tsx",
       "components/money/set-aside-card.tsx"
     ]
   },
@@ -3262,6 +3378,18 @@
     ]
   },
   {
+    "key": "Jobs (optional)",
+    "files": [
+      "app/scan-earnings.tsx"
+    ]
+  },
+  {
+    "key": "Jobs: trips, deliveries or orders",
+    "files": [
+      "app/scan-earnings.tsx"
+    ]
+  },
+  {
     "key": "Just drive. Each trip appears after you park.",
     "files": [
       "app/welcome.tsx"
@@ -3338,13 +3466,20 @@
   {
     "key": "Kilometres your delivery app counted",
     "files": [
-      "app/compare.tsx"
+      "app/compare.tsx",
+      "app/scan-earnings.tsx"
     ]
   },
   {
     "key": "km",
     "files": [
       "components/country-options.tsx"
+    ]
+  },
+  {
+    "key": "Km on jobs (optional)",
+    "files": [
+      "app/scan-earnings.tsx"
     ]
   },
   {
@@ -3371,6 +3506,12 @@
     "key": "Last chance: make sure every work drive is in MileSprout before {{date}}.",
     "files": [
       "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Last day",
+    "files": [
+      "app/scan-earnings.tsx"
     ]
   },
   {
@@ -3412,6 +3553,7 @@
   {
     "key": "Last week",
     "files": [
+      "app/scan-earnings.tsx",
       "components/money/earnings-sheet.tsx"
     ]
   },
@@ -3626,6 +3768,12 @@
     ]
   },
   {
+    "key": "Miles on jobs (optional)",
+    "files": [
+      "app/scan-earnings.tsx"
+    ]
+  },
+  {
     "key": "miles your delivery app counted",
     "files": [
       "app/compare.tsx"
@@ -3634,7 +3782,8 @@
   {
     "key": "Miles your delivery app counted",
     "files": [
-      "app/compare.tsx"
+      "app/compare.tsx",
+      "app/scan-earnings.tsx"
     ]
   },
   {
@@ -3731,6 +3880,18 @@
     "key": "MileSprout sorts your drives to match. You can always swipe to change a trip.",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "MileSprout tracked {{tracked}} work km",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
+    ]
+  },
+  {
+    "key": "MileSprout tracked {{tracked}} work mi",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
     ]
   },
   {
@@ -3981,6 +4142,12 @@
       "app/(tabs)/drives.tsx",
       "app/(tabs)/index.tsx",
       "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "No earnings could be read from that screenshot. Fill them in below.",
+    "files": [
+      "app/scan-earnings.tsx"
     ]
   },
   {
@@ -4341,6 +4508,12 @@
     ]
   },
   {
+    "key": "Opens a choice to delete these earnings",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
+    ]
+  },
+  {
     "key": "Opens a list of purposes",
     "files": [
       "components/purpose-picker.tsx",
@@ -4397,6 +4570,18 @@
     ]
   },
   {
+    "key": "Or type them in ›",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
+    ]
+  },
+  {
+    "key": "Or unlock it free by inviting friends ›",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
+    ]
+  },
+  {
     "key": "Ordinary commuting between home and your permanent workplace is not business mileage.",
     "files": [
       "domain/regions.ts"
@@ -4413,6 +4598,12 @@
     "key": "Other (lease, tyres, roadside assistance)",
     "files": [
       "domain/logbook.ts"
+    ]
+  },
+  {
+    "key": "Other app",
+    "files": [
+      "domain/earnings-scan.ts"
     ]
   },
   {
@@ -4814,6 +5005,19 @@
     ]
   },
   {
+    "key": "Read from your screenshot on this iPhone. Check each figure, and fill in anything left empty.",
+    "files": [
+      "app/scan-earnings.tsx"
+    ]
+  },
+  {
+    "key": "Read on your iPhone. The screenshot isn’t kept or uploaded.",
+    "files": [
+      "app/scan-earnings.tsx",
+      "components/money/platform-earnings-card.tsx"
+    ]
+  },
+  {
     "key": "Ready for your first drive",
     "files": [
       "app/(tabs)/index.tsx"
@@ -5023,6 +5227,7 @@
     "key": "Save",
     "files": [
       "app/region.tsx",
+      "app/scan-earnings.tsx",
       "app/trip/[id].tsx",
       "components/money/earnings-sheet.tsx"
     ]
@@ -5130,6 +5335,30 @@
       "app/(tabs)/settings.tsx",
       "app/add-trip.tsx",
       "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Scan a screenshot of an app’s earnings page to see what each app pays you, next to the distance you drove for it.",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
+    ]
+  },
+  {
+    "key": "Scan earnings screenshot",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
+    ]
+  },
+  {
+    "key": "Scan your earnings screenshots from each app. See what each one pays you, and the driving they don’t count: to pickups and between jobs.",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
+    ]
+  },
+  {
+    "key": "Screenshots can only be read in the iPhone app",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
     ]
   },
   {
@@ -5944,7 +6173,7 @@
     ]
   },
   {
-    "key": "Tax set-aside is ready now, in the Money tab. Earnings by platform is on its way: earn it now and it unlocks as soon as it arrives.",
+    "key": "Tax set-aside and earnings by platform are both ready now, in the Money tab.",
     "files": [
       "app/friends.tsx"
     ]
@@ -6016,6 +6245,12 @@
     ]
   },
   {
+    "key": "The app",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
+    ]
+  },
+  {
     "key": "The App Store couldn’t start the purchase. Please try again.",
     "files": [
       "purchases/pro.tsx"
@@ -6083,6 +6318,12 @@
     ]
   },
   {
+    "key": "The last day is before the first day.",
+    "files": [
+      "domain/earnings-scan.ts"
+    ]
+  },
+  {
     "key": "The logbook method",
     "files": [
       "app/(tabs)/money.tsx",
@@ -6130,6 +6371,30 @@
     "key": "These 12 weeks run into the next income year. MileSprout counts the logbook as kept in the year it started; check with your tax agent if unsure.",
     "files": [
       "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "These dates are in the future. Check the days.",
+    "files": [
+      "domain/earnings-scan.ts"
+    ]
+  },
+  {
+    "key": "These days run over more than one week, so they aren’t added to your tax set-aside. Add each week there instead.",
+    "files": [
+      "app/scan-earnings.tsx"
+    ]
+  },
+  {
+    "key": "These earnings are already saved.",
+    "files": [
+      "domain/earnings-scan.ts"
+    ]
+  },
+  {
+    "key": "They also come off that week’s earnings in your tax set-aside.",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
     ]
   },
   {
@@ -6202,6 +6467,7 @@
   {
     "key": "This week",
     "files": [
+      "app/scan-earnings.tsx",
       "components/money/earnings-sheet.tsx",
       "components/money/set-aside-card.tsx",
       "domain/missed-miles.ts"
@@ -6254,6 +6520,7 @@
     "key": "Today",
     "files": [
       "app/add-trip.tsx",
+      "app/scan-earnings.tsx",
       "components/tax-countdown.tsx"
     ]
   },
@@ -6262,6 +6529,12 @@
     "files": [
       "app/report.tsx",
       "components/cost-fields.tsx"
+    ]
+  },
+  {
+    "key": "Total earnings",
+    "files": [
+      "app/scan-earnings.tsx"
     ]
   },
   {
@@ -6446,6 +6719,12 @@
     "key": "Two weeks before each quarterly deadline, with your figures ready.",
     "files": [
       "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Type them in",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
     ]
   },
   {
@@ -6771,6 +7050,12 @@
     ]
   },
   {
+    "key": "Which app?",
+    "files": [
+      "app/scan-earnings.tsx"
+    ]
+  },
+  {
     "key": "Which vehicle today?",
     "files": [
       "app/(tabs)/index.tsx"
@@ -6931,6 +7216,12 @@
     "key": "You can claim up to 5,000 business kilometres per car each income year. This report assumes one car.",
     "files": [
       "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "You can type the figures in instead.",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
     ]
   },
   {

@@ -49,6 +49,7 @@ const COMPARISON: readonly [feature: string, free: boolean, pro: boolean][] = [
   [msg('Send your report to your accountant'), false, true],
   [QUARTERLY_ROW, false, true],
   [msg('Tax set-aside: what to put aside each week'), false, true],
+  [msg('Earnings by platform, read from your screenshots'), false, true],
   [msg('Encrypted on your iPhone, no ads'), true, true],
 ];
 
@@ -222,7 +223,7 @@ export default function ProScreen() {
         <Comparison />
 
         <ThemedText type="small" themeColor="textSecondary">
-          {t('Coming to Pro: earnings by platform, and bringing in your log from another app.')}
+          {t('Coming to Pro: bringing in your log from another app.')}
         </ThemedText>
         <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/friends' as Href)}>
           <ThemedText type="small" style={{ color: theme.accent }}>

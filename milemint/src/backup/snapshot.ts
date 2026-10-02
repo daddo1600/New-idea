@@ -23,6 +23,8 @@ export const BACKUP_TABLES = [
   'settings',
   // Tax set-aside: each week's earnings (schema 12).
   'weekly_earnings',
+  // Earnings by platform, from screenshots or typed in (schema 13).
+  'platform_earnings',
   'vehicles',
   'places',
   'shifts',
@@ -165,6 +167,11 @@ const isCell = (value: unknown): value is Cell =>
 const NUMERIC: Partial<Record<BackupTable, Record<string, { nullable: boolean; min?: number }>>> = {
   settings: { id: { nullable: false } },
   weekly_earnings: { amount_minor: { nullable: false, min: 0 } },
+  platform_earnings: {
+    amount_minor: { nullable: false, min: 0 },
+    trip_count: { nullable: true, min: 0 },
+    distance_meters: { nullable: true, min: 0 },
+  },
   vehicles: { archived: { nullable: false } },
   places: { latitude: { nullable: false }, longitude: { nullable: false }, radius_m: { nullable: false, min: 0 } },
   trips: {
@@ -228,6 +235,7 @@ const UPGRADES: Partial<Record<number, (tables: Tables) => Tables>> = {
   // 11: trips.parking_minor and trips.tolls_minor (NOT NULL DEFAULT 0). Written as 0 on
   // every older trip rather than left out, so a restore never inserts null into them.
   // 12: weekly_earnings (a new table: missing in older backups, so restored empty).
+  // 13: platform_earnings (likewise).
   11: (tables) => ({
     ...tables,
     trips: tables.trips.map((trip) => ({ parking_minor: 0, tolls_minor: 0, ...trip })),
@@ -345,6 +353,17 @@ export function consistentTables(tables: Tables): Tables {
         typeof week.week_start === 'string' &&
         typeof week.amount_minor === 'number' &&
         typeof week.updated_at === 'string',
+    ),
+    // An app's earnings needs its id, app, days and amount, for the same reason.
+    platform_earnings: tables.platform_earnings.filter(
+      (entry) =>
+        typeof entry.id === 'string' &&
+        typeof entry.platform === 'string' &&
+        typeof entry.period_start === 'string' &&
+        typeof entry.period_end === 'string' &&
+        entry.period_end >= entry.period_start &&
+        typeof entry.amount_minor === 'number' &&
+        typeof entry.created_at === 'string',
     ),
   };
 }

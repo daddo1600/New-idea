@@ -86,6 +86,10 @@ export default function RootLayout() {
                     <Stack.Screen name="region" options={{ title: t('Your country'), presentation: 'modal' }} />
                     <Stack.Screen name="pro" options={{ title: 'MileSprout Pro', presentation: 'modal' }} />
                     <Stack.Screen name="compare" options={{ title: t('Missed miles check'), presentation: 'modal' }} />
+                    <Stack.Screen
+                      name="scan-earnings"
+                      options={{ title: t('Check your earnings'), presentation: 'modal' }}
+                    />
                     <Stack.Screen name="milestones" options={{ title: t('Milestones') }} />
                     <Stack.Screen name="tax-dates" options={{ title: t('Tax dates') }} />
                     <Stack.Screen name="claim-relief" options={{ title: t('Claim mileage relief') }} />

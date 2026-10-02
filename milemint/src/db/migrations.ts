@@ -193,6 +193,26 @@ const MIGRATIONS: readonly string[] = [
     updated_at TEXT NOT NULL
   );
   `,
+  `
+  -- Earnings by platform: one app's earnings (Uber, Deliveroo…) for a day or
+  -- a few days, read from a screenshot of its earnings page or typed in, in
+  -- minor units. trip_count and distance_meters are what the app itself
+  -- counted, for comparing with the drives logged; null where it didn't say.
+  -- added_to_week is the Monday of the weekly_earnings row this amount was
+  -- added to (so deleting the entry takes it back off), or null.
+  CREATE TABLE platform_earnings (
+    id TEXT PRIMARY KEY NOT NULL,
+    platform TEXT NOT NULL,
+    period_start TEXT NOT NULL,
+    period_end TEXT NOT NULL CHECK (period_end >= period_start),
+    amount_minor INTEGER NOT NULL CHECK (amount_minor >= 0),
+    trip_count INTEGER CHECK (trip_count IS NULL OR trip_count >= 0),
+    distance_meters INTEGER CHECK (distance_meters IS NULL OR distance_meters >= 0),
+    added_to_week TEXT,
+    created_at TEXT NOT NULL
+  );
+  CREATE INDEX platform_earnings_period ON platform_earnings (period_start);
+  `,
 ];
 
 /** The schema this build creates: stored in PRAGMA user_version, and in iCloud backups. */
