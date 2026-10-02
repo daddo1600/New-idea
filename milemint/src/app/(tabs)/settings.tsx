@@ -20,6 +20,7 @@ import { backedUpText, formatBackupDate, PROBLEM_TEXT } from '@/backup/copy';
 import { backupAge } from '@/backup/schedule';
 import { tripCount, type Snapshot } from '@/backup/snapshot';
 import { GoldButton } from '@/components/gold-button';
+import { FoundingBadge, InviteHero, SproutGarden } from '@/components/invite';
 import { clockTime, weekdayName } from '@/components/home-empty';
 import { LinkRow } from '@/components/link-row';
 import { ReplayTutorialSection } from '@/components/practice-tutorial';
@@ -40,7 +41,6 @@ import { listTrips } from '@/db/trips-repo';
 import { frequentPurposes } from '@/domain/suggestions';
 import type { Appearance } from '@/domain/appearance';
 import { isValidShift, type WorkShift } from '@/domain/classify-rules';
-import { autoDrivesInMonth, REFERRAL_BONUS_DRIVES } from '@/domain/plan';
 import { marApplies, parsePence, TAX_BAND_RATES, type TaxBand } from '@/domain/mar';
 import { formatRate, ratePeriodFor, vehicleRule } from '@/domain/regions';
 import { toLocalIsoDate, VEHICLE_ICONS, VEHICLE_LABELS, type VehicleType } from '@/domain/trip';
@@ -944,7 +944,7 @@ function DrivingSection() {
             <ThemedText type="smallBold">{t('Shift mode')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
               {t(
-                'For delivery and courier work (Uber Eats, Deliveroo, Amazon Flex, Evri, DPD and the like): a Start shift button on the home screen. Every drive in a shift is business, and a whole shift counts as one drive on the free plan.',
+                'For delivery and courier work (Uber Eats, Deliveroo, Amazon Flex, Evri, DPD and the like): a Start shift button on the home screen. Every drive in a shift is business.',
               )}
             </ThemedText>
           </View>
@@ -1354,36 +1354,23 @@ function ProSection() {
   const theme = useTheme();
   const t = useT();
   const { isPro, storeAvailable, busy, restore, manage } = usePro();
-  const { allowance } = useReferral();
-  const db = useSQLiteContext();
-  /** This month's work drives on the free plan, for "Free · 3 of 40". */
-  const [used, setUsed] = useState<number | null>(null);
-  useFocusEffect(
-    useCallback(() => {
-      const month = toLocalIsoDate(new Date()).slice(0, 7);
-      listTrips(db).then((trips) => setUsed(Math.min(autoDrivesInMonth(trips, month), allowance)), () => {});
-    }, [db, allowance]),
-  );
   const onRestore = async () => {
     const found = await restore();
     Alert.alert(
       found ? t('MileSprout Pro restored') : t('No subscription found'),
-      found ? t('Every drive is unlocked.') : t('This Apple Account doesn’t have MileSprout Pro.'),
+      found ? t('Your reports and exports are unlocked.') : t('This Apple Account doesn’t have MileSprout Pro.'),
     );
   };
   return (
     <>
-      <SectionTitle
-        title="MileSprout Pro"
-        value={isPro ? 'Pro' : used === null ? null : t('Free · {{used}} of {{limit}}', { used, limit: allowance })}
-      />
+      <SectionTitle title="MileSprout Pro" value={isPro ? 'Pro' : t('Free')} />
       <ThemedView type="backgroundElement" style={styles.card}>
         <ThemedText type="small" themeColor="textSecondary">
           {isPro
-            ? t('Pro is active: unlimited automatic drives.')
-            : t('Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.', {
-                count: allowance,
-              })}
+            ? t('Pro is active: the itemised report, the PDF and every export.')
+            : t(
+                'Free: every drive tracked, with no monthly limit, plus your totals and year-end summary. Pro adds the itemised report, the PDF and every export.',
+              )}
         </ThemedText>
         {isPro ? (
           storeAvailable && (
@@ -1408,59 +1395,45 @@ function ProSection() {
   );
 }
 
-/** Settings → Invite friends: send a single-use invite, and (for 30 days after install) a friend's code to enter. */
+/**
+ * Settings → Invite friends: the gift and the perks on the brand green with a
+ * big gold button, the sprout garden, and (for 30 days after install) a box
+ * for a friend's code. The Founding driver badge shows here once earned.
+ */
 function InviteSection() {
   const theme = useTheme();
   const t = useT();
-  const { loaded, invitesSent, redeemedCode, redeemStatus, friendsJoined, counting, shareInvite, sharing } =
-    useReferral();
-  const canShare = loaded && !sharing;
+  const { invitesSent, redeemedCode, redeemStatus, perks } = useReferral();
   return (
     <>
-      <ThemedText type="smallBold">{t('Invite friends')}</ThemedText>
-      <ThemedView type="backgroundElement" style={styles.card}>
-        <View style={styles.rowBetween}>
-          <View style={styles.flex}>
-            <ThemedText type="small">{t('Invites sent: {{count}}', { count: invitesSent })}</ThemedText>
-            <ThemedText type="small" themeColor="textSecondary">
-              {t('Every invite has its own code, for one friend.')}
-            </ThemedText>
-          </View>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityState={{ disabled: !canShare }}
-            disabled={!canShare}
-            onPress={() => shareInvite().catch(() => {})}
-            style={[styles.smallButton, { backgroundColor: theme.accent, opacity: canShare ? 1 : 0.5 }]}>
-            <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-              {t('Share')}
-            </ThemedText>
-          </Pressable>
-        </View>
-        <ThemedText type="small" themeColor="textSecondary">
-          {counting
-            ? t('Friends joined: {{count}} · +{{drives}} free drives a month', {
-                count: friendsJoined,
-                drives: friendsJoined * REFERRAL_BONUS_DRIVES,
-              })
-            : t('You both get +10 free drives a month when a friend joins.')}
+      <View style={styles.rowBetween}>
+        <ThemedText type="smallBold" accessibilityRole="header">
+          {t('Invite friends')}
         </ThemedText>
+        {perks.includes('founding-badge') && <FoundingBadge />}
+      </View>
+      <InviteHero compact />
+      <SproutGarden />
+      <ThemedView type="backgroundElement" style={styles.card}>
         {redeemedCode ? (
           <ThemedText type="small" themeColor="textSecondary">
             {redeemStatus === 'granted'
-              ? t('You joined with {{code}}: 10 extra free drives a month.', { code: redeemedCode })
-              : t('You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed.', {
-                  code: redeemedCode,
-                })}
+              ? t('You joined with {{code}}.', { code: redeemedCode })
+              : t('You entered {{code}}. It’s confirmed once iCloud can check it.', { code: redeemedCode })}
           </ThemedText>
         ) : (
           <RedeemCode />
         )}
-        <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/friends' as Href)}>
-          <ThemedText type="small" style={{ color: theme.accent }}>
-            {t('How it works')}
+        <View style={styles.rowBetween}>
+          <ThemedText type="small" themeColor="textSecondary">
+            {t('Invites sent: {{count}}', { count: invitesSent })}
           </ThemedText>
-        </Pressable>
+          <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/friends' as Href)}>
+            <ThemedText type="small" style={{ color: theme.accent }}>
+              {t('How it works ›')}
+            </ThemedText>
+          </Pressable>
+        </View>
       </ThemedView>
     </>
   );

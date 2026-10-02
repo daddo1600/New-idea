@@ -76,3 +76,22 @@ export async function rememberTotal(total: number, meters: number): Promise<void
 export function markTotalSeen(totals: LaunchTotals): void {
   write(TOTALS_KEY, JSON.stringify({ ...totals, seen: totals.total }));
 }
+
+/**
+ * Gold leaves in the opening: earned with the "Earnings by platform" invite
+ * perk (domain/plan). Kept here because the opening plays before the database
+ * opens.
+ */
+const GOLD_KEY = 'milemint.gold-leaves';
+
+export async function recallGoldLeaves(): Promise<boolean> {
+  try {
+    return (await read(GOLD_KEY)) === '1';
+  } catch {
+    return false;
+  }
+}
+
+export function rememberGoldLeaves(gold: boolean): void {
+  write(GOLD_KEY, gold ? '1' : '0');
+}

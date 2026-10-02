@@ -11,14 +11,11 @@ import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { loadSettings } from '@/db/settings-repo';
 import { listTrips } from '@/db/trips-repo';
 import { HABITS, type HabitId, MILESTONES, type Milestone, nextMilestone, reachedMilestones } from '@/domain/milestones';
-import { lockedTripIds } from '@/domain/plan';
 import { computeDeductions, formatDistance, formatMoney, fromUnits } from '@/domain/regions';
 import type { Trip } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
 import { milestoneProgress } from '@/milestones/use-milestones';
-import { usePro } from '@/purchases/pro';
-import { useAllowance } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 
 /** Badges for money back, distance logged and good habits, with progress to the next one. */
@@ -27,8 +24,6 @@ export default function MilestonesScreen() {
   const theme = useTheme();
   const t = useT();
   const { region } = useRegion();
-  const { isPro } = usePro();
-  const allowance = useAllowance();
   const [trips, setTrips] = useState<Trip[]>([]);
   const [exported, setExported] = useState(false);
 
@@ -39,13 +34,9 @@ export default function MilestonesScreen() {
     }, [db]),
   );
 
-  const visible = useMemo(() => {
-    const locked = lockedTripIds(trips, isPro, allowance);
-    return trips.filter((trip) => !locked.has(trip.id));
-  }, [trips, isPro, allowance]);
   const progress = useMemo(
-    () => milestoneProgress(visible, computeDeductions(visible, region), region, exported),
-    [visible, region, exported],
+    () => milestoneProgress(trips, computeDeductions(trips, region), region, exported),
+    [trips, region, exported],
   );
   const earned = useMemo(() => new Set(reachedMilestones(progress).map((m) => m.id)), [progress]);
   const nextMoney = nextMilestone('money', progress.moneyMinor);

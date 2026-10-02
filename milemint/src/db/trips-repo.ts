@@ -80,16 +80,13 @@ type AutoFields =
 export type NewTrip = Omit<Trip, 'id' | 'createdAt' | AutoFields> & Partial<Pick<Trip, AutoFields>>;
 
 export async function listTrips(db: SQLiteDatabase): Promise<Trip[]> {
-  const [rows, rejoined, filled] = await Promise.all([
+  const [rows, filled] = await Promise.all([
     db.getAllAsync<TripRow>('SELECT * FROM trips ORDER BY local_date DESC, started_at DESC;'),
-    listRejoinedAt(db),
     listFilledPurposeIds(db),
   ]);
   return rows.map((row) => {
     const trip = fromRow(row);
-    const at = rejoined.get(trip.id);
-    const withRejoined = at ? { ...trip, rejoinedAt: at } : trip;
-    return filled.has(trip.id) && trip.purpose ? { ...withRejoined, purposeFilled: true } : withRejoined;
+    return filled.has(trip.id) && trip.purpose ? { ...trip, purposeFilled: true } : trip;
   });
 }
 
@@ -113,19 +110,6 @@ async function listFilledPurposeIds(db: SQLiteDatabase): Promise<Set<string>> {
       WHERE e.action = 'auto';`,
   );
   return new Set(rows.map((row) => row.trip_id));
-}
-
-/**
- * When each trip was last sorted back from personal by the user, from the
- * edit log: the free plan queues such a drive from then (domain/plan).
- */
-async function listRejoinedAt(db: SQLiteDatabase): Promise<Map<string, string>> {
-  const rows = await db.getAllAsync<{ trip_id: string; at: string }>(
-    `SELECT trip_id, MAX(at) AS at FROM trip_edits
-      WHERE action = 'update' AND field = 'classification' AND old_value = 'personal'
-      GROUP BY trip_id;`,
-  );
-  return new Map(rows.map((row) => [row.trip_id, row.at]));
 }
 
 /** Trips changed after they were recorded, for the "Edited later" column of reports. */

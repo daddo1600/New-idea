@@ -30,6 +30,8 @@ import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/tri
  *   ?demo=empty  home just after setup, with no drives yet
  *   &courier     (with tutorial or empty) a shift worker; &hours: set work hours
  *   &region=GB   preview another country's currency, units and rules
+ *   &friends=2   friends joined with this user's invites (the perk ladder)
+ *   &offer=CODE  as if the friend's 50% off offer code were set; &gift: joined with a friend's code
  */
 const demoParam =
   __DEV__ && Platform.OS === 'web' && typeof window !== 'undefined'
@@ -135,8 +137,23 @@ function validDate(text: string | null): string | null {
   return date.getUTCMonth() === m - 1 && date.getUTCDate() === d ? text : null;
 }
 
-/** Demo users are Pro (every drive visible) unless showing the free plan. */
+/** Demo users are Pro unless showing the free plan. */
 export const DEMO_PRO = DEMO_MODE && demoParam !== 'free';
+
+const demoValue = (name: string) =>
+  demoParam !== null && typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get(name) : null;
+
+/** `&friends=2`: friends who joined with this user's invites, to preview the perk ladder; null to use the saved count. */
+export const DEMO_FRIENDS = (() => {
+  const value = Number(demoValue('friends'));
+  return demoValue('friends') !== null && Number.isInteger(value) && value >= 0 ? value : null;
+})();
+
+/** `&offer=CODE`: preview the friend's 50% off as if FRIEND_OFFER_CODE were set. */
+export const DEMO_OFFER_CODE = demoValue('offer') ?? '';
+
+/** `&gift`: this user joined with a friend's code today, so the Pro screen offers the friend's gift (with `&offer`). */
+export const DEMO_GIFT = demoFlag('gift');
 
 type DemoTrip = [
   daysAgo: number,

@@ -57,7 +57,7 @@ export type ReportRow = {
   parts: DeductionPart[];
   /** Minor units (cents, pence). */
   deduction: number;
-  /** Parking and tolls entered on the drive, minor units; 0 for a locked drive (its value waits for Pro). */
+  /** Parking and tolls entered on the drive, minor units. */
   parking: number;
   tolls: number;
   /** Changed after it was recorded (the edit history keeps the originals). */
@@ -66,11 +66,6 @@ export type ReportRow = {
   vehicle: string;
   /** Logged in a vehicle other than the user's only car: worth showing in the trip log. */
   showVehicle: boolean;
-  /**
-   * Past the free plan's monthly allowance: listed in the trip log, but with
-   * no value and left out of every total until Pro (domain/plan).
-   */
-  locked: boolean;
 };
 
 export type RateTotal = { label: string; distance: number; deduction: number };
@@ -104,8 +99,6 @@ export type MileageReport = {
   unclassifiedCount: number;
   /** Business drives (with a value) that have no purpose, which tax offices expect on every one. */
   missingPurposeCount: number;
-  /** Drives in the log whose value waits for Pro; not in any total. */
-  lockedCount: number;
   /** The mileage figure: business distance at the official rates. */
   deduction: number;
   /** Parking and tolls on business drives with a value, minor units. */
@@ -144,8 +137,6 @@ export function buildReport(
     vehicles?: readonly Vehicle[];
     /** Australia: logbooks to summarise (see `logbooksForReport`) with each car's expenses for the year. */
     logbooks?: readonly { summary: LogbookSummary; expenses: CarExpenses | null }[];
-    /** Free plan: drives past the monthly allowance (lockedTripIds), logged without a value. */
-    locked?: ReadonlySet<string>;
     /** A UK employee (Mileage Allowance Relief): parking and tolls are listed apart, not added. */
     employee?: boolean;
   } = {},
@@ -155,11 +146,8 @@ export function buildReport(
     const vehicle = options.vehicles?.find((v) => v.id === trip.vehicleId);
     return vehicle ? vehicleLabel(vehicle) : VEHICLE_LABELS[trip.vehicle ?? 'car'];
   };
-  const locked = options.locked ?? new Set<string>();
-  // Tiers depend on every business trip of the year, so price them all first
-  // (the ones with a value: as on the home screen, locked drives aren't priced).
-  const valued = locked.size > 0 ? trips.filter((trip) => !locked.has(trip.id)) : trips;
-  const allParts = computeDeductionParts(valued, region);
+  // Tiers depend on every business trip of the year, so price them all first.
+  const allParts = computeDeductionParts(trips, region);
   const rows: ReportRow[] = trips
     .filter((trip) => taxYearOf(trip.localDate, region) === taxYear)
     .sort((a, b) => a.startedAt.localeCompare(b.startedAt))
@@ -171,12 +159,11 @@ export function buildReport(
         commute: isCommute(kindOf(trip.startPlaceId), kindOf(trip.endPlaceId)),
         parts,
         deduction: parts.reduce((sum, part) => sum + part.amount, 0),
-        parking: locked.has(trip.id) ? 0 : (trip.parkingMinor ?? 0),
-        tolls: locked.has(trip.id) ? 0 : (trip.tollsMinor ?? 0),
+        parking: trip.parkingMinor ?? 0,
+        tolls: trip.tollsMinor ?? 0,
         edited: options.editedIds?.has(trip.id) ?? false,
         vehicle: vehicleOf(trip),
         showVehicle: (options.vehicles?.length ?? 0) > 1 || (trip.vehicle ?? 'car') !== 'car',
-        locked: locked.has(trip.id),
       };
     });
 
@@ -191,7 +178,6 @@ export function buildReport(
     otherDistance: 0,
     unclassifiedCount: 0,
     missingPurposeCount: 0,
-    lockedCount: 0,
     deduction: 0,
     parking: 0,
     tolls: 0,
@@ -212,7 +198,7 @@ export function buildReport(
         vehicle: car ? vehicleLabel(car) : 'Car',
         expenses,
         valid,
-        centsPerKm: centsPerKmForVehicle(valued, summary.logbook.vehicleId, taxYear, region).deduction,
+        centsPerKm: centsPerKmForVehicle(trips, summary.logbook.vehicleId, taxYear, region).deduction,
         logbookEstimate: valid ? logbookDeduction(expenses, summary.businessPercent) : null,
       };
     });
@@ -222,10 +208,6 @@ export function buildReport(
   const byRate = new Map<string, RateTotal>();
   for (const row of rows) {
     if (row.trip.classification === 'unclassified') report.unclassifiedCount += 1;
-    if (row.locked) {
-      report.lockedCount += 1;
-      continue;
-    }
     report.totalDistance += row.distance;
     if (row.trip.classification === 'business' && !row.trip.purpose.trim()) report.missingPurposeCount += 1;
     if (row.trip.classification === 'business') {
@@ -326,8 +308,7 @@ export function toCsv(report: MileageReport): string {
   const localTime = localTimes(region);
   for (const row of report.rows) {
     const { trip } = row;
-    // Past the free allowance: the drive is the user's data and always listed; its value waits for Pro.
-    const business = trip.classification === 'business' && !row.locked;
+    const business = trip.classification === 'business';
     lines.push(
       [
         trip.localDate,
@@ -339,12 +320,12 @@ export function toCsv(report: MileageReport): string {
         row.vehicle,
         CLASSIFICATION_LABELS[trip.classification],
         trip.purpose,
-        business ? ratesText(row.parts, region) : row.locked ? 'Value unlocks with MileSprout Pro' : '',
+        business ? ratesText(row.parts, region) : '',
         business ? (row.deduction / 100).toFixed(2) : '',
         trip.source === 'auto' ? 'Automatically while driving' : `Added by hand on ${trip.createdAt.slice(0, 10)}`,
         row.edited ? 'Yes' : 'No',
-        row.locked ? '' : costCell(row.parking, business),
-        row.locked ? '' : costCell(row.tolls, business),
+        costCell(row.parking, business),
+        costCell(row.tolls, business),
       ]
         .map(csvCell)
         .join(','),

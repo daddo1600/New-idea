@@ -7,7 +7,7 @@ import { DEFAULT_SETTINGS, loadSettings, parseSettings, saveSettings, updateSett
 import { startShift } from '../shifts-repo';
 import { available, openTestDatabase, type TestDatabase } from '../testing/node-sqlite';
 import { inWriteTransaction, lockWait, NestedWriteLockError, withWriteLock } from '../transaction';
-import { deleteTrip, getTrip, insertTrip, listTrips, setClassification, setTripPlace, updateTripDetails, type NewTrip } from '../trips-repo';
+import { deleteTrip, getTrip, insertTrip, setClassification, setTripPlace, updateTripDetails, type NewTrip } from '../trips-repo';
 import { addVehicle, ensureVehicles, removeVehicle, updateVehicle } from '../vehicles-repo';
 
 jest.mock('expo-crypto', () => ({ randomUUID: () => jest.requireActual<typeof import('node:crypto')>('node:crypto').randomUUID() }));
@@ -222,19 +222,6 @@ describeSqlite('trips', () => {
     await setTripPlace(db, trip.id, 'end', 'nowhere');
     await deleteTrip(db, trip);
     expect(edits(db, trip.id).map(([action]) => action)).toEqual(['create', 'delete']);
-  });
-
-  it('lists when a drive was last sorted back from personal, for the free plan', async () => {
-    const db = await database();
-    const flipped = await insertTrip(db, newTrip());
-    const plain = await insertTrip(db, newTrip());
-    await setClassification(db, flipped, 'personal');
-    await setClassification(db, flipped, 'business');
-    await setClassification(db, plain, 'business');
-    const trips = await listTrips(db);
-    const rejoined = trips.find((trip) => trip.id === flipped.id)?.rejoinedAt;
-    expect(rejoined).toEqual(expect.stringMatching(/^\d{4}-\d{2}-\d{2}T/));
-    expect(trips.find((trip) => trip.id === plain.id)?.rejoinedAt).toBeUndefined();
   });
 
   it('links a trip to a place only while the place exists', async () => {

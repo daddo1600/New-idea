@@ -24,8 +24,8 @@ Context for short or ambiguous lines, by the part of the app they come from. Key
 - “+ Add a place”, “+ Add a vehicle”: keep the "+".
 ## Other-screens helper
 
-- Free: name of the free plan (table column), not "no cost". Unlimited / Kept, locked / Unlocked: what each plan does with drives over the limit.
-- {{count}} a month: free plan's automatic drive limit. Included / Not included: spoken labels for ✓/– cells. Best value: badge on yearly plan.
+- Free: name of the free plan (table column), not "no cost". Tracking is free with no limit; Pro is the itemised report and exports. Included / Not included: spoken labels for ✓/– cells. Best value: badge on yearly plan.
+- Invite perks: Tax set-aside, Earnings by platform and Founding driver badge are names (shown under sprouts, keep them short). "Your sprout garden" is the row of sprouts, one per perk. Founding boost: perks unlock at fewer friends until a date. {{perk}} is one of those names, already translated.
 - {{price}}/year, {{price}}/month: App Store price string. After the {{trial}}, …: trial = e.g. "30-day free trial".
 - Done: closes a screen/calendar. Change: change the date. From / To: start and end address of a drive.
 - Business / Personal: trip type toggle. Note / Optional: label/placeholder for a personal trip's note. Save: saves trip edits. Delete: confirm deleting a trip.

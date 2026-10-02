@@ -1,5 +1,3 @@
-import { monthlyAllowance } from '@/domain/plan';
-
 import type { ClaimOutcome, InviteCloud } from './cloud';
 import { checkRedeem, generateReferralCode, isReferralCode, normalizeReferralCode, type RedeemProblem, type RedeemState } from './code';
 
@@ -21,8 +19,8 @@ export type IssuedInvite = {
 };
 
 /**
- * A friend's code entered here. `pending` until iCloud confirms the invite
- * (no +10 yet); `granted` once it has (+10 free drives a month).
+ * A friend's code entered here. `pending` until iCloud confirms the invite;
+ * `granted` once it has (and the friend who sent it is credited).
  */
 export type RedeemStatus = 'pending' | 'granted';
 export type Redemption = { code: string; at: string; status: RedeemStatus };
@@ -208,18 +206,7 @@ export function cleanInvites(value: unknown): IssuedInvite[] {
   );
 }
 
-/** Free automatic drives a month: a friend's invite counts only once granted, never while pending. */
-export function referralAllowance({
-  redeemStatus,
-  friendsJoined,
-}: {
-  redeemStatus: RedeemStatus | null;
-  friendsJoined: number;
-}): number {
-  return monthlyAllowance({ redeemed: redeemStatus === 'granted', friendsJoined });
-}
-
-/** Friends who joined: never goes down, so a bonus once given stays, even if iCloud answers oddly one day. */
+/** Friends who joined: never goes down, so a perk once earned stays, even if iCloud answers oddly one day. */
 export function nextFriendsJoined(current: number, counted: number | null): number {
   return counted !== null && counted > current ? counted : current;
 }

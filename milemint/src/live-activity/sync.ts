@@ -1,22 +1,18 @@
-import * as SecureStore from 'expo-secure-store';
 import type { SQLiteDatabase } from 'expo-sqlite';
 import { AppState, Platform } from 'react-native';
 
 import { loadSettings } from '@/db/settings-repo';
 import { currentPause, currentShift } from '@/db/shifts-repo';
 import { listTrips } from '@/db/trips-repo';
-import { lockedTripIds } from '@/domain/plan';
 import { computeDeductions, type Region, REGIONS } from '@/domain/regions';
 import { currentDistanceM } from '@/domain/trip-detector';
 import { t } from '@/i18n/i18n';
-import { referralAllowance } from '@/referral/invites';
 import { loadTrackerRecord } from '@/tracking/tracker-store';
 
 import { ShiftActivity } from '../../modules/live-activity';
 import { shiftActivityContent, shouldPush, type ShiftActivityContent, type ShiftActivityInput } from './model';
 
 /** Same key the Pro provider caches the App Store status under (as region/launch-total). */
-const PRO_CACHE_KEY = 'milemint.pro-active';
 
 /** How long the "Shift ended" summary stays on the lock screen. */
 const ENDED_LINGER_S = 15 * 60;
@@ -33,15 +29,11 @@ let queue: Promise<void> = Promise.resolve();
 
 /**
  * The saved drives of a shift with what each is worth, as home's shift bar
- * counts them: drives past the free plan's allowance add no money until Pro.
+ * counts them.
  */
 async function shiftDrives(db: SQLiteDatabase, shiftId: string, region: Region): Promise<ShiftActivityInput['drives']> {
-  const settings = await loadSettings(db);
-  const isPro = (await SecureStore.getItemAsync(PRO_CACHE_KEY).catch(() => null)) === '1';
   const trips = await listTrips(db);
-  const locked = lockedTripIds(trips, isPro, referralAllowance(settings));
-  const visible = trips.filter((trip) => !locked.has(trip.id));
-  const deductions = computeDeductions(visible, region);
+  const deductions = computeDeductions(trips, region);
   return trips
     .filter((trip) => trip.shiftId === shiftId)
     .map((trip) => ({

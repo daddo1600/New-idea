@@ -120,19 +120,17 @@ describe('toCsv', () => {
     expect(csv).toContain(`"'=HYPERLINK(""x"")"`);
   });
 
-  it('lists drives past the free allowance, with their value left for Pro', () => {
-    const free = trip({});
-    const locked = trip({ purpose: 'Late delivery' });
-    const report = buildReport([free, locked], US, 2026, { locked: new Set([locked.id]) });
+  it('values every drive: there is no free-plan limit any more', () => {
+    const first = trip({});
+    const later = trip({ purpose: 'Late delivery' });
+    const report = buildReport([first, later], US, 2026);
     expect(report.rows).toHaveLength(2);
-    expect(report.lockedCount).toBe(1);
-    expect(report.deduction).toBe(725);
-    expect(report.businessDistance).toBeCloseTo(10, 1);
+    expect(report.deduction).toBe(1450);
+    expect(report.businessDistance).toBeCloseTo(20, 1);
     const lines = toCsv(report).trim().split('\r\n');
     expect(lines).toHaveLength(3);
     expect(lines[2]).toContain('Late delivery');
-    expect(lines[2]).toContain('Value unlocks with MileSprout Pro');
-    expect(lines[2]).not.toContain('7.25');
+    expect(lines[2]).toContain('7.25');
   });
 
   it('marks edited trips', () => {

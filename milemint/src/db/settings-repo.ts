@@ -7,6 +7,7 @@ import type { WorkShift, WorkWeek } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
 import { TAX_BANDS, type TaxBand } from '@/domain/mar';
 import { MAX_DISMISSED_SPOTS } from '@/domain/place-asks';
+import { PERK_LADDER, type Perk } from '@/domain/plan';
 import { REGIONS, type RegionCode } from '@/domain/regions';
 import { VEHICLE_TYPES, type VehicleType } from '@/domain/trip';
 import { cleanInvites, type ClaimRefusal, type IssuedInvite, type RedeemStatus } from '@/referral/invites';
@@ -89,14 +90,16 @@ export type AppSettings = {
   redeemedCode: string | null;
   /** ISO time the friend's code was entered. */
   redeemedAt: string | null;
-  /** 'pending' until iCloud confirms the invite; 'granted' (+10 free drives a month) after. */
+  /** 'pending' until iCloud confirms the invite; 'granted' after. */
   redeemStatus: RedeemStatus | null;
   /** Why iCloud last turned down a pending code, shown by the code box until another is entered. */
   redeemRefusal: ClaimRefusal | null;
   /** ISO time this user's claim was marked qualified in iCloud (3 real drives), crediting the sharer. */
   qualifiedAt: string | null;
-  /** Friends who joined with this user's invites, as iCloud last counted them (+10 drives each). */
+  /** Friends who joined with this user's invites, as iCloud last counted them (they earn perks: domain/plan). */
   friendsJoined: number;
+  /** Invite perks earned, kept for good (one earned during the founding boost stays after it). */
+  perksEarned: Perk[];
   /** ISO time the app was first set up: a friend's code can be entered for 30 days after. */
   installedAt: string | null;
   /** Spots answered "No" to "Is this home?" on the home screen: not asked again nearby (domain/place-asks). */
@@ -150,6 +153,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   redeemRefusal: null,
   qualifiedAt: null,
   friendsJoined: 0,
+  perksEarned: [],
   installedAt: null,
   dismissedHomeSpots: [],
   dismissedWorkSpots: [],
@@ -257,6 +261,8 @@ const CHECKS: { [K in keyof AppSettings]-?: Check<AppSettings[K]> } = {
   redeemRefusal: oneOf(['not-found', 'used', 'own', 'already-claimed'] as const),
   qualifiedAt: textOrNull,
   friendsJoined: (value) => (typeof value === 'number' && Number.isInteger(value) && value >= 0 ? value : undefined),
+  perksEarned: (value) =>
+    Array.isArray(value) ? PERK_LADDER.map((step) => step.perk).filter((perk) => value.includes(perk)) : undefined,
   installedAt: textOrNull,
   dismissedHomeSpots: spots,
   dismissedWorkSpots: spots,

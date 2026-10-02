@@ -21,7 +21,7 @@ import Constants from 'expo-constants';
 
 /** What claiming an invite can come to. */
 export type ClaimOutcome =
-  /** Claimed: the friend gets their +10. */
+  /** Claimed: the invite is confirmed. */
   | 'ok'
   /** No invite with that code. */
   | 'not-found'

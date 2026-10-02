@@ -46,12 +46,6 @@ export type Trip = {
   /** The shift the drive was part of (shift mode), or null. */
   shiftId: string | null;
   /**
-   * When the user last sorted it back from personal (from the edit log), if
-   * ever. Such a drive rejoins the free plan's monthly queue from then, so it
-   * can't take a slot from a drive already showing its value (domain/plan).
-   */
-  rejoinedAt?: string | null;
-  /**
    * The shift this drive was cut from, when it's the part after the shift
    * ended (or during a pause): not work, and left for the user to sort.
    */
