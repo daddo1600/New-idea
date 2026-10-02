@@ -14,3 +14,11 @@
    - countries: UK, US, Canada, Australia.
    - Report: what each one understood in the first 5 seconds, where they dropped off, whether they signed up, and what put them off.
    Do this before publishing the redesign.
+6. **Comparison table redesign.** Feedback: "this could look a whole lot better".
+   - Replace the dense text grid with scannable ticks and crosses (✓ / ✕ / partial) and short labels; detail goes in footnotes or on tap.
+   - Lift the MileSprout column into a raised, branded card (logo, gold "Free" badge) rather than a mint stripe.
+   - Competitor logos or names in a single row; consistent cell heights; fewer words per cell (e.g. "40 drives/mo").
+   - On iPhone, use a swipeable card per app, or MileSprout vs one app at a time with a picker, instead of a squeezed table.
+   - The "Paid plan" row reads oddly ("Free; Pro optional") until Pro has a price. Revisit once pricing is set.
+   - Keep every fact sourced (`website-comparison-sources.md`) and the "Checked October 2026" note.
+   - Run it through the Monday visitor simulations.
