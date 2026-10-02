@@ -30,10 +30,10 @@ index 6d41d09..223db7f 100644
 +  }
 +}
 diff --git a/node_modules/expo-location/ios/Providers/BaseLocationProvider.swift b/node_modules/expo-location/ios/Providers/BaseLocationProvider.swift
-index ae9135a..a35485c 100644
+index ae9135a..0570b09 100644
 --- a/node_modules/expo-location/ios/Providers/BaseLocationProvider.swift
 +++ b/node_modules/expo-location/ios/Providers/BaseLocationProvider.swift
-@@ -14,4 +14,18 @@ internal class BaseLocationProvider: NSObject, CLLocationManagerDelegate {
+@@ -14,4 +14,23 @@ internal class BaseLocationProvider: NSObject, CLLocationManagerDelegate {
      manager.desiredAccuracy = options.accuracy.toCLLocationAccuracy()
      manager.delegate = self
    }
@@ -44,6 +44,11 @@ index ae9135a..a35485c 100644
 +  // so it is never freed under a pending callback.
 +  deinit {
 +    let retired = manager
++    // Callbacks arrive on the main thread: detaching there now leaves no
++    // moment where one can reach this freed provider.
++    if Thread.isMainThread {
++      retired.delegate = nil
++    }
 +    DispatchQueue.main.async {
 +      retired.delegate = nil
 +      DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
@@ -52,11 +57,56 @@ index ae9135a..a35485c 100644
 +    }
 +  }
  }
+diff --git a/node_modules/expo-location/ios/Requesters/EXBackgroundLocationPermissionRequester.m b/node_modules/expo-location/ios/Requesters/EXBackgroundLocationPermissionRequester.m
+index aa54f8c..f182a13 100644
+--- a/node_modules/expo-location/ios/Requesters/EXBackgroundLocationPermissionRequester.m
++++ b/node_modules/expo-location/ios/Requesters/EXBackgroundLocationPermissionRequester.m
+@@ -73,10 +73,11 @@ static SEL alwaysAuthorizationSelector;
+ - (void)handleAppBecomingActive
+ {
+   [[NSNotificationCenter defaultCenter] removeObserver:self];
+-  if (self.resolve) {
+-    self.resolve([self getPermissions]);
+-    self.resolve = nil;
+-    self.reject = nil;
++  EXPromiseResolveBlock resolve = self.resolve;
++  self.resolve = nil;
++  self.reject = nil;
++  if (resolve) {
++    resolve([self getPermissions]);
+   }
+ }
+ 
+@@ -100,8 +101,10 @@ static SEL alwaysAuthorizationSelector;
+ {
+   _isWaitingForTimeout = true;
+   
+-  // Obtain a reference to the current queue
+-  dispatch_queue_t currentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
++  // On the main queue, like the location manager's own callbacks: answering the
++  // promise from a background queue raced the authorization callback, and the
++  // block could be called while the other thread was freeing it.
++  dispatch_queue_t currentQueue = dispatch_get_main_queue();
+ 
+   // Calculate the time for the delay
+   dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC));
+@@ -114,9 +117,10 @@ static SEL alwaysAuthorizationSelector;
+     // Check if we are still waiting - ie. we haven't seen a permission dialog
+     if (self.isWaitingForTimeout && self.resolve) {
+       self.isWaitingForTimeout = false;
+-      self.resolve([self getPermissions]);
++      EXPromiseResolveBlock resolve = self.resolve;
+       self.resolve = nil;
+       self.reject = nil;
++      resolve([self getPermissions]);
+     }
+   });
+ }
 diff --git a/node_modules/expo-location/ios/Requesters/EXBaseLocationRequester.m b/node_modules/expo-location/ios/Requesters/EXBaseLocationRequester.m
-index 350eb5f..83c7015 100644
+index 350eb5f..6a780d4 100644
 --- a/node_modules/expo-location/ios/Requesters/EXBaseLocationRequester.m
 +++ b/node_modules/expo-location/ios/Requesters/EXBaseLocationRequester.m
-@@ -13,6 +13,24 @@
+@@ -13,8 +13,56 @@
  
  @end
  
@@ -70,6 +120,11 @@ index 350eb5f..83c7015 100644
 +  if (manager == nil) {
 +    return;
 +  }
++  // Core Location delivers callbacks on the main thread, so detaching there
++  // straight away leaves no moment where a callback can reach a freed delegate.
++  if ([NSThread isMainThread]) {
++    manager.delegate = nil;
++  }
 +  dispatch_async(dispatch_get_main_queue(), ^{
 +    manager.delegate = nil;
 +    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -80,20 +135,111 @@ index 350eb5f..83c7015 100644
 +
  @implementation EXBaseLocationRequester
  
++// Requesters are registered each time the location module is created, which
++// replaces (and frees) the previous ones. A freed requester can still be its
++// manager's delegate when an authorization change arrives (the delegate isn't
++// retained), which crashed in -locationManagerDidChangeAuthorization:. They are
++// small and few, so keep every one alive for the life of the app.
++- (instancetype)init
++{
++  if (self = [super init]) {
++    static NSMutableArray *everyRequester;
++    static dispatch_once_t once;
++    dispatch_once(&once, ^{
++      everyRequester = [NSMutableArray new];
++    });
++    @synchronized (everyRequester) {
++      [everyRequester addObject:self];
++    }
++  }
++  return self;
++}
++
++- (void)dealloc
++{
++  EXRetireRequesterLocationManager(_locationManager);
++}
++
  # pragma mark - Abstract methods
-@@ -60,6 +78,7 @@
+ 
+ - (void)requestLocationPermissions
+@@ -53,13 +101,19 @@
+     // just resolve with whatever existing permissions.
+     resolve(existingPermissions);
+   } else {
+-    _resolve = resolve;
+-    _reject = reject;
+-
+     EX_WEAKIFY(self)
      [EXUtilities performSynchronouslyOnMainThread:^{
        EX_ENSURE_STRONGIFY(self)
++      // The delegate callbacks read and clear these on the main thread, so set
++      // them there too. A request still waiting is answered first, not dropped.
++      EXPromiseResolveBlock waiting = self->_resolve;
++      self->_resolve = resolve;
++      self->_reject = reject;
++      if (waiting) {
++        waiting([self getPermissions]);
++      }
        self.locationManagerWasCalled = false;
 +      EXRetireRequesterLocationManager(self.locationManager);
        self.locationManager = [[CLLocationManager alloc] init];
        self.locationManager.delegate = self;
      }];
+@@ -112,9 +166,13 @@
+     // - rbp -> "Allow while using App", no more dialogs                        = (fp: granted, bg: granted (provisional))
+     // - rbp -> "Don't allow"                                                   = (fp: denied, bg: denied)
+     
+-    // Save start statue and call requestLocationPermissions
+-    _beginStatus = [self.locationManager authorizationStatus];
+-    [self requestLocationPermissions];
++    // Save start statue and call requestLocationPermissions, on the main thread
++    // with the manager, so nothing here runs alongside its callbacks.
++    [EXUtilities performSynchronouslyOnMainThread:^{
++      EX_ENSURE_STRONGIFY(self)
++      self->_beginStatus = [self.locationManager authorizationStatus];
++      [self requestLocationPermissions];
++    }];
+   }
+ }
+ 
+@@ -122,10 +180,11 @@
+ 
+ - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+ {
+-  if (_reject) {
+-    _reject(@"E_LOCATION_ERROR_UNKNOWN", error.localizedDescription, error);
+-    _resolve = nil;
+-    _reject = nil;
++  EXPromiseRejectBlock reject = _reject;
++  _resolve = nil;
++  _reject = nil;
++  if (reject) {
++    reject(@"E_LOCATION_ERROR_UNKNOWN", error.localizedDescription, error);
+   }
+ }
+ 
+@@ -140,10 +199,11 @@
+     return;
+   }
+ 
+-  if (_resolve) {
+-    _resolve([self getPermissions]);
+-    _resolve = nil;
+-    _reject = nil;
++  EXPromiseResolveBlock resolve = _resolve;
++  _resolve = nil;
++  _reject = nil;
++  if (resolve) {
++    resolve([self getPermissions]);
+   }
+ }
+ 
 diff --git a/node_modules/expo-location/ios/TaskConsumers/EXGeofencingTaskConsumer.m b/node_modules/expo-location/ios/TaskConsumers/EXGeofencingTaskConsumer.m
-index 7e6482e..9c91f2f 100644
+index 7e6482e..e291f7c 100644
 --- a/node_modules/expo-location/ios/TaskConsumers/EXGeofencingTaskConsumer.m
 +++ b/node_modules/expo-location/ios/TaskConsumers/EXGeofencingTaskConsumer.m
-@@ -17,6 +17,24 @@
+@@ -17,6 +17,29 @@
  
  @end
  
@@ -107,6 +253,11 @@ index 7e6482e..9c91f2f 100644
 +  if (manager == nil) {
 +    return;
 +  }
++  // Core Location delivers callbacks on the main thread, so detaching there
++  // straight away leaves no moment where a callback can reach a freed delegate.
++  if ([NSThread isMainThread]) {
++    manager.delegate = nil;
++  }
 +  dispatch_async(dispatch_get_main_queue(), ^{
 +    manager.delegate = nil;
 +    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -118,7 +269,7 @@ index 7e6482e..9c91f2f 100644
  @implementation EXGeofencingTaskConsumer
  
  - (void)dealloc
-@@ -53,6 +71,7 @@
+@@ -53,6 +76,7 @@
  {
    [self stopMonitoringAllRegions];
    [EXUtilities performSynchronouslyOnMainThread:^{
@@ -126,7 +277,7 @@ index 7e6482e..9c91f2f 100644
      self->_locationManager = nil;
      self->_task = nil;
    }];
-@@ -67,6 +86,7 @@
+@@ -67,6 +91,7 @@
      NSArray *regions = options[@"regions"];
  
      self->_task = task;
@@ -135,10 +286,10 @@ index 7e6482e..9c91f2f 100644
      self->_regionStates = regionStates;
  
 diff --git a/node_modules/expo-location/ios/TaskConsumers/EXLocationTaskConsumer.m b/node_modules/expo-location/ios/TaskConsumers/EXLocationTaskConsumer.m
-index fe1d9dd..8d859a3 100644
+index fe1d9dd..7744c71 100644
 --- a/node_modules/expo-location/ios/TaskConsumers/EXLocationTaskConsumer.m
 +++ b/node_modules/expo-location/ios/TaskConsumers/EXLocationTaskConsumer.m
-@@ -17,6 +17,24 @@
+@@ -17,6 +17,29 @@
  
  @end
  
@@ -152,6 +303,11 @@ index fe1d9dd..8d859a3 100644
 +  if (manager == nil) {
 +    return;
 +  }
++  // Core Location delivers callbacks on the main thread, so detaching there
++  // straight away leaves no moment where a callback can reach a freed delegate.
++  if ([NSThread isMainThread]) {
++    manager.delegate = nil;
++  }
 +  dispatch_async(dispatch_get_main_queue(), ^{
 +    manager.delegate = nil;
 +    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -163,7 +319,7 @@ index fe1d9dd..8d859a3 100644
  @implementation EXLocationTaskConsumer
  
  - (instancetype)init
-@@ -45,6 +63,7 @@
+@@ -45,6 +68,7 @@
    [EXUtilities performSynchronouslyOnMainThread:^{
      CLLocationManager *locationManager = [CLLocationManager new];
  
@@ -171,7 +327,7 @@ index fe1d9dd..8d859a3 100644
      self->_task = task;
      self->_locationManager = locationManager;
  
-@@ -103,6 +122,7 @@
+@@ -103,6 +127,7 @@
      [self->_deferredLocations removeAllObjects];
      self->_lastReportedLocation = nil;
      self->_deferredDistance = 0.0;
