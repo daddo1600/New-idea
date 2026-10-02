@@ -97,3 +97,17 @@ Email Routing only receives. To reply *from* @milesprout.app, set up sending sep
 - Brand: **MileSprout** (wordmark "Mile" ink + "Sprout" green). Colours, the sprout mark and fonts follow the app and `research_notes/launch-2026/milesprout-brand-brief.md`.
 - User copy says **Work** and **Personal**, never "Business". No statistics or "save £X" claims.
 - The privacy policy must match the app. If the app starts sending data anywhere (for example iCloud invite checking, or Perks redemption through a server), update `privacy.html` before that version ships.
+
+## Updating site.css or site.js
+
+Browsers cache `site.css` and `site.js` for a day, so every page links them with a version
+(`/assets/site.css?v=…`). After changing either file, refresh the versions so visitors get the
+new one straight away:
+
+```sh
+cd website
+CSSV=$(sha1sum assets/site.css | cut -c1-8); JSV=$(sha1sum assets/site.js | cut -c1-8)
+for f in $(grep -rl '/assets/site' --include=*.html .); do
+  sed -i -E "s#/assets/site\.css(\?v=[0-9a-f]+)?\"#/assets/site.css?v=$CSSV\"#; s#/assets/site\.js(\?v=[0-9a-f]+)?\"#/assets/site.js?v=$JSV\"#" "$f"
+done
+```
