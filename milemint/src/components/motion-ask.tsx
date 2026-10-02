@@ -133,7 +133,7 @@ export function MotionCoach() {
           <Animated.Text style={[styles.coachArrow, arrow]}>↑</Animated.Text>
           <View style={styles.coachPill}>
             {/* The same gold light as the language button, quicker here: it's the one thing to tap. */}
-            <GoldTrace stroke={3} lapMs={1400} restMs={500} restingOpacity={0.9} />
+            <GoldTrace stroke={3} lapMs={1600} />
             <Text style={styles.coachText} numberOfLines={2} adjustsFontSizeToFit>
               {t('Tap “{{button}}”', { button: t('Allow') })}
             </Text>

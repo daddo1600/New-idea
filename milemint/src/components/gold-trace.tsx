@@ -1,45 +1,45 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, {
+  cancelAnimation,
   Easing,
   useAnimatedProps,
   useReducedMotion,
   useSharedValue,
-  withDelay,
   withRepeat,
-  withSequence,
   withTiming,
 } from 'react-native-reanimated';
 import Svg, { Rect } from 'react-native-svg';
 
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
 
-/** How much of the border the light covers. */
+/** How much of the border the gold light covers. */
 const TAIL = 0.22;
+/** The bright glint at the head of the light. */
+const GLINT = 0.05;
 
 /**
- * A gold light that runs around a pill's border, then rests, to draw the eye
- * (the language button, the "Tap Allow" coaching). Lay it over the pill: it
- * fills its parent and sizes itself to it. Reduce Motion keeps a still gold
- * border.
+ * A gold light that runs round and round a pill's border, with a bright glint
+ * at its head and a gently shimmering glow, to draw the eye (the language
+ * button, the "Tap Allow" coaching). Lay it over the pill: it fills its parent
+ * and sizes itself to it. The loop is seamless: one lap ends exactly where the
+ * next begins. Reduce Motion keeps a still gold border.
  */
 export function GoldTrace({
   stroke = 2,
-  lapMs = 2200,
-  restMs = 2600,
-  restingOpacity = 0.35,
+  lapMs = 2400,
+  shimmerMs = 900,
 }: {
   stroke?: number;
-  /** One lap of the light… */
+  /** One lap of the light. */
   lapMs?: number;
-  /** …then a rest. */
-  restMs?: number;
-  /** The border between laps. */
-  restingOpacity?: number;
+  /** One swell of the shimmering glow. */
+  shimmerMs?: number;
 }) {
   const reduceMotion = useReducedMotion();
   const [size, setSize] = useState({ width: 0, height: 0 });
   const lap = useSharedValue(0);
+  const shimmer = useSharedValue(0);
 
   const inset = stroke / 2;
   const w = Math.max(0, size.width - stroke);
@@ -47,47 +47,49 @@ export function GoldTrace({
   const r = h / 2;
   // A rounded rectangle's outline: two straights each way and a full circle of corners.
   const perimeter = 2 * (w - 2 * r) + 2 * (h - 2 * r) + 2 * Math.PI * r;
+  const ready = perimeter > 0;
 
+  // Started once when the pill has a size: a re-layout only changes the
+  // perimeter the props read, so it never restarts the loop.
   useEffect(() => {
-    if (reduceMotion || perimeter <= 0) return;
-    lap.set(
-      withRepeat(
-        withSequence(
-          withTiming(0, { duration: 0 }),
-          withDelay(600, withTiming(1, { duration: lapMs, easing: Easing.inOut(Easing.quad) })),
-          withTiming(1, { duration: restMs }),
-        ),
-        -1,
-        false,
-      ),
-    );
-  }, [lap, perimeter, reduceMotion, lapMs, restMs]);
+    if (reduceMotion || !ready) return;
+    lap.set(withRepeat(withTiming(1, { duration: lapMs, easing: Easing.linear }), -1, false));
+    shimmer.set(withRepeat(withTiming(1, { duration: shimmerMs, easing: Easing.inOut(Easing.sin) }), -1, true));
+    return () => {
+      cancelAnimation(lap);
+      cancelAnimation(shimmer);
+    };
+  }, [lap, shimmer, ready, reduceMotion, lapMs, shimmerMs]);
 
-  const light = useAnimatedProps(() => ({
-    strokeDashoffset: -perimeter * lap.value,
-    strokeOpacity: lap.value > 0 && lap.value < 1 ? 1 : 0,
-  }));
+  const border = useAnimatedProps(() => ({ strokeOpacity: 0.45 + 0.35 * shimmer.value }));
   const glow = useAnimatedProps(() => ({
     strokeDashoffset: -perimeter * lap.value,
-    strokeOpacity: lap.value > 0 && lap.value < 1 ? 0.35 : 0,
+    strokeOpacity: 0.25 + 0.35 * shimmer.value,
+  }));
+  const light = useAnimatedProps(() => ({ strokeDashoffset: -perimeter * lap.value }));
+  const glint = useAnimatedProps(() => ({
+    strokeDashoffset: -perimeter * (lap.value + TAIL - GLINT),
+    strokeOpacity: 0.7 + 0.3 * shimmer.value,
   }));
 
   const outline = { x: inset, y: inset, width: w, height: h, rx: r, fill: 'none' };
-  const dashes = [perimeter * TAIL, perimeter * (1 - TAIL)];
+  const tail = [perimeter * TAIL, perimeter * (1 - TAIL)];
+  const head = [perimeter * GLINT, perimeter * (1 - GLINT)];
   return (
     <View style={StyleSheet.absoluteFill} pointerEvents="none" onLayout={(event) => setSize(event.nativeEvent.layout)}>
-      {perimeter > 0 && (
+      {ready && (
         <Svg width={size.width} height={size.height}>
-          <Rect {...outline} stroke="#FACC15" strokeOpacity={reduceMotion ? 0.9 : restingOpacity} strokeWidth={stroke} />
-          {!reduceMotion && (
+          {reduceMotion ? (
+            <Rect {...outline} stroke="#FACC15" strokeOpacity={0.9} strokeWidth={stroke} />
+          ) : (
             <>
+              <AnimatedRect {...outline} stroke="#FACC15" strokeWidth={stroke} animatedProps={border} />
               <AnimatedRect
                 {...outline}
                 stroke="#FACC15"
                 strokeWidth={stroke * 3}
                 strokeLinecap="round"
-                strokeDasharray={dashes}
-                strokeOpacity={0}
+                strokeDasharray={tail}
                 animatedProps={glow}
               />
               <AnimatedRect
@@ -95,9 +97,16 @@ export function GoldTrace({
                 stroke="#FDE68A"
                 strokeWidth={stroke}
                 strokeLinecap="round"
-                strokeDasharray={dashes}
-                strokeOpacity={0}
+                strokeDasharray={tail}
                 animatedProps={light}
+              />
+              <AnimatedRect
+                {...outline}
+                stroke="#FFFBEB"
+                strokeWidth={stroke * 1.4}
+                strokeLinecap="round"
+                strokeDasharray={head}
+                animatedProps={glint}
               />
             </>
           )}
