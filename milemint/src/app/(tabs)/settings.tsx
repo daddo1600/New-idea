@@ -94,7 +94,7 @@ const NEW_SHIFT: WorkShift = { start: '09:00', end: '17:00' };
 /** A second shift that day, pre-filled so it's clearly editable rather than a hint. */
 const EXTRA_SHIFT: WorkShift = { start: '18:00', end: '22:00' };
 
-const SUPPORT_EMAIL = 'milemint.support@gmail.com';
+const SUPPORT_EMAIL = 'hello@milesprout.app';
 
 export default function SettingsTab() {
   // After a restore every section loads afresh, so nothing stale (work hours, places) is saved over it.

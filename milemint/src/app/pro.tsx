@@ -22,7 +22,7 @@ import { useRegion } from '@/region/region';
 
 const TERMS_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
 const PRIVACY_URL =
-  'https://github.com/daddo1600/New-idea/blob/claude/ios-app-ideas-market-of84qv/milemint/docs/privacy-policy.md';
+  'https://milesprout.app/privacy';
 
 /** Stands in for the quarterly figures row, named for the user's tax office (QUARTERLY_ROWS). */
 const QUARTERLY_ROW = 'quarterly';

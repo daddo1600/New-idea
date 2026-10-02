@@ -128,7 +128,7 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
       <Text style={styles.errorBody}>
         {t(
           'MileSprout couldn’t open this screen. Your trips are safe. Please send a screenshot of this page to {{email}} so we can fix it.',
-          { email: 'milemint.support@gmail.com' },
+          { email: 'hello@milesprout.app' },
         )}
       </Text>
       <Text selectable style={styles.errorDetail}>
