@@ -188,7 +188,9 @@ function withMonths(rows: readonly HomeItem[], trips: readonly Trip[], deduction
 function MonthHeading({ item, region }: { item: MonthItem; region: Region }) {
   const t = useT();
   const [year, month] = item.month.split('-').map(Number);
-  const name = new Date(year, month - 1, 1).toLocaleDateString(displayLocale(region), { month: 'long', year: 'numeric' });
+  const long = new Date(year, month - 1, 1).toLocaleDateString(displayLocale(region), { month: 'long', year: 'numeric' });
+  // "octubre de 2026" → "Octubre de 2026": only the first letter, as a heading.
+  const name = long.charAt(0).toLocaleUpperCase() + long.slice(1);
   const distance = formatDistance(item.meters, region);
   return (
     <View style={styles.month} accessibilityRole="header">
@@ -221,6 +223,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.one,
     marginTop: Spacing.two,
   },
-  monthName: { flexShrink: 1, textTransform: 'capitalize' },
+  monthName: { flexShrink: 1 },
   leg: { marginLeft: Spacing.three, paddingLeft: Spacing.two, borderLeftWidth: 2, marginTop: -Spacing.two },
 });

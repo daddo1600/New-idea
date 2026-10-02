@@ -208,10 +208,12 @@ function monthLines(
     if (month > 12) [year, month] = [year + 1, 1];
     const key = `${year}-${String(month).padStart(2, '0')}`;
     if (key > last) break;
-    const label = new Date(year, month - 1, 1).toLocaleDateString(displayLocale(region), {
+    // "octubre de 2026" → "Octubre de 2026": only the first letter, as a heading.
+    const name = new Date(year, month - 1, 1).toLocaleDateString(displayLocale(region), {
       month: 'long',
       year: 'numeric',
     });
+    const label = name.charAt(0).toLocaleUpperCase() + name.slice(1);
     lines.set(key, { key, label, meters: 0, valueMinor: 0 });
   }
   for (const trip of visible) {
@@ -256,7 +258,7 @@ const styles = StyleSheet.create({
   total: { fontSize: 36, lineHeight: 44, fontWeight: '800', fontVariant: ['tabular-nums'] },
   breakdown: { borderRadius: 12, paddingHorizontal: Spacing.three },
   line: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three, paddingVertical: Spacing.two + 2 },
-  lineLabel: { flex: 1, textTransform: 'capitalize' },
+  lineLabel: { flex: 1 },
   lineValue: { minWidth: 80, textAlign: 'right', fontVariant: ['tabular-nums'] },
   links: { borderRadius: 16, padding: Spacing.one },
 });

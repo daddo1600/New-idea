@@ -72,6 +72,7 @@ export default function HomeScreen() {
   const { fill, year: fillYear, sort: sortAsked } = useLocalSearchParams<{ fill?: string; year?: string; sort?: string }>();
   const fillAsked = fill === 'purpose' ? (fillYear ?? '') : null;
   const [fillSeen, setFillSeen] = useState<string | null>(null);
+  const [sortSeen, setSortSeen] = useState<string | undefined>(undefined);
   const [sortPending, setSortPending] = useState(false);
   useEffect(() => {
     if (fill || sortAsked) router.setParams({ fill: undefined, year: undefined, sort: undefined });
@@ -87,7 +88,11 @@ export default function HomeScreen() {
     setFillSeen(fillAsked);
     if (fillAsked !== null) setFilling(Number.isInteger(Number(fillAsked)) && fillAsked ? Number(fillAsked) : taxYear);
   }
-  if (sortAsked === 'unsorted' && !sortPending) setSortPending(true);
+  // Asked from Money: once per visit, as the parameter is cleared straight after.
+  if (sortAsked !== sortSeen) {
+    setSortSeen(sortAsked);
+    if (sortAsked === 'unsorted') setSortPending(true);
+  }
   const shiftMode = useShift(reload);
   /** Offers the user waved away ("Not now", "Still working"), by what they were about. */
   const [dismissed, setDismissed] = useState<ReadonlySet<string>>(new Set());
