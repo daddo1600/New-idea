@@ -1,6 +1,8 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Drives are logged by themselves when you drive.": "开车时会自动记录行程。",
+  "Off: no drives are logged. You can still add drives from the Drives tab.": "已关闭：不会记录任何行程。你仍可在“行程”标签页手动添加。",
   "Swipe back to end your shift. Stopped for something personal? Swipe that drive left afterwards.": "向回滑动即可收工。中途办了私事？之后把那段行程向左滑。",
   "Almost there: set location to “Always” and every drive is logged. Home shows you how.": "就差一步：把定位设为“始终”，每段行程都会被记录。首页会告诉你怎么做。",
   "Add your drives from the Drives tab.": "在“行程”标签页添加你的行程。",

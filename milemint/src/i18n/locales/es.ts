@@ -1,6 +1,8 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Drives are logged by themselves when you drive.": "Los viajes se registran solos cuando conduces.",
+  "Off: no drives are logged. You can still add drives from the Drives tab.": "Desactivado: no se registra ningún viaje. Aún puedes añadir viajes desde la pestaña Viajes.",
   "Swipe back to end your shift. Stopped for something personal? Swipe that drive left afterwards.": "Desliza hacia atrás para terminar el turno. ¿Paraste para algo personal? Después desliza ese viaje a la izquierda.",
   "Almost there: set location to “Always” and every drive is logged. Home shows you how.": "Ya casi: pon la ubicación en “Siempre” y se registrará cada viaje. Inicio te muestra cómo.",
   "Add your drives from the Drives tab.": "Añade tus viajes desde la pestaña Viajes.",

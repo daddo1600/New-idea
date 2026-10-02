@@ -1153,7 +1153,8 @@
   {
     "key": "Automatic tracking",
     "files": [
-      "app/_layout.tsx"
+      "app/_layout.tsx",
+      "components/tracking-health-card.tsx"
     ]
   },
   {
@@ -1996,6 +1997,12 @@
     "key": "Drives",
     "files": [
       "app/(tabs)/_layout.tsx"
+    ]
+  },
+  {
+    "key": "Drives are logged by themselves when you drive.",
+    "files": [
+      "components/tracking-health-card.tsx"
     ]
   },
   {
@@ -4076,6 +4083,12 @@
     "key": "Off we go! 👋",
     "files": [
       "domain/cheers.ts"
+    ]
+  },
+  {
+    "key": "Off: no drives are logged. You can still add drives from the Drives tab.",
+    "files": [
+      "components/tracking-health-card.tsx"
     ]
   },
   {

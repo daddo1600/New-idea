@@ -1,6 +1,8 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Drives are logged by themselves when you drive.": "ਤੁਸੀਂ ਗੱਡੀ ਚਲਾਓ, ਡਰਾਈਵਾਂ ਆਪਣੇ-ਆਪ ਦਰਜ ਹੋ ਜਾਂਦੀਆਂ ਹਨ।",
+  "Off: no drives are logged. You can still add drives from the Drives tab.": "ਬੰਦ: ਕੋਈ ਡਰਾਈਵ ਦਰਜ ਨਹੀਂ ਹੋ ਰਹੀ। ਟ੍ਰਿਪ ਟੈਬ ਤੋਂ ਤੁਸੀਂ ਹਾਲੇ ਵੀ ਡਰਾਈਵ ਜੋੜ ਸਕਦੇ ਹੋ।",
   "Swipe back to end your shift. Stopped for something personal? Swipe that drive left afterwards.": "ਸ਼ਿਫਟ ਖ਼ਤਮ ਕਰਨ ਲਈ ਵਾਪਸ ਸਵਾਈਪ ਕਰੋ। ਵਿੱਚੋਂ ਕੋਈ ਨਿੱਜੀ ਕੰਮ ਕੀਤਾ? ਬਾਅਦ ਵਿੱਚ ਉਸ ਟ੍ਰਿਪ ਨੂੰ ਖੱਬੇ ਸਵਾਈਪ ਕਰੋ।",
   "Almost there: set location to “Always” and every drive is logged. Home shows you how.": "ਬੱਸ ਥੋੜ੍ਹਾ ਹੋਰ: ਲੋਕੇਸ਼ਨ “ਹਮੇਸ਼ਾ” ’ਤੇ ਕਰੋ, ਤਾਂ ਹਰ ਡਰਾਈਵ ਦਰਜ ਹੋਵੇਗੀ। ਹੋਮ ਸਕ੍ਰੀਨ ਦੱਸੇਗੀ ਕਿਵੇਂ।",
   "Add your drives from the Drives tab.": "ਟ੍ਰਿਪ ਟੈਬ ਤੋਂ ਆਪਣੀਆਂ ਡਰਾਈਵਾਂ ਜੋੜੋ।",

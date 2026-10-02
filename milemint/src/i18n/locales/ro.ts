@@ -1,6 +1,8 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Drives are logged by themselves when you drive.": "Cursele se înregistrează singure când conduci.",
+  "Off: no drives are logged. You can still add drives from the Drives tab.": "Oprit: nu se înregistrează nicio cursă. Poți adăuga în continuare curse din fila Curse.",
   "Swipe back to end your shift. Stopped for something personal? Swipe that drive left afterwards.": "Glisează înapoi ca să închei tura. Te-ai oprit pentru ceva personal? Glisează apoi cursa aceea la stânga.",
   "Almost there: set location to “Always” and every drive is logged. Home shows you how.": "Aproape gata: setează localizarea pe „Întotdeauna” și fiecare cursă va fi înregistrată. Ecranul principal îți arată cum.",
   "Add your drives from the Drives tab.": "Adaugă-ți cursele din fila Curse.",

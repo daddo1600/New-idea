@@ -1,6 +1,7 @@
 import { router, type Href } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { AppState, Linking, Pressable, StyleSheet, View } from 'react-native';
+import { useSQLiteContext } from 'expo-sqlite';
+import { AppState, Linking, Pressable, StyleSheet, Switch, View } from 'react-native';
 
 import { SectionTitle } from '@/components/section-title';
 import { ThemedText } from '@/components/themed-text';
@@ -14,6 +15,8 @@ import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { useRegion } from '@/region/region';
 import { askForMotion, motionStatus } from '@/tracking/motion';
+import { stopTracking } from '@/tracking/background';
+import { trackingChecked } from '@/tracking/use-tracking';
 import { useTrackingHealth } from '@/tracking/use-tracking-health';
 
 /**
@@ -200,11 +203,52 @@ function ago(at: number, now: number, t: ReturnType<typeof useT>): string {
 export function TrackingCheckRow() {
   const theme = useTheme();
   const t = useT();
-  const { health, checkedAt: now } = useTrackingHealth();
+  const db = useSQLiteContext();
+  const { health, checkedAt: now, restart } = useTrackingHealth();
+  const [busy, setBusy] = useState(false);
   if (!health) return null;
   const good = health.issue === 'ok';
+  // Off only when switched off here; missing access is set up, not switched.
+  const needsSetup = health.issue === 'needs-permission' || health.issue === 'needs-always';
+  const on = health.issue !== 'off' && !needsSetup;
+  const toggle = async (value: boolean) => {
+    if (value && needsSetup) {
+      router.push('/setup-tracking' as Href);
+      return;
+    }
+    setBusy(true);
+    try {
+      if (value) await restart();
+      else {
+        await stopTracking(db);
+        trackingChecked();
+      }
+    } finally {
+      setBusy(false);
+    }
+  };
   return (
     <>
+      {/* The one switch for automatic logging: off stops it completely, with no warnings. */}
+      <ThemedView type="backgroundElement" style={[styles.row, styles.switchRow]}>
+        <View style={styles.flex}>
+          <ThemedText type="smallBold">{t('Automatic tracking')}</ThemedText>
+          <ThemedText type="small" themeColor="textSecondary">
+            {on
+              ? t('Drives are logged by themselves when you drive.')
+              : t('Off: no drives are logged. You can still add drives from the Drives tab.')}
+          </ThemedText>
+        </View>
+        <Switch
+          accessibilityLabel={t('Automatic tracking')}
+          value={on}
+          disabled={busy}
+          onValueChange={(value) => {
+            toggle(value).catch(() => {});
+          }}
+          trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
+        />
+      </ThemedView>
       {/* The state in the heading, so the group reads at a glance. */}
       <SectionTitle
         title={t('Tracking check')}
@@ -294,5 +338,6 @@ const styles = StyleSheet.create({
   },
   row: { borderRadius: 12, padding: Spacing.three },
   motionRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
+  switchRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three },
   flex: { flex: 1 },
 });
