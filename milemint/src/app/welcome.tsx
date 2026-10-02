@@ -39,6 +39,7 @@ import { MotionCoach, MotionStep } from '@/components/motion-ask';
 import { PermissionPreview } from '@/components/permission-preview';
 import { PopPress } from '@/components/pop-press';
 import { purposeIcon, quickPurposes, shownPurpose } from '@/components/purpose-picker';
+import { GoldTrace } from '@/components/gold-trace';
 import { LanguageButton } from '@/components/language-button';
 import { MintWash, StepHeader } from '@/components/step-header';
 import { VehiclePicker } from '@/components/vehicle-picker';
@@ -718,12 +719,13 @@ export default function WelcomeScreen() {
           {step === 2 &&
             !motion &&
             (asking ? (
-              // Shown behind iOS's own question (it dims the screen but this still reads).
+              // One slim line at the very bottom, in the gap under iOS's own question
+              // (its map makes the alert tall, so anything higher is hidden behind it).
               <View style={styles.coach} accessibilityLiveRegion="polite">
-                <View style={styles.coachCard}>
-                  <Text style={styles.coachStep}>{t('↑ {{step}} OF 2', { step: asking })}</Text>
-                  <Text style={styles.coachText}>
-                    {asking === 1 ? t('Tap “Allow While Using App”') : t('Tap “Change to Always Allow”')}
+                <View style={styles.coachPill}>
+                  <GoldTrace stroke={2.5} lapMs={1600} />
+                  <Text style={styles.coachText} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.6}>
+                    {asking === 1 ? t('Select “Allow While Using App”') : t('Select “Change to Always Allow”')}
                   </Text>
                 </View>
               </View>
@@ -1054,15 +1056,15 @@ const styles = StyleSheet.create({
   vehicles: { gap: Spacing.two },
   // Pinned low, below where iOS's alert sits, on a dark card so it still reads while dimmed.
   coach: { flex: 1, justifyContent: 'flex-end' },
-  coachCard: {
+  coachPill: {
     backgroundColor: 'rgba(1,28,20,0.85)',
-    borderRadius: 20,
-    padding: Spacing.four,
-    gap: Spacing.one,
-    alignItems: 'center',
+    borderRadius: 999,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
+    marginBottom: -Spacing.two,
+    alignSelf: 'center',
   },
-  coachStep: { color: '#D1FAE5', fontSize: 15, fontWeight: '800', letterSpacing: 1.2 },
-  coachText: { color: '#FACC15', fontSize: 28, lineHeight: 35, fontWeight: '800', textAlign: 'center' },
+  coachText: { color: '#FACC15', fontSize: 17, fontWeight: '800', textAlign: 'center' },
   privacy: { color: '#FFFFFF', fontSize: 15, lineHeight: 21 },
   privacyLine: { color: '#D1FAE5', fontSize: 15, lineHeight: 21, fontWeight: '600' },
   extraRow: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },

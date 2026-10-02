@@ -713,12 +713,6 @@
     ]
   },
   {
-    "key": "↑ {{step}} OF 2",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
     "key": "+ Add a place",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -5575,6 +5569,18 @@
     ]
   },
   {
+    "key": "Select “Allow While Using App”",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Select “Change to Always Allow”",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Select {{count}} unsorted",
     "files": [
       "components/trips/list-bars.tsx"
@@ -6276,18 +6282,6 @@
     "files": [
       "components/motion-ask.tsx",
       "components/permission-preview.tsx"
-    ]
-  },
-  {
-    "key": "Tap “Allow While Using App”",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "Tap “Change to Always Allow”",
-    "files": [
-      "app/welcome.tsx"
     ]
   },
   {
