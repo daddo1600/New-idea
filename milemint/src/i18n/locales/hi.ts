@@ -1260,6 +1260,9 @@ const dictionary: Dictionary = {
   "Shift paused": "शिफ्ट ब्रेक पर",
   "Shift on": "शिफ्ट चालू",
   "Not working": "काम पर नहीं",
+  // "How do you work?": the chosen way of working on its own, with a "Change" pill.
+  "{{option}} selected. Double-tap Change to pick another": "{{option}} चुना गया। कोई और चुनने के लिए बदलें पर दो बार टैप करें",
+  "Shows all three ways of working again": "काम के तीनों तरीके फिर से दिखाता है",
 };
 
 export default dictionary;

@@ -1218,6 +1218,9 @@ const dictionary: Dictionary = {
   "Shift paused": "班次已暂停",
   "Shift on": "开工中",
   "Not working": "非工作",
+  // "How do you work?": the chosen way of working on its own, with a "Change" pill.
+  "{{option}} selected. Double-tap Change to pick another": "已选择“{{option}}”。点按两次“更改”可另选一项",
+  "Shows all three ways of working again": "重新显示全部三种工作方式",
 };
 
 export default dictionary;

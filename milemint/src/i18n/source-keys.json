@@ -445,6 +445,12 @@
     ]
   },
   {
+    "key": "{{option}} selected. Double-tap Change to pick another",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "{{percent}}% business use",
     "files": [
       "app/logbook.tsx"
@@ -1464,7 +1470,8 @@
     "files": [
       "app/(tabs)/settings.tsx",
       "app/add-trip.tsx",
-      "components/trips/purpose-line.tsx"
+      "components/trips/purpose-line.tsx",
+      "components/work-style-card.tsx"
     ]
   },
   {
@@ -5166,6 +5173,12 @@
     "key": "Show shift on lock screen",
     "files": [
       "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Shows all three ways of working again",
+    "files": [
+      "components/work-style-card.tsx"
     ]
   },
   {

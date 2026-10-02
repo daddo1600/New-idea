@@ -1272,6 +1272,9 @@ const dictionary: Dictionary = {
   "Shift paused": "ਸ਼ਿਫਟ ਬ੍ਰੇਕ ’ਤੇ",
   "Shift on": "ਸ਼ਿਫਟ ਚਾਲੂ",
   "Not working": "ਕੰਮ ’ਤੇ ਨਹੀਂ",
+  // "How do you work?": the chosen way of working on its own, with a "Change" pill.
+  "{{option}} selected. Double-tap Change to pick another": "{{option}} ਚੁਣਿਆ ਗਿਆ। ਕੋਈ ਹੋਰ ਚੁਣਨ ਲਈ ਬਦਲੋ 'ਤੇ ਦੋ ਵਾਰ ਟੈਪ ਕਰੋ",
+  "Shows all three ways of working again": "ਕੰਮ ਦੇ ਤਿੰਨੇ ਤਰੀਕੇ ਮੁੜ ਦਿਖਾਉਂਦਾ ਹੈ",
 };
 
 export default dictionary;

@@ -1314,6 +1314,9 @@ const dictionary: Dictionary = {
   "Shift paused": "Turno en pausa",
   "Shift on": "En turno",
   "Not working": "No estoy trabajando",
+  // "How do you work?": the chosen way of working on its own, with a "Change" pill.
+  "{{option}} selected. Double-tap Change to pick another": "Elegido: {{option}}. Toca dos veces Cambiar para elegir otra opción",
+  "Shows all three ways of working again": "Muestra de nuevo las tres formas de trabajar",
 };
 
 export default dictionary;

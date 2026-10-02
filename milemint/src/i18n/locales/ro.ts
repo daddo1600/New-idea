@@ -1354,6 +1354,9 @@ const dictionary: Dictionary = {
   "Shift paused": "Tură în pauză",
   "Shift on": "În tură",
   "Not working": "Nu lucrez",
+  // "How do you work?": the chosen way of working on its own, with a "Change" pill.
+  "{{option}} selected. Double-tap Change to pick another": "Ai ales: {{option}}. Atinge de două ori Schimbă ca să alegi altă variantă",
+  "Shows all three ways of working again": "Arată din nou toate cele trei moduri de lucru",
 };
 
 export default dictionary;

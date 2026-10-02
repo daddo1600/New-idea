@@ -1260,6 +1260,9 @@ const dictionary: Dictionary = {
   "Shift paused": "শিফট বিরতিতে",
   "Shift on": "শিফট চালু",
   "Not working": "কাজে নেই",
+  // "How do you work?": the chosen way of working on its own, with a "Change" pill.
+  "{{option}} selected. Double-tap Change to pick another": "{{option}} বেছে নেওয়া হয়েছে। অন্যটি বাছতে বদলান-এ দুবার ট্যাপ করুন",
+  "Shows all three ways of working again": "তিনটি কাজের ধরনই আবার দেখায়",
 };
 
 export default dictionary;
