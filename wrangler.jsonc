@@ -1,0 +1,11 @@
+// Cloudflare Workers static-assets config for the milesprout.app website (website/).
+// Lets the site deploy through the Workers flow ("npx wrangler deploy");
+// Cloudflare Pages can use the same folder with build output directory "website".
+{
+  "name": "milesprout",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./website",
+    "not_found_handling": "404-page"
+  }
+}
