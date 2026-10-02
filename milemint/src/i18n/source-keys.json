@@ -1532,6 +1532,12 @@
     ]
   },
   {
+    "key": "Client addresses are never saved or shared. MileMint keeps only the area, and everything stays on your phone.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Client meeting",
     "files": [
       "components/purpose-picker.tsx"
@@ -2135,6 +2141,12 @@
     "files": [
       "app/logbook.tsx",
       "app/tax-dates.tsx"
+    ]
+  },
+  {
+    "key": "Ends the practice run",
+    "files": [
+      "components/practice-tutorial.tsx"
     ]
   },
   {
@@ -5135,12 +5147,6 @@
     ]
   },
   {
-    "key": "Start driving",
-    "files": [
-      "components/practice-tutorial.tsx"
-    ]
-  },
-  {
     "key": "Start earlier",
     "files": [
       "components/work-hours-quick.tsx"
@@ -5359,6 +5365,12 @@
     ]
   },
   {
+    "key": "Swipe to start driving",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
     "key": "Swipe to start shift",
     "files": [
       "app/index.tsx",
@@ -5485,6 +5497,12 @@
     "key": "Terms of Use",
     "files": [
       "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Thank you for all you do for the people you care for. 💚",
+    "files": [
+      "app/welcome.tsx"
     ]
   },
   {

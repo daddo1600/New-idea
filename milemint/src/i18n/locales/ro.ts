@@ -983,6 +983,8 @@ const dictionary: Dictionary = {
   "{{vehicle}} has done {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.": "{{vehicle}} a parcurs {{distance}} pentru lucru anul acesta. Metoda cents per km nu mai numără după 5.000 km.",
   "{{vehicle}} is on track for about {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.": "În ritmul ăsta, {{vehicle}} ajunge la aprox. {{distance}} pentru lucru anul acesta. Metoda cents per km nu mai numără după 5.000 km.",
   "Client visit": "Vizită la client",
+  "Client addresses are never saved or shared. MileMint keeps only the area, and everything stays on your phone.": "Adresele clienților tăi nu sunt niciodată salvate sau distribuite. MileMint păstrează doar zona, iar totul rămâne pe telefonul tău.",
+  "Thank you for all you do for the people you care for. 💚": "Îți mulțumim pentru tot ce faci pentru oamenii de care ai grijă. 💚",
   "Add initials or a client number if you like. Never a name or address.": "Dacă vrei, adaugă inițiale sau un număr de client. Niciodată un nume sau o adresă.",
   "e.g. Client visit, J.S. or no. 1042": "de ex. Vizită la client, J.S. sau nr. 1042",
   "Fuel and oil": "Combustibil și ulei",

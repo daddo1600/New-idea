@@ -885,6 +885,8 @@ const dictionary: Dictionary = {
   "{{vehicle}} has done {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.": "{{vehicle}} 今年的工作里程已达 {{distance}}。cents per km method 超过 5,000 公里的部分不再计算。",
   "{{vehicle}} is on track for about {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.": "按目前进度，{{vehicle}} 今年的工作里程预计约 {{distance}}。cents per km method 超过 5,000 公里的部分不再计算。",
   "Client visit": "客户探访",
+  "Client addresses are never saved or shared. MileMint keeps only the area, and everything stays on your phone.": "客户的地址绝不会被保存或分享。MileMint 只保留大致区域，所有数据都留在你的手机上。",
+  "Thank you for all you do for the people you care for. 💚": "感谢你为所照顾的人付出的一切。💚",
   "Add initials or a client number if you like. Never a name or address.": "如果愿意，可以加上姓名首字母或客户编号。绝不要写姓名或地址。",
   "e.g. Client visit, J.S. or no. 1042": "例如：客户探访、J.S. 或 1042 号",
   "Fuel and oil": "燃油和机油",

@@ -926,6 +926,12 @@ function WorkStyleOption({
  * "I visit clients or patients at home": one tick for care, nursing and support
  * workers, who must not keep clients' addresses on their phone.
  */
+/**
+ * For anyone who visits people at home (care, nursing, support work): keep
+ * only the area of a client's address. A card of its own so it isn't missed,
+ * and once ticked it says plainly that nothing is saved or shared, and thanks
+ * them.
+ */
 function ClientPrivacyCheck({ value, onChange }: { value: boolean; onChange: (value: boolean) => void }) {
   const theme = useTheme();
   const t = useT();
@@ -934,27 +940,50 @@ function ClientPrivacyCheck({ value, onChange }: { value: boolean; onChange: (va
       accessibilityRole="checkbox"
       accessibilityState={{ checked: value }}
       onPress={() => onChange(!value)}
-      style={styles.privacyCheck}>
-      <View
-        style={[
-          styles.checkbox,
-          { borderColor: value ? theme.accent : theme.textSecondary },
-          value && { backgroundColor: theme.accent },
-        ]}>
-        {value && <Text style={[styles.radioTick, { color: theme.onAccent }]}>✓</Text>}
+      style={[
+        styles.privacyCard,
+        { borderColor: value ? theme.accent : theme.backgroundSelected },
+        value && { backgroundColor: theme.accent + '14' },
+      ]}>
+      <View style={styles.privacyCheck}>
+        <Text style={styles.privacyEmoji}>🩺</Text>
+        <View style={styles.flex}>
+          <ThemedText type="smallBold">{t('I visit clients or patients at home (care, nursing, support work)')}</ThemedText>
+          <ThemedText type="small" themeColor="textSecondary">
+            {t('We’ll keep only the area, never their address.')}
+          </ThemedText>
+        </View>
+        <View
+          style={[
+            styles.checkbox,
+            { borderColor: value ? theme.accent : theme.textSecondary },
+            value && { backgroundColor: theme.accent },
+          ]}>
+          {value && <Text style={[styles.radioTick, { color: theme.onAccent }]}>✓</Text>}
+        </View>
       </View>
-      <View style={styles.flex}>
-        <ThemedText type="smallBold">{t('I visit clients or patients at home (care, nursing, support work)')}</ThemedText>
-        <ThemedText type="small" themeColor="textSecondary">
-          {t('We’ll keep only the area, never their address.')}
-        </ThemedText>
-      </View>
+      {value && (
+        <View style={styles.privacyThanks}>
+          <ThemedText type="small">
+            🔒{' '}
+            {t(
+              'Client addresses are never saved or shared. MileMint keeps only the area, and everything stays on your phone.',
+            )}
+          </ThemedText>
+          <ThemedText type="smallBold" style={{ color: theme.accent }}>
+            {t('Thank you for all you do for the people you care for. 💚')}
+          </ThemedText>
+        </View>
+      )}
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  privacyCheck: { flexDirection: 'row', alignItems: 'flex-start', gap: Spacing.three, paddingHorizontal: Spacing.one },
+  privacyCard: { borderWidth: 1.5, borderRadius: 16, padding: Spacing.three, gap: Spacing.three },
+  privacyCheck: { flexDirection: 'row', alignItems: 'flex-start', gap: Spacing.three },
+  privacyEmoji: { fontSize: 24, lineHeight: 28 },
+  privacyThanks: { gap: Spacing.two },
   checkbox: {
     width: 24,
     height: 24,

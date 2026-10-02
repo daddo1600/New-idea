@@ -920,6 +920,8 @@ const dictionary: Dictionary = {
   "{{vehicle}} has done {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.": "ਇਸ ਸਾਲ {{vehicle}} ਨਾਲ {{distance}} ਦੀ ਬਿਜ਼ਨਸ ਡਰਾਈਵਿੰਗ ਹੋ ਚੁੱਕੀ ਹੈ। cents per km ਵਿੱਚ 5,000 ਕਿ.ਮੀ. ਤੋਂ ਬਾਅਦ ਗਿਣਤੀ ਨਹੀਂ ਹੁੰਦੀ।",
   "{{vehicle}} is on track for about {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.": "ਇਸ ਸਾਲ {{vehicle}} ਨਾਲ ਲਗਭਗ {{distance}} ਦੀ ਬਿਜ਼ਨਸ ਡਰਾਈਵਿੰਗ ਹੋਣ ਦਾ ਅੰਦਾਜ਼ਾ ਹੈ। cents per km ਵਿੱਚ 5,000 ਕਿ.ਮੀ. ਤੋਂ ਬਾਅਦ ਗਿਣਤੀ ਨਹੀਂ ਹੁੰਦੀ।",
   "Client visit": "ਕਲਾਇੰਟ ਵਿਜ਼ਿਟ",
+  "Client addresses are never saved or shared. MileMint keeps only the area, and everything stays on your phone.": "ਤੁਹਾਡੇ ਕਲਾਇੰਟਾਂ ਦੇ ਪਤੇ ਕਦੇ ਸੇਵ ਜਾਂ ਸਾਂਝੇ ਨਹੀਂ ਕੀਤੇ ਜਾਂਦੇ। MileMint ਸਿਰਫ਼ ਇਲਾਕਾ ਰੱਖਦਾ ਹੈ, ਅਤੇ ਸਭ ਕੁਝ ਤੁਹਾਡੇ ਫ਼ੋਨ ’ਤੇ ਹੀ ਰਹਿੰਦਾ ਹੈ।",
+  "Thank you for all you do for the people you care for. 💚": "ਜਿਨ੍ਹਾਂ ਲੋਕਾਂ ਦੀ ਤੁਸੀਂ ਦੇਖਭਾਲ ਕਰਦੇ ਹੋ, ਉਨ੍ਹਾਂ ਲਈ ਤੁਸੀਂ ਜੋ ਵੀ ਕਰਦੇ ਹੋ, ਉਸ ਲਈ ਧੰਨਵਾਦ। 💚",
   "Add initials or a client number if you like. Never a name or address.": "ਚਾਹੋ ਤਾਂ ਨਾਂ ਦੇ ਪਹਿਲੇ ਅੱਖਰ ਜਾਂ ਕਲਾਇੰਟ ਨੰਬਰ ਜੋੜੋ, ਪਰ ਨਾਂ ਜਾਂ ਪਤਾ ਕਦੇ ਨਹੀਂ।",
   "e.g. Client visit, J.S. or no. 1042": "ਜਿਵੇਂ ਕਲਾਇੰਟ ਵਿਜ਼ਿਟ, J.S. ਜਾਂ ਨੰ. 1042",
   "Fuel and oil": "ਫ਼ਿਊਲ ਅਤੇ ਆਇਲ",

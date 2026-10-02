@@ -908,6 +908,8 @@ const dictionary: Dictionary = {
   "{{vehicle}} has done {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.": "इस साल {{vehicle}} से {{distance}} बिज़नेस ड्राइविंग हो चुकी है। cents per km में 5,000 किमी के बाद गिनती रुक जाती है।",
   "{{vehicle}} is on track for about {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.": "इस साल {{vehicle}} से लगभग {{distance}} बिज़नेस ड्राइविंग होने का अनुमान है। cents per km में 5,000 किमी के बाद गिनती रुक जाती है।",
   "Client visit": "क्लाइंट विज़िट",
+  "Client addresses are never saved or shared. MileMint keeps only the area, and everything stays on your phone.": "आपके क्लाइंट्स के पते कभी सेव या शेयर नहीं किए जाते। MileMint सिर्फ़ इलाका रखता है, और सब कुछ आपके फ़ोन पर ही रहता है।",
+  "Thank you for all you do for the people you care for. 💚": "जिन लोगों की आप देखभाल करते हैं, उनके लिए आप जो कुछ करते हैं, उसके लिए धन्यवाद। 💚",
   "Add initials or a client number if you like. Never a name or address.": "चाहें तो initials (नाम के पहले अक्षर) या क्लाइंट नंबर जोड़ें। नाम या पता कभी नहीं।",
   "e.g. Client visit, J.S. or no. 1042": "जैसे क्लाइंट विज़िट, J.S. या नंबर 1042",
   "Fuel and oil": "फ़्यूल और ऑयल",

@@ -943,6 +943,8 @@ const dictionary: Dictionary = {
   "{{vehicle}} has done {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.": "{{vehicle}} lleva {{distance}} en viajes de trabajo este año. El método cents per km solo cuenta hasta 5,000 km.",
   "{{vehicle}} is on track for about {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.": "Al ritmo actual, {{vehicle}} llegará a unos {{distance}} en viajes de trabajo este año. El método cents per km solo cuenta hasta 5,000 km.",
   "Client visit": "Visita a cliente",
+  "Client addresses are never saved or shared. MileMint keeps only the area, and everything stays on your phone.": "Las direcciones de tus clientes nunca se guardan ni se comparten. MileMint solo guarda la zona, y todo se queda en tu teléfono.",
+  "Thank you for all you do for the people you care for. 💚": "Gracias por todo lo que haces por las personas que cuidas. 💚",
   "Add initials or a client number if you like. Never a name or address.": "Si quieres, agrega iniciales o un número de cliente. Nunca un nombre ni una dirección.",
   "e.g. Client visit, J.S. or no. 1042": "p. ej., Visita a cliente, J.S. o n.º 1042",
   "Fuel and oil": "Combustible y aceite",
