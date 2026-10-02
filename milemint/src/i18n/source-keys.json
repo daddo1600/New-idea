@@ -2827,7 +2827,7 @@
     ]
   },
   {
-    "key": "Every friend who joins unlocks Pro perks for you.",
+    "key": "Every friend who joins unlocks a free extra for you.",
     "files": [
       "components/celebration.tsx"
     ]
@@ -3275,7 +3275,7 @@
     ]
   },
   {
-    "key": "Give 50% off. Get Pro perks.",
+    "key": "Give 50% off. Get free extras.",
     "files": [
       "components/invite.tsx"
     ]
@@ -3606,7 +3606,7 @@
     ]
   },
   {
-    "key": "Invite a driver, unlock Pro perks",
+    "key": "Invite a driver, unlock free extras",
     "files": [
       "components/invite.tsx"
     ]
@@ -6020,7 +6020,7 @@
     ]
   },
   {
-    "key": "Share MileSprout with drivers you know. You unlock Pro perks for free as friends join.",
+    "key": "Share MileSprout with drivers you know. You unlock extras, free for good, as friends join.",
     "files": [
       "components/invite.tsx"
     ]
@@ -8114,7 +8114,7 @@
     ]
   },
   {
-    "key": "Your friend gets 50% off their first year of Pro. You unlock Pro perks for free as friends join.",
+    "key": "Your friend gets 50% off their first year of Pro. You unlock extras, free for good, as friends join.",
     "files": [
       "components/invite.tsx"
     ]

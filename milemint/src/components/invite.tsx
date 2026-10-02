@@ -51,12 +51,12 @@ export function InviteHero({ compact = false }: { compact?: boolean }) {
         </View>
       )}
       <Text style={[styles.heroTitle, compact && styles.heroTitleCompact]} accessibilityRole="header">
-        {offerCode ? t('Give 50% off. Get Pro perks.') : t('Invite a driver, unlock Pro perks')}
+        {offerCode ? t('Give 50% off. Get free extras.') : t('Invite a driver, unlock free extras')}
       </Text>
       <Text style={styles.heroBody}>
         {offerCode
-          ? t('Your friend gets 50% off their first year of Pro. You unlock Pro perks for free as friends join.')
-          : t('Share MileSprout with drivers you know. You unlock Pro perks for free as friends join.')}
+          ? t('Your friend gets 50% off their first year of Pro. You unlock extras, free for good, as friends join.')
+          : t('Share MileSprout with drivers you know. You unlock extras, free for good, as friends join.')}
       </Text>
       <View style={styles.heroButton}>
         <GoldButton

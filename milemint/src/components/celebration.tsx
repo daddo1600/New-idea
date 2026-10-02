@@ -211,7 +211,7 @@ export function Celebration({ content, onClose }: { content: CelebrationContent 
             </Text>
           </Pressable>
           {/* The share carries a new single-use invite code (src/referral/invites.ts). */}
-          <Text style={styles.reward}>{t('Every friend who joins unlocks Pro perks for you.')}</Text>
+          <Text style={styles.reward}>{t('Every friend who joins unlocks a free extra for you.')}</Text>
           <Pressable accessibilityRole="button" hitSlop={8} onPress={onClose}>
             <Text style={styles.close}>{t('Keep going')}</Text>
           </Pressable>
