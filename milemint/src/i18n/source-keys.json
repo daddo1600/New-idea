@@ -30,7 +30,7 @@
     ]
   },
   {
-    "key": "{{amount}} of business mileage logged",
+    "key": "{{amount}} of work mileage logged",
     "files": [
       "milestones/copy.ts"
     ]
@@ -60,13 +60,13 @@
     ]
   },
   {
-    "key": "{{authority}} expects a purpose for every business drive. Add them before you export?",
+    "key": "{{authority}} expects a purpose for every work drive. Add them before you export?",
     "files": [
       "app/report.tsx"
     ]
   },
   {
-    "key": "{{authority}} expects a purpose for every business drive. One tap each.",
+    "key": "{{authority}} expects a purpose for every work drive. One tap each.",
     "files": [
       "app/report.tsx",
       "components/home/purpose-nudge.tsx"
@@ -91,7 +91,7 @@
     ]
   },
   {
-    "key": "{{authority}} needs a business purpose, e.g. \"Client meeting\".",
+    "key": "{{authority}} needs a purpose for every work drive, e.g. \"Client meeting\".",
     "files": [
       "app/add-trip.tsx",
       "app/trip/[id].tsx"
@@ -171,7 +171,7 @@
     ]
   },
   {
-    "key": "{{count}} drives since then look like deliveries. They’ll be added to the shift as business.",
+    "key": "{{count}} drives since then look like deliveries. They’ll be added to the shift as work.",
     "files": [
       "components/shift-prompts.tsx"
     ]
@@ -299,7 +299,13 @@
     ]
   },
   {
-    "key": "{{distance}} business",
+    "key": "{{distance}} driven · {{percent}}% business",
+    "files": [
+      "app/report.tsx"
+    ]
+  },
+  {
+    "key": "{{distance}} for work",
     "files": [
       "app/(tabs)/drives.tsx",
       "app/(tabs)/money.tsx",
@@ -307,40 +313,10 @@
     ]
   },
   {
-    "key": "{{distance}} business · {{count}} to review",
+    "key": "{{distance}} for work · {{count}} to review",
     "files": [
       "app/(tabs)/money.tsx",
       "components/home/summary-card.tsx"
-    ]
-  },
-  {
-    "key": "{{distance}} business km",
-    "files": [
-      "milestones/copy.ts"
-    ]
-  },
-  {
-    "key": "{{distance}} business km logged with MileSprout 🛣️ Every one counted.",
-    "files": [
-      "milestones/copy.ts"
-    ]
-  },
-  {
-    "key": "{{distance}} business miles",
-    "files": [
-      "milestones/copy.ts"
-    ]
-  },
-  {
-    "key": "{{distance}} business miles logged with MileSprout 🛣️ Every one counted.",
-    "files": [
-      "milestones/copy.ts"
-    ]
-  },
-  {
-    "key": "{{distance}} driven · {{percent}}% business",
-    "files": [
-      "app/report.tsx"
     ]
   },
   {
@@ -357,7 +333,7 @@
     ]
   },
   {
-    "key": "{{distance}} km · a typical month of business driving",
+    "key": "{{distance}} km · a typical month of work driving",
     "files": [
       "components/launch-intro.tsx"
     ]
@@ -376,7 +352,7 @@
     ]
   },
   {
-    "key": "{{distance}} miles · a typical month of business driving",
+    "key": "{{distance}} miles · a typical month of work driving",
     "files": [
       "components/launch-intro.tsx"
     ]
@@ -388,10 +364,34 @@
     ]
   },
   {
-    "key": "{{distance}} of business driving",
+    "key": "{{distance}} of work driving",
     "files": [
       "app/milestones.tsx",
       "components/launch-intro.tsx"
+    ]
+  },
+  {
+    "key": "{{distance}} work km",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "{{distance}} work km logged with MileSprout 🛣️ Every one counted.",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "{{distance}} work miles",
+    "files": [
+      "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "{{distance}} work miles logged with MileSprout 🛣️ Every one counted.",
+    "files": [
+      "milestones/copy.ts"
     ]
   },
   {
@@ -589,13 +589,13 @@
     ]
   },
   {
-    "key": "{{vehicle}} has done {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.",
+    "key": "{{vehicle}} has done {{distance}} of work driving this year. Cents per km stops counting at 5,000 km.",
     "files": [
       "components/logbook-nudge.tsx"
     ]
   },
   {
-    "key": "{{vehicle}} is on track for about {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.",
+    "key": "{{vehicle}} is on track for about {{distance}} of work driving this year. Cents per km stops counting at 5,000 km.",
     "files": [
       "components/logbook-nudge.tsx"
     ]
@@ -1103,12 +1103,6 @@
     ]
   },
   {
-    "key": "Auto: business by default · swipe left if personal",
-    "files": [
-      "components/trips/trip-row.tsx"
-    ]
-  },
-  {
     "key": "Auto: commute",
     "files": [
       "components/trips/trip-row.tsx"
@@ -1134,6 +1128,12 @@
   },
   {
     "key": "Auto: usual route",
+    "files": [
+      "components/trips/trip-row.tsx"
+    ]
+  },
+  {
+    "key": "Auto: work by default · swipe left if personal",
     "files": [
       "components/trips/trip-row.tsx"
     ]
@@ -1337,17 +1337,6 @@
     ]
   },
   {
-    "key": "Business",
-    "files": [
-      "app/add-trip.tsx",
-      "app/trip/[id].tsx",
-      "components/trips/list-bars.tsx",
-      "components/trips/row-parts.tsx",
-      "components/trips/selectable-trip-row.tsx",
-      "components/trips/trip-row.tsx"
-    ]
-  },
-  {
     "key": "Business errand",
     "files": [
       "components/purpose-picker.tsx"
@@ -1363,7 +1352,6 @@
     "key": "Business km",
     "files": [
       "app/logbook.tsx",
-      "app/milestones.tsx",
       "app/report.tsx"
     ]
   },
@@ -1377,53 +1365,13 @@
     "key": "Business miles",
     "files": [
       "app/claim-relief.tsx",
-      "app/milestones.tsx",
       "app/report.tsx"
-    ]
-  },
-  {
-    "key": "Business or personal?",
-    "files": [
-      "components/trips/trip-row.tsx"
-    ]
-  },
-  {
-    "key": "Business or personal? Worth {{amount}} if business.",
-    "files": [
-      "components/trips/trip-row.tsx"
     ]
   },
   {
     "key": "Business parking and tolls are deductible on top of the mileage rate. Parking at your regular workplace isn’t, and fines never are.",
     "files": [
       "domain/regions.ts"
-    ]
-  },
-  {
-    "key": "Business purpose",
-    "files": [
-      "app/add-trip.tsx",
-      "app/trip/[id].tsx",
-      "components/purpose-picker.tsx"
-    ]
-  },
-  {
-    "key": "Business purpose: {{purpose}}",
-    "files": [
-      "components/purpose-picker.tsx",
-      "components/trips/purpose-line.tsx"
-    ]
-  },
-  {
-    "key": "Business purpose: {{purpose}}. Double-tap to confirm",
-    "files": [
-      "components/trips/purpose-line.tsx"
-    ]
-  },
-  {
-    "key": "Business purpose: not chosen",
-    "files": [
-      "components/purpose-picker.tsx"
     ]
   },
   {
@@ -1937,13 +1885,13 @@
     ]
   },
   {
-    "key": "Delivery apps only count km with an order on board. The drive to the pickup, between orders and home again are business km too, and MileSprout logs them all.",
+    "key": "Delivery apps only count km with an order on board. The drive to the pickup, between orders and home again are work km too, and MileSprout logs them all.",
     "files": [
       "app/compare.tsx"
     ]
   },
   {
-    "key": "Delivery apps only count miles with an order on board. The drive to the pickup, between orders and home again are business miles too, and MileSprout logs them all.",
+    "key": "Delivery apps only count miles with an order on board. The drive to the pickup, between orders and home again are work miles too, and MileSprout logs them all.",
     "files": [
       "app/compare.tsx"
     ]
@@ -2018,13 +1966,13 @@
     ]
   },
   {
-    "key": "Drives in your hours ({{days}} {{from}}–{{to}}) are sorted as business for you.",
+    "key": "Drives in your hours ({{days}} {{from}}–{{to}}) are sorted as work for you.",
     "files": [
       "components/home-empty.tsx"
     ]
   },
   {
-    "key": "Drives in your work hours are sorted as business for you.",
+    "key": "Drives in your work hours are sorted as work for you.",
     "files": [
       "components/home-empty.tsx"
     ]
@@ -2038,7 +1986,7 @@
     ]
   },
   {
-    "key": "Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.",
+    "key": "Drives that start during your hours are marked work, others personal. Your usual routes and commutes take priority.",
     "files": [
       "app/(tabs)/settings.tsx"
     ]
@@ -2332,7 +2280,7 @@
     ]
   },
   {
-    "key": "Estimated at {{authority}} rates for your business trips. Not tax advice.",
+    "key": "Estimated at {{authority}} rates for your work drives. Not tax advice.",
     "files": [
       "app/compare.tsx"
     ]
@@ -2359,24 +2307,6 @@
     "key": "Estimates only, not tax advice. Keep receipts for your car expenses, and odometer readings at the start and end of each income year you use the logbook method.",
     "files": [
       "app/logbook.tsx"
-    ]
-  },
-  {
-    "key": "Every business kilometre counts",
-    "files": [
-      "domain/reminders.ts"
-    ]
-  },
-  {
-    "key": "Every business mile counts",
-    "files": [
-      "domain/reminders.ts"
-    ]
-  },
-  {
-    "key": "Every business mile, counted.",
-    "files": [
-      "app/welcome.tsx"
     ]
   },
   {
@@ -2457,6 +2387,24 @@
     "key": "Every work drive has a purpose ✓",
     "files": [
       "components/trips/list-bars.tsx"
+    ]
+  },
+  {
+    "key": "Every work kilometre counts",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Every work mile counts",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Every work mile, counted.",
+    "files": [
+      "app/welcome.tsx"
     ]
   },
   {
@@ -2971,13 +2919,13 @@
     ]
   },
   {
-    "key": "I’ve found {{amount}} in business mileage with MileSprout 🚗💸 Every mile counted, automatically.",
+    "key": "I’ve found {{amount}} in work mileage with MileSprout 🚗💸 Every mile counted, automatically.",
     "files": [
       "milestones/copy.ts"
     ]
   },
   {
-    "key": "I’ve logged {{amount}} of business mileage with MileSprout 🚗 Every mile counted, automatically.",
+    "key": "I’ve logged {{amount}} of work mileage with MileSprout 🚗 Every mile counted, automatically.",
     "files": [
       "milestones/copy.ts"
     ]
@@ -3202,7 +3150,7 @@
     ]
   },
   {
-    "key": "Kept with the drive, but only counted on business drives.",
+    "key": "Kept with the drive, but only counted on work drives.",
     "files": [
       "app/add-trip.tsx",
       "app/trip/[id].tsx"
@@ -3259,7 +3207,7 @@
     ]
   },
   {
-    "key": "Last chance: make sure every business drive is in MileSprout before {{date}}.",
+    "key": "Last chance: make sure every work drive is in MileSprout before {{date}}.",
     "files": [
       "domain/deadlines.ts"
     ]
@@ -3418,25 +3366,25 @@
     ]
   },
   {
-    "key": "Mark {{from}} to {{to}} as business",
-    "files": [
-      "components/trips/trip-row.tsx"
-    ]
-  },
-  {
     "key": "Mark {{from}} to {{to}} as personal",
     "files": [
       "components/trips/trip-row.tsx"
     ]
   },
   {
-    "key": "Mark as business",
+    "key": "Mark {{from}} to {{to}} as work",
+    "files": [
+      "components/trips/trip-row.tsx"
+    ]
+  },
+  {
+    "key": "Mark as personal",
     "files": [
       "components/practice-tutorial.tsx"
     ]
   },
   {
-    "key": "Mark as personal",
+    "key": "Mark as work",
     "files": [
       "components/practice-tutorial.tsx"
     ]
@@ -3522,31 +3470,31 @@
     ]
   },
   {
-    "key": "MileSprout has now found {{amount}} in business mileage for you. It all counts at tax time.",
+    "key": "MileSprout has now found {{amount}} in work mileage for you. It all counts at tax time.",
     "files": [
       "milestones/copy.ts"
     ]
   },
   {
-    "key": "MileSprout has now found {{amount}} in business mileage for you. That’s your hard work, counted.",
+    "key": "MileSprout has now found {{amount}} in work mileage for you. That’s your hard work, counted.",
     "files": [
       "milestones/copy.ts"
     ]
   },
   {
-    "key": "MileSprout has now found {{amount}} in business mileage for you. Well done. Keep going.",
+    "key": "MileSprout has now found {{amount}} in work mileage for you. Well done. Keep going.",
     "files": [
       "milestones/copy.ts"
     ]
   },
   {
-    "key": "MileSprout has now found {{amount}} in business mileage for you. You earned all of it.",
+    "key": "MileSprout has now found {{amount}} in work mileage for you. You earned all of it.",
     "files": [
       "milestones/copy.ts"
     ]
   },
   {
-    "key": "MileSprout has now logged {{amount}} of business mileage at {{authority}} rates, ready for your expense and relief claims.",
+    "key": "MileSprout has now logged {{amount}} of work mileage at {{authority}} rates, ready for your expense and relief claims.",
     "files": [
       "milestones/copy.ts"
     ]
@@ -3716,37 +3664,37 @@
     ]
   },
   {
-    "key": "My delivery app counted {{counted}} km last month. MileSprout logged {{logged}} business km: that's {{extra}} km (about {{amount}}) I'd have missed claiming. 🚗💸 MileSprout logs every mile automatically.",
+    "key": "My delivery app counted {{counted}} km last month. MileSprout logged {{logged}} work km: that's {{extra}} km (about {{amount}}) I'd have missed claiming. 🚗💸 MileSprout logs every mile automatically.",
     "files": [
       "app/compare.tsx"
     ]
   },
   {
-    "key": "My delivery app counted {{counted}} km this month. MileSprout logged {{logged}} business km: that's {{extra}} km (about {{amount}}) I'd have missed claiming. 🚗💸 MileSprout logs every mile automatically.",
+    "key": "My delivery app counted {{counted}} km this month. MileSprout logged {{logged}} work km: that's {{extra}} km (about {{amount}}) I'd have missed claiming. 🚗💸 MileSprout logs every mile automatically.",
     "files": [
       "app/compare.tsx"
     ]
   },
   {
-    "key": "My delivery app counted {{counted}} km this week. MileSprout logged {{logged}} business km: that's {{extra}} km (about {{amount}}) I'd have missed claiming. 🚗💸 MileSprout logs every mile automatically.",
+    "key": "My delivery app counted {{counted}} km this week. MileSprout logged {{logged}} work km: that's {{extra}} km (about {{amount}}) I'd have missed claiming. 🚗💸 MileSprout logs every mile automatically.",
     "files": [
       "app/compare.tsx"
     ]
   },
   {
-    "key": "My delivery app counted {{counted}} miles last month. MileSprout logged {{logged}} business miles: that's {{extra}} miles (about {{amount}}) I'd have missed claiming. 🚗💸 MileSprout logs every mile automatically.",
+    "key": "My delivery app counted {{counted}} miles last month. MileSprout logged {{logged}} work miles: that's {{extra}} miles (about {{amount}}) I'd have missed claiming. 🚗💸 MileSprout logs every mile automatically.",
     "files": [
       "app/compare.tsx"
     ]
   },
   {
-    "key": "My delivery app counted {{counted}} miles this month. MileSprout logged {{logged}} business miles: that's {{extra}} miles (about {{amount}}) I'd have missed claiming. 🚗💸 MileSprout logs every mile automatically.",
+    "key": "My delivery app counted {{counted}} miles this month. MileSprout logged {{logged}} work miles: that's {{extra}} miles (about {{amount}}) I'd have missed claiming. 🚗💸 MileSprout logs every mile automatically.",
     "files": [
       "app/compare.tsx"
     ]
   },
   {
-    "key": "My delivery app counted {{counted}} miles this week. MileSprout logged {{logged}} business miles: that's {{extra}} miles (about {{amount}}) I'd have missed claiming. 🚗💸 MileSprout logs every mile automatically.",
+    "key": "My delivery app counted {{counted}} miles this week. MileSprout logged {{logged}} work miles: that's {{extra}} miles (about {{amount}}) I'd have missed claiming. 🚗💸 MileSprout logs every mile automatically.",
     "files": [
       "app/compare.tsx"
     ]
@@ -3782,7 +3730,7 @@
     ]
   },
   {
-    "key": "Needs a business purpose",
+    "key": "Needs a purpose",
     "files": [
       "components/trips/purpose-line.tsx"
     ]
@@ -3818,7 +3766,7 @@
     ]
   },
   {
-    "key": "New drives start as business",
+    "key": "New drives start as work",
     "files": [
       "app/(tabs)/settings.tsx"
     ]
@@ -4055,19 +4003,19 @@
     ]
   },
   {
-    "key": "of business driving last month",
+    "key": "of work driving last month",
     "files": [
       "app/compare.tsx"
     ]
   },
   {
-    "key": "of business driving this month",
+    "key": "of work driving this month",
     "files": [
       "app/compare.tsx"
     ]
   },
   {
-    "key": "of business driving this week",
+    "key": "of work driving this week",
     "files": [
       "app/compare.tsx"
     ]
@@ -4550,9 +4498,36 @@
     ]
   },
   {
+    "key": "Purpose",
+    "files": [
+      "app/add-trip.tsx",
+      "app/trip/[id].tsx",
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
     "key": "Purpose:",
     "files": [
       "components/trips/purpose-line.tsx"
+    ]
+  },
+  {
+    "key": "Purpose: {{purpose}}",
+    "files": [
+      "components/purpose-picker.tsx",
+      "components/trips/purpose-line.tsx"
+    ]
+  },
+  {
+    "key": "Purpose: {{purpose}}. Double-tap to confirm",
+    "files": [
+      "components/trips/purpose-line.tsx"
+    ]
+  },
+  {
+    "key": "Purpose: not chosen",
+    "files": [
+      "components/purpose-picker.tsx"
     ]
   },
   {
@@ -5219,13 +5194,13 @@
     ]
   },
   {
-    "key": "Sort your drives and add any you missed before {{date}}. Every business kilometre is money back.",
+    "key": "Sort your drives and add any you missed before {{date}}. Every work kilometre is money back.",
     "files": [
       "domain/deadlines.ts"
     ]
   },
   {
-    "key": "Sort your drives and add any you missed before {{date}}. Every business mile is money back.",
+    "key": "Sort your drives and add any you missed before {{date}}. Every work mile is money back.",
     "files": [
       "domain/deadlines.ts"
     ]
@@ -5237,13 +5212,13 @@
     ]
   },
   {
-    "key": "Sorted as business: worth {{amount}}",
+    "key": "Sorted as personal ✓",
     "files": [
       "components/practice-tutorial.tsx"
     ]
   },
   {
-    "key": "Sorted as personal ✓",
+    "key": "Sorted as work: worth {{amount}}",
     "files": [
       "components/practice-tutorial.tsx"
     ]
@@ -5627,7 +5602,7 @@
     ]
   },
   {
-    "key": "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.",
+    "key": "Tax offices want a purpose for every work drive. We’ll fill this in for you, and you can change it on any trip.",
     "files": [
       "app/welcome.tsx"
     ]
@@ -6056,7 +6031,7 @@
     ]
   },
   {
-    "key": "Trades, sales, care, office. Drives in your hours are business.",
+    "key": "Trades, sales, care, office. Drives in your hours count as work.",
     "files": [
       "app/welcome.tsx"
     ]
@@ -6196,7 +6171,7 @@
     ]
   },
   {
-    "key": "Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.",
+    "key": "Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only work drives should be claimed.",
     "files": [
       "app/(tabs)/settings.tsx"
     ]
@@ -6268,7 +6243,7 @@
     ]
   },
   {
-    "key": "Usual business purpose",
+    "key": "Usual purpose",
     "files": [
       "app/(tabs)/settings.tsx"
     ]
@@ -6477,15 +6452,50 @@
     ]
   },
   {
+    "key": "Work (drive type)",
+    "files": [
+      "app/add-trip.tsx",
+      "app/trip/[id].tsx",
+      "components/trips/list-bars.tsx",
+      "components/trips/row-parts.tsx",
+      "components/trips/selectable-trip-row.tsx",
+      "components/trips/trip-row.tsx"
+    ]
+  },
+  {
     "key": "Work hours",
     "files": [
       "app/(tabs)/settings.tsx"
     ]
   },
   {
+    "key": "Work km",
+    "files": [
+      "app/milestones.tsx"
+    ]
+  },
+  {
+    "key": "Work miles",
+    "files": [
+      "app/milestones.tsx"
+    ]
+  },
+  {
     "key": "Work on {{day}}",
     "files": [
       "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Work or personal?",
+    "files": [
+      "components/trips/trip-row.tsx"
+    ]
+  },
+  {
+    "key": "Work or personal? Worth {{amount}} if work.",
+    "files": [
+      "components/trips/trip-row.tsx"
     ]
   },
   {
@@ -6677,7 +6687,7 @@
     ]
   },
   {
-    "key": "Your app counted as much as MileSprout logged. Check your trips are sorted as business.",
+    "key": "Your app counted as much as MileSprout logged. Check your drives are sorted as work.",
     "files": [
       "app/compare.tsx"
     ]

@@ -11,7 +11,8 @@ Written for Brazilian delivery riders, drivers and other workers living in the U
 | English | pt-BR | Why |
 |---|---|---|
 | drive / trip | **trajeto** (pl. trajetos) | One word for both. "Viagem" sounds like a long journey, and "corrida" is what Uber or the delivery app calls a job, which would get confused with the app's own count. "Trajeto" is neutral and clear. |
-| business (trip type) | **profissional** | "Trabalho" is already the saved place "Work" (Casa → Trabalho). A commute to "Trabalho" is personal, so the category needs a different word. "Uso profissional" is the everyday term. |
+| work (trip type; English “Work”, was “Business”) | **trabalho** (Trabalho, trajeto de trabalho, km a trabalho) | October 2026: what couriers say. English has the same overlap with the saved place “Work”; the toggle has its own key (“Work (drive type)”). |
+| business (official tax term only) | **profissional** | Kept in the report, exports, logbook, P87 and rate names. |
 | personal | **pessoal** | Standard. |
 | Not sorted / unsorted | **sem classificar** | |
 | sort (mark business or personal) | **classificar** | Used everywhere, including "classified". |
@@ -30,7 +31,7 @@ Written for Brazilian delivery riders, drivers and other workers living in the U
 | claim | **declarar** (to the tax office); **pedir** (P87, Mileage Allowance Relief) | "Unclaimed" = "sem declarar". |
 | estimated | **estimativa / estimado** | Kept wherever the English has it. Never promises a saving. |
 | commute | **deslocamento casa-trabalho**; short form **casa-trabalho** | |
-| business purpose | **finalidade profissional** | |
+| purpose (on a work drive) | **finalidade** | “Business purpose” became “Purpose” in English. |
 | work hours | **horário de trabalho** | |
 | place / saved place | **local / local salvo** | |
 | Home / Work / Client / Other | **Casa / Trabalho / Cliente / Outro** | |
@@ -113,7 +114,7 @@ pt-BR categories are `one`, `many`, `other`. `many` is always the same as `other
    - "ALLOW LOCATION ACCESS" → **PERMITIR ACESSO À LOCALIZAÇÃO**
    - "Always" → **Sempre**, "Never" → **Nunca**, "Location" → **Localização**, "Open Settings" → **Abrir Ajustes**, "Settings → Notifications" → **Ajustes → Notificações**
 2. **"Enter the miles/kilometres driven, e.g. 12.5."** I kept "12.5" with a dot because the app's number check (`parseMiles` in `src/domain/format.ts`) only accepts a dot. Brazilians normally type a comma (12,5), which the app will reject. This is worth fixing in code.
-3. **"Business" = "Profissional"**: kept. Every place it appears as a label (segmented control, bulk buttons, swipe action) is half the screen wide, so the extra length fits.
+3. **Superseded (October 2026): the toggle is now "Trabalho".** Original note: **"Business" = "Profissional"**: kept. Every place it appears as a label (segmented control, bulk buttons, swipe action) is half the screen wide, so the extra length fits.
 4. **Articles before `{{authority}}`**: always masculine, including the written-out CRA lines ("o CRA").
 5. **"Missed miles check" → "Conferir distância perdida"**: I used a unit-neutral wording because the screen also serves km regions.
 6. **"{{label}}: earned / not yet"** (screen reader) → "conquista obtida / ainda não obtida". I used the noun "conquista" so it works whatever the gender of the milestone title.

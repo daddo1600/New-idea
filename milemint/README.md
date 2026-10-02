@@ -35,7 +35,7 @@ npx expo start      # press w for the web preview (also generates route types)
 - Permission setup and a tracking-status card
 - Automatic sorting: learned routes, work hours, named places, commute warning (home ↔ work isn't deductible)
 - Swipe to classify, trip detail screen (purpose, labels, save as place), settings (work hours, places)
-- Business/personal classification with a "worth $X if business" prompt
+- Work/personal classification with a "worth $X if work" prompt
 - Deductions counter
 - Split IRS rates
 - Encrypted storage with edit history

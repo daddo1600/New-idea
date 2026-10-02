@@ -11,7 +11,7 @@ Neutral international Spanish, written mainly for Latin American speakers in the
 | English | Spanish | Why |
 |---|---|---|
 | drive / trip | viaje | One everyday word for both; it's what Uber and delivery apps use in Spanish. |
-| business (trip type) | de trabajo / Trabajo | "Negocio" sounds like owning a company; couriers and carers think of these as work trips. |
+| work (trip type; English “Work” since October 2026, was “Business”) | de trabajo / Trabajo | "Negocio" sounds like owning a company; couriers and carers think of these as work trips. |
 | personal | personal | Same word. |
 | business purpose | motivo de trabajo | Short, clear. |
 | shift | turno | Standard. "Start shift" = Iniciar turno, "End shift" = Terminar turno. |

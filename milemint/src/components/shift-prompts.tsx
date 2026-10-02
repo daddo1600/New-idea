@@ -73,7 +73,7 @@ export function BackdateOffer({
   return (
     <PromptCard
       title={running ? t('Did your shift start at {{time}}?', { time }) : t('Start shift from {{time}}?', { time })}
-      body={t('{{count}} drives since then look like deliveries. They’ll be added to the shift as business.', {
+      body={t('{{count}} drives since then look like deliveries. They’ll be added to the shift as work.', {
         count,
       })}
       action={t('Start from {{time}}', { time })}

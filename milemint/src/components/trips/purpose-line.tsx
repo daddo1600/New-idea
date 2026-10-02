@@ -88,7 +88,7 @@ export function PurposeLine({
         {saved ? (
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={t('Business purpose: {{purpose}}', { purpose: shownPurpose(saved, t) })}
+            accessibilityLabel={t('Purpose: {{purpose}}', { purpose: shownPurpose(saved, t) })}
             accessibilityHint={t('Opens a list of purposes')}
             onPress={openSheet}
             hitSlop={8}
@@ -106,7 +106,7 @@ export function PurposeLine({
         ) : (
           <>
             {/* The dot is the only "needs attention" colour; the label says it for VoiceOver. */}
-            <View accessible accessibilityLabel={t('Needs a business purpose')} style={styles.label}>
+            <View accessible accessibilityLabel={t('Needs a purpose')} style={styles.label}>
               <View style={[styles.dot, { backgroundColor: theme.warning }]} />
               <ThemedText type="small" themeColor="textSecondary">
                 {t('Purpose:')}
@@ -115,7 +115,7 @@ export function PurposeLine({
             {suggestion !== null && (
               <PopPress
                 accessibilityRole="button"
-                accessibilityLabel={t('Business purpose: {{purpose}}. Double-tap to confirm', {
+                accessibilityLabel={t('Purpose: {{purpose}}. Double-tap to confirm', {
                   purpose: shownPurpose(suggestion, t),
                 })}
                 accessibilityState={{ selected: picked !== null, disabled: picked !== null }}

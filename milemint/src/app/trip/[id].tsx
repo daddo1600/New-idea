@@ -50,7 +50,7 @@ type End = 'start' | 'end';
 
 // Labels are English, shown with t().
 const CLASSIFY_OPTIONS = [
-  { value: 'business', label: msg('Business') },
+  { value: 'business', label: msg('Work (drive type)') },
   { value: 'personal', label: msg('Personal') },
 ] as const satisfies readonly { value: Classification; label: string }[];
 
@@ -161,7 +161,7 @@ export default function TripScreen() {
   const save = async () => {
     if (!startLabel.trim() || !endLabel.trim()) return setError(t('Enter where you drove from and to.'));
     if (business && !purpose.trim()) {
-      return setError(t('{{authority}} needs a business purpose, e.g. "Client meeting".', { authority: region.authority }));
+      return setError(t('{{authority}} needs a purpose for every work drive, e.g. "Client meeting".', { authority: region.authority }));
     }
     const paid = readCosts(costs);
     if ('error' in paid) return setError(t(paid.error, { max: maxCost(region) }));
@@ -236,7 +236,7 @@ export default function TripScreen() {
         <Field label={t('To')}>
           <TextInput style={inputStyle} value={endLabel} onChangeText={setEndLabel} />
         </Field>
-        <Field label={business ? t('Business purpose') : t('Note (optional)')}>
+        <Field label={business ? t('Purpose') : t('Note (optional)')}>
           {business ? (
             <PurposePicker value={purpose} onChange={setPurpose} recent={purposes} clientPrivacy={clientPrivacy} />
           ) : (
@@ -257,7 +257,7 @@ export default function TripScreen() {
           }}
           region={region}
           note={
-            business ? t(costsNote(region, employee)) : t('Kept with the drive, but only counted on business drives.')
+            business ? t(costsNote(region, employee)) : t('Kept with the drive, but only counted on work drives.')
           }
         />
         {error && (

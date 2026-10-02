@@ -24,7 +24,7 @@ Audience: Polish drivers, couriers and tradespeople living in the UK. The text i
 | English | Polish | Why |
 |---|---|---|
 | drive / trip | przejazd (1 przejazd, 2 przejazdy, 5 przejazdów, 1,5 przejazdu) | One word for both, so the app reads consistently. "Podróż" sounds like a holiday, "kurs" like a taxi ride. |
-| business (trip type) | służbowy (przejazd służbowy, mile/km służbowe), "służbowo" | The standard Polish word for work-related travel ("podróż służbowa", "samochód służbowy"). Not "biznesowy", which sounds like a company. |
+| work (trip type; English “Work” since October 2026, was “Business”) | służbowy (przejazd służbowy, mile/km służbowe), "służbowo" | The standard Polish word for work-related travel ("podróż służbowa", "samochód służbowy"). Not "biznesowy", which sounds like a company. |
 | personal | prywatny | Standard opposite of "służbowy". |
 | sort (mark business/personal) | oznaczyć / oznacz | "Sortować" in Polish means putting things in order. "Oznaczyć" (to mark) is what the user actually does. |
 | Not sorted | Nieoznaczony | Matches "oznaczyć". |

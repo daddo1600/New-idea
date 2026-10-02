@@ -19,7 +19,7 @@ The user is always **你** (never 您), as Apple's Simplified Chinese iOS does. 
 | English | 中文 | Why |
 |---|---|---|
 | drive / trip | 行程（counted as 次行程） | One word for both, so the two English words don't turn into two concepts. |
-| business (trip type) | 工作 | Clearer than 商务 or 公务 for couriers and tradespeople. Used as 工作行程 and 工作里程. |
+| work (trip type; English “Work” since October 2026, was “Business”) | 工作 | Clearer than 商务 or 公务 for couriers and tradespeople. Used as 工作行程 and 工作里程. |
 | personal | 私人 | Standard opposite of 工作. |
 | Private (privacy feature heading) | 保护隐私 | Kept apart from 私人 (personal). |
 | business mileage | 工作里程 | Everyday wording. |

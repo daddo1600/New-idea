@@ -9,6 +9,8 @@ import type { Dictionary } from '../i18n';
 const en: Dictionary = {
   // The tab, not the place: "Inicio" rather than "Casa".
   'Home (tab)': 'Home',
+  // The drive type (Work / Personal), not the saved place "Work": some languages say these differently.
+  'Work (drive type)': 'Work',
   // A saved purpose (the key is stored with trips); couriers say "pickup", not "collection".
   'Delivery or collection': 'Delivery or pickup',
   days: { one: 'day', other: 'days' },
@@ -43,9 +45,9 @@ const en: Dictionary = {
   'Sort {{count}} drives': { one: 'Sort {{count}} drive', other: 'Sort {{count}} drives' },
   'Select {{count}} unsorted': { one: 'Select {{count}} unsorted', other: 'Select {{count}} unsorted' },
   '{{count}} selected': { one: '{{count}} selected', other: '{{count}} selected' },
-  '{{distance}} business · {{count}} to review': {
-    one: '{{distance}} business · {{count}} to review',
-    other: '{{distance}} business · {{count}} to review',
+  '{{distance}} for work · {{count}} to review': {
+    one: '{{distance}} for work · {{count}} to review',
+    other: '{{distance}} for work · {{count}} to review',
   },
   'On shift for {{elapsed}}, {{count}} drives': {
     one: 'On shift for {{elapsed}}, {{count}} drive',
@@ -108,9 +110,9 @@ const en: Dictionary = {
   '{{count}} days ago': { one: '{{count}} day ago', other: '{{count}} days ago' },
   '{{count}} drives': { one: '{{count}} drive', other: '{{count}} drives' },
   '{{purpose}} · {{count}} to sort': { one: '{{purpose}} · {{count}} to sort', other: '{{purpose}} · {{count}} to sort' },
-  '{{count}} drives since then look like deliveries. They’ll be added to the shift as business.': {
-    one: '{{count}} drive since then looks like a delivery. It’ll be added to the shift as business.',
-    other: '{{count}} drives since then look like deliveries. They’ll be added to the shift as business.',
+  '{{count}} drives since then look like deliveries. They’ll be added to the shift as work.': {
+    one: '{{count}} drive since then looks like a delivery. It’ll be added to the shift as work.',
+    other: '{{count}} drives since then look like deliveries. They’ll be added to the shift as work.',
   },
   'Friends joined: {{count}}': { one: 'Friends joined: {{count}}', other: 'Friends joined: {{count}}' },
   '{{count}} friends joined': { one: '{{count}} friend joined', other: '{{count}} friends joined' },

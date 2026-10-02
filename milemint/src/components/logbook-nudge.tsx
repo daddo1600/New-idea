@@ -63,11 +63,11 @@ export function LogbookNudge({ trips, vehicles }: { trips: readonly Trip[]; vehi
         <ThemedText type="smallBold">{t('Over 5,000 km? The logbook method could claim more')}</ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
           {over
-            ? t('{{vehicle}} has done {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.', {
+            ? t('{{vehicle}} has done {{distance}} of work driving this year. Cents per km stops counting at 5,000 km.', {
                 vehicle,
                 distance: formatDistance(car.businessKm * 1000, region),
               })
-            : t('{{vehicle}} is on track for about {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.', {
+            : t('{{vehicle}} is on track for about {{distance}} of work driving this year. Cents per km stops counting at 5,000 km.', {
                 vehicle,
                 distance: formatDistance(roundTo100(car.projectedKm) * 1000, region, { whole: true }),
               })}

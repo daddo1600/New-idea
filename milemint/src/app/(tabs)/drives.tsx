@@ -209,7 +209,7 @@ function MonthHeading({ item, region }: { item: MonthItem; region: Region }) {
         {name}
       </ThemedText>
       <ThemedText type="small" themeColor="textSecondary">
-        {t('{{distance}} business', { distance })} · {formatMoney(item.valueMinor, region)}
+        {t('{{distance}} for work', { distance })} · {formatMoney(item.valueMinor, region)}
       </ThemedText>
     </View>
   );

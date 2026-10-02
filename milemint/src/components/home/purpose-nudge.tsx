@@ -20,7 +20,7 @@ export function PurposeNudge({ count, onFill }: { count: number; onFill: () => v
       <ThemedView type="backgroundElement" style={[styles.purposeNudge, { borderColor: theme.warning }]}>
         <ThemedText type="smallBold">{t('{{count}} work drives need a purpose', { count })}</ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
-          {t('{{authority}} expects a purpose for every business drive. One tap each.', {
+          {t('{{authority}} expects a purpose for every work drive. One tap each.', {
             authority: region.authority,
           })}
         </ThemedText>

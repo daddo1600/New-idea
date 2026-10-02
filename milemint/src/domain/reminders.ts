@@ -42,8 +42,8 @@ export const WEEKLY_MESSAGES: readonly { title: string; titleKm?: string; body: 
     body: msg('Sort this week’s drives now and tax time becomes a two-minute job.'),
   },
   {
-    title: msg('Every business mile counts'),
-    titleKm: msg('Every business kilometre counts'),
+    title: msg('Every work mile counts'),
+    titleKm: msg('Every work kilometre counts'),
     body: msg('Take a minute to sort this week’s drives.'),
   },
   {

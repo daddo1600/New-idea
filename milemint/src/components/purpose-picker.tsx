@@ -118,7 +118,7 @@ export function PurposePicker({
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={
-          value ? t('Business purpose: {{purpose}}', { purpose: shown }) : t('Business purpose: not chosen')
+          value ? t('Purpose: {{purpose}}', { purpose: shown }) : t('Purpose: not chosen')
         }
         accessibilityHint={t('Opens a list of purposes')}
         onPress={() => setOpen(true)}
@@ -259,7 +259,7 @@ export function PurposeSheet({
         <ThemedView type="sheet" style={[styles.sheet, { paddingBottom: insets.bottom + Spacing.three }]}>
           <View style={[styles.grabber, { backgroundColor: theme.backgroundSelected }]} />
           <ThemedText type="smallBold" style={styles.title}>
-            {t('Business purpose')}
+            {t('Purpose')}
           </ThemedText>
           {subtitle ? (
             <ThemedText type="small" themeColor="textSecondary" numberOfLines={1} style={styles.title}>

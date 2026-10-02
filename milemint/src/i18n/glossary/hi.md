@@ -12,7 +12,8 @@ The app always calls the user **आप** and uses polite imperatives (करे�
 |---|---|---|
 | drive / trip | ट्रिप (feminine) | Drive and trip are one idea in the app, so both are ट्रिप. Everyone says it. |
 | driving (activity) | ड्राइविंग / ड्राइव करना | Common loanword. |
-| business | बिज़नेस | The word people use. In Hindi, व्यवसाय sounds formal. |
+| work (trip type; English “Work”, was “Business”) | काम (काम की ट्रिप, काम के मील) | October 2026: what couriers say, and it matches “काम की थी तो दाएँ स्वाइप करें”. |
+| business (official tax term only) | बिज़नेस | Kept in the report, exports, logbook, P87 and rate names. In Hindi, व्यवसाय sounds formal. |
 | personal | पर्सनल | Pairs naturally with बिज़नेस, and it's widely used. |
 | sort (mark business/personal) | सॉर्ट करना; unsorted = सॉर्ट नहीं / सॉर्ट न हुई | Short and clear. Couriers already use it. |
 | swipe | स्वाइप करना; right/left = दाएँ/बाएँ (राइट in the dating pun) | Standard. |
@@ -34,7 +35,7 @@ The app always calls the user **आप** and uses polite imperatives (करे�
 | start / end of trip | शुरुआत / मंज़िल; From/To = कहाँ से / कहाँ तक | Natural. |
 | work hours | काम के घंटे; Set hours = तय घंटे | Everyday. |
 | commute | घर-काम आना-जाना | No common single word. आवागमन is too formal. |
-| business purpose | बिज़नेस का मकसद | मकसद is everyday. उद्देश्य is formal. |
+| purpose (on a work drive) | मकसद | “Business purpose” became “Purpose” in English. मकसद is everyday; उद्देश्य is formal. |
 | employer / employee | एम्प्लॉयर / कर्मचारी | Common usage. |
 | self-employed | सेल्फ़-एम्प्लॉयड | Matches the English on tax forms. |
 | estimated / estimate | अनुमानित / अनुमान | Used wherever the English says so. |

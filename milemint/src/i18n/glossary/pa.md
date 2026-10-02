@@ -15,7 +15,8 @@ The user is always addressed as **ਤੁਸੀਂ**, with polite imperatives (�
 | English | Punjabi | Why |
 |---|---|---|
 | drive / trip | ਟ੍ਰਿਪ (m.; oblique pl. ਟ੍ਰਿਪਾਂ) | One term for both, as the brief asks. ਟ੍ਰਿਪ is what drivers say. Driving as an activity is ਡਰਾਈਵਿੰਗ. |
-| business (trip type) | ਬਿਜ਼ਨਸ | The everyday diaspora word, and it matches the English tax forms. ਕੰਮ is kept for the "Work" place and for work hours. |
+| work (trip type; English “Work”, was “Business”) | ਕੰਮ (ਕੰਮ ਦਾ ਟ੍ਰਿਪ, ਕੰਮ ਦੇ ਮੀਲ) | October 2026: what couriers say. The toggle has its own key (“Work (drive type)”), apart from the saved place. |
+| business (official tax term only) | ਬਿਜ਼ਨਸ | Kept in the report, exports, logbook, P87 and rate names, where it matches the English tax forms. |
 | personal | ਨਿੱਜੀ | Standard and clear. "Private" (feature heading) is ਪ੍ਰਾਈਵੇਟ so the two don't clash. |
 | shift | ਸ਼ਿਫਟ (f.) | Loanword used by everyone. Start shift = ਸ਼ਿਫਟ ਸ਼ੁਰੂ ਕਰੋ. |
 | tax year | ਟੈਕਸ ਸਾਲ | Plain. "income year" (AU) = ਆਮਦਨ ਸਾਲ. |
@@ -123,7 +124,7 @@ Status after checks 2 and 3: only item 1 (Apple's iOS wording) is still open. It
    - Settings → Notifications = ਸੈਟਿੰਗਾਂ → ਸੂਚਨਾਵਾਂ
    - Allow Once and Keep Only While Using are not keys in the source, so they weren't translated.
 2. **Resolved:** now "ਹਰ ਟ੍ਰਿਪ ਖ਼ੁਦ ਸਵਾਈਪ ਕਰਕੇ ਛਾਂਟੋ।" (neutral imperative). Original note: **"I’ll swipe each drive myself."** This is first person, so the verb is gendered. I used "ਮੈਂ ਹਰ ਟ੍ਰਿਪ ਖ਼ੁਦ ਸਵਾਈਪ ਕਰਾਂਗਾ/ਕਰਾਂਗੀ।" Reviewers may prefer a neutral rewrite.
-3. **Resolved: keep ਬਿਜ਼ਨਸ.** Original note: **ਬਿਜ਼ਨਸ vs ਕੰਮ ਵਾਲਾ for "business".** I chose the loanword for consistency with the tax forms. Some users might find "ਕੰਮ ਦਾ ਟ੍ਰਿਪ" friendlier.
+3. **Superseded (October 2026): ਕੰਮ for the trip type; ਬਿਜ਼ਨਸ only for tax terms.** Earlier: **Resolved: keep ਬਿਜ਼ਨਸ.** Original note: **ਬਿਜ਼ਨਸ vs ਕੰਮ ਵਾਲਾ for "business".** I chose the loanword for consistency with the tax forms. Some users might find "ਕੰਮ ਦਾ ਟ੍ਰਿਪ" friendlier.
 4. **Resolved: ਇੰਪਲਾਇਰ.** Original note: **ਮਾਲਕ for "employer".** It's natural in speech but can also read as "owner". ਇੰਪਲੌਇਰ is the alternative.
 5. **Resolved: kept; secular.** Original note: **"Happy Halloween" = ਹੈਲੋਵੀਨ ਮੁਬਾਰਕ and "Happy holidays" = ਛੁੱਟੀਆਂ ਮੁਬਾਰਕ.** Both are kept secular. Please confirm Halloween is acceptable to the brief's no-religion rule. The source treats it as secular.
 6. **Resolved: kept; unambiguous next to ਅੱਜ.** **"Yesterday" = ਕੱਲ੍ਹ.** The word also means "tomorrow". Next to "Today" in the date picker it is clear, but please flag it if it's ambiguous on screen.

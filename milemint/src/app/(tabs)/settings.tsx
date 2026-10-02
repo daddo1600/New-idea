@@ -182,7 +182,7 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
               <ThemedText type="smallBold">{t('Classify by work hours')}</ThemedText>
               <ThemedText type="small" themeColor="textSecondary">
                 {t(
-                  'Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.',
+                  'Drives that start during your hours are marked work, others personal. Your usual routes and commutes take priority.',
                 )}
               </ThemedText>
             </View>
@@ -898,15 +898,15 @@ function DrivingSection() {
         <Garage />
         <View style={[styles.rowBetween, styles.spaced]}>
           <View style={styles.flex}>
-            <ThemedText type="smallBold">{t('New drives start as business')}</ThemedText>
+            <ThemedText type="smallBold">{t('New drives start as work')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
               {t(
-                'Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.',
+                'Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only work drives should be claimed.',
               )}
             </ThemedText>
           </View>
           <Switch
-            accessibilityLabel={t('New drives start as business')}
+            accessibilityLabel={t('New drives start as work')}
             value={settings.defaultBusiness}
             onValueChange={(defaultBusiness) => change({ defaultBusiness })}
             trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
@@ -915,7 +915,7 @@ function DrivingSection() {
         <View style={[styles.purposeSetting, styles.spaced]}>
           <View style={styles.rowBetween}>
             <ThemedText type="smallBold" style={styles.flex}>
-              {t('Usual business purpose')}
+              {t('Usual purpose')}
             </ThemedText>
             {settings.defaultPurpose && (
               <Pressable accessibilityRole="button" hitSlop={8} onPress={() => change({ defaultPurpose: null })}>

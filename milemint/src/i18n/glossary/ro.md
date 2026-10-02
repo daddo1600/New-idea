@@ -11,7 +11,7 @@ Informal **tu** throughout (imperatives like *Glisează*, *Atinge*, *Sortează*;
 | English | Romanian | Why |
 |---|---|---|
 | drive / trip | **cursă** (pl. *curse*) | What couriers and ride drivers already call a trip; one word for both “drive” and “trip” keeps it simple. |
-| business (trip type) | **de lucru** | Everyday and fits self-employed couriers. *De serviciu* sounds like an employee on an assignment, and *business* is an anglicism. Toggle: *De lucru* / *Personală*. |
+| work (trip type; English “Work” since October 2026, was “Business”) | **de lucru** | Everyday and fits self-employed couriers. *De serviciu* sounds like an employee on an assignment, and *business* is an anglicism. Toggle: *De lucru* / *Personală*. |
 | personal | **personală** (agrees with *cursă*) | Standard. |
 | business mileage / business miles | **mile de lucru** / **km de lucru** | Matches “de lucru” above. |
 | business purpose | **scopul cursei** (help text: *scop de lucru*) | Short and clear in field labels. |

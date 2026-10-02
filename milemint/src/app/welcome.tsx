@@ -99,7 +99,7 @@ const WORK_STYLE_TEXT: Record<WorkStyle, { emoji: string; title: string; detail:
   hours: {
     emoji: '🗓️',
     title: msg('Set hours'),
-    detail: msg('Trades, sales, care, office. Drives in your hours are business.'),
+    detail: msg('Trades, sales, care, office. Drives in your hours count as work.'),
   },
   shifts: {
     emoji: '📦',
@@ -654,7 +654,7 @@ export default function WelcomeScreen() {
           {step === 0 && (
             <>
               <LeafMark size={132} />
-              <Text style={[styles.brandTitle, styles.heading]}>{t('Every business mile, counted.')}</Text>
+              <Text style={[styles.brandTitle, styles.heading]}>{t('Every work mile, counted.')}</Text>
               <Text style={styles.brandBody}>
                 {t('MileSprout logs your drives automatically and works out what they’re worth at tax time.')}
               </Text>
@@ -808,7 +808,7 @@ export default function WelcomeScreen() {
                 eyebrow={t('Step 3 · Your work')}
                 title={t('What are most of your work drives for?')}>
                 {t(
-                  'Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.',
+                  'Tax offices want a purpose for every work drive. We’ll fill this in for you, and you can change it on any trip.',
                 )}
               </StepHeader>
               <ThemedText type="small" themeColor="textSecondary">

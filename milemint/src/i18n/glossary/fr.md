@@ -22,7 +22,8 @@ The app speaks to the user as **vous** throughout. Two exceptions:
 | English | French | Why |
 |---|---|---|
 | drive / trip | trajet | One word for both, so the app reads consistently. |
-| business (trip type) | affaires (trajet d’affaires, km d’affaires) | CRA’s French wording ("à des fins d’affaires"), short enough for the toggle. "Pro" is not used for this because it’s the plan name. |
+| work (trip type; English “Work”, was “Business”) | travail (Travail, trajet de travail, km pour le travail) | October 2026: what couriers say. Not “Affaires”, and not “pro”, which is the plan name. |
+| business (official tax term only) | affaires (km d’affaires, usage professionnel) | Kept in the report, exports, logbook, P87 and rate names, where the tax office says “business” (CRA: « à des fins d’affaires »). |
 | personal | personnel | Standard term. |
 | Not sorted | Non classé | Matches "classer". |
 | sort (mark business/personal) | classer | Plain and everyday. |
@@ -45,7 +46,7 @@ The app speaks to the user as **vous** throughout. Two exceptions:
 | tracking | suivi (automatique) | Plain term. |
 | place (saved) | lieu | Plain term. |
 | Home / Work | Domicile / Travail | Plain terms. |
-| purpose (business) | motif professionnel | Plain term. |
+| purpose (on a work drive) | motif | “Business purpose” became “Purpose” in English. “motif professionnel” stays only in tax-office lines. |
 | app | app | Apple French style, as in "l’app". |
 | self-employed / sole trader | travailleur autonome | The Québec/CRA term, understood elsewhere. |
 | Employees | Employés | Québec usage. |

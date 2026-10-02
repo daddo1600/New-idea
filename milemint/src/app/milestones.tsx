@@ -97,7 +97,7 @@ export default function MilestonesScreen() {
           <Text style={styles.heroLabel}>{t('Found for you so far')}</Text>
           <Text style={styles.heroTotal}>{formatMoney(progress.moneyMinor, region)}</Text>
           <Text style={styles.heroLabel}>
-            {t('{{distance}} of business driving', {
+            {t('{{distance}} of work driving', {
               distance: formatDistance(fromUnits(progress.distance, region), region),
             })}
           </Text>
@@ -116,7 +116,7 @@ export default function MilestonesScreen() {
           )}
         </View>
         {section(t('Money back'), 'money')}
-        {section(miles ? t('Business miles') : t('Business km'), 'distance')}
+        {section(miles ? t('Work miles') : t('Work km'), 'distance')}
         {section(t('Good habits'), 'habit')}
       </ScrollView>
     </ThemedView>

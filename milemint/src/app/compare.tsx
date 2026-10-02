@@ -35,44 +35,44 @@ function shareMessage(t: T, period: Period, miles: boolean, params: ShareParams)
   if (miles) {
     if (period === 'this-week') {
       return t(
-        'My delivery app counted {{counted}} miles this week. MileSprout logged {{logged}} business miles: that\'s {{extra}} miles (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
+        'My delivery app counted {{counted}} miles this week. MileSprout logged {{logged}} work miles: that\'s {{extra}} miles (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
         params,
       );
     }
     if (period === 'this-month') {
       return t(
-        'My delivery app counted {{counted}} miles this month. MileSprout logged {{logged}} business miles: that\'s {{extra}} miles (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
+        'My delivery app counted {{counted}} miles this month. MileSprout logged {{logged}} work miles: that\'s {{extra}} miles (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
         params,
       );
     }
     return t(
-      'My delivery app counted {{counted}} miles last month. MileSprout logged {{logged}} business miles: that\'s {{extra}} miles (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
+      'My delivery app counted {{counted}} miles last month. MileSprout logged {{logged}} work miles: that\'s {{extra}} miles (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
       params,
     );
   }
   if (period === 'this-week') {
     return t(
-      'My delivery app counted {{counted}} km this week. MileSprout logged {{logged}} business km: that\'s {{extra}} km (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
+      'My delivery app counted {{counted}} km this week. MileSprout logged {{logged}} work km: that\'s {{extra}} km (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
       params,
     );
   }
   if (period === 'this-month') {
     return t(
-      'My delivery app counted {{counted}} km this month. MileSprout logged {{logged}} business km: that\'s {{extra}} km (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
+      'My delivery app counted {{counted}} km this month. MileSprout logged {{logged}} work km: that\'s {{extra}} km (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
       params,
     );
   }
   return t(
-    'My delivery app counted {{counted}} km last month. MileSprout logged {{logged}} business km: that\'s {{extra}} km (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
+    'My delivery app counted {{counted}} km last month. MileSprout logged {{logged}} work km: that\'s {{extra}} km (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
     params,
   );
 }
 
-/** "of business driving this month", under the logged distance. */
+/** "of work driving this month", under the logged distance. */
 function periodCaption(t: T, period: Period): string {
-  if (period === 'this-week') return t('of business driving this week');
-  if (period === 'this-month') return t('of business driving this month');
-  return t('of business driving last month');
+  if (period === 'this-week') return t('of work driving this week');
+  if (period === 'this-month') return t('of work driving this month');
+  return t('of work driving last month');
 }
 
 /**
@@ -128,10 +128,10 @@ export default function CompareScreen() {
           <ThemedText type="small" themeColor="textSecondary">
             {miles
               ? t(
-                  'Delivery apps only count miles with an order on board. The drive to the pickup, between orders and home again are business miles too, and MileSprout logs them all.',
+                  'Delivery apps only count miles with an order on board. The drive to the pickup, between orders and home again are work miles too, and MileSprout logs them all.',
                 )
               : t(
-                  'Delivery apps only count km with an order on board. The drive to the pickup, between orders and home again are business km too, and MileSprout logs them all.',
+                  'Delivery apps only count km with an order on board. The drive to the pickup, between orders and home again are work km too, and MileSprout logs them all.',
                 )}
           </ThemedText>
 
@@ -188,7 +188,7 @@ export default function CompareScreen() {
                   </>
                 ) : (
                   <Text style={styles.extraSub}>
-                    {t('Your app counted as much as MileSprout logged. Check your trips are sorted as business.')}
+                    {t('Your app counted as much as MileSprout logged. Check your drives are sorted as work.')}
                   </Text>
                 )}
               </View>
@@ -206,7 +206,7 @@ export default function CompareScreen() {
             </Pressable>
           )}
           <ThemedText type="small" themeColor="textSecondary">
-            {t('Estimated at {{authority}} rates for your business trips. Not tax advice.', {
+            {t('Estimated at {{authority}} rates for your work drives. Not tax advice.', {
               authority: region.authority,
             })}
           </ThemedText>
