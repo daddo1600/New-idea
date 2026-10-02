@@ -6,6 +6,7 @@ import { LogbookNudge } from '@/components/logbook-nudge';
 import { PlatformEarningsCard } from '@/components/money/platform-earnings-card';
 import { QuarterlyFigures } from '@/components/money/quarterly-figures';
 import { SetAsideCard } from '@/components/money/set-aside-card';
+import { WeeklyRecap } from '@/components/money/weekly-recap';
 import { ReliefNudge } from '@/components/home/summary-card';
 import { TaxCountdown } from '@/components/tax-countdown';
 import { ThemedText } from '@/components/themed-text';
@@ -80,6 +81,7 @@ export default function MoneyScreen() {
           </ThemedText>
         </ThemedView>
         {money.nudge && <ReliefNudge nudge={money.nudge} />}
+        <WeeklyRecap trips={allTrips} deductions={deductions} employee={money.employee} />
 
         {/* For the self-employed: UK employees claim relief once a year and pay tax through PAYE. */}
         {!money.employee && <QuarterlyFigures trips={allTrips} deductions={deductions} employee={money.employee} />}

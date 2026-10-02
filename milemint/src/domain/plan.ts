@@ -22,7 +22,9 @@ export type ProFeature =
   /** The tax set-aside: what to put aside from each week's earnings. */
   | 'tax-set-aside'
   /** Importing a log from another app. */
-  | 'import';
+  | 'import'
+  /** The weekly recap in full and Ask MileSprout (Apple Intelligence, on the iPhone). */
+  | 'weekly-recap';
 
 /** Rewards for inviting friends. Never a report or an export: those are what Pro is paid for. */
 export type Perk = 'tax-set-aside' | 'platform-earnings' | 'founding-badge';
