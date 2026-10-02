@@ -1322,6 +1322,8 @@ const dictionary: Dictionary = {
   "About & support": "Despre și asistență",
   "Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here.": "Înregistrarea automată funcționează pe iPhone. Adaugă o cursă din fila Curse ca să încerci aplicația aici.",
   "Add a drive you missed": "Adaugă o cursă care lipsește",
+  "Varies by day": "Diferă de la zi la zi",
+  "Free · {{used}} of {{limit}}": "Gratuit · {{used}} din {{limit}}",
 };
 
 export default dictionary;

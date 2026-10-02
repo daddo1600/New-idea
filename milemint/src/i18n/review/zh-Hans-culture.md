@@ -416,3 +416,5 @@ The app now opens on four tabs (Home, Drives, Money, Settings) instead of one lo
 | About & support | 关于与帮助 | About and help | Settings group heading: language, the tutorial, help and feedback. |
 | Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here. | 自动追踪只能在 iPhone 上运行。在“行程”标签页添加一次行程，在这里试用 App。 | Automatic tracking only runs on iPhone. Add a trip in the “Trips” tab to try the App here. | Web preview only (no tracking there): the + moved from home to the Drives tab. Name the tab as its label is translated. |
 | Add a drive you missed | 添加漏记的行程 | Add a missed trip | Drives tab: dashed row under the list, opens Add missed trip. A backup for drives tracking missed. |
+| Varies by day | 每天不同 | Different each day | Settings → Work hours heading, on the right, when the days have different hours (otherwise e.g. "Mon–Fri 09:00–17:00", or Off). |
+| Free · {{used}} of {{limit}} | 免费 · 已用 {{used}}/{{limit}} | Free · used {{used}}/{{limit}} | Settings → MileMint Pro heading, on the right: this month’s free work drives used, e.g. "Free · 3 of 40". Short. |

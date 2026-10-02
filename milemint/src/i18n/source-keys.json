@@ -2546,6 +2546,12 @@
     ]
   },
   {
+    "key": "Free · {{used}} of {{limit}}",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
     "key": "Free money alert 💸",
     "files": [
       "domain/reminders.ts"
@@ -3968,6 +3974,7 @@
   {
     "key": "Off",
     "files": [
+      "app/(tabs)/settings.tsx",
       "components/tracking-health-card.tsx"
     ]
   },
@@ -3986,6 +3993,7 @@
   {
     "key": "On",
     "files": [
+      "app/(tabs)/settings.tsx",
       "components/tracking-health-card.tsx"
     ]
   },
@@ -6135,6 +6143,12 @@
     "key": "Valid for the {{first}} to {{last}} income years, unless your work or your car changes.",
     "files": [
       "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Varies by day",
+    "files": [
+      "app/(tabs)/settings.tsx"
     ]
   },
   {

@@ -1188,6 +1188,8 @@ const dictionary: Dictionary = {
   "About & support": "关于与帮助",
   "Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here.": "自动追踪只能在 iPhone 上运行。在“行程”标签页添加一次行程，在这里试用 App。",
   "Add a drive you missed": "添加漏记的行程",
+  "Varies by day": "每天不同",
+  "Free · {{used}} of {{limit}}": "免费 · 已用 {{used}}/{{limit}}",
 };
 
 export default dictionary;

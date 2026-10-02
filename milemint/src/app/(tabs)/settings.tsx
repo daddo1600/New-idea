@@ -20,10 +20,12 @@ import { backedUpText, formatBackupDate, PROBLEM_TEXT } from '@/backup/copy';
 import { backupAge } from '@/backup/schedule';
 import { tripCount, type Snapshot } from '@/backup/snapshot';
 import { GoldButton } from '@/components/gold-button';
+import { clockTime, weekdayName } from '@/components/home-empty';
 import { LinkRow } from '@/components/link-row';
 import { ReplayTutorialSection } from '@/components/practice-tutorial';
-import { PurposePicker } from '@/components/purpose-picker';
+import { PurposePicker, shownPurpose } from '@/components/purpose-picker';
 import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
+import { SectionTitle } from '@/components/section-title';
 import { Segmented } from '@/components/segmented';
 import { TrackingCheckRow } from '@/components/tracking-health-card';
 import { VehiclePicker } from '@/components/vehicle-picker';
@@ -37,10 +39,11 @@ import { loadSettings, updateSettings, type AppSettings } from '@/db/settings-re
 import { listTrips } from '@/db/trips-repo';
 import { frequentPurposes } from '@/domain/suggestions';
 import { isValidShift, type WorkShift } from '@/domain/classify-rules';
-import { REFERRAL_BONUS_DRIVES } from '@/domain/plan';
+import { autoDrivesInMonth, REFERRAL_BONUS_DRIVES } from '@/domain/plan';
 import { marApplies, parsePence, TAX_BAND_RATES, type TaxBand } from '@/domain/mar';
-import { vehicleRule } from '@/domain/regions';
-import { VEHICLE_ICONS, VEHICLE_LABELS, type VehicleType } from '@/domain/trip';
+import { formatRate, ratePeriodFor, vehicleRule } from '@/domain/regions';
+import { toLocalIsoDate, VEHICLE_ICONS, VEHICLE_LABELS, type VehicleType } from '@/domain/trip';
+import { formatWorkDays, summarizeWorkHours } from '@/domain/work-hours-summary';
 import { defaultVehicleName, normaliseRegistration, type Vehicle } from '@/domain/vehicles';
 import { addVehicle, removeVehicle, updateVehicle } from '@/db/vehicles-repo';
 import { useVehicles } from '@/vehicles/use-vehicles';
@@ -95,6 +98,7 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
   const db = useSQLiteContext();
   const theme = useTheme();
   const t = useT();
+  const { region } = useRegion();
   const [enabled, setEnabled] = useState(false);
   const [week, setWeek] = useState<WorkShift[][] | null>(null);
   const [places, setPlaces] = useState<Place[]>([]);
@@ -152,6 +156,14 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
     ]);
 
   const inputStyle = [styles.time, { color: theme.text, backgroundColor: theme.background }];
+  // "Mon–Fri 9:00–17:00", "Varies" or "Off", next to the heading.
+  const hours = enabled ? summarizeWorkHours(week) : null;
+  const hoursValue =
+    hours === null
+      ? t('Off')
+      : hours === 'varies'
+        ? t('Varies by day')
+        : `${formatWorkDays(hours.days, (day) => weekdayName(day, region))} ${clockTime(hours.start, region)}–${clockTime(hours.end, region)}`;
 
   return (
     <ThemedView style={styles.container}>
@@ -160,7 +172,7 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
 
         <TrackingCheckRow />
 
-        <ThemedText type="smallBold">{t('Work hours')}</ThemedText>
+        <SectionTitle title={t('Work hours')} value={hoursValue} />
         <ThemedView type="backgroundElement" style={styles.card}>
           <View style={styles.rowBetween}>
             <View style={styles.flex}>
@@ -278,7 +290,7 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
           </Pressable>
         </ThemedView>
 
-        <ThemedText type="smallBold">{t('Places')}</ThemedText>
+        <SectionTitle title={t('Places')} value={String(places.length)} />
         <ThemedView type="backgroundElement" style={styles.card}>
           {places.length === 0 ? (
             <ThemedText type="small" themeColor="textSecondary">
@@ -479,7 +491,7 @@ function ReminderSection() {
 
   return (
     <>
-      <ThemedText type="smallBold">{t('Reminders')}</ThemedText>
+      <SectionTitle title={t('Reminders')} value={on === null ? null : on ? t('On') : t('Off')} />
       <ThemedView type="backgroundElement" style={styles.card}>
         <View style={styles.rowBetween}>
           <View style={styles.flex}>
@@ -778,7 +790,7 @@ function Garage() {
 
   return (
     <>
-      <ThemedText type="smallBold">{t('Your vehicles')}</ThemedText>
+      <SectionTitle title={t('Your vehicles')} value={String(vehicles.length)} />
       {vehicles.map((vehicle) =>
         editing === vehicle.id ? (
           <View key={vehicle.id}>
@@ -865,7 +877,16 @@ function DrivingSection() {
 
   return (
     <>
-      <ThemedText type="smallBold">{t('Your driving')}</ThemedText>
+      {/* The usual purpose and shift mode, at a glance. */}
+      <SectionTitle
+        title={t('Your driving')}
+        value={[
+          settings.defaultPurpose ? shownPurpose(settings.defaultPurpose, t) : null,
+          `${t('Shift mode')}: ${settings.shiftMode ? t('On') : t('Off')}`,
+        ]
+          .filter(Boolean)
+          .join(' · ')}
+      />
       <ThemedView type="backgroundElement" style={styles.card}>
         <Garage />
         <View style={[styles.rowBetween, styles.spaced]}>
@@ -1180,9 +1201,11 @@ function CountrySection() {
   const theme = useTheme();
   const t = useT();
   const { region } = useRegion();
+  const rate = ratePeriodFor(toLocalIsoDate(new Date()), region, 'car')?.tiers[0]?.rate;
+  const countryValue = rate === undefined ? region.flag : `${region.flag} · ${formatRate(rate, region)}`;
   return (
     <>
-      <ThemedText type="smallBold">{t('Country')}</ThemedText>
+      <SectionTitle title={t('Country')} value={countryValue} />
       <ThemedView type="backgroundElement" style={styles.card}>
         <View style={styles.rowBetween}>
           <View style={styles.flex}>
@@ -1248,7 +1271,7 @@ function LanguageSection() {
   const language = LANGUAGES.find((l) => l.code === code) ?? LANGUAGES[0];
   return (
     <>
-      <ThemedText type="smallBold">{t('Language')}</ThemedText>
+      <SectionTitle title={t('Language')} value={language.name} />
       <ThemedView type="backgroundElement" style={styles.card}>
         <View style={styles.rowBetween}>
           <View style={styles.flex}>
@@ -1274,6 +1297,15 @@ function ProSection() {
   const t = useT();
   const { isPro, storeAvailable, busy, restore, manage } = usePro();
   const { allowance } = useReferral();
+  const db = useSQLiteContext();
+  /** This month's work drives on the free plan, for "Free · 3 of 40". */
+  const [used, setUsed] = useState<number | null>(null);
+  useFocusEffect(
+    useCallback(() => {
+      const month = toLocalIsoDate(new Date()).slice(0, 7);
+      listTrips(db).then((trips) => setUsed(Math.min(autoDrivesInMonth(trips, month), allowance)), () => {});
+    }, [db, allowance]),
+  );
   const onRestore = async () => {
     const found = await restore();
     Alert.alert(
@@ -1283,7 +1315,10 @@ function ProSection() {
   };
   return (
     <>
-      <ThemedText type="smallBold">MileMint Pro</ThemedText>
+      <SectionTitle
+        title="MileMint Pro"
+        value={isPro ? 'Pro' : used === null ? null : t('Free · {{used}} of {{limit}}', { used, limit: allowance })}
+      />
       <ThemedView type="backgroundElement" style={styles.card}>
         <ThemedText type="small" themeColor="textSecondary">
           {isPro

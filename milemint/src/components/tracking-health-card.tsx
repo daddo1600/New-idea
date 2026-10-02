@@ -2,6 +2,7 @@ import { router, type Href } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { AppState, Linking, Pressable, StyleSheet, View } from 'react-native';
 
+import { SectionTitle } from '@/components/section-title';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
@@ -204,26 +205,25 @@ export function TrackingCheckRow() {
   const good = health.issue === 'ok';
   return (
     <>
-      <ThemedText type="smallBold">{t('Tracking check')}</ThemedText>
+      {/* The state in the heading, so the group reads at a glance. */}
+      <SectionTitle
+        title={t('Tracking check')}
+        value={t(STATUS[health.issue])}
+        valueColor={
+          good
+            ? theme.accent
+            : health.issue === 'off'
+              ? theme.textSecondary
+              : health.issue === 'gap'
+                ? theme.text
+                : theme.danger
+        }
+      />
       <ThemedView type="backgroundElement" style={styles.row}>
         <ThemedText type="small" themeColor="textSecondary">
           {health.lastSeenAt
             ? t('Last location: {{ago}}', { ago: ago(health.lastSeenAt, now, t) })
             : t('No location yet')}
-          {' · '}
-          <ThemedText
-            type="smallBold"
-            style={{
-              color: good
-                ? theme.accent
-                : health.issue === 'off'
-                  ? theme.textSecondary
-                  : health.issue === 'gap'
-                    ? theme.text
-                    : theme.danger,
-            }}>
-            {t(STATUS[health.issue])}
-          </ThemedText>
         </ThemedText>
       </ThemedView>
       <MotionRow />

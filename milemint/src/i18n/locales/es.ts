@@ -1282,6 +1282,8 @@ const dictionary: Dictionary = {
   "About & support": "Información y ayuda",
   "Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here.": "El seguimiento automático funciona en tu iPhone. Agrega un viaje desde la pestaña Viajes para probar la app aquí.",
   "Add a drive you missed": "Agregar un viaje que faltó",
+  "Varies by day": "Varía según el día",
+  "Free · {{used}} of {{limit}}": "Gratis · {{used}} de {{limit}}",
 };
 
 export default dictionary;
