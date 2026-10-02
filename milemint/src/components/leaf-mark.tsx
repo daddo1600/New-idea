@@ -2,6 +2,7 @@ import { type ReactNode, useId } from 'react';
 import Svg, { Circle, Defs, G, LinearGradient, Path, Stop } from 'react-native-svg';
 
 import {
+  BURIED,
   DASH_WIDTH,
   DOT_R,
   LANE_DASHES,
@@ -176,14 +177,14 @@ export function Soil() {
 }
 
 /**
- * The launch animation's first frame and the splash screen's image: the
- * gold seed half in its soil, where they sit in the full mark.
+ * The launch animation's first frame and the splash screen's image: the gold
+ * seed asleep inside its soil, glowing through the mound, before it breaks out.
  */
 export function SproutSeed({ size }: { size: number }) {
   const seed = stemAt(0);
   return (
     <Svg width={size} height={size} viewBox={markViewBox(0)}>
-      <Circle cx={seed.x} cy={seed.y} r={DOT_R} fill={SPROUT_COLORS.gold} />
+      <Circle cx={seed.x} cy={BURIED.y} r={BURIED.r} fill={SPROUT_COLORS.gold} />
       <Soil />
     </Svg>
   );

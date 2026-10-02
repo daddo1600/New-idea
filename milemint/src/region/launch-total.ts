@@ -29,11 +29,12 @@ export async function refreshLaunchTotal(db: SQLiteDatabase): Promise<void> {
   const locked = lockedTripIds(trips, isPro, allowance);
   const visible = trips.filter((trip) => !locked.has(trip.id));
   const year = currentTaxYear(region);
+  // As home's hero total: parking and tolls included where they count.
+  const summary = summarizeTaxYear(visible, region, year);
   // UK employees see their Mileage Allowance Relief on home, so the opening counts that up.
   if (settings.employment === 'employee' && marApplies(region)) {
     const relief = marForYear(visible, region, year, { employerRate: settings.employerRate, band: settings.taxBand });
-    return rememberTotal(relief.relief);
+    return rememberTotal(relief.relief, summary.businessMeters);
   }
-  // As home's hero total: parking and tolls included where they count.
-  await rememberTotal(summarizeTaxYear(visible, region, year).total);
+  await rememberTotal(summary.total, summary.businessMeters);
 }

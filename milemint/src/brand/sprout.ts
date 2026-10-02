@@ -12,6 +12,8 @@ export const SPROUT_COLORS = {
   gold: '#FACC15',
   ring: '#FFFFFF',
   soil: '#064E3B',
+  /** The seed's light through the soil as it cracks open. */
+  soilCrack: '#FACC15',
   shadow: '#085E42',
 } as const;
 
@@ -213,6 +215,26 @@ export const SOIL = {
   ],
 } as const;
 
+/**
+ * The seed asleep inside the soil before it breaks out (the splash screen and
+ * the launch animation's first frame): small and low, glowing through the mound.
+ */
+export const BURIED = { y: 90, r: 2.4 } as const;
+
+/** The crack that opens in the soil as the seed pushes up. */
+export const CRACK = 'M45.6 86.9 L47.6 85.4 L49.2 86.6 L50.9 85 L52.6 86.5 L54.4 85.6';
+
+/** Clods of soil thrown out as the seed breaks through: where each flies to, from the crack. */
+export const CRUMBS = [
+  { dx: -11, dy: -10, r: 1.7 },
+  { dx: -6, dy: -15, r: 1.2 },
+  { dx: 1.5, dy: -17, r: 1 },
+  { dx: 7, dy: -14, r: 1.4 },
+  { dx: 12, dy: -8, r: 1.8 },
+  { dx: -15, dy: -4, r: 1.1 },
+  { dx: 15, dy: -3, r: 1 },
+] as const;
+
 /** Small sizes are drawn thicker and a little larger, around the centre. */
 export const SMALL = { road: 10, dash: 2.4, dot: 7, ring: 8.6, scale: 1.08 } as const;
 
@@ -223,7 +245,7 @@ type SvgOptions = {
   /** 'icon' adds the 135° brand gradient behind the mark. */
   background?: 'icon' | 'none';
   small?: boolean;
-  /** Only the first frame of the launch animation: the seed in its soil (the splash screen). */
+  /** Only the first frame of the launch animation: the seed asleep in its soil (the splash screen). */
   seed?: boolean;
   /**
    * One colour for themed icons (Android's monochrome layer, a tinted iOS icon):
@@ -320,7 +342,7 @@ export function sproutSvg({
   if (tinted) {
     parts.push(`<circle cx="${dot.x}" cy="${dot.y}" r="${small ? SMALL.dot : DOT_R}" fill="#FFFFFF"/>`);
   } else if (seed) {
-    parts.push(`<circle cx="${dot.x}" cy="${dot.y}" r="${DOT_R}" fill="${SPROUT_COLORS.gold}"/>`);
+    parts.push(`<circle cx="${dot.x}" cy="${BURIED.y}" r="${BURIED.r}" fill="${SPROUT_COLORS.gold}"/>`);
   } else {
     parts.push(`<circle cx="${dot.x}" cy="${dot.y}" r="${ringR}" fill="${SPROUT_COLORS.ring}"/>`);
     parts.push(`<circle cx="${dot.x}" cy="${dot.y}" r="${small ? SMALL.dot : DOT_R}" fill="${SPROUT_COLORS.gold}"/>`);

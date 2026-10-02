@@ -4,6 +4,9 @@ import Animated, { type SharedValue, useAnimatedProps, useAnimatedStyle } from '
 import Svg, { Circle, G, Path } from 'react-native-svg';
 
 import {
+  BURIED,
+  CRACK,
+  CRUMBS,
   DASH_WIDTH,
   DOT_R,
   LANE_DASHES,
@@ -19,12 +22,15 @@ import {
   STEM_SAMPLES,
   STEM_XS,
   STEM_YS,
+  stemAt,
   TOP,
 } from '@/brand/sprout';
 import { LeafBody, LeafGradient, LeafVeins, markViewBox, Soil } from '@/components/leaf-mark';
 
 /**
- * The launch animation's sprout, grown by one progress value (`drive`, 0–1):
+ * The launch animation's sprout. First `emerge` (0–1): the seed asleep in the
+ * soil glows, the soil trembles and cracks, and the seed bursts out of it,
+ * throwing clods aside. Then it grows by one progress value (`drive`, 0–1):
  * the road climbs out of the soil with the car at its tip, laying the lane
  * dashes behind it; each leaf springs open from its node once the car has
  * passed it, its veins following; the last, curled leaflet opens as the car
@@ -43,6 +49,10 @@ const LANDED = 0.95;
 const DASH_LAG = 0.08;
 /** The ring draws in over the last stretch of the climb. */
 const RING_FROM = 0.9;
+/** Of `emerge`: the seed stirs in the soil until here, then breaks out. */
+const BREAK = 0.55;
+/** How far the clods fall back under gravity, as a share of their throw. */
+const GRAVITY = 0.6;
 /** Room around the mark for the leaves' overshoot and the hats. */
 const MARGIN = 0.3;
 
@@ -63,12 +73,15 @@ function backFor(peak: number) {
 
 export function GrowingSprout({
   size,
+  emerge,
   drive,
   palette,
   car,
   hat,
 }: {
   size: number;
+  /** The seed breaking out of the soil, before the climb. */
+  emerge: SharedValue<number>;
   drive: SharedValue<number>;
   palette: LeafPalette;
   /** The yellow dot (hidden while a seasonal rider stands in for it). */
@@ -103,7 +116,7 @@ export function GrowingSprout({
         );
       })}
       <Svg style={layer} viewBox={markViewBox(MARGIN)}>
-        <Road drive={drive} car={car} />
+        <Road emerge={emerge} drive={drive} car={car} />
       </Svg>
       {hat && <Hat drive={drive} size={size} layer={layer} hat={hat} />}
     </View>
@@ -176,7 +189,7 @@ function GrowingLeaf({
 }
 
 /** The road growing up from the seed, its lane dashes, the car and the soil in front. */
-function Road({ drive, car }: { drive: SharedValue<number>; car: boolean }) {
+function Road({ emerge, drive, car }: { emerge: SharedValue<number>; drive: SharedValue<number>; car: boolean }) {
   // A dash one unit longer than the road, so its tip never falls short of the top.
   const length = STEM_LENGTH + 1;
   const roadProps = useAnimatedProps(() => ({ strokeDashoffset: length * (1 - drive.value) }));
@@ -184,13 +197,19 @@ function Road({ drive, car }: { drive: SharedValue<number>; car: boolean }) {
     const at = drive.value * STEM_SAMPLES;
     const i = Math.min(STEM_SAMPLES - 1, Math.floor(at));
     const f = at - i;
-    // The seed swells a little as it wakes, and its white ring draws in as it lands.
-    const wake = Math.sin(Math.PI * Math.min(1, drive.value / 0.06)) * 0.08;
+    // Asleep in the soil it glows and trembles, swelling, then bursts up to the
+    // stem's foot with a little bounce; its white ring draws in as it lands.
+    const e = emerge.value;
+    const stir = Math.min(1, e / BREAK);
+    const out = Math.max(0, (e - BREAK) / (1 - BREAK));
+    const rise = 1 - (1 - out) * (1 - out) + Math.sin(Math.PI * out) * 0.25;
+    const tremble = e < BREAK ? Math.sin(e * 90) * 0.5 * stir : 0;
     const ring = (RING_R - DOT_R) * Math.min(1, Math.max(0, (drive.value - RING_FROM) / (1 - RING_FROM)));
+    const buried = BURIED.r + (DOT_R * 0.75 - BURIED.r) * stir;
     return {
-      cx: STEM_XS[i] + (STEM_XS[i + 1] - STEM_XS[i]) * f,
-      cy: STEM_YS[i] + (STEM_YS[i + 1] - STEM_YS[i]) * f,
-      r: DOT_R * (1 + wake) + ring / 2,
+      cx: STEM_XS[i] + (STEM_XS[i + 1] - STEM_XS[i]) * f + tremble,
+      cy: STEM_YS[i] + (STEM_YS[i + 1] - STEM_YS[i]) * f + (BURIED.y - FOOT.y) * (1 - rise),
+      r: buried + (DOT_R - buried) * Math.min(1, out * 1.5) + ring / 2,
       strokeWidth: ring,
     };
   });
@@ -220,7 +239,53 @@ function Road({ drive, car }: { drive: SharedValue<number>; car: boolean }) {
         />
       )}
       <Soil />
+      <Burst emerge={emerge} />
     </G>
+  );
+}
+
+/** The stem's foot, where the seed comes to rest as it breaks out. */
+const FOOT = stemAt(0);
+
+/** The crack opening in the soil, and the clods the seed throws out as it breaks through. */
+function Burst({ emerge }: { emerge: SharedValue<number> }) {
+  const crackProps = useAnimatedProps(() => {
+    const opening = Math.min(1, Math.max(0, (emerge.value - 0.2) / (BREAK - 0.2)));
+    // Gone the moment the seed is through, so it never crosses the dot.
+    const through = Math.min(1, Math.max(0, (emerge.value - BREAK) / 0.12));
+    return { strokeOpacity: opening * (1 - through), strokeWidth: 0.6 + 0.8 * opening };
+  });
+  return (
+    <G>
+      <AnimatedPath
+        d={CRACK}
+        stroke={SPROUT_COLORS.soilCrack}
+        strokeOpacity={0}
+        strokeWidth={0.6}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+        animatedProps={crackProps}
+      />
+      {CRUMBS.map((crumb) => (
+        <Crumb key={`${crumb.dx},${crumb.dy}`} crumb={crumb} emerge={emerge} />
+      ))}
+    </G>
+  );
+}
+
+function Crumb({ crumb, emerge }: { crumb: (typeof CRUMBS)[number]; emerge: SharedValue<number> }) {
+  const props = useAnimatedProps(() => {
+    const t = Math.max(0, (emerge.value - BREAK) / (1 - BREAK));
+    // Thrown up and out, then falling back as they fade.
+    return {
+      cx: FOOT.x + crumb.dx * t,
+      cy: FOOT.y + crumb.dy * t + -crumb.dy * GRAVITY * t * t,
+      fillOpacity: t === 0 ? 0 : 1 - t * t,
+    };
+  });
+  return (
+    <AnimatedCircle cx={FOOT.x} cy={FOOT.y} r={crumb.r} fill={SPROUT_COLORS.soil} fillOpacity={0} animatedProps={props} />
   );
 }
 
