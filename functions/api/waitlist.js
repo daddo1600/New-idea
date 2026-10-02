@@ -7,13 +7,44 @@
 //
 // Accepts JSON (from the site's script) or a normal form post (no JavaScript).
 // JSON gets JSON back; a form post gets a 303 redirect to /waitlist?joined=1#joined
-// (or /waitlist?error=1#error).
+// (or /waitlist?error=1#error), or to /testers?... when it came from the founding testers page.
+//
+// Founding testers (source "testers"), without changing the table:
+//   - source is stored as "testers", or "testers:<group>" when the sign-up link had ?g=<group>
+//     (group: lowercase a-z, 0-9 and hyphens, at most 40 characters).
+//   - the optional iPhone model goes in segment as "<segment>|<device>", e.g. "parcels|12-to-15",
+//     or "|older" when no segment was chosen. Waitlist rows never contain "|".
 
 const MAX_BODY = 4096;
 const EMAIL_RE = /^[^\s@<>()",;:]+@[^\s@<>()",;:]+\.[^\s@<>()",;:]{2,}$/;
 const SEGMENTS = new Set(['food', 'parcels', 'ridehail', 'care', 'trades', 'other']);
 const COUNTRIES = new Set(['UK', 'US', 'CA', 'AU', 'other']);
-const SOURCES = new Set(['hero', 'home-bottom', 'waitlist-page']);
+const SOURCES = new Set(['hero', 'home-bottom', 'waitlist-page', 'testers']);
+const DEVICES = new Set(['15pro-or-newer', '12-to-15', 'older', 'not-sure']);
+
+// Group tag from a sign-up link (?g=fb-leeds-couriers): lowercase, runs of anything other than
+// a-z / 0-9 / hyphen become one hyphen, no hyphens at the ends, at most 40 characters.
+export function cleanGroup(v) {
+  return str(v)
+    .toLowerCase()
+    .replace(/[^a-z0-9-]+/g, '-')
+    .replace(/-{2,}/g, '-')
+    .slice(0, 40)
+    .replace(/^-+|-+$/g, '');
+}
+
+// No-JS posts can't copy ?g= into the form, so fall back to the page the form was on
+// (same-origin Referer, which our Referrer-Policy sends in full).
+function groupFromReferer(request) {
+  try {
+    const ref = new URL(request.headers.get('Referer') || '');
+    const here = new URL(request.url);
+    if (ref.origin !== here.origin || !/^\/testers(\.html)?$/.test(ref.pathname)) return '';
+    return cleanGroup(ref.searchParams.get('g'));
+  } catch {
+    return '';
+  }
+}
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -65,12 +96,17 @@ export async function handleWaitlist(request, env) {
   const body = await readBody(request);
   if (body.tooBig) return json({ ok: false, error: 'too_large' }, 413);
   const { isForm, data } = body;
-  const fail = (error, status) => (isForm ? redirect(request, '/waitlist?error=1#error') : json({ ok: false, error }, status));
+  const testers = str(data.source) === 'testers';
+  const group = testers ? cleanGroup(data.group) || (isForm ? groupFromReferer(request) : '') : '';
+  // no-JS posts go back to the page they came from; an error keeps the group tag for the retry
+  const page = testers ? '/testers' : '/waitlist';
+  const joinedPath = `${page}?joined=1#joined`;
+  const errorPath = `${page}?${group ? `g=${group}&` : ''}error=1#error`;
+  const ok = () => (isForm ? redirect(request, joinedPath) : json({ ok: true }));
+  const fail = (error, status) => (isForm ? redirect(request, errorPath) : json({ ok: false, error }, status));
 
   // Honeypot: people never see the "company" field. Pretend it worked and store nothing.
-  if (str(data.company).trim() !== '') {
-    return isForm ? redirect(request, '/waitlist?joined=1#joined') : json({ ok: true });
-  }
+  if (str(data.company).trim() !== '') return ok();
 
   const email = str(data.email).trim().toLowerCase();
   if (body.bad || email.length < 3 || email.length > 254 || !EMAIL_RE.test(email)) return fail('email', 400);
@@ -80,13 +116,16 @@ export async function handleWaitlist(request, env) {
 
   if (!env || !env.DB) {
     return isForm
-      ? redirect(request, '/waitlist?error=1#error')
+      ? redirect(request, errorPath)
       : json({ ok: false, error: 'unavailable', message: 'Waitlist storage is not set up: bind a D1 database as DB.' }, 503);
   }
 
-  const segment = SEGMENTS.has(str(data.segment)) ? str(data.segment) : null;
+  let segment = SEGMENTS.has(str(data.segment)) ? str(data.segment) : null;
+  const device = testers && DEVICES.has(str(data.device)) ? str(data.device) : '';
+  if (device) segment = `${segment || ''}|${device}`;
   const country = COUNTRIES.has(str(data.country)) ? str(data.country) : null;
-  const source = SOURCES.has(str(data.source)) ? str(data.source) : 'web';
+  let source = SOURCES.has(str(data.source)) ? str(data.source) : 'web';
+  if (testers && group) source = `testers:${group}`;
   const now = new Date().toISOString();
 
   try {
@@ -101,7 +140,7 @@ export async function handleWaitlist(request, env) {
     return fail('server', 500);
   }
 
-  return isForm ? redirect(request, '/waitlist?joined=1#joined') : json({ ok: true });
+  return ok();
 }
 
 export function onRequestPost(context) {

@@ -6,6 +6,7 @@ The public website for MileSprout: plain static HTML, one CSS file and one small
 |---|---|
 | `index.html` | Landing page: hero with waitlist form, the feature deck, Free vs Pro, regions, closing sign-up |
 | `waitlist.html` | Early-access page (also where no-JS form posts land: `?joined=1#joined`, `?error=1#error`) |
+| `testers.html` | Founding testers sign-up (`/testers?g=<group>`): the offer, the form (adds "Which iPhone?"), FAQ. Group links and what gets stored: `../functions/README.md` |
 | `privacy.html` | Privacy policy for the app and the site (effective 2 Oct 2026) |
 | `support.html` | Support FAQ |
 | `partners.html` | MileSprout Perks pitch for partners |
@@ -19,7 +20,7 @@ The public website for MileSprout: plain static HTML, one CSS file and one small
 | `assets/site.js` | Hero phone tilt, the feature deck (drag, swipe, trackpad, keys, dots) and the waitlist form. The page reads fine without it |
 | `assets/img/screens/` | Raw app captures (`milemint/assets/store/raw/`, `milemint/docs/screenshots/perks/`) as 640 px WebP, with the top and bottom rows extended to leave room for the CSS status bar and home indicator. `trip.webp` has an invented street map drawn under the route (the capture's map panel was blank); `perks.webp` has the Expo dev button painted out of the tab bar |
 | `assets/img/og.jpg` | Link preview image |
-| `docs/` | Preview screenshots of the home page (not linked from the site): `scroll-*.png` for the hero and deck at desktop and mobile sizes, `waitlist-*.png` for the form states |
+| `docs/` | Preview screenshots of the home page (not linked from the site): `scroll-*.png` for the hero and deck at desktop and mobile sizes, `waitlist-*.png` for the form states, `testers-*.png` for `/testers?g=fb-test` (page, filled form, success) at 1440 and 390 px |
 
 Links between pages are extensionless (`/privacy`), which is how Cloudflare Pages serves `privacy.html`. To preview locally with working links, use `npx wrangler pages dev website`. A quick look also works with `python3 -m http.server 8080 -d website` and opening `/index.html`, `/privacy.html` and so on.
 

@@ -450,3 +450,30 @@ kbd, code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospac
 .wl-done.wl-target:target ~ .waitlist { display: none; }
 .wl-error { padding: 14px 16px; border-radius: 12px; border: 1px solid #F3B4AE; background: #FEF3F2; color: #7A1A12; }
 @media (prefers-color-scheme: dark) { .wl-error { background: #3A1512; border-color: #7A2A22; color: #FECDCA; } }
+
+/* Founding testers page */
+.btn-gold {
+  display: inline-flex; align-items: center; min-height: 48px; padding: 0 20px; border-radius: 12px;
+  background: var(--gold); color: #14261F; font-weight: 800; text-decoration: none;
+  box-shadow: 0 6px 18px rgba(250, 204, 21, .28);
+}
+.hero a.btn-gold { color: #14261F; }
+.btn-gold:hover { background: #FDE047; }
+.tester-phone { justify-self: center; }
+.tester-phone .phone { --w: clamp(170px, 46vw, 210px); transform: rotate(3deg); }
+@media (min-width: 900px) { .tester-phone .phone { --w: 240px; } }
+@media (prefers-reduced-motion: reduce) { .tester-phone .phone { transform: none; } }
+.testers-deal .card h3 { font-size: 1.25rem; }
+.testers-deal .card li { font-size: .97rem; }
+.testers-deal .card p + p { margin-top: .8em; }
+.cta .wl-target { max-width: 40rem; }
+.waitlist.wide { max-width: 40rem; }
+.wl-opts-3 > label:last-child { grid-column: 1 / -1; }
+@media (min-width: 720px) { .wl-opts-3 { grid-template-columns: repeat(3, 1fr); } .wl-opts-3 > label:last-child { grid-column: auto; } }
+@media (max-width: 420px) { .wl-opts-3 > label:last-child { grid-column: auto; } }
+.testers-faq { max-width: 46rem; }
+.testers-faq h2 { margin-bottom: .8em; }
+/* "Become a founding tester" link under the waitlist forms */
+.tester-link { margin: 14px 0 0; font-size: .95rem; font-weight: 600; }
+.hero .tester-link a { color: #FFFFFF; }
+.waitlist-page .tester-link { margin: -8px 0 20px; }

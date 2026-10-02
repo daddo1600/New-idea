@@ -1,4 +1,4 @@
-/* MileSprout website: hero phone tilt, the feature deck and the waitlist form.
+/* MileSprout website: hero phone tilt, the feature deck and the waitlist (and founding testers) form.
    Vanilla JS, no libraries, no requests except the waitlist form posting to /api/waitlist.
    The page works without it: the phone sits still and every feature is listed. */
 (function () {
@@ -223,6 +223,15 @@
       f.classList.add('is-done');
       var ok = f.querySelector('.wl-done');
       if (ok) { ok.hidden = false; ok.focus(); }
+    }
+
+    // Founding testers links carry the group they were posted in (/testers?g=fb-leeds-couriers).
+    // Same clean-up as the server: lowercase a-z, 0-9 and hyphens, at most 40 characters.
+    var g = /[?&]g=([^&#]*)/.exec(location.search);
+    if (g) {
+      try { g = decodeURIComponent(g[1].replace(/\+/g, ' ')); } catch (err) { g = ''; }
+      g = g.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/-{2,}/g, '-').slice(0, 40).replace(/^-+|-+$/g, '');
+      Array.prototype.forEach.call(document.querySelectorAll('form[data-waitlist] input[name="group"]'), function (i) { i.value = g; });
     }
 
     Array.prototype.forEach.call(forms, function (f) {
