@@ -512,6 +512,7 @@ const dictionary: Dictionary = {
   "Reports": "Rapoarte",
   "Reports & export": "Rapoarte și export",
   "Reports: export your mileage log": "Rapoarte: exportă jurnalul de kilometraj",
+  "Reports: export your mileage log (Pro)": "Rapoarte: exportă jurnalul de kilometraj (Pro)",
   "Restore purchases": "Restabilește achizițiile",
   "Sat": "Sâm",
   "Save": "Salvează",

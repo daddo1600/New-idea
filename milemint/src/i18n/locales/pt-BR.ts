@@ -493,6 +493,7 @@ const dictionary: Dictionary = {
   "Reports": "Relatórios",
   "Reports & export": "Relatórios e exportação",
   "Reports: export your mileage log": "Relatórios: exporte seu registro de quilometragem",
+  "Reports: export your mileage log (Pro)": "Relatórios: exporte seu registro de quilometragem (Pro)",
   "Restore purchases": "Restaurar compras",
   "Sat": "Sáb",
   "Save": "Salvar",

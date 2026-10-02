@@ -452,6 +452,7 @@ const dictionary: Dictionary = {
   "Reports": "রিপোর্ট",
   "Reports & export": "রিপোর্ট ও এক্সপোর্ট",
   "Reports: export your mileage log": "রিপোর্ট: আপনার মাইলেজ লগ এক্সপোর্ট করুন",
+  "Reports: export your mileage log (Pro)": "রিপোর্ট: আপনার মাইলেজ লগ এক্সপোর্ট করুন (Pro)",
   "Restore purchases": "কেনাকাটা পুনরুদ্ধার করুন",
   "Sat": "শনি",
   "Save": "সেভ",

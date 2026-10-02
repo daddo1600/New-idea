@@ -444,6 +444,7 @@ const dictionary: Dictionary = {
   "Reports": "报告",
   "Reports & export": "报告与导出",
   "Reports: export your mileage log": "报告：导出你的里程记录",
+  "Reports: export your mileage log (Pro)": "报告：导出你的里程记录（Pro）",
   "Restore purchases": "恢复购买",
   "Sat": "周六",
   "Save": "保存",

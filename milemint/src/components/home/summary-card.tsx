@@ -3,11 +3,13 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { BrandGradient } from '@/components/brand-gradient';
 import { LeafMark } from '@/components/leaf-mark';
+import { ProBadge } from '@/components/pro-prompt';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import type { MarYear, UnclaimedNudge } from '@/domain/mar';
 import { formatDistance, formatLongDate, formatMoney, type TaxYearSummary } from '@/domain/regions';
+import { useCanUse } from '@/hooks/use-feature';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
 import { useRegion } from '@/region/region';
@@ -49,14 +51,9 @@ export function SummaryCard({
           : t('{{distance}} for work', { distance })}
       </Text>
       <CostsLine summary={summary} />
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={t('Reports: export your mileage log')}
-        hitSlop={8}
-        onPress={() => router.push('/report')}
-        style={styles.reportLink}>
-        <Text style={styles.reportLinkText}>{t('Export report')}</Text>
-      </Pressable>
+      <View style={styles.heroButtons}>
+        <ReportButton />
+      </View>
       {commuteCents > 0 && (
         <Text style={styles.heroWarning}>
           {t('Includes {{amount}} from home ↔ work commutes, which usually aren’t deductible.', {
@@ -111,14 +108,7 @@ function EmployeeSummaryCard({ summary, year, paysLess }: { summary: TaxYearSumm
       </Text>
       <CostsLine summary={summary} />
       <View style={styles.heroButtons}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('Reports: export your mileage log')}
-          hitSlop={8}
-          onPress={() => router.push('/report')}
-          style={styles.reportLink}>
-          <Text style={styles.reportLinkText}>{t('Export report')}</Text>
-        </Pressable>
+        <ReportButton />
         {paysLess && (
           <Pressable
             accessibilityRole="button"
@@ -130,6 +120,29 @@ function EmployeeSummaryCard({ summary, year, paysLess }: { summary: TaxYearSumm
         )}
       </View>
     </View>
+  );
+}
+
+/**
+ * The hero card's way to the report. Exports are Pro, so without it the
+ * button carries the PRO tag (the report screen keeps the free summary and
+ * says what Pro adds).
+ */
+function ReportButton() {
+  const t = useT();
+  const unlocked = useCanUse('reports');
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={
+        unlocked ? t('Reports: export your mileage log') : t('Reports: export your mileage log (Pro)')
+      }
+      hitSlop={8}
+      onPress={() => router.push('/report')}
+      style={[styles.reportLink, styles.reportRow]}>
+      <Text style={styles.reportLinkText}>{t('Export report')}</Text>
+      {!unlocked && <ProBadge />}
+    </Pressable>
   );
 }
 
@@ -187,16 +200,17 @@ const styles = StyleSheet.create({
   watermark: { position: 'absolute', right: -44, bottom: -52 },
   heroLabel: { color: '#D1FAE5', fontSize: 15, fontWeight: '500' },
   heroTotal: { color: '#FFFFFF', fontSize: 48, lineHeight: 56, fontWeight: '800', fontVariant: ['tabular-nums'] },
-  heroWarning: { color: '#FDE68A', fontSize: 14, lineHeight: 20 },
+  heroWarning: { color: '#FDE68A', fontSize: 14, lineHeight: 20, marginTop: Spacing.two },
   reportLink: {
     alignSelf: 'flex-start',
-    marginTop: Spacing.two,
     backgroundColor: '#FFFFFF',
     borderRadius: 999,
     paddingHorizontal: Spacing.three,
     paddingVertical: Spacing.two,
   },
   reportLinkText: { color: '#064E3B', fontSize: 14, fontWeight: '700' },
-  heroButtons: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
+  // Clear of the lines above, so the buttons don't crowd the figures.
+  heroButtons: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two, marginTop: Spacing.three },
+  reportRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
   trackingCard: { borderRadius: 16, borderWidth: 1, padding: Spacing.three, gap: Spacing.one },
 });

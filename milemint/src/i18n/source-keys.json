@@ -5332,6 +5332,12 @@
     ]
   },
   {
+    "key": "Reports: export your mileage log (Pro)",
+    "files": [
+      "components/home/summary-card.tsx"
+    ]
+  },
+  {
     "key": "Restore",
     "files": [
       "app/(tabs)/settings.tsx"
