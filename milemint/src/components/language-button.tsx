@@ -1,11 +1,11 @@
 import { StyleSheet, Text } from 'react-native';
 
-import { GoldTrace } from '@/components/gold-trace';
+import { GoldSparkle } from '@/components/gold-sparkle';
 import { PopPress } from '@/components/pop-press';
 
 /**
  * The language button on the first welcome screen: bigger than a plain pill,
- * with a gold light that runs around its border every few seconds so people
+ * with gold fairy dust twinkling round its border so people
  * who don't read English notice they can change it. Reduce Motion keeps a
  * still gold border.
  */
@@ -25,7 +25,7 @@ export function LanguageButton({
       hitSlop={8}
       onPress={onPress}
       style={styles.button}>
-      <GoldTrace />
+      <GoldSparkle />
       <Text style={styles.text} numberOfLines={1}>
         🌐 {name}
       </Text>

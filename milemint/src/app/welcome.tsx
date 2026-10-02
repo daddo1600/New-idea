@@ -39,7 +39,7 @@ import { MotionCoach, MotionStep } from '@/components/motion-ask';
 import { PermissionPreview } from '@/components/permission-preview';
 import { PopPress } from '@/components/pop-press';
 import { purposeIcon, quickPurposes, shownPurpose } from '@/components/purpose-picker';
-import { GoldTrace } from '@/components/gold-trace';
+import { GoldSparkle } from '@/components/gold-sparkle';
 import { LanguageButton } from '@/components/language-button';
 import { MintWash, StepHeader } from '@/components/step-header';
 import { VehiclePicker } from '@/components/vehicle-picker';
@@ -723,7 +723,7 @@ export default function WelcomeScreen() {
               // (its map makes the alert tall, so anything higher is hidden behind it).
               <View style={styles.coach} accessibilityLiveRegion="polite">
                 <View style={styles.coachPill}>
-                  <GoldTrace stroke={2.5} lapMs={1600} />
+                  <GoldSparkle />
                   <Text style={styles.coachText} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.6}>
                     {asking === 1 ? t('Select “Allow While Using App”') : t('Select “Change to Always Allow”')}
                   </Text>
