@@ -1589,6 +1589,13 @@
     ]
   },
   {
+    "key": "Care worker",
+    "files": [
+      "app/(tabs)/settings.tsx",
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Cents per km looks better: about {{amount}} more.",
     "files": [
       "app/logbook.tsx"
@@ -3224,6 +3231,13 @@
     ]
   },
   {
+    "key": "Home visits. We keep the area, never the address.",
+    "files": [
+      "app/(tabs)/settings.tsx",
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "How do you work?",
     "files": [
       "app/welcome.tsx"
@@ -3276,13 +3290,6 @@
     "key": "I log my work miles with MileSprout. It tracks every drive by itself, free, with no account.",
     "files": [
       "referral/links.ts"
-    ]
-  },
-  {
-    "key": "I visit clients or patients at home (care, nursing, support work)",
-    "files": [
-      "app/(tabs)/settings.tsx",
-      "app/welcome.tsx"
     ]
   },
   {
@@ -7159,13 +7166,6 @@
     "key": "We read every message",
     "files": [
       "app/(tabs)/settings.tsx"
-    ]
-  },
-  {
-    "key": "We’ll keep only the area, never their address.",
-    "files": [
-      "app/(tabs)/settings.tsx",
-      "app/welcome.tsx"
     ]
   },
   {

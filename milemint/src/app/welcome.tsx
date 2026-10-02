@@ -936,7 +936,7 @@ export default function WelcomeScreen() {
 }
 
 /**
- * "I visit clients or patients at home": one tick for care, nursing and support
+ * "Care worker": one tick for care, nursing and support
  * workers, who must not keep clients' addresses on their phone.
  */
 /**
@@ -961,9 +961,9 @@ function ClientPrivacyCheck({ value, onChange }: { value: boolean; onChange: (va
       <View style={styles.privacyCheck}>
         <Text style={styles.privacyEmoji}>🩺</Text>
         <View style={styles.flex}>
-          <ThemedText type="smallBold">{t('I visit clients or patients at home (care, nursing, support work)')}</ThemedText>
+          <ThemedText type="smallBold">{t('Care worker')}</ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
-            {t('We’ll keep only the area, never their address.')}
+            {t('Home visits. We keep the area, never the address.')}
           </ThemedText>
         </View>
         <View

@@ -1130,9 +1130,9 @@ function ClientPrivacySection() {
       <ThemedView type="backgroundElement" style={styles.card}>
         <View style={styles.rowBetween}>
           <View style={styles.flex}>
-            <ThemedText type="smallBold">{t('I visit clients or patients at home (care, nursing, support work)')}</ThemedText>
+            <ThemedText type="smallBold">{t('Care worker')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              {t('We’ll keep only the area, never their address.')}
+              {t('Home visits. We keep the area, never the address.')}
             </ThemedText>
           </View>
           <Switch
