@@ -220,7 +220,6 @@ const dictionary: Dictionary = {
   "Delivery apps only count miles with an order on board. The drive to the pickup, between orders and home again are business miles too, and MileSprout logs them all.": "ডেলিভারি অ্যাপ শুধু অর্ডার সাথে থাকার সময়ের মাইল গোনে। পিকআপে যাওয়া, দুই অর্ডারের মাঝের পথ আর বাড়ি ফেরাও ব্যবসায়িক মাইল, আর MileSprout সবগুলোই রেকর্ড করে।",
   "Delivery or collection": "ডেলিভারি বা কালেকশন",
   "Done": "সম্পন্ন",
-  "Drives are logged in the background. No buttons to press.": "ট্রিপ ব্যাকগ্রাউন্ডে রেকর্ড হয়। কোনো বোতাম চাপতে হয় না।",
   "Drives are logged when you park.": "পার্ক করলেই ট্রিপ রেকর্ড হয়।",
   "Drives may be missed": "কিছু ট্রিপ বাদ পড়তে পারে",
   "Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.": "আপনার কাজের সময়ে শুরু হওয়া ট্রিপ ব্যবসায়িক হিসেবে চিহ্নিত হয়, বাকিগুলো ব্যক্তিগত। আপনার নিয়মিত রুট আর যাতায়াত অগ্রাধিকার পায়।",
@@ -481,7 +480,6 @@ const dictionary: Dictionary = {
   "Saving…": "সেভ হচ্ছে…",
   "Search an address or place": "ঠিকানা বা জায়গা খুঁজুন",
   "Search for its address, or use “I’m here now”.": "এর ঠিকানা খুঁজুন, অথবা “আমি এখন এখানে” ব্যবহার করুন।",
-  "See what each business drive saves you at tax time.": "দেখুন ট্যাক্সের সময় প্রতিটি ব্যবসায়িক ট্রিপের মূল্য কত।",
   "Select": "নির্বাচন",
   "Select {{count}} unsorted": {
     "one": "বাছাই-বাকি {{count}}টি নির্বাচন",
@@ -637,7 +635,6 @@ const dictionary: Dictionary = {
   "Work on {{day}}": "{{day}}-এ কাজ",
   "Work-related car use (cents per km method)": "কাজের জন্য গাড়ির ব্যবহার (cents per km method)",
   "worth about {{amount}}": "মূল্য প্রায় {{amount}}",
-  "Worth money": "আর্থিক মূল্য",
   "Worth up to {{amount}} in deductions if they were for business.": "ব্যবসার কাজে হলে সর্বোচ্চ {{amount}} পর্যন্ত ট্যাক্স ছাড় হতে পারে।",
   "Wrap up warm out there ❄️": "বাইরে গরম কাপড় পরে থাকুন ❄️",
   "Yearly": "বার্ষিক",

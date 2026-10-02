@@ -280,7 +280,6 @@ const dictionary: Dictionary = {
   "Delivery apps only count miles with an order on board. The drive to the pickup, between orders and home again are business miles too, and MileSprout logs them all.": "Aplicațiile de livrări numără doar milele cu o comandă la bord. Drumul până la ridicare, cel dintre comenzi și cel spre casă sunt tot mile de lucru, iar MileSprout le înregistrează pe toate.",
   "Delivery or collection": "Livrare sau ridicare",
   "Done": "Gata",
-  "Drives are logged in the background. No buttons to press.": "Cursele se înregistrează în fundal. Fără butoane de apăsat.",
   "Drives are logged when you park.": "Cursele se înregistrează când parchezi.",
   "Drives may be missed": "Unele curse pot fi ratate",
   "Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.": "Cursele care încep în orele tale de lucru sunt marcate de lucru, celelalte personale. Traseele obișnuite și navetele au prioritate.",
@@ -542,7 +541,6 @@ const dictionary: Dictionary = {
   "Saving…": "Se salvează…",
   "Search an address or place": "Caută o adresă sau un loc",
   "Search for its address, or use “I’m here now”.": "Caută-i adresa sau folosește „Sunt aici acum”.",
-  "See what each business drive saves you at tax time.": "Vezi cât valorează fiecare cursă de lucru la vremea taxelor.",
   "Select": "Selectează",
   "Select {{count}} unsorted": {
     "one": "Selectează {{count}} cursă nesortată",
@@ -700,7 +698,6 @@ const dictionary: Dictionary = {
   "Work on {{day}}": "Lucru: {{day}}",
   "Work-related car use (cents per km method)": "Folosirea mașinii pentru muncă (cents per km method)",
   "worth about {{amount}}": "valorează cam {{amount}}",
-  "Worth money": "Valorează bani",
   "Worth up to {{amount}} in deductions if they were for business.": "Valorează până la {{amount}} în deduceri, dacă au fost de lucru.",
   "Wrap up warm out there ❄️": "Îmbracă-te gros, e frig afară ❄️",
   "Yearly": "Anual",

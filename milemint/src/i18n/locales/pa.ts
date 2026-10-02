@@ -232,7 +232,6 @@ const dictionary: Dictionary = {
   "Delivery apps only count miles with an order on board. The drive to the pickup, between orders and home again are business miles too, and MileSprout logs them all.": "ਡਿਲੀਵਰੀ ਐਪਾਂ ਸਿਰਫ਼ ਉਹ ਮੀਲ ਗਿਣਦੀਆਂ ਹਨ ਜਦੋਂ ਆਰਡਰ ਨਾਲ ਹੋਵੇ। ਪਿਕਅੱਪ ਤੱਕ ਜਾਣਾ, ਇੱਕ ਆਰਡਰ ਤੋਂ ਦੂਜੇ ਤੱਕ ਜਾਣਾ ਅਤੇ ਵਾਪਸ ਘਰ ਆਉਣਾ ਵੀ ਬਿਜ਼ਨਸ ਮੀਲ ਹਨ, ਅਤੇ MileSprout ਇਹ ਸਾਰੇ ਦਰਜ ਕਰਦਾ ਹੈ।",
   "Delivery or collection": "ਡਿਲੀਵਰੀ ਜਾਂ ਪਿਕਅੱਪ",
   "Done": "ਹੋ ਗਿਆ",
-  "Drives are logged in the background. No buttons to press.": "ਟ੍ਰਿਪ ਬੈਕਗ੍ਰਾਊਂਡ ਵਿੱਚ ਦਰਜ ਹੁੰਦੇ ਹਨ। ਕੋਈ ਬਟਨ ਦਬਾਉਣ ਦੀ ਲੋੜ ਨਹੀਂ।",
   "Drives are logged when you park.": "ਗੱਡੀ ਪਾਰਕ ਕਰਦੇ ਹੀ ਟ੍ਰਿਪ ਦਰਜ ਹੋ ਜਾਂਦੇ ਹਨ।",
   "Drives may be missed": "ਟ੍ਰਿਪ ਛੁੱਟ ਸਕਦੇ ਹਨ",
   "Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.": "ਤੁਹਾਡੇ ਕੰਮ ਦੇ ਘੰਟਿਆਂ ਵਿੱਚ ਸ਼ੁਰੂ ਹੋਣ ਵਾਲੇ ਟ੍ਰਿਪ ਬਿਜ਼ਨਸ ਮੰਨੇ ਜਾਂਦੇ ਹਨ, ਬਾਕੀ ਨਿੱਜੀ। ਤੁਹਾਡੇ ਆਮ ਰਸਤਿਆਂ ਅਤੇ ਘਰ-ਕੰਮ ਆਉਣ-ਜਾਣ ਨੂੰ ਪਹਿਲ ਮਿਲਦੀ ਹੈ।",
@@ -493,7 +492,6 @@ const dictionary: Dictionary = {
   "Saving…": "ਸੇਵ ਹੋ ਰਿਹਾ ਹੈ…",
   "Search an address or place": "ਪਤਾ ਜਾਂ ਥਾਂ ਖੋਜੋ",
   "Search for its address, or use “I’m here now”.": "ਇਸਦਾ ਪਤਾ ਖੋਜੋ, ਜਾਂ “ਮੈਂ ਹੁਣ ਇੱਥੇ ਹਾਂ” ਵਰਤੋ।",
-  "See what each business drive saves you at tax time.": "ਦੇਖੋ ਕਿ ਟੈਕਸ ਵੇਲੇ ਹਰ ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ਦੀ ਕਿੰਨੀ ਕੀਮਤ ਬਣਦੀ ਹੈ।",
   "Select": "ਚੁਣੋ",
   "Select {{count}} unsorted": {
     "one": "{{count}} ਬਿਨਾਂ ਛਾਂਟਿਆ ਚੁਣੋ",
@@ -649,7 +647,6 @@ const dictionary: Dictionary = {
   "Work on {{day}}": "{{day}} ਨੂੰ ਕੰਮ",
   "Work-related car use (cents per km method)": "ਕੰਮ ਨਾਲ ਜੁੜੀ ਕਾਰ ਦੀ ਵਰਤੋਂ (cents per km method)",
   "worth about {{amount}}": "ਲਗਭਗ {{amount}} ਦੀ ਕੀਮਤ",
-  "Worth money": "ਹਰ ਟ੍ਰਿਪ ਦੀ ਕੀਮਤ",
   "Worth up to {{amount}} in deductions if they were for business.": "ਜੇ ਇਹ ਬਿਜ਼ਨਸ ਲਈ ਸਨ ਤਾਂ {{amount}} ਤੱਕ ਦੀਆਂ ਕਟੌਤੀਆਂ।",
   "Wrap up warm out there ❄️": "ਠੰਢ ਹੈ, ਆਪਣਾ ਖ਼ਿਆਲ ਰੱਖਣਾ ❄️",
   "Yearly": "ਸਾਲਾਨਾ",

@@ -28,6 +28,7 @@ import { MotionCoach, MotionStep } from '@/components/motion-ask';
 import { PermissionPreview } from '@/components/permission-preview';
 import { PopPress } from '@/components/pop-press';
 import { purposeIcon, quickPurposes, shownPurpose } from '@/components/purpose-picker';
+import { LanguageButton } from '@/components/language-button';
 import { MintWash, StepHeader } from '@/components/step-header';
 import { VehiclePicker } from '@/components/vehicle-picker';
 import { firstCode, RedeemCode } from '@/components/redeem-code';
@@ -80,11 +81,6 @@ const EXTRA_LABELS: Record<VehicleType, string> = {
   motorbike: msg('Moped or motorbike'),
   bicycle: msg('Bicycle'),
 };
-
-const WELCOME_POINTS = [
-  [msg('Automatic'), msg('Drives are logged in the background. No buttons to press.')],
-  [msg('Worth money'), msg('See what each business drive saves you at tax time.')],
-] as const;
 
 export default function WelcomeScreen() {
   const theme = useTheme();
@@ -459,16 +455,11 @@ export default function WelcomeScreen() {
           ))}
         </View>
         {step === 0 ? (
-          <Pressable
-            accessibilityRole="button"
+          <LanguageButton
+            name={languageName}
             accessibilityLabel={t('Language: {{name}}. Change', { name: languageName })}
-            hitSlop={8}
             onPress={() => router.push('/language' as Href)}
-            style={styles.languagePill}>
-            <Text style={styles.languagePillText} numberOfLines={1}>
-              🌐 {languageName}
-            </Text>
-          </Pressable>
+          />
         ) : (
           <View style={styles.topSpacer} />
         )}
@@ -490,22 +481,7 @@ export default function WelcomeScreen() {
               <Text style={styles.brandBody}>
                 {t('MileSprout logs your drives automatically and works out what they’re worth at tax time.')}
               </Text>
-              <View style={styles.privacyPill}>
-                <Text style={styles.privacyPillText}>🔒 {t('No account. Your trips stay on your phone.')}</Text>
-              </View>
-              <View style={styles.points}>
-                {WELCOME_POINTS.map(([title, body]) => (
-                  <View key={title} style={styles.point}>
-                    <View style={styles.pointTick}>
-                      <Text style={styles.pointTickText}>✓</Text>
-                    </View>
-                    <View style={styles.flex}>
-                      <Text style={styles.pointTitle}>{t(title)}</Text>
-                      <Text style={styles.pointBody}>{t(body)}</Text>
-                    </View>
-                  </View>
-                ))}
-              </View>
+              <Text style={styles.privacyLine}>🔒 {t('No account. Your trips stay on your phone.')}</Text>
               {backup && (
                 <View style={styles.glass} accessibilityLiveRegion="polite">
                   <Text style={styles.pointTitle}>{t('Restore your trips from iCloud')}</Text>
@@ -1054,16 +1030,6 @@ const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: Spacing.four },
   brandTitle: { color: '#FFFFFF', fontSize: 40, lineHeight: 46, fontWeight: '800', letterSpacing: -0.5 },
   brandBody: { color: '#D1FAE5', fontSize: 17, lineHeight: 24 },
-  pointTick: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    backgroundColor: '#FACC15',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 1,
-  },
-  pointTickText: { color: '#064E3B', fontSize: 12, fontWeight: '800' },
   pointTitle: { color: '#FFFFFF', fontSize: 15, fontWeight: '700' },
   brandEyebrow: { color: '#FACC15', fontSize: 12, fontWeight: '800', letterSpacing: 1.2, marginTop: Spacing.one },
   brandTitleSmall: { color: '#FFFFFF', fontSize: 34, lineHeight: 40, fontWeight: '800', letterSpacing: -0.5 },
@@ -1085,14 +1051,6 @@ const styles = StyleSheet.create({
   tipIcon: { fontSize: 15, lineHeight: 20 },
   top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 32 },
   topSpacer: { width: 32 },
-  languagePill: {
-    backgroundColor: 'rgba(255,255,255,0.16)',
-    borderRadius: 999,
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.one,
-    maxWidth: 180,
-  },
-  languagePillText: { color: '#FFFFFF', fontSize: 13, fontWeight: '600' },
   // Centred on the screen whatever sits either side (Back, the language button).
   dots: { position: 'absolute', left: 0, right: 0, flexDirection: 'row', justifyContent: 'center', gap: Spacing.one },
   dot: { width: 8, height: 8, borderRadius: 4 },
@@ -1108,8 +1066,6 @@ const styles = StyleSheet.create({
   },
   heading: { marginTop: Spacing.two },
   contentTop: { justifyContent: 'flex-start', paddingTop: Spacing.three },
-  points: { gap: Spacing.three, marginTop: Spacing.two },
-  point: { flexDirection: 'row', gap: Spacing.two },
   flex: { flex: 1, gap: Spacing.half },
   flexFill: { flex: 1 },
   vehicles: { gap: Spacing.two },
@@ -1125,17 +1081,7 @@ const styles = StyleSheet.create({
   coachStep: { color: '#D1FAE5', fontSize: 15, fontWeight: '800', letterSpacing: 1.2 },
   coachText: { color: '#FACC15', fontSize: 28, lineHeight: 35, fontWeight: '800', textAlign: 'center' },
   privacy: { color: '#FFFFFF', fontSize: 15, lineHeight: 21 },
-  privacyPill: {
-    alignSelf: 'flex-start',
-    backgroundColor: 'rgba(250,204,21,0.16)',
-    borderColor: 'rgba(250,204,21,0.5)',
-    borderWidth: 1,
-    // Rounded, not a pill: longer languages wrap to two lines.
-    borderRadius: 14,
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.two,
-  },
-  privacyPillText: { color: '#FACC15', fontSize: 15, lineHeight: 20, fontWeight: '800' },
+  privacyLine: { color: '#D1FAE5', fontSize: 15, lineHeight: 21, fontWeight: '600' },
   extraRow: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
   extraChip: {
     borderWidth: 1.5,

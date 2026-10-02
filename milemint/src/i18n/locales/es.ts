@@ -240,7 +240,6 @@ const dictionary: Dictionary = {
   "Delivery apps only count miles with an order on board. The drive to the pickup, between orders and home again are business miles too, and MileSprout logs them all.": "Las apps de reparto solo cuentan las millas con un pedido a bordo. Los trayectos hasta la recogida, entre pedidos y de vuelta a casa también son millas de trabajo, y MileSprout las registra todas.",
   "Delivery or collection": "Entrega o recogida",
   "Done": "Listo",
-  "Drives are logged in the background. No buttons to press.": "Los viajes se registran en segundo plano. Sin tocar ningún botón.",
   "Drives are logged when you park.": "Los viajes se registran cuando te estacionas.",
   "Drives may be missed": "Es posible que falten viajes",
   "Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.": "Los viajes que empiezan en tu horario se marcan como de trabajo; los demás, como personales. Tus rutas habituales y trayectos casa-trabajo tienen prioridad.",
@@ -502,7 +501,6 @@ const dictionary: Dictionary = {
   "Saving…": "Guardando…",
   "Search an address or place": "Busca una dirección o lugar",
   "Search for its address, or use “I’m here now”.": "Busca su dirección o usa “Estoy aquí ahora”.",
-  "See what each business drive saves you at tax time.": "Mira cuánto vale cada viaje de trabajo a la hora de declarar impuestos.",
   "Select": "Seleccionar",
   "Select {{count}} unsorted": {
     "one": "Seleccionar {{count}} sin clasificar",
@@ -660,7 +658,6 @@ const dictionary: Dictionary = {
   "Work on {{day}}": "Trabajo el {{day}}",
   "Work-related car use (cents per km method)": "Uso del auto para trabajar (cents per km method)",
   "worth about {{amount}}": "vale alrededor de {{amount}}",
-  "Worth money": "Vale dinero",
   "Worth up to {{amount}} in deductions if they were for business.": "Valen hasta {{amount}} en deducciones si fueron de trabajo.",
   "Wrap up warm out there ❄️": "Abrígate bien ❄️",
   "Yearly": "Anual",

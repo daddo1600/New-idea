@@ -280,7 +280,6 @@ const dictionary: Dictionary = {
   "Delivery apps only count miles with an order on board. The drive to the pickup, between orders and home again are business miles too, and MileSprout logs them all.": "Les apps de livraison ne comptent que les miles faits avec une commande à bord. Le trajet jusqu’au point de collecte, entre les commandes et le retour à la maison, ce sont aussi des miles d’affaires, et MileSprout les enregistre tous.",
   "Delivery or collection": "Livraison ou collecte",
   "Done": "OK",
-  "Drives are logged in the background. No buttons to press.": "Les trajets sont enregistrés en arrière-plan. Aucun bouton à toucher.",
   "Drives are logged when you park.": "Les trajets sont enregistrés quand vous vous garez.",
   "Drives may be missed": "Des trajets pourraient être manqués",
   "Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.": "Les trajets qui commencent pendant vos heures sont classés affaires, les autres personnels. Vos trajets habituels et vos trajets domicile-travail ont priorité.",
@@ -542,7 +541,6 @@ const dictionary: Dictionary = {
   "Saving…": "Enregistrement…",
   "Search an address or place": "Chercher une adresse ou un lieu",
   "Search for its address, or use “I’m here now”.": "Cherchez son adresse ou utilisez « Je suis ici ».",
-  "See what each business drive saves you at tax time.": "Voyez ce que chaque trajet d’affaires peut valoir au moment des impôts.",
   "Select": "Sélectionner",
   "Select {{count}} unsorted": {
     "one": "Sélectionner {{count}} non classé",
@@ -700,7 +698,6 @@ const dictionary: Dictionary = {
   "Work on {{day}}": "Travail le {{day}}",
   "Work-related car use (cents per km method)": "Usage de la voiture pour le travail (cents per km method)",
   "worth about {{amount}}": "soit environ {{amount}}",
-  "Worth money": "Ça rapporte",
   "Worth up to {{amount}} in deductions if they were for business.": "Jusqu’à {{amount}} en déductions, s’ils étaient pour affaires.",
   "Wrap up warm out there ❄️": "Couvrez-vous bien ❄️",
   "Yearly": "Annuel",

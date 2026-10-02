@@ -1092,8 +1092,7 @@
   {
     "key": "Automatic",
     "files": [
-      "app/setup-tracking.tsx",
-      "app/welcome.tsx"
+      "app/setup-tracking.tsx"
     ]
   },
   {
@@ -1936,12 +1935,6 @@
     "key": "Drives",
     "files": [
       "app/(tabs)/_layout.tsx"
-    ]
-  },
-  {
-    "key": "Drives are logged in the background. No buttons to press.",
-    "files": [
-      "app/welcome.tsx"
     ]
   },
   {
@@ -4901,12 +4894,6 @@
     ]
   },
   {
-    "key": "See what each business drive saves you at tax time.",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
     "key": "Select",
     "files": [
       "components/trips/list-bars.tsx"
@@ -6434,12 +6421,6 @@
     "key": "worth about {{amount}}",
     "files": [
       "app/compare.tsx"
-    ]
-  },
-  {
-    "key": "Worth money",
-    "files": [
-      "app/welcome.tsx"
     ]
   },
   {

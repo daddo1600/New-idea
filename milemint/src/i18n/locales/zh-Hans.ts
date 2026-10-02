@@ -212,7 +212,6 @@ const dictionary: Dictionary = {
   "Delivery apps only count miles with an order on board. The drive to the pickup, between orders and home again are business miles too, and MileSprout logs them all.": "配送 App 只计算车上有订单时的英里数。去取货点、订单之间往返以及回家的路程，也都算工作里程，MileSprout 会全部记录下来。",
   "Delivery or collection": "送货或取货",
   "Done": "完成",
-  "Drives are logged in the background. No buttons to press.": "行程在后台自动记录，无需按任何按钮。",
   "Drives are logged when you park.": "停车后自动记录行程。",
   "Drives may be missed": "可能会漏记行程",
   "Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.": "在你工作时间内开始的行程标为工作，其余标为私人。常用路线和通勤规则优先。",
@@ -472,7 +471,6 @@ const dictionary: Dictionary = {
   "Saving…": "正在保存…",
   "Search an address or place": "搜索地址或地点",
   "Search for its address, or use “I’m here now”.": "搜索它的地址，或使用“我就在这里”。",
-  "See what each business drive saves you at tax time.": "看看每次工作行程在报税时值多少钱。",
   "Select": "选择",
   "Select {{count}} unsorted": {
     "other": "选择 {{count}} 次未分类行程"
@@ -626,7 +624,6 @@ const dictionary: Dictionary = {
   "Work on {{day}}": "{{day}}上班",
   "Work-related car use (cents per km method)": "与工作相关的用车（cents per km method）",
   "worth about {{amount}}": "约值 {{amount}}",
-  "Worth money": "价值看得见",
   "Worth up to {{amount}} in deductions if they were for business.": "如果是工作行程，抵扣额最高可达 {{amount}}。",
   "Wrap up warm out there ❄️": "出门记得穿暖和 ❄️",
   "Yearly": "按年",

@@ -260,7 +260,6 @@ const dictionary: Dictionary = {
   "Delivery apps only count miles with an order on board. The drive to the pickup, between orders and home again are business miles too, and MileSprout logs them all.": "Os apps de entrega só contam as milhas com pedido a bordo. O caminho até a coleta, entre um pedido e outro e de volta para casa também são milhas profissionais, e o MileSprout registra todas.",
   "Delivery or collection": "Entrega ou coleta",
   "Done": "OK",
-  "Drives are logged in the background. No buttons to press.": "Os trajetos são registrados em segundo plano. Sem botões para apertar.",
   "Drives are logged when you park.": "Os trajetos são registrados quando você estaciona.",
   "Drives may be missed": "Trajetos podem ficar de fora",
   "Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.": "Trajetos que começam no seu horário são marcados como profissionais; os outros, como pessoais. Suas rotas habituais e o deslocamento casa-trabalho têm prioridade.",
@@ -523,7 +522,6 @@ const dictionary: Dictionary = {
   "Saving…": "Salvando…",
   "Search an address or place": "Busque um endereço ou local",
   "Search for its address, or use “I’m here now”.": "Busque o endereço ou use “Estou aqui agora”.",
-  "See what each business drive saves you at tax time.": "Veja quanto cada trajeto profissional vale na época do imposto.",
   "Select": "Selecionar",
   "Select {{count}} unsorted": {
     "zero": "Selecionar {{count}} pendentes",
@@ -683,7 +681,6 @@ const dictionary: Dictionary = {
   "Work on {{day}}": "Trabalho: {{day}}",
   "Work-related car use (cents per km method)": "Uso do carro no trabalho (cents per km method)",
   "worth about {{amount}}": "vale cerca de {{amount}}",
-  "Worth money": "Quanto vale",
   "Worth up to {{amount}} in deductions if they were for business.": "Valem até {{amount}} em deduções, se forem profissionais.",
   "Wrap up warm out there ❄️": "Se agasalhe bem por aí ❄️",
   "Yearly": "Anual",
