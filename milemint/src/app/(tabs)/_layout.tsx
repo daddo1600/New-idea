@@ -15,9 +15,10 @@ import { useReminders } from '@/reminders/use-reminders';
 import { useTrackingAlerts } from '@/tracking/use-tracking-health';
 
 /**
- * The app's four tabs: Home (today: the shift, the year's money, drives to
+ * The app's five tabs: Home (today: the shift, the year's money, drives to
  * sort), Drives (every drive), Money (the year in detail, Pro and the tax
- * screens) and Settings. Everything else opens over them from the root stack.
+ * screens), Perks (partner deals, demo for now) and Settings. Everything else
+ * opens over them from the root stack.
  */
 export default function TabsLayout() {
   const t = useT();
@@ -60,6 +61,13 @@ export default function TabsLayout() {
                 color={color}
               />
             ),
+          }}
+        />
+        <Tabs.Screen
+          name="perks"
+          options={{
+            title: t('Perks'),
+            tabBarIcon: ({ color, size }) => <SymbolIcon name="gift.fill" glyph="🎁" size={size} color={color} />,
           }}
         />
         <Tabs.Screen

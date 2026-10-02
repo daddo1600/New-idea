@@ -213,6 +213,21 @@ const MIGRATIONS: readonly string[] = [
   );
   CREATE INDEX platform_earnings_period ON platform_earnings (period_start);
   `,
+  `
+  -- Perks (demo partner offers): each code claimed on this phone, used once.
+  -- No personal data: the code is random and stays here until it's shown at
+  -- a till. expires_at and redeemed_at are ISO times; redeemed_at is null
+  -- while the code is still to use. Not in iCloud backups: codes are
+  -- short-lived, and a restored phone simply claims again.
+  CREATE TABLE perk_claims (
+    code TEXT PRIMARY KEY NOT NULL,
+    offer_id TEXT NOT NULL,
+    claimed_at TEXT NOT NULL,
+    expires_at TEXT NOT NULL CHECK (expires_at > claimed_at),
+    redeemed_at TEXT
+  );
+  CREATE INDEX perk_claims_offer ON perk_claims (offer_id, claimed_at);
+  `,
 ];
 
 /** The schema this build creates: stored in PRAGMA user_version, and in iCloud backups. */

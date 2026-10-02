@@ -179,6 +179,7 @@
   {
     "key": "{{count}} days left",
     "files": [
+      "app/perk/[code].tsx",
       "app/tax-dates.tsx",
       "components/money/quarterly-figures.tsx"
     ]
@@ -474,6 +475,12 @@
     ]
   },
   {
+    "key": "{{hours}} h {{minutes}} min left",
+    "files": [
+      "app/perk/[code].tsx"
+    ]
+  },
+  {
     "key": "{{hours}}h {{minutes}}m",
     "files": [
       "components/home/shift-bar.tsx",
@@ -509,6 +516,12 @@
     "key": "{{label}}: not yet",
     "files": [
       "app/milestones.tsx"
+    ]
+  },
+  {
+    "key": "{{left}} of {{cap}} left this week",
+    "files": [
+      "components/perks/offer-card.tsx"
     ]
   },
   {
@@ -791,9 +804,27 @@
     ]
   },
   {
+    "key": "£20 off your Self Assessment",
+    "files": [
+      "perks/offers.ts"
+    ]
+  },
+  {
+    "key": "£3 off any wash",
+    "files": [
+      "perks/offers.ts"
+    ]
+  },
+  {
     "key": "1 month left in the {{year}} tax year",
     "files": [
       "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "10p off a litre of fuel",
+    "files": [
+      "perks/offers.ts"
     ]
   },
   {
@@ -806,6 +837,12 @@
     "key": "2 months left in the {{year}} tax year ⏳",
     "files": [
       "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "20% off a phone mount",
+    "files": [
+      "perks/offers.ts"
     ]
   },
   {
@@ -854,6 +891,12 @@
     "key": "A Founding driver badge in Settings, for helping MileSprout grow.",
     "files": [
       "referral/perks.ts"
+    ]
+  },
+  {
+    "key": "A free hot drink",
+    "files": [
+      "perks/offers.ts"
     ]
   },
   {
@@ -1164,6 +1207,12 @@
     "key": "An estimate to help you save for your tax bill. Your real bill depends on your total income.",
     "files": [
       "components/money/set-aside-card.tsx"
+    ]
+  },
+  {
+    "key": "Any size. In store only.",
+    "files": [
+      "perks/offers.ts"
     ]
   },
   {
@@ -1488,6 +1537,18 @@
     ]
   },
   {
+    "key": "Bike repairs",
+    "files": [
+      "perks/offers.ts"
+    ]
+  },
+  {
+    "key": "Bikes and e-bikes. In store only.",
+    "files": [
+      "perks/offers.ts"
+    ]
+  },
+  {
     "key": "Both methods come out the same.",
     "files": [
       "app/logbook.tsx"
@@ -1586,6 +1647,12 @@
       "app/welcome.tsx",
       "components/vehicle-picker.tsx",
       "domain/trip.ts"
+    ]
+  },
+  {
+    "key": "Car wash",
+    "files": [
+      "perks/offers.ts"
     ]
   },
   {
@@ -1715,6 +1782,24 @@
     ]
   },
   {
+    "key": "Claim",
+    "files": [
+      "components/perks/offer-card.tsx"
+    ]
+  },
+  {
+    "key": "Claim a deal",
+    "files": [
+      "app/(tabs)/perks.tsx"
+    ]
+  },
+  {
+    "key": "Claim again",
+    "files": [
+      "components/perks/offer-card.tsx"
+    ]
+  },
+  {
     "key": "Claim it before {{date}}.",
     "files": [
       "components/home/summary-card.tsx"
@@ -1752,6 +1837,18 @@
     ]
   },
   {
+    "key": "Claim: {{offer}}",
+    "files": [
+      "components/perks/offer-card.tsx"
+    ]
+  },
+  {
+    "key": "Claimed · expires {{date}}",
+    "files": [
+      "components/perks/offer-card.tsx"
+    ]
+  },
+  {
     "key": "Classify by work hours",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -1762,6 +1859,12 @@
     "files": [
       "app/(tabs)/settings.tsx",
       "components/money/earnings-sheet.tsx"
+    ]
+  },
+  {
+    "key": "Clear demo claims",
+    "files": [
+      "app/(tabs)/perks.tsx"
     ]
   },
   {
@@ -1823,6 +1926,12 @@
     ]
   },
   {
+    "key": "Coffee",
+    "files": [
+      "perks/offers.ts"
+    ]
+  },
+  {
     "key": "Coming to Pro: bringing in your log from another app.",
     "files": [
       "app/pro.tsx"
@@ -1862,6 +1971,24 @@
     "key": "Continue without “Always”",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Copied ✓",
+    "files": [
+      "app/perk/[code].tsx"
+    ]
+  },
+  {
+    "key": "Copy code",
+    "files": [
+      "app/perk/[code].tsx"
+    ]
+  },
+  {
+    "key": "Copy or share code",
+    "files": [
+      "app/perk/[code].tsx"
     ]
   },
   {
@@ -2128,6 +2255,18 @@
     ]
   },
   {
+    "key": "Demo offers — these partners are examples",
+    "files": [
+      "app/(tabs)/perks.tsx"
+    ]
+  },
+  {
+    "key": "Demo: in the live version, this happens by itself when the till scans the code.",
+    "files": [
+      "app/perk/[code].tsx"
+    ]
+  },
+  {
     "key": "Depreciation",
     "files": [
       "domain/logbook.ts"
@@ -2305,6 +2444,12 @@
     "key": "e.g. Quote for Acme Ltd",
     "files": [
       "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Each partner sets how many codes it gives out a week. When they’re gone, more come on Monday.",
+    "files": [
+      "app/(tabs)/perks.tsx"
     ]
   },
   {
@@ -2761,6 +2906,18 @@
     ]
   },
   {
+    "key": "Expired",
+    "files": [
+      "app/perk/[code].tsx"
+    ]
+  },
+  {
+    "key": "Expires {{date}} at {{time}}. Works once.",
+    "files": [
+      "app/perk/[code].tsx"
+    ]
+  },
+  {
     "key": "Export",
     "files": [
       "app/report.tsx"
@@ -2924,6 +3081,12 @@
     ]
   },
   {
+    "key": "Fitting included. Walk in or book ahead.",
+    "files": [
+      "perks/offers.ts"
+    ]
+  },
+  {
     "key": "For delivery and ride app work (Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber and others): a Start shift button on the home screen. Every drive in a shift counts as work.",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -2997,6 +3160,12 @@
     ]
   },
   {
+    "key": "Free bike safety check",
+    "files": [
+      "perks/offers.ts"
+    ]
+  },
+  {
     "key": "Free trial",
     "files": [
       "app/pro.tsx"
@@ -3012,6 +3181,12 @@
     "key": "Free trial, then {{price}} a year. Cancel any time in Settings.",
     "files": [
       "domain/pro-offer.ts"
+    ]
+  },
+  {
+    "key": "Free tyre check + 15% off tyres",
+    "files": [
+      "perks/offers.ts"
     ]
   },
   {
@@ -3055,6 +3230,12 @@
     "key": "From its weekly or monthly summary",
     "files": [
       "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "Fuel",
+    "files": [
+      "perks/offers.ts"
     ]
   },
   {
@@ -3262,6 +3443,12 @@
     ]
   },
   {
+    "key": "How perks work",
+    "files": [
+      "app/(tabs)/perks.tsx"
+    ]
+  },
+  {
     "key": "How to claim",
     "files": [
       "app/claim-relief.tsx",
@@ -3362,6 +3549,12 @@
     "key": "In Settings, under Allow Location Access, choose Always",
     "files": [
       "components/always-guide.tsx"
+    ]
+  },
+  {
+    "key": "In store",
+    "files": [
+      "components/perks/offer-card.tsx"
     ]
   },
   {
@@ -3826,6 +4019,12 @@
     ]
   },
   {
+    "key": "Mark as used",
+    "files": [
+      "app/perk/[code].tsx"
+    ]
+  },
+  {
     "key": "Mark as work",
     "files": [
       "components/practice-tutorial.tsx"
@@ -3992,6 +4191,12 @@
     ]
   },
   {
+    "key": "MileSprout never shares your trips. A code has nothing about you in it, and claiming one needs no account.",
+    "files": [
+      "app/(tabs)/perks.tsx"
+    ]
+  },
+  {
     "key": "MileSprout only gets a rough position, so drives can’t be measured. In Settings, tap Location and turn on Precise Location.",
     "files": [
       "components/tracking-health-card.tsx"
@@ -4099,6 +4304,12 @@
     "key": "Moped or motorbike",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "More codes on Monday.",
+    "files": [
+      "components/perks/offer-card.tsx"
     ]
   },
   {
@@ -4355,6 +4566,12 @@
     "key": "No work drives yet today.",
     "files": [
       "domain/shortcuts-snapshot.ts"
+    ]
+  },
+  {
+    "key": "None left this week",
+    "files": [
+      "components/perks/offer-card.tsx"
     ]
   },
   {
@@ -4616,6 +4833,24 @@
     "key": "One week left in the {{year}} tax year 🏁",
     "files": [
       "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Online code",
+    "files": [
+      "components/perks/offer-card.tsx"
+    ]
+  },
+  {
+    "key": "Online code. For your first tax return with them.",
+    "files": [
+      "perks/offers.ts"
+    ]
+  },
+  {
+    "key": "Online code. Type it in at checkout.",
+    "files": [
+      "perks/offers.ts"
     ]
   },
   {
@@ -4886,6 +5121,12 @@
     ]
   },
   {
+    "key": "Partners pay MileSprout only when a code is used, never when you claim it. That helps keep MileSprout free.",
+    "files": [
+      "app/(tabs)/perks.tsx"
+    ]
+  },
+  {
     "key": "Past trips keep their names.",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -4941,6 +5182,18 @@
     ]
   },
   {
+    "key": "Perks",
+    "files": [
+      "app/(tabs)/_layout.tsx"
+    ]
+  },
+  {
+    "key": "Perks are just deals: MileSprout works the same whether you use them or not.",
+    "files": [
+      "app/(tabs)/perks.tsx"
+    ]
+  },
+  {
     "key": "Personal",
     "files": [
       "app/add-trip.tsx",
@@ -4949,6 +5202,12 @@
       "components/trips/row-parts.tsx",
       "components/trips/selectable-trip-row.tsx",
       "components/trips/trip-row.tsx"
+    ]
+  },
+  {
+    "key": "Phone mounts",
+    "files": [
+      "perks/offers.ts"
     ]
   },
   {
@@ -5230,6 +5489,18 @@
     ]
   },
   {
+    "key": "Redeemed ✓",
+    "files": [
+      "app/perk/[code].tsx"
+    ]
+  },
+  {
+    "key": "Redeemed ✓ · {{date}}",
+    "files": [
+      "components/perks/offer-card.tsx"
+    ]
+  },
+  {
     "key": "Registration",
     "files": [
       "domain/logbook.ts"
@@ -5335,6 +5606,12 @@
     "key": "Reports: export your mileage log (Pro)",
     "files": [
       "components/home/summary-card.tsx"
+    ]
+  },
+  {
+    "key": "Resets each Monday",
+    "files": [
+      "app/(tabs)/perks.tsx"
     ]
   },
   {
@@ -5787,6 +6064,18 @@
     ]
   },
   {
+    "key": "Show code",
+    "files": [
+      "components/perks/offer-card.tsx"
+    ]
+  },
+  {
+    "key": "Show code for {{partner}}",
+    "files": [
+      "components/perks/offer-card.tsx"
+    ]
+  },
+  {
     "key": "Show drives ▾",
     "files": [
       "components/shift-row.tsx"
@@ -5796,6 +6085,24 @@
     "key": "Show shift on lock screen",
     "files": [
       "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Show the code at the till",
+    "files": [
+      "app/(tabs)/perks.tsx"
+    ]
+  },
+  {
+    "key": "Show the QR code at the till, or type the code in when you buy online.",
+    "files": [
+      "app/(tabs)/perks.tsx"
+    ]
+  },
+  {
+    "key": "Show this at the till",
+    "files": [
+      "app/perk/[code].tsx"
     ]
   },
   {
@@ -6316,6 +6623,12 @@
     ]
   },
   {
+    "key": "Tap Claim and your phone makes a code just for you. Each code works once and has an expiry date.",
+    "files": [
+      "app/(tabs)/perks.tsx"
+    ]
+  },
+  {
     "key": "Tap here",
     "files": [
       "components/always-guide.tsx"
@@ -6338,6 +6651,12 @@
     "key": "Tax dates ›",
     "files": [
       "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "Tax help",
+    "files": [
+      "perks/offers.ts"
     ]
   },
   {
@@ -6563,6 +6882,12 @@
     ]
   },
   {
+    "key": "The partner pays only when it’s used",
+    "files": [
+      "app/(tabs)/perks.tsx"
+    ]
+  },
+  {
     "key": "The purchase didn’t go through. Please try again.",
     "files": [
       "purchases/pro.tsx"
@@ -6611,6 +6936,12 @@
     ]
   },
   {
+    "key": "They’re not real businesses, and the codes won’t work in shops yet.",
+    "files": [
+      "app/(tabs)/perks.tsx"
+    ]
+  },
+  {
     "key": "Thinking…",
     "files": [
       "components/money/weekly-recap.tsx"
@@ -6654,6 +6985,24 @@
     ]
   },
   {
+    "key": "This code expired on {{date}}. You can claim a new one from Perks.",
+    "files": [
+      "app/perk/[code].tsx"
+    ]
+  },
+  {
+    "key": "This code has nothing about you in it: no name, no trips, no location.",
+    "files": [
+      "app/perk/[code].tsx"
+    ]
+  },
+  {
+    "key": "This code isn’t on this phone any more.",
+    "files": [
+      "app/perk/[code].tsx"
+    ]
+  },
+  {
     "key": "This is CRA’s reimbursement rate for employees. If you’re self-employed, CRA usually wants your actual car costs, so treat the figure as an estimate.",
     "files": [
       "domain/regions.ts"
@@ -6663,6 +7012,12 @@
     "key": "This is how a drive shows up after you park. Try sorting it.",
     "files": [
       "components/practice-tutorial.tsx"
+    ]
+  },
+  {
+    "key": "This is when {{partner}} pays MileSprout: when the code is used, not when it was claimed.",
+    "files": [
+      "app/perk/[code].tsx"
     ]
   },
   {
@@ -6703,6 +7058,12 @@
     "key": "This week so far: {{distance}} for work over {{count}} drives.",
     "files": [
       "domain/recap.ts"
+    ]
+  },
+  {
+    "key": "This week’s offers",
+    "files": [
+      "app/(tabs)/perks.tsx"
     ]
   },
   {
@@ -6967,9 +7328,21 @@
     ]
   },
   {
+    "key": "Type this code in at checkout",
+    "files": [
+      "app/perk/[code].tsx"
+    ]
+  },
+  {
     "key": "Type your own purpose",
     "files": [
       "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Tyres & servicing",
+    "files": [
+      "perks/offers.ts"
     ]
   },
   {
@@ -7047,6 +7420,12 @@
     ]
   },
   {
+    "key": "Up to 40 litres. One fill-up per code.",
+    "files": [
+      "perks/offers.ts"
+    ]
+  },
+  {
     "key": "Upgrade to Pro",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -7089,6 +7468,12 @@
     ]
   },
   {
+    "key": "Used {{date}} at {{time}}",
+    "files": [
+      "app/perk/[code].tsx"
+    ]
+  },
+  {
     "key": "Uses little battery",
     "files": [
       "app/setup-tracking.tsx"
@@ -7104,6 +7489,12 @@
     "key": "Usual purpose · tap to change",
     "files": [
       "components/trips/purpose-line.tsx"
+    ]
+  },
+  {
+    "key": "Valets too. Not with other offers.",
+    "files": [
+      "perks/offers.ts"
     ]
   },
   {
@@ -7643,6 +8034,12 @@
     "key": "Your car did the hard part",
     "files": [
       "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Your code",
+    "files": [
+      "app/_layout.tsx"
     ]
   },
   {
