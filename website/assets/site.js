@@ -235,9 +235,15 @@
     pill.addEventListener('click', go);
     document.body.appendChild(pill);
 
-    var formSeen = true, footSeen = false, shown = null;
+    // Only near the end of the page (the closing section, or within a screen of the bottom),
+    // and never while another way to sign up is on screen (the hero form, the Pro card's
+    // button, the closing section's button).
+    var others = [form].concat(Array.prototype.filter.call(document.querySelectorAll('a[href="#early-access"]'), function (a) { return a !== pill; }));
+    var seen = others.map(function () { return false; });
+    var closing = document.querySelector('section.cta'), closingSeen = false, nearEnd = false, shown = null;
     function update() {
-      var on = !formSeen && !footSeen;
+      nearEnd = window.innerHeight + (window.scrollY || window.pageYOffset) >= document.documentElement.scrollHeight - window.innerHeight;
+      var on = (closingSeen || nearEnd) && seen.indexOf(true) < 0;
       if (on === shown) return;
       shown = on;
       pill.classList.toggle('on', on);
@@ -246,9 +252,16 @@
       if (on) { pill.removeAttribute('aria-hidden'); pill.removeAttribute('tabindex'); pill.inert = false; }
       else { pill.setAttribute('aria-hidden', 'true'); pill.setAttribute('tabindex', '-1'); pill.inert = true; }
     }
-    new IntersectionObserver(function (es) { formSeen = es[0].isIntersecting; update(); }).observe(form);
-    var foot = document.querySelector('.site-footer');
-    if (foot) new IntersectionObserver(function (es) { footSeen = es[0].isIntersecting; update(); }).observe(foot);
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.target === closing) closingSeen = e.isIntersecting;
+        else seen[others.indexOf(e.target)] = e.isIntersecting;
+      });
+      update();
+    });
+    others.forEach(function (el) { io.observe(el); });
+    if (closing) io.observe(closing);
+    window.addEventListener('scroll', update, { passive: true }); // cheap: only works out "near the end"
     update();
   })();
 
@@ -492,6 +505,57 @@
         if (e.target.type !== 'radio') return;
         if (was === e.target) e.target.checked = false;
         was = null;
+      });
+    });
+
+    // Cleaner forms: until a whole email is typed, only the email box and the button show.
+    // The optional chips and the consent box then slide in, and stay. Pressing the button
+    // early reveals them and moves to the consent box (still required). No JS: all visible.
+    var FULL_EMAIL = /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/;
+    Array.prototype.forEach.call(forms, function (f, n) {
+      var email = f.querySelector('input[type="email"]');
+      var btn = f.querySelector('button[type="submit"]');
+      var opts = f.querySelector('.wl-opts'), consent = f.querySelector('.wl-consent');
+      if (!email || !btn || !consent) return;
+      var more = document.createElement('div');
+      more.className = 'wl-more';
+      more.id = 'wl-more-' + n;
+      var inner = document.createElement('div');
+      inner.className = 'wl-more-inner';
+      more.appendChild(inner);
+      (opts || consent).parentNode.insertBefore(more, opts || consent);
+      if (opts) inner.appendChild(opts);
+      inner.appendChild(consent);
+      // screen readers hear once that more fields appeared (sighted users see them slide in)
+      var live = document.createElement('p');
+      live.className = 'sr-only';
+      live.setAttribute('aria-live', 'polite');
+      f.appendChild(live);
+      f.classList.add('wl-compact');
+      more.inert = true;
+      btn.setAttribute('aria-controls', more.id);
+      btn.setAttribute('aria-expanded', 'false');
+      var open = false;
+      function reveal(announce) {
+        if (open) return;
+        open = true;
+        f.classList.add('wl-open');
+        more.inert = false;
+        btn.setAttribute('aria-expanded', 'true');
+        if (announce) live.textContent = 'A few optional questions and the consent box have appeared after the button.';
+      }
+      function check() { if (FULL_EMAIL.test(email.value.trim())) reveal(true); }
+      email.addEventListener('input', check);
+      email.addEventListener('change', check);
+      email.addEventListener('paste', function () { setTimeout(check, 0); });
+      check(); // autofilled
+      // the button (or Enter in the email box, which "clicks" it) before the extras show
+      btn.addEventListener('click', function (e) {
+        if (open) return;
+        e.preventDefault();
+        reveal(false);
+        var box = consent.querySelector('input');
+        setTimeout(function () { if (box) box.focus(); }, still() ? 0 : 220);
       });
     });
 

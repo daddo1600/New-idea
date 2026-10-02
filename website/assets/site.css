@@ -228,6 +228,13 @@ section.hero { padding: 0; }
 .wl-opts { display: grid; gap: 14px; margin-top: 14px; }
 @media (max-width: 420px) { .wl-go, .wl-go button { width: 100%; } }
 
+/* Cleaner forms (site.js adds .wl-compact): the chips and consent box slide in once a whole email is typed */
+.wl-compact .wl-more { display: grid; grid-template-rows: 0fr; opacity: 0; visibility: hidden; transition: grid-template-rows .3s ease, opacity .25s ease, visibility 0s linear .3s; }
+.wl-compact.wl-open .wl-more { grid-template-rows: 1fr; opacity: 1; visibility: visible; transition: grid-template-rows .3s ease, opacity .3s ease .05s, visibility 0s; }
+.wl-compact .wl-more-inner { min-height: 0; overflow: hidden; padding: 0 4px; margin: 0 -4px; }
+.wl-compact.wl-open .wl-more-inner { overflow: visible; }
+@media (prefers-reduced-motion: reduce) { .wl-compact .wl-more, .wl-compact.wl-open .wl-more { transition: none; } }
+
 /* Choice chips: radio buttons styled as pills (optional; tap a chosen one again to clear it) */
 .chips { border: 0; margin: 0; padding: 0; min-width: 0; }
 .chips legend { padding: 0; margin-bottom: 6px; font-size: .9rem; font-weight: 600; color: var(--ink); }
