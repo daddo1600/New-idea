@@ -10,7 +10,12 @@
 
   /* ---------- Home intro: the sprout grows, as in the app's opening, then becomes the header logo ----------
      Only when intro-gate.js has put up its cover (first visit this session, motion allowed).
+     Road signs pop up beside the road; in a season (season.js) the sprout dresses up: a backdrop,
+     a hat on the gold dot, autumn leaves, the sleigh or the pumpkin, and a greeting.
      Everything is drawn from one clock in requestAnimationFrame, so a skip or an error just ends it. */
+  var SEASON = null;
+  try { SEASON = window.MSSeason ? window.MSSeason.detect() : null; } catch (err) { SEASON = null; }
+
   (function intro() {
     var root = document.documentElement;
     if (!root.classList.contains('ms-intro')) return;
@@ -22,38 +27,61 @@
     }
     try {
       try { window.sessionStorage.setItem('ms-intro-seen', '1'); } catch (err) { /* fine */ }
+      var S = window.MSSeason, season = S ? SEASON : null;
       var ROAD = 'M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30';
       var LOW = 'M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z';
       var UP = 'M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z';
+      var pal = S ? S.palette(season && season.id) : { light: '#77E8A0', deep: '#24B359', shadow: '#085E42' };
+      var rider = season && S ? S.rider(season.id) : null;
       overlay = document.createElement('div');
-      overlay.className = 'sprout-intro';
+      overlay.className = 'sprout-intro' + (season ? ' season-' + season.id : '');
       overlay.setAttribute('aria-hidden', 'true');
       overlay.innerHTML =
         '<div class="intro-bg"></div>' +
+        (season ? '<div class="season-fx">' + S.ambient(season) + '</div>' : '') +
         '<div class="intro-stage"><svg class="intro-art" viewBox="12 9 77 84" fill="none">' +
-          '<defs><linearGradient id="ms-intro-leaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#77E8A0"/><stop offset="1" stop-color="#24B359"/></linearGradient>' +
+          '<defs><linearGradient id="ms-intro-leaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + pal.light + '"/><stop offset="1" stop-color="' + pal.deep + '"/></linearGradient>' +
           '<mask id="ms-intro-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100"><path class="i-mask" d="' + ROAD + '" stroke="#FFF" stroke-width="10" stroke-linecap="round" fill="none"/></mask></defs>' +
           '<path class="i-soil" d="M30 88 Q50 84 70 88" stroke="#064E3B" stroke-opacity=".55" stroke-width="2.4" stroke-linecap="round"/>' +
-          '<g class="i-leaf i-low"><path d="' + LOW + '" fill="#085E42" opacity=".5" transform="translate(1.2 1.6)"/><path d="' + LOW + '" fill="url(#ms-intro-leaf)"/></g>' +
-          '<g class="i-leaf i-up"><path d="' + UP + '" fill="#085E42" opacity=".5" transform="translate(1.2 1.6)"/><path d="' + UP + '" fill="url(#ms-intro-leaf)"/></g>' +
+          '<g class="i-signs"></g>' +
+          '<g class="i-leaf i-low"><path d="' + LOW + '" fill="' + pal.shadow + '" opacity=".5" transform="translate(1.2 1.6)"/><path d="' + LOW + '" fill="url(#ms-intro-leaf)"/></g>' +
+          '<g class="i-leaf i-up"><path d="' + UP + '" fill="' + pal.shadow + '" opacity=".5" transform="translate(1.2 1.6)"/><path d="' + UP + '" fill="url(#ms-intro-leaf)"/></g>' +
           '<path class="i-road" d="' + ROAD + '" stroke="#064E3B" stroke-width="8" stroke-linecap="round"/>' +
           '<path class="i-dash" d="' + ROAD + '" stroke="#FBF7EE" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="2.6 3.2" stroke-dashoffset="-3" mask="url(#ms-intro-mask)"/>' +
           '<g class="i-dot"><circle class="i-ring" r="7.6" fill="#FFFFFF"/><circle r="5.6" fill="#FACC15"/></g>' +
+          (season && S ? '<g class="i-hat-wrap" opacity="0">' + S.hat(season.id, false) + '</g>' : '') +
+          (rider ? rider.svg : '') +
         '</svg>' +
+        (season ? '<p class="intro-greeting">' + season.greeting + '</p>' : '') +
         '<p class="intro-word"><span class="wm-mile">Mile</span><span class="wm-sprout">Sprout</span></p></div>' +
         '<button type="button" class="intro-skip" tabindex="-1">Skip intro</button>';
       document.body.appendChild(overlay);
       root.classList.remove('ms-intro'); // the overlay takes over from the plain cover
 
       var q = function (s) { return overlay.querySelector(s); };
-      var bg = q('.intro-bg'), stage = q('.intro-stage'), art = q('.intro-art'), word = q('.intro-word'), skip = q('.intro-skip');
+      var bg = q('.intro-bg'), fx = q('.season-fx'), art = q('.intro-art'), word = q('.intro-word'), skip = q('.intro-skip');
+      var greet = q('.intro-greeting'), hatWrap = q('.i-hat-wrap'), riderEl = q('.i-rider');
       var road = q('.i-road'), mask = q('.i-mask'), dot = q('.i-dot'), ring = q('.i-ring');
       var low = q('.i-low'), up = q('.i-up');
       var L = road.getTotalLength();
       road.style.strokeDasharray = mask.style.strokeDasharray = L + ' ' + (L + 1);
+      var roadAt = function (f) { return road.getPointAtLength(L * clamp(f, 0, 1)); };
 
+      // the signs beside the road (the app's petrol station, shops and café; gifts or Halloween treats in season)
+      var signs = [];
+      if (S) {
+        var holder = q('.i-signs'), html = '';
+        var list = S.signs(season, roadAt);
+        list.forEach(function (s) { html += s.svg; });
+        holder.innerHTML = html;
+        Array.prototype.forEach.call(holder.children, function (el, i) { signs.push({ el: el, at: list[i].at, x: list[i].x, y: list[i].y }); });
+      }
+      var drop = !!(season && season.id === 'festive');
+
+      // a season gets a little longer, to enjoy the touches
+      var EXTRA = season ? 700 : 0;
       var T_DRIVE = 250, DRIVE = 1400, T_LOW = 1050, T_UP = 1400, LEAF = 300, T_RING = 1650, T_WORD = 1700,
-          T_MORPH = 2450, MORPH = 600, END = 3200;
+          T_MORPH = 2450 + EXTRA, MORPH = 600, END = 3200 + EXTRA;
       var inOut = function (x) { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
       var back = function (x, k) { var c3 = k + 1; return 1 + c3 * Math.pow(x - 1, 3) + k * Math.pow(x - 1, 2); };
       var leaf = function (el, t0, ox, oy, k) {
@@ -76,13 +104,39 @@
         var lift = -2 * Math.sin(wake * Math.PI / 2) * (1 - p);
         var pop = 1 + 0.08 * Math.sin(wake * Math.PI) * (1 - p);
         var glint = t > T_RING + 150 ? 1 + 0.12 * Math.sin(clamp((t - T_RING - 150) / 240, 0, 1) * Math.PI) : 1;
+        var ringIn = clamp((t - T_RING) / 150, 0, 1);
         dot.setAttribute('transform', 'translate(' + pt.x.toFixed(2) + ' ' + (pt.y + lift - (p === 1 ? 2 : 2 * p)).toFixed(2) + ') scale(' + (pop * glint).toFixed(3) + ')');
-        ring.setAttribute('r', (5.6 + 2 * clamp((t - T_RING) / 150, 0, 1)).toFixed(2));
+        ring.setAttribute('r', (5.6 + 2 * ringIn).toFixed(2));
         leaf(low, T_LOW, 47, 54, 1.0);
         leaf(up, T_UP, 52, 31, 1.3);
+
+        signs.forEach(function (s) {
+          var st = S.signState(s.at, p, drop);
+          s.el.setAttribute('opacity', st.opacity.toFixed(3));
+          s.el.setAttribute('transform', 'translate(' + s.x.toFixed(2) + ' ' + (s.y + st.dy).toFixed(2) + ') scale(' + st.scale.toFixed(3) + ')');
+        });
+
+        if (rider) {
+          // the sleigh or the pumpkin drives instead of the dot; the sleigh then takes off over the leaves
+          var rp = road.getPointAtLength(L * Math.min(1, p * rider.reach)), so = rider.soar(p);
+          riderEl.setAttribute('transform', 'translate(' + (rp.x + so.x).toFixed(2) + ' ' + (rp.y + so.y).toFixed(2) + ')');
+          riderEl.setAttribute('opacity', season.id === 'festive' ? (1 - clamp((p - 0.85) / 0.15, 0, 1)).toFixed(3) : '1');
+          // the pumpkin stays under the witch hat; after the sleigh has gone, the dot pops in at the top
+          dot.setAttribute('opacity', season.id === 'festive' ? ringIn.toFixed(3) : '0');
+        }
+        if (hatWrap) {
+          var h = clamp((t - T_RING) / 260, 0, 1);
+          hatWrap.setAttribute('opacity', h.toFixed(3));
+          hatWrap.setAttribute('transform', 'translate(0 ' + (-6 * (1 - back(h, 1.2))).toFixed(2) + ')');
+        }
+
         var w = clamp((t - T_WORD) / 400, 0, 1);
         word.style.opacity = w;
         word.style.transform = 'translateY(' + (12 * (1 - w)).toFixed(1) + 'px)';
+        if (greet) {
+          greet.style.opacity = w;
+          greet.style.transform = word.style.transform;
+        }
 
         // the sprout flies to the header logo while the green lifts away
         if (t >= T_MORPH) {
@@ -94,7 +148,10 @@
           var m = inOut(clamp((t - T_MORPH) / MORPH, 0, 1));
           art.style.transform = 'translate(' + (target.x * m).toFixed(1) + 'px,' + (target.y * m).toFixed(1) + 'px) scale(' + (1 + (target.s - 1) * m).toFixed(4) + ')';
           bg.style.opacity = 1 - m;
+          if (fx) fx.style.opacity = 1 - m;
           word.style.opacity = Math.max(0, 1 - m * 2.5);
+          if (greet) greet.style.opacity = word.style.opacity;
+          if (hatWrap) hatWrap.setAttribute('opacity', Math.max(0, 1 - m * 2).toFixed(3));
           skip.style.opacity = 1 - m;
           if (m === 1) art.style.opacity = 1 - clamp((t - T_MORPH - MORPH) / (END - T_MORPH - MORPH), 0, 1);
         }
@@ -122,6 +179,31 @@
     } catch (err) {
       cleanup();
     }
+  })();
+
+  /* ---------- Home hero: the sprout mark in its seasonal end state (the hat, autumn's leaves) and the greeting ----------
+     This is all that shows with Reduce Motion, and what's left after the intro. */
+  (function heroSeason() {
+    var mark = document.querySelector('.hero-sprout');
+    var S = window.MSSeason;
+    if (!mark || !S || !SEASON) return;
+    try {
+      var pal = S.palette(SEASON.id);
+      var stops = mark.querySelectorAll('linearGradient stop');
+      if (stops.length === 2) { stops[0].setAttribute('stop-color', pal.light); stops[1].setAttribute('stop-color', pal.deep); }
+      var shadow = mark.querySelector('g[opacity]');
+      if (shadow) shadow.setAttribute('fill', pal.shadow);
+      var hat = S.hat(SEASON.id, still());
+      if (hat) {
+        mark.insertAdjacentHTML('beforeend', hat);
+        mark.setAttribute('viewBox', '12 2 77 91'); // room for the hat
+        mark.classList.add('has-hat');
+      }
+      var p = document.createElement('p');
+      p.className = 'season-greeting';
+      p.textContent = SEASON.greeting;
+      mark.insertAdjacentElement('afterend', p);
+    } catch (err) { /* the plain mark stays */ }
   })();
 
   /* ---------- Home: links to the sign-up (and a floating "Get early access" pill) ----------

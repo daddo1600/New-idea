@@ -526,7 +526,50 @@ html.ms-intro::after {
 .intro-skip:hover { background: rgba(255, 255, 255, .24); }
 @media (prefers-reduced-motion: reduce) { .sprout-intro, html.ms-intro::after { display: none; } }
 
+/* Seasons (season.js): the backdrop behind the sprout, and the greeting */
+.season-fx { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.intro-greeting { margin: 0; color: #FFFFFF; font-weight: 700; font-size: clamp(1rem, 2.4vh, 1.2rem); opacity: 0; }
+.season-halloween .intro-bg { background: radial-gradient(120% 90% at 50% 40%, #0B7A55 0%, #064E3B 50%, #1E1B2E 100%); }
+.season-new-year .intro-bg { background: radial-gradient(120% 90% at 50% 40%, #0B7A55 0%, #053D2E 55%, #0F172A 100%); }
+.fx-fall { position: absolute; top: -30px; animation: fx-fall linear infinite; }
+.fx-sway { display: block; animation: fx-sway ease-in-out infinite alternate; }
+.fx-dot { display: block; border-radius: 50%; }
+.fx-fall svg { display: block; }
+.fx-twinkle { animation-name: fx-fall, fx-twinkle; }
+@keyframes fx-fall { from { transform: translateY(0); } to { transform: translateY(calc(100vh + 60px)); } }
+@keyframes fx-sway { from { transform: translateX(calc(var(--sway) * -1)) rotate(0deg); } to { transform: translateX(var(--sway)) rotate(var(--spin)); } }
+@keyframes fx-twinkle { 0%, 100% { opacity: .4; } 50% { opacity: 1; } }
+.fx-bat { position: absolute; left: 0; animation: fx-across linear infinite both; }
+.fx-bat.fx-rtl { animation-name: fx-back; }
+.fx-bat.fx-rtl svg { transform: scaleX(-1); }
+.fx-bob { display: block; animation: fx-bob .9s ease-in-out infinite alternate; }
+.fx-flap { display: block; animation: fx-flap .16s ease-in-out infinite alternate; }
+@keyframes fx-across { from { transform: translateX(-60px); } to { transform: translateX(calc(100vw + 60px)); } }
+@keyframes fx-back { from { transform: translateX(calc(100vw + 60px)); } to { transform: translateX(-60px); } }
+@keyframes fx-bob { from { transform: translateY(-18px); } to { transform: translateY(18px); } }
+@keyframes fx-flap { from { transform: scaleY(1); } to { transform: scaleY(.55); } }
+.fx-burst { position: absolute; width: 0; height: 0; }
+.fx-spark { position: absolute; left: -3.5px; top: -3.5px; width: 7px; height: 7px; border-radius: 50%; opacity: 0; animation: fx-spark 1.5s cubic-bezier(.25, .46, .45, .94) infinite; }
+@keyframes fx-spark {
+  0%, 5% { opacity: 0; transform: translate(0, 0); }
+  6% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--dx), calc(var(--dy) + 30px)); }
+}
+.fx-sun { position: absolute; top: 30px; right: -30px; }
+.fx-rays { transform-origin: 50px 50px; animation: fx-turn 12s linear infinite; }
+@keyframes fx-turn { to { transform: rotate(360deg); } }
+.fx-ground { position: absolute; left: -40px; right: -40px; bottom: -130px; height: 260px; border-radius: 400px 400px 0 0; background: #C2410C; opacity: .6; }
+.fx-run { position: absolute; left: 0; animation: fx-across linear infinite both; }
+.fx-run > span { display: block; }
+.fx-kangaroo { animation: fx-hop ease-in-out infinite; transform-origin: 50% 100%; }
+.fx-emu { animation: fx-trot ease-in-out infinite; }
+@keyframes fx-hop { 0%, 100% { transform: translateY(0) rotate(0deg); } 25% { transform: translateY(-24px) rotate(-10deg); } 50% { transform: translateY(-34px) rotate(0deg); } 75% { transform: translateY(-24px) rotate(10deg); } }
+@keyframes fx-trot { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
 /* The sprout mark in the hero, so the brand is there after the intro too */
+.season-greeting { margin: -6px 0 12px; color: var(--mint); font-weight: 600; font-size: .95rem; }
+.hero-sprout.has-hat { width: 52px; overflow: visible; }
+@media (min-width: 900px) { .hero-sprout.has-hat { width: 64px; } }
 .hero-sprout { display: block; width: 52px; height: auto; margin: 0 0 14px; filter: drop-shadow(0 4px 10px rgba(3, 28, 20, .35)); }
 @media (min-width: 900px) { .hero-sprout { width: 64px; } }
 

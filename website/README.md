@@ -18,16 +18,18 @@ The public website for MileSprout: plain static HTML, one CSS file and one small
 | `favicon.svg`, `favicon-32.png`, `apple-touch-icon.png` | Icons (the PNGs are made from `milemint/assets/images/icon.png`) |
 | `assets/site.css` | All styles, light and dark mode, including the CSS-built iPhone frame |
 | `assets/site.js` | The sprout intro, hero phone tilt, the feature deck (drag, swipe, trackpad, keys, dots), the form's choice chips and the waitlist form. The page reads fine without it |
+| `assets/season.js` | Home page only: the app's seasons (same date rules and greetings as `milemint/src/domain/seasons.ts`) and the intro's road signs, hats, riders and seasonal backdrops. Country from the browser's time zone, then its language; no location asked. `?season=<id>` previews a season, `?season=none` turns it off |
 | `assets/intro-gate.js` | Home page only, loaded before paint (not deferred): decides whether the intro plays and puts up a green cover so the hero doesn't flash first |
 | `assets/img/screens/` | Raw app captures (`milemint/assets/store/raw/`, `milemint/docs/screenshots/perks/`) as 640 px WebP, with the top and bottom rows extended to leave room for the CSS status bar and home indicator. `trip.webp` has an invented street map drawn under the route (the capture's map panel was blank); `perks.webp` has the Expo dev button painted out of the tab bar |
 | `assets/img/og.jpg` | Link preview image |
-| `docs/` | Preview screenshots of the home page (not linked from the site): `scroll-*.png` for the hero and deck at desktop and mobile sizes, `waitlist-*.png` for the form states, `testers-*.png` for `/testers?g=fb-test` (page, filled form, success) at 1440 and 390 px, `intro-*.png` for the sprout intro (frames at 0.0–3.2 s and the final hero), `chips-*-hero.png` for the choice chips, `float-*.png` for the floating "Get early access" pill, and `pro-*`, `countries-*`, `languages-*`, `compare-*.png` for those home sections |
+| `docs/` | Preview screenshots of the home page (not linked from the site): `scroll-*.png` for the hero and deck at desktop and mobile sizes, `waitlist-*.png` for the form states, `testers-*.png` for `/testers?g=fb-test` (page, filled form, success) at 1440 and 390 px, `intro-*.png` for the sprout intro (frames at 0.0–3.2 s and the final hero), `signs-*.png` for the road signs, `season-<id>-*.png` for each season (plus `-drive` frames and `-reduced-hero` end states), `chips-*-hero.png` for the choice chips, `float-*.png` for the floating "Get early access" pill, and `pro-*`, `countries-*`, `languages-*`, `compare-*.png` for those home sections |
 
 Links between pages are extensionless (`/privacy`), which is how Cloudflare Pages serves `privacy.html`. To preview locally with working links, use `npx wrangler pages dev website`. A quick look also works with `python3 -m http.server 8080 -d website` and opening `/index.html`, `/privacy.html` and so on.
 
 ## How the home page moves
 
-- **Intro (first visit in a browser session):** the app's opening, about 3.2 s. The seed wakes in the soil, the road grows up with the gold dot at its tip laying the lane dashes, the leaves unfold, the dot's white ring draws in and "MileSprout" fades up. Then the sprout flies to the header logo while the green lifts away. Click, tap, any key, scrolling or "Skip intro" ends it. It never plays with reduced motion or without JavaScript, and it's `aria-hidden` (the page is in the DOM underneath the whole time). `sessionStorage` key `ms-intro-seen` marks it as played.
+- **Intro (first visit in a browser session):** the app's opening, about 3.2 s. The seed wakes in the soil, the road grows up with the gold dot at its tip laying the lane dashes, the leaves unfold, the dot's white ring draws in and "MileSprout" fades up. Then the sprout flies to the header logo while the green lifts away. Click, tap, any key, scrolling or "Skip intro" ends it. It never plays with reduced motion or without JavaScript, and it's `aria-hidden` (the page is in the DOM underneath the whole time). `sessionStorage` key `ms-intro-seen` marks it as played; `?intro=1` or `?season=<id>` plays it again.
+- **Road signs and seasons (`season.js`, ported from the app):** a petrol station, shops and a café pop up beside the road as the dot reaches them and shrink away before the leaves open. In a season the sprout dresses up as in the app: snow, falling leaves or petals, bats, fireworks, a sun or the outback behind it; a hat on the dot (Santa hat, beanie, witch hat, party hat, cork hat, sunglasses, blossom); orange leaves in autumn; the sleigh (which takes off) or a pumpkin instead of the dot; gifts or Halloween treats for signs; and the greeting ("Fall is here" in the US and Canada). The intro runs 0.7 s longer in a season. The hero's sprout mark wears the hat and autumn colours with the greeting under it, which is all that shows with Reduce Motion.
 
 - **Hero:** the phone starts turned away (`rotateY(-22deg) rotateX(8deg)`) and straightens over the first ~300 px of scroll; the big faint sprout drifts slower than the page. Gold glints twinkle by the sign-up button.
 - **Feature deck:** eight phones in a fanned stack. Hover fans it out; flick with a horizontal trackpad swipe (one swipe = one card), a mouse drag or touch swipe (throw it), the arrow keys, the dots or the buttons. The caption beside it crossfades to the matching feature, and a polite live region announces "3 of 8: …".
@@ -104,14 +106,16 @@ Email Routing only receives. To reply *from* @milesprout.app, set up sending sep
 
 ## Updating site.css, site.js or intro-gate.js
 
-Browsers cache `site.css`, `site.js` and `intro-gate.js` for a day, so pages link them with a version
+Browsers cache `site.css`, `site.js`, `intro-gate.js` and `season.js` for a day, so pages link them with a version
 (`/assets/site.css?v=…`). After changing any of them, refresh the versions so visitors get the
 new one straight away:
 
 ```sh
 cd website
-CSSV=$(sha1sum assets/site.css | cut -c1-8); JSV=$(sha1sum assets/site.js | cut -c1-8); GV=$(sha1sum assets/intro-gate.js | cut -c1-8)
-for f in $(grep -rl '/assets/' --include=*.html .); do
-  sed -i -E "s#/assets/site\.css(\?v=[0-9a-f]+)?\"#/assets/site.css?v=$CSSV\"#; s#/assets/site\.js(\?v=[0-9a-f]+)?\"#/assets/site.js?v=$JSV\"#; s#/assets/intro-gate\.js(\?v=[0-9a-f]+)?\"#/assets/intro-gate.js?v=$GV\"#" "$f"
+for name in site.css site.js intro-gate.js season.js; do
+  v=$(sha1sum "assets/$name" | cut -c1-8); re=$(printf '%s' "$name" | sed 's/\./\\./g')
+  for f in $(grep -rl "/assets/$name" --include=*.html .); do
+    sed -i -E "s#/assets/$re(\?v=[0-9a-f]+)?\"#/assets/$name?v=$v\"#" "$f"
+  done
 done
 ```

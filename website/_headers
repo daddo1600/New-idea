@@ -22,3 +22,6 @@
 
 /assets/intro-gate.js
   Cache-Control: public, max-age=86400
+
+/assets/season.js
+  Cache-Control: public, max-age=86400
