@@ -17,6 +17,7 @@ import { ProProvider } from '@/purchases/pro';
 import { loadLanguage, useT } from '@/i18n/i18n';
 import { ReferralProvider } from '@/referral/referral';
 import { RegionProvider } from '@/region/region';
+import { ShortcutsSync } from '@/shortcuts/use-shortcuts-sync';
 // Registers the background location tasks; must run before the app renders.
 import '@/tracking/background';
 
@@ -69,6 +70,8 @@ export default function RootLayout() {
               <ShiftActivitySync />
               <ProProvider>
                 <ReferralProvider>
+                  {/* Siri & Shortcuts: the summary they answer from. */}
+                  <ShortcutsSync />
                   <Stack>
                     {/* Home, Drives, Money and Settings; every other screen opens over them. */}
                     <Stack.Screen name="(tabs)" options={{ title: 'MileSprout', headerShown: false }} />

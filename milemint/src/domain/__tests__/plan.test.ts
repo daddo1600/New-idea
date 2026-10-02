@@ -69,7 +69,7 @@ describe('the perk ladder', () => {
 });
 
 describe('what each plan can use', () => {
-  const ALL: ProFeature[] = ['reports', 'accountant', 'quarterly', 'platform-earnings', 'tax-set-aside', 'import'];
+  const ALL: ProFeature[] = ['reports', 'accountant', 'quarterly', 'platform-earnings', 'tax-set-aside', 'import', 'siri'];
 
   it('gives Pro everything', () => {
     for (const feature of ALL) expect(canUse(feature, { isPro: true, perks: [] })).toBe(true);

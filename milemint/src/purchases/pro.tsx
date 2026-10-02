@@ -49,6 +49,11 @@ const canCache = Platform.OS !== 'web';
 
 type Pro = {
   isPro: boolean;
+  /**
+   * `isPro` is what the App Store said (or last said, from the cache), not
+   * just the starting value. Siri & Shortcuts only pass the status on then.
+   */
+  statusKnown: boolean;
   /** Empty until the App Store answers, or when purchases aren't available here. */
   plans: ProPlan[];
   /** The App Store has answered (possibly with no plans, e.g. before prices are set). */
@@ -69,6 +74,7 @@ const ProContext = createContext<Pro | null>(null);
 export function ProProvider({ children }: { children: ReactNode }) {
   // The web demo stands in for a paying user so screenshots show every drive.
   const [isPro, setIsPro] = useState(DEMO_PRO);
+  const [statusKnown, setStatusKnown] = useState(DEMO_MODE);
   const db = useSQLiteContext();
   const { region } = useRegion();
   const [plans, setPlans] = useState<ProPlan[]>(() => (DEMO_MODE ? demoPlans() : []));
@@ -85,6 +91,7 @@ export function ProProvider({ children }: { children: ReactNode }) {
   const remember = useCallback(
     (active: boolean) => {
       setIsPro(active);
+      setStatusKnown(true);
       if (canCache) SecureStore.setItemAsync(CACHE_KEY, active ? '1' : '0').catch(() => {});
       // Cancelled or lapsed: no "your trial ends soon" for a trial that's over.
       if (!active) cancelTrialReminder(db).catch(() => {});
@@ -105,7 +112,10 @@ export function ProProvider({ children }: { children: ReactNode }) {
     if (DEMO_MODE) return;
     if (canCache) {
       SecureStore.getItemAsync(CACHE_KEY)
-        .then((cached) => cached === '1' && setIsPro(true))
+        .then((cached) => {
+          if (cached === '1') setIsPro(true);
+          if (cached === '1' || cached === '0') setStatusKnown(true);
+        })
         .catch(() => {});
     }
     // Deferred so the provider's first render isn't followed by a synchronous update.
@@ -182,6 +192,7 @@ export function ProProvider({ children }: { children: ReactNode }) {
   const value = useMemo<Pro>(
     () => ({
       isPro,
+      statusKnown,
       plans,
       plansLoaded,
       storeAvailable: STORE_AVAILABLE || DEMO_MODE,
@@ -191,7 +202,7 @@ export function ProProvider({ children }: { children: ReactNode }) {
       restore,
       manage: manageSubscription,
     }),
-    [isPro, plans, plansLoaded, busy, error, buy, restore],
+    [isPro, statusKnown, plans, plansLoaded, busy, error, buy, restore],
   );
 
   return <ProContext.Provider value={value}>{children}</ProContext.Provider>;

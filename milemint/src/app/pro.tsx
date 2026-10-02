@@ -49,6 +49,7 @@ const COMPARISON: readonly [feature: string, free: boolean, pro: boolean][] = [
   [msg('Send your report to your accountant'), false, true],
   [QUARTERLY_ROW, false, true],
   [msg('Tax set-aside: what to put aside each week'), false, true],
+  [msg('Siri & Shortcuts: start a shift, ask how far you’ve driven'), false, true],
   [msg('Encrypted on your iPhone, no ads'), true, true],
 ];
 

@@ -1,6 +1,7 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
 
 import { endShift } from '@/db/shifts-repo';
+import { startShiftFromShortcut } from '@/shortcuts/start-shift';
 import { cancelShiftAutoEnd } from '@/tracking/shift-notifications';
 
 import { ShiftActivity, type ShiftActivityAction } from '../../modules/live-activity';
@@ -30,7 +31,8 @@ export function onShiftChangedElsewhere(listener: Listener): () => void {
 /**
  * Acts on the buttons tapped on the lock-screen card since last time: "End
  * shift" ends the shift as of the tap, "Not working" takes the current drive
- * off it (see not-working). Returns whether anything changed.
+ * off it (see not-working). Siri & Shortcuts queue theirs in the same place:
+ * "start" and "end". Returns whether anything changed.
  */
 export async function handleShiftActivityActions(db: SQLiteDatabase, now = Date.now()): Promise<boolean> {
   return applyActions(db, ShiftActivity.consumeActions(), now);
@@ -53,6 +55,9 @@ export async function applyActions(
     } else if (action === 'notWorking') {
       await markNotWorking(db, when);
       changed = true;
+    } else if (action === 'start') {
+      // Siri & Shortcuts (native/siri-shortcuts): "Start my shift". "End shift" there queues "end", as above.
+      if (await startShiftFromShortcut(db, when, now)) changed = true;
     }
   }
   if (changed) for (const listener of listeners) listener();

@@ -347,6 +347,9 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
 
         <ProSection />
 
+        {/* iPhone only (App Intents); the web demo shows it for screenshots. */}
+        {(Platform.OS === 'ios' || DEMO_MODE) && <SiriSection />}
+
         <InviteSection />
 
         {/* Hidden on iPhone until iCloud is enabled for the app; the web preview explains it. */}
@@ -1468,6 +1471,66 @@ function ProSection() {
           <Pressable accessibilityRole="button" disabled={busy} onPress={onRestore} hitSlop={8}>
             <ThemedText type="small" style={{ color: theme.accent }}>
               {t('Restore purchases')}
+            </ThemedText>
+          </Pressable>
+        )}
+      </ThemedView>
+    </>
+  );
+}
+
+/**
+ * Siri & Shortcuts (Pro): the phrases Siri knows with no set-up, as in
+ * native/siri-shortcuts/MileSproutShortcuts.swift (the first of each;
+ * translated as in AppShortcuts.xcstrings). Without Pro, the same list with
+ * the Pro badge and a way to the Pro screen; asking Siri says it's Pro.
+ */
+function SiriSection() {
+  const theme = useTheme();
+  const t = useT();
+  const { region } = useRegion();
+  const unlocked = useCanUse('siri');
+  const km = region.unit === 'km';
+  const phrases = [
+    t('“Start my shift in MileSprout”'),
+    t('“End my shift in MileSprout”'),
+    km ? t('“How far have I driven this week in MileSprout”') : t('“How many miles this week in MileSprout”'),
+    km ? t('“How far have I driven today in MileSprout”') : t('“How many miles today in MileSprout”'),
+  ];
+  return (
+    <>
+      <View style={styles.titleWithBadge}>
+        <ThemedText type="smallBold" accessibilityRole="header">
+          {t('Siri & Shortcuts')}
+        </ThemedText>
+        {!unlocked && <ProBadge />}
+      </View>
+      <ThemedView type="backgroundElement" style={styles.card}>
+        <ThemedText type="small" themeColor="textSecondary">
+          {t(
+            'Start or end a shift and hear how far you’ve driven for work, hands-free. Say one of these to Siri, or find them in the Shortcuts app:',
+          )}
+        </ThemedText>
+        <View style={styles.stack}>
+          {phrases.map((phrase) => (
+            <ThemedText key={phrase} type="smallBold">
+              {phrase}
+            </ThemedText>
+          ))}
+        </View>
+        {unlocked ? (
+          <Pressable
+            accessibilityRole="button"
+            hitSlop={8}
+            onPress={() => Linking.openURL('shortcuts://').catch(() => {})}>
+            <ThemedText type="small" style={{ color: theme.accent }}>
+              {t('Open the Shortcuts app')}
+            </ThemedText>
+          </Pressable>
+        ) : (
+          <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/pro')}>
+            <ThemedText type="small" style={{ color: theme.accent }}>
+              {t('See what Pro adds ›')}
             </ThemedText>
           </Pressable>
         )}

@@ -9,6 +9,7 @@ import { loadSettings, updateSettings } from '@/db/settings-repo';
 import { shiftAround, shiftEndMs } from '@/db/shifts-repo';
 import { inWriteTransaction } from '@/db/transaction';
 import { refreshLaunchTotal } from '@/region/launch-total';
+import { refreshShortcutsSnapshot } from '@/shortcuts/sync';
 import { autoTripExists, insertTripUnlocked, listClassificationHistory, type NewTrip } from '@/db/trips-repo';
 import { autoClassify } from '@/domain/auto-classify';
 import { withDroppedWalks } from '@/domain/motion';
@@ -244,6 +245,8 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
   }
   // Keep the opening animation's total current for the next launch.
   await refreshLaunchTotal(db).catch(() => {});
+  // And what Siri says for "miles today" and "miles this week", with the app closed.
+  await refreshShortcutsSnapshot(db);
 }
 
 /** What iOS says about location access and MileSprout's tasks right now. */

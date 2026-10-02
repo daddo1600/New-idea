@@ -69,6 +69,7 @@
       ],
       "expo-iap",
       "./plugins/without-push-entitlement",
+      "./plugins/with-siri-shortcuts",
       "expo-localization",
       "@bacons/apple-targets"
     ],

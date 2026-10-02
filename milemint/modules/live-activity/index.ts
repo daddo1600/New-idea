@@ -16,7 +16,11 @@ export type ShiftActivityContentNative = {
   startedAt: number;
 };
 
-/** A button tapped on the card: "end" (End shift) or "notWorking", and when (ms since 1970). */
+/**
+ * A button tapped on the card: "end" (End shift) or "notWorking", and when
+ * (ms since 1970). Siri & Shortcuts queue "start" and "end" here too
+ * (native/siri-shortcuts).
+ */
 export type ShiftActivityAction = { action: string; at: number };
 
 type Subscription = { remove(): void };
