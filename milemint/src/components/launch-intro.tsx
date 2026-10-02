@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Easing,
-  useAnimatedProps,
+  ReduceMotion,
+  type SharedValue,
   useAnimatedReaction,
   useAnimatedStyle,
   useReducedMotion,
@@ -10,18 +11,19 @@ import Animated, {
   withDelay,
   withTiming,
 } from 'react-native-reanimated';
-import { Circle, Path } from 'react-native-svg';
 import { scheduleOnRN } from 'react-native-worklets';
 
-import { ROAD_PATH } from '@/brand/leaf';
+import { STEM_SAMPLES, STEM_XS, STEM_YS, stemAt } from '@/brand/sprout';
 import { phoneRegion } from '@/components/country-options';
+import { GrowingSprout } from '@/components/growing-sprout';
 import { IntroScenery } from '@/components/intro-scenery';
-import { LeafMark } from '@/components/leaf-mark';
+import { LeafMark, SproutSeed } from '@/components/leaf-mark';
 import { SeasonAmbient } from '@/components/season/ambient';
 import { SeasonHat } from '@/components/season/hats';
 import { hasRider, SeasonRider } from '@/components/season/rider';
 import { DEMO_TODAY } from '@/dev/demo';
 import {
+  formatDistance,
   formatMoney,
   ratePeriodFor,
   REGIONS,
@@ -33,11 +35,14 @@ import { useT } from '@/i18n/i18n';
 import { type LaunchTotals, markTotalSeen, recallRegion, recallTotals } from '@/region/remembered-region';
 
 /**
- * Plays on every launch while the app opens underneath: the car (the logo's
- * yellow dot) drives up the leaf's road, laying the lane markings behind it,
- * past a petrol station, shops and a café, while the miles and their tax
- * value count up in the user's currency. Starts exactly where the
- * native splash screen leaves off (same colour, size and position).
+ * Plays on every launch while the app opens underneath: the seed (the logo's
+ * yellow dot) wakes in its soil and climbs, the road growing up beneath it as
+ * the sprout's stem and laying the lane markings behind it, past a petrol
+ * station, shops and a café. Each leaf springs open as the car passes its
+ * node, and the last one as the car lands at the top, while the miles and
+ * their tax value count up in the user's currency. Starts exactly where the
+ * native splash screen leaves off (same colour, and the seed at the same size
+ * and position), and ends on the logo itself (see components/growing-sprout).
  */
 
 /** Matches the splash screen in app.json. */
@@ -46,22 +51,45 @@ export const INTRO_BACKGROUND = '#0B7A55';
 const SPLASH_SIZE = 120;
 const GROWN_SCALE = 1.5;
 /**
- * The grown leaf and the total under it are centred as one group: the leaf
+ * The grown sprout and the total under it are centred as one group: the sprout
  * rises this far and the total starts COUNTER_TOP below the middle, so the
  * gap between them is small and the pair sits in the middle of the screen.
  */
 const LOGO_LIFT = 66;
 const COUNTER_TOP = 40;
 
-const DRIVE_MS = 3200;
-const HOLD_MS = 500;
-/** The car's climb and the total counting up: unhurried enough to follow. */
-const QUICK_DRIVE_MS = 1600;
+/** The first launch: slow enough to watch the sprout grow, each sign and leaf in turn. */
+const DRIVE_MS = 4400;
+const HOLD_MS = 1500;
+/** Every launch after: the sprout grows as their own money and miles count up, at the same unhurried pace. */
+const QUICK_DRIVE_MS = 4400;
 /** The total stays up, still, long enough to read and take in. */
-const QUICK_HOLD_MS = 1500;
+const QUICK_HOLD_MS = 2000;
 /** A little longer to enjoy the seasonal touches. */
-const SEASON_HOLD_MS = 1900;
+const SEASON_HOLD_MS = 2200;
 const FADE_MS = 300;
+/** The seed breaking out of the soil before the climb: longer the first time. */
+const EMERGE_MS = 1000;
+const QUICK_EMERGE_MS = 1000;
+/** How far in (extra scale) the view moves onto the soil as the seed breaks out… */
+const EMERGE_ZOOM = 1.2;
+/** …keeping the soil, this far below the logo's centre, where it is. */
+const SOIL_BELOW = SPLASH_SIZE * 0.38;
+
+/** The extra zoom onto the soil: in while the seed breaks out, back out as the climb begins. */
+function zoomFor(emerge: number, drive: number) {
+  'worklet';
+  const zoomIn = emerge * emerge * (3 - 2 * emerge);
+  const back = Math.min(1, drive / 0.3);
+  return EMERGE_ZOOM * zoomIn * (1 - back * back * (3 - 2 * back));
+}
+/** Reduce Motion: the seed cross-fades to the finished logo instead of growing. */
+const CROSS_FADE_MS = 200;
+/**
+ * Reanimated jumps animations to their end under Reduce Motion, which would
+ * skip the opening altogether; the cross-fade and fade are gentle enough to keep.
+ */
+const ALWAYS = ReduceMotion.Never;
 /** The drive the counter shows. */
 /**
  * The demo counts up a typical month of business driving (about 400 miles or
@@ -71,59 +99,12 @@ const DEMO_MONTH = { mi: 400, km: 650 } as const;
 /** The demo counter moves in 1% steps: smooth to the eye without hundreds of re-renders. */
 const STEPS = 100;
 
-/** The road as a cubic Bézier (see ROAD_PATH), sampled evenly by distance travelled. */
-const ROAD = { p0: [0, 420], p1: [-20, 200], p2: [25, 0], p3: [0, -330] } as const;
-const SAMPLES = 64;
-const { roadXs, roadYs, roadLength } = sampleRoad();
-
-function sampleRoad() {
-  const fine = 400;
-  const points: [number, number][] = [];
-  const lengths = [0];
-  for (let i = 0; i <= fine; i++) {
-    const t = i / fine;
-    const u = 1 - t;
-    const at = (k: 0 | 1) =>
-      u * u * u * ROAD.p0[k] +
-      3 * u * u * t * ROAD.p1[k] +
-      3 * u * t * t * ROAD.p2[k] +
-      t * t * t * ROAD.p3[k];
-    points.push([at(0), at(1)]);
-    if (i > 0) {
-      const [px, py] = points[i - 1];
-      lengths.push(lengths[i - 1] + Math.hypot(at(0) - px, at(1) - py));
-    }
-  }
-  const total = lengths[fine];
-  const xs: number[] = [];
-  const ys: number[] = [];
-  let j = 0;
-  for (let s = 0; s <= SAMPLES; s++) {
-    const target = (s / SAMPLES) * total;
-    while (j < fine && lengths[j + 1] < target) j++;
-    const span = lengths[j + 1] - lengths[j] || 1;
-    const f = Math.min(1, Math.max(0, (target - lengths[j]) / span));
-    const next = points[Math.min(j + 1, fine)];
-    xs.push(points[j][0] + (next[0] - points[j][0]) * f);
-    ys.push(points[j][1] + (next[1] - points[j][1]) * f);
-  }
-  return { roadXs: xs, roadYs: ys, roadLength: total };
-}
-
-/** A point `t` (0–1) of the way along the road, in leaf units. */
-function roadAt(t: number) {
-  const i = Math.round(Math.min(1, Math.max(0, t)) * SAMPLES);
-  return { x: roadXs[i], y: roadYs[i] };
-}
-
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
-const AnimatedPath = Animated.createAnimatedComponent(Path);
-
 /**
- * Opening sequence. Before set-up: the full demo drive (about 3.5 s) that
- * shows what MileMint does. Once set up: a quick one (under 2 s) with the
- * user's own tax-year total counting up from what they last saw, so every
- * launch is a reminder of the money coming back. A tap skips either.
+ * Opening sequence. Before set-up: the full demo drive (about 7 s) that
+ * shows what MileMint does. Once set up: the same pace (about 7.5 s) where
+ * the sprout grows as the user's own tax-year money and distance count up
+ * from zero, so every launch is a reminder of the money coming back. A tap
+ * skips either.
  */
 export function LaunchIntro({ onDone }: { onDone: () => void }) {
   const t = useT();
@@ -160,7 +141,7 @@ export function LaunchIntro({ onDone }: { onDone: () => void }) {
       style={[StyleSheet.absoluteFill, styles.layer]}>
       {mode === null ? (
         <View style={[StyleSheet.absoluteFill, styles.container]}>
-          <LeafMark size={SPLASH_SIZE} />
+          <SproutSeed size={SPLASH_SIZE} />
         </View>
       ) : mode.quick ? (
         <QuickIntro code={mode.code} season={season} totals={mode.quick} skip={skip} onDone={onDone} />
@@ -171,7 +152,7 @@ export function LaunchIntro({ onDone }: { onDone: () => void }) {
   );
 }
 
-/** After set-up: the car zips up the leaf while their own total counts up. */
+/** After set-up: the car zips up the sprout while their own total counts up. */
 function QuickIntro({
   code,
   season,
@@ -188,24 +169,31 @@ function QuickIntro({
   const t = useT();
   const reduceMotion = useReducedMotion();
   const region = REGIONS[code];
-  const from = Math.max(0, Math.min(totals.seen, totals.total));
-  const gained = totals.total - from;
-  const drive = useSharedValue(reduceMotion ? 1 : 0);
+  // Grows from nothing every time; what's new since last time is called out below it.
+  const gained = totals.total - Math.max(0, Math.min(totals.seen, totals.total));
+  const meters = totals.meters ?? 0;
+  // With Reduce Motion the same value runs the short cross-fade instead of the climb.
+  const emerge = useSharedValue(reduceMotion ? 1 : 0);
+  const drive = useSharedValue(0);
   const fade = useSharedValue(1);
-  const [shown, setShown] = useState(reduceMotion ? totals.total : from);
+  const [shown, setShown] = useState(reduceMotion ? 1 : 0);
 
   useEffect(() => {
-    // Eases in and out, so the car doesn't dart off the line.
-    const easing = Easing.inOut(Easing.cubic);
-    drive.value = withDelay(80, withTiming(1, { duration: reduceMotion ? 0 : QUICK_DRIVE_MS, easing }));
+    // Gentle: a steady climb, easing in and out only a little, as on the first launch.
+    const easing = reduceMotion ? Easing.linear : Easing.inOut(Easing.sin);
+    const drivingFor = reduceMotion ? CROSS_FADE_MS : QUICK_DRIVE_MS;
+    const lead = 80 + (reduceMotion ? 0 : QUICK_EMERGE_MS);
+    if (!reduceMotion) emerge.value = withDelay(80, withTiming(1, { duration: QUICK_EMERGE_MS, easing: Easing.linear }));
+    drive.value = withDelay(lead, withTiming(1, { duration: drivingFor, easing, reduceMotion: ALWAYS }), ALWAYS);
     fade.value = withDelay(
-      80 + (reduceMotion ? 0 : QUICK_DRIVE_MS) + (season ? SEASON_HOLD_MS : QUICK_HOLD_MS),
-      withTiming(0, { duration: FADE_MS }, (finished) => {
+      lead + drivingFor + (season ? SEASON_HOLD_MS : QUICK_HOLD_MS),
+      withTiming(0, { duration: FADE_MS, reduceMotion: ALWAYS }, (finished) => {
         if (finished) scheduleOnRN(onDone);
       }),
+      ALWAYS,
     );
     markTotalSeen(totals);
-  }, [drive, fade, onDone, reduceMotion, totals, season]);
+  }, [emerge, drive, fade, onDone, reduceMotion, totals, season]);
 
   useEffect(() => {
     if (!skip) return;
@@ -216,44 +204,51 @@ function QuickIntro({
     );
   }, [skip, fade, onDone]);
 
+  // The counters move in 1% steps, so only re-render when the shown value changes.
   useAnimatedReaction(
-    () => Math.round(from + gained * drive.value),
-    (minor, previous) => {
-      if (minor !== previous) scheduleOnRN(setShown, minor);
+    () => Math.round(drive.value * STEPS),
+    (step, previous) => {
+      // Reduce Motion shows the totals straight away, without counting.
+      if (step !== previous && !reduceMotion) scheduleOnRN(setShown, step / STEPS);
     },
   );
 
-  const carProps = useAnimatedProps(() => {
-    const at = drive.value * SAMPLES;
-    const i = Math.min(SAMPLES - 1, Math.floor(at));
-    const f = at - i;
+  const logoStyle = useAnimatedStyle(() => {
+    const grow = reduceMotion ? 1 : Math.min(1, drive.value / 0.6);
     return {
-      cx: roadXs[i] + (roadXs[i + 1] - roadXs[i]) * f,
-      cy: roadYs[i] + (roadYs[i + 1] - roadYs[i]) * f,
+      opacity: reduceMotion ? drive.value : 1,
+      transform: [
+        { translateY: -LOGO_LIFT * grow - SOIL_BELOW * zoomFor(emerge.value, drive.value) },
+        { scale: 1 + (GROWN_SCALE - 1) * grow + zoomFor(emerge.value, drive.value) },
+      ],
     };
   });
-  const unpavedProps = useAnimatedProps(() => ({ strokeDashoffset: -drive.value * roadLength }));
-  const logoStyle = useAnimatedStyle(() => {
-    const grow = Math.min(1, drive.value * 2);
-    return { transform: [{ translateY: -LOGO_LIFT * grow }, { scale: 1 + (GROWN_SCALE - 1) * grow }] };
-  });
-  const counterStyle = useAnimatedStyle(() => ({ opacity: Math.min(1, drive.value * 3) }));
+  // In once the view has pulled back from the soil, so it never overlaps the burst.
+  const counterStyle = useAnimatedStyle(() => ({ opacity: Math.min(1, Math.max(0, (drive.value - 0.15) * 4)) }));
   const fadeStyle = useAnimatedStyle(() => ({ opacity: fade.value }));
 
   return (
     <Animated.View style={[StyleSheet.absoluteFill, styles.container, fadeStyle]}>
       {season && <SeasonAmbient season={season.id} southern={code === 'AU'} />}
+      {reduceMotion && <Seed drive={drive} />}
       <Animated.View style={logoStyle}>
-        <SeasonalLeaf season={season} unpavedProps={unpavedProps} carProps={carProps} />
-        {season && hasRider(season.id) && (
-          <SeasonRider season={season.id} drive={drive} size={SPLASH_SIZE} xs={roadXs} ys={roadYs} samples={SAMPLES} />
+        <SeasonalSprout season={season} emerge={emerge} drive={drive} reduceMotion={reduceMotion} />
+        {season && hasRider(season.id) && !reduceMotion && (
+          <SeasonRider
+            season={season.id}
+            drive={drive}
+            size={SPLASH_SIZE}
+            xs={STEM_XS}
+            ys={STEM_YS}
+            samples={STEM_SAMPLES}
+          />
         )}
-        {/* The places flying past, as on the first launch, in every country and season. */}
+        {/* The signs beside the road, as on the first launch, in every country and season. */}
         {!reduceMotion && (
           <IntroScenery
             size={SPLASH_SIZE}
             drive={drive}
-            roadAt={roadAt}
+            roadAt={stemAt}
             glyphs={season ? SEASON_PLACES[season.id] : undefined}
             drop={season?.id === 'festive'}
           />
@@ -261,8 +256,15 @@ function QuickIntro({
       </Animated.View>
       <Animated.View style={[styles.counter, counterStyle]}>
         {season && <Greeting text={season.greeting} />}
-        <Text style={styles.money}>{formatMoney(shown, region)}</Text>
+        <Text style={styles.money}>{formatMoney(Math.round(totals.total * shown), region)}</Text>
         <Text style={styles.distance}>{t('found this tax year')}</Text>
+        {meters > 0 && (
+          <Text style={styles.distance}>
+            {t('{{distance}} of business driving', {
+              distance: formatDistance(meters * shown, region, { whole: true }),
+            })}
+          </Text>
+        )}
         {gained > 0 && (
           <Text style={styles.gained}>
             {t('+{{amount}} since you last looked', { amount: formatMoney(gained, region) })}
@@ -293,25 +295,30 @@ function FullIntro({
     return period.tiers[0].rate / 10; // minor units (cents, pence) per mile or km
   }, [region]);
 
-  const drive = useSharedValue(reduceMotion ? 1 : 0);
+  // With Reduce Motion `drive` runs the short cross-fade instead of the climb.
+  const emerge = useSharedValue(reduceMotion ? 1 : 0);
+  const drive = useSharedValue(0);
   const grow = useSharedValue(reduceMotion ? 1 : 0);
   const fade = useSharedValue(1);
   const [shown, setShown] = useState(reduceMotion ? 1 : 0);
 
   useEffect(() => {
     // Gentle: a steady drive, easing in and out only a little.
-    const easing = Easing.inOut(Easing.sin);
-    const lead = reduceMotion ? 0 : 120;
-    const drivingFor = reduceMotion ? 0 : DRIVE_MS;
-    grow.value = withDelay(lead, withTiming(1, { duration: drivingFor * 0.6, easing }));
-    drive.value = withDelay(lead, withTiming(1, { duration: drivingFor, easing }));
+    const easing = reduceMotion ? Easing.linear : Easing.inOut(Easing.sin);
+    const lead = reduceMotion ? 0 : 120 + EMERGE_MS;
+    const drivingFor = reduceMotion ? CROSS_FADE_MS : DRIVE_MS;
+    if (!reduceMotion) emerge.value = withDelay(120, withTiming(1, { duration: EMERGE_MS, easing: Easing.linear }));
+    if (!reduceMotion) grow.value = withDelay(lead, withTiming(1, { duration: drivingFor * 0.6, easing }));
+    drive.value = withDelay(lead, withTiming(1, { duration: drivingFor, easing, reduceMotion: ALWAYS }), ALWAYS);
     fade.value = withDelay(
-      lead + drivingFor + HOLD_MS,
-      withTiming(0, { duration: FADE_MS }, (finished) => {
+      // Without the climb, the finished logo holds as long as the quick opening's.
+      lead + drivingFor + (reduceMotion ? QUICK_HOLD_MS : HOLD_MS),
+      withTiming(0, { duration: FADE_MS, reduceMotion: ALWAYS }, (finished) => {
         if (finished) scheduleOnRN(onDone);
       }),
+      ALWAYS,
     );
-  }, [drive, grow, fade, onDone, reduceMotion]);
+  }, [emerge, drive, grow, fade, onDone, reduceMotion]);
 
   useEffect(() => {
     if (!skip) return;
@@ -326,26 +333,20 @@ function FullIntro({
   useAnimatedReaction(
     () => Math.round(drive.value * STEPS),
     (step, previous) => {
-      if (step !== previous) scheduleOnRN(setShown, step / STEPS);
+      if (step !== previous && !reduceMotion) scheduleOnRN(setShown, step / STEPS);
     },
   );
 
-  const carProps = useAnimatedProps(() => {
-    const at = drive.value * SAMPLES;
-    const i = Math.min(SAMPLES - 1, Math.floor(at));
-    const f = at - i;
-    return {
-      cx: roadXs[i] + (roadXs[i + 1] - roadXs[i]) * f,
-      cy: roadYs[i] + (roadYs[i + 1] - roadYs[i]) * f,
-    };
-  });
-  // Hides the lane markings the car hasn't reached yet.
-  const unpavedProps = useAnimatedProps(() => ({ strokeDashoffset: -drive.value * roadLength }));
   const logoStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: -LOGO_LIFT * grow.value }, { scale: 1 + (GROWN_SCALE - 1) * grow.value }],
+    opacity: reduceMotion ? drive.value : 1,
+    transform: [
+      { translateY: -LOGO_LIFT * grow.value - SOIL_BELOW * zoomFor(emerge.value, drive.value) },
+      { scale: 1 + (GROWN_SCALE - 1) * grow.value + zoomFor(emerge.value, drive.value) },
+    ],
   }));
+  // In once the view has pulled back from the soil, so it never overlaps the burst.
   const counterStyle = useAnimatedStyle(() => ({
-    opacity: grow.value,
+    opacity: Math.max(0, (grow.value - 0.3) / 0.7),
     transform: [{ translateY: 12 * (1 - grow.value) }],
   }));
   const fadeStyle = useAnimatedStyle(() => ({ opacity: fade.value }));
@@ -355,16 +356,24 @@ function FullIntro({
   return (
     <Animated.View style={[StyleSheet.absoluteFill, styles.container, fadeStyle]}>
       {season && <SeasonAmbient season={season.id} southern={code === 'AU'} />}
+      {reduceMotion && <Seed drive={drive} />}
       <Animated.View style={logoStyle}>
-        <SeasonalLeaf season={season} unpavedProps={unpavedProps} carProps={carProps} />
-        {season && hasRider(season.id) && (
-          <SeasonRider season={season.id} drive={drive} size={SPLASH_SIZE} xs={roadXs} ys={roadYs} samples={SAMPLES} />
+        <SeasonalSprout season={season} emerge={emerge} drive={drive} reduceMotion={reduceMotion} />
+        {season && hasRider(season.id) && !reduceMotion && (
+          <SeasonRider
+            season={season.id}
+            drive={drive}
+            size={SPLASH_SIZE}
+            xs={STEM_XS}
+            ys={STEM_YS}
+            samples={STEM_SAMPLES}
+          />
         )}
         {!reduceMotion && (
           <IntroScenery
             size={SPLASH_SIZE}
             drive={drive}
-            roadAt={roadAt}
+            roadAt={stemAt}
             glyphs={season ? SEASON_PLACES[season.id] : undefined}
             drop={season?.id === 'festive'}
           />
@@ -383,10 +392,10 @@ function FullIntro({
   );
 }
 
-/** Seasonal stand-ins for the places along the road. */
+/** Seasonal stand-ins for the signs along the road. */
 const SEASON_PLACES: Partial<Record<Season['id'], readonly string[]>> = {
-  festive: ['gift', 'gift', 'gift', 'gift', 'gift'],
-  halloween: ['pumpkin', 'ghost', 'candy', 'pumpkin', 'ghost'],
+  festive: ['gift', 'gift', 'gift'],
+  halloween: ['pumpkin', 'ghost', 'candy'],
 };
 
 /**
@@ -404,31 +413,49 @@ function Greeting({ text }: { text: string }) {
   );
 }
 
-/** The logo with the road being laid, the car (unless a rider stands in) and the season's hat. */
-function SeasonalLeaf({
+/**
+ * The sprout growing (or, with Reduce Motion, already grown), the car unless a
+ * rider stands in, the season's hat and autumn's colours.
+ */
+function SeasonalSprout({
   season,
-  unpavedProps,
-  carProps,
+  emerge,
+  drive,
+  reduceMotion,
 }: {
   season: Season | null;
-  unpavedProps: Partial<{ strokeDashoffset: number }>;
-  carProps: Partial<{ cx: number; cy: number }>;
+  emerge: SharedValue<number>;
+  drive: SharedValue<number>;
+  reduceMotion: boolean;
 }) {
+  const palette = season?.id === 'autumn' ? 'autumn' : 'mint';
+  const hat = season ? <SeasonHat season={season.id} /> : undefined;
+  if (reduceMotion) {
+    return (
+      <LeafMark size={SPLASH_SIZE} bleed={season !== null} palette={palette}>
+        {hat}
+      </LeafMark>
+    );
+  }
   return (
-    <LeafMark size={SPLASH_SIZE} car={false} bleed={season !== null} palette={season?.id === 'autumn' ? 'autumn' : 'mint'}>
-      <AnimatedPath
-        d={ROAD_PATH}
-        stroke="#064E3B"
-        strokeWidth={16}
-        fill="none"
-        strokeDasharray={[roadLength, roadLength]}
-        animatedProps={unpavedProps}
-      />
-      {!(season && hasRider(season.id)) && (
-        <AnimatedCircle r={58} fill="#FACC15" stroke="#FFFFFF" strokeWidth={16} animatedProps={carProps} />
-      )}
-      {season && <SeasonHat season={season.id} />}
-    </LeafMark>
+    <GrowingSprout
+      size={SPLASH_SIZE}
+      emerge={emerge}
+      drive={drive}
+      palette={palette}
+      car={!(season && hasRider(season.id))}
+      hat={hat}
+    />
+  );
+}
+
+/** Reduce Motion: the splash screen's seed, fading out as the finished logo fades in over it. */
+function Seed({ drive }: { drive: SharedValue<number> }) {
+  const style = useAnimatedStyle(() => ({ opacity: 1 - drive.value }));
+  return (
+    <Animated.View style={[styles.seed, style]}>
+      <SproutSeed size={SPLASH_SIZE} />
+    </Animated.View>
   );
 }
 
@@ -444,6 +471,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: 10,
   },
+  seed: { position: 'absolute' },
   counter: { position: 'absolute', top: '50%', marginTop: COUNTER_TOP, alignItems: 'center', gap: 2 },
   money: { color: '#FFFFFF', fontSize: 40, fontWeight: '800', fontVariant: ['tabular-nums'] },
   distance: {

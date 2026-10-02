@@ -10,16 +10,13 @@ import type { SeasonId } from '@/domain/seasons';
  * the logo and moved along the road with the drive.
  */
 
-/** The road runs up the leaf at 40°. */
-const ANGLE = (40 * Math.PI) / 180;
-
 type RiderSpec = {
   width: number;
   height: number;
   tilt: number;
   /** After the road ends: keep flying up and away (the sleigh) rather than stop. */
   takeOff: boolean;
-  /** How far up the road it goes (0–1), so it stops short of the hat. */
+  /** How far up the road it goes (0–1): the pumpkin stops just under the witch hat. */
   reach: number;
   art: () => React.ReactNode;
 };
@@ -72,7 +69,7 @@ const RIDERS: Partial<Record<SeasonId, RiderSpec>> = {
     height: 30,
     tilt: 0,
     takeOff: false,
-    reach: 0.82,
+    reach: 0.93,
     art: () => (
       <>
         <Path d="M15 4 C16 1 19 1 20 2" stroke="#15803D" strokeWidth={2.4} fill="none" strokeLinecap="round" />
@@ -90,8 +87,9 @@ export function hasRider(season: SeasonId | null): boolean {
 }
 
 /**
- * The rider, following the car along the road. `point` gives the road
- * position (leaf units) for the drive's progress; `size` is the logo's width.
+ * The rider, following the car up the road. `xs` and `ys` are the road's
+ * points (mark units, see brand/sprout) for the drive's progress; `size` is
+ * the logo's width.
  */
 export function SeasonRider({
   season,
@@ -109,7 +107,7 @@ export function SeasonRider({
   samples: number;
 }) {
   const spec = RIDERS[season];
-  const scale = size / 1024;
+  const scale = size / 100;
   const style = useAnimatedStyle(() => {
     const progress = drive.value * (spec?.reach ?? 1);
     const at = Math.min(progress, 1) * samples;
@@ -119,13 +117,13 @@ export function SeasonRider({
     const y = ys[i] + (ys[i + 1] - ys[i]) * f;
     const width = spec?.width ?? 0;
     const height = spec?.height ?? 0;
-    // The sleigh lifts off over the last stretch and soars past the hat.
+    // The sleigh lifts off over the last stretch and soars away past the leaves.
     const lift = spec?.takeOff ? Math.max(0, (drive.value - 0.6) / 0.4) : 0;
     const soar = lift * lift * 110;
     return {
       transform: [
-        { translateX: (530 + x * Math.cos(ANGLE) - y * Math.sin(ANGLE)) * scale - width / 2 + soar * 0.75 },
-        { translateY: (490 + x * Math.sin(ANGLE) + y * Math.cos(ANGLE)) * scale - height / 2 - soar },
+        { translateX: x * scale - width / 2 + soar * 0.75 },
+        { translateY: y * scale - height / 2 - soar },
         { rotate: `${spec?.tilt ?? 0}deg` },
       ],
     };

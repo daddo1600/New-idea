@@ -4,9 +4,10 @@ import Animated, { useAnimatedStyle, type SharedValue } from 'react-native-reani
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 
 /**
- * Places along the launch animation's road: a petrol station, a shop, a café,
- * an office and a tree pop up beside it as the car approaches, then slip away
- * behind it. Drawn in the logo's colours rather than emoji so they match.
+ * Signs beside the launch animation's road: a petrol station, shops and a café
+ * pop up next to the sprout's stem just as the car reaches them, then shrink
+ * away behind it before the leaves open. Drawn in the logo's colours rather
+ * than emoji so they match.
  */
 
 const INK = '#064E3B';
@@ -47,14 +48,6 @@ const GLYPHS: Record<string, ReactNode> = {
       />
     </>
   ),
-  office: (
-    <>
-      <Rect x={6} y={3} width={12} height={18} rx={1} fill={INK} />
-      {[6, 10, 14].map((y) =>
-        [8.5, 13].map((x) => <Rect key={`${x},${y}`} x={x} y={y} width={2.5} height={2.5} fill={SUN} />),
-      )}
-    </>
-  ),
   gift: (
     <>
       <Rect x={4} y={9} width={16} height={12} rx={1.5} fill="#DC2626" />
@@ -84,39 +77,33 @@ const GLYPHS: Record<string, ReactNode> = {
       <Circle cx={14.5} cy={11} r={1.4} fill={INK} />
     </>
   ),
-  tree: (
-    <>
-      <Rect x={10.8} y={13} width={2.4} height={8} rx={1} fill={INK} />
-      <Circle cx={12} cy={10} r={6.5} fill={LEAF} />
-    </>
-  ),
 };
 
-/** Where each place sits: how far along the road (0–1) and which side of it. */
+/**
+ * Where each sign sits: how far up the road (0–1) and which side of it. Each
+ * is clear of the leaf on its side, which only opens once the sign has gone.
+ */
 const PLACES = [
-  { glyph: 'fuel', at: 0.14, side: -1 },
-  { glyph: 'shop', at: 0.29, side: 1 },
-  { glyph: 'cafe', at: 0.44, side: -1 },
-  { glyph: 'office', at: 0.59, side: 1 },
-  { glyph: 'tree', at: 0.72, side: -1 },
+  { glyph: 'fuel', at: 0.12, side: 1 },
+  { glyph: 'shop', at: 0.3, side: -1 },
+  { glyph: 'cafe', at: 0.6, side: 1 },
 ] as const;
 
 const BADGE = 30;
-/** The road runs up the leaf at 40°; this is "forwards" on screen. */
-const ANGLE = (40 * Math.PI) / 180;
-const FORWARD = { x: Math.sin(ANGLE), y: -Math.cos(ANGLE) };
-/** Beside the road, just outside the leaf (leaf units). */
-const OFFSET = 390;
-/** How far a place drifts back as the car passes (points). */
-const DRIFT = 36;
+/** Beside the road (mark units). */
+const OFFSET = 24;
+/** Pops in over this much of the drive before the car arrives… */
+const POP = 0.1;
+/** …stays this long after it passes, then shrinks away over LEAVE. */
+const STAY = 0.1;
+const LEAVE = 0.14;
+/** How far a sign sinks as the car climbs on past it (points). */
+const DRIFT = 10;
 
-/** Leaf coordinates (see LeafMark) to points inside a `size`-wide logo. */
+/** Mark coordinates (see LeafMark) to points inside a `size`-wide logo. */
 function toScreen(x: number, y: number, size: number) {
-  const scale = size / 1024;
-  return {
-    left: (530 + x * Math.cos(ANGLE) - y * Math.sin(ANGLE)) * scale - BADGE / 2,
-    top: (490 + x * Math.sin(ANGLE) + y * Math.cos(ANGLE)) * scale - BADGE / 2,
-  };
+  const scale = size / 100;
+  return { left: x * scale - BADGE / 2, top: y * scale - BADGE / 2 };
 }
 
 function Place({
@@ -134,15 +121,16 @@ function Place({
   drop: boolean;
 }) {
   const style = useAnimatedStyle(() => {
-    const appear = Math.min(1, Math.max(0, (drive.value - (at - 0.24)) / 0.18));
-    const leave = Math.min(1, Math.max(0, (drive.value - (at + 0.08)) / 0.16));
-    const passed = drive.value - at;
+    const appear = Math.min(1, Math.max(0, (drive.value - (at - POP)) / POP));
+    const leave = Math.min(1, Math.max(0, (drive.value - (at + STAY)) / LEAVE));
+    // A springy pop: past full size, then back.
+    const back = appear - 1;
+    const pop = 1 + 2.7 * back * back * back + 1.7 * back * back;
     return {
-      opacity: appear * (1 - leave),
+      opacity: Math.min(1, appear * 3) * (1 - leave),
       transform: [
-        { translateX: -FORWARD.x * DRIFT * passed * 2 },
-        { translateY: -FORWARD.y * DRIFT * passed * 2 - (drop ? 34 * (1 - appear) : 0) },
-        { scale: 0.3 + 0.7 * appear - 0.3 * leave },
+        { translateY: DRIFT * leave - (drop ? 34 * (1 - appear) : 0) },
+        { scale: Math.max(0, 0.3 + 0.7 * pop) * (1 - 0.6 * leave) },
       ],
     };
   });
@@ -155,7 +143,7 @@ function Place({
   );
 }
 
-/** Road points for 0…1 along the road, in leaf units (see launch-intro). */
+/** `roadAt` gives road points for 0…1 up the road, in mark units (see brand/sprout). */
 export function IntroScenery({
   size,
   drive,

@@ -36,7 +36,8 @@ export function rememberRegion(code: RegionCode): void {
  */
 const TOTALS_KEY = 'milemint.launch-totals';
 
-export type LaunchTotals = { total: number; seen: number };
+/** Money in minor units; `meters` is this tax year's business distance (absent before it was stored). */
+export type LaunchTotals = { total: number; seen: number; meters?: number };
 
 async function read(key: string): Promise<string | null> {
   return Platform.OS === 'web' ? (globalThis.localStorage?.getItem(key) ?? null) : SecureStore.getItemAsync(key);
@@ -56,20 +57,22 @@ export async function recallTotals(): Promise<LaunchTotals | null> {
     const stored = await read(TOTALS_KEY);
     if (!stored) return null;
     const parsed = JSON.parse(stored) as Partial<LaunchTotals>;
-    return typeof parsed.total === 'number' ? { total: parsed.total, seen: parsed.seen ?? parsed.total } : null;
+    return typeof parsed.total === 'number'
+      ? { total: parsed.total, seen: parsed.seen ?? parsed.total, meters: parsed.meters }
+      : null;
   } catch {
     return null;
   }
 }
 
 /** The home screen's current tax-year total, in minor units (pence, cents). */
-export async function rememberTotal(total: number): Promise<void> {
+export async function rememberTotal(total: number, meters: number): Promise<void> {
   const previous = await recallTotals();
-  if (previous?.total === total) return;
-  write(TOTALS_KEY, JSON.stringify({ total, seen: previous?.seen ?? total }));
+  if (previous?.total === total && previous.meters === meters) return;
+  write(TOTALS_KEY, JSON.stringify({ total, seen: previous?.seen ?? total, meters }));
 }
 
 /** The opening has shown this total; next time it counts up from here. */
 export function markTotalSeen(totals: LaunchTotals): void {
-  write(TOTALS_KEY, JSON.stringify({ total: totals.total, seen: totals.total }));
+  write(TOTALS_KEY, JSON.stringify({ ...totals, seen: totals.total }));
 }

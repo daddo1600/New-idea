@@ -22,7 +22,8 @@ Never pure `#FFFFFF`/`#000000` backgrounds except white text on the gradient.
 - One gold word or underline per headline at most ("was **missed**.", "**forgot.**").
 
 ## Logo
-- The leaf mark: `milemint/assets/images/splash-icon.png` (transparent), app icon `icon.png`.
+- The sprout mark: a seedling whose stem is the road (cream lane dashes), with the gold dot (the car) at the top where the leaves open. Drawn from `milemint/src/brand/sprout.ts`; exports `milemint/assets/brand/mark.svg` (transparent) and `mark-small.svg` (under 60pt: no veins, sheen, shadow or soil), app icon `icon.png`, splash `splash-seed.png` (the seed in its soil, the launch animation's first frame).
+- Leaf colours: Leaf light `#77E8A0` → Leaf deep `#24B359` (vertical gradient), underside `#085E42`, veins Deep green.
 - Wordmark "MileMint": white on green; on light, "Mile" ink + "Mint" brand green.
 
 ## Voice

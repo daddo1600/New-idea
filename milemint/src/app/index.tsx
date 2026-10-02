@@ -190,11 +190,11 @@ export default function HomeScreen() {
     if (!employee || !claimedYears) return null;
     return unclaimedNudge(marSummary(visible, region, { employerRate, band }, new Date(), deductions), region, claimedYears);
   }, [employee, claimedYears, visible, region, employerRate, band, deductions]);
-  // For the quick opening next time: this tax year's total, counted up from what was last seen.
+  // For the opening next time: this tax year's total and business distance, grown from zero.
   const launchTotal = relief ? relief.relief : summary.total;
   useEffect(() => {
-    if (trips && onboarded && !DEMO_MODE) rememberTotal(launchTotal).catch(() => {});
-  }, [trips, onboarded, launchTotal]);
+    if (trips && onboarded && !DEMO_MODE) rememberTotal(launchTotal, summary.businessMeters).catch(() => {});
+  }, [trips, onboarded, launchTotal, summary.businessMeters]);
 
   // Home ↔ work drives the user marked business anyway. Kept in the total (a
   // home office can make them deductible), but called out so they get a second look.
