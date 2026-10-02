@@ -339,7 +339,7 @@ export default function HomeScreen() {
           filling !== null ? null : trips.length === 0 ? (
             <View style={styles.empty}>
               <LeafMark size={72} />
-              <ThemedText type="smallBold">{status === 'on' ? t('Ready when you are') : t('No drives yet')}</ThemedText>
+              <ThemedText type="smallBold">{status === 'on' ? t('Ready for your first drive') : t('No drives yet')}</ThemedText>
               <HomeEmptyLines trackingOn={status === 'on'} style={styles.emptyBody} />
               <AddTripLink />
             </View>

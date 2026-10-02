@@ -29,7 +29,7 @@ const PRIVACY_URL =
  */
 const COMPARISON: readonly [feature: string, free: boolean, pro: boolean][] = [
   [msg('Automatic tracking, no monthly limit'), true, true],
-  [msg('Swipe to sort business trips'), true, true],
+  [msg('Swipe to sort your trips'), true, true],
   [msg('Money total and tax-year totals'), true, true],
   [msg('Year-end summary on screen'), true, true],
   [msg('Add missed trips by hand'), true, true],
@@ -184,7 +184,7 @@ export default function ProScreen() {
       <ScrollView contentContainerStyle={styles.content}>
         <ThemedText type="subtitle">{t('Your mileage report, ready for tax time')}</ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
-          {t('Tracking stays free for good: every drive, with no monthly limit. Pro is for your report and exports.')}
+          {t('Tracking is always free: every drive, with no monthly limit. Pro is for your report and exports.')}
         </ThemedText>
 
         {giftOpen && (

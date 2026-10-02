@@ -10,7 +10,7 @@ export const PERK_NAMES: Record<Perk, string> = {
 
 /** What each perk gives, in one line. */
 export const PERK_DETAILS: Record<Perk, string> = {
-  'tax-set-aside': msg('A pot that shows what to put aside for tax. Yours for good, even without Pro.'),
+  'tax-set-aside': msg('Shows how much to save for tax. Yours to keep, even without Pro.'),
   'platform-earnings': msg('See what each delivery app pays you, plus gold leaves on your sprout.'),
   'founding-badge': msg('A Founding driver badge in Settings, for helping MileSprout grow.'),
 };

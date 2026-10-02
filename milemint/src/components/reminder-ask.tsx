@@ -37,10 +37,10 @@ export function ReminderAsk() {
     <View style={[styles.card, { borderColor: theme.accent, backgroundColor: theme.accent + '14' }]}>
       <Text style={styles.icon}>📅</Text>
       <View style={styles.flex}>
-        <ThemedText type="smallBold">{t('Want a Sunday nudge?')}</ThemedText>
+        <ThemedText type="smallBold">{t('Want a reminder on Sundays?')}</ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
           {t(
-            'A quick (slightly cheeky) reminder each Sunday evening to sort the week’s drives, so nothing goes unclaimed.',
+            'A short reminder each Sunday evening to sort the week’s drives, so you don’t miss anything you can claim.',
           )}
         </ThemedText>
         <View style={styles.buttons}>

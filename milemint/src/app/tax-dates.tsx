@@ -65,7 +65,7 @@ export default function TaxDatesScreen() {
           '✅',
           t('Stay ready'),
           t(
-            'Sort your drives each week and your figures are ready whenever a deadline comes round. MileSprout reminds you two months, one month and one week before the tax year ends.',
+            'Sort your drives each week and your figures are ready for every deadline. MileSprout reminds you two months, one month and one week before the tax year ends.',
           ),
         )}
 

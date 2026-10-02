@@ -15,7 +15,7 @@ import { useTracking } from '@/tracking/use-tracking';
 
 const POINTS = [
   [msg('Automatic'), msg('Every drive is logged the moment you park. No buttons to press.')],
-  [msg('Light on battery'), msg('GPS only runs while you drive. Parked, MileSprout sleeps.')],
+  [msg('Uses little battery'), msg('GPS only runs while you drive. Parked, MileSprout sleeps.')],
   [msg('Private'), msg('Your trips are stored encrypted on your phone, not on our servers.')],
 ] as const;
 

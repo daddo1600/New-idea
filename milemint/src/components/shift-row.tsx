@@ -125,7 +125,7 @@ export function ShiftRow({
                 />
               )}
               <ThemedText type="small" themeColor="textSecondary">
-                {t('Drives join or leave the shift by when they started. A drive past the end is cut there.')}
+                {t('A drive is part of the shift if it started during the shift. If it goes past the end, it’s cut there.')}
               </ThemedText>
             </View>
           )}

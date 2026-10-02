@@ -103,7 +103,7 @@ const WORK_STYLE_TEXT: Record<WorkStyle, { emoji: string; title: string; detail:
   },
   shifts: {
     emoji: '📦',
-    title: msg('Shifts & rounds (delivery apps)'),
+    title: msg('Shifts or blocks (delivery and ride apps)'),
     detail: msg('Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber. Car, van, moped or bike.'),
   },
   neither: { emoji: '✋', title: msg('Neither'), detail: msg('I’ll swipe each drive myself.') },
@@ -213,7 +213,7 @@ export default function WelcomeScreen() {
     celebrate(
       kind,
       kind === 'thumbs'
-        ? t('Nice one!')
+        ? t('Great!')
         : kind === 'tracking'
           ? tracking
           : kind === 'almost'
@@ -730,7 +730,7 @@ export default function WelcomeScreen() {
             ) : (
               <>
                 <Text style={styles.brandEyebrow}>{t('STEP 2 · TRACKING')}</Text>
-                <Text style={styles.brandTitleSmall}>{t('Never miss a mile.')}</Text>
+                <Text style={styles.brandTitleSmall}>{t('Never miss a drive.')}</Text>
                 <Text style={styles.brandBody}>
                   {t('Set location to “Always” and MileSprout logs every drive, even when it’s closed.')}
                 </Text>

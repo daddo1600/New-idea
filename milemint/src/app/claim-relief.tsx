@@ -139,7 +139,7 @@ export default function ClaimReliefScreen() {
               { limit },
             ),
             t(
-              'Have to hand: your employer’s name and PAYE reference (on your payslip or P60), your National Insurance number, and for each tax year your business miles and the mileage allowance you were paid. The P87 summary below has the figures.',
+              'You’ll need: your employer’s name and PAYE reference (on your payslip or P60), your National Insurance number, and for each tax year your business miles and the mileage allowance you were paid. The P87 summary below has the figures.',
             ),
             t(
               'Claim online on GOV.UK with your Government Gateway login, or print the P87 form and post it. You can claim this tax year and the 4 before it.',

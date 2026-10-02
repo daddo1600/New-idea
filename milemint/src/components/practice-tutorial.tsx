@@ -307,8 +307,10 @@ function TutorialOverlay({
                   {step === 'personal'
                     ? t('This is how a drive shows up after you park. Try sorting it.')
                     : step === 'business'
-                      ? t('Now a work drive. Work drives are worth money back.')
-                      : t('Every drive until you end it counts as business.')}
+                      ? shiftWorker
+                        ? t('Now a delivery. Deliveries and pickups are work drives, and they count at tax time.')
+                        : t('Now a work drive. Work drives count at tax time.')
+                      : t('Every drive until you end your shift counts as work.')}
                 </Text>
                 <Bubble step={step} misses={state.misses} passed={state.passed} passedLine={passedLine} />
                 {step === 'shift' ? (
@@ -391,9 +393,9 @@ function Bubble({
 
   const [icon, text] =
     step === 'personal'
-      ? ['🏠', t('Swipe left for personal')]
+      ? ['🏠', t('Swipe left if it was personal')]
       : step === 'business'
-        ? ['💼', t('Swipe right for business')]
+        ? ['💼', t('Swipe right if it was for work')]
         : ['▶', t('Swipe to start your shift')];
   return (
     <Animated.View
@@ -508,7 +510,7 @@ function ShiftPractice({ passed, onStart }: { passed: boolean; onStart: () => vo
         <ShiftSwitch
           on={passed}
           startLabel={t('Swipe to start shift')}
-          startHint={t('Every drive until you end it counts as business')}
+          startHint={t('Every drive until you end your shift counts as work')}
           endLabel={t('Your shift is on ✓')}
           onStart={onStart}
           onEnd={() => {}}>

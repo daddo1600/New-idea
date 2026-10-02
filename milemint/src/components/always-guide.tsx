@@ -29,7 +29,7 @@ export function AlwaysGuide({ current }: { current: 'While Using the App' | 'Nev
       <ThemedText type="smallBold">{t('One quick switch in Settings')}</ThemedText>
       <ThemedText type="small" themeColor="textSecondary">
         {t(
-          'iOS only offers “Always” in Settings. It takes ten seconds, and MileSprout carries on by itself when you come back.',
+          'iOS only offers “Always” in Settings. It takes ten seconds, and MileSprout continues by itself when you come back.',
         )}
       </ThemedText>
 

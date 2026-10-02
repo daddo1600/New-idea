@@ -5,10 +5,10 @@ import { msg, t } from '@/i18n/i18n';
 
 /** A few warm messages, picked by the milestone so the same one always reads the same. */
 const MONEY_MESSAGES = [
-  msg('MileSprout has now found {{amount}} in business mileage for you. You’ve earned every penny of it.'),
-  msg('MileSprout has now found {{amount}} in business mileage for you. Hard work, properly rewarded.'),
-  msg('MileSprout has now found {{amount}} in business mileage for you. That’s real money back at tax time.'),
-  msg('MileSprout has now found {{amount}} in business mileage for you. Nicely done. Keep it rolling.'),
+  msg('MileSprout has now found {{amount}} in business mileage for you. You earned all of it.'),
+  msg('MileSprout has now found {{amount}} in business mileage for you. That’s your hard work, counted.'),
+  msg('MileSprout has now found {{amount}} in business mileage for you. It all counts at tax time.'),
+  msg('MileSprout has now found {{amount}} in business mileage for you. Well done. Keep going.'),
 ];
 
 const pounds = (region: Region, major: number) => formatMoney(major * 100, region).replace(/[.,]00$/, '');
@@ -40,7 +40,7 @@ export function celebrationFor(milestone: Milestone, region: Region, employee = 
     const message = MONEY_MESSAGES[Math.round(Math.log10(milestone.threshold) * 3) % MONEY_MESSAGES.length];
     return {
       emoji: '💰',
-      title: t('{{amount}} back in your pocket', { amount }),
+      title: t('{{amount}} found for you', { amount }),
       message: t(message, { amount }),
       share: t('I’ve found {{amount}} in business mileage with MileSprout 🚗💸 Every mile counted, automatically.', {
         amount,

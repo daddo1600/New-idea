@@ -253,7 +253,7 @@ export function countdownReminders(
     {
       before: 7,
       title: t('One week left in the {{year}} tax year 🏁', { year: label }),
-      body: t('Last call: make sure every business drive is in MileSprout before {{date}}.', { date: endDate }),
+      body: t('Last chance: make sure every business drive is in MileSprout before {{date}}.', { date: endDate }),
     },
   ].map((r, i) => ({
     id: `year-end-${i}`,
@@ -270,7 +270,7 @@ export function countdownReminders(
     {
       before: 30,
       title: t(guide.returnDueInMonth, { year: dueLabel }),
-      body: t('Your mileage report is ready. Export it now so the figures are to hand.'),
+      body: t('Your mileage report is ready. Export it now so you have the figures ready.'),
     },
     {
       before: 7,
