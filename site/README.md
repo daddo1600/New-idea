@@ -59,4 +59,4 @@ Every App Store button then links to the store and reads "Download on the App St
 
 ## Images
 - `assets/img/shot-*.webp`: App Store screenshots resized to 540×1170 (35–48 KB each), lazy-loaded.
-- `assets/img/og.png`: 1200×630 share image. `favicon.ico`, `favicon-32.png`, `apple-touch-icon.png` from `milemint/assets/images/icon.png`; `assets/img/leaf.png` from `splash-icon.png`.
+- `assets/img/og.png`: 1200×630 share image. `favicon.ico`, `favicon-32.png`, `apple-touch-icon.png` from `milemint/assets/images/icon.png`; `assets/img/leaf.png` from `milemint/assets/brand/mark.svg` (the sprout mark; the old `splash-icon.png` is gone).
