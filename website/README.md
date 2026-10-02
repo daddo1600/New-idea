@@ -1,10 +1,11 @@
 # milesprout.app website (`website/`)
 
-The public website for MileSprout: plain static HTML and one CSS file. No build step, no JavaScript, no cookies, no analytics, no external fonts or scripts. Everything is served from this folder.
+The public website for MileSprout: plain static HTML, one CSS file and one small script of our own. No build step, no cookies, no analytics, no external fonts or scripts. Everything is served from this folder, plus one Pages Function (`../functions/api/waitlist.js`) for the waitlist.
 
 | Path | What it is |
 |---|---|
-| `index.html` | Landing page: hero, features (from the App Store screenshots), Free vs Pro, regions |
+| `index.html` | Landing page: hero with waitlist form, the feature deck, Free vs Pro, regions, closing sign-up |
+| `waitlist.html` | Early-access page (also where no-JS form posts land: `?joined=1#joined`, `?error=1#error`) |
 | `privacy.html` | Privacy policy for the app and the site (effective 2 Oct 2026) |
 | `support.html` | Support FAQ |
 | `partners.html` | MileSprout Perks pitch for partners |
@@ -14,16 +15,41 @@ The public website for MileSprout: plain static HTML and one CSS file. No build 
 | `_redirects` | The `/r/*` rewrite |
 | `robots.txt`, `sitemap.xml` | For search engines |
 | `favicon.svg`, `favicon-32.png`, `apple-touch-icon.png` | Icons (the PNGs are made from `milemint/assets/images/icon.png`) |
-| `assets/site.css` | All styles, light and dark mode |
-| `assets/img/` | Store screenshots resized to WebP (400 and 800 px wide), `og.jpg` for link previews |
-| `docs/` | Preview screenshots of the home page (not linked from the site) |
+| `assets/site.css` | All styles, light and dark mode, including the CSS-built iPhone frame |
+| `assets/site.js` | Hero phone tilt, the feature deck (drag, swipe, trackpad, keys, dots) and the waitlist form. The page reads fine without it |
+| `assets/img/screens/` | Raw app captures (`milemint/assets/store/raw/`, `milemint/docs/screenshots/perks/`) as 640 px WebP, with the top and bottom rows extended to leave room for the CSS status bar and home indicator. `trip.webp` has an invented street map drawn under the route (the capture's map panel was blank); `perks.webp` has the Expo dev button painted out of the tab bar |
+| `assets/img/og.jpg` | Link preview image |
+| `docs/` | Preview screenshots of the home page (not linked from the site): `scroll-*.png` for the hero and deck at desktop and mobile sizes, `waitlist-*.png` for the form states |
 
 Links between pages are extensionless (`/privacy`), which is how Cloudflare Pages serves `privacy.html`. To preview locally with working links, use `npx wrangler pages dev website`. A quick look also works with `python3 -m http.server 8080 -d website` and opening `/index.html`, `/privacy.html` and so on.
+
+## How the home page moves
+
+- **Hero:** the phone starts turned away (`rotateY(-22deg) rotateX(8deg)`) and straightens over the first ~300 px of scroll; the big faint sprout drifts slower than the page. Gold glints twinkle by the sign-up button.
+- **Feature deck:** eight phones in a fanned stack. Hover fans it out; flick with a horizontal trackpad swipe (one swipe = one card), a mouse drag or touch swipe (throw it), the arrow keys, the dots or the buttons. The caption beside it crossfades to the matching feature, and a polite live region announces "3 of 8: …".
+- **Reduced motion:** the phone stays flat, nothing flies or rotates, the deck just crossfades.
+- **No JavaScript:** a still phone, the deck's top card, and every feature listed in full (a `<noscript>` style in `index.html`).
+- Only `transform` and `opacity` are animated.
+
+## Waitlist
+
+The hero, the closing section and `/waitlist` have the same form: email, optional "What do you drive for?" and country, a consent box, and a hidden honeypot field. With JavaScript it posts JSON to `/api/waitlist` and shows "You're on the list" in place; without it, it's a normal form post and the function redirects back to `/waitlist`.
+
+The function needs a D1 database bound as `DB`. Set-up, in short (details in [`functions/README.md`](../functions/README.md)):
+
+1. Dashboard → **Storage & Databases → D1 → Create**, name `milesprout-waitlist` (EU location if offered).
+2. In its **Console**, run:
+   `CREATE TABLE IF NOT EXISTS waitlist (email TEXT PRIMARY KEY, segment TEXT, country TEXT, consent_at TEXT, source TEXT, created_at TEXT);`
+3. Pages project → **Settings → Bindings → Add → D1 database**, variable name **`DB`**, then redeploy.
+4. To export: D1 Console, `SELECT * FROM waitlist ORDER BY created_at;` → **Download** CSV.
+
+Functions run only on Cloudflare Pages deploys (not the Workers flow in `wrangler.jsonc`). Until the binding exists, sign-ups get a friendly "didn't go through" message (the function answers 503).
 
 ## Before launch
 
 - `index.html`: the App Store button is a placeholder (`href="#"`, "Coming to the App Store"). When the app is live, put in `https://apps.apple.com/app/id<APP_ID>` and use Apple's official "Download on the App Store" badge (saved locally, not hot-linked). There's a `TODO` comment next to it.
 - `privacy.html`: replace `[address]` with the postal address.
+- Set up the waitlist database and binding (above), and test a sign-up on the live site.
 - The app's `PRIVACY_URL` in `milemint/src/app/pro.tsx` still points at a GitHub file, and `SUPPORT_EMAIL` in `milemint/src/app/(tabs)/settings.tsx` is the old Gmail address. Point them at `https://milesprout.app/privacy` and `hello@milesprout.app`. Use the same privacy URL in App Store Connect.
 
 ## Deploy on Cloudflare Pages

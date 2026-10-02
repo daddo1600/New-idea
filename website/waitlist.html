@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get early access · MileSprout</title>
+<meta name="description" content="Join the MileSprout waitlist and we'll email you when the free automatic mileage tracker for couriers and drivers is in the App Store.">
+<link rel="canonical" href="https://milesprout.app/waitlist">
+<meta name="theme-color" content="#0B7A55">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="MileSprout home">
+      <svg viewBox="12 9 77 84" aria-hidden="true" focusable="false"><defs><linearGradient id="ms-leaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#77E8A0"/><stop offset="1" stop-color="#24B359"/></linearGradient></defs><g transform="translate(1.2 1.6)" fill="#085E42" opacity=".5"><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z"/><path d="M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z"/></g><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z" fill="url(#ms-leaf)"/><path d="M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z" fill="url(#ms-leaf)"/><path class="road" d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#064E3B" stroke-width="8" stroke-linecap="round" fill="none"/><path d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#FBF7EE" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="2.6 3.2" stroke-dashoffset="-3" fill="none"/><circle cx="51" cy="28" r="7.6" fill="#FFFFFF"/><circle cx="51" cy="28" r="5.6" fill="#FACC15"/></svg>
+      <span><span class="wm-mile">Mile</span><span class="wm-sprout">Sprout</span></span>
+    </a>
+    <nav aria-label="Main">
+      <ul class="nav">
+        <li><a href="/#free-pro">Free &amp; Pro</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/support">Support</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <div class="page-head">
+    <div class="wrap">
+      <p class="eyebrow">Early access</p>
+      <h1>Be first to try MileSprout</h1>
+      <p>MileSprout is a free, automatic mileage tracker for couriers, delivery riders and self-employed drivers. It's coming to the App Store in the UK in October 2026. Leave your email and we'll tell you when it's ready.</p>
+    </div>
+  </div>
+
+  <div class="wrap waitlist-page">
+    <!-- Shown after a sign-up without JavaScript: the server redirects to /waitlist?joined=1#joined -->
+    <p class="wl-done wl-target" id="joined" tabindex="-1"><strong>You're on the list.</strong> We'll email you once, when MileSprout is ready.</p>
+    <p class="wl-error wl-target" id="error" tabindex="-1">Sorry, that didn't work. Check your email address, tick the box, and try again. Or email <a href="mailto:hello@milesprout.app">hello@milesprout.app</a>.</p>
+    <form class="waitlist" action="/api/waitlist" method="post" data-waitlist>
+        <input type="hidden" name="source" value="waitlist-page">
+        <div class="wl-fields">
+          <label class="wl-label" for="wl-email-p">Your email</label>
+          <div class="wl-row">
+            <input id="wl-email-p" name="email" type="email" required maxlength="254" autocomplete="email" inputmode="email" placeholder="you@example.com" aria-describedby="wl-status-p">
+            <span class="wl-go">
+              <button type="submit">Get early access</button>
+              <span class="sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            </span>
+          </div>
+          <div class="wl-opts">
+            <label><span>What do you drive for? <small>(optional)</small></span>
+              <select name="segment">
+                <option value="">Choose…</option>
+                <option value="food">Food delivery</option>
+                <option value="parcels">Parcels</option>
+                <option value="ridehail">Ride-hail</option>
+                <option value="care">Care or home visits</option>
+                <option value="trades">Trades</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+            <label><span>Country <small>(optional)</small></span>
+              <select name="country">
+                <option value="">Choose…</option>
+                <option value="UK">UK</option>
+                <option value="US">US</option>
+                <option value="CA">Canada</option>
+                <option value="AU">Australia</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+          </div>
+          <label class="wl-consent"><input type="checkbox" name="consent" value="yes" required> <span>Email me when MileSprout launches. Unsubscribe any time. <a href="/privacy#waitlist">How we use your email</a></span></label>
+          <div class="wl-hp" aria-hidden="true"><label>Company <input type="text" name="company" tabindex="-1" autocomplete="off"></label></div>
+        </div>
+        <p class="wl-done" tabindex="-1" hidden><strong>You're on the list.</strong> We'll email you once, when MileSprout is ready.</p>
+        <p class="wl-status" id="wl-status-p" role="status" aria-live="polite"></p>
+      </form>
+    <p class="fine">We'll use your email only to tell you about MileSprout's launch. It's stored with Cloudflare, never sold or shared, and you can ask us to delete it any time at <a href="mailto:privacy@milesprout.app">privacy@milesprout.app</a>. <a href="/privacy#waitlist">Privacy policy</a></p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <p><strong><span class="wm-mile">Mile</span><span class="wm-sprout">Sprout</span></strong>: mileage tracking for people who drive for work.</p>
+      <p>Questions? <a href="mailto:hello@milesprout.app">hello@milesprout.app</a></p>
+    </div>
+    <nav aria-label="Footer">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/partners">For partners</a></li>
+      </ul>
+      <p class="fine" style="margin-top:10px">&copy; 2026 MileSprout</p>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>
