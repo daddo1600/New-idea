@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MileMint: mileage tracker for people who drive for work</title>
+<meta name="description" content="MileMint is an iPhone mileage tracker for couriers, delivery drivers, trades and the self-employed in the UK, US, Canada and Australia. You'll know if a mile was missed. No account; trips stay on your phone.">
+<link rel="canonical" href="https://milemint.app/">
+<meta name="theme-color" content="#0B7A55">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/inter-extrabold.woff2" as="font" type="font/woff2" crossorigin>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MileMint">
+<meta property="og:locale" content="en_GB">
+<meta property="og:url" content="https://milemint.app/">
+<meta property="og:title" content="MileMint: you'll know if a mile was missed">
+<meta property="og:description" content="MileMint is an iPhone mileage tracker for couriers, delivery drivers, trades and the self-employed in the UK, US, Canada and Australia. You'll know if a mile was missed. No account; trips stay on your phone.">
+<meta property="og:image" content="https://milemint.app/assets/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MileMint leaf logo with the words: You'll know if a mile was missed.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MileMint: you'll know if a mile was missed">
+<meta name="twitter:description" content="MileMint is an iPhone mileage tracker for couriers, delivery drivers, trades and the self-employed in the UK, US, Canada and Australia. You'll know if a mile was missed. No account; trips stay on your phone.">
+<meta name="twitter:image" content="https://milemint.app/assets/img/og.png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/config.js" defer></script>
+<script src="/assets/main.js" defer></script>
+<script src="/assets/join.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="MileMint home"><img src="/assets/img/leaf.png" alt="" width="26" height="30"><span>Mile<b>Mint</b></span></a>
+    <nav class="nav" aria-label="Main">
+      <a href="/calculator.html">Calculator</a>
+      <a class="hide-sm" href="/support.html">Support</a>
+      <a class="btn small-btn" href="/join.html">Join</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero green split" aria-labelledby="hero-title">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Mileage tracker for iPhone</span>
+        <h1 id="hero-title">You'll know if a mile was <span class="key">missed.</span></h1>
+        <p class="lede">MileMint logs every drive on its own and tells you the moment tracking stops, so every business mile makes it into your claim.</p>
+        <ul class="hero-points">
+          <li>No account. Just drive.</li>
+          <li>Trips stay on your phone</li>
+          <li>UK · US · Canada · Australia</li>
+        </ul>
+
+        <div class="card" id="join">
+          <h2 style="font-size:1.4rem">Join the Founding 1,000</h2>
+          <p class="muted small">Be first to hear when MileMint is on the App Store. Free to track. Pro for reports.</p>
+          <!-- No-JavaScript fallback: add action="YOUR-PROVIDER-FORM-URL" to this <form> (same URL as FORM_ENDPOINT in assets/config.js). -->
+          <form class="form" data-waitlist data-thanks="hero-thanks" method="post">
+            <div>
+              <label for="h-email">Email address</label>
+              <input id="h-email" data-field="email" name="email" type="email" autocomplete="email" inputmode="email" required>
+            </div>
+            <div class="form-row two">
+              <div>
+                <label for="h-country">Country</label>
+                <select id="h-country" data-field="country" name="fields[country]">
+                  <option value="UK">United Kingdom</option>
+                  <option value="US">United States</option>
+                  <option value="Canada">Canada</option>
+                  <option value="Australia">Australia</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label for="h-work">How do you work?</label>
+                <select id="h-work" data-field="work" name="fields[work]">
+                  <option value="Courier/delivery">Courier / delivery</option>
+                  <option value="Trades/sales">Trades / sales</option>
+                  <option value="Care/support">Care / support</option>
+                  <option value="Other self-employed">Other self-employed</option>
+                </select>
+              </div>
+            </div>
+            <div class="check-wrap">
+              <label class="check"><input type="checkbox" data-field="consent" name="consent" value="yes" required> <span>Email me launch news, tax-deadline reminders and tips. Unsubscribe any time.</span></label>
+            </div>
+            <button class="btn" type="submit">Join the waitlist</button>
+            <p class="status" data-status role="status" aria-live="polite" hidden></p>
+            <p class="form-note">We only use your email for MileMint news. See the <a href="/privacy.html#website">privacy policy</a>.</p>
+          </form>
+          <div class="thanks" id="hero-thanks" hidden>
+            <h3>You're in.</h3>
+            <p>Check your inbox to confirm. Know a driver who'd want this? Share MileMint with a driver friend.</p>
+            <button class="btn" type="button" data-share>Share MileMint</button>
+            <p class="status ok" data-share-status role="status" aria-live="polite" hidden></p>
+          </div>
+        </div>
+
+        <div class="cta-row">
+          <a class="appstore" data-appstore href="/join.html" aria-label="MileMint on the App Store: coming soon. Join the waitlist.">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 18.5h4"/></svg>
+            <span><small>App Store</small><strong>Coming soon</strong></span>
+          </a>
+          <a class="text-link" href="/calculator.html">What are your miles worth? →</a>
+        </div>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="150 140 700 720" focusable="false">
+          <defs>
+            <linearGradient id="leafFill" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#86EFAC"/><stop offset="1" stop-color="#22A95B"/>
+            </linearGradient>
+          </defs>
+          <g class="leaf-group">
+            <path d="M300 720 C 230 640 230 470 320 400 C 430 320 620 230 790 180 C 790 330 760 470 700 600 C 640 720 470 800 300 720 Z" fill="#0A5A41" transform="translate(-14 14)"/>
+            <path d="M300 720 C 230 640 230 470 320 400 C 430 320 620 230 790 180 C 790 330 760 470 700 600 C 640 720 470 800 300 720 Z" fill="url(#leafFill)"/>
+            <g stroke="#1F9D57" stroke-width="10" stroke-linecap="round" opacity=".7" fill="none">
+              <path d="M400 640 L 330 430"/><path d="M470 560 L 400 360"/><path d="M540 480 L 470 310"/><path d="M610 400 L 560 270"/>
+              <path d="M430 610 L 650 680"/><path d="M500 530 L 715 590"/><path d="M570 450 L 750 480"/><path d="M640 370 L 770 360"/>
+            </g>
+            <path d="M275 795 C 420 610 560 450 720 255" stroke="#0B3B2D" stroke-width="44" stroke-linecap="round" fill="none"/>
+            <path class="road-dash" d="M275 795 C 420 610 560 450 720 255" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" fill="none"/>
+          </g>
+          <circle class="pin-pulse" cx="274" cy="795" r="58" fill="#FACC15"/>
+          <circle cx="274" cy="795" r="58" fill="#FFFFFF"/>
+          <circle cx="274" cy="795" r="44" fill="#FACC15"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="why-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="why-title">Why <span class="u">MileMint</span></h2>
+        <p class="muted">Built for people whose car is part of the job, and who'd rather not hand their location history to anyone.</p>
+      </div>
+      <div class="grid cols-4">
+        <article class="card feature">
+          <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+          <h3>No account. Nothing collected.</h3>
+          <p>No sign-up, no ads, no analytics. Your trips stay encrypted on your iPhone. We never see them.</p>
+        </article>
+        <article class="card feature">
+          <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
+          <h3>One row per shift</h3>
+          <p>Every drop in a shift sits in one tidy row. The drive home is split off, so you decide if it counts.</p>
+        </article>
+        <article class="card feature">
+          <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div>
+          <h3>You'll know if a mile was missed</h3>
+          <p>If tracking stops or a drive is cut short, MileMint tells you straight away and helps you add what's missing.</p>
+        </article>
+        <article class="card feature">
+          <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></div>
+          <h3>Tax-office ready in 4 countries</h3>
+          <p>HMRC, IRS, CRA and ATO rates. Business purpose filled in, parking and tolls, and exports to a spreadsheet, Xero, QuickBooks or FreeAgent.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-alt" aria-labelledby="shots-title">
+    <div class="wrap">
+      <div class="section-head center">
+        <h2 id="shots-title">See it in <span class="u">action</span>.</h2>
+        <p class="muted">Swipe through the app.</p>
+      </div>
+      <div class="shots" tabindex="0" role="region" aria-label="App screenshots, scroll sideways">
+        <figure><img src="/assets/img/shot-hero.webp" loading="lazy" decoding="async" width="540" height="1170" alt="MileMint home screen showing deductions found this tax year, with an alert that tracking stopped and a button to add the missed trip."><figcaption>You'll know if a mile was missed</figcaption></figure>
+        <figure><img src="/assets/img/shot-shift.webp" loading="lazy" decoding="async" width="540" height="1170" alt="A delivery shift shown as one row with eight drives, and the drive home split off with a business or personal choice."><figcaption>One row per shift</figcaption></figure>
+        <figure><img src="/assets/img/shot-missed.webp" loading="lazy" decoding="async" width="540" height="1170" alt="Alert: tracking stopped between 20:19 and 21:54, about 8 miles may be missing, with an Add missed trip button."><figcaption>Missed a drive? We'll tell you</figcaption></figure>
+        <figure><img src="/assets/img/shot-sort.webp" loading="lazy" decoding="async" width="540" height="1170" alt="A drive being swiped to sort it as business, with purpose buttons such as Client visit and Client meeting."><figcaption>Swipe to sort, tap a purpose</figcaption></figure>
+        <figure><img src="/assets/img/shot-report.webp" loading="lazy" decoding="async" width="540" height="1170" alt="HMRC report for the 2026/27 tax year with export options: spreadsheet, Xero, QuickBooks, FreeAgent or an expense claim."><figcaption>Reports and exports</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="for-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="for-title">Built for people who <span class="u">drive</span> for work</h2>
+      </div>
+      <div class="grid cols-2">
+        <div class="card who"><span class="badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v8H3zM14 10h4l3 3v2h-7"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span><div><h3>Couriers &amp; delivery</h3><p class="muted">Running more than one app? Each one only sees its own miles. MileMint logs every mile, whichever app you're on.</p></div></div>
+        <div class="card who"><span class="badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></span><div><h3>Trades &amp; sales</h3><p class="muted">Job sites, suppliers, client visits. Name your places once and your log reads like a proper record.</p></div></div>
+        <div class="card who"><span class="badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21.2l8.8-8.8a5.5 5.5 0 0 0 0-7.8z"/></svg></span><div><h3>Care &amp; support</h3><p class="muted">Visit after visit, every business mile counted, with the purpose filled in for you.</p></div></div>
+        <div class="card who"><span class="badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M6 17l1.5-6h9L18 17"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/><path d="M9 11V8h6v3"/></svg></span><div><h3>Anyone self-employed</h3><p class="muted">If your car earns you money, your miles are worth claiming. MileMint keeps the record so you don't have to.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-alt" aria-labelledby="faq-title">
+    <div class="wrap narrow faq">
+      <h2 id="faq-title">Questions</h2>
+      <details>
+        <summary>Is it free?</summary>
+        <div><p>Free to track. Pro for reports. Automatic tracking and your mileage log are free; MileMint Pro adds the reports you need at tax time. Prices will be shown on the App Store at launch, and the Founding 1,000 keep their launch price of Pro for as long as they subscribe.</p></div>
+      </details>
+      <details>
+        <summary>Do I need an account?</summary>
+        <div><p>No. There's nothing to sign up for. Your trips are stored encrypted on your iPhone, and if you use iCloud, an encrypted backup goes to your own iCloud. We never receive your trips or your location.</p></div>
+      </details>
+      <details>
+        <summary>Which countries does it work in?</summary>
+        <div><p>The United Kingdom (HMRC), the United States (IRS), Canada (CRA) and Australia (ATO). MileMint uses each tax office's rates, tax year and record-keeping rules.</p></div>
+      </details>
+      <details>
+        <summary>Which languages?</summary>
+        <div><p>The app comes in 10 languages: English, <span lang="es">Español</span>, <span lang="pt-BR">Português (Brasil)</span>, <span lang="fr">Français</span>, <span lang="ro">Română</span>, <span lang="pl">Polski</span>, <span lang="hi">हिन्दी</span>, <span lang="pa">ਪੰਜਾਬੀ</span>, <span lang="bn">বাংলা</span> and <span lang="zh-Hans">简体中文</span>.</p></div>
+      </details>
+      <details>
+        <summary>Does it drain my battery?</summary>
+        <div><p>MileMint uses iOS location services the efficient way: low-power geofencing while you're parked, and GPS only while you're driving. Any app that detects drives in the background uses some battery, and you can always see MileMint's share in <strong>Settings → Battery</strong>. If you prefer, switch to manual logging at any time.</p></div>
+      </details>
+      <details>
+        <summary>Is this tax advice?</summary>
+        <div><p>No. MileMint estimates your claim using the official rates. Check with an accountant or tax agent for your situation.</p></div>
+      </details>
+      <p style="margin-top:20px">More answers on the <a href="/support.html">support page</a>.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer green">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="MileMint home"><img src="/assets/img/leaf.png" alt="" width="26" height="30"><span>Mile<b>Mint</b></span></a>
+    <p>You'll know if a mile was missed.</p>
+    <nav aria-label="Footer">
+      <a href="/join.html">Founding 1,000</a>
+      <a href="/calculator.html">Calculator</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/support.html">Support</a>
+      <a href="mailto:hello@milemint.app">hello@milemint.app</a>
+    </nav>
+    <p class="small">No cookies, no trackers, no analytics on this site. Estimates on this site are not tax advice.</p>
+    <p class="small">© <span data-year>2026</span> MileMint. Apple, iPhone and App Store are trademarks of Apple Inc.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mileage claim calculator (HMRC, IRS, CRA, ATO) · MileMint</title>
+<meta name="description" content="Work out a year's mileage claim at the official rate: HMRC 55p/25p, IRS 76¢, CRA 73¢/67¢ allowance, ATO 91c per km. Free, runs in your browser.">
+<link rel="canonical" href="https://milemint.app/calculator.html">
+<meta name="theme-color" content="#0B7A55">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/inter-extrabold.woff2" as="font" type="font/woff2" crossorigin>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MileMint">
+<meta property="og:locale" content="en_GB">
+<meta property="og:url" content="https://milemint.app/calculator.html">
+<meta property="og:title" content="How much could you claim for your miles?">
+<meta property="og:description" content="Work out a year's mileage claim at the official rate: HMRC 55p/25p, IRS 76¢, CRA 73¢/67¢ allowance, ATO 91c per km. Free, runs in your browser.">
+<meta property="og:image" content="https://milemint.app/assets/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MileMint leaf logo with the words: You'll know if a mile was missed.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How much could you claim for your miles?">
+<meta name="twitter:description" content="Work out a year's mileage claim at the official rate: HMRC 55p/25p, IRS 76¢, CRA 73¢/67¢ allowance, ATO 91c per km. Free, runs in your browser.">
+<meta name="twitter:image" content="https://milemint.app/assets/img/og.png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/config.js" defer></script>
+<script src="/assets/main.js" defer></script>
+<script src="/assets/calc.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="MileMint home"><img src="/assets/img/leaf.png" alt="" width="26" height="30"><span>Mile<b>Mint</b></span></a>
+    <nav class="nav" aria-label="Main">
+      <a href="/calculator.html" aria-current="page">Calculator</a>
+      <a class="hide-sm" href="/support.html">Support</a>
+      <a class="btn small-btn" href="/join.html">Join</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-hero green" aria-labelledby="calc-title">
+    <div class="wrap">
+      <span class="eyebrow">Mileage calculator</span>
+      <h1 id="calc-title">How much could you <span class="key">claim?</span></h1>
+      <p class="lede">Pick your country and enter your business driving. We'll work out a year's claim at the official rate. Nothing you type leaves your browser.</p>
+    </div>
+  </section>
+
+  <section aria-label="Calculator" style="padding-top:40px">
+    <div class="wrap">
+      <div class="calc-grid">
+        <div class="card form" id="calc">
+          <fieldset class="seg">
+            <legend>Country</legend>
+            <label><input type="radio" name="country" value="UK" checked><span>UK</span></label>
+            <label><input type="radio" name="country" value="US"><span>US</span></label>
+            <label><input type="radio" name="country" value="CA"><span>Canada</span></label>
+            <label><input type="radio" name="country" value="AU"><span>Australia</span></label>
+          </fieldset>
+
+          <fieldset class="seg">
+            <legend>I'll enter my driving</legend>
+            <label><input type="radio" name="period" value="week" checked><span>Per week</span></label>
+            <label><input type="radio" name="period" value="year"><span>Per year</span></label>
+          </fieldset>
+
+          <div class="inline-inputs">
+            <div>
+              <label for="distance">Business <span data-unit-plural>miles</span> <span data-period-label>a week</span></label>
+              <input id="distance" type="number" inputmode="decimal" min="0" step="1" value="150">
+            </div>
+            <div data-weeks-wrap>
+              <label for="weeks">Weeks worked a year</label>
+              <input id="weeks" type="number" inputmode="numeric" min="1" max="52" step="1" value="48">
+            </div>
+          </div>
+
+          <details class="extra" data-ca-only hidden>
+            <summary>Self-employed in Canada? Estimate with your costs</summary>
+            <p class="small muted">Self-employed people usually claim their actual vehicle costs multiplied by their business-use percentage.</p>
+            <div class="inline-inputs">
+              <div>
+                <label for="totalkm">All km driven in the year</label>
+                <input id="totalkm" type="number" inputmode="decimal" min="0" step="1" placeholder="e.g. 25000">
+              </div>
+              <div>
+                <label for="costs">Vehicle costs for the year ($)</label>
+                <input id="costs" type="number" inputmode="decimal" min="0" step="1" placeholder="e.g. 9000">
+              </div>
+            </div>
+            <p class="small muted">Costs include fuel, insurance, maintenance and repairs, licence and registration, lease payments or interest, and capital cost allowance.</p>
+          </details>
+        </div>
+
+        <div class="result green" aria-live="polite" aria-atomic="true" id="result">
+          <p class="label-top" data-headline>Your estimated claim for a year</p>
+          <p class="big" data-total>£3,960</p>
+          <table><tbody data-rows></tbody></table>
+          <p class="small" data-note></p>
+        </div>
+      </div>
+
+      <p class="small muted" style="margin-top:20px">This is an estimate, not tax advice. Rates, limits and what counts as business driving depend on your situation and the tax office's rules. Check with an accountant or tax agent before you file.</p>
+
+      <div class="card" style="margin-top:24px">
+        <h2 style="font-size:1.6rem">Make sure every mile gets <span class="u">counted</span>.</h2>
+        <p class="muted">A claim is only as good as your log. MileMint records every drive and tells you if one was missed.</p>
+        <a class="btn" href="/join.html">Join the Founding 1,000</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer green">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="MileMint home"><img src="/assets/img/leaf.png" alt="" width="26" height="30"><span>Mile<b>Mint</b></span></a>
+    <p>You'll know if a mile was missed.</p>
+    <nav aria-label="Footer">
+      <a href="/join.html">Founding 1,000</a>
+      <a href="/calculator.html">Calculator</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/support.html">Support</a>
+      <a href="mailto:hello@milemint.app">hello@milemint.app</a>
+    </nav>
+    <p class="small">No cookies, no trackers, no analytics on this site. Estimates on this site are not tax advice.</p>
+    <p class="small">© <span data-year>2026</span> MileMint. Apple, iPhone and App Store are trademarks of Apple Inc.</p>
+  </div>
+</footer>
+</body>
+</html>
