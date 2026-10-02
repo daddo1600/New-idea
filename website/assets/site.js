@@ -124,6 +124,52 @@
     }
   })();
 
+  /* ---------- Home: links to the sign-up (and a floating "Get early access" pill) ----------
+     Every link to #early-access scrolls to the hero form and puts the cursor in the email box.
+     The pill is made here (no JS, no pill) and shows only while the hero form is off screen
+     and the footer isn't in view. */
+  (function joinLinks() {
+    var form = document.querySelector('.hero form[data-waitlist]');
+    var heading = document.getElementById('early-access');
+    if (!form || !heading) return;
+    var email = form.querySelector('input[type="email"]');
+
+    function go(e) {
+      if (e) e.preventDefault();
+      heading.scrollIntoView({ behavior: still() ? 'auto' : 'smooth', block: 'start' });
+      if (email && !form.classList.contains('is-done')) {
+        try { email.focus({ preventScroll: true }); } catch (err) { email.focus(); }
+      }
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('a[href="#early-access"]'), function (a) {
+      a.addEventListener('click', go);
+    });
+
+    if (!('IntersectionObserver' in window)) return;
+    var pill = document.createElement('a');
+    pill.className = 'float-join';
+    pill.href = '#early-access';
+    pill.innerHTML = '<span>Get early access</span><svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 15.5V5M5 9.5l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    pill.addEventListener('click', go);
+    document.body.appendChild(pill);
+
+    var formSeen = true, footSeen = false, shown = null;
+    function update() {
+      var on = !formSeen && !footSeen;
+      if (on === shown) return;
+      shown = on;
+      pill.classList.toggle('on', on);
+      document.body.classList.toggle('has-float', on);
+      // hidden: out of the tab order and the accessibility tree
+      if (on) { pill.removeAttribute('aria-hidden'); pill.removeAttribute('tabindex'); pill.inert = false; }
+      else { pill.setAttribute('aria-hidden', 'true'); pill.setAttribute('tabindex', '-1'); pill.inert = true; }
+    }
+    new IntersectionObserver(function (es) { formSeen = es[0].isIntersecting; update(); }).observe(form);
+    var foot = document.querySelector('.site-footer');
+    if (foot) new IntersectionObserver(function (es) { footSeen = es[0].isIntersecting; update(); }).observe(foot);
+    update();
+  })();
+
   /* ---------- Hero: the phone turns to face you as you scroll; the sprout drifts ---------- */
   (function hero() {
     var section = document.querySelector('.hero');
