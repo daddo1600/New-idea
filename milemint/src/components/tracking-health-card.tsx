@@ -13,7 +13,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { useRegion } from '@/region/region';
 import { askForMotion, motionStatus } from '@/tracking/motion';
-import { useTrackingAlerts, useTrackingHealth } from '@/tracking/use-tracking-health';
+import { useTrackingHealth } from '@/tracking/use-tracking-health';
 
 /**
  * "You'll know if a mile was missed." The home screen's plain-words warning
@@ -67,7 +67,6 @@ export function TrackingHealthCard({ state }: { state: ReturnType<typeof useTrac
   const t = useT();
   const { region } = useRegion();
   const { health, checkedAt: now, restart, dismissGap, labelGap } = state;
-  useTrackingAlerts();
   const [busy, setBusy] = useState(false);
 
   if (!health) return null;

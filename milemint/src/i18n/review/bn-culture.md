@@ -404,3 +404,19 @@ Parking and tolls on a drive: the “+ Parking or tolls” fields when adding a 
 | Parking and tolls are listed separately and not added to the per-km figure. Self-employed: business parking fees are deducted in full on T2125, not reduced to your business-use share. Ask your accountant whether your tolls can be claimed. | পার্কিং আর টোল আলাদা করে দেখানো আছে, প্রতি km-এর অঙ্কে যোগ করা হয়নি। স্বনিযুক্ত: ব্যবসায়িক পার্কিং ফি T2125-এ পুরোটাই বাদ যায়, ব্যবসায়িক ব্যবহারের অংশ অনুযায়ী কমানো হয় না। টোল দাবি করা যায় কি না, আপনার অ্যাকাউন্ট্যান্টকে জিজ্ঞেস করুন। | Parking and tolls are shown separately, not added to the per-km amount. Self-employed: business parking fees are deducted in full on T2125, not reduced by the business-use share. Ask your accountant whether tolls can be claimed. | Canada report guidance (PDF stays English). |
 | Work parking and tolls aren’t covered by cents per km, so they’re claimed separately. Not parking at your regular workplace, or tolls on the way there. | কাজের পার্কিং আর টোল cents per km-এর মধ্যে পড়ে না, তাই এগুলো আলাদা করে দাবি করা হয়। আপনার নিয়মিত কর্মস্থলের পার্কিং বা সেখানে যাওয়ার টোল নয়। | Work parking and tolls don’t fall within cents per km, so they’re claimed separately. Not parking at your regular workplace or tolls going there. | Australia note under the fields. |
 | Parking fees and tolls for work trips aren’t covered by the cents per km rate. Claim them separately: individuals as Work-related travel expenses (D2), sole traders with business expenses. Not parking at your regular workplace, or tolls between home and work. | কাজের ট্রিপের পার্কিং ফি আর টোল cents per km রেটের মধ্যে পড়ে না। এগুলো আলাদা করে দাবি করুন: ব্যক্তি করদাতা Work-related travel expenses (D2)-এ, sole traders ব্যবসার খরচের সঙ্গে। আপনার নিয়মিত কর্মস্থলের পার্কিং বা বাড়ি আর কর্মস্থলের মধ্যে টোল নয়। | Work-trip parking fees and tolls don’t fall within the cents per km rate. Claim them separately: individual taxpayers in Work-related travel expenses (D2), sole traders with business expenses. Not parking at your regular workplace or tolls between home and workplace. | Australia report guidance (PDF stays English). |
+
+## Round 9: tabs
+
+The app now opens on four tabs (Home, Drives, Money, Settings) instead of one long home screen with a menu. The menu’s lines (Menu, Close menu, Free plan, ★ Pro · unlimited drives, Work hours, places and reminders) are gone. “হোম” as in other apps; “বাড়ি” stays for the place.
+
+| English | Translation | Back-translation | Note |
+|---|---|---|---|
+| Home (tab) | হোম | Home | Tab bar label for the first tab. Key is "Home (tab)" so it isn’t the place “Home” (English shows “Home”). Short: under an icon. |
+| Drives | ট্রিপ | Trips | Tab bar label: every drive, by month. Same word as the app’s “drives”. |
+| Money | টাকা | Money | Tab bar label: the tax year’s money back, month by month, Pro and the tax screens. One short word. |
+| Opens the Money tab | টাকা ট্যাব খোলে | Opens the Money tab | VoiceOver hint on home’s green card, which opens the Money tab. |
+| To sort | বাছাই বাকি | Sorting left | Home: heading over the drives still to sort as business or personal. |
+| All drives sorted ✓ | সব ট্রিপ বাছাই হয়েছে ✓ | All trips sorted ✓ | Home, when nothing is left to sort; the row opens the Drives tab. |
+| See all drives › | সব ট্রিপ দেখান › | Show all trips › | Home, next to the line above: opens the Drives tab. Keep the “›”. |
+| By month | মাস অনুযায়ী | By month | Money tab: heading over this tax year’s months. |
+| Earlier tax years | আগের ট্যাক্স বছর | Previous tax years | Money tab: heading over the years before this one. |

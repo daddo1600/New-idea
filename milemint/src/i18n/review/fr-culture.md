@@ -392,3 +392,19 @@ Parking and tolls on a drive: the “+ Parking or tolls” fields when adding a 
 | Parking and tolls are listed separately and not added to the per-km figure. Self-employed: business parking fees are deducted in full on T2125, not reduced to your business-use share. Ask your accountant whether your tolls can be claimed. | Le stationnement et les péages figurent à part et ne s’ajoutent pas au montant au km. Travailleurs autonomes : les frais de stationnement d’affaires se déduisent en entier sur le T2125, sans être réduits à votre part d’usage professionnel. Demandez à votre comptable si vos péages sont déductibles. | Parking and tolls appear separately and aren’t added to the per-km amount. Self-employed: business parking fees are deducted in full on the T2125, not reduced to your business-use share. Ask your accountant whether your tolls are deductible. | Canada report guidance (PDF stays English). |
 | Work parking and tolls aren’t covered by cents per km, so they’re claimed separately. Not parking at your regular workplace, or tolls on the way there. | Les cents per km ne couvrent pas le stationnement ni les péages du travail : ils se demandent à part. Sauf le stationnement à votre lieu de travail habituel, ou les péages pour vous y rendre. | Cents per km doesn’t cover work parking or tolls: they’re claimed separately. Except parking at your usual workplace, or tolls to get there. | Australia note under the fields. |
 | Parking fees and tolls for work trips aren’t covered by the cents per km rate. Claim them separately: individuals as Work-related travel expenses (D2), sole traders with business expenses. Not parking at your regular workplace, or tolls between home and work. | Les cents per km ne couvrent pas le stationnement ni les péages des trajets de travail. Demandez-les à part : particuliers, en Work-related travel expenses (D2) ; travailleurs autonomes (sole traders), avec les frais d’entreprise. Sauf le stationnement à votre lieu de travail habituel, ou les péages entre domicile et travail. | Cents per km doesn’t cover parking or tolls on work trips. Claim them separately: individuals as Work-related travel expenses (D2); self-employed (sole traders) with business expenses. Except parking at your usual workplace, or tolls between home and work. | Australia report guidance (PDF stays English). |
+
+## Round 9: tabs
+
+The app now opens on four tabs (Home, Drives, Money, Settings) instead of one long home screen with a menu. The menu’s lines (Menu, Close menu, Free plan, ★ Pro · unlimited drives, Work hours, places and reminders) are gone. “Accueil” as in French iPhone apps; “Domicile” stays for the place.
+
+| English | Translation | Back-translation | Note |
+|---|---|---|---|
+| Home (tab) | Accueil | Home (welcome) | Tab bar label for the first tab. Key is "Home (tab)" so it isn’t the place “Home” (English shows “Home”). Short: under an icon. |
+| Drives | Trajets | Journeys | Tab bar label: every drive, by month. Same word as the app’s “drives”. |
+| Money | Argent | Money | Tab bar label: the tax year’s money back, month by month, Pro and the tax screens. One short word. |
+| Opens the Money tab | Ouvre l’onglet Argent | Opens the Money tab | VoiceOver hint on home’s green card, which opens the Money tab. |
+| To sort | À classer | To classify | Home: heading over the drives still to sort as business or personal. |
+| All drives sorted ✓ | Tous les trajets sont classés ✓ | All journeys are classified ✓ | Home, when nothing is left to sort; the row opens the Drives tab. |
+| See all drives › | Voir tous les trajets › | See all journeys › | Home, next to the line above: opens the Drives tab. Keep the “›”. |
+| By month | Par mois | By month | Money tab: heading over this tax year’s months. |
+| Earlier tax years | Années d’imposition précédentes | Previous tax years | Money tab: heading over the years before this one. |

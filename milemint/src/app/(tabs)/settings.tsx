@@ -1,9 +1,10 @@
-import { router, Stack, useFocusEffect, type Href } from 'expo-router';
+import { router, useFocusEffect, type Href } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Linking,
   Platform,
   Pressable,
   ScrollView,
@@ -19,6 +20,7 @@ import { backedUpText, formatBackupDate, PROBLEM_TEXT } from '@/backup/copy';
 import { backupAge } from '@/backup/schedule';
 import { tripCount, type Snapshot } from '@/backup/snapshot';
 import { GoldButton } from '@/components/gold-button';
+import { LinkRow } from '@/components/link-row';
 import { ReplayTutorialSection } from '@/components/practice-tutorial';
 import { PurposePicker } from '@/components/purpose-picker';
 import { EMPTY_PLACE, PlaceField, resolvePlace, type PlaceDraft } from '@/components/place-field';
@@ -57,7 +59,7 @@ import {
   REMINDERS_SUPPORTED,
 } from '@/reminders/weekly';
 
-import { ICloudBackup, type BackupKeyInfo } from '../../modules/icloud-backup';
+import { ICloudBackup, type BackupKeyInfo } from '../../../modules/icloud-backup';
 
 /** Monday first, as people read a work week; values are `Date.getDay()` indexes. */
 const DAYS = [
@@ -81,7 +83,15 @@ const NEW_SHIFT: WorkShift = { start: '09:00', end: '17:00' };
 /** A second shift that day, pre-filled so it's clearly editable rather than a hint. */
 const EXTRA_SHIFT: WorkShift = { start: '18:00', end: '22:00' };
 
-export default function SettingsScreen() {
+const SUPPORT_EMAIL = 'milemint.support@gmail.com';
+
+export default function SettingsTab() {
+  // After a restore every section loads afresh, so nothing stale (work hours, places) is saved over it.
+  const [generation, reopen] = useReducer((n: number) => n + 1, 0);
+  return <SettingsScreen key={generation} onRestored={reopen} />;
+}
+
+function SettingsScreen({ onRestored }: { onRestored: () => void }) {
   const db = useSQLiteContext();
   const theme = useTheme();
   const t = useT();
@@ -145,8 +155,6 @@ export default function SettingsScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      {/* Set here too, so the title follows a language change straight away. */}
-      <Stack.Screen options={{ title: t('Settings') }} />
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <ProSection />
 
@@ -171,7 +179,7 @@ export default function SettingsScreen() {
         {REMINDERS_SUPPORTED && <ReminderSection />}
 
         {/* Hidden on iPhone until iCloud is enabled for the app; the web preview explains it. */}
-        {(ICloudBackup.supported || Platform.OS === 'web') && <BackupSection />}
+        {(ICloudBackup.supported || Platform.OS === 'web') && <BackupSection onRestored={onRestored} />}
 
         <ThemedText type="smallBold">{t('Work hours')}</ThemedText>
         <ThemedView type="backgroundElement" style={styles.card}>
@@ -323,6 +331,17 @@ export default function SettingsScreen() {
           )}
           <AddPlace onAdded={async () => setPlaces(await listPlaces(db))} />
         </ThemedView>
+
+        <ThemedText type="smallBold">{t('Help & feedback')}</ThemedText>
+        <ThemedView type="backgroundElement" style={styles.links}>
+          <LinkRow
+            icon="envelope.fill"
+            glyph="✉️"
+            title={t('Help & feedback')}
+            detail={t('We read every message')}
+            onPress={() => Linking.openURL(`mailto:${SUPPORT_EMAIL}?subject=MileMint`).catch(() => {})}
+          />
+        </ThemedView>
       </ScrollView>
     </ThemedView>
   );
@@ -461,7 +480,7 @@ function ReminderSection() {
 }
 
 /** Encrypted iCloud backup: whether it's working, when it last ran, and back up or restore now. */
-function BackupSection() {
+function BackupSection({ onRestored }: { onRestored: () => void }) {
   const db = useSQLiteContext();
   const theme = useTheme();
   const t = useT();
@@ -522,7 +541,7 @@ function BackupSection() {
       // Every section on this screen loaded the old data: open it afresh so
       // nothing stale (work hours, places) gets saved over what was restored.
       Alert.alert(t('Restored {{count}} trips from iCloud.', { count: tripCount(snapshot) }));
-      router.replace('/settings');
+      onRestored();
       return;
     } catch {
       setNote({ error: true, text: t('Couldn’t restore. Nothing on this iPhone was changed.') });
@@ -1346,6 +1365,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   card: { borderRadius: 12, padding: Spacing.three, gap: Spacing.three },
+  links: { borderRadius: 12, padding: Spacing.one },
   rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.three },
   flex: { flex: 1, gap: Spacing.half },
   // Stacked blocks in a card: not stretched, so the next one can't slide under it.

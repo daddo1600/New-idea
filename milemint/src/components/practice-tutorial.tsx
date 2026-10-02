@@ -134,7 +134,7 @@ export function ReplayTutorialSection() {
   const replay = async () => {
     replayAsked = true;
     if (!DEMO_MODE) await updateSettings(db, { tutorialDone: false }).catch(() => {});
-    router.dismissTo('/');
+    router.navigate('/');
   };
   return (
     <>

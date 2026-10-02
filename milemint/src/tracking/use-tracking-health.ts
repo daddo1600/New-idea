@@ -91,7 +91,7 @@ export function useTrackingHealth() {
   return { health: checked.health, checkedAt: checked.at, refresh, restart, dismissGap, labelGap };
 }
 
-/** Notifies about tracking problems found as the app goes into the background. Mount once (home). */
+/** Notifies about tracking problems found as the app goes into the background. Mount once (the tabs' layout). */
 export function useTrackingAlerts() {
   const db = useSQLiteContext();
   useEffect(() => {

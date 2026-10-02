@@ -392,3 +392,19 @@ Parking and tolls on a drive: the “+ Parking or tolls” fields when adding a 
 | Parking and tolls are listed separately and not added to the per-km figure. Self-employed: business parking fees are deducted in full on T2125, not reduced to your business-use share. Ask your accountant whether your tolls can be claimed. | 停车费和过路费单独列出，不计入按公里计算的金额。自雇者：工作停车费在 T2125 上全额抵扣，不按工作用车比例折算。过路费能否申报，请咨询你的会计师。 | Parking and tolls are listed separately, not counted in the per-km amount. Self-employed: work parking is deducted in full on T2125, not prorated by the work-use share. Whether tolls can be claimed, ask your accountant. | Canada report guidance (PDF stays English). |
 | Work parking and tolls aren’t covered by cents per km, so they’re claimed separately. Not parking at your regular workplace, or tolls on the way there. | cents per km 不包括工作的停车费和过路费，所以要另行申报。在固定工作地点停车，或去那里途中的过路费除外。 | Cents per km doesn’t include work parking and tolls, so they’re claimed separately. Except parking at your fixed workplace, or tolls on the way there. | Australia note under the fields. |
 | Parking fees and tolls for work trips aren’t covered by the cents per km rate. Claim them separately: individuals as Work-related travel expenses (D2), sole traders with business expenses. Not parking at your regular workplace, or tolls between home and work. | cents per km 费率不包括工作行程的停车费和过路费。请另行申报：个人填入 Work-related travel expenses（D2），个体经营者（sole trader）计入业务开支。在固定工作地点停车，或家与工作地点之间的过路费除外。 | The cents per km rate doesn’t include parking and tolls on work trips. Claim them separately: individuals in Work-related travel expenses (D2), sole traders in business expenses. Except parking at your fixed workplace, or tolls between home and workplace. | Australia report guidance (PDF stays English). |
+
+## Round 9: tabs
+
+The app now opens on four tabs (Home, Drives, Money, Settings) instead of one long home screen with a menu. The menu’s lines (Menu, Close menu, Free plan, ★ Pro · unlimited drives, Work hours, places and reminders) are gone. “首页” is the usual first tab; “家” stays for the place. “金额” (amount) for Money: plain, not slangy.
+
+| English | Translation | Back-translation | Note |
+|---|---|---|---|
+| Home (tab) | 首页 | Home page | Tab bar label for the first tab. Key is "Home (tab)" so it isn’t the place “Home” (English shows “Home”). Short: under an icon. |
+| Drives | 行程 | Trips | Tab bar label: every drive, by month. Same word as the app’s “drives”. |
+| Money | 金额 | Amount | Tab bar label: the tax year’s money back, month by month, Pro and the tax screens. One short word. |
+| Opens the Money tab | 打开“金额”标签页 | Opens the “Amount” tab | VoiceOver hint on home’s green card, which opens the Money tab. |
+| To sort | 待分类 | To be classified | Home: heading over the drives still to sort as business or personal. |
+| All drives sorted ✓ | 所有行程都已分类 ✓ | All trips are classified ✓ | Home, when nothing is left to sort; the row opens the Drives tab. |
+| See all drives › | 显示全部行程 › | Show all trips › | Home, next to the line above: opens the Drives tab. Keep the “›”. |
+| By month | 按月 | By month | Money tab: heading over this tax year’s months. |
+| Earlier tax years | 以往纳税年度 | Previous tax years | Money tab: heading over the years before this one. |

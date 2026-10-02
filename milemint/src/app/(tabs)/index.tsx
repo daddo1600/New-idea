@@ -1,22 +1,20 @@
-import { Redirect, router, Stack, useLocalSearchParams } from 'expo-router';
+import { type Href, router, useLocalSearchParams } from 'expo-router';
+import { Tabs } from 'expo-router/js-tabs';
 import { useEffect, useMemo, useReducer, useState } from 'react';
-import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { useAutoBackup } from '@/backup/use-backup';
-import { MenuButton } from '@/components/header-menu';
 import { HomeEmptyLines } from '@/components/home-empty';
 import { LeafMark } from '@/components/leaf-mark';
-import { LogbookNudge } from '@/components/logbook-nudge';
 import { PracticeTutorial } from '@/components/practice-tutorial';
 import { Celebration } from '@/components/celebration';
 import { ReminderAsk } from '@/components/reminder-ask';
 import { quickPurposes } from '@/components/purpose-picker';
 import { PlaceAskCard } from '@/components/place-ask-card';
 import { BackdateOffer, EndShiftPrompt, UndoEndBar } from '@/components/shift-prompts';
-import { shortTime, ShiftRow } from '@/components/shift-row';
+import { shortTime } from '@/components/shift-row';
 import { LiveDriveBanner } from '@/components/home/live-drive-banner';
-import { PlanCard } from '@/components/home/plan-card';
+import { PlanMeter } from '@/components/home/plan-meter';
 import { PurposeNudge } from '@/components/home/purpose-nudge';
 import { ShiftBar } from '@/components/home/shift-bar';
 import { ReliefNudge, SummaryCard } from '@/components/home/summary-card';
@@ -26,7 +24,6 @@ import { BulkActions, FillingBar, SelectBar, ValueWaitsNotice } from '@/componen
 import { LockedTripRow } from '@/components/trips/locked-trip-row';
 import { SelectableTripRow } from '@/components/trips/selectable-trip-row';
 import { needsPurpose, TripRow } from '@/components/trips/trip-row';
-import { TaxCountdown } from '@/components/tax-countdown';
 import { TrackingHealthCard } from '@/components/tracking-health-card';
 import { useTrackingHealth } from '@/tracking/use-tracking-health';
 import { VehicleSheet } from '@/components/vehicle-sheet';
@@ -35,7 +32,7 @@ import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { DEMO_MODE } from '@/dev/demo';
 import { isCommute } from '@/domain/classify-rules';
-import { homeItems, itemKey, offShiftKind, type HomeItem } from '@/domain/shift-rows';
+import { offShiftKind } from '@/domain/shift-rows';
 import { backdateStart } from '@/domain/shift-split';
 import { frequentPurposes } from '@/domain/suggestions';
 import { formatDistance, formatMoney, potentialDeductions, taxYearOf } from '@/domain/regions';
@@ -49,13 +46,17 @@ import { useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
 import { useRegion } from '@/region/region';
 import { rememberTotal } from '@/region/remembered-region';
-import { useReminders } from '@/reminders/use-reminders';
 import { useShift } from '@/tracking/use-shift';
 import { useLiveDrive } from '@/tracking/use-live-drive';
 import { useTracking } from '@/tracking/use-tracking';
 import { useVehicles } from '@/vehicles/use-vehicles';
 import { useMilestoneCelebration } from '@/milestones/use-milestones';
 
+/**
+ * Home: what needs doing now. The shift, the year's money back, whether
+ * tracking is working, and the drives still to sort. Every drive is on the
+ * Drives tab; the money in detail on Money.
+ */
 export default function HomeScreen() {
   const list = useTripList();
   const { trips, places, reload, setPurpose, locked, visible, deductions, kindOf } = list;
@@ -63,20 +64,22 @@ export default function HomeScreen() {
   const purposeSettings = usePurposeSettings();
   /**
    * The tax year whose work drives without a purpose are shown on their own,
-   * to fill in one after another (null: all drives are shown).
+   * to fill in one after another (null: the drives to sort are shown).
    */
   const [filling, setFilling] = useState<number | null>(null);
-  // The report screen sends the user here to fill in the purposes its year is missing.
-  const { fill, year: fillYear } = useLocalSearchParams<{ fill?: string; year?: string }>();
+  // The report screen sends the user here to fill in the purposes its year is missing,
+  // and the Money tab's countdown to sort every unsorted drive at once.
+  const { fill, year: fillYear, sort: sortAsked } = useLocalSearchParams<{ fill?: string; year?: string; sort?: string }>();
   const fillAsked = fill === 'purpose' ? (fillYear ?? '') : null;
   const [fillSeen, setFillSeen] = useState<string | null>(null);
+  const [sortPending, setSortPending] = useState(false);
   useEffect(() => {
-    if (fill) router.setParams({ fill: undefined, year: undefined });
-  }, [fill]);
+    if (fill || sortAsked) router.setParams({ fill: undefined, year: undefined, sort: undefined });
+  }, [fill, sortAsked]);
   const insets = useSafeAreaInsets();
   const { status } = useTracking(reload);
   const { isPro } = usePro();
-  const { region, loaded, onboarded } = useRegion();
+  const { region, onboarded } = useRegion();
   const money = useYearMoney(visible, deductions, places);
   const { taxYear, summary, relief, nudge } = money;
   // Opened from the report: show its year's drives without a purpose (once per visit).
@@ -84,14 +87,12 @@ export default function HomeScreen() {
     setFillSeen(fillAsked);
     if (fillAsked !== null) setFilling(Number.isInteger(Number(fillAsked)) && fillAsked ? Number(fillAsked) : taxYear);
   }
-  useReminders(region);
-  // Encrypted copy in the user's own iCloud, so a lost phone doesn't take the log with it.
-  useAutoBackup(onboarded && !DEMO_MODE);
+  if (sortAsked === 'unsorted' && !sortPending) setSortPending(true);
   const shiftMode = useShift(reload);
   /** Offers the user waved away ("Not now", "Still working"), by what they were about. */
   const [dismissed, setDismissed] = useState<ReadonlySet<string>>(new Set());
   const dismiss = (key: string) => setDismissed((current) => new Set(current).add(key));
-  /** The time the shift rows and offers are worked out at, ticking each minute. */
+  /** The time the offers are worked out at, ticking each minute. */
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 60_000);
@@ -137,21 +138,23 @@ export default function HomeScreen() {
 
   const placeAsk = usePlaceAsk(trips, places, now, reload);
 
-  // First launch goes through the welcome flow before anything else is shown.
-  if (!loaded) return <ActivityIndicator style={styles.loading} />;
-  if (!onboarded) return <Redirect href="/welcome" />;
   if (!trips) return <ActivityIndicator style={styles.loading} />;
+
+  // Drives past the free allowance can be sorted too (sorting one personal frees a slot).
+  const unsorted = trips.filter((trip) => trip.classification === 'unclassified');
+  // From the Money tab's countdown: every unsorted drive picked, to sort at once.
+  if (sortPending) {
+    setSortPending(false);
+    setFilling(null);
+    setSelecting(true);
+    setSelected(new Set(unsorted.map((trip) => trip.id)));
+  }
 
   // "Worth up to" on unsorted rows: the year's business distance added up once, not once per row.
   const potentialOf = potentialDeductions(visible, region);
 
-  // The shift is the row: a shift's drives are one row that opens to them.
-  // Selecting works on drives, so it lists them one by one as before.
-  const items: HomeItem[] = selecting
-    ? trips.map((trip) => ({ kind: 'trip', trip }))
-    : filling !== null
-      ? needPurpose.map((trip) => ({ kind: 'trip', trip }))
-      : homeItems(trips, shiftMode.shifts, list.expanded);
+  // Home lists what needs doing: the drives to sort, or the ones missing a purpose.
+  const items: readonly Trip[] = filling !== null ? needPurpose : unsorted;
   // "Start shift from 10:40?": unsorted drives that look like work, before a
   // shift was started (or with none started at all). Never into the last shift.
   const lastShiftEnd = Math.max(0, ...shiftMode.shifts.map((s) => (s.endedAt ? Date.parse(s.endedAt) : 0)));
@@ -180,22 +183,15 @@ export default function HomeScreen() {
       ? lastShiftTrip
       : null;
 
-  // Drives past the free allowance can be sorted too (sorting one personal frees a slot).
-  const unsorted = trips.filter((trip) => trip.classification === 'unclassified');
-
   return (
     <ThemedView style={styles.container}>
-      <Stack.Screen
-        options={{
-          headerTitle: () => <BrandTitle />,
-          headerLeft: () => <MenuButton />,
-        }}
-      />
+      {/* The bulk actions bar takes the tab bar's place while selecting. */}
+      <Tabs.Screen options={{ tabBarStyle: selecting ? { display: 'none' } : undefined }} />
       <FlatList
         data={items}
-        keyExtractor={itemKey}
-        // Room for the bulk actions bar while selecting.
-        contentContainerStyle={[styles.list, { paddingBottom: (selecting ? 160 : 96) + insets.bottom }]}
+        keyExtractor={(trip) => trip.id}
+        // Room for the add-trip button, or the bulk actions bar while selecting.
+        contentContainerStyle={[styles.list, { paddingBottom: selecting ? 160 + insets.bottom : 96 }]}
         ListHeaderComponent={
           <View style={styles.header}>
             {/* Couriers: the shift comes first, it's what they tap every day. */}
@@ -252,11 +248,16 @@ export default function HomeScreen() {
                 onDismiss={() => dismiss(`home:${parkedAtHome.id}`)}
               />
             )}
+            {/* The year's money back; the whole card opens the Money tab. */}
+            <Pressable
+              accessibilityHint={t('Opens the Money tab')}
+              onPress={() => router.navigate('/money' as Href)}>
+              <SummaryCard summary={summary} commuteCents={money.commuteCents} relief={relief} />
+            </Pressable>
+            {nudge && <ReliefNudge nudge={nudge} />}
             {liveDrive && <LiveDriveBanner drive={liveDrive} />}
             {/* Tracking that stopped, or a drive it lost: never silent. */}
             <TrackingHealthCard state={trackingHealth} />
-            <SummaryCard summary={summary} commuteCents={money.commuteCents} relief={relief} />
-            {nudge && <ReliefNudge nudge={nudge} />}
             <TrackingCard status={status} working={!trackingProblem} />
             {/* Home and work, asked once the drives show where they are (not at set-up). */}
             {placeAsk.ask && !selecting && filling === null && (
@@ -266,20 +267,9 @@ export default function HomeScreen() {
                 onNo={() => placeAsk.decline().catch(() => {})}
               />
             )}
-            <TaxCountdown
-              foundMinor={launchTotal}
-              unsortedCount={unsorted.length}
-              onSortUnsorted={() => {
-                setFilling(null);
-                setSelecting(true);
-                setSelected(new Set(unsorted.map((trip) => trip.id)));
-              }}
-            />
             {filling === null && needPurpose.length > 0 && (
               <PurposeNudge count={needPurpose.length} onFill={() => setFilling(taxYear)} />
             )}
-            {/* Australia: past 5,000 km in a car, the logbook method usually claims more. */}
-            <LogbookNudge trips={visible} vehicles={garage.vehicles} />
             {visible.length > 0 && <ReminderAsk />}
             {garage.vehicles.length > 1 && garage.current && (
               <Pressable
@@ -298,10 +288,11 @@ export default function HomeScreen() {
                 </ThemedText>
               </Pressable>
             )}
-            {!isPro && <PlanCard trips={trips} locked={locked} />}
+            {!isPro && <PlanMeter trips={trips} locked={locked} />}
             {filling !== null && <FillingBar count={needPurpose.length} onDone={() => setFilling(null)} />}
-            {visible.length > 0 && filling === null && (
+            {filling === null && (unsorted.length > 0 || selecting) && (
               <SelectBar
+                title={t('To sort')}
                 selecting={selecting}
                 unsortedCount={unsorted.length}
                 onStart={() => setSelecting(true)}
@@ -313,30 +304,29 @@ export default function HomeScreen() {
         }
         ListEmptyComponent={
           // Filling in purposes: the bar above says they're all done.
-          filling !== null ? null : (
+          filling !== null ? null : trips.length === 0 ? (
             <View style={styles.empty}>
               <LeafMark size={72} />
               <ThemedText type="smallBold">{status === 'on' ? t('Ready when you are') : t('No drives yet')}</ThemedText>
               <HomeEmptyLines trackingOn={status === 'on'} style={styles.emptyBody} />
             </View>
+          ) : (
+            // Nothing to sort: the rest are on the Drives tab.
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => router.navigate('/drives' as Href)}
+              style={[styles.allSorted, { backgroundColor: theme.backgroundElement }]}>
+              <ThemedText type="smallBold" style={styles.flex}>
+                {t('All drives sorted ✓')}
+              </ThemedText>
+              <ThemedText type="smallBold" style={{ color: theme.accent }}>
+                {t('See all drives ›')}
+              </ThemedText>
+            </Pressable>
           )
         }
-        renderItem={({ item: row }) => {
-          if (row.kind === 'shift') {
-            return (
-              <ShiftRow
-                group={row.group}
-                valueMinor={row.group.legs.reduce((sum, trip) => sum + (deductions.get(trip.id) ?? 0), 0)}
-                region={region}
-                expanded={row.expanded}
-                now={now}
-                onToggle={() => list.toggleShift(row.group.shiftId)}
-                onEditTimes={(changes) => shiftMode.editTimes(row.group.shiftId, changes).catch(() => {})}
-              />
-            );
-          }
-          const item = row.trip;
-          const content = selecting ? (
+        renderItem={({ item }) =>
+          selecting ? (
             <SelectableTripRow trip={item} selected={selected.has(item.id)} onToggle={() => toggle(item)} />
           ) : locked.has(item.id) ? (
             <LockedTripRow
@@ -357,17 +347,11 @@ export default function HomeScreen() {
               purposeChoices={purposeChoices}
               onPurpose={(purpose) => setPurpose(item, purpose).catch(() => {})}
             />
-          );
-          // A shift's drives, under its row while it's open.
-          return row.kind === 'leg' ? (
-            <View style={[styles.leg, { borderLeftColor: theme.accent }]}>{content}</View>
-          ) : (
-            content
-          );
-        }}
+          )
+        }
       />
-      {!selecting && <AddTripButton bottom={insets.bottom} />}
-      {list.waiting && <ValueWaitsNotice bottom={insets.bottom} onClose={list.closeWaiting} />}
+      {!selecting && <AddTripButton bottom={0} />}
+      {list.waiting && <ValueWaitsNotice bottom={0} onClose={list.closeWaiting} />}
       <Celebration content={celebration.content} onClose={celebration.close} />
       {/* Once after setup (or replayed from Settings): sort two sample drives, nothing saved. */}
       <PracticeTutorial
@@ -414,17 +398,6 @@ export default function HomeScreen() {
   );
 }
 
-function BrandTitle() {
-  const theme = useTheme();
-  return (
-    <View style={styles.brand} accessibilityRole="header" accessibilityLabel="MileMint">
-      <Text style={[styles.brandText, { color: theme.text }]}>
-        Mile<Text style={{ color: theme.accent }}>Mint</Text>
-      </Text>
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
   loading: { flex: 1 },
   container: { flex: 1 },
@@ -438,8 +411,14 @@ const styles = StyleSheet.create({
   },
   empty: { alignItems: 'center', gap: Spacing.two, marginTop: Spacing.five, paddingHorizontal: Spacing.four },
   emptyBody: { textAlign: 'center' },
-  brand: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  brandText: { fontSize: 18, fontWeight: '800', letterSpacing: -0.3 },
+  flex: { flex: 1 },
+  allSorted: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+    borderRadius: 12,
+    padding: Spacing.three,
+  },
   vehicleChip: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -449,6 +428,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     paddingVertical: Spacing.one + 2,
   },
-  leg: { marginLeft: Spacing.three, paddingLeft: Spacing.two, borderLeftWidth: 2, marginTop: -Spacing.two },
   header: { gap: Spacing.three },
 });

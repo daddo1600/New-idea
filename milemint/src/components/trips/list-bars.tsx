@@ -10,12 +10,15 @@ import { useT } from '@/i18n/i18n';
 
 /** "Select" above the list; while selecting, quick picks and Cancel. */
 export function SelectBar({
+  title,
   selecting,
   unsortedCount,
   onStart,
   onSelectUnsorted,
   onCancel,
 }: {
+  /** What the list is called ("Trips" when not given). */
+  title?: string;
   selecting: boolean;
   unsortedCount: number;
   onStart: () => void;
@@ -27,7 +30,7 @@ export function SelectBar({
   return (
     <View style={styles.selectBar}>
       <ThemedText type="smallBold" themeColor="textSecondary">
-        {t('Trips')}
+        {title ?? t('Trips')}
       </ThemedText>
       <View style={styles.selectActions}>
         {selecting && unsortedCount > 0 && (
