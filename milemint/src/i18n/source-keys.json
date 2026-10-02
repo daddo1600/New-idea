@@ -1125,12 +1125,6 @@
     ]
   },
   {
-    "key": "ALLOW LOCATION ACCESS",
-    "files": [
-      "components/always-guide.tsx"
-    ]
-  },
-  {
     "key": "Allow location access and MileSprout logs every drive for you.",
     "files": [
       "components/home/tracking-card.tsx"
@@ -1152,12 +1146,6 @@
     "key": "Almost there: set location to “Always” and every drive is logged. Home shows you how.",
     "files": [
       "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "Always",
-    "files": [
-      "components/always-guide.tsx"
     ]
   },
   {
@@ -1218,12 +1206,6 @@
     "key": "Ask MileSprout",
     "files": [
       "components/money/weekly-recap.tsx"
-    ]
-  },
-  {
-    "key": "Ask Next Time Or When I Share",
-    "files": [
-      "components/always-guide.tsx"
     ]
   },
   {
@@ -1666,12 +1648,6 @@
     ]
   },
   {
-    "key": "Choose “Always”",
-    "files": [
-      "components/always-guide.tsx"
-    ]
-  },
-  {
     "key": "Choose a purpose",
     "files": [
       "components/purpose-picker.tsx",
@@ -1854,12 +1830,6 @@
   },
   {
     "key": "Continue",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "Continue without “Always”",
     "files": [
       "app/welcome.tsx"
     ]
@@ -3359,7 +3329,7 @@
     ]
   },
   {
-    "key": "In Settings, under Allow Location Access, choose Always",
+    "key": "In Settings, tap Location, then Always.",
     "files": [
       "components/always-guide.tsx"
     ]
@@ -3448,12 +3418,6 @@
     "key": "iOS asks twice. Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.",
     "files": [
       "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "iOS only offers “Always” in Settings. It takes ten seconds, and MileSprout continues by itself when you come back.",
-    "files": [
-      "components/always-guide.tsx"
     ]
   },
   {
@@ -3740,6 +3704,12 @@
     ]
   },
   {
+    "key": "Location is off for now.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Location is set to “While Using”. Switch it to “Always” so drives are logged when the app is closed.",
     "files": [
       "components/home/tracking-card.tsx",
@@ -3917,6 +3887,12 @@
     "files": [
       "app/compare.tsx",
       "app/scan-earnings.tsx"
+    ]
+  },
+  {
+    "key": "MileSprout carries on by itself when you come back.",
+    "files": [
+      "components/always-guide.tsx"
     ]
   },
   {
@@ -4219,12 +4195,6 @@
     "key": "Neither",
     "files": [
       "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "Never",
-    "files": [
-      "components/always-guide.tsx"
     ]
   },
   {
@@ -4607,12 +4577,6 @@
     ]
   },
   {
-    "key": "One quick switch in Settings",
-    "files": [
-      "components/always-guide.tsx"
-    ]
-  },
-  {
     "key": "One week left in the {{year}} tax year 🏁",
     "files": [
       "domain/deadlines.ts"
@@ -4636,7 +4600,6 @@
       "app/claim-relief.tsx",
       "app/logbook.tsx",
       "app/setup-tracking.tsx",
-      "app/welcome.tsx",
       "components/tracking-health-card.tsx"
     ]
   },
@@ -6298,27 +6261,9 @@
     ]
   },
   {
-    "key": "Tap “Location”",
-    "files": [
-      "components/always-guide.tsx"
-    ]
-  },
-  {
-    "key": "Tap “Open Settings” below",
-    "files": [
-      "components/always-guide.tsx"
-    ]
-  },
-  {
     "key": "Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.",
     "files": [
       "i18n/rich.tsx"
-    ]
-  },
-  {
-    "key": "Tap here",
-    "files": [
-      "components/always-guide.tsx"
     ]
   },
   {
@@ -6936,6 +6881,12 @@
     ]
   },
   {
+    "key": "Turn on in Settings",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Turn on Motion & Fitness",
     "files": [
       "app/setup-tracking.tsx",
@@ -7319,12 +7270,6 @@
     ]
   },
   {
-    "key": "While Using the App",
-    "files": [
-      "components/always-guide.tsx"
-    ]
-  },
-  {
     "key": "Without “Always”, drives go unlogged and unclaimed.",
     "files": [
       "app/welcome.tsx"
@@ -7482,6 +7427,12 @@
     ]
   },
   {
+    "key": "You can still add drives yourself, and turn on automatic logging any time in Settings.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "You can type the figures in instead.",
     "files": [
       "components/money/platform-earnings-card.tsx"
@@ -7553,6 +7504,12 @@
     "key": "You’re often parked here in your work hours. Trips will read “Work”, and drives between home and work are flagged as commutes.",
     "files": [
       "components/place-ask-card.tsx"
+    ]
+  },
+  {
+    "key": "You’re set.",
+    "files": [
+      "app/welcome.tsx"
     ]
   },
   {
@@ -7747,6 +7704,12 @@
     "key": "Your income tax rate",
     "files": [
       "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Your iPhone will check about “Always” later. Choose “Change to Always Allow” so drives log even when MileSprout is closed.",
+    "files": [
+      "app/welcome.tsx"
     ]
   },
   {

@@ -131,7 +131,7 @@ export default function SetupTrackingScreen() {
             </ThemedView>
           ))}
 
-        {needsSettings && <AlwaysGuide current="While Using the App" />}
+        {needsSettings && <AlwaysGuide />}
 
         {status === 'unsupported' ? (
           <ThemedText type="small" themeColor="textSecondary">

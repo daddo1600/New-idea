@@ -30,7 +30,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { findLatestBackup, isDatabaseEmpty, problemOf, restoreBackup, type FoundBackup } from '@/backup/backup';
 import { formatBackupDate, PROBLEM_TEXT } from '@/backup/copy';
 import { tripCount } from '@/backup/snapshot';
-import { AlwaysGuide } from '@/components/always-guide';
 import { BrandGradient } from '@/components/brand-gradient';
 import { CelebrationOverlay } from '@/components/celebration-overlay';
 import { CountryOptions, phoneRegion } from '@/components/country-options';
@@ -736,9 +735,26 @@ export default function WelcomeScreen() {
                 <Text style={styles.brandBody}>
                   {t('Set location to “Always” and MileSprout logs every drive, even when it’s closed.')}
                 </Text>
-                <Text style={styles.brandCallout}>{t('Without “Always”, drives go unlogged and unclaimed.')}</Text>
-                {status === 'needs-always' || (status === 'needs-permission' && asked) ? (
-                  <AlwaysGuide current={status === 'needs-always' ? 'While Using the App' : 'Never'} />
+                {status === 'needs-permission' && !asked && (
+                  <Text style={styles.brandCallout}>{t('Without “Always”, drives go unlogged and unclaimed.')}</Text>
+                )}
+                {status === 'needs-always' ? (
+                  // iOS asks about "Always" by itself later on: no detour to Settings during set-up.
+                  <View style={styles.preview}>
+                    <Text style={styles.pointTitle}>{t('You’re set.')}</Text>
+                    <Text style={styles.pointBody}>
+                      {t(
+                        'Your iPhone will check about “Always” later. Choose “Change to Always Allow” so drives log even when MileSprout is closed.',
+                      )}
+                    </Text>
+                  </View>
+                ) : status === 'needs-permission' && asked ? (
+                  <View style={styles.preview}>
+                    <Text style={styles.pointTitle}>{t('Location is off for now.')}</Text>
+                    <Text style={styles.pointBody}>
+                      {t('You can still add drives yourself, and turn on automatic logging any time in Settings.')}
+                    </Text>
+                  </View>
                 ) : status === 'unsupported' ? (
                   <Text style={styles.pointBody}>
                     {t('Automatic tracking runs on your iPhone. You can still add trips by hand here.')}
@@ -899,12 +915,11 @@ export default function WelcomeScreen() {
             !motion &&
             (status === 'on' || status === 'unsupported'
               ? primary(t('Continue'), status === 'on' ? afterLocation : () => setStep(afterTracking))
-              : status === 'needs-always' || (status === 'needs-permission' && asked)
-                ? primary(t('Open Settings'), () => {
-                    setInSettings(true);
-                    Linking.openSettings();
-                  })
-                : asking
+              : status === 'needs-always'
+                ? primary(t('Continue'), afterLocation)
+                : status === 'needs-permission' && asked
+                  ? primary(t('Continue'), () => setStep(afterTracking))
+                  : asking
                   ? null
                   : primary(t('Set up auto-logging'), allowLocation))}
           {step === 2 &&
@@ -912,9 +927,12 @@ export default function WelcomeScreen() {
             !motion &&
             status !== 'on' &&
             status !== 'unsupported' &&
-            secondary(status === 'needs-always' ? t('Continue without “Always”') : t('Not now'), () =>
-              setStep(afterTracking),
-            )}
+            (status === 'needs-always' || asked
+              ? secondary(t('Turn on in Settings'), () => {
+                  setInSettings(true);
+                  Linking.openSettings();
+                })
+              : secondary(t('Not now'), () => setStep(afterTracking)))}
           {step === HOURS &&
             (workStyle === 'hours'
               ? primary(t('Save my hours'), saveHours)
