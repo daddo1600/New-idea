@@ -17,7 +17,7 @@ import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { isCommute } from '@/domain/classify-rules';
 import { homeItems, itemKey, offShiftKind, type HomeItem } from '@/domain/shift-rows';
 import { displayLocale, formatDistance, formatMoney, potentialDeductions, type Region } from '@/domain/regions';
-import { frequentPurposes } from '@/domain/suggestions';
+import { frequentPurposes, purposesByPlace } from '@/domain/suggestions';
 import type { Trip } from '@/domain/trip';
 import { usePurposeSettings } from '@/hooks/use-purpose-settings';
 import { useTheme } from '@/hooks/use-theme';
@@ -38,7 +38,7 @@ type DriveItem = HomeItem | MonthItem;
  */
 export default function DrivesScreen() {
   const list = useTripList();
-  const { trips, reload, setPurpose, locked, visible, deductions, kindOf, selecting, selected } = list;
+  const { trips, places, reload, setPurpose, locked, visible, deductions, kindOf, selecting, selected } = list;
   const purposeSettings = usePurposeSettings();
   const shiftMode = useShift(reload);
   const insets = useSafeAreaInsets();
@@ -55,14 +55,23 @@ export default function DrivesScreen() {
   }, []);
   const purposeChoices = useMemo(
     () =>
-      quickPurposes({
-        usual: purposeSettings.usual,
-        chosen: purposeSettings.chosen,
-        recent: frequentPurposes(trips ?? []),
-        shiftMode: purposeSettings.shiftMode,
-        clientPrivacy: purposeSettings.clientPrivacy,
-      }),
+      quickPurposes(
+        {
+          usual: purposeSettings.usual,
+          chosen: purposeSettings.chosen,
+          recent: frequentPurposes(trips ?? []),
+          shiftMode: purposeSettings.shiftMode,
+          clientPrivacy: purposeSettings.clientPrivacy,
+        },
+        // Enough for the purpose sheet's tiles.
+        10,
+      ),
     [trips, purposeSettings.usual, purposeSettings.chosen, purposeSettings.shiftMode, purposeSettings.clientPrivacy],
+  );
+  // What each place's drives were last for: a drive without a purpose is offered the same again.
+  const purposeHistory = useMemo(
+    () => purposesByPlace(trips ?? [], (id) => places.some((place) => place.id === id && place.kind === 'home')),
+    [trips, places],
   );
 
   if (!trips) return <ActivityIndicator style={styles.loading} />;
@@ -144,6 +153,8 @@ export default function DrivesScreen() {
               onLongPress={() => list.confirmDelete(item)}
               usualPurpose={purposeSettings.usual}
               purposeChoices={purposeChoices}
+              purposeHistory={purposeHistory}
+              clientPrivacy={purposeSettings.clientPrivacy}
               onPurpose={(purpose) => setPurpose(item, purpose)}
             />
           );

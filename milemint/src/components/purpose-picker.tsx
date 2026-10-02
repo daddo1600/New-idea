@@ -21,7 +21,7 @@ export const COMMON_PURPOSES = [
   ['🧾', msg('Business errand')],
 ] as const;
 
-/** How long a picked row shows its ✓ before the sheet closes. */
+/** How long a picked tile shows its ✓ before the sheet closes. */
 const PICKED_MS = 200;
 
 /** Listed first in client privacy mode: the usual purpose for care and support work. */
@@ -104,12 +104,7 @@ export function PurposePicker({
 }) {
   const theme = useTheme();
   const t = useT();
-  const insets = useSafeAreaInsets();
   const [open, setOpen] = useState(false);
-  const [typing, setTyping] = useState(false);
-  const [custom, setCustom] = useState('');
-  /** The row just tapped: ticked while the sheet stays a moment, so the tap is seen. */
-  const [picked, setPicked] = useState<string | null>(null);
 
   const listed = [...(shiftMode ? [DELIVERIES_PURPOSE] : []), ...(clientPrivacy ? KNOWN_PURPOSES : COMMON_PURPOSES)];
   const common = [...KNOWN_PURPOSES, ...listed].map(([, text]) => text.toLowerCase());
@@ -117,41 +112,6 @@ export function PurposePicker({
   const match = SHOWN_PURPOSES.find(([, text]) => text.toLowerCase() === value.trim().toLowerCase());
   const icon = match?.[0];
   const shown = match ? t(match[1]) : value;
-
-  const close = () => {
-    setOpen(false);
-    setTyping(false);
-  };
-  const pick = (purpose: string) => {
-    onChange(purpose);
-    close();
-  };
-
-  const row = (key: string, emoji: string, text: string, label: string = text) => {
-    const selected = (picked ?? value.trim()).toLowerCase() === text.toLowerCase();
-    return (
-      <PopPress
-        key={key}
-        accessibilityRole="button"
-        accessibilityState={{ selected }}
-        disabled={picked !== null && picked !== text}
-        onPop={() => setPicked(text)}
-        commitDelay={PICKED_MS}
-        scale={1.03}
-        onPress={() => pick(text)}
-        style={({ pressed }) => [
-          styles.option,
-          selected && { backgroundColor: theme.accent + '1F' },
-          pressed && { backgroundColor: theme.backgroundSelected },
-        ]}>
-        <ThemedText style={styles.emoji}>{emoji}</ThemedText>
-        <ThemedText type={selected ? 'smallBold' : 'small'} style={[styles.flex, selected && { color: theme.accent }]}>
-          {label}
-        </ThemedText>
-        {selected && <ThemedText style={{ color: theme.accent }}>✓</ThemedText>}
-      </PopPress>
-    );
-  };
 
   return (
     <>
@@ -161,11 +121,7 @@ export function PurposePicker({
           value ? t('Business purpose: {{purpose}}', { purpose: shown }) : t('Business purpose: not chosen')
         }
         accessibilityHint={t('Opens a list of purposes')}
-        onPress={() => {
-          setCustom('');
-          setPicked(null);
-          setOpen(true);
-        }}
+        onPress={() => setOpen(true)}
         style={[styles.field, { backgroundColor: theme.backgroundElement }]}>
         {value ? (
           <ThemedText style={styles.flex} numberOfLines={1}>
@@ -179,65 +135,178 @@ export function PurposePicker({
         )}
         <ThemedText style={{ color: theme.accent }}>▾</ThemedText>
       </Pressable>
+      <PurposeSheet
+        visible={open}
+        onClose={() => setOpen(false)}
+        onPick={onChange}
+        purposes={[...recentOnly, ...listed.map(([, text]) => text)]}
+        value={value}
+        clientPrivacy={clientPrivacy}
+      />
+    </>
+  );
+}
 
-      <Modal visible={open} transparent animationType="slide" onRequestClose={close}>
-        <Pressable accessibilityLabel={t('Close')} style={styles.backdrop} onPress={close} />
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-          <ThemedView style={[styles.sheet, { paddingBottom: insets.bottom + Spacing.three }]}>
-            <View style={[styles.grabber, { backgroundColor: theme.backgroundSelected }]} />
-            <ThemedText type="smallBold" style={styles.title}>
-              {t('Business purpose')}
+/**
+ * The purposes as a sheet of large tiles, two to a row, with "Other…" last to
+ * type your own. The tapped tile pops and ticks, then the sheet closes and
+ * `onPick` gets the purpose (the saved value: English for the common ones).
+ * The purpose field in trip details and the trip rows both open it.
+ */
+export function PurposeSheet({
+  visible,
+  onClose,
+  onPick,
+  purposes,
+  value = '',
+  subtitle,
+  clientPrivacy = false,
+}: {
+  visible: boolean;
+  onClose: () => void;
+  onPick: (purpose: string) => void;
+  /** In order, most likely first; repeats are left out. */
+  purposes: readonly string[];
+  /** The purpose chosen now, ticked. */
+  value?: string;
+  /** Under the title, e.g. the drive's route. */
+  subtitle?: string;
+  /** Typing your own suggests a client reference rather than a name (see PurposePicker). */
+  clientPrivacy?: boolean;
+}) {
+  const theme = useTheme();
+  const t = useT();
+  const insets = useSafeAreaInsets();
+  const [typing, setTyping] = useState(false);
+  const [custom, setCustom] = useState('');
+  /** The tile just tapped: ticked while the sheet stays a moment, so the tap is seen. */
+  const [picked, setPicked] = useState<string | null>(null);
+  // Opened again: starts afresh.
+  const [wasVisible, setWasVisible] = useState(visible);
+  if (visible !== wasVisible) {
+    setWasVisible(visible);
+    if (visible) {
+      setTyping(false);
+      setCustom('');
+      setPicked(null);
+    }
+  }
+
+  const tiles: string[] = [];
+  for (const text of purposes) {
+    if (text.trim() && !tiles.some((other) => sameText(other, text))) tiles.push(text.trim());
+  }
+  const pick = (purpose: string) => {
+    onPick(purpose);
+    onClose();
+  };
+
+  const tile = (text: string) => {
+    const selected = sameText(picked ?? value, text);
+    return (
+      <PopPress
+        key={text}
+        accessibilityRole="button"
+        accessibilityState={{ selected }}
+        disabled={picked !== null && picked !== text}
+        onPop={() => setPicked(text)}
+        commitDelay={PICKED_MS}
+        scale={1.05}
+        onPress={() => pick(text)}
+        style={({ pressed }) => [
+          styles.tile,
+          { backgroundColor: pressed ? theme.backgroundSelected : theme.backgroundElement, borderColor: 'transparent' },
+          selected && { backgroundColor: theme.accent + '1F', borderColor: theme.accent },
+        ]}>
+        <ThemedText style={[styles.emoji, selected && { color: theme.accent }]}>
+          {selected ? '✓' : purposeIcon(text)}
+        </ThemedText>
+        <ThemedText
+          type={selected ? 'smallBold' : 'small'}
+          numberOfLines={2}
+          style={[styles.flex, selected && { color: theme.accent }]}>
+          {shownPurpose(text, t)}
+        </ThemedText>
+      </PopPress>
+    );
+  };
+  const other = (
+    <Pressable
+      key="other"
+      accessibilityRole="button"
+      accessibilityHint={t('Type your own purpose')}
+      disabled={picked !== null}
+      onPress={() => setTyping(true)}
+      style={({ pressed }) => [
+        styles.tile,
+        { borderColor: theme.backgroundSelected, borderStyle: 'dashed' },
+        pressed && { backgroundColor: theme.backgroundSelected },
+      ]}>
+      <ThemedText style={styles.emoji}>✏️</ThemedText>
+      <ThemedText type="small" style={[styles.flex, { color: theme.accent }]}>
+        {t('Other…')}
+      </ThemedText>
+    </Pressable>
+  );
+  const cells = [...tiles.map(tile), ...(typing ? [] : [other])];
+  const rows: (typeof cells)[] = [];
+  for (let i = 0; i < cells.length; i += 2) rows.push(cells.slice(i, i + 2));
+
+  return (
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+      <Pressable accessibilityLabel={t('Close')} style={styles.backdrop} onPress={onClose} />
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <ThemedView style={[styles.sheet, { paddingBottom: insets.bottom + Spacing.three }]}>
+          <View style={[styles.grabber, { backgroundColor: theme.backgroundSelected }]} />
+          <ThemedText type="smallBold" style={styles.title}>
+            {t('Business purpose')}
+          </ThemedText>
+          {subtitle ? (
+            <ThemedText type="small" themeColor="textSecondary" numberOfLines={1} style={styles.title}>
+              {subtitle}
             </ThemedText>
-            <ScrollView style={styles.list} keyboardShouldPersistTaps="handled">
-              {recentOnly.map((text) => row(`recent:${text}`, '🕘', text))}
-              {recentOnly.length > 0 && (
-                <View style={[styles.divider, { backgroundColor: theme.backgroundSelected }]} />
-              )}
-              {listed.map(([emoji, text]) => row(text, emoji, text, t(text)))}
-              {typing && clientPrivacy && (
-                <ThemedText type="small" themeColor="textSecondary" style={styles.hint}>
-                  {t('Add initials or a client number if you like. Never a name or address.')}
-                </ThemedText>
-              )}
-              {typing ? (
-                <View style={styles.customRow}>
-                  <TextInput
-                    accessibilityLabel={t('Your own purpose')}
-                    autoFocus
-                    value={custom}
-                    onChangeText={setCustom}
-                    placeholder={clientPrivacy ? t('e.g. Client visit, J.S. or no. 1042') : t('e.g. Quote for Acme Ltd')}
-                    placeholderTextColor={theme.textSecondary}
-                    returnKeyType="done"
-                    onSubmitEditing={() => custom.trim() && pick(custom.trim())}
-                    style={[styles.input, { color: theme.text, backgroundColor: theme.backgroundElement }]}
-                  />
-                  <Pressable
-                    accessibilityRole="button"
-                    disabled={!custom.trim()}
-                    onPress={() => pick(custom.trim())}
-                    style={[styles.use, { backgroundColor: theme.accent, opacity: custom.trim() ? 1 : 0.4 }]}>
-                    <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-                      {t('Use')}
-                    </ThemedText>
-                  </Pressable>
-                </View>
-              ) : (
+          ) : null}
+          <ScrollView style={styles.list} contentContainerStyle={styles.grid} keyboardShouldPersistTaps="handled">
+            {rows.map((row, i) => (
+              <View key={i} style={styles.gridRow}>
+                {row}
+                {/* An odd one out keeps its half: the grid stays a grid. */}
+                {row.length === 1 && <View style={[styles.tile, styles.spacer]} />}
+              </View>
+            ))}
+            {typing && clientPrivacy && (
+              <ThemedText type="small" themeColor="textSecondary" style={styles.hint}>
+                {t('Add initials or a client number if you like. Never a name or address.')}
+              </ThemedText>
+            )}
+            {typing && (
+              <View style={styles.customRow}>
+                <TextInput
+                  accessibilityLabel={t('Your own purpose')}
+                  autoFocus
+                  value={custom}
+                  onChangeText={setCustom}
+                  placeholder={clientPrivacy ? t('e.g. Client visit, J.S. or no. 1042') : t('e.g. Quote for Acme Ltd')}
+                  placeholderTextColor={theme.textSecondary}
+                  returnKeyType="done"
+                  onSubmitEditing={() => custom.trim() && pick(custom.trim())}
+                  style={[styles.input, { color: theme.text, backgroundColor: theme.backgroundElement }]}
+                />
                 <Pressable
                   accessibilityRole="button"
-                  onPress={() => setTyping(true)}
-                  style={({ pressed }) => [styles.option, pressed && { backgroundColor: theme.backgroundSelected }]}>
-                  <ThemedText style={styles.emoji}>✏️</ThemedText>
-                  <ThemedText type="small" style={[styles.flex, { color: theme.accent }]}>
-                    {t('Other…')}
+                  disabled={!custom.trim()}
+                  onPress={() => pick(custom.trim())}
+                  style={[styles.use, { backgroundColor: theme.accent, opacity: custom.trim() ? 1 : 0.4 }]}>
+                  <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
+                    {t('Use')}
                   </ThemedText>
                 </Pressable>
-              )}
-            </ScrollView>
-          </ThemedView>
-        </KeyboardAvoidingView>
-      </Modal>
-    </>
+              </View>
+            )}
+          </ScrollView>
+        </ThemedView>
+      </KeyboardAvoidingView>
+    </Modal>
   );
 }
 
@@ -260,20 +329,25 @@ const styles = StyleSheet.create({
     maxHeight: 560,
   },
   grabber: { alignSelf: 'center', width: 40, height: 5, borderRadius: 3, marginBottom: Spacing.two },
-  title: { textAlign: 'center', marginBottom: Spacing.two },
-  list: { flexGrow: 0 },
-  option: {
+  title: { textAlign: 'center' },
+  list: { flexGrow: 0, marginTop: Spacing.three },
+  grid: { gap: Spacing.two, paddingBottom: Spacing.two },
+  gridRow: { flexDirection: 'row', gap: Spacing.two },
+  tile: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.three,
-    paddingHorizontal: Spacing.two,
-    paddingVertical: 13,
-    borderRadius: 10,
+    gap: Spacing.two,
+    minHeight: 56,
+    paddingHorizontal: Spacing.three - 4,
+    paddingVertical: Spacing.two,
+    borderRadius: 14,
+    borderWidth: 1.5,
   },
-  emoji: { fontSize: 18, lineHeight: 24, width: 26, textAlign: 'center' },
-  divider: { height: StyleSheet.hairlineWidth, marginVertical: Spacing.one },
-  hint: { paddingHorizontal: Spacing.two, paddingTop: Spacing.two },
-  customRow: { flexDirection: 'row', gap: Spacing.two, paddingVertical: Spacing.two, alignItems: 'center' },
+  spacer: { borderColor: 'transparent' },
+  emoji: { fontSize: 20, lineHeight: 26, width: 26, textAlign: 'center' },
+  hint: { paddingHorizontal: Spacing.two, paddingTop: Spacing.one },
+  customRow: { flexDirection: 'row', gap: Spacing.two, paddingTop: Spacing.one, alignItems: 'center' },
   input: { flex: 1, borderRadius: 10, paddingHorizontal: Spacing.three, paddingVertical: 10, fontSize: 16 },
   use: { paddingHorizontal: Spacing.three, paddingVertical: 10, borderRadius: 10 },
 });

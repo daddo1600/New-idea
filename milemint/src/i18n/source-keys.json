@@ -503,6 +503,12 @@
     ]
   },
   {
+    "key": "{{purpose}}?",
+    "files": [
+      "components/trips/purpose-line.tsx"
+    ]
+  },
+  {
     "key": "{{rate}} a km · {{vehicle}} · {{country}}",
     "files": [
       "components/home-empty.tsx"
@@ -1369,7 +1375,13 @@
     "key": "Business purpose: {{purpose}}",
     "files": [
       "components/purpose-picker.tsx",
-      "components/trips/trip-row.tsx"
+      "components/trips/purpose-line.tsx"
+    ]
+  },
+  {
+    "key": "Business purpose: {{purpose}}. Double-tap to confirm",
+    "files": [
+      "components/trips/purpose-line.tsx"
     ]
   },
   {
@@ -1444,7 +1456,8 @@
     "key": "Change",
     "files": [
       "app/(tabs)/settings.tsx",
-      "app/add-trip.tsx"
+      "app/add-trip.tsx",
+      "components/trips/purpose-line.tsx"
     ]
   },
   {
@@ -1486,7 +1499,8 @@
   {
     "key": "Choose a purpose",
     "files": [
-      "components/purpose-picker.tsx"
+      "components/purpose-picker.tsx",
+      "components/trips/purpose-line.tsx"
     ]
   },
   {
@@ -3724,6 +3738,12 @@
     ]
   },
   {
+    "key": "Needs a business purpose",
+    "files": [
+      "components/trips/purpose-line.tsx"
+    ]
+  },
+  {
     "key": "Neither",
     "files": [
       "app/welcome.tsx"
@@ -4133,7 +4153,8 @@
   {
     "key": "Opens a list of purposes",
     "files": [
-      "components/purpose-picker.tsx"
+      "components/purpose-picker.tsx",
+      "components/trips/purpose-line.tsx"
     ]
   },
   {
@@ -4153,12 +4174,6 @@
     "key": "Opens the Money tab",
     "files": [
       "app/(tabs)/index.tsx"
-    ]
-  },
-  {
-    "key": "Opens trip details",
-    "files": [
-      "components/trips/trip-row.tsx"
     ]
   },
   {
@@ -4228,8 +4243,7 @@
   {
     "key": "Other…",
     "files": [
-      "components/purpose-picker.tsx",
-      "components/trips/trip-row.tsx"
+      "components/purpose-picker.tsx"
     ]
   },
   {
@@ -4520,9 +4534,9 @@
     ]
   },
   {
-    "key": "Purpose needed for your tax records",
+    "key": "Purpose:",
     "files": [
-      "components/trips/trip-row.tsx"
+      "components/trips/purpose-line.tsx"
     ]
   },
   {
@@ -6081,6 +6095,12 @@
     ]
   },
   {
+    "key": "Type your own purpose",
+    "files": [
+      "components/purpose-picker.tsx"
+    ]
+  },
+  {
     "key": "Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber. Car, van, moped or bike.",
     "files": [
       "app/welcome.tsx"
@@ -6185,7 +6205,7 @@
   {
     "key": "Usual purpose · tap to change",
     "files": [
-      "components/trips/trip-row.tsx"
+      "components/trips/purpose-line.tsx"
     ]
   },
   {
