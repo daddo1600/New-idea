@@ -11,7 +11,11 @@
       "bundleIdentifier": "com.milemint.app",
       "supportsTablet": false,
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSSupportsLiveActivities": true
+      },
+      "entitlements": {
+        "com.apple.security.application-groups": ["group.com.milemint.app"]
       }
     },
     "android": {
@@ -65,7 +69,8 @@
       ],
       "expo-iap",
       "./plugins/without-push-entitlement",
-      "expo-localization"
+      "expo-localization",
+      "@bacons/apple-targets"
     ],
     "experiments": {
       "typedRoutes": true,

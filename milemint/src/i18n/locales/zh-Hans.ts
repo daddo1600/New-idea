@@ -1201,6 +1201,15 @@ const dictionary: Dictionary = {
   "Good start": "开局不错",
   "ALMOST DONE!": "马上就好！",
   "YOU DID IT!": "大功告成！",
+  // The shift on the lock screen (Live Activity).
+  "Show shift on lock screen": "在锁定屏幕上显示班次",
+  "While a shift is on, your lock screen and the Dynamic Island show its time, distance and money so far, with a button to end it. Anyone who sees your phone can see the money.": "开工期间，锁定屏幕和灵动岛会显示本班次的时长、里程和目前的金额，并提供收工按钮。任何看到你手机的人都能看到这笔金额。",
+  "Paused": "已暂停",
+  "Driving · {{distance}}": "行驶中 · {{distance}}",
+  "Waiting for your next drive": "等待下一趟行程",
+  "Shift paused": "班次已暂停",
+  "Shift on": "开工中",
+  "Not working": "非工作",
 };
 
 export default dictionary;

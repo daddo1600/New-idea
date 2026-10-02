@@ -288,7 +288,8 @@
   {
     "key": "{{distance}} · {{value}} · {{count}} drives",
     "files": [
-      "components/home/shift-bar.tsx"
+      "components/home/shift-bar.tsx",
+      "live-activity/model.ts"
     ]
   },
   {
@@ -421,7 +422,8 @@
     "key": "{{hours}}h {{minutes}}m",
     "files": [
       "components/home/shift-bar.tsx",
-      "components/shift-row.tsx"
+      "components/shift-row.tsx",
+      "live-activity/model.ts"
     ]
   },
   {
@@ -1981,6 +1983,12 @@
     ]
   },
   {
+    "key": "Driving · {{distance}}",
+    "files": [
+      "live-activity/model.ts"
+    ]
+  },
+  {
     "key": "Driving {{vehicle}}. Change vehicle",
     "files": [
       "app/(tabs)/index.tsx"
@@ -2158,7 +2166,8 @@
     "key": "End shift",
     "files": [
       "components/shift-prompts.tsx",
-      "components/shift-switch.tsx"
+      "components/shift-switch.tsx",
+      "live-activity/model.ts"
     ]
   },
   {
@@ -3904,6 +3913,12 @@
     ]
   },
   {
+    "key": "Not working",
+    "files": [
+      "live-activity/model.ts"
+    ]
+  },
+  {
     "key": "Note",
     "files": [
       "app/add-trip.tsx"
@@ -4345,6 +4360,12 @@
     "key": "Pause the shift for a personal errand",
     "files": [
       "components/home/shift-bar.tsx"
+    ]
+  },
+  {
+    "key": "Paused",
+    "files": [
+      "live-activity/model.ts"
     ]
   },
   {
@@ -5057,7 +5078,8 @@
   {
     "key": "Shift ended",
     "files": [
-      "components/shift-prompts.tsx"
+      "components/shift-prompts.tsx",
+      "live-activity/model.ts"
     ]
   },
   {
@@ -5067,9 +5089,21 @@
     ]
   },
   {
+    "key": "Shift on",
+    "files": [
+      "live-activity/model.ts"
+    ]
+  },
+  {
     "key": "Shift on {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}}",
     "files": [
       "components/shift-row.tsx"
+    ]
+  },
+  {
+    "key": "Shift paused",
+    "files": [
+      "live-activity/model.ts"
     ]
   },
   {
@@ -5088,6 +5122,12 @@
     "key": "Show drives ▾",
     "files": [
       "components/shift-row.tsx"
+    ]
+  },
+  {
+    "key": "Show shift on lock screen",
+    "files": [
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -6221,6 +6261,12 @@
     ]
   },
   {
+    "key": "Waiting for your next drive",
+    "files": [
+      "live-activity/model.ts"
+    ]
+  },
+  {
     "key": "Want a Sunday nudge?",
     "files": [
       "components/reminder-ask.tsx"
@@ -6346,6 +6392,12 @@
     "key": "Which vehicle today?",
     "files": [
       "app/(tabs)/index.tsx"
+    ]
+  },
+  {
+    "key": "While a shift is on, your lock screen and the Dynamic Island show its time, distance and money so far, with a button to end it. Anyone who sees your phone can see the money.",
+    "files": [
+      "app/(tabs)/settings.tsx"
     ]
   },
   {

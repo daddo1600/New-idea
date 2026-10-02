@@ -1255,6 +1255,15 @@ const dictionary: Dictionary = {
   "Good start": "ਵਧੀਆ ਸ਼ੁਰੂਆਤ",
   "ALMOST DONE!": "ਬੱਸ ਥੋੜ੍ਹਾ ਹੋਰ!",
   "YOU DID IT!": "ਤੁਸੀਂ ਕਰ ਦਿਖਾਇਆ!",
+  // The shift on the lock screen (Live Activity).
+  "Show shift on lock screen": "ਲੌਕ ਸਕ੍ਰੀਨ ’ਤੇ ਸ਼ਿਫਟ ਦਿਖਾਓ",
+  "While a shift is on, your lock screen and the Dynamic Island show its time, distance and money so far, with a button to end it. Anyone who sees your phone can see the money.": "ਸ਼ਿਫਟ ਚੱਲਦੇ ਸਮੇਂ, ਲੌਕ ਸਕ੍ਰੀਨ ਅਤੇ Dynamic Island ’ਤੇ ਇਸਦਾ ਸਮਾਂ, ਦੂਰੀ ਅਤੇ ਹੁਣ ਤੱਕ ਦੀ ਰਕਮ ਦਿਖਦੀ ਹੈ, ਨਾਲ ਹੀ ਇਸਨੂੰ ਖ਼ਤਮ ਕਰਨ ਦਾ ਬਟਨ। ਤੁਹਾਡਾ ਫ਼ੋਨ ਦੇਖਣ ਵਾਲਾ ਕੋਈ ਵੀ ਇਹ ਰਕਮ ਦੇਖ ਸਕਦਾ ਹੈ।",
+  "Paused": "ਬ੍ਰੇਕ ’ਤੇ",
+  "Driving · {{distance}}": "ਗੱਡੀ ਚੱਲ ਰਹੀ ਹੈ · {{distance}}",
+  "Waiting for your next drive": "ਅਗਲੇ ਟ੍ਰਿਪ ਦੀ ਉਡੀਕ",
+  "Shift paused": "ਸ਼ਿਫਟ ਬ੍ਰੇਕ ’ਤੇ",
+  "Shift on": "ਸ਼ਿਫਟ ਚਾਲੂ",
+  "Not working": "ਕੰਮ ’ਤੇ ਨਹੀਂ",
 };
 
 export default dictionary;

@@ -1297,6 +1297,15 @@ const dictionary: Dictionary = {
   "Good start": "Buen comienzo",
   "ALMOST DONE!": "¡YA CASI ESTÁ!",
   "YOU DID IT!": "¡LO LOGRASTE!",
+  // The shift on the lock screen (Live Activity).
+  "Show shift on lock screen": "Mostrar el turno en la pantalla bloqueada",
+  "While a shift is on, your lock screen and the Dynamic Island show its time, distance and money so far, with a button to end it. Anyone who sees your phone can see the money.": "Mientras un turno está activo, la pantalla bloqueada y la Dynamic Island muestran su tiempo, distancia y dinero hasta ahora, con un botón para terminarlo. Cualquiera que vea tu teléfono puede ver el dinero.",
+  "Paused": "En pausa",
+  "Driving · {{distance}}": "Conduciendo · {{distance}}",
+  "Waiting for your next drive": "Esperando tu próximo viaje",
+  "Shift paused": "Turno en pausa",
+  "Shift on": "En turno",
+  "Not working": "No estoy trabajando",
 };
 
 export default dictionary;

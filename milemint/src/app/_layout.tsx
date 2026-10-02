@@ -9,6 +9,7 @@ import { markLaunchIntroDone } from '@/components/launch-intro-state';
 import { DATABASE_NAME, initDatabase } from '@/db/database';
 import { DEMO_MODE, seedDemoTrips } from '@/dev/demo';
 import { describeError } from '@/errors/fatal-errors';
+import { ShiftActivitySync } from '@/live-activity/use-shift-activity';
 import { ProProvider } from '@/purchases/pro';
 import { loadLanguage, useT } from '@/i18n/i18n';
 import { ReferralProvider } from '@/referral/referral';
@@ -41,6 +42,8 @@ export default function RootLayout() {
         <Suspense fallback={<ActivityIndicator style={{ flex: 1 }} />}>
           <SQLiteProvider databaseName={DATABASE_NAME} onInit={onInit} useSuspense>
             <RegionProvider>
+              {/* The shift on the lock screen: its card, and the buttons tapped on it. */}
+              <ShiftActivitySync />
               <ProProvider>
                 <ReferralProvider>
                   <Stack>

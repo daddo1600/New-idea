@@ -42,6 +42,18 @@ export type AppSettings = {
   currentVehicleId: string | null;
   /** Couriers and gig drivers: a Start shift / End shift button instead of (or as well as) work hours. */
   shiftMode: boolean;
+  /**
+   * While a shift is on, show it on the lock screen and in the Dynamic Island
+   * (iOS Live Activity): its time, distance and money so far. On by default;
+   * a switch in Settings, as it puts money on the lock screen.
+   */
+  shiftLiveActivity: boolean;
+  /**
+   * "Not working" tapped on the lock screen during a drive: the start (ISO) of
+   * the drive being recorded then. When that drive is saved it's filed as
+   * personal, outside the shift, and this is cleared (tracking/background).
+   */
+  notWorkingDriveAt: string | null;
   /** Drives no rule decides start as business (swipe left if personal); off leaves them unsorted. */
   defaultBusiness: boolean;
   /**
@@ -118,6 +130,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
   vehicle: 'car',
   currentVehicleId: null,
   shiftMode: false,
+  shiftLiveActivity: true,
+  notWorkingDriveAt: null,
   defaultBusiness: true,
   defaultPurpose: null,
   workPurposes: [],
@@ -210,6 +224,8 @@ const CHECKS: { [K in keyof AppSettings]-?: Check<AppSettings[K]> } = {
   vehicle: oneOf(VEHICLE_TYPES),
   currentVehicleId: textOrNull,
   shiftMode: bool,
+  shiftLiveActivity: bool,
+  notWorkingDriveAt: isoTimeOrNull,
   defaultBusiness: bool,
   defaultPurpose: (value) => {
     if (value === null) return null;
