@@ -1297,6 +1297,11 @@ const dictionary: Dictionary = {
   "Good start": "Buen comienzo",
   "ALMOST DONE!": "¡YA CASI ESTÁ!",
   "YOU DID IT!": "¡LO LOGRASTE!",
+  "Appearance": "Apariencia",
+  "System": "Sistema",
+  "Light": "Claro",
+  "Dark": "Oscuro",
+  "System follows your iPhone’s light or dark setting.": "Sistema sigue el modo claro u oscuro de tu iPhone.",
 };
 
 export default dictionary;

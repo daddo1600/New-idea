@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import { loadSettings, updateSettings } from '@/db/settings-repo';
 import { DEMO_REGION } from '@/dev/demo';
 import { DEFAULT_REGION, REGIONS, type Region, type RegionCode } from '@/domain/regions';
+import { setAppearance } from '@/hooks/use-appearance';
 
 import { rememberRegion } from './remembered-region';
 
@@ -41,6 +42,8 @@ export function RegionProvider({ children }: { children: ReactNode }) {
     loadSettings(db).then(
       (settings) => {
         if (cancelled) return;
+        // Read here with the rest of the settings: light or dark for the whole app.
+        setAppearance(settings.appearance);
         setCode(settings.region);
         if (settings.region) rememberRegion(settings.region);
         setOnboarded(settings.onboarded);
@@ -56,6 +59,7 @@ export function RegionProvider({ children }: { children: ReactNode }) {
   const reload = useCallback(async () => {
     if (demo) return;
     const settings = await loadSettings(db);
+    setAppearance(settings.appearance);
     setCode(settings.region);
     if (settings.region) rememberRegion(settings.region);
     setOnboarded(settings.onboarded);

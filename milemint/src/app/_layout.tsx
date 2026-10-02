@@ -1,14 +1,17 @@
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider, type ErrorBoundaryProps } from 'expo-router';
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider, type ErrorBoundaryProps, type Theme } from 'expo-router';
 import { SQLiteProvider, type SQLiteDatabase } from 'expo-sqlite';
+import { StatusBar } from 'expo-status-bar';
 import { Suspense, useCallback, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, useColorScheme } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { LaunchIntro } from '@/components/launch-intro';
 import { markLaunchIntroDone } from '@/components/launch-intro-state';
 import { DATABASE_NAME, initDatabase } from '@/db/database';
 import { DEMO_MODE, seedDemoTrips } from '@/dev/demo';
+import { Colors } from '@/constants/theme';
 import { describeError } from '@/errors/fatal-errors';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { ProProvider } from '@/purchases/pro';
 import { loadLanguage, useT } from '@/i18n/i18n';
 import { ReferralProvider } from '@/referral/referral';
@@ -19,12 +22,31 @@ import '@/tracking/background';
 // The language picked last time, read while the launch animation plays.
 loadLanguage();
 
+/** Headers, the tab bar and screen backgrounds in the app's own colours, light or dark. */
+const NAV_THEMES: Record<'light' | 'dark', Theme> = {
+  light: {
+    ...DefaultTheme,
+    colors: { ...DefaultTheme.colors, primary: Colors.light.accent, background: Colors.light.background },
+  },
+  dark: {
+    ...DarkTheme,
+    colors: {
+      ...DarkTheme.colors,
+      primary: Colors.dark.accent,
+      background: Colors.dark.background,
+      card: '#121212',
+      border: Colors.dark.backgroundSelected,
+    },
+  },
+};
+
 async function onInit(db: SQLiteDatabase) {
   await initDatabase(db);
   if (DEMO_MODE) await seedDemoTrips(db);
 }
 
 export default function RootLayout() {
+  // The Appearance setting (System, Light or Dark), applied once settings load.
   const colorScheme = useColorScheme();
   const t = useT();
   // The web demo (store screenshots) opens straight onto the app.
@@ -37,7 +59,8 @@ export default function RootLayout() {
   return (
     // Needed for swipe-to-classify on trip rows.
     <GestureHandlerRootView style={styles.root}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={NAV_THEMES[colorScheme]}>
+        <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
         <Suspense fallback={<ActivityIndicator style={{ flex: 1 }} />}>
           <SQLiteProvider databaseName={DATABASE_NAME} onInit={onInit} useSuspense>
             <RegionProvider>

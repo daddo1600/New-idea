@@ -1201,6 +1201,11 @@ const dictionary: Dictionary = {
   "Good start": "开局不错",
   "ALMOST DONE!": "马上就好！",
   "YOU DID IT!": "大功告成！",
+  "Appearance": "外观",
+  "System": "系统",
+  "Light": "浅色",
+  "Dark": "深色",
+  "System follows your iPhone’s light or dark setting.": "“系统”会跟随 iPhone 的浅色或深色设置。",
 };
 
 export default dictionary;

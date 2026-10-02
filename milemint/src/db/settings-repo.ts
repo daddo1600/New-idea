@@ -1,6 +1,7 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
 
 import { EXPORT_FORMATS, type ExportFormat } from '@/domain/accounting-export';
+import { APPEARANCES, type Appearance } from '@/domain/appearance';
 import { MAX_PURPOSE_LENGTH } from '@/domain/auto-classify';
 import type { WorkShift, WorkWeek } from '@/domain/classify-rules';
 import type { LatLng } from '@/domain/geo';
@@ -100,6 +101,8 @@ export type AppSettings = {
    * queued once; cleared when the subscription is no longer active.
    */
   trialReminderAt: string | null;
+  /** Light or dark: 'system' follows the phone (Settings → Appearance). */
+  appearance: Appearance;
 };
 
 const WEEKDAY_9_TO_5 = [{ start: '09:00', end: '17:00' }];
@@ -138,6 +141,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   dismissedWorkSpots: [],
   tutorialDone: false,
   trialReminderAt: null,
+  appearance: 'system',
 };
 
 type Check<T> = (value: unknown) => T | undefined;
@@ -242,6 +246,7 @@ const CHECKS: { [K in keyof AppSettings]-?: Check<AppSettings[K]> } = {
   dismissedWorkSpots: spots,
   tutorialDone: bool,
   trialReminderAt: isoTimeOrNull,
+  appearance: oneOf(APPEARANCES),
 };
 
 /** Stored settings, each field checked against its type and allowed values (see CHECKS). */

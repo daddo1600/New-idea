@@ -1337,6 +1337,11 @@ const dictionary: Dictionary = {
   "Good start": "Un început bun",
   "ALMOST DONE!": "APROAPE GATA!",
   "YOU DID IT!": "AI REUȘIT!",
+  "Appearance": "Aspect",
+  "System": "Sistem",
+  "Light": "Luminos",
+  "Dark": "Întunecat",
+  "System follows your iPhone’s light or dark setting.": "Sistem urmează setarea luminoasă sau întunecată a iPhone-ului.",
 };
 
 export default dictionary;

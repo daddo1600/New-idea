@@ -1243,6 +1243,11 @@ const dictionary: Dictionary = {
   "Good start": "अच्छी शुरुआत",
   "ALMOST DONE!": "बस थोड़ा और!",
   "YOU DID IT!": "आपने कर दिखाया!",
+  "Appearance": "रूप-रंग",
+  "System": "सिस्टम",
+  "Light": "लाइट",
+  "Dark": "डार्क",
+  "System follows your iPhone’s light or dark setting.": "सिस्टम चुनने पर आपके iPhone की लाइट या डार्क सेटिंग अपनाई जाती है।",
 };
 
 export default dictionary;
