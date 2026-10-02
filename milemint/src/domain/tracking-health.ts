@@ -1,7 +1,7 @@
 import type { AlertLog, TrackerRecord, TrackingGap } from './tracker-policy';
 
 /**
- * Is automatic tracking really working? MileMint promises "you'll know if a
+ * Is automatic tracking really working? MileSprout promises "you'll know if a
  * mile was missed", so every way tracking can quietly stop has a name here,
  * and the home card, Settings and notifications all read it from this one
  * pure check.

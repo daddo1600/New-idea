@@ -132,7 +132,7 @@ export function PlaceField({
     try {
       const permission = await Location.getForegroundPermissionsAsync();
       if (!permission.granted && !(await Location.requestForegroundPermissionsAsync()).granted) {
-        setNote(t('Location is off for MileMint, so type the address instead.'));
+        setNote(t('Location is off for MileSprout, so type the address instead.'));
         return;
       }
       const { coords } = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });

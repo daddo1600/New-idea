@@ -23,11 +23,11 @@ export function periodBounds(period: Period, today: Date): { start: string; end:
 }
 
 export type MissedMiles = {
-  /** Business distance MileMint logged in the period, in the region's unit. */
+  /** Business distance MileSprout logged in the period, in the region's unit. */
   logged: number;
   /** What the delivery app counted. */
   counted: number;
-  /** How much more MileMint logged (0 if it logged less). */
+  /** How much more MileSprout logged (0 if it logged less). */
   extra: number;
   /** Rough value of the extra distance, in minor units, at the rate the period's business trips averaged. */
   extraValue: number;
@@ -36,7 +36,7 @@ export type MissedMiles = {
 /**
  * Delivery apps only count miles driven with an order on board; the drive to
  * the pickup, between orders and home again are business miles too. This
- * compares what MileMint logged with what the app counted.
+ * compares what MileSprout logged with what the app counted.
  */
 export function missedMiles(
   trips: readonly DeductionTrip[],

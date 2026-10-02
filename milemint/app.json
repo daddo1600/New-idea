@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "MileMint",
+    "name": "MileSprout",
     "slug": "mile-mint",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -55,12 +55,12 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "MileMint logs your drives automatically in the background, so you never miss a deductible mile. Your trips are stored encrypted on your phone.",
-          "locationWhenInUsePermission": "MileMint uses your location to log your drives and label where they started and ended.",
+          "locationAlwaysAndWhenInUsePermission": "MileSprout logs your drives automatically in the background, so you never miss a deductible mile. Your trips are stored encrypted on your phone.",
+          "locationWhenInUsePermission": "MileSprout uses your location to log your drives and label where they started and ended.",
           "isIosBackgroundLocationEnabled": true,
           "isAndroidBackgroundLocationEnabled": true,
           "isAndroidForegroundServiceEnabled": true,
-          "motionUsagePermission": "So MileMint can tell driving from walking, and a walk is never logged as a drive. Motion data stays on your iPhone."
+          "motionUsagePermission": "So MileSprout can tell driving from walking, and a walk is never logged as a drive. Motion data stays on your iPhone."
         }
       ],
       "expo-iap",

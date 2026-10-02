@@ -37,35 +37,35 @@ function shareMessage(t: T, period: Period, miles: boolean, params: ShareParams)
   if (miles) {
     if (period === 'this-week') {
       return t(
-        'My delivery app counted {{counted}} miles this week. MileMint logged {{logged}} business miles: that\'s {{extra}} miles (about {{amount}}) I\'d have missed claiming. 🚗💸 MileMint logs every mile automatically.',
+        'My delivery app counted {{counted}} miles this week. MileSprout logged {{logged}} business miles: that\'s {{extra}} miles (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
         params,
       );
     }
     if (period === 'this-month') {
       return t(
-        'My delivery app counted {{counted}} miles this month. MileMint logged {{logged}} business miles: that\'s {{extra}} miles (about {{amount}}) I\'d have missed claiming. 🚗💸 MileMint logs every mile automatically.',
+        'My delivery app counted {{counted}} miles this month. MileSprout logged {{logged}} business miles: that\'s {{extra}} miles (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
         params,
       );
     }
     return t(
-      'My delivery app counted {{counted}} miles last month. MileMint logged {{logged}} business miles: that\'s {{extra}} miles (about {{amount}}) I\'d have missed claiming. 🚗💸 MileMint logs every mile automatically.',
+      'My delivery app counted {{counted}} miles last month. MileSprout logged {{logged}} business miles: that\'s {{extra}} miles (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
       params,
     );
   }
   if (period === 'this-week') {
     return t(
-      'My delivery app counted {{counted}} km this week. MileMint logged {{logged}} business km: that\'s {{extra}} km (about {{amount}}) I\'d have missed claiming. 🚗💸 MileMint logs every mile automatically.',
+      'My delivery app counted {{counted}} km this week. MileSprout logged {{logged}} business km: that\'s {{extra}} km (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
       params,
     );
   }
   if (period === 'this-month') {
     return t(
-      'My delivery app counted {{counted}} km this month. MileMint logged {{logged}} business km: that\'s {{extra}} km (about {{amount}}) I\'d have missed claiming. 🚗💸 MileMint logs every mile automatically.',
+      'My delivery app counted {{counted}} km this month. MileSprout logged {{logged}} business km: that\'s {{extra}} km (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
       params,
     );
   }
   return t(
-    'My delivery app counted {{counted}} km last month. MileMint logged {{logged}} business km: that\'s {{extra}} km (about {{amount}}) I\'d have missed claiming. 🚗💸 MileMint logs every mile automatically.',
+    'My delivery app counted {{counted}} km last month. MileSprout logged {{logged}} business km: that\'s {{extra}} km (about {{amount}}) I\'d have missed claiming. 🚗💸 MileSprout logs every mile automatically.',
     params,
   );
 }
@@ -79,7 +79,7 @@ function periodCaption(t: T, period: Period): string {
 
 /**
  * "Missed miles": delivery apps only count distance with an order on board.
- * Compare with what MileMint logged, and share the difference.
+ * Compare with what MileSprout logged, and share the difference.
  */
 export default function CompareScreen() {
   const db = useSQLiteContext();
@@ -135,10 +135,10 @@ export default function CompareScreen() {
           <ThemedText type="small" themeColor="textSecondary">
             {miles
               ? t(
-                  'Delivery apps only count miles with an order on board. The drive to the pickup, between orders and home again are business miles too, and MileMint logs them all.',
+                  'Delivery apps only count miles with an order on board. The drive to the pickup, between orders and home again are business miles too, and MileSprout logs them all.',
                 )
               : t(
-                  'Delivery apps only count km with an order on board. The drive to the pickup, between orders and home again are business km too, and MileMint logs them all.',
+                  'Delivery apps only count km with an order on board. The drive to the pickup, between orders and home again are business km too, and MileSprout logs them all.',
                 )}
           </ThemedText>
 
@@ -171,7 +171,7 @@ export default function CompareScreen() {
             <View style={styles.leaf} pointerEvents="none">
               <LeafMark size={150} opacity={0.2} />
             </View>
-            <Text style={styles.resultLabel}>{t('MileMint logged')}</Text>
+            <Text style={styles.resultLabel}>{t('MileSprout logged')}</Text>
             <Text style={styles.resultBig}>{distance(result.logged)}</Text>
             <Text style={styles.resultLabel}>{periodCaption(t, period)}</Text>
             {typed !== null && (
@@ -195,7 +195,7 @@ export default function CompareScreen() {
                   </>
                 ) : (
                   <Text style={styles.extraSub}>
-                    {t('Your app counted as much as MileMint logged. Check your trips are sorted as business.')}
+                    {t('Your app counted as much as MileSprout logged. Check your trips are sorted as business.')}
                   </Text>
                 )}
               </View>

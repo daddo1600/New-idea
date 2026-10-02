@@ -61,7 +61,7 @@ export async function scheduleShiftAutoEnd(shift: Shift, now = Date.now()): Prom
     identifier: AUTO_END_ID,
     content: {
       title: t('Your shift ended after 16 hours'),
-      body: t('It was still on, so MileMint ended it. Drives from now on are left for you to sort. Tap to check the times.'),
+      body: t('It was still on, so MileSprout ended it. Drives from now on are left for you to sort. Tap to check the times.'),
       data: { url: '/' },
     },
     trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: new Date(at) },

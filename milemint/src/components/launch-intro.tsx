@@ -101,7 +101,7 @@ const STEPS = 100;
 
 /**
  * Opening sequence. Before set-up: the full demo drive (about 7 s) that
- * shows what MileMint does. Once set up: the same pace (about 7.5 s) where
+ * shows what MileSprout does. Once set up: the same pace (about 7.5 s) where
  * the sprout grows as the user's own tax-year money and distance count up
  * from zero, so every launch is a reminder of the money coming back. A tap
  * skips either.
@@ -136,7 +136,7 @@ export function LaunchIntro({ onDone }: { onDone: () => void }) {
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={t('MileMint. Tap to skip')}
+      accessibilityLabel={t('MileSprout. Tap to skip')}
       onPress={() => setSkip(true)}
       style={[StyleSheet.absoluteFill, styles.layer]}>
       {mode === null ? (

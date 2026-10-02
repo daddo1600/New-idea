@@ -58,7 +58,7 @@ async function shareCsvText(name: string, csv: string): Promise<void> {
 }
 
 export async function sharePdf(report: MileageReport): Promise<void> {
-  const name = `MileMint ${report.label.replace(/[/–]/g, '-')} ${report.region.authority} mileage report.pdf`;
+  const name = `MileSprout ${report.label.replace(/[/–]/g, '-')} ${report.region.authority} mileage report.pdf`;
   const { uri } = await Print.printToFileAsync({
     html: toReportHtml(report),
     // US Letter or A4, with half-inch margins.

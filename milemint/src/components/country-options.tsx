@@ -27,7 +27,7 @@ const SHORT_NAMES: Record<RegionCode, string> = {
   AU: msg('Australia'),
 };
 
-/** The phone's country as a MileMint region (UK phone → GB), from its Region setting; no location permission. */
+/** The phone's country as a MileSprout region (UK phone → GB), from its Region setting; no location permission. */
 export function phoneRegion(): RegionCode {
   try {
     // The iPhone's Region setting, then its time zone, then the language: no location permission needed.

@@ -167,7 +167,7 @@ export default function AddTripScreen() {
       : new Promise<boolean | null>((resolve) =>
           Alert.alert(
             t('Save only the area?'),
-            t('Client privacy is on. MileMint can save the town and postcode area instead of the address, as “Client visit · area”.'),
+            t('Client privacy is on. MileSprout can save the town and postcode area instead of the address, as “Client visit · area”.'),
             [
               { text: t('Cancel'), style: 'cancel', onPress: () => resolve(null) },
               { text: t('Keep the address'), onPress: () => resolve(false) },

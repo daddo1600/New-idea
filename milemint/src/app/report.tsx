@@ -432,7 +432,7 @@ export default function ReportScreen() {
           </ThemedText>
         )}
         <ThemedText type="small" themeColor="textSecondary">
-          {t('Files are shared straight from your iPhone. MileMint never uploads them. Deductions are estimates, not tax advice.')}
+          {t('Files are shared straight from your iPhone. MileSprout never uploads them. Deductions are estimates, not tax advice.')}
         </ThemedText>
       </ScrollView>
     </ThemedView>

@@ -71,7 +71,7 @@ const monthName = (key: string) =>
   new Date(`${key}-15T00:00:00Z`).toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 
 function narration(month: Month, region: Region): string {
-  return `Business mileage ${monthName(month.key)}: ${month.distance.toFixed(1)} ${units(region)} at ${region.authority} rates (MileMint)`;
+  return `Business mileage ${monthName(month.key)}: ${month.distance.toFixed(1)} ${units(region)} at ${region.authority} rates (MileSprout)`;
 }
 
 function lines(rows: readonly (string | number)[][]): string {
@@ -126,7 +126,7 @@ export function toQuickBooksJournals(report: MileageReport): string {
     const text = narration(month, region);
     if (month.deduction > 0) rows.push([number, date, accounts.expense, money(month.deduction), '', text]);
     if (month.costs > 0) {
-      const costsText = `Parking and tolls ${monthName(month.key)}: business journeys (MileMint)`;
+      const costsText = `Parking and tolls ${monthName(month.key)}: business journeys (MileSprout)`;
       rows.push([number, date, accounts.expense, money(month.costs), '', costsText]);
     }
     rows.push([number, date, accounts.owner, '', money(month.deduction + month.costs), text]);
@@ -223,15 +223,15 @@ export function exportFile(report: MileageReport, format: ExportFormat): { name:
   const year = report.label.replace(/[/–]/g, '-');
   switch (format) {
     case 'xero':
-      return { name: `MileMint ${year} Xero manual journals.csv`, text: toXeroJournals(report) };
+      return { name: `MileSprout ${year} Xero manual journals.csv`, text: toXeroJournals(report) };
     case 'quickbooks':
-      return { name: `MileMint ${year} QuickBooks journal entries.csv`, text: toQuickBooksJournals(report) };
+      return { name: `MileSprout ${year} QuickBooks journal entries.csv`, text: toQuickBooksJournals(report) };
     case 'freeagent':
-      return { name: `MileMint ${year} mileage for FreeAgent.csv`, text: toFreeAgentMileage(report) };
+      return { name: `MileSprout ${year} mileage for FreeAgent.csv`, text: toFreeAgentMileage(report) };
     case 'expense-claim':
-      return { name: `MileMint ${year} expense claim.csv`, text: toExpenseClaim(report) };
+      return { name: `MileSprout ${year} expense claim.csv`, text: toExpenseClaim(report) };
     default:
-      return { name: `MileMint ${year} mileage log.csv`, text: toCsv(report) };
+      return { name: `MileSprout ${year} mileage log.csv`, text: toCsv(report) };
   }
 }
 
@@ -259,7 +259,7 @@ export function toLogbookCsv(summary: LogbookSummary, vehicle: string): string {
     [
       'Total km travelled in the period',
       km1(summary.totalKm),
-      summary.basis === 'odometer' ? 'Odometer end minus start' : 'Km logged by MileMint (odometer readings missing)',
+      summary.basis === 'odometer' ? 'Odometer end minus start' : 'Km logged by MileSprout (odometer readings missing)',
     ],
     ['Business km travelled in the period', km1(summary.businessKm)],
     ['Business-use percentage', summary.businessPercent === null ? '' : `${summary.businessPercent}%`, percentBasisText(summary)],
@@ -294,12 +294,12 @@ export function toLogbookCsv(summary: LogbookSummary, vehicle: string): string {
   rows.push(
     [],
     [
-      'Journey odometer readings are calculated from the odometer at the start of the period plus the GPS distance of every drive logged since; the readings at the start and end of the period are read off the car. The logbook can be used for the income year it was kept in and the next 4, unless your circumstances change. Prepared with MileMint; not tax advice.',
+      'Journey odometer readings are calculated from the odometer at the start of the period plus the GPS distance of every drive logged since; the readings at the start and end of the period are read off the car. The logbook can be used for the income year it was kept in and the next 4, unless your circumstances change. Prepared with MileSprout; not tax advice.',
     ],
   );
   return lines(rows);
 }
 
 export function logbookFileName(summary: LogbookSummary): string {
-  return `MileMint ATO logbook ${summary.logbook.startDate} to ${summary.logbook.endDate}.csv`;
+  return `MileSprout ATO logbook ${summary.logbook.startDate} to ${summary.logbook.endDate}.csv`;
 }

@@ -13,7 +13,7 @@ import { LiveDot } from './live-dot';
 const TRACKING_MESSAGES: Record<Exclude<TrackingStatus, 'on'>, { title: string; body: string }> = {
   'needs-permission': {
     title: msg('Automatic tracking is off'),
-    body: msg('Allow location access and MileMint logs every drive for you.'),
+    body: msg('Allow location access and MileSprout logs every drive for you.'),
   },
   'needs-always': {
     title: msg('Drives may be missed'),

@@ -5,12 +5,12 @@ import { Platform } from 'react-native';
 import type { TrialLength } from '@/domain/pro-offer';
 
 /**
- * MileMint Pro through Apple's StoreKit, with no third-party service: the
+ * MileSprout Pro through Apple's StoreKit, with no third-party service: the
  * App Store holds the subscription and the phone checks it, so no account and
  * no purchase data ever reaches us.
  *
  * Product IDs must match the auto-renewable subscriptions set up in App Store
- * Connect (one subscription group, "MileMint Pro").
+ * Connect (one subscription group, "MileSprout Pro").
  */
 export const PRO_MONTHLY = 'com.milemint.app.pro.monthly';
 export const PRO_YEARLY = 'com.milemint.app.pro.yearly';

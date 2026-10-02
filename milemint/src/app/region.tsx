@@ -28,7 +28,7 @@ export default function RegionScreen() {
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         <ThemedText type="small" themeColor="textSecondary">
-          {t('MileMint uses your country’s currency, distance unit, tax year and official mileage rate.')}
+          {t('MileSprout uses your country’s currency, distance unit, tax year and official mileage rate.')}
         </ThemedText>
         <CountryOptions value={selected} onChange={setSelected} />
         <Pressable accessibilityRole="button" onPress={done} style={[styles.button, { backgroundColor: theme.accent }]}>

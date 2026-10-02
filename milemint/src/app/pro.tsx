@@ -157,9 +157,9 @@ export default function ProScreen() {
     return (
       <ThemedView style={styles.container}>
         <ScrollView contentContainerStyle={styles.content}>
-          <ThemedText type="subtitle">{t('MileMint Pro is active')}</ThemedText>
+          <ThemedText type="subtitle">{t('MileSprout Pro is active')}</ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
-            {t('Every drive is logged and unlocked. Thanks for supporting MileMint.')}
+            {t('Every drive is logged and unlocked. Thanks for supporting MileSprout.')}
           </ThemedText>
           {storeAvailable && (
             <Pressable accessibilityRole="button" onPress={manage} hitSlop={8}>
@@ -185,13 +185,13 @@ export default function ProScreen() {
 
   const onRestore = async () => {
     const found = await restore();
-    if (!found) Alert.alert(t('No subscription found'), t('This Apple Account doesn’t have MileMint Pro.'));
+    if (!found) Alert.alert(t('No subscription found'), t('This Apple Account doesn’t have MileSprout Pro.'));
   };
 
   return (
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        <ThemedText type="subtitle">{t('Log every drive with MileMint Pro')}</ThemedText>
+        <ThemedText type="subtitle">{t('Log every drive with MileSprout Pro')}</ThemedText>
         {locked.count > 0 && (
           <ThemedView type="backgroundElement" style={[styles.locked, { borderColor: theme.accent }]}>
             <ThemedText type="smallBold">
@@ -227,7 +227,7 @@ export default function ProScreen() {
 
         {!storeAvailable ? (
           <ThemedText type="small" themeColor="textSecondary">
-            {t('Subscriptions are available in the App Store version of MileMint on iPhone.')}
+            {t('Subscriptions are available in the App Store version of MileSprout on iPhone.')}
           </ThemedText>
         ) : plans.length === 0 ? (
           plansLoaded ? (

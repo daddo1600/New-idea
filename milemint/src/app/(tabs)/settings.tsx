@@ -369,7 +369,7 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
             glyph="✉️"
             title={t('Help & feedback')}
             detail={t('We read every message')}
-            onPress={() => Linking.openURL(`mailto:${SUPPORT_EMAIL}?subject=MileMint`).catch(() => {})}
+            onPress={() => Linking.openURL(`mailto:${SUPPORT_EMAIL}?subject=MileSprout`).catch(() => {})}
           />
         </ThemedView>
       </ScrollView>
@@ -483,7 +483,7 @@ function ReminderSection() {
     setNote(null);
     const scheduled = value ? await enableWeeklyReminder(region.unit) : (await disableWeeklyReminder(), false);
     if (value && !scheduled) {
-      setNote(t('Notifications are off for MileMint. Turn them on in iPhone Settings → Notifications.'));
+      setNote(t('Notifications are off for MileSprout. Turn them on in iPhone Settings → Notifications.'));
     }
     setOn(scheduled);
     await updateSettings(db, { weeklyReminder: scheduled });
@@ -623,7 +623,7 @@ function BackupSection({ onRestored }: { onRestored: () => void }) {
     : available === null
       ? t('Checking iCloud…')
       : !available
-        ? t('iCloud is off for MileMint. Sign in to iCloud and turn on iCloud Drive in iPhone Settings to back up your trips.')
+        ? t('iCloud is off for MileSprout. Sign in to iCloud and turn on iCloud Drive in iPhone Settings to back up your trips.')
         : lastAt
           ? backedUpText(backupAge(lastAt, new Date()), t)
           : t('Not backed up yet.');
@@ -639,7 +639,7 @@ function BackupSection({ onRestored }: { onRestored: () => void }) {
           </ThemedText>
         </View>
         <ThemedText type="small" themeColor="textSecondary">
-          {t('Encrypted with a key only your iCloud Keychain holds. MileMint never sees your trips.')}
+          {t('Encrypted with a key only your iCloud Keychain holds. MileSprout never sees your trips.')}
         </ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
           {t('Backs up by itself when something changes, at most once a day, and keeps the last four backups.')}
@@ -1181,7 +1181,7 @@ function MileagePayForm({
             />
             <ThemedText type="small" themeColor="textSecondary">
               {t(
-                'For the tax back estimate: basic {{basic}}%, higher {{higher}}%, additional {{additional}}%. Not sure? MileMint uses {{basic}}%. Scottish rates differ a little.',
+                'For the tax back estimate: basic {{basic}}%, higher {{higher}}%, additional {{additional}}%. Not sure? MileSprout uses {{basic}}%. Scottish rates differ a little.',
                 TAX_BAND_RATES,
               )}
             </ThemedText>
@@ -1309,14 +1309,14 @@ function ProSection() {
   const onRestore = async () => {
     const found = await restore();
     Alert.alert(
-      found ? t('MileMint Pro restored') : t('No subscription found'),
-      found ? t('Every drive is unlocked.') : t('This Apple Account doesn’t have MileMint Pro.'),
+      found ? t('MileSprout Pro restored') : t('No subscription found'),
+      found ? t('Every drive is unlocked.') : t('This Apple Account doesn’t have MileSprout Pro.'),
     );
   };
   return (
     <>
       <SectionTitle
-        title="MileMint Pro"
+        title="MileSprout Pro"
         value={isPro ? 'Pro' : used === null ? null : t('Free · {{used}} of {{limit}}', { used, limit: allowance })}
       />
       <ThemedView type="backgroundElement" style={styles.card}>

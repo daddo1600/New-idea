@@ -9,10 +9,10 @@ import type { RedeemProblem } from '@/referral/code';
 import { REFUSAL_MESSAGES, useReferral } from '@/referral/referral';
 
 const PROBLEMS: Record<RedeemProblem, string> = {
-  format: msg('That doesn’t look like a MileMint code. It’s 4 letters, a dash and 3 more, like TRVB-7K2.'),
+  format: msg('That doesn’t look like a MileSprout code. It’s 4 letters, a dash and 3 more, like TRVB-7K2.'),
   own: REFUSAL_MESSAGES.own,
   already: msg('A friend’s code has already been used on this iPhone.'),
-  expired: msg('A friend’s code can only be entered in the first 30 days after installing MileMint.'),
+  expired: msg('A friend’s code can only be entered in the first 30 days after installing MileSprout.'),
   'not-found': REFUSAL_MESSAGES['not-found'],
   used: REFUSAL_MESSAGES.used,
   'claimed-before': REFUSAL_MESSAGES['already-claimed'],

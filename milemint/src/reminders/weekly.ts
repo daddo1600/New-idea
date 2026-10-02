@@ -80,7 +80,7 @@ export async function scheduleWorkHoursNudge(): Promise<void> {
     identifier: WORK_HOURS_NUDGE_ID,
     content: {
       title: t('Set it and forget it ⏱️'),
-      body: t('Tell MileMint your work hours once and it sorts most drives for you. Takes 30 seconds.'),
+      body: t('Tell MileSprout your work hours once and it sorts most drives for you. Takes 30 seconds.'),
       data: { url: '/settings' },
     },
     trigger: {

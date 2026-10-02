@@ -433,7 +433,7 @@ export function vehicleRule(region: Region, vehicle: VehicleType): string {
     : t('{{authority}} rate for bicycles: {{rate}}', { authority: region.authority, rate });
 }
 
-/** The earliest date MileMint has a rate for in this region. */
+/** The earliest date MileSprout has a rate for in this region. */
 export function earliestDate(region: Region): string {
   return region.rates[0].from;
 }

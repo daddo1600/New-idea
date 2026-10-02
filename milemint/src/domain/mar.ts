@@ -39,7 +39,7 @@ import { toLocalIsoDate } from './trip';
  *
  * Simplifications, noted for review:
  *   - One employment. The 10,000-mile threshold applies per employment (or
- *     jointly for associated employers); MileMint counts all business miles.
+ *     jointly for associated employers); MileSprout counts all business miles.
  *   - The employer's rate applies to every business mile, whatever the vehicle.
  *   - Scotland has its own income tax bands (19%–48%); the estimate uses the
  *     band the user picks, and 20% when they're not sure.
@@ -314,7 +314,7 @@ export function toP87Html(summary: MarSummary, region: Region, options: MarOptio
 </style></head>
 <body>
   <h1>Mileage Allowance Relief · P87 summary</h1>
-  <p class="sub">Business mileage in your own vehicle as an employee · employer mileage allowance: ${escapeHtml(employerRate)} · prepared with MileMint on ${date(toLocalIsoDate(generatedAt))}</p>
+  <p class="sub">Business mileage in your own vehicle as an employee · employer mileage allowance: ${escapeHtml(employerRate)} · prepared with MileSprout on ${date(toLocalIsoDate(generatedAt))}</p>
   <table>
     <thead><tr><th>Tax year</th><th class="num">Business miles</th><th class="num">HMRC approved amount</th><th class="num">Allowance received</th><th class="num">Relief claimable</th><th>How to claim</th><th>Claim by</th></tr></thead>
     <tbody>${rows}</tbody>
@@ -326,13 +326,13 @@ export function toP87Html(summary: MarSummary, region: Region, options: MarOptio
     <li>Online with form P87 at GOV.UK (“Claim Income Tax relief for your employment expenses”), or by post, if your employment expenses for the year are £2,500 or less and you don’t file a Self Assessment return.</li>
     <li>Otherwise, include it in employment expenses on your Self Assessment return.</li>
     <li>You’ll need your employer’s name and PAYE reference (on your payslip or P60), the business miles and the mileage allowance you received for each tax year.</li>
-    <li>HMRC may ask to see your mileage log; export it from MileMint (Reports).</li>
+    <li>HMRC may ask to see your mileage log; export it from MileSprout (Reports).</li>
   </ol>
   <p class="note">Approved amounts use HMRC approved mileage allowance payments rates: cars and vans 45p a mile (55p from 6 April 2026) for the first 10,000 business miles in a tax year and 25p after that, motorbikes 24p, bicycles 20p. Ordinary commuting is not business mileage. Relief reduces your taxable pay, so the tax you get back depends on your tax rate. These are estimates, not tax advice.</p>
 </body></html>`;
 }
 
-/** File name for the P87 summary, e.g. "MileMint P87 summary.csv". */
+/** File name for the P87 summary, e.g. "MileSprout P87 summary.csv". */
 export function p87FileName(extension: 'csv' | 'pdf'): string {
-  return `MileMint P87 summary.${extension}`;
+  return `MileSprout P87 summary.${extension}`;
 }

@@ -29,7 +29,7 @@ const SOUTHERN: ReadonlySet<RegionCode> = new Set(['AU']);
 const md = (date: Date) => (date.getMonth() + 1) * 100 + date.getDate();
 
 const GREETINGS: Record<SeasonId, (code: RegionCode) => string> = {
-  festive: () => msg('Happy holidays from MileMint 🎁'),
+  festive: () => msg('Happy holidays from MileSprout 🎁'),
   'new-year': () => msg('Happy New Year 🎆'),
   halloween: () => msg('Happy Halloween 🎃'),
   'aussie-summer': () => msg('G’day! Summer on the road ☀️'),

@@ -31,7 +31,7 @@ const ISSUES: Partial<Record<HealthIssue, { title: string; body: string; fix: Fi
   'precise-location-off': {
     title: msg('Precise Location is off'),
     body: msg(
-      'MileMint only gets a rough position, so drives can’t be measured. In Settings, tap Location and turn on Precise Location.',
+      'MileSprout only gets a rough position, so drives can’t be measured. In Settings, tap Location and turn on Precise Location.',
     ),
     fix: 'settings',
   },

@@ -45,7 +45,7 @@ export default function RootLayout() {
                 <ReferralProvider>
                   <Stack>
                     {/* Home, Drives, Money and Settings; every other screen opens over them. */}
-                    <Stack.Screen name="(tabs)" options={{ title: 'MileMint', headerShown: false }} />
+                    <Stack.Screen name="(tabs)" options={{ title: 'MileSprout', headerShown: false }} />
                     <Stack.Screen
                       name="welcome"
                       options={{ headerShown: false, gestureEnabled: false, animation: 'fade' }}
@@ -58,7 +58,7 @@ export default function RootLayout() {
                     <Stack.Screen name="trip/[id]" options={{ title: t('Trip') }} />
                     <Stack.Screen name="report" options={{ title: t('Reports') }} />
                     <Stack.Screen name="region" options={{ title: t('Your country'), presentation: 'modal' }} />
-                    <Stack.Screen name="pro" options={{ title: 'MileMint Pro', presentation: 'modal' }} />
+                    <Stack.Screen name="pro" options={{ title: 'MileSprout Pro', presentation: 'modal' }} />
                     <Stack.Screen name="compare" options={{ title: t('Missed miles check'), presentation: 'modal' }} />
                     <Stack.Screen name="milestones" options={{ title: t('Milestones') }} />
                     <Stack.Screen name="tax-dates" options={{ title: t('Tax dates') }} />
@@ -92,7 +92,7 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
       <Text style={styles.errorTitle}>{t('Something went wrong')}</Text>
       <Text style={styles.errorBody}>
         {t(
-          'MileMint couldn’t open this screen. Your trips are safe. Please send a screenshot of this page to {{email}} so we can fix it.',
+          'MileSprout couldn’t open this screen. Your trips are safe. Please send a screenshot of this page to {{email}} so we can fix it.',
           { email: 'milemint.support@gmail.com' },
         )}
       </Text>

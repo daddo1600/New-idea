@@ -36,7 +36,7 @@ export function PlanMeter({ trips, locked }: { trips: readonly Trip[]; locked: R
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityHint={t('Opens MileMint Pro')}
+      accessibilityHint={t('Opens MileSprout Pro')}
       onPress={() => router.push('/pro')}
       style={[styles.meter, { backgroundColor: theme.backgroundElement }, waiting && { borderColor: theme.accent }]}>
       <ThemedText

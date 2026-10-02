@@ -38,7 +38,7 @@ import {
  * Automatic, end-to-end encrypted backups to the user's own iCloud, and
  * restoring from them. The snapshot is built here, sealed (compressed and
  * encrypted with the iCloud Keychain key) by modules/icloud-backup, and only
- * the sealed bytes are written to iCloud. MileMint has no server in the loop.
+ * the sealed bytes are written to iCloud. MileSprout has no server in the loop.
  */
 
 const STATE_KEY = 'milemint.backup.state';

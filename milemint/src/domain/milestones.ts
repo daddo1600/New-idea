@@ -21,7 +21,7 @@ export const MONEY_STEPS = [50, 100, 250, 500, 1_000, 2_500, 5_000, 10_000] as c
 export const DISTANCE_STEPS = [100, 500, 1_000, 2_500, 5_000, 10_000, 25_000] as const;
 
 export const HABITS = {
-  'first-trip': { emoji: '🚗', title: msg('First trip logged'), message: msg('MileMint is on the job. Just drive.') },
+  'first-trip': { emoji: '🚗', title: msg('First trip logged'), message: msg('MileSprout is on the job. Just drive.') },
   'first-shift': { emoji: '📦', title: msg('First shift done'), message: msg('Every drive of it counted as business.') },
   'sorted-week': {
     emoji: '✅',

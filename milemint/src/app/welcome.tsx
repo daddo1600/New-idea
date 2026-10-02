@@ -66,7 +66,7 @@ import { ICloudBackup } from '../../modules/icloud-backup';
  * "Is this home?" once the drives show it (domain/place-asks). Each step does
  * one thing, and the user always sees how far along they are.
  *
- * On a new iPhone with a MileMint backup in iCloud, the welcome offers to
+ * On a new iPhone with a MileSprout backup in iCloud, the welcome offers to
  * restore it instead; the backup brings the country, hours and places, so
  * only the tracking step (a permission for this phone) remains.
  */
@@ -451,7 +451,7 @@ export default function WelcomeScreen() {
               <LeafMark size={132} />
               <Text style={[styles.brandTitle, styles.heading]}>{t('Every business mile, counted.')}</Text>
               <Text style={styles.brandBody}>
-                {t('MileMint logs your drives automatically and works out what they’re worth at tax time.')}
+                {t('MileSprout logs your drives automatically and works out what they’re worth at tax time.')}
               </Text>
               <View style={styles.privacyPill}>
                 <Text style={styles.privacyPillText}>🔒 {t('No account. Your trips stay on your phone.')}</Text>
@@ -542,7 +542,7 @@ export default function WelcomeScreen() {
                 <Text style={styles.brandEyebrow}>{t('STEP 2 · TRACKING')}</Text>
                 <Text style={styles.brandTitleSmall}>{t('Never miss a mile.')}</Text>
                 <Text style={styles.brandBody}>
-                  {t('Set location to “Always” and MileMint logs every drive, even when it’s closed.')}
+                  {t('Set location to “Always” and MileSprout logs every drive, even when it’s closed.')}
                 </Text>
                 <Text style={styles.brandCallout}>{t('Without “Always”, drives go unlogged and unclaimed.')}</Text>
                 {status === 'needs-always' || (status === 'needs-permission' && asked) ? (
@@ -574,7 +574,7 @@ export default function WelcomeScreen() {
           {step === HOURS && (
             <>
               <StepHeader glyph="clock" eyebrow={t('Step 3 · Your work')} title={t('How do you work?')}>
-                {t('MileMint sorts your drives to match. You can always swipe to change a trip.')}
+                {t('MileSprout sorts your drives to match. You can always swipe to change a trip.')}
               </StepHeader>
               <WorkStyleOption
                 selected={workStyle === 'hours'}
@@ -647,7 +647,7 @@ export default function WelcomeScreen() {
                     <View style={styles.flex}>
                       <ThemedText type="smallBold">{t('Employed, in your own vehicle?')}</ThemedText>
                       <ThemedText type="small" themeColor="textSecondary">
-                        {t('MileMint works out the tax relief you can claim. Optional.')}
+                        {t('MileSprout works out the tax relief you can claim. Optional.')}
                       </ThemedText>
                     </View>
                     <Switch
@@ -869,7 +869,7 @@ export default function WelcomeScreen() {
                   : primary(t('Choose one to continue'), () => {}, false))}
           {step === PURPOSE && shownChoices.length > 0 && primary(t('Continue'), () => saveWork(shownChoices))}
           {step === PURPOSE && secondary(t('Skip for now'), () => saveWork([]))}
-          {step === DONE && primary(t('Start using MileMint'), finish)}
+          {step === DONE && primary(t('Start using MileSprout'), finish)}
         </View>
       </KeyboardAvoidingView>
     </ThemedView>
@@ -967,7 +967,7 @@ function ClientPrivacyCheck({ value, onChange }: { value: boolean; onChange: (va
           <ThemedText type="small">
             🔒{' '}
             {t(
-              'Client addresses are never saved or shared. MileMint keeps only the area, and everything stays on your phone.',
+              'Client addresses are never saved or shared. MileSprout keeps only the area, and everything stays on your phone.',
             )}
           </ThemedText>
           <ThemedText type="smallBold" style={{ color: theme.accent }}>

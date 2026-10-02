@@ -87,7 +87,7 @@ export function MotionStep() {
         {t('One more for accuracy: Motion & Fitness')}
       </Text>
       <Text style={styles.body}>
-        {t('Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone.')}
+        {t('Lets MileSprout tell driving from walking, so a stroll is never logged as a trip. It stays on your phone.')}
       </Text>
       <MotionPreview />
     </>

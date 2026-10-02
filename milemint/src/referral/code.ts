@@ -36,7 +36,7 @@ export function generateReferralCode(randomBytes: (n: number) => Uint8Array): st
 
 /**
  * The code someone typed, tidied up ("trvb 7k2", "TRVB7K2" → "TRVB-7K2"),
- * or null if it can't be a MileMint code. Case, spaces and dashes don't matter.
+ * or null if it can't be a MileSprout code. Case, spaces and dashes don't matter.
  */
 export function normalizeReferralCode(input: string): string | null {
   // NFKC turns full-width ＴＲＶＢ－７Ｋ２ (Chinese and Japanese keyboards) into plain characters;

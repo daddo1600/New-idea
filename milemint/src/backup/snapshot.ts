@@ -241,19 +241,19 @@ export function upgradeSnapshot(snapshot: Snapshot, currentSchema = SCHEMA_VERSI
 /** Checks a parsed backup and upgrades it to this build's schema; throws BackupError if it can't be used. */
 export function validateSnapshot(value: unknown, currentSchema = SCHEMA_VERSION): Snapshot {
   if (!isRecord(value) || value.format !== BACKUP_FORMAT) {
-    throw new BackupError('not-a-backup', 'Not a MileMint backup');
+    throw new BackupError('not-a-backup', 'Not a MileSprout backup');
   }
   const { version, schemaVersion, createdAt, appVersion, tables } = value;
   if (typeof version !== 'number' || typeof schemaVersion !== 'number') {
     throw new BackupError('not-a-backup', 'No version');
   }
   if (!Number.isInteger(version) || version < 1) throw new BackupError('not-a-backup', 'Bad snapshot version');
-  if (version > SNAPSHOT_VERSION) throw new BackupError('newer-app', 'Made by a newer version of MileMint');
+  if (version > SNAPSHOT_VERSION) throw new BackupError('newer-app', 'Made by a newer version of MileSprout');
   if (!Number.isInteger(schemaVersion) || schemaVersion < 1) {
     throw new BackupError('not-a-backup', 'Bad schema version');
   }
   // A newer schema may hold data this build would silently drop: update the app first.
-  if (schemaVersion > currentSchema) throw new BackupError('newer-app', 'Made by a newer version of MileMint');
+  if (schemaVersion > currentSchema) throw new BackupError('newer-app', 'Made by a newer version of MileSprout');
   if (typeof createdAt !== 'string' || Number.isNaN(Date.parse(createdAt))) {
     throw new BackupError('not-a-backup', 'Bad creation time');
   }

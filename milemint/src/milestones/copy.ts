@@ -5,10 +5,10 @@ import { msg, t } from '@/i18n/i18n';
 
 /** A few warm messages, picked by the milestone so the same one always reads the same. */
 const MONEY_MESSAGES = [
-  msg('MileMint has now found {{amount}} in business mileage for you. You’ve earned every penny of it.'),
-  msg('MileMint has now found {{amount}} in business mileage for you. Hard work, properly rewarded.'),
-  msg('MileMint has now found {{amount}} in business mileage for you. That’s real money back at tax time.'),
-  msg('MileMint has now found {{amount}} in business mileage for you. Nicely done. Keep it rolling.'),
+  msg('MileSprout has now found {{amount}} in business mileage for you. You’ve earned every penny of it.'),
+  msg('MileSprout has now found {{amount}} in business mileage for you. Hard work, properly rewarded.'),
+  msg('MileSprout has now found {{amount}} in business mileage for you. That’s real money back at tax time.'),
+  msg('MileSprout has now found {{amount}} in business mileage for you. Nicely done. Keep it rolling.'),
 ];
 
 const pounds = (region: Region, major: number) => formatMoney(major * 100, region).replace(/[.,]00$/, '');
@@ -27,10 +27,10 @@ export function celebrationFor(milestone: Milestone, region: Region, employee = 
       emoji: '💰',
       title: t('{{amount}} of business mileage logged', { amount }),
       message: t(
-        'MileMint has now logged {{amount}} of business mileage at {{authority}} rates, ready for your expense and relief claims.',
+        'MileSprout has now logged {{amount}} of business mileage at {{authority}} rates, ready for your expense and relief claims.',
         { amount, authority: region.authority },
       ),
-      share: t('I’ve logged {{amount}} of business mileage with MileMint 🚗 Every mile counted, automatically.', {
+      share: t('I’ve logged {{amount}} of business mileage with MileSprout 🚗 Every mile counted, automatically.', {
         amount,
       }),
     };
@@ -42,7 +42,7 @@ export function celebrationFor(milestone: Milestone, region: Region, employee = 
       emoji: '💰',
       title: t('{{amount}} back in your pocket', { amount }),
       message: t(message, { amount }),
-      share: t('I’ve found {{amount}} in business mileage with MileMint 🚗💸 Every mile counted, automatically.', {
+      share: t('I’ve found {{amount}} in business mileage with MileSprout 🚗💸 Every mile counted, automatically.', {
         amount,
       }),
     };
@@ -61,8 +61,8 @@ export function celebrationFor(milestone: Milestone, region: Region, employee = 
         ? t('{{distance}} miles logged for work, every one counted. That’s a lot of road.', params)
         : t('{{distance}} km logged for work, every one counted. That’s a lot of road.', params),
       share: mi
-        ? t('{{distance}} business miles logged with MileMint 🛣️ Every one counted.', params)
-        : t('{{distance}} business km logged with MileMint 🛣️ Every one counted.', params),
+        ? t('{{distance}} business miles logged with MileSprout 🛣️ Every one counted.', params)
+        : t('{{distance}} business km logged with MileSprout 🛣️ Every one counted.', params),
     };
   }
   const habit = HABITS[milestone.id as HabitId];
@@ -71,7 +71,7 @@ export function celebrationFor(milestone: Milestone, region: Region, employee = 
     emoji: habit.emoji,
     title,
     message: t(habit.message),
-    share: t('{{achievement}} on MileMint {{emoji}} The mileage app that counts every mile.', {
+    share: t('{{achievement}} on MileSprout {{emoji}} The mileage app that counts every mile.', {
       achievement: title,
       emoji: habit.emoji,
     }),

@@ -3,14 +3,14 @@ import { StyleSheet, Text, View } from 'react-native';
 import { LeafMark } from '@/components/leaf-mark';
 import { useTheme } from '@/hooks/use-theme';
 
-/** Home's header: the leaf and the name, with "Mint" in the brand green. */
+/** Home's header: the leaf and the name, with "Sprout" in the brand green. */
 export function BrandTitle() {
   const theme = useTheme();
   return (
-    <View style={styles.brand} accessibilityRole="header" accessibilityLabel="MileMint">
+    <View style={styles.brand} accessibilityRole="header" accessibilityLabel="MileSprout">
       <LeafMark size={26} />
       <Text style={[styles.brandText, { color: theme.text }]}>
-        Mile<Text style={{ color: theme.accent }}>Mint</Text>
+        Mile<Text style={{ color: theme.accent }}>Sprout</Text>
       </Text>
     </View>
   );

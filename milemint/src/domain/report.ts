@@ -339,7 +339,7 @@ export function toCsv(report: MileageReport): string {
         row.vehicle,
         CLASSIFICATION_LABELS[trip.classification],
         trip.purpose,
-        business ? ratesText(row.parts, region) : row.locked ? 'Value unlocks with MileMint Pro' : '',
+        business ? ratesText(row.parts, region) : row.locked ? 'Value unlocks with MileSprout Pro' : '',
         business ? (row.deduction / 100).toFixed(2) : '',
         trip.source === 'auto' ? 'Automatically while driving' : `Added by hand on ${trip.createdAt.slice(0, 10)}`,
         row.edited ? 'Yes' : 'No',
@@ -400,8 +400,8 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
   </table>
   <p class="hint">${
     driven
-      ? `Business share of the ${units} MileMint logged: ${loggedShare}. The odometer share above includes driving MileMint didn’t log, so use it for the claim.`
-      : `Business share of the ${units} MileMint logged: ${loggedShare}. Use your odometer total for the claim, since it includes any driving MileMint didn’t log.`
+      ? `Business share of the ${units} MileSprout logged: ${loggedShare}. The odometer share above includes driving MileSprout didn’t log, so use it for the claim.`
+      : `Business share of the ${units} MileSprout logged: ${loggedShare}. Use your odometer total for the claim, since it includes any driving MileSprout didn’t log.`
   }</p>`
       : '';
   const logbooks = report.logbooks.map((entry) => logbookHtml(entry, report, distance, money)).join('');
@@ -485,7 +485,7 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
   tr { page-break-inside: avoid; }
 </style></head><body>
   <h1>Vehicle mileage log · ${escapeHtml(yearName)}</h1>
-  <p class="sub">${escapeHtml(region.name)} · ${period} · ${escapeHtml(region.authority)} rates · prepared with MileMint on ${formatDate(toLocalIsoDate(generatedAt), region)}</p>
+  <p class="sub">${escapeHtml(region.name)} · ${period} · ${escapeHtml(region.authority)} rates · prepared with MileSprout on ${formatDate(toLocalIsoDate(generatedAt), region)}</p>
 
   <h2>${summaryHeading}</h2>
   <table class="summary">
@@ -515,7 +515,7 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
   <h2>Where these figures go</h2>
   <ul>${guidance}</ul>
 
-  <p class="note">“Auto” trips were recorded by the phone while driving; “Manual” trips were added by hand. MileMint keeps a history of every change to a trip, and trips changed after they were recorded are marked “edited”. Deductions are estimates at ${escapeHtml(region.authority)} rates and are not tax advice.${caveat}</p>
+  <p class="note">“Auto” trips were recorded by the phone while driving; “Manual” trips were added by hand. MileSprout keeps a history of every change to a trip, and trips changed after they were recorded are marked “edited”. Deductions are estimates at ${escapeHtml(region.authority)} rates and are not tax advice.${caveat}</p>
 </body></html>`;
 }
 
@@ -573,7 +573,7 @@ function logbookHtml(
   <p class="hint">${better} Estimates only. Keep receipts for every expense (fuel can be estimated from your records), and use one method per car for the year.</p>`;
   }
   const note = entry.valid
-    ? 'Claim this share of the car’s actual expenses with the logbook method. Journey details, with dates, odometer readings and reasons, are in MileMint’s ATO logbook export.'
+    ? 'Claim this share of the car’s actual expenses with the logbook method. Journey details, with dates, odometer readings and reasons, are in MileSprout’s ATO logbook export.'
     : summary.status === 'closed-early'
       ? 'This logbook was closed before 12 weeks, so it can’t be used for the logbook method.'
       : `This logbook can’t be used for ${escapeHtml(report.label)} yet: the ATO needs 12 continuous weeks and the odometer readings at the start and end of the period.`;

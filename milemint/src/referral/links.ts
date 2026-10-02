@@ -1,6 +1,6 @@
 import { t } from '@/i18n/i18n';
 
-/** MileMint on the App Store (live once version 1.0 is released). */
+/** MileSprout on the App Store (live once version 1.0 is released). */
 export const APP_STORE_URL = 'https://apps.apple.com/app/id6817748981';
 const APP_ID = '6817748981';
 
@@ -21,10 +21,10 @@ const redeemUrl = (code: string) => `https://apps.apple.com/redeem?ctx=offercode
  * lines are translated here, in the current language.
  */
 export function withInvite(message: string, code: string | null): string {
-  const lines = [message, '', t('Get MileMint free on the App Store: {{url}}', { url: APP_STORE_URL })];
+  const lines = [message, '', t('Get MileSprout free on the App Store: {{url}}', { url: APP_STORE_URL })];
   if (code) {
     lines.push(
-      t('Your invite code is {{code}}. Enter it when you set up MileMint for 10 extra free drives a month.', { code }),
+      t('Your invite code is {{code}}. Enter it when you set up MileSprout for 10 extra free drives a month.', { code }),
     );
   }
   if (FRIEND_OFFER_CODE) {
@@ -40,6 +40,6 @@ export function withInvite(message: string, code: string | null): string {
 /** The "Invite a friend" message, in the current language, without the code (withInvite adds it). */
 export function inviteText(): string {
   return t(
-    'I use MileMint to log my business mileage automatically. It works out what every drive is worth at tax time, so nothing goes unclaimed. 🚗💸',
+    'I use MileSprout to log my business mileage automatically. It works out what every drive is worth at tax time, so nothing goes unclaimed. 🚗💸',
   );
 }

@@ -32,7 +32,7 @@ export function installFatalErrorAlert(): void {
     if (!isFatal || __DEV__) return previous(error, isFatal);
     console.error(error);
     Alert.alert(
-      t('MileMint hit a problem'),
+      t('MileSprout hit a problem'),
       `${t('Please send a screenshot of this to support.')}\n\n${describeError(error)}`,
     );
   });

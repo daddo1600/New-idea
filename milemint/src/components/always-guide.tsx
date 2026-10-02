@@ -29,7 +29,7 @@ export function AlwaysGuide({ current }: { current: 'While Using the App' | 'Nev
       <ThemedText type="smallBold">{t('One quick switch in Settings')}</ThemedText>
       <ThemedText type="small" themeColor="textSecondary">
         {t(
-          'iOS only offers “Always” in Settings. It takes ten seconds, and MileMint carries on by itself when you come back.',
+          'iOS only offers “Always” in Settings. It takes ten seconds, and MileSprout carries on by itself when you come back.',
         )}
       </ThemedText>
 
@@ -44,7 +44,7 @@ export function AlwaysGuide({ current }: { current: 'While Using the App' | 'Nev
         ))}
       </View>
 
-      {/* What they'll see in Settings → MileMint → Location. */}
+      {/* What they'll see in Settings → MileSprout → Location. */}
       <View
         accessible
         accessibilityLabel={t('In Settings, under Allow Location Access, choose Always')}

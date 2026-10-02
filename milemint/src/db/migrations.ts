@@ -189,7 +189,7 @@ const MIGRATIONS: readonly string[] = [
 export const SCHEMA_VERSION = MIGRATIONS.length;
 
 /**
- * The database was last opened by a newer build of MileMint (an update then
+ * The database was last opened by a newer build of MileSprout (an update then
  * rolled back, or a backup of the phone restored onto an older app version):
  * its schema has tables or columns this build doesn't know, and writing to it
  * could lose or break them. Nothing is migrated or written; the app shows
@@ -203,8 +203,8 @@ export class DatabaseTooNewError extends Error {
     readonly appVersion: number = SCHEMA_VERSION,
   ) {
     super(
-      `This iPhone's MileMint data was saved by a newer version of the app (data version ${databaseVersion}, ` +
-        `this app knows up to ${appVersion}). Update MileMint from the App Store to open it; nothing has been changed.`,
+      `This iPhone's MileSprout data was saved by a newer version of the app (data version ${databaseVersion}, ` +
+        `this app knows up to ${appVersion}). Update MileSprout from the App Store to open it; nothing has been changed.`,
     );
     this.name = 'DatabaseTooNewError';
   }

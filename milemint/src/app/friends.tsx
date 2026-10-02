@@ -63,7 +63,7 @@ export default function FriendsScreen() {
           <Text style={styles.heroTitle}>{t('More free drives for every friend')}</Text>
           <Text style={styles.heroBody}>
             {t(
-              'Send a friend an invite. When they join MileMint with it, you both get 10 extra free automatic drives a month. For every friend, with no limit.',
+              'Send a friend an invite. When they join MileSprout with it, you both get 10 extra free automatic drives a month. For every friend, with no limit.',
             )}
           </Text>
           <Pressable

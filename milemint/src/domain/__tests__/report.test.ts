@@ -131,7 +131,7 @@ describe('toCsv', () => {
     const lines = toCsv(report).trim().split('\r\n');
     expect(lines).toHaveLength(3);
     expect(lines[2]).toContain('Late delivery');
-    expect(lines[2]).toContain('Value unlocks with MileMint Pro');
+    expect(lines[2]).toContain('Value unlocks with MileSprout Pro');
     expect(lines[2]).not.toContain('7.25');
   });
 

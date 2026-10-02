@@ -262,7 +262,7 @@ function StartCard({
     <ThemedView type="backgroundElement" style={styles.card}>
       <ThemedText type="smallBold">{t('Start a 12-week logbook for {{vehicle}}', { vehicle: car.name })}</ThemedText>
       <ThemedText type="small" themeColor="textSecondary">
-        {t('Pick 12 weeks that are typical of how you use the car through the year. MileMint logs each drive; you add the reason for each work trip.')}
+        {t('Pick 12 weeks that are typical of how you use the car through the year. MileSprout logs each drive; you add the reason for each work trip.')}
       </ThemedText>
 
       <ThemedText type="small" themeColor="textSecondary">
@@ -473,7 +473,7 @@ function ProgressCard({
       <View style={styles.lines}>
         <Line label={t('Business km')} value={km(summary.businessKm)} />
         <Line
-          label={summary.basis === 'odometer' ? t('Total km (odometer)') : t('Total km (logged by MileMint)')}
+          label={summary.basis === 'odometer' ? t('Total km (odometer)') : t('Total km (logged by MileSprout)')}
           value={km(summary.totalKm)}
           bold
         />
@@ -487,7 +487,7 @@ function ProgressCard({
       )}
       {summary.basis === 'logged' && summary.businessPercent !== null && (
         <ThemedText type="small" themeColor="textSecondary">
-          {t('Worked out from the km MileMint logged. Add both odometer readings so any driving MileMint missed is counted too.')}
+          {t('Worked out from the km MileSprout logged. Add both odometer readings so any driving MileSprout missed is counted too.')}
         </ThemedText>
       )}
       {summary.readingsInconsistent && (
@@ -519,7 +519,7 @@ function ProgressCard({
       )}
       {taxYearOf(logbook.endDate, region) !== first && summary.status !== 'closed-early' && (
         <ThemedText type="small" themeColor="textSecondary">
-          {t('These 12 weeks run into the next income year. MileMint counts the logbook as kept in the year it started; check with your tax agent if unsure.')}
+          {t('These 12 weeks run into the next income year. MileSprout counts the logbook as kept in the year it started; check with your tax agent if unsure.')}
         </ThemedText>
       )}
 
@@ -746,7 +746,7 @@ function EstimateCard({
             : comparison.better === 'same'
               ? t('Both methods come out the same.')
               : businessPercent === null
-                ? t('Once the logbook has some drives, MileMint compares the two methods here.')
+                ? t('Once the logbook has some drives, MileSprout compares the two methods here.')
                 : t('Add this year’s costs to compare the two methods.')}
       </ThemedText>
       {!percentIsFinal && estimate !== null && (

@@ -165,16 +165,16 @@ export type LogbookSummary = {
   daysLeft: number;
   /** Business journeys in the period, oldest first. */
   journeys: LogbookJourney[];
-  /** Every drive MileMint logged in this car in the period, in km. */
+  /** Every drive MileSprout logged in this car in the period, in km. */
   loggedKm: number;
   businessKm: number;
   /** Odometer end minus start, when both readings are in and make sense. */
   odometerKm: number | null;
-  /** The period's total km: by odometer when available, else what MileMint logged. */
+  /** The period's total km: by odometer when available, else what MileSprout logged. */
   totalKm: number;
   /**
    * Where the total came from. 'logged' means the odometer readings are
-   * missing (or don't add up), so driving MileMint didn't log isn't counted
+   * missing (or don't add up), so driving MileSprout didn't log isn't counted
    * and the percentage is likely too high: shown as a warning.
    */
   basis: 'odometer' | 'logged';
@@ -427,5 +427,5 @@ export function statusText(summary: LogbookSummary): string {
 export function percentBasisText(summary: LogbookSummary): string {
   return summary.basis === 'odometer'
     ? 'Business km ÷ total km travelled (odometer)'
-    : 'Business km ÷ km logged by MileMint (odometer readings missing, so driving MileMint didn’t log isn’t counted)';
+    : 'Business km ÷ km logged by MileSprout (odometer readings missing, so driving MileSprout didn’t log isn’t counted)';
 }

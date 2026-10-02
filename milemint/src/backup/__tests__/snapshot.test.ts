@@ -100,7 +100,7 @@ describe('snapshots', () => {
     });
   });
 
-  it('refuse anything that is not a MileMint backup', () => {
+  it('refuse anything that is not a MileSprout backup', () => {
     expect(codeOf(() => parseSnapshot('not json', CURRENT))).toBe('not-a-backup');
     expect(codeOf(() => validateSnapshot({ format: 'something-else' }, CURRENT))).toBe('not-a-backup');
     expect(codeOf(() => validateSnapshot({ ...sample(), createdAt: 'yesterday' }, CURRENT))).toBe('not-a-backup');

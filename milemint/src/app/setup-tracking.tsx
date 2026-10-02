@@ -15,7 +15,7 @@ import { useTracking } from '@/tracking/use-tracking';
 
 const POINTS = [
   [msg('Automatic'), msg('Every drive is logged the moment you park. No buttons to press.')],
-  [msg('Light on battery'), msg('GPS only runs while you drive. Parked, MileMint sleeps.')],
+  [msg('Light on battery'), msg('GPS only runs while you drive. Parked, MileSprout sleeps.')],
   [msg('Private'), msg('Your trips are stored encrypted on your phone, not on our servers.')],
 ] as const;
 
@@ -89,7 +89,7 @@ export default function SetupTrackingScreen() {
         <ScrollView contentContainerStyle={styles.content}>
           <ThemedText type="subtitle">{t('One more for accuracy: Motion & Fitness')}</ThemedText>
           <ThemedText themeColor="textSecondary">
-            {t('Lets MileMint tell driving from walking, so a stroll is never logged as a trip. It stays on your phone.')}
+            {t('Lets MileSprout tell driving from walking, so a stroll is never logged as a trip. It stays on your phone.')}
           </ThemedText>
           <MotionPreview style={[styles.preview, { backgroundColor: theme.accent }]} />
           <Pressable
@@ -116,7 +116,7 @@ export default function SetupTrackingScreen() {
         <ThemedText type="subtitle">{t('Log every drive automatically')}</ThemedText>
         <ThemedText themeColor="textSecondary">
           {t(
-            'MileMint needs location access set to “Always” to notice when you start driving, even when the app is closed.',
+            'MileSprout needs location access set to “Always” to notice when you start driving, even when the app is closed.',
           )}
         </ThemedText>
 

@@ -169,14 +169,14 @@ describe('“prepared on” dates are the local date, not UTC', () => {
       const summary = marSummary([], GB, { employerRate: 450, band: 'basic' }, moment);
       const html = toP87Html(summary, GB, { employerRate: 450, band: 'basic' }, moment);
       const day = Number(local(moment).slice(8));
-      expect(html).toContain(`prepared with MileMint on ${day} Apr 2026`);
+      expect(html).toContain(`prepared with MileSprout on ${day} Apr 2026`);
     }
   });
 
   it('in the mileage report', () => {
     for (const moment of moments) {
       const [y, m, d] = local(moment).split('-');
-      expect(toReportHtml(buildReport([], GB, 2025), moment)).toContain(`prepared with MileMint on ${d}/${m}/${y}`);
+      expect(toReportHtml(buildReport([], GB, 2025), moment)).toContain(`prepared with MileSprout on ${d}/${m}/${y}`);
     }
   });
 });

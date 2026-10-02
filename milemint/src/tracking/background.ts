@@ -110,7 +110,7 @@ async function startGps(): Promise<void> {
     // Shows the blue location pill while driving: honest, and keeps iOS from suspending us.
     showsBackgroundLocationIndicator: true,
     foregroundService: {
-      notificationTitle: t('MileMint is logging this drive'),
+      notificationTitle: t('MileSprout is logging this drive'),
       notificationBody: t('Tracking stops automatically when you park.'),
     },
   });
@@ -236,7 +236,7 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
   await refreshLaunchTotal(db).catch(() => {});
 }
 
-/** What iOS says about location access and MileMint's tasks right now. */
+/** What iOS says about location access and MileSprout's tasks right now. */
 export async function readTrackingPermissions(): Promise<TrackingPermissions> {
   const foreground = await Location.getForegroundPermissionsAsync();
   const background = foreground.granted ? await Location.getBackgroundPermissionsAsync() : null;

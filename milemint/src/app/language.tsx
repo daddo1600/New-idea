@@ -21,7 +21,7 @@ export default function LanguageScreen() {
       <Stack.Screen options={{ title: t('Language') }} />
       <ScrollView contentContainerStyle={styles.content}>
         <ThemedText type="small" themeColor="textSecondary">
-          {t('Choose the language for MileMint. Reports for the tax office stay in English.')}
+          {t('Choose the language for MileSprout. Reports for the tax office stay in English.')}
         </ThemedText>
         <View style={styles.list}>
           {LANGUAGES.map((language) => {

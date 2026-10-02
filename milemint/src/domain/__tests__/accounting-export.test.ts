@@ -75,8 +75,8 @@ describe('accounting exports (UK)', () => {
   });
 
   it('names each file for where it goes', () => {
-    expect(exportFile(report, 'xero').name).toBe('MileMint 2026-27 Xero manual journals.csv');
-    expect(exportFile(report, 'spreadsheet').name).toBe('MileMint 2026-27 mileage log.csv');
+    expect(exportFile(report, 'xero').name).toBe('MileSprout 2026-27 Xero manual journals.csv');
+    expect(exportFile(report, 'spreadsheet').name).toBe('MileSprout 2026-27 mileage log.csv');
   });
 });
 

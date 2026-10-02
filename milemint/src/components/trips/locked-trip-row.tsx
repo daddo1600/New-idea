@@ -72,7 +72,7 @@ export function LockedTripRow({
           </ThemedText>
           <Pressable
             accessibilityRole="button"
-            accessibilityHint={t('Opens MileMint Pro')}
+            accessibilityHint={t('Opens MileSprout Pro')}
             hitSlop={8}
             onPress={() => router.push('/pro')}
             style={rowStyles.savedLine}>
