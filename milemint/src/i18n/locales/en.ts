@@ -1,10 +1,13 @@
 import type { Dictionary } from '../i18n';
 
 /**
- * English needs entries only where a line changes with a number (plurals);
+ * English needs entries only where a line changes with a number (plurals),
+ * or where two lines read the same in English but not in other languages;
  * everything else is the key itself.
  */
 const en: Dictionary = {
+  // The tab, not the place: "Inicio" rather than "Casa".
+  'Home (tab)': 'Home',
   days: { one: 'day', other: 'days' },
   '{{count}} days': { one: '{{count}} day', other: '{{count}} days' },
   '{{count}} days left': { one: '{{count}} day left', other: '{{count}} days left' },

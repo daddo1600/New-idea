@@ -93,6 +93,14 @@ export async function listTrips(db: SQLiteDatabase): Promise<Trip[]> {
   });
 }
 
+/** Drives still to sort as business or personal: the badge on the Home tab. */
+export async function countUnsorted(db: SQLiteDatabase): Promise<number> {
+  const row = await db.getFirstAsync<{ n: number }>(
+    "SELECT COUNT(*) AS n FROM trips WHERE classification = 'unclassified';",
+  );
+  return row?.n ?? 0;
+}
+
 /**
  * Trips whose purpose the app filled in (learned from a route, or the usual
  * purpose) and the user hasn't changed since: the last purpose entry in the

@@ -146,7 +146,7 @@ export default function LogbookScreen() {
             <ThemedText type="small" themeColor="textSecondary">
               {t('The logbook method is for cars. Add your car in Settings first.')}
             </ThemedText>
-            <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/settings')}>
+            <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.navigate('/settings')}>
               <ThemedText type="smallBold" style={{ color: theme.accent }}>
                 {t('Open Settings')}
               </ThemedText>

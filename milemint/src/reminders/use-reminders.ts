@@ -20,11 +20,12 @@ function open(response: Notifications.NotificationResponse | null) {
   // Otherwise the next launch would report the same tap again.
   Notifications.clearLastNotificationResponseAsync().catch(() => {});
   const url = response.notification.request.content.data?.url;
-  if (typeof url === 'string' && url !== '/') router.push(url as Href);
+  // Navigate, not push: '/' and '/settings' are tabs, switched to rather than stacked again.
+  if (typeof url === 'string' && url !== '/') router.navigate(url as Href);
 }
 
 /**
- * For the home screen: keeps Sunday reminders and the tax-year countdown
+ * Mounted once, by the tabs' layout: keeps Sunday reminders and the tax-year countdown
  * queued, and opens the screen a tapped reminder points to.
  */
 export function useReminders(region: Region) {

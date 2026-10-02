@@ -26,7 +26,7 @@
   {
     "key": "{{amount}} found",
     "files": [
-      "app/index.tsx"
+      "components/home/summary-card.tsx"
     ]
   },
   {
@@ -38,13 +38,13 @@
   {
     "key": "{{amount}} relief to claim",
     "files": [
-      "app/index.tsx"
+      "components/home/summary-card.tsx"
     ]
   },
   {
     "key": "{{amount}} relief unclaimed from {{year}}",
     "files": [
-      "app/index.tsx"
+      "components/home/summary-card.tsx"
     ]
   },
   {
@@ -56,8 +56,8 @@
   {
     "key": "{{authority}} expects a purpose for every business drive. One tap each.",
     "files": [
-      "app/index.tsx",
-      "app/report.tsx"
+      "app/report.tsx",
+      "components/home/purpose-nudge.tsx"
     ]
   },
   {
@@ -161,7 +161,7 @@
   {
     "key": "{{count}} drives are saved and shown in full. Their value unlocks with Pro.",
     "files": [
-      "app/index.tsx"
+      "components/home/plan-card.tsx"
     ]
   },
   {
@@ -209,13 +209,13 @@
   {
     "key": "{{count}} past trips may still have addresses and routes. Replace them with the area only and delete the routes?",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "{{count}} purposes added",
     "files": [
-      "app/index.tsx"
+      "components/trips/list-bars.tsx"
     ]
   },
   {
@@ -227,7 +227,7 @@
   {
     "key": "{{count}} selected",
     "files": [
-      "app/index.tsx"
+      "components/trips/list-bars.tsx"
     ]
   },
   {
@@ -245,7 +245,8 @@
   {
     "key": "{{count}} work drives need a purpose",
     "files": [
-      "app/index.tsx"
+      "components/home/purpose-nudge.tsx",
+      "components/trips/list-bars.tsx"
     ]
   },
   {
@@ -275,31 +276,34 @@
   {
     "key": "{{day}} shift {{number}} end",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "{{day}} shift {{number}} start",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "{{distance}} · {{value}} · {{count}} drives",
     "files": [
-      "app/index.tsx"
+      "components/home/shift-bar.tsx"
     ]
   },
   {
     "key": "{{distance}} business",
     "files": [
-      "app/index.tsx"
+      "app/(tabs)/drives.tsx",
+      "app/(tabs)/money.tsx",
+      "components/home/summary-card.tsx"
     ]
   },
   {
     "key": "{{distance}} business · {{count}} to review",
     "files": [
-      "app/index.tsx"
+      "app/(tabs)/money.tsx",
+      "components/home/summary-card.tsx"
     ]
   },
   {
@@ -398,7 +402,7 @@
   {
     "key": "{{from}} to {{to}}, {{date}}, {{status}}",
     "files": [
-      "app/index.tsx"
+      "components/trips/selectable-trip-row.tsx"
     ]
   },
   {
@@ -416,7 +420,7 @@
   {
     "key": "{{hours}}h {{minutes}}m",
     "files": [
-      "app/index.tsx",
+      "components/home/shift-bar.tsx",
       "components/shift-row.tsx"
     ]
   },
@@ -519,13 +523,13 @@
   {
     "key": "{{rule}}.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "{{rule}}. Petrol, diesel, hybrid or electric: same rate for a car or van you own.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -555,7 +559,8 @@
   {
     "key": "{{used}} of {{limit}} free work drives in {{month}}",
     "files": [
-      "app/index.tsx"
+      "components/home/plan-card.tsx",
+      "components/home/plan-meter.tsx"
     ]
   },
   {
@@ -591,9 +596,10 @@
   {
     "key": "{{year}} tax year",
     "files": [
+      "app/(tabs)/money.tsx",
       "app/claim-relief.tsx",
-      "app/index.tsx",
-      "app/tax-dates.tsx"
+      "app/tax-dates.tsx",
+      "components/home/summary-card.tsx"
     ]
   },
   {
@@ -611,13 +617,13 @@
   {
     "key": "+ Add a place",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "+ Add a vehicle",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -629,7 +635,7 @@
   {
     "key": "+{{amount}} parking & tolls",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
     ]
   },
   {
@@ -648,12 +654,6 @@
     "key": "+{{distance}} miles your app missed",
     "files": [
       "app/compare.tsx"
-    ]
-  },
-  {
-    "key": "★ Pro · unlimited drives",
-    "files": [
-      "components/header-menu.tsx"
     ]
   },
   {
@@ -707,7 +707,7 @@
   {
     "key": "24-hour times. A shift like 22:00 to 02:00 runs past midnight.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -725,7 +725,7 @@
   {
     "key": "A (slightly cheeky) nudge on Sunday evening to sort the week’s drives.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -803,7 +803,7 @@
   {
     "key": "About {{amount}} tax back",
     "files": [
-      "app/index.tsx"
+      "components/home/summary-card.tsx"
     ]
   },
   {
@@ -819,27 +819,34 @@
     ]
   },
   {
+    "key": "About & support",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
     "key": "Active · thank you!",
     "files": [
-      "components/header-menu.tsx"
+      "app/(tabs)/money.tsx"
+    ]
+  },
+  {
+    "key": "Add a drive you missed",
+    "files": [
+      "components/trips/add-trip-links.tsx"
     ]
   },
   {
     "key": "Add a missed drive",
     "files": [
-      "components/tax-countdown.tsx"
-    ]
-  },
-  {
-    "key": "Add a missed trip",
-    "files": [
-      "components/header-menu.tsx"
+      "components/tax-countdown.tsx",
+      "components/trips/add-trip-links.tsx"
     ]
   },
   {
     "key": "Add another time",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -852,7 +859,8 @@
     "key": "Add missed trip",
     "files": [
       "app/_layout.tsx",
-      "components/tracking-health-card.tsx"
+      "components/tracking-health-card.tsx",
+      "components/trips/add-trip-links.tsx"
     ]
   },
   {
@@ -870,8 +878,8 @@
   {
     "key": "Add purposes ›",
     "files": [
-      "app/index.tsx",
-      "app/report.tsx"
+      "app/report.tsx",
+      "components/home/purpose-nudge.tsx"
     ]
   },
   {
@@ -889,19 +897,19 @@
   {
     "key": "Added manually",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
     ]
   },
   {
     "key": "Additional",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Address",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -925,7 +933,13 @@
   {
     "key": "After your shift ended · not counted as work unless you say so",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
+    ]
+  },
+  {
+    "key": "All drives sorted ✓",
+    "files": [
+      "app/(tabs)/index.tsx"
     ]
   },
   {
@@ -949,7 +963,7 @@
   {
     "key": "Allow location access and MileMint logs every drive for you.",
     "files": [
-      "app/index.tsx"
+      "components/home/tracking-card.tsx"
     ]
   },
   {
@@ -1003,8 +1017,9 @@
   {
     "key": "ATO logbook",
     "files": [
-      "app/_layout.tsx",
-      "app/settings.tsx"
+      "app/(tabs)/money.tsx",
+      "app/(tabs)/settings.tsx",
+      "app/_layout.tsx"
     ]
   },
   {
@@ -1023,43 +1038,43 @@
   {
     "key": "Auto: business by default · swipe left if personal",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
     ]
   },
   {
     "key": "Auto: commute",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
     ]
   },
   {
     "key": "Auto: in your work hours",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
     ]
   },
   {
     "key": "Auto: on shift",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
     ]
   },
   {
     "key": "Auto: outside your work hours · swipe right if it was work",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
     ]
   },
   {
     "key": "Auto: usual route",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
     ]
   },
   {
     "key": "Auto: work hours",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
     ]
   },
   {
@@ -1084,7 +1099,7 @@
   {
     "key": "Automatic tracking is off",
     "files": [
-      "app/index.tsx",
+      "components/home/tracking-card.tsx",
       "components/tracking-health-card.tsx",
       "tracking/health-alerts.ts"
     ]
@@ -1092,14 +1107,14 @@
   {
     "key": "Automatic tracking is paused",
     "files": [
-      "app/index.tsx",
+      "components/home/tracking-card.tsx",
       "components/tracking-health-card.tsx"
     ]
   },
   {
-    "key": "Automatic tracking runs on your iPhone. Tap + to add a trip and try the app here.",
+    "key": "Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here.",
     "files": [
-      "app/index.tsx"
+      "components/home/tracking-card.tsx"
     ]
   },
   {
@@ -1135,7 +1150,7 @@
   {
     "key": "Back up now",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -1165,25 +1180,31 @@
   {
     "key": "Backed up to iCloud.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Backing up…",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Backs up by itself when something changes, at most once a day, and keeps the last four backups.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Backup",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Backup & data",
+    "files": [
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -1201,7 +1222,7 @@
   {
     "key": "Backups to iCloud work in the iPhone app.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -1225,7 +1246,7 @@
   {
     "key": "Basic",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -1258,8 +1279,12 @@
     "key": "Business",
     "files": [
       "app/add-trip.tsx",
-      "app/index.tsx",
-      "app/trip/[id].tsx"
+      "app/trip/[id].tsx",
+      "components/trips/list-bars.tsx",
+      "components/trips/locked-trip-row.tsx",
+      "components/trips/row-parts.tsx",
+      "components/trips/selectable-trip-row.tsx",
+      "components/trips/trip-row.tsx"
     ]
   },
   {
@@ -1305,19 +1330,19 @@
   {
     "key": "Business or personal?",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
     ]
   },
   {
     "key": "Business or personal? Personal drives don’t use your free drives.",
     "files": [
-      "app/index.tsx"
+      "components/trips/locked-trip-row.tsx"
     ]
   },
   {
     "key": "Business or personal? Worth {{amount}} if business.",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
     ]
   },
   {
@@ -1337,8 +1362,8 @@
   {
     "key": "Business purpose: {{purpose}}",
     "files": [
-      "app/index.tsx",
-      "components/purpose-picker.tsx"
+      "components/purpose-picker.tsx",
+      "components/trips/trip-row.tsx"
     ]
   },
   {
@@ -1360,6 +1385,12 @@
     ]
   },
   {
+    "key": "By month",
+    "files": [
+      "app/(tabs)/money.tsx"
+    ]
+  },
+  {
     "key": "By road, from Apple Maps",
     "files": [
       "app/add-trip.tsx"
@@ -1375,11 +1406,12 @@
   {
     "key": "Cancel",
     "files": [
+      "app/(tabs)/settings.tsx",
       "app/add-trip.tsx",
-      "app/index.tsx",
       "app/logbook.tsx",
-      "app/settings.tsx",
-      "app/trip/[id].tsx"
+      "app/trip/[id].tsx",
+      "components/trips/list-bars.tsx",
+      "hooks/use-trip-list.ts"
     ]
   },
   {
@@ -1405,20 +1437,20 @@
   {
     "key": "Change",
     "files": [
-      "app/add-trip.tsx",
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx",
+      "app/add-trip.tsx"
     ]
   },
   {
     "key": "Change country",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Change language",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -1430,13 +1462,13 @@
   {
     "key": "Check {{days}}: use 24-hour times like 09:00, and an end different from the start.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Checking iCloud…",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -1478,20 +1510,20 @@
   {
     "key": "Claim it before {{date}}.",
     "files": [
-      "app/index.tsx"
+      "components/home/summary-card.tsx"
     ]
   },
   {
     "key": "Claim it before {{date}}. {{total}} unclaimed across {{count}} earlier tax years.",
     "files": [
-      "app/index.tsx"
+      "components/home/summary-card.tsx"
     ]
   },
   {
     "key": "Claim mileage relief",
     "files": [
-      "app/_layout.tsx",
-      "components/header-menu.tsx"
+      "app/(tabs)/money.tsx",
+      "app/_layout.tsx"
     ]
   },
   {
@@ -1515,19 +1547,19 @@
   {
     "key": "Classify by work hours",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Clear",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Client",
     "files": [
-      "app/settings.tsx",
+      "app/(tabs)/settings.tsx",
       "app/trip/[id].tsx"
     ]
   },
@@ -1540,7 +1572,7 @@
   {
     "key": "Client privacy",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -1564,15 +1596,9 @@
     ]
   },
   {
-    "key": "Close menu",
-    "files": [
-      "components/header-menu.tsx"
-    ]
-  },
-  {
     "key": "Closes this message",
     "files": [
-      "app/index.tsx"
+      "components/trips/list-bars.tsx"
     ]
   },
   {
@@ -1590,7 +1616,7 @@
   {
     "key": "Commute between home and work isn’t deductible.",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
     ]
   },
   {
@@ -1608,7 +1634,7 @@
   {
     "key": "Compare with your delivery app",
     "files": [
-      "components/header-menu.tsx"
+      "app/(tabs)/money.tsx"
     ]
   },
   {
@@ -1639,20 +1665,20 @@
   {
     "key": "Could not save. Please try again.",
     "files": [
-      "app/logbook.tsx",
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx",
+      "app/logbook.tsx"
     ]
   },
   {
     "key": "Couldn’t back up. Check your connection and try again.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Couldn’t change past trips. Please try again.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -1684,25 +1710,25 @@
   {
     "key": "Couldn’t reach your iCloud backups. Check your connection and try again.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Couldn’t restore. Nothing on this iPhone was changed.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Couldn’t save the place. Please try again.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Country",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -1768,13 +1794,13 @@
   {
     "key": "Deductions found in {{year}}",
     "files": [
-      "app/index.tsx"
+      "components/home/summary-card.tsx"
     ]
   },
   {
     "key": "Deductions found in {{year}} tax year",
     "files": [
-      "app/index.tsx"
+      "components/home/summary-card.tsx"
     ]
   },
   {
@@ -1786,22 +1812,22 @@
   {
     "key": "Delete",
     "files": [
-      "app/index.tsx",
+      "app/(tabs)/settings.tsx",
       "app/logbook.tsx",
-      "app/settings.tsx",
-      "app/trip/[id].tsx"
+      "app/trip/[id].tsx",
+      "hooks/use-trip-list.ts"
     ]
   },
   {
     "key": "Delete “{{name}}”?",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Delete {{name}}",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -1819,8 +1845,8 @@
   {
     "key": "Delete trip?",
     "files": [
-      "app/index.tsx",
-      "app/trip/[id].tsx"
+      "app/trip/[id].tsx",
+      "hooks/use-trip-list.ts"
     ]
   },
   {
@@ -1870,14 +1896,20 @@
     "files": [
       "app/add-trip.tsx",
       "app/friends.tsx",
-      "app/index.tsx",
-      "app/pro.tsx"
+      "app/pro.tsx",
+      "components/trips/list-bars.tsx"
     ]
   },
   {
     "key": "Done. {{count}} past trips now show only the area.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Drives",
+    "files": [
+      "app/(tabs)/_layout.tsx"
     ]
   },
   {
@@ -1889,7 +1921,7 @@
   {
     "key": "Drives are logged when you park.",
     "files": [
-      "app/index.tsx"
+      "components/home/tracking-card.tsx"
     ]
   },
   {
@@ -1919,7 +1951,7 @@
   {
     "key": "Drives may be missed",
     "files": [
-      "app/index.tsx",
+      "components/home/tracking-card.tsx",
       "components/tracking-health-card.tsx",
       "tracking/health-alerts.ts"
     ]
@@ -1933,13 +1965,19 @@
   {
     "key": "Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Driving {{vehicle}}. Change vehicle",
     "files": [
-      "app/index.tsx"
+      "app/(tabs)/index.tsx"
+    ]
+  },
+  {
+    "key": "Driving & tax",
+    "files": [
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -1951,13 +1989,13 @@
   {
     "key": "Driving now",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Driving:",
     "files": [
-      "app/index.tsx"
+      "app/(tabs)/index.tsx"
     ]
   },
   {
@@ -1969,7 +2007,7 @@
   {
     "key": "During a pause in your shift · not counted as work unless you say so",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
     ]
   },
   {
@@ -1997,9 +2035,15 @@
     ]
   },
   {
+    "key": "Earlier tax years",
+    "files": [
+      "app/(tabs)/money.tsx"
+    ]
+  },
+  {
     "key": "Edit this vehicle",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -2011,7 +2055,7 @@
   {
     "key": "Employee",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -2065,7 +2109,7 @@
   {
     "key": "Encrypted with a key only your iCloud Keychain holds. MileMint never sees your trips.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -2138,6 +2182,12 @@
     ]
   },
   {
+    "key": "Ends the practice run",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
     "key": "Enter amounts as numbers, e.g. 2400 or 2,400.50.",
     "files": [
       "app/logbook.tsx"
@@ -2165,7 +2215,7 @@
   {
     "key": "Enter pence a mile as a number, e.g. 45.",
     "files": [
-      "app/settings.tsx",
+      "app/(tabs)/settings.tsx",
       "app/welcome.tsx"
     ]
   },
@@ -2244,7 +2294,7 @@
   {
     "key": "Every drive counts as business",
     "files": [
-      "app/index.tsx"
+      "components/home/shift-bar.tsx"
     ]
   },
   {
@@ -2262,7 +2312,7 @@
   {
     "key": "Every drive is unlocked.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -2280,22 +2330,22 @@
   {
     "key": "Every drive until you end it counts as business",
     "files": [
-      "app/index.tsx",
+      "components/home/shift-bar.tsx",
       "components/practice-tutorial.tsx"
     ]
   },
   {
     "key": "Every drive until you end it counts as business.",
     "files": [
-      "app/index.tsx",
+      "components/home/shift-bar.tsx",
       "components/practice-tutorial.tsx"
     ]
   },
   {
     "key": "Every invite has its own code, for one friend.",
     "files": [
-      "app/friends.tsx",
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx",
+      "app/friends.tsx"
     ]
   },
   {
@@ -2319,7 +2369,7 @@
   {
     "key": "Every work drive has a purpose ✓",
     "files": [
-      "app/index.tsx"
+      "components/trips/list-bars.tsx"
     ]
   },
   {
@@ -2361,7 +2411,7 @@
   {
     "key": "Export report",
     "files": [
-      "app/index.tsx"
+      "components/home/summary-card.tsx"
     ]
   },
   {
@@ -2397,13 +2447,13 @@
   {
     "key": "Filled in for work drives that have none, so your tax records are complete. Shift drives use “Deliveries” unless you choose one.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Filled in for work drives that have none, so your tax records are complete. You can change it on any trip.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -2469,19 +2519,19 @@
   {
     "key": "For delivery and courier work (Uber Eats, Deliveroo, Amazon Flex, Evri, DPD and the like): a Start shift button on the home screen. Every drive in a shift is business, and a whole shift counts as one drive on the free plan.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "For employees: P87 or Self Assessment",
     "files": [
-      "components/header-menu.tsx"
+      "app/(tabs)/money.tsx"
     ]
   },
   {
     "key": "For the tax back estimate: basic {{basic}}%, higher {{higher}}%, additional {{additional}}%. Not sure? MileMint uses {{basic}}%. Scottish rates differ a little.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -2509,21 +2559,21 @@
     ]
   },
   {
+    "key": "Free · {{used}} of {{limit}}",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
     "key": "Free money alert 💸",
     "files": [
       "domain/reminders.ts"
     ]
   },
   {
-    "key": "Free plan",
-    "files": [
-      "components/header-menu.tsx"
-    ]
-  },
-  {
     "key": "Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -2571,7 +2621,7 @@
   {
     "key": "Fri",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -2589,8 +2639,8 @@
   {
     "key": "Friends joined: {{count}} · +{{drives}} free drives a month",
     "files": [
-      "app/friends.tsx",
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx",
+      "app/friends.tsx"
     ]
   },
   {
@@ -2663,14 +2713,15 @@
   {
     "key": "Give the place a name, e.g. “Acme HQ”.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Go Pro",
     "files": [
-      "app/index.tsx",
-      "components/header-menu.tsx"
+      "app/(tabs)/money.tsx",
+      "components/home/plan-card.tsx",
+      "components/home/plan-meter.tsx"
     ]
   },
   {
@@ -2694,8 +2745,8 @@
   {
     "key": "Got a code from a friend? It adds 10 free drives a month.",
     "files": [
-      "app/index.tsx",
-      "app/pro.tsx"
+      "app/pro.tsx",
+      "components/home/plan-card.tsx"
     ]
   },
   {
@@ -2737,7 +2788,7 @@
   {
     "key": "Help & feedback",
     "files": [
-      "components/header-menu.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -2761,7 +2812,7 @@
   {
     "key": "Higher",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -2785,10 +2836,16 @@
   {
     "key": "Home",
     "files": [
-      "app/settings.tsx",
+      "app/(tabs)/settings.tsx",
       "app/trip/[id].tsx",
       "components/practice-tutorial.tsx",
       "hooks/use-place-ask.ts"
+    ]
+  },
+  {
+    "key": "Home (tab)",
+    "files": [
+      "app/(tabs)/_layout.tsx"
     ]
   },
   {
@@ -2800,26 +2857,26 @@
   {
     "key": "How it works",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "How to claim",
     "files": [
       "app/claim-relief.tsx",
-      "app/index.tsx"
+      "components/home/summary-card.tsx"
     ]
   },
   {
     "key": "How to claim Mileage Allowance Relief ›",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "How you’re paid for mileage",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -2831,7 +2888,7 @@
   {
     "key": "I visit clients or patients at home (care, nursing, support work)",
     "files": [
-      "app/settings.tsx",
+      "app/(tabs)/settings.tsx",
       "app/welcome.tsx"
     ]
   },
@@ -2868,25 +2925,25 @@
   {
     "key": "iCloud backup",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "iCloud is off for MileMint. Sign in to iCloud and turn on iCloud Drive in iPhone Settings to back up your trips.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "iCloud isn’t available. Sign in to iCloud and turn on iCloud Drive in iPhone Settings.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "iCloud Keychain isn’t available, so the backup key is kept on this iPhone only. These backups can’t be restored on a new iPhone.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -2898,7 +2955,7 @@
   {
     "key": "If you’ve parked, the trip is saved after 5 minutes.",
     "files": [
-      "app/index.tsx"
+      "components/home/live-drive-banner.tsx"
     ]
   },
   {
@@ -2910,7 +2967,7 @@
   {
     "key": "incl. {{amount}} parking & tolls",
     "files": [
-      "app/index.tsx"
+      "components/home/summary-card.tsx"
     ]
   },
   {
@@ -2928,7 +2985,7 @@
   {
     "key": "Includes {{amount}} from home ↔ work commutes, which usually aren’t deductible.",
     "files": [
-      "app/index.tsx"
+      "components/home/summary-card.tsx"
     ]
   },
   {
@@ -2952,9 +3009,8 @@
   {
     "key": "Invite friends",
     "files": [
-      "app/_layout.tsx",
-      "app/settings.tsx",
-      "components/header-menu.tsx"
+      "app/(tabs)/settings.tsx",
+      "app/_layout.tsx"
     ]
   },
   {
@@ -2966,8 +3022,8 @@
   {
     "key": "Invites sent: {{count}}",
     "files": [
-      "app/friends.tsx",
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx",
+      "app/friends.tsx"
     ]
   },
   {
@@ -3052,7 +3108,7 @@
   {
     "key": "Keep them",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -3107,9 +3163,9 @@
   {
     "key": "Language",
     "files": [
+      "app/(tabs)/settings.tsx",
       "app/_layout.tsx",
-      "app/language.tsx",
-      "app/settings.tsx"
+      "app/language.tsx"
     ]
   },
   {
@@ -3212,7 +3268,7 @@
   {
     "key": "Location is set to “While Using”. Switch it to “Always” so drives are logged when the app is closed.",
     "files": [
-      "app/index.tsx",
+      "components/home/tracking-card.tsx",
       "tracking/health-alerts.ts"
     ]
   },
@@ -3267,8 +3323,8 @@
   {
     "key": "Manage subscription",
     "files": [
-      "app/pro.tsx",
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx",
+      "app/pro.tsx"
     ]
   },
   {
@@ -3280,13 +3336,15 @@
   {
     "key": "Mark {{from}} to {{to}} as business",
     "files": [
-      "app/index.tsx"
+      "components/trips/locked-trip-row.tsx",
+      "components/trips/trip-row.tsx"
     ]
   },
   {
     "key": "Mark {{from}} to {{to}} as personal",
     "files": [
-      "app/index.tsx"
+      "components/trips/locked-trip-row.tsx",
+      "components/trips/trip-row.tsx"
     ]
   },
   {
@@ -3308,12 +3366,6 @@
     ]
   },
   {
-    "key": "Menu",
-    "files": [
-      "components/header-menu.tsx"
-    ]
-  },
-  {
     "key": "Mileage Allowance Relief",
     "files": [
       "app/claim-relief.tsx"
@@ -3328,7 +3380,8 @@
   {
     "key": "Mileage Allowance Relief to claim, {{year}} tax year",
     "files": [
-      "app/index.tsx"
+      "app/(tabs)/money.tsx",
+      "components/home/summary-card.tsx"
     ]
   },
   {
@@ -3352,7 +3405,7 @@
   {
     "key": "Mileage logged for your expense claims",
     "files": [
-      "app/index.tsx"
+      "components/home/summary-card.tsx"
     ]
   },
   {
@@ -3442,7 +3495,7 @@
   {
     "key": "MileMint Pro restored",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -3503,21 +3556,27 @@
   {
     "key": "Milestones",
     "files": [
-      "app/_layout.tsx",
-      "components/header-menu.tsx"
+      "app/(tabs)/money.tsx",
+      "app/_layout.tsx"
     ]
   },
   {
     "key": "Missed miles check",
     "files": [
-      "app/_layout.tsx",
-      "components/header-menu.tsx"
+      "app/(tabs)/money.tsx",
+      "app/_layout.tsx"
     ]
   },
   {
     "key": "Mon",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Money",
+    "files": [
+      "app/(tabs)/_layout.tsx"
     ]
   },
   {
@@ -3625,25 +3684,25 @@
   {
     "key": "Name, e.g. Acme HQ",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Name, e.g. Cargo bike",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Name, e.g. Golf",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Name, e.g. Honda PCX",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -3673,13 +3732,13 @@
   {
     "key": "New drives read like “{{example}}”, with no route saved. Places you saved yourself, like Home, keep their names. For the tax office, the area, the distance and the purpose are enough; add initials or a client number to the purpose if you like.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "New drives start as business",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -3691,7 +3750,7 @@
   {
     "key": "New work drives are still saved and shown in full. Their value unlocks with Pro.",
     "files": [
-      "app/index.tsx"
+      "components/home/plan-card.tsx"
     ]
   },
   {
@@ -3715,7 +3774,8 @@
   {
     "key": "No drives yet",
     "files": [
-      "app/index.tsx",
+      "app/(tabs)/drives.tsx",
+      "app/(tabs)/index.tsx",
       "app/logbook.tsx"
     ]
   },
@@ -3740,7 +3800,7 @@
   {
     "key": "No places yet. Add one below, or open a trip and tap “Save as place”.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -3752,8 +3812,8 @@
   {
     "key": "No subscription found",
     "files": [
-      "app/pro.tsx",
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx",
+      "app/pro.tsx"
     ]
   },
   {
@@ -3771,7 +3831,7 @@
   {
     "key": "None: ask me each time",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -3783,7 +3843,7 @@
   {
     "key": "Not backed up yet.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -3804,13 +3864,13 @@
   {
     "key": "Not sorted",
     "files": [
-      "app/index.tsx"
+      "components/trips/selectable-trip-row.tsx"
     ]
   },
   {
     "key": "Not sure",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -3835,20 +3895,26 @@
   {
     "key": "Nothing",
     "files": [
-      "app/settings.tsx",
+      "app/(tabs)/settings.tsx",
       "app/welcome.tsx"
     ]
   },
   {
     "key": "Nothing to back up yet. Your trips are backed up once you have some.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Notifications",
+    "files": [
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Notifications are off for MileMint. Turn them on in iPhone Settings → Notifications.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -3866,7 +3932,7 @@
   {
     "key": "Number plate (optional)",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -3921,6 +3987,7 @@
   {
     "key": "Off",
     "files": [
+      "app/(tabs)/settings.tsx",
       "components/tracking-health-card.tsx"
     ]
   },
@@ -3939,6 +4006,7 @@
   {
     "key": "On",
     "files": [
+      "app/(tabs)/settings.tsx",
       "components/tracking-health-card.tsx"
     ]
   },
@@ -3951,13 +4019,13 @@
   {
     "key": "On shift · {{elapsed}}",
     "files": [
-      "app/index.tsx"
+      "components/home/shift-bar.tsx"
     ]
   },
   {
     "key": "On shift for {{elapsed}}, {{count}} drives",
     "files": [
-      "app/index.tsx"
+      "components/home/shift-bar.tsx"
     ]
   },
   {
@@ -4012,7 +4080,7 @@
   {
     "key": "Open",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -4028,8 +4096,8 @@
   {
     "key": "Open the ATO logbook",
     "files": [
-      "app/report.tsx",
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx",
+      "app/report.tsx"
     ]
   },
   {
@@ -4047,7 +4115,8 @@
   {
     "key": "Opens MileMint Pro",
     "files": [
-      "app/index.tsx"
+      "components/home/plan-meter.tsx",
+      "components/trips/locked-trip-row.tsx"
     ]
   },
   {
@@ -4057,15 +4126,22 @@
     ]
   },
   {
+    "key": "Opens the Money tab",
+    "files": [
+      "app/(tabs)/index.tsx"
+    ]
+  },
+  {
     "key": "Opens trip details",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
     ]
   },
   {
     "key": "Opens trip details. Long press to delete",
     "files": [
-      "app/index.tsx"
+      "components/trips/locked-trip-row.tsx",
+      "components/trips/trip-row.tsx"
     ]
   },
   {
@@ -4090,8 +4166,8 @@
   {
     "key": "Or invite a friend: you both get 10 more free drives a month.",
     "files": [
-      "app/index.tsx",
-      "app/pro.tsx"
+      "app/pro.tsx",
+      "components/home/plan-card.tsx"
     ]
   },
   {
@@ -4103,7 +4179,7 @@
   {
     "key": "Other",
     "files": [
-      "app/settings.tsx",
+      "app/(tabs)/settings.tsx",
       "app/trip/[id].tsx"
     ]
   },
@@ -4128,8 +4204,8 @@
   {
     "key": "Other…",
     "files": [
-      "app/index.tsx",
-      "components/purpose-picker.tsx"
+      "components/purpose-picker.tsx",
+      "components/trips/trip-row.tsx"
     ]
   },
   {
@@ -4141,7 +4217,7 @@
   {
     "key": "Over 5,000 business km in a car? Keep a 12-week logbook and claim the business share of its running costs.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -4178,7 +4254,7 @@
   {
     "key": "Parking & tolls: {{amount}} (recorded)",
     "files": [
-      "app/index.tsx"
+      "components/home/summary-card.tsx"
     ]
   },
   {
@@ -4226,37 +4302,37 @@
   {
     "key": "Past trips keep their names.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Past trips too?",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Pause",
     "files": [
-      "app/index.tsx"
+      "components/home/shift-bar.tsx"
     ]
   },
   {
     "key": "Pause the shift for a personal errand",
     "files": [
-      "app/index.tsx"
+      "components/home/shift-bar.tsx"
     ]
   },
   {
     "key": "Paused · {{elapsed}}",
     "files": [
-      "app/index.tsx"
+      "components/home/shift-bar.tsx"
     ]
   },
   {
     "key": "Paused: drives now aren’t counted as work. Resume when you’re back.",
     "files": [
-      "app/index.tsx"
+      "components/home/shift-bar.tsx"
     ]
   },
   {
@@ -4274,34 +4350,38 @@
   {
     "key": "pence a mile",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Pence per mile your employer pays",
     "files": [
-      "app/settings.tsx",
+      "app/(tabs)/settings.tsx",
       "app/welcome.tsx"
     ]
   },
   {
     "key": "Per mile",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Personal",
     "files": [
       "app/add-trip.tsx",
-      "app/index.tsx",
-      "app/trip/[id].tsx"
+      "app/trip/[id].tsx",
+      "components/trips/list-bars.tsx",
+      "components/trips/locked-trip-row.tsx",
+      "components/trips/row-parts.tsx",
+      "components/trips/selectable-trip-row.tsx",
+      "components/trips/trip-row.tsx"
     ]
   },
   {
     "key": "Personal drives don’t count.",
     "files": [
-      "app/index.tsx"
+      "components/home/plan-card.tsx"
     ]
   },
   {
@@ -4331,13 +4411,13 @@
   {
     "key": "Place name",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Places",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -4382,7 +4462,7 @@
   {
     "key": "Preview mode",
     "files": [
-      "app/index.tsx"
+      "components/home/tracking-card.tsx"
     ]
   },
   {
@@ -4404,21 +4484,27 @@
     ]
   },
   {
+    "key": "Pro & friends",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
     "key": "Pro is active: unlimited automatic drives.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Purpose needed for your tax records",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
     ]
   },
   {
     "key": "Ready when you are",
     "files": [
-      "app/index.tsx"
+      "app/(tabs)/index.tsx"
     ]
   },
   {
@@ -4436,7 +4522,7 @@
   {
     "key": "Recording a drive · {{distance}}",
     "files": [
-      "app/index.tsx"
+      "components/home/live-drive-banner.tsx"
     ]
   },
   {
@@ -4460,61 +4546,61 @@
   {
     "key": "Reminders",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Remove",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Remove “{{name}}”?",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Remove {{day}} shift {{number}}",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Remove addresses",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Remove addresses from past trips",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Remove addresses from past trips?",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Remove this vehicle",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Replace what’s on this iPhone?",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Replace…",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -4538,25 +4624,25 @@
   {
     "key": "Reports & export",
     "files": [
-      "components/header-menu.tsx"
+      "app/(tabs)/money.tsx"
     ]
   },
   {
     "key": "Reports: export your mileage log",
     "files": [
-      "app/index.tsx"
+      "components/home/summary-card.tsx"
     ]
   },
   {
     "key": "Restore",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Restore from iCloud backup",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -4568,14 +4654,14 @@
   {
     "key": "Restore purchases",
     "files": [
-      "app/pro.tsx",
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx",
+      "app/pro.tsx"
     ]
   },
   {
     "key": "Restore the backup from {{date}} with {{count}} trips. The trips, places, vehicles and settings on this iPhone are replaced by the ones in the backup.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -4587,32 +4673,32 @@
   {
     "key": "Restored {{count}} trips from iCloud.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Restoring…",
     "files": [
-      "app/settings.tsx",
+      "app/(tabs)/settings.tsx",
       "app/welcome.tsx"
     ]
   },
   {
     "key": "Resume",
     "files": [
-      "app/index.tsx"
+      "components/home/shift-bar.tsx"
     ]
   },
   {
     "key": "Resume the shift",
     "files": [
-      "app/index.tsx"
+      "components/home/shift-bar.tsx"
     ]
   },
   {
     "key": "Sat",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -4661,7 +4747,7 @@
   {
     "key": "Save place",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -4698,19 +4784,19 @@
   {
     "key": "Save vehicle",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Save work hours",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Saved · value unlocks with Pro",
     "files": [
-      "app/index.tsx"
+      "components/trips/locked-trip-row.tsx"
     ]
   },
   {
@@ -4722,7 +4808,7 @@
   {
     "key": "Saved. New drives will use these hours.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -4734,34 +4820,40 @@
   {
     "key": "Saved. This month’s free drives are used, so a drive sorted back from personal waits for Pro to show its value. Drives already showing their value keep it.",
     "files": [
-      "app/index.tsx"
+      "components/trips/list-bars.tsx"
     ]
   },
   {
     "key": "Saving…",
     "files": [
+      "app/(tabs)/settings.tsx",
       "app/add-trip.tsx",
-      "app/settings.tsx",
       "app/trip/[id].tsx"
     ]
   },
   {
     "key": "Search an address or place",
     "files": [
-      "app/add-trip.tsx",
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx",
+      "app/add-trip.tsx"
     ]
   },
   {
     "key": "Search for its address, or use “I’m here now”.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "See all drives ›",
+    "files": [
+      "app/(tabs)/index.tsx"
     ]
   },
   {
     "key": "See how to claim ›",
     "files": [
-      "app/index.tsx"
+      "components/home/summary-card.tsx"
     ]
   },
   {
@@ -4779,19 +4871,19 @@
   {
     "key": "Select",
     "files": [
-      "app/index.tsx"
+      "components/trips/list-bars.tsx"
     ]
   },
   {
     "key": "Select {{count}} unsorted",
     "files": [
-      "app/index.tsx"
+      "components/trips/list-bars.tsx"
     ]
   },
   {
     "key": "Select several trips to sort at once",
     "files": [
-      "app/index.tsx"
+      "components/trips/list-bars.tsx"
     ]
   },
   {
@@ -4809,7 +4901,7 @@
   {
     "key": "Self-employed",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -4911,15 +5003,13 @@
   {
     "key": "Settings",
     "files": [
-      "app/_layout.tsx",
-      "app/settings.tsx",
-      "components/header-menu.tsx"
+      "app/(tabs)/_layout.tsx"
     ]
   },
   {
     "key": "Share",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -4949,7 +5039,7 @@
   {
     "key": "Shift mode",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -4967,7 +5057,7 @@
   {
     "key": "Show all drives",
     "files": [
-      "app/index.tsx"
+      "components/trips/list-bars.tsx"
     ]
   },
   {
@@ -4979,8 +5069,8 @@
   {
     "key": "Shows only the drives that need a purpose",
     "files": [
-      "app/index.tsx",
-      "app/report.tsx"
+      "app/report.tsx",
+      "components/home/purpose-nudge.tsx"
     ]
   },
   {
@@ -4998,7 +5088,7 @@
   {
     "key": "Since {{time}}. It’s saved as a trip once you park.",
     "files": [
-      "app/index.tsx"
+      "components/home/live-drive-banner.tsx"
     ]
   },
   {
@@ -5135,12 +5225,6 @@
     ]
   },
   {
-    "key": "Start driving",
-    "files": [
-      "components/practice-tutorial.tsx"
-    ]
-  },
-  {
     "key": "Start earlier",
     "files": [
       "components/work-hours-quick.tsx"
@@ -5259,13 +5343,13 @@
   {
     "key": "Stop selecting trips",
     "files": [
-      "app/index.tsx"
+      "components/trips/list-bars.tsx"
     ]
   },
   {
     "key": "Stopped · {{distance}}",
     "files": [
-      "app/index.tsx"
+      "components/home/live-drive-banner.tsx"
     ]
   },
   {
@@ -5283,7 +5367,7 @@
   {
     "key": "Sun",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -5319,7 +5403,7 @@
   {
     "key": "Swipe back to end your shift.",
     "files": [
-      "app/index.tsx"
+      "components/home/shift-bar.tsx"
     ]
   },
   {
@@ -5359,9 +5443,15 @@
     ]
   },
   {
+    "key": "Swipe to start driving",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
     "key": "Swipe to start shift",
     "files": [
-      "app/index.tsx",
+      "components/home/shift-bar.tsx",
       "components/practice-tutorial.tsx"
     ]
   },
@@ -5423,14 +5513,14 @@
   {
     "key": "Tap trips to select them",
     "files": [
-      "app/index.tsx"
+      "components/trips/list-bars.tsx"
     ]
   },
   {
     "key": "Tax dates",
     "files": [
-      "app/_layout.tsx",
-      "components/header-menu.tsx"
+      "app/(tabs)/money.tsx",
+      "app/_layout.tsx"
     ]
   },
   {
@@ -5581,8 +5671,9 @@
   {
     "key": "The logbook method",
     "files": [
-      "app/logbook.tsx",
-      "app/settings.tsx"
+      "app/(tabs)/money.tsx",
+      "app/(tabs)/settings.tsx",
+      "app/logbook.tsx"
     ]
   },
   {
@@ -5630,7 +5721,7 @@
   {
     "key": "There’s no backup in iCloud yet.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -5648,8 +5739,8 @@
   {
     "key": "This Apple Account doesn’t have MileMint Pro.",
     "files": [
-      "app/pro.tsx",
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx",
+      "app/pro.tsx"
     ]
   },
   {
@@ -5679,7 +5770,7 @@
   {
     "key": "This can’t be undone. Dates, distances and purposes stay as they are; places you saved keep their names.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -5721,7 +5812,7 @@
   {
     "key": "Thu",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -5745,7 +5836,7 @@
   {
     "key": "to",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -5753,6 +5844,12 @@
     "files": [
       "app/add-trip.tsx",
       "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "To sort",
+    "files": [
+      "app/(tabs)/index.tsx"
     ]
   },
   {
@@ -5800,6 +5897,12 @@
     ]
   },
   {
+    "key": "Tracking",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
     "key": "Tracking check",
     "files": [
       "components/tracking-health-card.tsx"
@@ -5822,7 +5925,7 @@
   {
     "key": "Tracking on",
     "files": [
-      "app/index.tsx"
+      "components/home/tracking-card.tsx"
     ]
   },
   {
@@ -5858,13 +5961,13 @@
   {
     "key": "Trips",
     "files": [
-      "app/index.tsx"
+      "components/trips/list-bars.tsx"
     ]
   },
   {
     "key": "Trips already logged in it keep it in their record.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -5888,19 +5991,19 @@
   {
     "key": "Tue",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Turn it back on to keep logging drives.",
     "files": [
-      "app/index.tsx"
+      "components/home/tracking-card.tsx"
     ]
   },
   {
     "key": "Turn on",
     "files": [
-      "app/index.tsx",
+      "components/home/tracking-card.tsx",
       "components/tracking-health-card.tsx"
     ]
   },
@@ -5980,7 +6083,7 @@
   {
     "key": "Unless a rule says otherwise (work hours, a commute, a route you’ve taught it). Swipe left on any that were personal; only business drives should be claimed.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -5992,7 +6095,7 @@
   {
     "key": "Unlimited drives, PDF reports and accounting exports",
     "files": [
-      "components/header-menu.tsx"
+      "app/(tabs)/money.tsx"
     ]
   },
   {
@@ -6004,7 +6107,7 @@
   {
     "key": "Upgrade to Pro",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -6022,7 +6125,7 @@
   {
     "key": "Use now",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -6040,19 +6143,25 @@
   {
     "key": "Usual business purpose",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "Usual purpose · tap to change",
     "files": [
-      "app/index.tsx"
+      "components/trips/trip-row.tsx"
     ]
   },
   {
     "key": "Valid for the {{first}} to {{last}} income years, unless your work or your car changes.",
     "files": [
       "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Varies by day",
+    "files": [
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -6066,7 +6175,7 @@
   {
     "key": "Vehicle name",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -6090,13 +6199,13 @@
   {
     "key": "We read every message",
     "files": [
-      "components/header-menu.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "We’ll keep only the area, never their address.",
     "files": [
-      "app/settings.tsx",
+      "app/(tabs)/settings.tsx",
       "app/welcome.tsx"
     ]
   },
@@ -6109,7 +6218,7 @@
   {
     "key": "Wed",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -6121,7 +6230,7 @@
   {
     "key": "Weekly reminder",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -6139,13 +6248,13 @@
   {
     "key": "What are you driving?",
     "files": [
-      "app/index.tsx"
+      "app/(tabs)/index.tsx"
     ]
   },
   {
     "key": "What counts?",
     "files": [
-      "app/index.tsx",
+      "components/home/plan-card.tsx",
       "components/plan-rules.tsx"
     ]
   },
@@ -6158,7 +6267,7 @@
   {
     "key": "What does your employer pay?",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -6170,7 +6279,7 @@
   {
     "key": "When and how to claim with {{authority}}",
     "files": [
-      "components/header-menu.tsx"
+      "app/(tabs)/money.tsx"
     ]
   },
   {
@@ -6200,7 +6309,7 @@
   {
     "key": "Which vehicle today?",
     "files": [
-      "app/index.tsx"
+      "app/(tabs)/index.tsx"
     ]
   },
   {
@@ -6224,7 +6333,7 @@
   {
     "key": "Work",
     "files": [
-      "app/settings.tsx",
+      "app/(tabs)/settings.tsx",
       "app/trip/[id].tsx",
       "hooks/use-place-ask.ts"
     ]
@@ -6232,13 +6341,7 @@
   {
     "key": "Work hours",
     "files": [
-      "app/settings.tsx"
-    ]
-  },
-  {
-    "key": "Work hours, places and reminders",
-    "files": [
-      "components/header-menu.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -6250,7 +6353,7 @@
   {
     "key": "Work on {{day}}",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -6328,9 +6431,8 @@
   {
     "key": "You both get +10 free drives a month when a friend joins.",
     "files": [
-      "app/settings.tsx",
-      "components/celebration.tsx",
-      "components/header-menu.tsx"
+      "app/(tabs)/settings.tsx",
+      "components/celebration.tsx"
     ]
   },
   {
@@ -6348,14 +6450,14 @@
   {
     "key": "You drive your own vehicle for your employer. If they pay less than HMRC’s rate (or nothing), you can claim tax relief on the difference.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
     "key": "You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed.",
     "files": [
-      "app/friends.tsx",
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx",
+      "app/friends.tsx"
     ]
   },
   {
@@ -6374,8 +6476,8 @@
   {
     "key": "You joined with {{code}}: 10 extra free drives a month.",
     "files": [
-      "app/friends.tsx",
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx",
+      "app/friends.tsx"
     ]
   },
   {
@@ -6471,7 +6573,7 @@
   {
     "key": "Your business mileage is an expense on your Self Assessment return.",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -6501,7 +6603,7 @@
   {
     "key": "Your driving",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -6555,7 +6657,7 @@
   {
     "key": "Your income tax rate",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -6573,7 +6675,7 @@
   {
     "key": "Your mileage log for {{authority}}",
     "files": [
-      "components/header-menu.tsx"
+      "app/(tabs)/money.tsx"
     ]
   },
   {
@@ -6597,7 +6699,7 @@
   {
     "key": "Your money back and badges",
     "files": [
-      "components/header-menu.tsx"
+      "app/(tabs)/money.tsx"
     ]
   },
   {
@@ -6645,7 +6747,7 @@
   {
     "key": "Your vehicles",
     "files": [
-      "app/settings.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   }
 ]
