@@ -35,3 +35,21 @@ Kilomi had a 51% first-choice share in miles countries and 56% in km countries, 
 - **Kilomi:** rejected by the founder because it sounds like "kill me".
 - **Goldot and Drumi:** almost nobody could tell what the app does from these names (3–8% guessed correctly), and both carry negative associations.
 - **No coined name passed.** Next, test MileSprout (capital S) the same way.
+
+## MileSprout (capital S), simulated, n=1000
+
+This used a separate generator (`fieldtest/gen_ms.py`), so compare it with the table above only roughly.
+
+| Spelled right after hearing | Heard as "Miles Prout" | Read as intended | Guessed what it does | Like (/5) | Would tell another driver (/5) | Trust with tax (/5) | Fits a mileage app (/5) | Recalled |
+|---|---|---|---|---|---|---|---|---|
+| 61% | 10% | 48% | 44% | 2.93 | 2.90 | 2.97 | 3.46 | 63% |
+
+**Top negatives:**
+- The Brussels sprouts joke (~220 mentions).
+- Sounds like a gardening or veg-box app (~127).
+- Confused with Sprouts Farmers Market or Sprout Social (90).
+- **French "prout" = fart:** 29 of 40 Canadian Québécois respondents (73%) and 42 of 55 Québécois across the whole study (76%).
+- Canada and Australia: "we use km, miles feels American" (34). This applies to any "Mile" name.
+- "spr" is hard to say for South Asian, Spanish and Portuguese speakers ("isprout", "esprout").
+
+**Mitigation to consider:** the App Store name and the home-screen label can be set separately for each language, so the French-language listing could use a different display name.
