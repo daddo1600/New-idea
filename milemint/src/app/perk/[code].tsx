@@ -81,11 +81,15 @@ export default function PerkCodeScreen() {
   return (
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.partner}>
-          <PerkEmblem offer={offer} size={44} />
-          <View style={styles.flex}>
-            <ThemedText type="smallBold">{offer.partner}</ThemedText>
-            <ThemedText style={styles.headline}>{t(offer.headline)}</ThemedText>
+        {/* The partner's colour, as on its card; the ticket below stays white for the scanner. */}
+        <View style={[styles.brand, { backgroundColor: offer.color + '1F' }]}>
+          <View style={[styles.band, { backgroundColor: offer.color }]} />
+          <View style={styles.partner}>
+            <PerkEmblem offer={offer} size={44} />
+            <View style={styles.flex}>
+              <ThemedText type="smallBold">{offer.partner}</ThemedText>
+              <ThemedText style={styles.headline}>{t(offer.headline)}</ThemedText>
+            </View>
           </View>
         </View>
 
@@ -210,7 +214,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   flex: { flex: 1 },
-  partner: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three },
+  brand: { borderRadius: 16, overflow: 'hidden' },
+  band: { height: 5 },
+  partner: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three, padding: Spacing.three },
   headline: { fontSize: 18, lineHeight: 24, fontWeight: '700' },
   // Always white, like a paper voucher, so the QR code has its quiet zone in dark mode too.
   ticket: {

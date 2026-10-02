@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
 import {
+  claimAction,
   claimStatus,
   holdsCode,
   myClaimsThisPeriod,
@@ -270,5 +271,22 @@ describe('offerState', () => {
     expect(offerState(full, [c], at(MONDAY, 13))).toMatchObject({ left: 0, canClaim: false, nextAt: null });
     // Next Monday the cap resets.
     expect(offerState(full, [c], at(MONDAY + 7))).toMatchObject({ left: 1, canClaim: true });
+  });
+});
+
+describe('claims only while parked', () => {
+  it('while a drive is being recorded, the button is “Park up to claim”', () => {
+    expect(claimAction({ canClaim: true, latest: null }, true)).toBe('park');
+    expect(claimAction({ canClaim: true, latest: claim(at(MONDAY, 9)) }, true)).toBe('park');
+  });
+
+  it('parked, it’s Claim, or Claim again after a code ran out', () => {
+    expect(claimAction({ canClaim: true, latest: null }, false)).toBe('claim');
+    expect(claimAction({ canClaim: true, latest: claim(at(MONDAY, 9)) }, false)).toBe('claim-again');
+  });
+
+  it('nothing to claim, no button, driving or not', () => {
+    expect(claimAction({ canClaim: false, latest: null }, false)).toBeNull();
+    expect(claimAction({ canClaim: false, latest: null }, true)).toBeNull();
   });
 });

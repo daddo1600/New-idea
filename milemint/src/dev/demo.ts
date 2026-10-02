@@ -111,7 +111,7 @@ const DEMO_HOURS = demoFlag('hours');
  */
 export const DEMO_PLACES = demoParam === 'places';
 
-/** `?demo=driving`: the home screen shows a drive being recorded. */
+/** `?demo=driving`: the home screen shows a drive being recorded (and Perks show "Park up to claim"). */
 export const DEMO_DRIVING = demoParam === 'driving';
 
 /**

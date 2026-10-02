@@ -4842,12 +4842,6 @@
     ]
   },
   {
-    "key": "One per person a day, week or month: the partner sets it.",
-    "files": [
-      "app/(tabs)/perks.tsx"
-    ]
-  },
-  {
     "key": "One week left in the {{year}} tax year 🏁",
     "files": [
       "domain/deadlines.ts"
@@ -5077,6 +5071,12 @@
     ]
   },
   {
+    "key": "Park up to claim",
+    "files": [
+      "components/perks/offer-card.tsx"
+    ]
+  },
+  {
     "key": "Parking",
     "files": [
       "app/report.tsx",
@@ -5206,6 +5206,12 @@
   },
   {
     "key": "Perks are just deals: MileSprout works the same whether you use them or not.",
+    "files": [
+      "app/(tabs)/perks.tsx"
+    ]
+  },
+  {
+    "key": "Perks come from the partners shown. They’re not from, or endorsed by, delivery or ride apps.",
     "files": [
       "app/(tabs)/perks.tsx"
     ]
@@ -7863,6 +7869,12 @@
     "key": "You can claim up to 5,000 business kilometres per car each income year. This report assumes one car.",
     "files": [
       "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "You can have one a day, week or month: the partner sets it.",
+    "files": [
+      "app/(tabs)/perks.tsx"
     ]
   },
   {

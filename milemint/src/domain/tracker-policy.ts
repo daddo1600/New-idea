@@ -35,6 +35,17 @@ export type TrackerRecord = {
   droppedWalks?: DroppedWalk[];
 };
 
+/**
+ * The drive the tracker is recording right now, or null when parked (or
+ * tracking is off). Perks use it too: claims wait until the driver parks.
+ */
+export function driveInProgress(
+  record: Pick<TrackerRecord, 'enabled' | 'detector'> | null | undefined,
+): Extract<DetectorState, { mode: 'driving' }> | null {
+  const detector = record?.enabled ? record.detector : null;
+  return detector?.mode === 'driving' ? detector : null;
+}
+
 /** A detected "drive" not saved because the phone was walking: when, and how far the GPS made it. */
 export type DroppedWalk = { startedAt: number; endedAt: number; distanceM: number };
 
