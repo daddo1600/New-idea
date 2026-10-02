@@ -1,0 +1,181 @@
+diff --git a/node_modules/expo-location/ios/LocationModule.swift b/node_modules/expo-location/ios/LocationModule.swift
+index 6d41d09..223db7f 100644
+--- a/node_modules/expo-location/ios/LocationModule.swift
++++ b/node_modules/expo-location/ios/LocationModule.swift
+@@ -86,7 +86,7 @@ public final class LocationModule: Module {
+     AsyncFunction("getLastKnownPositionAsync") { (requirements: LastKnownLocationRequirements) -> [String: Any]? in
+       try ensureForegroundLocationPermissions(appContext)
+ 
+-      if let location = CLLocationManager().location, isLocation(location, valid: requirements) {
++      if let location = await LastKnownLocation.current(), isLocation(location, valid: requirements) {
+         return exportLocation(location)
+       }
+       return nil
+@@ -283,3 +283,17 @@ public final class LocationModule: Module {
+     }
+   }
+ }
++
++/**
++ One long-lived manager, made on the main thread, for reading the last known
++ location. A throwaway manager created and freed on a background thread could
++ be released while Core Location still had a callback queued for it.
++ */
++@MainActor
++private enum LastKnownLocation {
++  static let manager = CLLocationManager()
++
++  static func current() -> CLLocation? {
++    return manager.location
++  }
++}
+diff --git a/node_modules/expo-location/ios/Providers/BaseLocationProvider.swift b/node_modules/expo-location/ios/Providers/BaseLocationProvider.swift
+index ae9135a..a35485c 100644
+--- a/node_modules/expo-location/ios/Providers/BaseLocationProvider.swift
++++ b/node_modules/expo-location/ios/Providers/BaseLocationProvider.swift
+@@ -14,4 +14,18 @@ internal class BaseLocationProvider: NSObject, CLLocationManagerDelegate {
+     manager.desiredAccuracy = options.accuracy.toCLLocationAccuracy()
+     manager.delegate = self
+   }
++
++  // Released providers can be deallocated off the main thread while Core
++  // Location still has a callback (such as an authorization change) queued for
++  // their manager. Detach it and keep it alive on the main queue for a while,
++  // so it is never freed under a pending callback.
++  deinit {
++    let retired = manager
++    DispatchQueue.main.async {
++      retired.delegate = nil
++      DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
++        withExtendedLifetime(retired) {}
++      }
++    }
++  }
+ }
+diff --git a/node_modules/expo-location/ios/Requesters/EXBaseLocationRequester.m b/node_modules/expo-location/ios/Requesters/EXBaseLocationRequester.m
+index 350eb5f..83c7015 100644
+--- a/node_modules/expo-location/ios/Requesters/EXBaseLocationRequester.m
++++ b/node_modules/expo-location/ios/Requesters/EXBaseLocationRequester.m
+@@ -13,6 +13,24 @@
+ 
+ @end
+ 
++// Core Location can still deliver a queued callback (such as an authorization
++// change) to a manager after its owner lets it go, which crashed with
++// EXC_BAD_ACCESS in -[CLLocationManager onClientEventAuthStatus:]. Retired
++// managers are detached and kept alive on the main queue for a while, so any
++// callback already queued finds a live object, and are released on main.
++static void EXRetireRequesterLocationManager(CLLocationManager *manager)
++{
++  if (manager == nil) {
++    return;
++  }
++  dispatch_async(dispatch_get_main_queue(), ^{
++    manager.delegate = nil;
++    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
++      [manager self];
++    });
++  });
++}
++
+ @implementation EXBaseLocationRequester
+ 
+ # pragma mark - Abstract methods
+@@ -60,6 +78,7 @@
+     [EXUtilities performSynchronouslyOnMainThread:^{
+       EX_ENSURE_STRONGIFY(self)
+       self.locationManagerWasCalled = false;
++      EXRetireRequesterLocationManager(self.locationManager);
+       self.locationManager = [[CLLocationManager alloc] init];
+       self.locationManager.delegate = self;
+     }];
+diff --git a/node_modules/expo-location/ios/TaskConsumers/EXGeofencingTaskConsumer.m b/node_modules/expo-location/ios/TaskConsumers/EXGeofencingTaskConsumer.m
+index 7e6482e..9c91f2f 100644
+--- a/node_modules/expo-location/ios/TaskConsumers/EXGeofencingTaskConsumer.m
++++ b/node_modules/expo-location/ios/TaskConsumers/EXGeofencingTaskConsumer.m
+@@ -17,6 +17,24 @@
+ 
+ @end
+ 
++// Core Location can still deliver a queued callback (such as an authorization
++// change) to a manager after its owner lets it go, which crashed with
++// EXC_BAD_ACCESS in -[CLLocationManager onClientEventAuthStatus:]. Retired
++// managers are detached and kept alive on the main queue for a while, so any
++// callback already queued finds a live object, and are released on main.
++static void EXRetireGeofencingLocationManager(CLLocationManager *manager)
++{
++  if (manager == nil) {
++    return;
++  }
++  dispatch_async(dispatch_get_main_queue(), ^{
++    manager.delegate = nil;
++    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
++      [manager self];
++    });
++  });
++}
++
+ @implementation EXGeofencingTaskConsumer
+ 
+ - (void)dealloc
+@@ -53,6 +71,7 @@
+ {
+   [self stopMonitoringAllRegions];
+   [EXUtilities performSynchronouslyOnMainThread:^{
++    EXRetireGeofencingLocationManager(self->_locationManager);
+     self->_locationManager = nil;
+     self->_task = nil;
+   }];
+@@ -67,6 +86,7 @@
+     NSArray *regions = options[@"regions"];
+ 
+     self->_task = task;
++    EXRetireGeofencingLocationManager(self->_locationManager);
+     self->_locationManager = locationManager;
+     self->_regionStates = regionStates;
+ 
+diff --git a/node_modules/expo-location/ios/TaskConsumers/EXLocationTaskConsumer.m b/node_modules/expo-location/ios/TaskConsumers/EXLocationTaskConsumer.m
+index fe1d9dd..8d859a3 100644
+--- a/node_modules/expo-location/ios/TaskConsumers/EXLocationTaskConsumer.m
++++ b/node_modules/expo-location/ios/TaskConsumers/EXLocationTaskConsumer.m
+@@ -17,6 +17,24 @@
+ 
+ @end
+ 
++// Core Location can still deliver a queued callback (such as an authorization
++// change) to a manager after its owner lets it go, which crashed with
++// EXC_BAD_ACCESS in -[CLLocationManager onClientEventAuthStatus:]. Retired
++// managers are detached and kept alive on the main queue for a while, so any
++// callback already queued finds a live object, and are released on main.
++static void EXRetireTaskLocationManager(CLLocationManager *manager)
++{
++  if (manager == nil) {
++    return;
++  }
++  dispatch_async(dispatch_get_main_queue(), ^{
++    manager.delegate = nil;
++    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
++      [manager self];
++    });
++  });
++}
++
+ @implementation EXLocationTaskConsumer
+ 
+ - (instancetype)init
+@@ -45,6 +63,7 @@
+   [EXUtilities performSynchronouslyOnMainThread:^{
+     CLLocationManager *locationManager = [CLLocationManager new];
+ 
++    EXRetireTaskLocationManager(self->_locationManager);
+     self->_task = task;
+     self->_locationManager = locationManager;
+ 
+@@ -103,6 +122,7 @@
+     [self->_deferredLocations removeAllObjects];
+     self->_lastReportedLocation = nil;
+     self->_deferredDistance = 0.0;
++    EXRetireTaskLocationManager(self->_locationManager);
+     self->_locationManager = nil;
+     self->_task = nil;
+   }];

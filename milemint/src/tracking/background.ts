@@ -363,7 +363,21 @@ export async function getTrackingStatus(db: SQLiteDatabase): Promise<TrackingSta
  * status. `onAsking` says which of iOS's two questions is about to show, so
  * the screen behind it can say what to tap.
  */
-export async function requestTrackingPermissions(
+export function requestTrackingPermissions(
+  db: SQLiteDatabase,
+  onAsking?: (question: 1 | 2) => void,
+): Promise<TrackingStatus> {
+  // One request at a time: a second tap while iOS is asking would make a new
+  // location manager under the one iOS is answering (see patches/expo-location).
+  permissionRequest ??= askForTrackingPermissions(db, onAsking).finally(() => {
+    permissionRequest = null;
+  });
+  return permissionRequest;
+}
+
+let permissionRequest: Promise<TrackingStatus> | null = null;
+
+async function askForTrackingPermissions(
   db: SQLiteDatabase,
   onAsking?: (question: 1 | 2) => void,
 ): Promise<TrackingStatus> {
