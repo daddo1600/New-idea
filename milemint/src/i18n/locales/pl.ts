@@ -1,6 +1,7 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Just drive. Each trip appears after you park.": "Po prostu jedź. Każda trasa pojawi się, gdy zaparkujesz.",
   "…": "…",
   "…unless you set your work hours. Until then, a few swipes will do.": "…chyba że ustawisz godziny pracy. Do tego czasu wystarczy kilka przesunięć palcem.",
   "{{achievement}} on MileSprout {{emoji}} The mileage app that counts every mile.": "{{achievement}} w MileSprout {{emoji}} Aplikacja, dla której liczy się każdy przejazd.",
@@ -192,7 +193,6 @@ const dictionary: Dictionary = {
   "A few swipes tonight beats a shoebox of receipts at tax time.": "Kilka przesunięć palcem dziś wieczorem bije na głowę karton paragonów w sezonie podatkowym.",
   "A fully sorted week": "W pełni oznaczony tydzień",
   "A quick (slightly cheeky) reminder each Sunday evening to sort the week’s drives, so nothing goes unclaimed.": "Krótkie przypomnienie z przymrużeniem oka w każdą niedzielę wieczorem, żeby oznaczyć przejazdy z tygodnia i niczego nie pominąć przy odliczeniach.",
-  "A quick Sunday reminder to sort your week. Turn it off any time in Settings.": "Krótkie niedzielne przypomnienie, żeby oznaczyć przejazdy z tygodnia. Wyłączysz je w każdej chwili w Ustawieniach.",
   "A ready-to-file report for you or your accountant: your mileage totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "Raport gotowy do złożenia dla Ciebie lub Twojego księgowego: sumy przebiegu, odliczenie według każdej stawki {{authority}} i pełny rejestr przejazdów z informacją, które zapisano podczas jazdy, a które edytowano.",
   "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "Raport gotowy do złożenia dla Ciebie lub Twojego księgowego: sumy do Schedule C Part IV, odliczenie według każdej stawki {{authority}} i pełny rejestr przejazdów z informacją, które zapisano podczas jazdy, a które edytowano.",
   "Active · thank you!": "Aktywny · dziękujemy!",
@@ -360,7 +360,6 @@ const dictionary: Dictionary = {
   "found this tax year": "znaleziono w tym roku podatkowym",
   "Free": "Darmowy",
   "Free money alert 💸": "Odliczenia czekają 💸",
-  "Free to start": "Na start za darmo",
   "Free trial": "Darmowy okres próbny",
   "Fri": "Pt",
   "From": "Skąd",
@@ -376,7 +375,6 @@ const dictionary: Dictionary = {
   "Give the place a name, e.g. “Acme HQ”.": "Nadaj miejscu nazwę, np. „Biuro Acme”.",
   "Go Pro": "Kup Pro",
   "Good habits": "Dobre nawyki",
-  "Good to know": "Warto wiedzieć",
   "GPS only runs while you drive. Parked, MileSprout sleeps.": "GPS działa tylko podczas jazdy. Na postoju MileSprout śpi.",
   "Happy Halloween 🎃": "Wesołego Halloween 🎃",
   "Happy holidays from MileSprout 🎁": "Wesołych świąt od MileSprout 🎁",
@@ -399,7 +397,6 @@ const dictionary: Dictionary = {
   "iOS asks twice. Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.": "iOS pyta dwa razy. Stuknij <b>Pozwalaj, gdy używana</b>, a potem <b>Zmień na: Zawsze pozwalaj</b>.",
   "iOS only offers “Always” in Settings. It takes ten seconds, and MileSprout carries on by itself when you come back.": "iOS oferuje opcję „Zawsze” tylko w Ustawieniach. To zajmie dziesięć sekund, a po powrocie MileSprout dalej działa sam.",
   "IRS standard mileage rate: 76¢ a mile from July 2026": "Standardowa stawka IRS: 76¢ za milę od lipca 2026",
-  "Just drive. Each trip appears after you park, and business drives count at {{authority}}’s {{rate}} rate.": "Po prostu jedź. Każdy przejazd pojawi się po zaparkowaniu, a przejazdy służbowe liczą się według stawki {{rate}} ({{authority}}).",
   "Keep going": "Jedziemy dalej",
   "kilometres": "kilometry",
   "Kilometres": "Kilometry",
@@ -557,7 +554,6 @@ const dictionary: Dictionary = {
   "Save end as a place: {{name}}": "Zapisz koniec jako miejsce: {{name}}",
   "Save my hours": "Zapisz moje godziny",
   "Save place": "Zapisz miejsce",
-  "Save places like clients or the depot from any trip.": "Zapisuj miejsca, np. klientów albo bazę, z dowolnego przejazdu.",
   "Save readings": "Zapisz stany licznika",
   "Save start as a place": "Zapisz początek jako miejsce",
   "Save start as a place: {{name}}": "Zapisz początek jako miejsce: {{name}}",
@@ -588,7 +584,6 @@ const dictionary: Dictionary = {
   "Set it and forget it ⏱️": "Ustaw i zapomnij ⏱️",
   "Set location to “Always” and MileSprout logs every drive, even when it’s closed.": "Ustaw lokalizację na „Zawsze”, a MileSprout zapisze każdy przejazd, nawet gdy aplikacja jest zamknięta.",
   "Set up auto-logging": "Włącz automatyczny zapis",
-  "Set your work hours any time in Settings, and most drives sort themselves.": "Ustaw godziny pracy w dowolnej chwili w Ustawieniach, a większość przejazdów oznaczy się sama.",
   "Sets your currency, miles or kilometres, tax year and official mileage rate. You can change it later.": "Ustawia walutę, mile lub kilometry, rok podatkowy i oficjalną stawkę za przebieg. Możesz to później zmienić.",
   "Settings": "Ustawienia",
   "Share this": "Udostępnij",
@@ -631,7 +626,6 @@ const dictionary: Dictionary = {
   "Sunday scaries? Not for your taxes": "Niedzielna chandra? Nie przez podatki",
   "Sunny days, business miles ☀️": "Słoneczne dni, służbowe trasy ☀️",
   "Swap from and to": "Zamień początek z końcem",
-  "Swipe a trip right for business, left for personal.": "Przesuń przejazd w prawo, jeśli był służbowy, a w lewo, jeśli prywatny.",
   "Swipe right on savings": "Przesuń w prawo, to może być miłość",
   "Swipe this week’s trips business or personal and see what you’ve earned back.": "Oznacz przejazdy z tego tygodnia jako służbowe lub prywatne i zobacz, ile są warte.",
   "Swipe to sort business trips": "Oznaczanie przejazdów przesunięciem",
@@ -640,7 +634,6 @@ const dictionary: Dictionary = {
   "Tap “Change to Always Allow”": "Stuknij „Zmień na: Zawsze pozwalaj”",
   "Tap “Location”": "Stuknij „Lokalizacja”",
   "Tap “Open Settings” below": "Stuknij poniżej „Otwórz Ustawienia”",
-  "Tap “Start shift” when you start work. Every drive until you end it is business.": "Stuknij „Zacznij zmianę”, gdy zaczynasz pracę. Każdy przejazd do końca zmiany jest służbowy.",
   "Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.": "Stuknij <b>Pozwalaj, gdy używana</b>, a potem <b>Zmień na: Zawsze pozwalaj</b>.",
   "Tap here": "Stuknij tu",
   "Tap trips to select them": "Stuknij przejazdy, aby je zaznaczyć",
@@ -1117,18 +1110,6 @@ const dictionary: Dictionary = {
     "few": "Plan darmowy: {{count}} przejazdy służbowe miesięcznie (prywatne się nie liczą), dowolnie wiele przejazdów ręcznych i eksport do arkusza.",
     "many": "Plan darmowy: {{count}} przejazdów służbowych miesięcznie (prywatne się nie liczą), dowolnie wiele przejazdów ręcznych i eksport do arkusza.",
     "other": "Plan darmowy: {{count}} przejazdu służbowego miesięcznie (prywatne się nie liczą), dowolnie wiele przejazdów ręcznych i eksport do arkusza."
-  },
-  "Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.": {
-    "one": "Za darmo: {{count}} przejazd służbowy miesięcznie. Prywatne przejazdy się nie liczą, a zmiana liczy się raz dziennie. Przejazdy dodane ręcznie są zawsze darmowe. Pro: bez limitu.",
-    "few": "Za darmo: {{count}} przejazdy służbowe miesięcznie. Prywatne przejazdy się nie liczą, a zmiana liczy się raz dziennie. Przejazdy dodane ręcznie są zawsze darmowe. Pro: bez limitu.",
-    "many": "Za darmo: {{count}} przejazdów służbowych miesięcznie. Prywatne przejazdy się nie liczą, a zmiana liczy się raz dziennie. Przejazdy dodane ręcznie są zawsze darmowe. Pro: bez limitu.",
-    "other": "Za darmo: {{count}} przejazdu służbowego miesięcznie. Prywatne przejazdy się nie liczą, a zmiana liczy się raz dziennie. Przejazdy dodane ręcznie są zawsze darmowe. Pro: bez limitu."
-  },
-  "Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.": {
-    "one": "Za darmo: {{count}} przejazd służbowy miesięcznie. Prywatne przejazdy się nie liczą, a te dodane ręcznie są zawsze darmowe. Pro: bez limitu.",
-    "few": "Za darmo: {{count}} przejazdy służbowe miesięcznie. Prywatne przejazdy się nie liczą, a te dodane ręcznie są zawsze darmowe. Pro: bez limitu.",
-    "many": "Za darmo: {{count}} przejazdów służbowych miesięcznie. Prywatne przejazdy się nie liczą, a te dodane ręcznie są zawsze darmowe. Pro: bez limitu.",
-    "other": "Za darmo: {{count}} przejazdu służbowego miesięcznie. Prywatne przejazdy się nie liczą, a te dodane ręcznie są zawsze darmowe. Pro: bez limitu."
   },
   "Each automatic work drive counts once. Unsorted drives count until you sort them.": "Każdy automatyczny przejazd służbowy liczy się raz. Nieoznaczone przejazdy liczą się, dopóki ich nie oznaczysz.",
   "Personal drives don’t count. Sort one personal and the next drive gets its place.": "Prywatne przejazdy się nie liczą. Oznacz jeden jako prywatny, a jego miejsce zajmie kolejny przejazd.",

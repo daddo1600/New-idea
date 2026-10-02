@@ -1,6 +1,7 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Just drive. Each trip appears after you park.": "Doar condu. Fiecare cursă apare după ce parchezi.",
   "…": "…",
   "…unless you set your work hours. Until then, a few swipes will do.": "…dacă nu-ți setezi orele de lucru. Până atunci, câteva glisări sunt de ajuns.",
   "{{achievement}} on MileSprout {{emoji}} The mileage app that counts every mile.": "{{achievement}} pe MileSprout {{emoji}} Aplicația de kilometraj care numără fiecare milă.",
@@ -169,7 +170,6 @@ const dictionary: Dictionary = {
   "A few swipes tonight beats a shoebox of receipts at tax time.": "Câteva glisări în seara asta sunt mai bune decât o cutie plină de bonuri la vremea taxelor.",
   "A fully sorted week": "O săptămână sortată complet",
   "A quick (slightly cheeky) reminder each Sunday evening to sort the week’s drives, so nothing goes unclaimed.": "Un memento rapid (puțin glumeț) în fiecare duminică seara, ca să sortezi cursele săptămânii și să nu pierzi nimic.",
-  "A quick Sunday reminder to sort your week. Turn it off any time in Settings.": "Un memento rapid duminica, ca să-ți sortezi săptămâna. Îl poți opri oricând din Setări.",
   "A ready-to-file report for you or your accountant: your mileage totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "Un raport gata de depus, pentru tine sau contabilul tău: totalurile de kilometraj, deducerea la fiecare tarif {{authority}} și jurnalul complet al curselor, care arată ce curse au fost înregistrate în timpul condusului și care au fost modificate.",
   "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "Un raport gata de depus, pentru tine sau contabilul tău: totalurile pentru Schedule C Part IV, deducerea la fiecare tarif {{authority}} și jurnalul complet al curselor, care arată ce curse au fost înregistrate în timpul condusului și care au fost modificate.",
   "Active · thank you!": "Activ · mulțumim!",
@@ -336,7 +336,6 @@ const dictionary: Dictionary = {
   "found this tax year": "suma găsită în acest an fiscal",
   "Free": "Gratuit",
   "Free money alert 💸": "Bani uitați pe drum? 💸",
-  "Free to start": "Începi gratuit",
   "Free trial": "Probă gratuită",
   "Fri": "Vin",
   "From": "De la",
@@ -352,7 +351,6 @@ const dictionary: Dictionary = {
   "Give the place a name, e.g. “Acme HQ”.": "Dă un nume locului, de ex. „Acme HQ”.",
   "Go Pro": "Treci la Pro",
   "Good habits": "Obiceiuri bune",
-  "Good to know": "Bine de știut",
   "GPS only runs while you drive. Parked, MileSprout sleeps.": "GPS-ul merge doar cât conduci. Când ai parcat, MileSprout doarme.",
   "Happy Halloween 🎃": "Halloween fericit 🎃",
   "Happy holidays from MileSprout 🎁": "Sărbători fericite de la MileSprout 🎁",
@@ -375,7 +373,6 @@ const dictionary: Dictionary = {
   "iOS asks twice. Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.": "iOS întreabă de două ori. Atinge <b>Permite când se folosește aplicația</b>, apoi <b>Schimbă la Permite întotdeauna</b>.",
   "iOS only offers “Always” in Settings. It takes ten seconds, and MileSprout carries on by itself when you come back.": "iOS oferă „Întotdeauna” doar în Configurări. Durează zece secunde, iar MileSprout continuă singur când te întorci.",
   "IRS standard mileage rate: 76¢ a mile from July 2026": "Tariful standard IRS: 76¢ pe milă din iulie 2026",
-  "Just drive. Each trip appears after you park, and business drives count at {{authority}}’s {{rate}} rate.": "Doar condu. Fiecare cursă apare după ce parchezi, iar cursele de lucru se calculează la tariful {{authority}} de {{rate}}.",
   "Keep going": "Continuă",
   "kilometres": "kilometri",
   "Kilometres": "Kilometri",
@@ -532,7 +529,6 @@ const dictionary: Dictionary = {
   "Save end as a place: {{name}}": "Salvează sfârșitul ca loc: {{name}}",
   "Save my hours": "Salvează orele",
   "Save place": "Salvează locul",
-  "Save places like clients or the depot from any trip.": "Salvează locuri, ca clienții sau depozitul, din orice cursă.",
   "Save readings": "Salvează citirile",
   "Save start as a place": "Salvează începutul ca loc",
   "Save start as a place: {{name}}": "Salvează începutul ca loc: {{name}}",
@@ -562,7 +558,6 @@ const dictionary: Dictionary = {
   "Set it and forget it ⏱️": "Setezi o dată și gata ⏱️",
   "Set location to “Always” and MileSprout logs every drive, even when it’s closed.": "Setează localizarea pe „Întotdeauna” și MileSprout înregistrează fiecare cursă, chiar și când aplicația e închisă.",
   "Set up auto-logging": "Pornește înregistrarea automată",
-  "Set your work hours any time in Settings, and most drives sort themselves.": "Setează-ți oricând orele de lucru din Setări și majoritatea curselor se sortează singure.",
   "Sets your currency, miles or kilometres, tax year and official mileage rate. You can change it later.": "Stabilește moneda, mile sau kilometri, anul fiscal și tariful oficial pe distanță. Poți schimba asta mai târziu.",
   "Settings": "Setări",
   "Share this": "Distribuie",
@@ -604,7 +599,6 @@ const dictionary: Dictionary = {
   "Sunday scaries? Not for your taxes": "Stres de duminică seara? Nu și din cauza taxelor",
   "Sunny days, business miles ☀️": "Zile cu soare, mile de lucru ☀️",
   "Swap from and to": "Inversează plecarea și sosirea",
-  "Swipe a trip right for business, left for personal.": "Glisează o cursă la dreapta pentru lucru, la stânga pentru personal.",
   "Swipe right on savings": "Glisează la dreapta pentru deduceri",
   "Swipe this week’s trips business or personal and see what you’ve earned back.": "Glisează cursele săptămânii, de lucru sau personale, și vezi cât valorează.",
   "Swipe to sort business trips": "Sortare a curselor prin glisare",
@@ -613,7 +607,6 @@ const dictionary: Dictionary = {
   "Tap “Change to Always Allow”": "Atinge „Schimbă la Permite întotdeauna”",
   "Tap “Location”": "Atinge „Localizare”",
   "Tap “Open Settings” below": "Atinge „Deschide Configurări” mai jos",
-  "Tap “Start shift” when you start work. Every drive until you end it is business.": "Atinge „Începe tura” când te apuci de lucru. Toate cursele până închei tura sunt de lucru.",
   "Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.": "Atinge <b>Permite când se folosește aplicația</b>, apoi <b>Schimbă la Permite întotdeauna</b>.",
   "Tap here": "Atinge aici",
   "Tap trips to select them": "Atinge cursele ca să le selectezi",
@@ -1071,16 +1064,6 @@ const dictionary: Dictionary = {
     "one": "Plan gratuit: {{count}} cursă de lucru pe lună (cursele personale nu contează), curse adăugate manual nelimitate și exportul în foaie de calcul.",
     "few": "Plan gratuit: {{count}} curse de lucru pe lună (cursele personale nu contează), curse adăugate manual nelimitate și exportul în foaie de calcul.",
     "other": "Plan gratuit: {{count}} de curse de lucru pe lună (cursele personale nu contează), curse adăugate manual nelimitate și exportul în foaie de calcul."
-  },
-  "Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.": {
-    "one": "Gratuit: {{count}} cursă de lucru pe lună. Cursele personale nu contează, iar o tură contează o dată pe zi. Cursele adăugate manual sunt mereu gratuite. Pro: nelimitat.",
-    "few": "Gratuit: {{count}} curse de lucru pe lună. Cursele personale nu contează, iar o tură contează o dată pe zi. Cursele adăugate manual sunt mereu gratuite. Pro: nelimitat.",
-    "other": "Gratuit: {{count}} de curse de lucru pe lună. Cursele personale nu contează, iar o tură contează o dată pe zi. Cursele adăugate manual sunt mereu gratuite. Pro: nelimitat."
-  },
-  "Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.": {
-    "one": "Gratuit: {{count}} cursă de lucru pe lună. Cursele personale nu contează, iar cele adăugate manual sunt mereu gratuite. Pro: nelimitat.",
-    "few": "Gratuit: {{count}} curse de lucru pe lună. Cursele personale nu contează, iar cele adăugate manual sunt mereu gratuite. Pro: nelimitat.",
-    "other": "Gratuit: {{count}} de curse de lucru pe lună. Cursele personale nu contează, iar cele adăugate manual sunt mereu gratuite. Pro: nelimitat."
   },
   "Each automatic work drive counts once. Unsorted drives count until you sort them.": "Fiecare cursă de lucru automată contează o dată. Cursele nesortate contează până le sortezi.",
   "Personal drives don’t count. Sort one personal and the next drive gets its place.": "Cursele personale nu contează. Sortează una ca personală și următoarea cursă îi ia locul.",

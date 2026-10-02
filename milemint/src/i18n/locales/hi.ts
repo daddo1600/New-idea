@@ -1,6 +1,7 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Just drive. Each trip appears after you park.": "बस ड्राइव कीजिए। पार्क करते ही हर ट्रिप दिख जाती है।",
   "…": "…",
   "…unless you set your work hours. Until then, a few swipes will do.": "…जब तक आप काम के घंटे सेट न करें। तब तक कुछ स्वाइप ही काफ़ी हैं।",
   "{{achievement}} on MileSprout {{emoji}} The mileage app that counts every mile.": "MileSprout पर {{achievement}} {{emoji}} वो माइलेज ऐप जिसमें एक भी ट्रिप नहीं छूटती।",
@@ -110,7 +111,6 @@ const dictionary: Dictionary = {
   "A few swipes tonight beats a shoebox of receipts at tax time.": "आज रात बस कुछ स्वाइप, टैक्स के समय रसीदों के ढेर से कहीं बेहतर।",
   "A fully sorted week": "पूरा हफ़्ता सॉर्ट",
   "A quick (slightly cheeky) reminder each Sunday evening to sort the week’s drives, so nothing goes unclaimed.": "हर रविवार शाम हफ़्ते की ट्रिप सॉर्ट करने का एक छोटा (थोड़ा मज़ेदार) रिमाइंडर, ताकि कुछ भी क्लेम होने से न छूटे।",
-  "A quick Sunday reminder to sort your week. Turn it off any time in Settings.": "हफ़्ता सॉर्ट करने के लिए रविवार को एक छोटा रिमाइंडर। इसे कभी भी सेटिंग्ज़ में बंद किया जा सकता है।",
   "A ready-to-file report for you or your accountant: your mileage totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "आपके या आपके अकाउंटेंट के लिए फ़ाइल करने को तैयार रिपोर्ट: आपका कुल माइलेज, हर {{authority}} रेट पर टैक्स कटौती, और पूरा ट्रिप लॉग, जिसमें दिखता है कि कौन-सी ट्रिप ड्राइव करते समय रिकॉर्ड हुईं और कौन-सी बदली गईं।",
   "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "आपके या आपके अकाउंटेंट के लिए फ़ाइल करने को तैयार रिपोर्ट: आपके Schedule C Part IV के कुल आँकड़े, हर {{authority}} रेट पर टैक्स कटौती, और पूरा ट्रिप लॉग, जिसमें दिखता है कि कौन-सी ट्रिप ड्राइव करते समय रिकॉर्ड हुईं और कौन-सी बदली गईं।",
   "Active · thank you!": "चालू है · धन्यवाद!",
@@ -276,7 +276,6 @@ const dictionary: Dictionary = {
   "found this tax year": "इस टैक्स वर्ष में मिला",
   "Free": "फ़्री",
   "Free money alert 💸": "आपके पैसों की बात 💸",
-  "Free to start": "शुरुआत फ़्री",
   "Free trial": "फ़्री ट्रायल",
   "Fri": "शुक्र",
   "From": "कहाँ से",
@@ -292,7 +291,6 @@ const dictionary: Dictionary = {
   "Give the place a name, e.g. “Acme HQ”.": "जगह को एक नाम दें, जैसे “Acme HQ”।",
   "Go Pro": "Pro लें",
   "Good habits": "अच्छी आदतें",
-  "Good to know": "काम की बात",
   "GPS only runs while you drive. Parked, MileSprout sleeps.": "GPS सिर्फ़ ड्राइव करते समय चलता है। गाड़ी पार्क हो, तो MileSprout आराम करता है।",
   "Happy Halloween 🎃": "हैप्पी हैलोवीन 🎃",
   "Happy holidays from MileSprout 🎁": "MileSprout की ओर से छुट्टियों की शुभकामनाएँ 🎁",
@@ -315,7 +313,6 @@ const dictionary: Dictionary = {
   "iOS asks twice. Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.": "iOS दो बार पूछता है। <b>ऐप का उपयोग करते समय अनुमति दें</b> पर टैप करें, फिर <b>हमेशा अनुमति दें में बदलें</b> पर।",
   "iOS only offers “Always” in Settings. It takes ten seconds, and MileSprout carries on by itself when you come back.": "iOS “हमेशा” का विकल्प सिर्फ़ सेटिंग्ज़ में देता है। इसमें दस सेकंड लगते हैं, और लौटने पर MileSprout अपने-आप काम जारी रखता है।",
   "IRS standard mileage rate: 76¢ a mile from July 2026": "IRS स्टैंडर्ड माइलेज रेट: जुलाई 2026 से 76¢ प्रति मील",
-  "Just drive. Each trip appears after you park, and business drives count at {{authority}}’s {{rate}} rate.": "बस ड्राइव करें। पार्क करने के बाद हर ट्रिप दिखती है, और बिज़नेस ट्रिप {{authority}} के {{rate}} रेट पर गिनी जाती हैं।",
   "Keep going": "चलते रहें",
   "kilometres": "किलोमीटर",
   "Kilometres": "किलोमीटर",
@@ -471,7 +468,6 @@ const dictionary: Dictionary = {
   "Save end as a place: {{name}}": "मंज़िल को जगह के रूप में सेव करें: {{name}}",
   "Save my hours": "मेरे घंटे सेव करें",
   "Save place": "जगह सेव करें",
-  "Save places like clients or the depot from any trip.": "किसी भी ट्रिप से क्लाइंट या डिपो जैसी जगहें सेव करें।",
   "Save readings": "रीडिंग सेव करें",
   "Save start as a place": "शुरुआत को जगह के रूप में सेव करें",
   "Save start as a place: {{name}}": "शुरुआत को जगह के रूप में सेव करें: {{name}}",
@@ -500,7 +496,6 @@ const dictionary: Dictionary = {
   "Set it and forget it ⏱️": "एक बार सेट करें, फिर भूल जाएँ ⏱️",
   "Set location to “Always” and MileSprout logs every drive, even when it’s closed.": "स्थान को “हमेशा” पर सेट करें और MileSprout हर ट्रिप लॉग करेगा, ऐप बंद होने पर भी।",
   "Set up auto-logging": "ऑटो-लॉगिंग सेट करें",
-  "Set your work hours any time in Settings, and most drives sort themselves.": "काम के घंटे कभी भी सेटिंग्ज़ में सेट करें, और ज़्यादातर ट्रिप अपने-आप सॉर्ट हो जाएँगी।",
   "Sets your currency, miles or kilometres, tax year and official mileage rate. You can change it later.": "इससे आपकी करेंसी, मील या किलोमीटर, टैक्स वर्ष और आधिकारिक माइलेज रेट तय होते हैं। इसे बाद में बदला जा सकता है।",
   "Settings": "सेटिंग्ज़",
   "Share this": "इसे शेयर करें",
@@ -541,7 +536,6 @@ const dictionary: Dictionary = {
   "Sunday scaries? Not for your taxes": "संडे की टेंशन? टैक्स की तो बिल्कुल नहीं",
   "Sunny days, business miles ☀️": "धूप भरे दिन, बिज़नेस ट्रिप ☀️",
   "Swap from and to": "कहाँ से और कहाँ तक की अदला-बदली करें",
-  "Swipe a trip right for business, left for personal.": "बिज़नेस के लिए ट्रिप को दाएँ स्वाइप करें, पर्सनल के लिए बाएँ।",
   "Swipe right on savings": "सही मैच के लिए राइट स्वाइप",
   "Swipe this week’s trips business or personal and see what you’ve earned back.": "इस हफ़्ते की ट्रिप बिज़नेस या पर्सनल में स्वाइप करें और देखें उनकी कितनी कीमत बनी।",
   "Swipe to sort business trips": "स्वाइप से बिज़नेस ट्रिप सॉर्ट करें",
@@ -550,7 +544,6 @@ const dictionary: Dictionary = {
   "Tap “Change to Always Allow”": "“हमेशा अनुमति दें में बदलें” पर टैप करें",
   "Tap “Location”": "“स्थान” पर टैप करें",
   "Tap “Open Settings” below": "नीचे “सेटिंग्ज़ खोलें” पर टैप करें",
-  "Tap “Start shift” when you start work. Every drive until you end it is business.": "काम शुरू करते समय “शिफ्ट शुरू करें” पर टैप करें। जब तक आप इसे खत्म न करें, हर ट्रिप बिज़नेस है।",
   "Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.": "<b>ऐप का उपयोग करते समय अनुमति दें</b> पर टैप करें, फिर <b>हमेशा अनुमति दें में बदलें</b> पर।",
   "Tap here": "यहाँ टैप करें",
   "Tap trips to select them": "चुनने के लिए ट्रिप पर टैप करें",
@@ -989,14 +982,6 @@ const dictionary: Dictionary = {
   "Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.": {
     "one": "फ़्री प्लान: हर महीने {{count}} बिज़नेस ट्रिप (पर्सनल ट्रिप नहीं गिनी जातीं), हाथ से अनलिमिटेड ट्रिप और स्प्रेडशीट एक्सपोर्ट।",
     "other": "फ़्री प्लान: हर महीने {{count}} बिज़नेस ट्रिप (पर्सनल ट्रिप नहीं गिनी जातीं), हाथ से अनलिमिटेड ट्रिप और स्प्रेडशीट एक्सपोर्ट।"
-  },
-  "Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.": {
-    "one": "फ़्री: हर महीने {{count}} बिज़नेस ट्रिप। पर्सनल ट्रिप नहीं गिनी जातीं, और शिफ्ट दिन में एक बार गिनी जाती है। हाथ से जोड़ी गई ट्रिप हमेशा फ़्री हैं। Pro: अनलिमिटेड।",
-    "other": "फ़्री: हर महीने {{count}} बिज़नेस ट्रिप। पर्सनल ट्रिप नहीं गिनी जातीं, और शिफ्ट दिन में एक बार गिनी जाती है। हाथ से जोड़ी गई ट्रिप हमेशा फ़्री हैं। Pro: अनलिमिटेड।"
-  },
-  "Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.": {
-    "one": "फ़्री: हर महीने {{count}} बिज़नेस ट्रिप। पर्सनल ट्रिप नहीं गिनी जातीं, और हाथ से जोड़ी गई ट्रिप हमेशा फ़्री हैं। Pro: अनलिमिटेड।",
-    "other": "फ़्री: हर महीने {{count}} बिज़नेस ट्रिप। पर्सनल ट्रिप नहीं गिनी जातीं, और हाथ से जोड़ी गई ट्रिप हमेशा फ़्री हैं। Pro: अनलिमिटेड।"
   },
   "Each automatic work drive counts once. Unsorted drives count until you sort them.": "हर ऑटोमैटिक बिज़नेस ट्रिप एक बार गिनी जाती है। सॉर्ट न हुई ट्रिप सॉर्ट होने तक गिनी जाती हैं।",
   "Personal drives don’t count. Sort one personal and the next drive gets its place.": "पर्सनल ट्रिप नहीं गिनी जातीं। किसी ट्रिप को पर्सनल सॉर्ट करें, तो उसकी जगह अगली ट्रिप को मिल जाती है।",

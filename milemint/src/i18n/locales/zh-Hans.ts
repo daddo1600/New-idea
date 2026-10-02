@@ -1,6 +1,7 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Just drive. Each trip appears after you park.": "开就行。停车后，每段行程都会出现。",
   "…": "…",
   "…unless you set your work hours. Until then, a few swipes will do.": "……除非你设好工作时间。在那之前，滑几下就搞定。",
   "{{achievement}} on MileSprout {{emoji}} The mileage app that counts every mile.": "我在 MileSprout 达成了“{{achievement}}”{{emoji}} 这款里程 App，每一段路都不漏记。",
@@ -103,7 +104,6 @@ const dictionary: Dictionary = {
   "A few swipes tonight beats a shoebox of receipts at tax time.": "今晚滑几下，好过报税时翻一整盒票据。",
   "A fully sorted week": "一整周全部分好类",
   "A quick (slightly cheeky) reminder each Sunday evening to sort the week’s drives, so nothing goes unclaimed.": "每周日晚上一条简短（有点调皮）的提醒，帮你给本周行程分类，不漏掉任何可申报的里程。",
-  "A quick Sunday reminder to sort your week. Turn it off any time in Settings.": "每周日一条简短提醒，帮你给本周行程分类。随时可在设置中关闭。",
   "A ready-to-file report for you or your accountant: your mileage totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "一份可直接用于报税的报告，你自己或你的会计师都能用：里程总数、按 {{authority}} 各档费率计算的抵扣额，以及完整的行程记录，标明哪些行程是开车时实时记录的、哪些经过编辑。",
   "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "一份可直接用于报税的报告，你自己或你的会计师都能用：Schedule C Part IV 所需的各项合计、按 {{authority}} 各档费率计算的抵扣额，以及完整的行程记录，标明哪些行程是开车时实时记录的、哪些经过编辑。",
   "Active · thank you!": "已开通 · 谢谢你！",
@@ -268,7 +268,6 @@ const dictionary: Dictionary = {
   "found this tax year": "本纳税年度已找到",
   "Free": "免费版",
   "Free money alert 💸": "天上不掉馅饼 💸",
-  "Free to start": "免费开始使用",
   "Free trial": "免费试用",
   "Fri": "周五",
   "From": "起点",
@@ -284,7 +283,6 @@ const dictionary: Dictionary = {
   "Give the place a name, e.g. “Acme HQ”.": "给地点起个名字，例如“Acme HQ”。",
   "Go Pro": "升级 Pro",
   "Good habits": "好习惯",
-  "Good to know": "小贴士",
   "GPS only runs while you drive. Parked, MileSprout sleeps.": "GPS 只在你开车时运行。停车后，MileSprout 就休眠。",
   "Happy Halloween 🎃": "万圣节快乐 🎃",
   "Happy holidays from MileSprout 🎁": "MileSprout 祝你节日快乐 🎁",
@@ -307,7 +305,6 @@ const dictionary: Dictionary = {
   "iOS asks twice. Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.": "iOS 会询问两次。先轻点<b>使用App时允许</b>，再轻点<b>更改为始终允许</b>。",
   "iOS only offers “Always” in Settings. It takes ten seconds, and MileSprout carries on by itself when you come back.": "iOS 只在“设置”里提供“始终”选项。只需十秒钟，回来后 MileSprout 会自动继续。",
   "IRS standard mileage rate: 76¢ a mile from July 2026": "IRS 标准里程费率：2026 年 7 月起每英里 76¢",
-  "Just drive. Each trip appears after you park, and business drives count at {{authority}}’s {{rate}} rate.": "尽管开车就好。每次停车后行程就会出现，工作行程按 {{authority}} 的 {{rate}} 费率计算。",
   "Keep going": "继续加油",
   "kilometres": "公里",
   "Kilometres": "公里",
@@ -462,7 +459,6 @@ const dictionary: Dictionary = {
   "Save end as a place: {{name}}": "将终点存为地点：{{name}}",
   "Save my hours": "保存我的工作时间",
   "Save place": "保存地点",
-  "Save places like clients or the depot from any trip.": "可从任意行程中保存客户、仓库等地点。",
   "Save readings": "保存读数",
   "Save start as a place": "将起点存为地点",
   "Save start as a place: {{name}}": "将起点存为地点：{{name}}",
@@ -490,7 +486,6 @@ const dictionary: Dictionary = {
   "Set it and forget it ⏱️": "设好一次，从此省心 ⏱️",
   "Set location to “Always” and MileSprout logs every drive, even when it’s closed.": "将位置权限设为“始终”，即使 App 已关闭，MileSprout 也会记录每一次行程。",
   "Set up auto-logging": "设置自动记录",
-  "Set your work hours any time in Settings, and most drives sort themselves.": "随时可在设置中设定工作时间，大部分行程就会自动分类。",
   "Sets your currency, miles or kilometres, tax year and official mileage rate. You can change it later.": "决定你的货币、英里或公里、纳税年度和官方里程费率。之后可以更改。",
   "Settings": "设置",
   "Share this": "分享",
@@ -530,7 +525,6 @@ const dictionary: Dictionary = {
   "Sunday scaries? Not for your taxes": "周日焦虑？报税这事不用愁",
   "Sunny days, business miles ☀️": "阳光正好，工作里程照样攒 ☀️",
   "Swap from and to": "交换起点和终点",
-  "Swipe a trip right for business, left for personal.": "行程右滑为工作，左滑为私人。",
   "Swipe right on savings": "右滑，心动一下",
   "Swipe this week’s trips business or personal and see what you’ve earned back.": "把本周行程滑成工作或私人，看看它们值多少。",
   "Swipe to sort business trips": "滑动即可给行程分类",
@@ -539,7 +533,6 @@ const dictionary: Dictionary = {
   "Tap “Change to Always Allow”": "轻点“更改为始终允许”",
   "Tap “Location”": "轻点“位置”",
   "Tap “Open Settings” below": "轻点下方的“打开设置”",
-  "Tap “Start shift” when you start work. Every drive until you end it is business.": "开始工作时轻点“开工”。收工前的每次行程都算工作。",
   "Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.": "轻点<b>使用App时允许</b>，然后轻点<b>更改为始终允许</b>。",
   "Tap here": "轻点这里",
   "Tap trips to select them": "轻点行程即可选择",
@@ -959,12 +952,6 @@ const dictionary: Dictionary = {
   },
   "Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.": {
     "other": "免费版：每月 {{count}} 次工作行程（私人行程不计数），手动添加行程不限次数，可导出电子表格。"
-  },
-  "Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.": {
-    "other": "免费：每月 {{count}} 次工作行程。私人行程不计数，一个班次每天只算一次。手动添加的行程永远免费。Pro：不限次数。"
-  },
-  "Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.": {
-    "other": "免费：每月 {{count}} 次工作行程。私人行程不计数，手动添加的行程永远免费。Pro：不限次数。"
   },
   "Each automatic work drive counts once. Unsorted drives count until you sort them.": "每次自动记录的工作行程算一次。未分类的行程在分类之前也计数。",
   "Personal drives don’t count. Sort one personal and the next drive gets its place.": "私人行程不计数。把一次行程分类为私人，下一次行程就补上它的名额。",

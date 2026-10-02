@@ -1,6 +1,7 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Just drive. Each trip appears after you park.": "শুধু গাড়ি চালান। পার্ক করার পর প্রতিটি ট্রিপ দেখা যায়।",
   "…": "…",
   "…unless you set your work hours. Until then, a few swipes will do.": "…যদি না আপনি কাজের সময় সেট করে দেন। ততদিন কয়েকটা সোয়াইপই যথেষ্ট।",
   "{{achievement}} on MileSprout {{emoji}} The mileage app that counts every mile.": "MileSprout-এ {{achievement}} {{emoji}} প্রতিটি ট্রিপের হিসাব রাখে এমন মাইলেজ অ্যাপ।",
@@ -110,7 +111,6 @@ const dictionary: Dictionary = {
   "A few swipes tonight beats a shoebox of receipts at tax time.": "ট্যাক্সের সময় এক বাক্স রসিদ ঘাঁটার চেয়ে আজ রাতে কয়েকটা সোয়াইপ অনেক ভালো।",
   "A fully sorted week": "পুরো সপ্তাহ বাছাই শেষ",
   "A quick (slightly cheeky) reminder each Sunday evening to sort the week’s drives, so nothing goes unclaimed.": "প্রতি রবিবার সন্ধ্যায় সপ্তাহের ট্রিপ বাছাই করার একটা ছোট্ট (একটু মজার) রিমাইন্ডার, যাতে দাবি করতে কিছুই বাদ না পড়ে।",
-  "A quick Sunday reminder to sort your week. Turn it off any time in Settings.": "সপ্তাহের ট্রিপ বাছাই করতে রবিবারে একটা ছোট্ট রিমাইন্ডার। সেটিংসে যেকোনো সময় বন্ধ করতে পারবেন।",
   "A ready-to-file report for you or your accountant: your mileage totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "আপনার বা আপনার অ্যাকাউন্ট্যান্টের জন্য জমা দেওয়ার মতো তৈরি রিপোর্ট: আপনার মাইলেজের মোট হিসাব, {{authority}}-এর প্রতিটি রেটে ট্যাক্স ছাড়, আর পুরো ট্রিপ লগ, যাতে দেখা যায় কোন ট্রিপ চালানোর সময় রেকর্ড হয়েছে আর কোনগুলো এডিট করা হয়েছে।",
   "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "আপনার বা আপনার অ্যাকাউন্ট্যান্টের জন্য জমা দেওয়ার মতো তৈরি রিপোর্ট: আপনার Schedule C Part IV-এর মোট হিসাব, {{authority}}-এর প্রতিটি রেটে ট্যাক্স ছাড়, আর পুরো ট্রিপ লগ, যাতে দেখা যায় কোন ট্রিপ চালানোর সময় রেকর্ড হয়েছে আর কোনগুলো এডিট করা হয়েছে।",
   "Active · thank you!": "চালু · ধন্যবাদ!",
@@ -276,7 +276,6 @@ const dictionary: Dictionary = {
   "found this tax year": "এই ট্যাক্স বছরে পাওয়া গেছে",
   "Free": "ফ্রি",
   "Free money alert 💸": "টাকা ফেলে রাখবেন না 💸",
-  "Free to start": "ফ্রিতে শুরু",
   "Free trial": "ফ্রি ট্রায়াল",
   "Fri": "শুক্র",
   "From": "কোথা থেকে",
@@ -292,7 +291,6 @@ const dictionary: Dictionary = {
   "Give the place a name, e.g. “Acme HQ”.": "জায়গাটির একটি নাম দিন, যেমন “Acme HQ”।",
   "Go Pro": "Pro নিন",
   "Good habits": "ভালো অভ্যাস",
-  "Good to know": "জেনে রাখুন",
   "GPS only runs while you drive. Parked, MileSprout sleeps.": "GPS শুধু চালানোর সময় চলে। পার্ক করলে MileSprout ঘুমিয়ে থাকে।",
   "Happy Halloween 🎃": "হ্যাপি হ্যালোইন 🎃",
   "Happy holidays from MileSprout 🎁": "MileSprout-এর পক্ষ থেকে ছুটির শুভেচ্ছা 🎁",
@@ -315,7 +313,6 @@ const dictionary: Dictionary = {
   "iOS asks twice. Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.": "iOS দুবার জিজ্ঞাসা করে। <b>অ্যাপ ব্যবহার করার সময় অনুমতি দিন</b> ট্যাপ করুন, তারপর <b>সবসময় অনুমতি দিন-এ পরিবর্তন করুন</b>।",
   "iOS only offers “Always” in Settings. It takes ten seconds, and MileSprout carries on by itself when you come back.": "iOS শুধু সেটিংসেই “সবসময়” অপশন দেয়। দশ সেকেন্ড লাগে, আর আপনি ফিরে এলে MileSprout নিজে থেকেই চলতে থাকে।",
   "IRS standard mileage rate: 76¢ a mile from July 2026": "IRS standard mileage rate: জুলাই 2026 থেকে প্রতি মাইলে 76¢",
-  "Just drive. Each trip appears after you park, and business drives count at {{authority}}’s {{rate}} rate.": "শুধু ড্রাইভ করুন। পার্ক করার পর প্রতিটি ট্রিপ দেখা যায়, আর ব্যবসায়িক ট্রিপ {{authority}}-এর {{rate}} রেটে গোনা হয়।",
   "Keep going": "এগিয়ে চলুন",
   "kilometres": "কিলোমিটার",
   "Kilometres": "কিলোমিটার",
@@ -471,7 +468,6 @@ const dictionary: Dictionary = {
   "Save end as a place: {{name}}": "শেষের জায়গা সেভ করুন: {{name}}",
   "Save my hours": "আমার সময় সেভ করুন",
   "Save place": "জায়গা সেভ করুন",
-  "Save places like clients or the depot from any trip.": "যেকোনো ট্রিপ থেকে ক্লায়েন্ট বা ডিপোর মতো জায়গা সেভ করুন।",
   "Save readings": "রিডিং সেভ করুন",
   "Save start as a place": "শুরুর জায়গা সেভ করুন",
   "Save start as a place: {{name}}": "শুরুর জায়গা সেভ করুন: {{name}}",
@@ -500,7 +496,6 @@ const dictionary: Dictionary = {
   "Set it and forget it ⏱️": "একবার সেট করুন, তারপর ভুলে যান ⏱️",
   "Set location to “Always” and MileSprout logs every drive, even when it’s closed.": "লোকেশন “সবসময়” সেট করুন, অ্যাপ বন্ধ থাকলেও MileSprout প্রতিটি ট্রিপ রেকর্ড করবে।",
   "Set up auto-logging": "অটো-রেকর্ড চালু করুন",
-  "Set your work hours any time in Settings, and most drives sort themselves.": "সেটিংসে যেকোনো সময় আপনার কাজের সময় সেট করুন, বেশিরভাগ ট্রিপ নিজে থেকেই বাছাই হয়ে যাবে।",
   "Sets your currency, miles or kilometres, tax year and official mileage rate. You can change it later.": "আপনার মুদ্রা, মাইল বা কিলোমিটার, ট্যাক্স বছর আর সরকারি মাইলেজ রেট ঠিক করে। পরে বদলাতে পারবেন।",
   "Settings": "সেটিংস",
   "Share this": "এটি শেয়ার করুন",
@@ -541,7 +536,6 @@ const dictionary: Dictionary = {
   "Sunday scaries? Not for your taxes": "রবিবারের মন খারাপ? ট্যাক্স নিয়ে আর নয়",
   "Sunny days, business miles ☀️": "রোদেলা দিন, ব্যবসায়িক ট্রিপ ☀️",
   "Swap from and to": "কোথা থেকে আর কোথায় অদলবদল করুন",
-  "Swipe a trip right for business, left for personal.": "ব্যবসায়িক হলে ট্রিপ ডানে, ব্যক্তিগত হলে বাঁয়ে সোয়াইপ করুন।",
   "Swipe right on savings": "ডানে সোয়াইপ, হিসাব সহজ",
   "Swipe this week’s trips business or personal and see what you’ve earned back.": "এই সপ্তাহের ট্রিপগুলো ব্যবসায়িক বা ব্যক্তিগত সোয়াইপ করুন, আর দেখুন কত টাকা দাবি করার মতো জমল।",
   "Swipe to sort business trips": "সোয়াইপ করে ব্যবসায়িক ট্রিপ বাছাই",
@@ -550,7 +544,6 @@ const dictionary: Dictionary = {
   "Tap “Change to Always Allow”": "“সবসময় অনুমতি দিন-এ পরিবর্তন করুন” ট্যাপ করুন",
   "Tap “Location”": "“লোকেশন” ট্যাপ করুন",
   "Tap “Open Settings” below": "নিচে “সেটিংস খুলুন” ট্যাপ করুন",
-  "Tap “Start shift” when you start work. Every drive until you end it is business.": "কাজ শুরুর সময় “শিফট শুরু করুন” ট্যাপ করুন। শেষ না করা পর্যন্ত প্রতিটি ট্রিপ ব্যবসায়িক।",
   "Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.": "<b>অ্যাপ ব্যবহার করার সময় অনুমতি দিন</b> ট্যাপ করুন, তারপর <b>সবসময় অনুমতি দিন-এ পরিবর্তন করুন</b>।",
   "Tap here": "এখানে ট্যাপ",
   "Tap trips to select them": "নির্বাচন করতে ট্রিপে ট্যাপ করুন",
@@ -989,14 +982,6 @@ const dictionary: Dictionary = {
   "Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.": {
     "one": "ফ্রি প্ল্যান: মাসে {{count}}টি ব্যবসায়িক ট্রিপ (ব্যক্তিগত ট্রিপ গোনা হয় না), নিজে যোগ করা আনলিমিটেড ট্রিপ আর স্প্রেডশিট এক্সপোর্ট।",
     "other": "ফ্রি প্ল্যান: মাসে {{count}}টি ব্যবসায়িক ট্রিপ (ব্যক্তিগত ট্রিপ গোনা হয় না), নিজে যোগ করা আনলিমিটেড ট্রিপ আর স্প্রেডশিট এক্সপোর্ট।"
-  },
-  "Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.": {
-    "one": "ফ্রি: মাসে {{count}}টি ব্যবসায়িক ট্রিপ। ব্যক্তিগত ট্রিপ গোনা হয় না, আর একটি শিফট দিনে একবার গোনা হয়। নিজে যোগ করা ট্রিপ সবসময় ফ্রি। Pro: আনলিমিটেড।",
-    "other": "ফ্রি: মাসে {{count}}টি ব্যবসায়িক ট্রিপ। ব্যক্তিগত ট্রিপ গোনা হয় না, আর একটি শিফট দিনে একবার গোনা হয়। নিজে যোগ করা ট্রিপ সবসময় ফ্রি। Pro: আনলিমিটেড।"
-  },
-  "Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.": {
-    "one": "ফ্রি: মাসে {{count}}টি ব্যবসায়িক ট্রিপ। ব্যক্তিগত ট্রিপ গোনা হয় না, আর নিজে যোগ করা ট্রিপ সবসময় ফ্রি। Pro: আনলিমিটেড।",
-    "other": "ফ্রি: মাসে {{count}}টি ব্যবসায়িক ট্রিপ। ব্যক্তিগত ট্রিপ গোনা হয় না, আর নিজে যোগ করা ট্রিপ সবসময় ফ্রি। Pro: আনলিমিটেড।"
   },
   "Each automatic work drive counts once. Unsorted drives count until you sort them.": "প্রতিটি অটোমেটিক ব্যবসায়িক ট্রিপ একবার গোনা হয়। বাছাই না হওয়া ট্রিপ বাছাই না করা পর্যন্ত গোনা হয়।",
   "Personal drives don’t count. Sort one personal and the next drive gets its place.": "ব্যক্তিগত ট্রিপ গোনা হয় না। একটিকে ব্যক্তিগত বাছাই করলে তার জায়গা পরের ট্রিপ পায়।",

@@ -43,8 +43,7 @@ import {
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { loadSettings, updateSettings } from '@/db/settings-repo';
 import { marApplies, parsePence } from '@/domain/mar';
-import { FREE_AUTO_DRIVES_PER_MONTH } from '@/domain/plan';
-import { displayLocale, formatRate, REGIONS, vehicleRule, type RegionCode } from '@/domain/regions';
+import { displayLocale, REGIONS, vehicleRule, type RegionCode } from '@/domain/regions';
 import { type CheerKind, DONE, HOURS, PURPOSE, setupCheer } from '@/domain/setup-cheers';
 import { useTheme } from '@/hooks/use-theme';
 import { LANGUAGES, msg, useLanguage, useT } from '@/i18n/i18n';
@@ -219,7 +218,6 @@ export default function WelcomeScreen() {
   };
 
   const picked = REGIONS[country];
-  const topRate = formatRate(picked.rates[picked.rates.length - 1].tiers[0].rate, picked);
 
   const saveCountry = async () => {
     await setRegion(country);
@@ -386,6 +384,10 @@ export default function WelcomeScreen() {
   /** The dot lit for this step: the usual purpose shares "Your work"'s. */
   const dot = step >= PURPOSE ? step - 1 : step;
   const scroller = useRef<ScrollView>(null);
+  // Each step starts at its top, whatever the last one was scrolled to.
+  useEffect(() => {
+    scroller.current?.scrollTo({ y: 0, animated: false });
+  }, [step]);
   /** Back from the finish skips the steps that weren't shown (shift workers have no usual-purpose step). */
   const previous = step === DONE ? (restored ? 2 : shifts ? HOURS : PURPOSE) : step - 1;
 
@@ -778,61 +780,12 @@ export default function WelcomeScreen() {
               )}
               <Text style={styles.brandBody}>
                 {status === 'on'
-                  ? t(
-                      'Just drive. Each trip appears after you park, and business drives count at {{authority}}’s {{rate}} rate.',
-                      { authority: picked.authority, rate: topRate },
-                    )
+                  ? t('Just drive. Each trip appears after you park.')
                   : t(
                       'Turn on automatic tracking from the home screen whenever you’re ready, or add trips with the + button.',
                     )}
               </Text>
-              <View style={styles.glass}>
-                <Text style={styles.pointTitle}>{t('Good to know')}</Text>
-                {[
-                  ['👉', t('Swipe a trip right for business, left for personal.')],
-                  ['📅', t('A quick Sunday reminder to sort your week. Turn it off any time in Settings.')],
-                  ['📍', t('Save places like clients or the depot from any trip.')],
-                  ...(shifts
-                    ? [
-                        [
-                          '▶️',
-                          t('Tap “Start shift” when you start work. Every drive until you end it is business.'),
-                        ],
-                      ]
-                    : hoursSet
-                      ? []
-                      : [
-                          [
-                            '⏱️',
-                            t('Set your work hours any time in Settings, and most drives sort themselves.'),
-                          ],
-                        ]),
-                ].map(([icon, text]) => (
-                  <View key={icon} style={styles.tip}>
-                    <Text style={styles.tipIcon}>{icon}</Text>
-                    <Text style={[styles.pointBody, styles.flex]}>{text}</Text>
-                  </View>
-                ))}
-              </View>
-              <View style={[styles.glass, styles.reminderRow]}>
-                <Text style={styles.tipIcon}>🎁</Text>
-                <View style={styles.flex}>
-                  <Text style={styles.pointTitle}>{t('Free to start')}</Text>
-                  <Text style={styles.pointBody}>
-                    {/* The limit up front, in the same words as the plan meter's "What counts?" (domain/plan). */}
-                    {shifts
-                      ? t(
-                          'Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.',
-                          { count: FREE_AUTO_DRIVES_PER_MONTH },
-                        )
-                      : t(
-                          'Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.',
-                          { count: FREE_AUTO_DRIVES_PER_MONTH },
-                        )}
-                  </Text>
-                </View>
-              </View>
-              {/* Optional: a friend's code adds 10 drives a month (also in Settings for 30 days). */}
+              {/* Optional, and also in Settings for 30 days. */}
               <RedeemCode onBrand initialCode={linkCode} style={styles.glass} />
             </>
           )}
@@ -1047,8 +1000,6 @@ const styles = StyleSheet.create({
     padding: Spacing.three,
     gap: Spacing.two,
   },
-  tip: { flexDirection: 'row', gap: Spacing.two, alignItems: 'flex-start' },
-  tipIcon: { fontSize: 15, lineHeight: 20 },
   top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 32 },
   topSpacer: { width: 32 },
   // Centred on the screen whatever sits either side (Back, the language button).
@@ -1121,7 +1072,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
   },
-  reminderRow: { flexDirection: 'row', alignItems: 'flex-start', gap: Spacing.three },
   card: { borderRadius: 12, padding: Spacing.three, gap: Spacing.one },
   actions: { gap: Spacing.two, width: '100%', maxWidth: MaxContentWidth, alignSelf: 'center' },
   primary: { alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12 },

@@ -791,12 +791,6 @@
     ]
   },
   {
-    "key": "A quick Sunday reminder to sort your week. Turn it off any time in Settings.",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
     "key": "A ready-to-file report for you or your accountant: your mileage totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.",
     "files": [
       "app/report.tsx"
@@ -2618,12 +2612,6 @@
     ]
   },
   {
-    "key": "Free to start",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
     "key": "Free trial",
     "files": [
       "app/pro.tsx"
@@ -2639,18 +2627,6 @@
     "key": "Free trial, then {{price}} a year. Cancel any time in Settings.",
     "files": [
       "domain/pro-offer.ts"
-    ]
-  },
-  {
-    "key": "Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.",
-    "files": [
-      "app/welcome.tsx"
     ]
   },
   {
@@ -2773,12 +2749,6 @@
   },
   {
     "key": "Good start",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "Good to know",
     "files": [
       "app/welcome.tsx"
     ]
@@ -3110,7 +3080,7 @@
     ]
   },
   {
-    "key": "Just drive. Each trip appears after you park, and business drives count at {{authority}}’s {{rate}} rate.",
+    "key": "Just drive. Each trip appears after you park.",
     "files": [
       "app/welcome.tsx"
     ]
@@ -4840,12 +4810,6 @@
     ]
   },
   {
-    "key": "Save places like clients or the depot from any trip.",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
     "key": "Save readings",
     "files": [
       "app/logbook.tsx",
@@ -5067,12 +5031,6 @@
   },
   {
     "key": "Set up auto-logging",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "Set your work hours any time in Settings, and most drives sort themselves.",
     "files": [
       "app/welcome.tsx"
     ]
@@ -5497,12 +5455,6 @@
     ]
   },
   {
-    "key": "Swipe a trip right for business, left for personal.",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
     "key": "Swipe back to end your shift.",
     "files": [
       "components/home/shift-bar.tsx"
@@ -5604,12 +5556,6 @@
     "key": "Tap “Open Settings” below",
     "files": [
       "components/always-guide.tsx"
-    ]
-  },
-  {
-    "key": "Tap “Start shift” when you start work. Every drive until you end it is business.",
-    "files": [
-      "app/welcome.tsx"
     ]
   },
   {

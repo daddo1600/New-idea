@@ -1,6 +1,7 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Just drive. Each trip appears after you park.": "ਬੱਸ ਗੱਡੀ ਚਲਾਓ। ਪਾਰਕ ਕਰਦੇ ਹੀ ਹਰ ਟ੍ਰਿਪ ਦਿਖ ਜਾਂਦੀ ਹੈ।",
   "…": "…",
   "…unless you set your work hours. Until then, a few swipes will do.": "…ਜਦੋਂ ਤੱਕ ਕੰਮ ਦੇ ਘੰਟੇ ਸੈੱਟ ਨਾ ਹੋਣ। ਉਦੋਂ ਤੱਕ ਕੁਝ ਸਵਾਈਪ ਹੀ ਕਾਫ਼ੀ ਹਨ।",
   "{{achievement}} on MileSprout {{emoji}} The mileage app that counts every mile.": "MileSprout ’ਤੇ {{achievement}} {{emoji}} ਉਹ ਮਾਈਲੇਜ ਐਪ ਜਿਸ ਤੋਂ ਕੋਈ ਟ੍ਰਿਪ ਨਹੀਂ ਛੁੱਟਦਾ।",
@@ -122,7 +123,6 @@ const dictionary: Dictionary = {
   "A few swipes tonight beats a shoebox of receipts at tax time.": "ਅੱਜ ਰਾਤ ਕੁਝ ਸਵਾਈਪ, ਟੈਕਸ ਵੇਲੇ ਰਸੀਦਾਂ ਦੇ ਥੱਬੇ ਨਾਲੋਂ ਕਿਤੇ ਸੌਖੇ ਹਨ।",
   "A fully sorted week": "ਪੂਰਾ ਹਫ਼ਤਾ ਛਾਂਟਿਆ",
   "A quick (slightly cheeky) reminder each Sunday evening to sort the week’s drives, so nothing goes unclaimed.": "ਹਰ ਐਤਵਾਰ ਸ਼ਾਮ ਹਫ਼ਤੇ ਦੇ ਟ੍ਰਿਪ ਛਾਂਟਣ ਲਈ ਇੱਕ ਛੋਟਾ ਜਿਹਾ (ਥੋੜ੍ਹਾ ਮਜ਼ਾਕੀਆ) ਰਿਮਾਈਂਡਰ, ਤਾਂ ਜੋ ਕੁਝ ਵੀ ਕਲੇਮ ਕਰਨੋਂ ਨਾ ਰਹਿ ਜਾਵੇ।",
-  "A quick Sunday reminder to sort your week. Turn it off any time in Settings.": "ਆਪਣਾ ਹਫ਼ਤਾ ਛਾਂਟਣ ਲਈ ਐਤਵਾਰ ਨੂੰ ਇੱਕ ਛੋਟਾ ਰਿਮਾਈਂਡਰ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਜਦੋਂ ਮਰਜ਼ੀ ਬੰਦ ਕਰੋ।",
   "A ready-to-file report for you or your accountant: your mileage totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "ਤੁਹਾਡੇ ਜਾਂ ਤੁਹਾਡੇ ਅਕਾਊਂਟੈਂਟ ਲਈ ਭਰਨ ਲਈ ਤਿਆਰ ਰਿਪੋਰਟ: ਤੁਹਾਡੀ ਕੁੱਲ ਮਾਈਲੇਜ, ਹਰ {{authority}} ਰੇਟ ’ਤੇ ਕਟੌਤੀ, ਅਤੇ ਪੂਰਾ ਟ੍ਰਿਪ ਲੌਗ ਜੋ ਦਿਖਾਉਂਦਾ ਹੈ ਕਿ ਕਿਹੜੇ ਟ੍ਰਿਪ ਡਰਾਈਵਿੰਗ ਦੌਰਾਨ ਦਰਜ ਹੋਏ ਅਤੇ ਕਿਹੜੇ ਬਦਲੇ ਗਏ।",
   "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "ਤੁਹਾਡੇ ਜਾਂ ਤੁਹਾਡੇ ਅਕਾਊਂਟੈਂਟ ਲਈ ਭਰਨ ਲਈ ਤਿਆਰ ਰਿਪੋਰਟ: ਤੁਹਾਡੇ Schedule C Part IV ਦੇ ਕੁੱਲ ਅੰਕੜੇ, ਹਰ {{authority}} ਰੇਟ ’ਤੇ ਕਟੌਤੀ, ਅਤੇ ਪੂਰਾ ਟ੍ਰਿਪ ਲੌਗ ਜੋ ਦਿਖਾਉਂਦਾ ਹੈ ਕਿ ਕਿਹੜੇ ਟ੍ਰਿਪ ਡਰਾਈਵਿੰਗ ਦੌਰਾਨ ਦਰਜ ਹੋਏ ਅਤੇ ਕਿਹੜੇ ਬਦਲੇ ਗਏ।",
   "Active · thank you!": "ਚਾਲੂ · ਸ਼ੁਕਰੀਆ!",
@@ -288,7 +288,6 @@ const dictionary: Dictionary = {
   "found this tax year": "ਇਸ ਟੈਕਸ ਸਾਲ ਲੱਭੇ",
   "Free": "ਮੁਫ਼ਤ",
   "Free money alert 💸": "ਤੁਹਾਡੇ ਪੈਸਿਆਂ ਦੀ ਗੱਲ 💸",
-  "Free to start": "ਸ਼ੁਰੂ ਕਰਨਾ ਮੁਫ਼ਤ",
   "Free trial": "ਮੁਫ਼ਤ ਟ੍ਰਾਇਲ",
   "Fri": "ਸ਼ੁੱਕਰ",
   "From": "ਕਿੱਥੋਂ",
@@ -304,7 +303,6 @@ const dictionary: Dictionary = {
   "Give the place a name, e.g. “Acme HQ”.": "ਥਾਂ ਨੂੰ ਕੋਈ ਨਾਂ ਦਿਓ, ਜਿਵੇਂ “Acme HQ”।",
   "Go Pro": "Pro ਲਓ",
   "Good habits": "ਚੰਗੀਆਂ ਆਦਤਾਂ",
-  "Good to know": "ਜਾਣਨ ਵਾਲੀ ਗੱਲ",
   "GPS only runs while you drive. Parked, MileSprout sleeps.": "GPS ਸਿਰਫ਼ ਡਰਾਈਵਿੰਗ ਦੌਰਾਨ ਚੱਲਦਾ ਹੈ। ਗੱਡੀ ਖੜ੍ਹੀ ਹੋਵੇ ਤਾਂ MileSprout ਸੌਂ ਜਾਂਦਾ ਹੈ।",
   "Happy Halloween 🎃": "ਹੈਲੋਵੀਨ ਮੁਬਾਰਕ 🎃",
   "Happy holidays from MileSprout 🎁": "MileSprout ਵੱਲੋਂ ਛੁੱਟੀਆਂ ਮੁਬਾਰਕ 🎁",
@@ -327,7 +325,6 @@ const dictionary: Dictionary = {
   "iOS asks twice. Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.": "iOS ਦੋ ਵਾਰ ਪੁੱਛਦਾ ਹੈ। <b>ਐਪ ਦੀ ਵਰਤੋਂ ਕਰਦੇ ਸਮੇਂ ਇਜਾਜ਼ਤ ਦਿਓ</b> ’ਤੇ ਟੈਪ ਕਰੋ, ਫਿਰ <b>ਹਮੇਸ਼ਾਂ ਇਜਾਜ਼ਤ ਦੇਣ ’ਤੇ ਬਦਲੋ</b> ’ਤੇ।",
   "iOS only offers “Always” in Settings. It takes ten seconds, and MileSprout carries on by itself when you come back.": "iOS “ਹਮੇਸ਼ਾਂ” ਸਿਰਫ਼ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਦਿੰਦਾ ਹੈ। ਬੱਸ ਦਸ ਸਕਿੰਟ ਲੱਗਦੇ ਹਨ, ਅਤੇ ਵਾਪਸ ਆਉਣ ’ਤੇ MileSprout ਆਪਣੇ-ਆਪ ਅੱਗੇ ਚੱਲ ਪੈਂਦਾ ਹੈ।",
   "IRS standard mileage rate: 76¢ a mile from July 2026": "IRS ਸਟੈਂਡਰਡ ਮਾਈਲੇਜ ਰੇਟ: ਜੁਲਾਈ 2026 ਤੋਂ 76¢ ਪ੍ਰਤੀ ਮੀਲ",
-  "Just drive. Each trip appears after you park, and business drives count at {{authority}}’s {{rate}} rate.": "ਬੱਸ ਗੱਡੀ ਚਲਾਓ। ਪਾਰਕ ਕਰਨ ਤੋਂ ਬਾਅਦ ਹਰ ਟ੍ਰਿਪ ਦਿਸ ਪੈਂਦਾ ਹੈ, ਅਤੇ ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ {{authority}} ਦੇ {{rate}} ਰੇਟ ’ਤੇ ਗਿਣੇ ਜਾਂਦੇ ਹਨ।",
   "Keep going": "ਲੱਗੇ ਰਹੋ",
   "kilometres": "ਕਿਲੋਮੀਟਰ",
   "Kilometres": "ਕਿਲੋਮੀਟਰ",
@@ -483,7 +480,6 @@ const dictionary: Dictionary = {
   "Save end as a place: {{name}}": "ਮੰਜ਼ਿਲ ਨੂੰ ਥਾਂ ਵਜੋਂ ਸੇਵ ਕਰੋ: {{name}}",
   "Save my hours": "ਮੇਰੇ ਘੰਟੇ ਸੇਵ ਕਰੋ",
   "Save place": "ਥਾਂ ਸੇਵ ਕਰੋ",
-  "Save places like clients or the depot from any trip.": "ਕਿਸੇ ਵੀ ਟ੍ਰਿਪ ਤੋਂ ਕਲਾਇੰਟਾਂ ਜਾਂ ਡਿਪੋ ਵਰਗੀਆਂ ਥਾਵਾਂ ਸੇਵ ਕਰੋ।",
   "Save readings": "ਰੀਡਿੰਗ ਸੇਵ ਕਰੋ",
   "Save start as a place": "ਸ਼ੁਰੂਆਤੀ ਪਤਾ ਥਾਂ ਵਜੋਂ ਸੇਵ ਕਰੋ",
   "Save start as a place: {{name}}": "ਸ਼ੁਰੂਆਤੀ ਪਤਾ ਥਾਂ ਵਜੋਂ ਸੇਵ ਕਰੋ: {{name}}",
@@ -512,7 +508,6 @@ const dictionary: Dictionary = {
   "Set it and forget it ⏱️": "ਇੱਕ ਵਾਰ ਸੈੱਟ ਕਰੋ, ਫਿਰ ਭੁੱਲ ਜਾਓ ⏱️",
   "Set location to “Always” and MileSprout logs every drive, even when it’s closed.": "ਟਿਕਾਣਾ “ਹਮੇਸ਼ਾਂ” ’ਤੇ ਕਰੋ ਅਤੇ MileSprout ਹਰ ਟ੍ਰਿਪ ਦਰਜ ਕਰੇਗਾ, ਐਪ ਬੰਦ ਹੋਣ ’ਤੇ ਵੀ।",
   "Set up auto-logging": "ਆਟੋਮੈਟਿਕ ਟ੍ਰੈਕਿੰਗ ਸੈੱਟ ਕਰੋ",
-  "Set your work hours any time in Settings, and most drives sort themselves.": "ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਕਦੇ ਵੀ ਆਪਣੇ ਕੰਮ ਦੇ ਘੰਟੇ ਸੈੱਟ ਕਰੋ, ਅਤੇ ਜ਼ਿਆਦਾਤਰ ਟ੍ਰਿਪ ਆਪਣੇ-ਆਪ ਛਾਂਟੇ ਜਾਣਗੇ।",
   "Sets your currency, miles or kilometres, tax year and official mileage rate. You can change it later.": "ਇਸ ਨਾਲ ਐਪ ਦੀ ਕਰੰਸੀ, ਮੀਲ ਜਾਂ ਕਿਲੋਮੀਟਰ, ਟੈਕਸ ਸਾਲ ਅਤੇ ਸਰਕਾਰੀ ਮਾਈਲੇਜ ਰੇਟ ਤੈਅ ਹੁੰਦੇ ਹਨ। ਇਸਨੂੰ ਬਾਅਦ ਵਿੱਚ ਬਦਲਿਆ ਜਾ ਸਕਦਾ ਹੈ।",
   "Settings": "ਸੈਟਿੰਗਾਂ",
   "Share this": "ਇਹ ਸਾਂਝਾ ਕਰੋ",
@@ -553,7 +548,6 @@ const dictionary: Dictionary = {
   "Sunday scaries? Not for your taxes": "ਐਤਵਾਰ ਸ਼ਾਮ ਦੀ ਟੈਂਸ਼ਨ? ਟੈਕਸ ਦੀ ਤਾਂ ਬਿਲਕੁਲ ਨਹੀਂ",
   "Sunny days, business miles ☀️": "ਧੁੱਪਾਂ ਵਾਲੇ ਦਿਨ, ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ☀️",
   "Swap from and to": "ਕਿੱਥੋਂ ਅਤੇ ਕਿੱਥੇ ਨੂੰ ਅਦਲ-ਬਦਲ ਕਰੋ",
-  "Swipe a trip right for business, left for personal.": "ਬਿਜ਼ਨਸ ਲਈ ਟ੍ਰਿਪ ਸੱਜੇ ਸਵਾਈਪ ਕਰੋ, ਨਿੱਜੀ ਲਈ ਖੱਬੇ।",
   "Swipe right on savings": "ਕਟੌਤੀਆਂ ਨੂੰ ਸੱਜੇ ਸਵਾਈਪ ਕਰੋ",
   "Swipe this week’s trips business or personal and see what you’ve earned back.": "ਇਸ ਹਫ਼ਤੇ ਦੇ ਟ੍ਰਿਪ ਬਿਜ਼ਨਸ ਜਾਂ ਨਿੱਜੀ ਵੱਲ ਸਵਾਈਪ ਕਰੋ ਅਤੇ ਦੇਖੋ ਉਨ੍ਹਾਂ ਦੀ ਕਿੰਨੀ ਕੀਮਤ ਬਣੀ।",
   "Swipe to sort business trips": "ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ਛਾਂਟਣ ਲਈ ਸਵਾਈਪ ਕਰੋ",
@@ -562,7 +556,6 @@ const dictionary: Dictionary = {
   "Tap “Change to Always Allow”": "“ਹਮੇਸ਼ਾਂ ਇਜਾਜ਼ਤ ਦੇਣ ’ਤੇ ਬਦਲੋ” ’ਤੇ ਟੈਪ ਕਰੋ",
   "Tap “Location”": "“ਟਿਕਾਣਾ” ’ਤੇ ਟੈਪ ਕਰੋ",
   "Tap “Open Settings” below": "ਹੇਠਾਂ “ਸੈਟਿੰਗਾਂ ਖੋਲ੍ਹੋ” ’ਤੇ ਟੈਪ ਕਰੋ",
-  "Tap “Start shift” when you start work. Every drive until you end it is business.": "ਕੰਮ ਸ਼ੁਰੂ ਕਰਨ ਵੇਲੇ “ਸ਼ਿਫਟ ਸ਼ੁਰੂ ਕਰੋ” ’ਤੇ ਟੈਪ ਕਰੋ। ਸ਼ਿਫਟ ਖ਼ਤਮ ਕਰਨ ਤੱਕ ਹਰ ਟ੍ਰਿਪ ਬਿਜ਼ਨਸ ਹੈ।",
   "Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.": "<b>ਐਪ ਦੀ ਵਰਤੋਂ ਕਰਦੇ ਸਮੇਂ ਇਜਾਜ਼ਤ ਦਿਓ</b> ’ਤੇ ਟੈਪ ਕਰੋ, ਫਿਰ <b>ਹਮੇਸ਼ਾਂ ਇਜਾਜ਼ਤ ਦੇਣ ’ਤੇ ਬਦਲੋ</b> ’ਤੇ।",
   "Tap here": "ਇੱਥੇ ਟੈਪ ਕਰੋ",
   "Tap trips to select them": "ਟ੍ਰਿਪ ਚੁਣਨ ਲਈ ਉਨ੍ਹਾਂ ’ਤੇ ਟੈਪ ਕਰੋ",
@@ -1001,14 +994,6 @@ const dictionary: Dictionary = {
   "Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.": {
     "one": "ਮੁਫ਼ਤ ਪਲਾਨ: ਮਹੀਨੇ ਵਿੱਚ {{count}} ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ (ਨਿੱਜੀ ਟ੍ਰਿਪ ਨਹੀਂ ਗਿਣੇ ਜਾਂਦੇ), ਹੱਥੀਂ ਅਨਲਿਮਟਿਡ ਟ੍ਰਿਪ ਅਤੇ ਸਪ੍ਰੈਡਸ਼ੀਟ ਐਕਸਪੋਰਟ।",
     "other": "ਮੁਫ਼ਤ ਪਲਾਨ: ਮਹੀਨੇ ਵਿੱਚ {{count}} ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ (ਨਿੱਜੀ ਟ੍ਰਿਪ ਨਹੀਂ ਗਿਣੇ ਜਾਂਦੇ), ਹੱਥੀਂ ਅਨਲਿਮਟਿਡ ਟ੍ਰਿਪ ਅਤੇ ਸਪ੍ਰੈਡਸ਼ੀਟ ਐਕਸਪੋਰਟ।"
-  },
-  "Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.": {
-    "one": "ਮੁਫ਼ਤ: ਮਹੀਨੇ ਵਿੱਚ {{count}} ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ। ਨਿੱਜੀ ਟ੍ਰਿਪ ਨਹੀਂ ਗਿਣੇ ਜਾਂਦੇ, ਅਤੇ ਸ਼ਿਫਟ ਦਿਨ ਵਿੱਚ ਇੱਕ ਵਾਰ ਗਿਣੀ ਜਾਂਦੀ ਹੈ। ਹੱਥੀਂ ਜੋੜੇ ਟ੍ਰਿਪ ਹਮੇਸ਼ਾਂ ਮੁਫ਼ਤ ਹਨ। Pro: ਅਨਲਿਮਟਿਡ।",
-    "other": "ਮੁਫ਼ਤ: ਮਹੀਨੇ ਵਿੱਚ {{count}} ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ। ਨਿੱਜੀ ਟ੍ਰਿਪ ਨਹੀਂ ਗਿਣੇ ਜਾਂਦੇ, ਅਤੇ ਸ਼ਿਫਟ ਦਿਨ ਵਿੱਚ ਇੱਕ ਵਾਰ ਗਿਣੀ ਜਾਂਦੀ ਹੈ। ਹੱਥੀਂ ਜੋੜੇ ਟ੍ਰਿਪ ਹਮੇਸ਼ਾਂ ਮੁਫ਼ਤ ਹਨ। Pro: ਅਨਲਿਮਟਿਡ।"
-  },
-  "Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.": {
-    "one": "ਮੁਫ਼ਤ: ਮਹੀਨੇ ਵਿੱਚ {{count}} ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ। ਨਿੱਜੀ ਟ੍ਰਿਪ ਨਹੀਂ ਗਿਣੇ ਜਾਂਦੇ, ਅਤੇ ਹੱਥੀਂ ਜੋੜੇ ਟ੍ਰਿਪ ਹਮੇਸ਼ਾਂ ਮੁਫ਼ਤ ਹਨ। Pro: ਅਨਲਿਮਟਿਡ।",
-    "other": "ਮੁਫ਼ਤ: ਮਹੀਨੇ ਵਿੱਚ {{count}} ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ। ਨਿੱਜੀ ਟ੍ਰਿਪ ਨਹੀਂ ਗਿਣੇ ਜਾਂਦੇ, ਅਤੇ ਹੱਥੀਂ ਜੋੜੇ ਟ੍ਰਿਪ ਹਮੇਸ਼ਾਂ ਮੁਫ਼ਤ ਹਨ। Pro: ਅਨਲਿਮਟਿਡ।"
   },
   "Each automatic work drive counts once. Unsorted drives count until you sort them.": "ਹਰ ਆਟੋਮੈਟਿਕ ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ਇੱਕ ਵਾਰ ਗਿਣਿਆ ਜਾਂਦਾ ਹੈ। ਨਾ ਛਾਂਟੇ ਟ੍ਰਿਪ ਛਾਂਟਣ ਤੱਕ ਗਿਣੇ ਜਾਂਦੇ ਹਨ।",
   "Personal drives don’t count. Sort one personal and the next drive gets its place.": "ਨਿੱਜੀ ਟ੍ਰਿਪ ਨਹੀਂ ਗਿਣੇ ਜਾਂਦੇ। ਕਿਸੇ ਟ੍ਰਿਪ ਨੂੰ ਨਿੱਜੀ ਛਾਂਟੋ, ਤਾਂ ਉਸ ਦੀ ਥਾਂ ਅਗਲੇ ਟ੍ਰਿਪ ਨੂੰ ਮਿਲ ਜਾਂਦੀ ਹੈ।",

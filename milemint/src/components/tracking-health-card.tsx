@@ -7,7 +7,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import type { TrackingGap } from '@/domain/tracker-policy';
-import type { HealthIssue, TrackingHealth } from '@/domain/tracking-health';
+import type { HealthIssue } from '@/domain/tracking-health';
 import { displayLocale, formatDistance, type Region } from '@/domain/regions';
 import { toLocalIsoDate } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';

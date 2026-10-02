@@ -1,6 +1,7 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Just drive. Each trip appears after you park.": "Roulez, tout simplement. Chaque trajet apparaît une fois garé.",
   "…": "…",
   "…unless you set your work hours. Until then, a few swipes will do.": "…sauf si vous indiquez vos heures de travail. D’ici là, quelques gestes suffiront.",
   "{{achievement}} on MileSprout {{emoji}} The mileage app that counts every mile.": "{{achievement}} sur MileSprout {{emoji}} L’app de déplacements qui compte chaque trajet.",
@@ -169,7 +170,6 @@ const dictionary: Dictionary = {
   "A few swipes tonight beats a shoebox of receipts at tax time.": "Quelques gestes ce soir valent mieux qu’une boîte à chaussures pleine de reçus au moment des impôts.",
   "A fully sorted week": "Une semaine entièrement classée",
   "A quick (slightly cheeky) reminder each Sunday evening to sort the week’s drives, so nothing goes unclaimed.": "Un petit rappel (un brin taquin) chaque dimanche soir pour classer les trajets de la semaine, afin de ne rien oublier de déduire.",
-  "A quick Sunday reminder to sort your week. Turn it off any time in Settings.": "Un petit rappel le dimanche pour classer votre semaine. Désactivez-le quand vous voulez dans Réglages.",
   "A ready-to-file report for you or your accountant: your mileage totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "Un rapport prêt à remettre, pour vous ou votre comptable : vos totaux de déplacements, la déduction à chaque taux de {{authority}} et le registre complet des trajets, qui indique ceux enregistrés pendant la conduite et ceux modifiés.",
   "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "Un rapport prêt à remettre, pour vous ou votre comptable : vos totaux pour la Schedule C Part IV, la déduction à chaque taux de {{authority}} et le registre complet des trajets, qui indique ceux enregistrés pendant la conduite et ceux modifiés.",
   "Active · thank you!": "Actif · merci !",
@@ -336,7 +336,6 @@ const dictionary: Dictionary = {
   "found this tax year": "trouvés cette année d’imposition",
   "Free": "Gratuit",
   "Free money alert 💸": "De l’argent qui dort ? 💸",
-  "Free to start": "Gratuit pour commencer",
   "Free trial": "Essai gratuit",
   "Fri": "Ven",
   "From": "Départ",
@@ -352,7 +351,6 @@ const dictionary: Dictionary = {
   "Give the place a name, e.g. “Acme HQ”.": "Donnez un nom au lieu, p. ex. « Siège d’Acme ».",
   "Go Pro": "Passer à Pro",
   "Good habits": "Bonnes habitudes",
-  "Good to know": "Bon à savoir",
   "GPS only runs while you drive. Parked, MileSprout sleeps.": "Le GPS fonctionne seulement quand vous conduisez. À l’arrêt, MileSprout se met en veille.",
   "Happy Halloween 🎃": "Joyeuse Halloween 🎃",
   "Happy holidays from MileSprout 🎁": "Joyeuses fêtes de la part de MileSprout 🎁",
@@ -375,7 +373,6 @@ const dictionary: Dictionary = {
   "iOS asks twice. Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.": "iOS vous le demande deux fois. Touchez <b>Autoriser lorsque l’app est active</b>, puis <b>Passer à Toujours autoriser</b>.",
   "iOS only offers “Always” in Settings. It takes ten seconds, and MileSprout carries on by itself when you come back.": "iOS ne propose « Toujours » que dans Réglages. Ça prend dix secondes, et MileSprout continue tout seul à votre retour.",
   "IRS standard mileage rate: 76¢ a mile from July 2026": "Taux standard de l’IRS : 76 ¢ par mile à partir de juillet 2026",
-  "Just drive. Each trip appears after you park, and business drives count at {{authority}}’s {{rate}} rate.": "Conduisez, tout simplement. Chaque trajet apparaît dès que vous vous garez, et les trajets d’affaires comptent au taux de {{rate}} de {{authority}}.",
   "Keep going": "Continuer",
   "kilometres": "kilomètres",
   "Kilometres": "Kilomètres",
@@ -532,7 +529,6 @@ const dictionary: Dictionary = {
   "Save end as a place: {{name}}": "Enregistrer l’arrivée comme lieu : {{name}}",
   "Save my hours": "Enregistrer mes heures",
   "Save place": "Enregistrer le lieu",
-  "Save places like clients or the depot from any trip.": "Enregistrez des lieux, comme vos clients ou l’entrepôt, depuis n’importe quel trajet.",
   "Save readings": "Enregistrer les relevés",
   "Save start as a place": "Enregistrer le départ comme lieu",
   "Save start as a place: {{name}}": "Enregistrer le départ comme lieu : {{name}}",
@@ -562,7 +558,6 @@ const dictionary: Dictionary = {
   "Set it and forget it ⏱️": "Réglez-le une fois pour toutes ⏱️",
   "Set location to “Always” and MileSprout logs every drive, even when it’s closed.": "Réglez la position sur « Toujours » et MileSprout enregistre chaque trajet, même quand l’app est fermée.",
   "Set up auto-logging": "Activer l’enregistrement auto",
-  "Set your work hours any time in Settings, and most drives sort themselves.": "Indiquez vos heures de travail quand vous voulez dans Réglages, et la plupart des trajets se classeront tout seuls.",
   "Sets your currency, miles or kilometres, tax year and official mileage rate. You can change it later.": "Définit votre devise, les miles ou les kilomètres, l’année d’imposition et le taux officiel applicable aux déplacements. Vous pourrez le modifier plus tard.",
   "Settings": "Réglages",
   "Share this": "Partager",
@@ -604,7 +599,6 @@ const dictionary: Dictionary = {
   "Sunday scaries? Not for your taxes": "Le blues du dimanche ? Pas pour vos impôts",
   "Sunny days, business miles ☀️": "Soleil et trajets d’affaires ☀️",
   "Swap from and to": "Inverser départ et arrivée",
-  "Swipe a trip right for business, left for personal.": "Balayez un trajet vers la droite pour affaires, vers la gauche pour personnel.",
   "Swipe right on savings": "Coup de foudre pour vos déductions",
   "Swipe this week’s trips business or personal and see what you’ve earned back.": "Balayez les trajets de la semaine, affaires ou personnel, et voyez ce qu’ils valent.",
   "Swipe to sort business trips": "Classez les trajets d’affaires d’un balayage",
@@ -613,7 +607,6 @@ const dictionary: Dictionary = {
   "Tap “Change to Always Allow”": "Touchez « Passer à Toujours autoriser »",
   "Tap “Location”": "Touchez « Position »",
   "Tap “Open Settings” below": "Touchez « Ouvrir Réglages » ci-dessous",
-  "Tap “Start shift” when you start work. Every drive until you end it is business.": "Touchez « Commencer le quart » quand vous commencez à travailler. Chaque trajet compte comme affaires jusqu’à la fin du quart.",
   "Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.": "Touchez <b>Autoriser lorsque l’app est active</b>, puis <b>Passer à Toujours autoriser</b>.",
   "Tap here": "Touchez ici",
   "Tap trips to select them": "Touchez des trajets pour les sélectionner",
@@ -1071,16 +1064,6 @@ const dictionary: Dictionary = {
     "one": "Forfait gratuit : {{count}} trajet d’affaires par mois (les trajets personnels ne comptent pas), trajets ajoutés à la main illimités et export en tableur.",
     "many": "Forfait gratuit : {{count}} trajets d’affaires par mois (les trajets personnels ne comptent pas), trajets ajoutés à la main illimités et export en tableur.",
     "other": "Forfait gratuit : {{count}} trajets d’affaires par mois (les trajets personnels ne comptent pas), trajets ajoutés à la main illimités et export en tableur."
-  },
-  "Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.": {
-    "one": "Gratuit : {{count}} trajet d’affaires par mois. Les trajets personnels ne comptent pas, et un quart compte une fois par jour. Les trajets ajoutés à la main sont toujours gratuits. Pro : illimité.",
-    "many": "Gratuit : {{count}} trajets d’affaires par mois. Les trajets personnels ne comptent pas, et un quart compte une fois par jour. Les trajets ajoutés à la main sont toujours gratuits. Pro : illimité.",
-    "other": "Gratuit : {{count}} trajets d’affaires par mois. Les trajets personnels ne comptent pas, et un quart compte une fois par jour. Les trajets ajoutés à la main sont toujours gratuits. Pro : illimité."
-  },
-  "Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.": {
-    "one": "Gratuit : {{count}} trajet d’affaires par mois. Les trajets personnels ne comptent pas, et ceux ajoutés à la main sont toujours gratuits. Pro : illimité.",
-    "many": "Gratuit : {{count}} trajets d’affaires par mois. Les trajets personnels ne comptent pas, et ceux ajoutés à la main sont toujours gratuits. Pro : illimité.",
-    "other": "Gratuit : {{count}} trajets d’affaires par mois. Les trajets personnels ne comptent pas, et ceux ajoutés à la main sont toujours gratuits. Pro : illimité."
   },
   "Each automatic work drive counts once. Unsorted drives count until you sort them.": "Chaque trajet d’affaires automatique compte une fois. Les trajets non classés comptent jusqu’à ce que vous les classiez.",
   "Personal drives don’t count. Sort one personal and the next drive gets its place.": "Les trajets personnels ne comptent pas. Classez-en un en personnel et le trajet suivant prend sa place.",
