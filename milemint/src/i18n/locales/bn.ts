@@ -1238,6 +1238,11 @@ const dictionary: Dictionary = {
   "Add a drive you missed": "বাদ পড়া ট্রিপ যোগ করুন",
   "Varies by day": "দিন অনুযায়ী আলাদা",
   "Free · {{used}} of {{limit}}": "ফ্রি · {{limit}}টির মধ্যে {{used}}টি",
+  "Nice one!": "দারুণ!",
+  "Tracking’s set up": "ট্র্যাকিং চালু হয়ে গেছে",
+  "Good start": "ভালো শুরু",
+  "ALMOST DONE!": "প্রায় শেষ!",
+  "YOU DID IT!": "আপনি পেরেছেন!",
 };
 
 export default dictionary;

@@ -1,7 +1,7 @@
 import * as Haptics from 'expo-haptics';
 import { router, useFocusEffect } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useCallback, useEffect, useMemo, useReducer, useRef, useState, type ComponentType } from 'react';
+import { useCallback, useEffect, useReducer, useRef, useState, type ComponentType } from 'react';
 import { AccessibilityInfo, Modal, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, {
@@ -20,6 +20,7 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, G, Rect } from 'react-native-svg';
 
+import { Burst } from '@/components/celebration';
 import { useLaunchIntroDone } from '@/components/launch-intro-state';
 import { LeafMark } from '@/components/leaf-mark';
 import { ShiftSwitch } from '@/components/shift-switch';
@@ -481,7 +482,7 @@ function SampleCard({
         />
         {!passed && <Hand direction={expected === 'personal' ? -1 : 1} />}
       </Animated.View>
-      {passed && !reduceMotion && <Burst />}
+      {passed && !reduceMotion && <Burst style={styles.burst} />}
       {/* VoiceOver can't feel the swipe: the same thing as a plain button. */}
       {screenReader && !passed && (
         <Pressable
@@ -515,7 +516,7 @@ function ShiftPractice({ passed, onStart }: { passed: boolean; onStart: () => vo
         </ShiftSwitch>
         {!passed && <Hand direction={1} start={-HAND_TRAVEL - 30} top={14} />}
       </View>
-      {passed && !reduceMotion && <Burst />}
+      {passed && !reduceMotion && <Burst style={styles.burst} />}
     </View>
   );
 }
@@ -651,43 +652,6 @@ function HandShape() {
   );
 }
 
-const BURST_COLORS = [GOLD, '#4ADE80', '#FFFFFF', '#BBF7D0', '#F59E0B'];
-
-/** A small pop of confetti from the card, for a step done right. */
-function Burst() {
-  const pieces = useMemo(() => Array.from({ length: 18 }, (_, i) => i), []);
-  return (
-    <View pointerEvents="none" style={styles.burst}>
-      {pieces.map((i) => (
-        <BurstPiece key={i} index={i} />
-      ))}
-    </View>
-  );
-}
-
-function BurstPiece({ index }: { index: number }) {
-  const fly = useSharedValue(0);
-  useEffect(() => {
-    fly.set(withTiming(1, { duration: 900 + (index % 5) * 90, easing: Easing.out(Easing.cubic) }));
-  }, [fly, index]);
-  const angle = (index / 18) * Math.PI * 2 + (index % 3) * 0.2;
-  const reach = 70 + (index % 4) * 22;
-  const style = useAnimatedStyle(() => ({
-    opacity: 1 - Math.max(0, fly.value - 0.6) * 2.5,
-    transform: [
-      { translateX: Math.cos(angle) * reach * fly.value },
-      // Thrown out, then falling a little.
-      { translateY: Math.sin(angle) * reach * 0.6 * fly.value + 40 * fly.value * fly.value },
-      { rotate: `${index * 47 * fly.value}deg` },
-    ],
-  }));
-  return (
-    <Animated.View
-      style={[styles.piece, { backgroundColor: BURST_COLORS[index % BURST_COLORS.length] }, style]}
-    />
-  );
-}
-
 /** VoiceOver (or TalkBack) is on: swipes on the card are out of reach, so a button does the same. */
 function useScreenReader(): boolean {
   const [on, setOn] = useState(false);
@@ -785,7 +749,6 @@ const styles = StyleSheet.create({
   sampleNote: { color: 'rgba(209,250,229,0.75)', fontSize: 13, textAlign: 'center' },
   shiftOn: { color: '#FFFFFF', fontSize: 16, fontWeight: '800' },
   burst: { position: 'absolute', left: '50%', top: '45%' },
-  piece: { position: 'absolute', width: 8, height: 12, borderRadius: 2 },
   done: { alignItems: 'center', gap: Spacing.three },
   doneList: { width: '100%', borderRadius: 18, overflow: 'hidden', paddingVertical: Spacing.one },
   startButton: { width: '100%', marginTop: Spacing.two },

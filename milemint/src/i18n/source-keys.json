@@ -973,6 +973,12 @@
     ]
   },
   {
+    "key": "ALMOST DONE!",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Always",
     "files": [
       "components/always-guide.tsx"
@@ -2737,6 +2743,12 @@
     ]
   },
   {
+    "key": "Good start",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Good to know",
     "files": [
       "app/welcome.tsx"
@@ -3763,6 +3775,12 @@
     "key": "Next month",
     "files": [
       "components/calendar-picker.tsx"
+    ]
+  },
+  {
+    "key": "Nice one!",
+    "files": [
+      "app/welcome.tsx"
     ]
   },
   {
@@ -5953,6 +5971,12 @@
     ]
   },
   {
+    "key": "Tracking’s set up",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Trades, sales, care, office. Drives in your hours are business.",
     "files": [
       "app/welcome.tsx"
@@ -6451,6 +6475,12 @@
     "key": "You can claim up to 5,000 business kilometres per car each income year. This report assumes one car.",
     "files": [
       "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "YOU DID IT!",
+    "files": [
+      "app/welcome.tsx"
     ]
   },
   {

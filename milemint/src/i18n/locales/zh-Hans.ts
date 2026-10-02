@@ -1196,6 +1196,11 @@ const dictionary: Dictionary = {
   "Add a drive you missed": "添加漏记的行程",
   "Varies by day": "每天不同",
   "Free · {{used}} of {{limit}}": "免费 · 已用 {{used}}/{{limit}}",
+  "Nice one!": "真棒！",
+  "Tracking’s set up": "追踪已开启",
+  "Good start": "开局不错",
+  "ALMOST DONE!": "马上就好！",
+  "YOU DID IT!": "大功告成！",
 };
 
 export default dictionary;

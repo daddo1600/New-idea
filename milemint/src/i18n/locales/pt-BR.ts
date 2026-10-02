@@ -1330,6 +1330,11 @@ const dictionary: Dictionary = {
   "Add a drive you missed": "Adicionar um trajeto que faltou",
   "Varies by day": "Varia conforme o dia",
   "Free · {{used}} of {{limit}}": "Grátis · {{used}} de {{limit}}",
+  "Nice one!": "Mandou bem!",
+  "Tracking’s set up": "Rastreamento ativado",
+  "Good start": "Bom começo",
+  "ALMOST DONE!": "QUASE LÁ!",
+  "YOU DID IT!": "VOCÊ CONSEGUIU!",
 };
 
 export default dictionary;

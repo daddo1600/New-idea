@@ -1250,6 +1250,11 @@ const dictionary: Dictionary = {
   "Add a drive you missed": "ਛੁੱਟਿਆ ਟ੍ਰਿਪ ਜੋੜੋ",
   "Varies by day": "ਦਿਨ ਮੁਤਾਬਕ ਵੱਖਰੇ",
   "Free · {{used}} of {{limit}}": "ਫ਼ਰੀ · {{limit}} ਵਿੱਚੋਂ {{used}}",
+  "Nice one!": "ਬਹੁਤ ਵਧੀਆ!",
+  "Tracking’s set up": "ਟ੍ਰੈਕਿੰਗ ਚਾਲੂ ਹੋ ਗਈ",
+  "Good start": "ਵਧੀਆ ਸ਼ੁਰੂਆਤ",
+  "ALMOST DONE!": "ਬੱਸ ਥੋੜ੍ਹਾ ਹੋਰ!",
+  "YOU DID IT!": "ਤੁਸੀਂ ਕਰ ਦਿਖਾਇਆ!",
 };
 
 export default dictionary;

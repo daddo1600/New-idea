@@ -1332,6 +1332,11 @@ const dictionary: Dictionary = {
   "Add a drive you missed": "Adaugă o cursă care lipsește",
   "Varies by day": "Diferă de la zi la zi",
   "Free · {{used}} of {{limit}}": "Gratuit · {{used}} din {{limit}}",
+  "Nice one!": "Bravo!",
+  "Tracking’s set up": "Înregistrarea e pornită",
+  "Good start": "Un început bun",
+  "ALMOST DONE!": "APROAPE GATA!",
+  "YOU DID IT!": "AI REUȘIT!",
 };
 
 export default dictionary;
