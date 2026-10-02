@@ -16,7 +16,7 @@ import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import type { AutoReason } from '@/domain/classify-rules';
 import { shownLabel } from '@/domain/privacy';
-import { formatDistance, formatMoney } from '@/domain/regions';
+import { formatDistance, formatMoney, formatShortDate } from '@/domain/regions';
 import { type Classification, type Trip, tripCostsMinor } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
@@ -74,7 +74,7 @@ export function TripRow({
   const unclassified = trip.classification === 'unclassified';
   const business = trip.classification === 'business';
   const details = [
-    trip.localDate,
+    formatShortDate(trip.localDate, region, undefined, t),
     trip.source === 'auto' ? formatTime(trip.startedAt, region) : t('Added manually'),
     shownPurpose(trip.purpose, t),
     deduction > 0 ? formatMoney(deduction, region) : '',

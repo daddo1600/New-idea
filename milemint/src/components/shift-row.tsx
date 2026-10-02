@@ -9,7 +9,7 @@ import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import { getRoute } from '@/db/trips-repo';
 import type { LatLng } from '@/domain/geo';
-import { displayLocale, formatDistance, formatMoney, type Region } from '@/domain/regions';
+import { displayLocale, formatDistance, formatMoney, formatShortDate, type Region } from '@/domain/regions';
 import type { ShiftGroup } from '@/domain/shift-rows';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
@@ -20,15 +20,6 @@ const STEP_MS = 15 * 60_000;
 /** "4:12 PM" or "16:12", the way the user's country writes it. */
 export function shortTime(iso: string, region: Region): string {
   return new Date(iso).toLocaleTimeString(displayLocale(region), { hour: 'numeric', minute: '2-digit' });
-}
-
-function shortDate(isoDate: string, region: Region): string {
-  const [y, m, d] = isoDate.split('-').map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString(displayLocale(region), {
-    weekday: 'short',
-    day: 'numeric',
-    month: 'short',
-  });
 }
 
 /**
@@ -66,7 +57,7 @@ export function ShiftRow({
   const span = running ? t('Since {{time}}', { time: start }) : `${start}–${shortTime(group.endedAt!, region)}`;
   const drives = t('{{count}} drives', { count: group.legs.length });
   const value = formatMoney(valueMinor, region);
-  const date = shortDate(group.date, region);
+  const date = formatShortDate(group.date, region, undefined, t);
   const purposes = [...new Set(group.legs.filter((leg) => leg.classification === 'business').map((leg) => leg.purpose.trim()))];
   const purpose = shownPurpose(purposes.length === 1 && purposes[0] ? purposes[0] : 'Deliveries', t);
   return (

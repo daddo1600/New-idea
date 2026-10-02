@@ -324,7 +324,11 @@ export function taxYearBounds(startYear: number, region: Region): { start: strin
   return { start, end: next.toISOString().slice(0, 10) };
 }
 
-/** A date as people in the region write it: 9/30/2026, 30/09/2026 or 2026-09-30 (Canada). */
+/**
+ * A date as people in the region write it: 9/30/2026, 30/09/2026 or 2026-09-30
+ * (Canada). For the CSV exports, where accounting software reads it; the PDF
+ * uses formatReportDate and the screens formatShortDate or formatLongDate.
+ */
 export function formatDate(localDate: string, region: Region): string {
   const [y, m, d] = localDate.slice(0, 10).split('-');
   if (region.code === 'US') return `${Number(m)}/${Number(d)}/${y}`;
@@ -332,7 +336,6 @@ export function formatDate(localDate: string, region: Region): string {
   return `${d}/${m}/${y}`;
 }
 
-/** e.g. "1 Jul 2026" (or "Jul 1, 2026" in the US). */
 /**
  * The locale for dates and times on screen: the country's own English, or the
  * app's language with the country's conventions ("es-US", "pa-CA").
@@ -351,9 +354,60 @@ export function displayLocale(region: Region): string {
   }
 }
 
+/** e.g. "1 Jul 2026" (or "Jul 1, 2026" in the US). */
 export function formatLongDate(localDate: string, region: Region): string {
   const [y, m, d] = localDate.slice(0, 10).split('-').map(Number);
   return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(displayLocale(region), {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+}
+
+/**
+ * A day for lists and trip rows, the friendly way: "Today", "Yesterday", the
+ * weekday within the last six days ("Mon"), otherwise "2 Oct" ("Oct 2" in
+ * the US), with the year only when it isn't this year ("2 Oct 2025").
+ * In the user's language with the country's conventions (displayLocale);
+ * `today` is the device's own today.
+ */
+export function formatShortDate(localDate: string, region: Region, today: Date = new Date(), tr: Translator = t): string {
+  return friendlyDate(localDate, displayLocale(region), today, tr);
+}
+
+/** formatShortDate with the locale given, for tests and anywhere the region isn't known. */
+export function friendlyDate(localDate: string, locale: string, today: Date, tr: Translator): string {
+  const [y, m, d] = localDate.slice(0, 10).split('-').map(Number);
+  if (!y || !m || !d) return localDate;
+  const day = Date.UTC(y, m - 1, d);
+  const todayUtc = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+  const daysAgo = Math.round((todayUtc - day) / 86_400_000);
+  if (daysAgo === 0) return tr('Today');
+  if (daysAgo === 1) return tr('Yesterday');
+  const options: Intl.DateTimeFormatOptions =
+    daysAgo > 1 && daysAgo <= 6
+      ? { weekday: 'short' }
+      : { day: 'numeric', month: 'short', ...(y !== today.getFullYear() && { year: 'numeric' }) };
+  // Canadian English writes the day first ("2 Oct"), which CLDR's en-CA doesn't.
+  const dateLocale = locale === 'en-CA' ? 'en-GB' : locale;
+  try {
+    return new Date(day).toLocaleDateString(dateLocale, { ...options, timeZone: 'UTC' });
+  } catch {
+    return new Date(day).toLocaleDateString('en-GB', { ...options, timeZone: 'UTC' });
+  }
+}
+
+/**
+ * A date for a report the tax office reads (the PDF): numeric where the
+ * country writes it unambiguously that way ("9/30/2026", "30/09/2026"), and
+ * "Sep 30, 2026" in Canada, where the numeric form would be ISO or ambiguous.
+ * Always the country's English, like the rest of the report.
+ */
+export function formatReportDate(localDate: string, region: Region): string {
+  if (region.code !== 'CA') return formatDate(localDate, region);
+  const [y, m, d] = localDate.slice(0, 10).split('-').map(Number);
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(region.locale, {
     day: 'numeric',
     month: 'short',
     year: 'numeric',

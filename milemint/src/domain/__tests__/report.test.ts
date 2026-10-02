@@ -186,8 +186,8 @@ describe('each country’s printed report', () => {
       trip({ localDate: '2026-03-02', units: 100, classification: 'personal', purpose: '' }, CA),
     ];
     const html = toReportHtml(buildReport(trips, CA, 2026));
-    expect(html).toContain('Odometer on 2026-01-01');
-    expect(html).toContain('Odometer on 2026-12-31');
+    expect(html).toContain('Odometer on Jan 1, 2026');
+    expect(html).toContain('Odometer on Dec 31, 2026');
     expect(html).toContain('T2125');
     expect(html).toContain('75%'); // 300 of 400 km logged
     expect(html).toContain('estimate');

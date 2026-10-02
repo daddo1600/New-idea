@@ -9,6 +9,7 @@ import { PurposePicker } from '@/components/purpose-picker';
 import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { formatTime } from '@/components/trips/row-parts';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { insertPlace, listPlaces } from '@/db/places-repo';
 import {
@@ -25,7 +26,7 @@ import type { PlaceKind } from '@/domain/places';
 import { isAreaOnly, isPrivateLabel, placeNameSet } from '@/domain/privacy';
 import { loadSettings } from '@/db/settings-repo';
 import { minorToInput } from '@/domain/parse-number';
-import { costsNote, formatDistance } from '@/domain/regions';
+import { costsNote, formatDistance, formatShortDate } from '@/domain/regions';
 import { frequentPurposes } from '@/domain/suggestions';
 import { type Classification, type Trip, type VehicleType } from '@/domain/trip';
 import type { Vehicle } from '@/domain/vehicles';
@@ -185,10 +186,10 @@ export default function TripScreen() {
         <ThemedText type="small" themeColor="textSecondary">
           {trip.source === 'manual'
             ? t('{{date}} · {{distance}} · Added manually', {
-                date: trip.localDate,
+                date: formatShortDate(trip.localDate, region, undefined, t),
                 distance: formatDistance(trip.distanceMeters, region),
               })
-            : `${trip.localDate} · ${formatDistance(trip.distanceMeters, region)}`}
+            : `${formatShortDate(trip.localDate, region, undefined, t)} · ${formatTime(trip.startedAt, region)} · ${formatDistance(trip.distanceMeters, region)}`}
         </ThemedText>
         <Segmented
           options={CLASSIFY_OPTIONS.map((option) => ({ ...option, label: t(option.label) }))}

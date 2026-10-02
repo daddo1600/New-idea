@@ -11,7 +11,7 @@ import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { shownLabel } from '@/domain/privacy';
-import { formatDistance } from '@/domain/regions';
+import { formatDistance, formatShortDate } from '@/domain/regions';
 import type { Classification, Trip } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
@@ -38,7 +38,7 @@ export function LockedTripRow({
   const { region } = useRegion();
   const swipeable = useRef<SwipeableMethods>(null);
   const unclassified = trip.classification === 'unclassified';
-  const details = [trip.localDate, formatTime(trip.startedAt, region), shownPurpose(trip.purpose, t)].filter(Boolean);
+  const details = [formatShortDate(trip.localDate, region, undefined, t), formatTime(trip.startedAt, region), shownPurpose(trip.purpose, t)].filter(Boolean);
   const openDetails = () => router.push({ pathname: '/trip/[id]', params: { id: trip.id } });
   return (
     <ReanimatedSwipeable
