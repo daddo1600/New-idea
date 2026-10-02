@@ -281,6 +281,8 @@ Rules applied: no word repeated within a locale, singular forms only, no competi
 
 ## 8. Six-week plan (5 Oct – 15 Nov 2026)
 
+**Lead message:** "Uber counted 140 miles. MileSprout found 212 you may be able to claim." The figures are an example until we have real tester data. Wording for each channel and the claim rules are in [claim-gap-message.md](claim-gap-message.md).
+
 | Week | Founder actions | Spend | Watch |
 |---|---|---|---|
 | **W1 (5–11 Oct), prepare** | Update metadata as in §1. Set `automaticRelease:false`. Submit 1.0. Founding 50 on TestFlight. Collect real missed-miles numbers with permission. Open an Apple Ads Advanced account and check keyword popularity for every proposed term. Check "logbook" accuracy for AU. Build the one-page site and campaign links | £5 domain | TestFlight crash-free %, tracking-gap alerts per tester |
