@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { AppState } from 'react-native';
 
 import { DEMO_DRIVING, DEMO_MODE } from '@/dev/demo';
+import { driveInProgress } from '@/domain/tracker-policy';
 import { currentDistanceM } from '@/domain/trip-detector';
 
 import { loadTrackerRecord } from './tracker-store';
@@ -31,9 +32,9 @@ export function useLiveDrive(): LiveDrive | null {
       if (AppState.currentState !== 'active') return;
       const record = await loadTrackerRecord(db).catch(() => null);
       if (!current) return;
-      const detector = record?.enabled ? record.detector : null;
+      const detector = driveInProgress(record);
       setDrive(
-        detector?.mode === 'driving'
+        detector
           ? {
               startedAt: detector.start.timestamp,
               distanceMeters: currentDistanceM(detector),

@@ -1,13 +1,14 @@
 import { describe, expect, it } from '@jest/globals';
 
 import {
+  driveInProgress,
   INITIAL_TRACKER_RECORD,
   onGeofenceExit,
   onLocations,
   parkedAt,
   type TrackerRecord,
 } from '../tracker-policy';
-import type { LocationSample } from '../trip-detector';
+import type { DetectorState, LocationSample } from '../trip-detector';
 
 const T0 = Date.UTC(2026, 8, 30, 16, 0, 0);
 const LNG_PER_M = 1 / (111_320 * Math.cos((37.3382 * Math.PI) / 180));
@@ -89,5 +90,29 @@ describe('tracker policy', () => {
     const later = onLocations(record, poor, T0 + 6 * 60_000);
     expect(later.record.mode).toBe('geofence');
     expect(later.switchToGeofenceAt).not.toBeNull();
+  });
+});
+
+describe('driveInProgress', () => {
+  const fix = { latitude: 37.3382, longitude: -121.8863, timestamp: T0 };
+  const driving = {
+    mode: 'driving',
+    start: fix,
+    last: fix,
+    distanceM: 1200,
+    maxSpeedMps: 14,
+    route: [],
+    stop: null,
+  } as unknown as DetectorState;
+
+  it('is the drive while the tracker is recording one', () => {
+    expect(driveInProgress({ enabled: true, detector: driving })).toBe(driving);
+  });
+
+  it('is null when parked, tracking is off, or nothing is saved yet', () => {
+    expect(driveInProgress({ enabled: true, detector: { mode: 'idle', anchor: null } })).toBeNull();
+    expect(driveInProgress({ enabled: false, detector: driving })).toBeNull();
+    expect(driveInProgress(null)).toBeNull();
+    expect(driveInProgress(INITIAL_TRACKER_RECORD)).toBeNull();
   });
 });

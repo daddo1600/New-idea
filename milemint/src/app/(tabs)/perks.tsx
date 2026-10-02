@@ -13,6 +13,7 @@ import { offerState } from '@/perks/claims';
 import { DEMO_OFFERS, type PerkOffer } from '@/perks/offers';
 import { usePerkClaims } from '@/perks/use-perk-claims';
 import { useRegion } from '@/region/region';
+import { useLiveDrive } from '@/tracking/use-live-drive';
 
 const showCode = (code: string) => router.push({ pathname: '/perk/[code]', params: { code } } as unknown as Href);
 
@@ -28,6 +29,8 @@ export default function PerksTab() {
   const theme = useTheme();
   const { region } = useRegion();
   const { claims, loaded, claim, reset } = usePerkClaims();
+  // Claims wait while a drive is being recorded: park up first (safety, and no claiming on the move).
+  const driving = useLiveDrive() !== null;
   const [busy, setBusy] = useState<string | null>(null);
   const [now, setNow] = useState(() => new Date());
   // Codes last minutes: keep the cards current (a code running out goes back in the pool).
@@ -39,7 +42,7 @@ export default function PerksTab() {
   if (!loaded) return <ActivityIndicator style={styles.loading} />;
 
   const claimOffer = async (offer: PerkOffer) => {
-    if (busy) return;
+    if (busy || driving) return;
     setBusy(offer.id);
     try {
       const created = await claim(offer);
@@ -80,6 +83,7 @@ export default function PerksTab() {
             region={region}
             busy={busy === offer.id}
             now={now}
+            driving={driving}
             onClaim={() => claimOffer(offer)}
             onShow={showCode}
           />
@@ -91,7 +95,7 @@ export default function PerksTab() {
           </ThemedText>
           <Bullet text={t('Claim when you’re at the till. Each code works once, for a short time (often 30 minutes).')} />
           <Bullet text={t('Not used in time? It goes back in the pool, and you can claim again.')} />
-          <Bullet text={t('One per person a day, week or month: the partner sets it.')} />
+          <Bullet text={t('You can have one a day, week or month: the partner sets it.')} />
           <Bullet text={t('Show the QR code at the till, or type the code in when you buy online.')} />
           <Bullet
             text={t('Partners pay MileSprout only when a code is used, never when you claim it. That helps keep MileSprout free.')}
@@ -102,6 +106,10 @@ export default function PerksTab() {
           />
           <Bullet text={t('Perks are just deals: MileSprout works the same whether you use them or not.')} />
         </ThemedView>
+
+        <ThemedText type="small" themeColor="textSecondary" style={styles.center}>
+          {t('Perks come from the partners shown. They’re not from, or endorsed by, delivery or ride apps.')}
+        </ThemedText>
 
         {claims.length > 0 && (
           <Pressable accessibilityRole="button" hitSlop={8} onPress={() => reset()} style={styles.reset}>
@@ -160,5 +168,6 @@ const styles = StyleSheet.create({
   card: { borderRadius: 16, padding: Spacing.three, gap: Spacing.two },
   bullet: { flexDirection: 'row', gap: Spacing.two + 2, alignItems: 'flex-start' },
   dot: { width: 6, height: 6, borderRadius: 3, marginTop: 7 },
+  center: { textAlign: 'center' },
   reset: { alignSelf: 'center', paddingVertical: Spacing.two },
 });

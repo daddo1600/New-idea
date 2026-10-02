@@ -130,3 +130,16 @@ export function offerState(offer: PerkOffer, claims: readonly PerkClaim[], now: 
   const nextAt = usedUp ? nextPeriodStart(offer.perPerson.period, now) : null;
   return { left, latest, status, nextAt, canClaim: status !== 'active' && !usedUp && left > 0 };
 }
+
+/**
+ * A card's main button: Claim (or Claim again), or, while the tracker is
+ * recording a drive, "Park up to claim" (disabled), so no one claims on the
+ * move. Null when there's nothing to claim.
+ */
+export type ClaimAction = 'claim' | 'claim-again' | 'park' | null;
+
+export function claimAction(state: Pick<OfferState, 'canClaim' | 'latest'>, driving: boolean): ClaimAction {
+  if (!state.canClaim) return null;
+  if (driving) return 'park';
+  return state.latest ? 'claim-again' : 'claim';
+}

@@ -22,6 +22,10 @@ export type PerkOffer = {
   codePrefix: string;
   /** The emblem: initials on a coloured circle (no logos). */
   initials: string;
+  /**
+   * The partner's brand colour: the emblem, and the band on its card and code
+   * screen. Dark enough for white initials (4.5:1 or more).
+   */
   color: string;
   category: string;
   headline: string;
@@ -52,7 +56,7 @@ export const DEMO_OFFERS: readonly PerkOffer[] = [
     partner: 'Kerbside Fuel',
     codePrefix: 'KRB',
     initials: 'KF',
-    color: '#E4572E',
+    color: '#C2461F',
     category: msg('Fuel'),
     headline: msg('10p off a litre of fuel'),
     terms: msg('Up to 40 litres. One fill-up per code.'),
@@ -97,7 +101,7 @@ export const DEMO_OFFERS: readonly PerkOffer[] = [
     partner: 'Sparkle Hand Car Wash',
     codePrefix: 'SPK',
     initials: 'SW',
-    color: '#1B98E0',
+    color: '#1679B8',
     category: msg('Car wash'),
     headline: msg('£3 off any wash'),
     terms: msg('Valets too. Not with other offers.'),
@@ -112,7 +116,7 @@ export const DEMO_OFFERS: readonly PerkOffer[] = [
     partner: 'Spokes & Chains',
     codePrefix: 'SNC',
     initials: 'SC',
-    color: '#5B8E2D',
+    color: '#4A7A22',
     category: msg('Bike repairs'),
     headline: msg('Free bike safety check'),
     terms: msg('Bikes and e-bikes. In store only.'),
