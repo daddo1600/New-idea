@@ -217,7 +217,8 @@ function tripLine(row: ReportRow, region: Region, describe: boolean): (string | 
 /** The file for a format: its contents and a name. */
 export function exportFile(report: MileageReport, format: ExportFormat): { name: string; text: string } {
   // "2026/27" or "2026–27" → "2026-27": slashes and en dashes trip up some file systems and downloads.
-  const year = report.label.replace(/[/–]/g, '-');
+  // A quarter's export says which: "2026-27 Q2".
+  const year = report.label.replace(/[/–]/g, '-') + (report.range ? ` ${report.range.name}` : '');
   switch (format) {
     case 'xero':
       return { name: `MileSprout ${year} Xero manual journals.csv`, text: toXeroJournals(report) };

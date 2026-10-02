@@ -9,6 +9,7 @@ import { TAX_BANDS, type TaxBand } from '@/domain/mar';
 import { MAX_DISMISSED_SPOTS } from '@/domain/place-asks';
 import { PERK_LADDER, type Perk } from '@/domain/plan';
 import { REGIONS, type RegionCode } from '@/domain/regions';
+import { isValidSetAsidePercent } from '@/domain/set-aside';
 import { VEHICLE_TYPES, type VehicleType } from '@/domain/trip';
 import { cleanInvites, type ClaimRefusal, type IssuedInvite, type RedeemStatus } from '@/referral/invites';
 
@@ -118,6 +119,17 @@ export type AppSettings = {
   trialReminderAt: string | null;
   /** Light or dark: 'system' follows the phone (Settings → Appearance). */
   appearance: Appearance;
+  /** Tax set-aside rate in whole percent; null uses the region's default (domain/set-aside). */
+  setAsidePercent: number | null;
+  /** Monday-morning "put £X aside from last week's driving" notification. */
+  setAsideReminder: boolean;
+  /**
+   * The set-aside reminder has had its one-time switch-on, the first time
+   * earnings were entered. After this, turning it off sticks.
+   */
+  setAsideReminderDefaulted: boolean;
+  /** Pro: a notification two weeks before each quarterly deadline (MTD update, estimated tax, instalment, BAS). */
+  quarterlyReminder: boolean;
 };
 
 const WEEKDAY_9_TO_5 = [{ start: '09:00', end: '17:00' }];
@@ -160,6 +172,10 @@ export const DEFAULT_SETTINGS: AppSettings = {
   tutorialDone: false,
   trialReminderAt: null,
   appearance: 'system',
+  setAsidePercent: null,
+  setAsideReminder: false,
+  setAsideReminderDefaulted: false,
+  quarterlyReminder: true,
 };
 
 type Check<T> = (value: unknown) => T | undefined;
@@ -269,6 +285,10 @@ const CHECKS: { [K in keyof AppSettings]-?: Check<AppSettings[K]> } = {
   tutorialDone: bool,
   trialReminderAt: isoTimeOrNull,
   appearance: oneOf(APPEARANCES),
+  setAsidePercent: (value) => (value === null || isValidSetAsidePercent(value) ? value : undefined),
+  setAsideReminder: bool,
+  setAsideReminderDefaulted: bool,
+  quarterlyReminder: bool,
 };
 
 /** Stored settings, each field checked against its type and allowed values (see CHECKS). */

@@ -21,6 +21,8 @@ export const SNAPSHOT_VERSION = 2;
  */
 export const BACKUP_TABLES = [
   'settings',
+  // Tax set-aside: each week's earnings (schema 12).
+  'weekly_earnings',
   'vehicles',
   'places',
   'shifts',
@@ -162,6 +164,7 @@ const isCell = (value: unknown): value is Cell =>
  */
 const NUMERIC: Partial<Record<BackupTable, Record<string, { nullable: boolean; min?: number }>>> = {
   settings: { id: { nullable: false } },
+  weekly_earnings: { amount_minor: { nullable: false, min: 0 } },
   vehicles: { archived: { nullable: false } },
   places: { latitude: { nullable: false }, longitude: { nullable: false }, radius_m: { nullable: false, min: 0 } },
   trips: {
@@ -224,6 +227,7 @@ const UPGRADES: Partial<Record<number, (tables: Tables) => Tables>> = {
   // 10: indexes, and tracker_route (the drive in progress: never backed up).
   // 11: trips.parking_minor and trips.tolls_minor (NOT NULL DEFAULT 0). Written as 0 on
   // every older trip rather than left out, so a restore never inserts null into them.
+  // 12: weekly_earnings (a new table: missing in older backups, so restored empty).
   11: (tables) => ({
     ...tables,
     trips: tables.trips.map((trip) => ({ parking_minor: 0, tolls_minor: 0, ...trip })),
@@ -335,6 +339,13 @@ export function consistentTables(tables: Tables): Tables {
     car_expenses: tables.car_expenses.filter((expenses) => vehicles.has(expenses.vehicle_id)),
     // A pause can't outlive its shift (the shift deleted a moment before the backup).
     shift_pauses: tables.shift_pauses.filter((pause) => shifts.has(pause.shift_id)),
+    // A week's earnings needs its week and amount, or the whole restore would fail on it.
+    weekly_earnings: tables.weekly_earnings.filter(
+      (week) =>
+        typeof week.week_start === 'string' &&
+        typeof week.amount_minor === 'number' &&
+        typeof week.updated_at === 'string',
+    ),
   };
 }
 

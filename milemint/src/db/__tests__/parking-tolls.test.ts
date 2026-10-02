@@ -70,13 +70,13 @@ describeSqlite('migration 11: parking and tolls', () => {
     db.raw.exec(`
       ALTER TABLE trips DROP COLUMN parking_minor;
       ALTER TABLE trips DROP COLUMN tolls_minor;
+      DROP TABLE weekly_earnings;
       PRAGMA user_version = 10;
       INSERT INTO trips (id, started_at, local_date, start_label, end_label, distance_meters, classification, source, created_at)
         VALUES ('t1', '2026-05-01T08:00:00.000Z', '2026-05-01', 'A', 'B', 1000, 'business', 'auto', '2026-05-01T08:30:00.000Z');
     `);
-    expect(SCHEMA_VERSION).toBe(11);
     await migrate(db as never);
-    expect(db.rows<{ user_version: number }>('PRAGMA user_version;')[0].user_version).toBe(11);
+    expect(db.rows<{ user_version: number }>('PRAGMA user_version;')[0].user_version).toBe(SCHEMA_VERSION);
     expect(db.rows('SELECT id, parking_minor, tolls_minor FROM trips;')).toEqual([
       { id: 't1', parking_minor: 0, tolls_minor: 0 },
     ]);
