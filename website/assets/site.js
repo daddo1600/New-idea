@@ -208,8 +208,8 @@
 
   /* ---------- Home: links to the sign-up (and a floating "Get early access" pill) ----------
      Every link to #early-access scrolls to the hero form and puts the cursor in the email box.
-     The pill is made here (no JS, no pill) and shows only while the hero form is off screen
-     and the footer isn't in view. */
+     The pill is made here (no JS, no pill) and shows only further down the page while
+     scrolling down. */
   (function joinLinks() {
     var form = document.querySelector('.hero form[data-waitlist]');
     var heading = document.getElementById('early-access');
@@ -235,15 +235,17 @@
     pill.addEventListener('click', go);
     document.body.appendChild(pill);
 
-    // Only near the end of the page (the closing section, or within a screen of the bottom),
-    // and never while another way to sign up is on screen (the hero form, the Pro card's
-    // button, the closing section's button).
+    // Shows once the visitor is well past the hero and scrolling down; scrolling back up hides it.
+    // Never shown while another way to sign up is on screen (the hero form, the Pro card's
+    // button, the closing section's button), so the page never asks twice at once.
     var others = [form].concat(Array.prototype.filter.call(document.querySelectorAll('a[href="#early-access"]'), function (a) { return a !== pill; }));
     var seen = others.map(function () { return false; });
-    var closing = document.querySelector('section.cta'), closingSeen = false, nearEnd = false, shown = null;
+    var lastY = window.scrollY || window.pageYOffset, down = false, shown = null;
     function update() {
-      nearEnd = window.innerHeight + (window.scrollY || window.pageYOffset) >= document.documentElement.scrollHeight - window.innerHeight;
-      var on = (closingSeen || nearEnd) && seen.indexOf(true) < 0;
+      var y = window.scrollY || window.pageYOffset;
+      if (Math.abs(y - lastY) > 8) { down = y > lastY; lastY = y; } // ignore tiny jitters
+      var deep = y > window.innerHeight * 1.5;
+      var on = deep && down && seen.indexOf(true) < 0;
       if (on === shown) return;
       shown = on;
       pill.classList.toggle('on', on);
@@ -253,15 +255,11 @@
       else { pill.setAttribute('aria-hidden', 'true'); pill.setAttribute('tabindex', '-1'); pill.inert = true; }
     }
     var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) {
-        if (e.target === closing) closingSeen = e.isIntersecting;
-        else seen[others.indexOf(e.target)] = e.isIntersecting;
-      });
+      es.forEach(function (e) { seen[others.indexOf(e.target)] = e.isIntersecting; });
       update();
     });
     others.forEach(function (el) { io.observe(el); });
-    if (closing) io.observe(closing);
-    window.addEventListener('scroll', update, { passive: true }); // cheap: only works out "near the end"
+    window.addEventListener('scroll', update, { passive: true }); // cheap: depth and direction only
     update();
   })();
 
