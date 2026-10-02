@@ -1,6 +1,9 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Almost there: set location to “Always” and every drive is logged. Home shows you how.": "ਬੱਸ ਥੋੜ੍ਹਾ ਹੋਰ: ਲੋਕੇਸ਼ਨ “ਹਮੇਸ਼ਾ” ’ਤੇ ਕਰੋ, ਤਾਂ ਹਰ ਡਰਾਈਵ ਦਰਜ ਹੋਵੇਗੀ। ਹੋਮ ਸਕ੍ਰੀਨ ਦੱਸੇਗੀ ਕਿਵੇਂ।",
+  "Add your drives from the Drives tab.": "ਟ੍ਰਿਪ ਟੈਬ ਤੋਂ ਆਪਣੀਆਂ ਡਰਾਈਵਾਂ ਜੋੜੋ।",
+  "Turn on automatic tracking from the home screen whenever you’re ready, or add a drive from the Drives tab.": "ਜਦੋਂ ਤਿਆਰ ਹੋਵੋ, ਹੋਮ ਸਕ੍ਰੀਨ ਤੋਂ ਆਟੋਮੈਟਿਕ ਟ੍ਰੈਕਿੰਗ ਚਾਲੂ ਕਰੋ, ਜਾਂ ਟ੍ਰਿਪ ਟੈਬ ਤੋਂ ਕੋਈ ਡਰਾਈਵ ਜੋੜੋ।",
   "Just drive. Each trip appears after you park.": "ਬੱਸ ਗੱਡੀ ਚਲਾਓ। ਪਾਰਕ ਕਰਦੇ ਹੀ ਹਰ ਟ੍ਰਿਪ ਦਿਖ ਜਾਂਦੀ ਹੈ।",
   "…": "…",
   "…unless you set your work hours. Until then, a few swipes will do.": "…ਜਦੋਂ ਤੱਕ ਕੰਮ ਦੇ ਘੰਟੇ ਸੈੱਟ ਨਾ ਹੋਣ। ਉਦੋਂ ਤੱਕ ਕੁਝ ਸਵਾਈਪ ਹੀ ਕਾਫ਼ੀ ਹਨ।",
@@ -590,7 +593,6 @@ const dictionary: Dictionary = {
   "Turn on": "ਚਾਲੂ ਕਰੋ",
   "Turn on automatic tracking": "ਆਟੋਮੈਟਿਕ ਟ੍ਰੈਕਿੰਗ ਚਾਲੂ ਕਰੋ",
   "Turn on automatic tracking and your drives will appear here.": "ਆਟੋਮੈਟਿਕ ਟ੍ਰੈਕਿੰਗ ਚਾਲੂ ਕਰੋ ਅਤੇ ਤੁਹਾਡੇ ਟ੍ਰਿਪ ਇੱਥੇ ਦਿਸਣਗੇ।",
-  "Turn on automatic tracking from the home screen whenever you’re ready, or add trips with the + button.": "ਜਦੋਂ ਵੀ ਤਿਆਰ ਹੋਵੋ, ਹੋਮ ਸਕ੍ਰੀਨ ਤੋਂ ਆਟੋਮੈਟਿਕ ਟ੍ਰੈਕਿੰਗ ਚਾਲੂ ਕਰੋ, ਜਾਂ + ਬਟਨ ਨਾਲ ਟ੍ਰਿਪ ਜੋੜੋ।",
   "Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber. Car, van, moped or bike.": "Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber। ਕਾਰ, ਵੈਨ, ਮੋਪੇਡ ਜਾਂ ਸਾਈਕਲ।",
   "UK": "ਯੂ.ਕੇ.",
   "United Kingdom": "ਯੂਨਾਈਟਿਡ ਕਿੰਗਡਮ",

@@ -781,9 +781,13 @@ export default function WelcomeScreen() {
               <Text style={styles.brandBody}>
                 {status === 'on'
                   ? t('Just drive. Each trip appears after you park.')
-                  : t(
-                      'Turn on automatic tracking from the home screen whenever you’re ready, or add trips with the + button.',
-                    )}
+                  : status === 'needs-always'
+                    ? t('Almost there: set location to “Always” and every drive is logged. Home shows you how.')
+                    : status === 'unsupported'
+                      ? t('Add your drives from the Drives tab.')
+                      : t(
+                          'Turn on automatic tracking from the home screen whenever you’re ready, or add a drive from the Drives tab.',
+                        )}
               </Text>
               {/* Optional, and also in Settings for 30 days. */}
               <RedeemCode onBrand initialCode={linkCode} style={styles.glass} />

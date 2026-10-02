@@ -1,6 +1,9 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Almost there: set location to “Always” and every drive is logged. Home shows you how.": "Aproape gata: setează localizarea pe „Întotdeauna” și fiecare cursă va fi înregistrată. Ecranul principal îți arată cum.",
+  "Add your drives from the Drives tab.": "Adaugă-ți cursele din fila Curse.",
+  "Turn on automatic tracking from the home screen whenever you’re ready, or add a drive from the Drives tab.": "Pornește urmărirea automată din ecranul principal când ești gata sau adaugă o cursă din fila Curse.",
   "Just drive. Each trip appears after you park.": "Doar condu. Fiecare cursă apare după ce parchezi.",
   "…": "…",
   "…unless you set your work hours. Until then, a few swipes will do.": "…dacă nu-ți setezi orele de lucru. Până atunci, câteva glisări sunt de ajuns.",
@@ -640,7 +643,6 @@ const dictionary: Dictionary = {
   "Turn on": "Pornește",
   "Turn on automatic tracking": "Pornește înregistrarea automată",
   "Turn on automatic tracking and your drives will appear here.": "Pornește înregistrarea automată și cursele tale vor apărea aici.",
-  "Turn on automatic tracking from the home screen whenever you’re ready, or add trips with the + button.": "Pornește înregistrarea automată din ecranul principal când ești gata, sau adaugă curse cu butonul +.",
   "Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber. Car, van, moped or bike.": "Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber. Mașină, dubă, moped sau bicicletă.",
   "UK": "UK",
   "United Kingdom": "Regatul Unit",

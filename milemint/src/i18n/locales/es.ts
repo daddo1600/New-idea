@@ -1,6 +1,9 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Almost there: set location to “Always” and every drive is logged. Home shows you how.": "Ya casi: pon la ubicación en “Siempre” y se registrará cada viaje. Inicio te muestra cómo.",
+  "Add your drives from the Drives tab.": "Añade tus viajes desde la pestaña Viajes.",
+  "Turn on automatic tracking from the home screen whenever you’re ready, or add a drive from the Drives tab.": "Activa el registro automático desde la pantalla de inicio cuando quieras, o añade un viaje desde la pestaña Viajes.",
   "Just drive. Each trip appears after you park.": "Solo conduce. Cada viaje aparece cuando aparcas.",
   "…": "…",
   "…unless you set your work hours. Until then, a few swipes will do.": "…a menos que configures tu horario de trabajo. Mientras tanto, basta con deslizar un poco.",
@@ -600,7 +603,6 @@ const dictionary: Dictionary = {
   "Turn on": "Activar",
   "Turn on automatic tracking": "Activa el seguimiento automático",
   "Turn on automatic tracking and your drives will appear here.": "Activa el seguimiento automático y tus viajes aparecerán aquí.",
-  "Turn on automatic tracking from the home screen whenever you’re ready, or add trips with the + button.": "Activa el seguimiento automático desde la pantalla de inicio cuando quieras, o agrega viajes con el botón +.",
   "Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber. Car, van, moped or bike.": "Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber. Auto, camioneta, ciclomotor o bici.",
   "UK": "Reino Unido",
   "United Kingdom": "Reino Unido",

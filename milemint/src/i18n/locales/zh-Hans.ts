@@ -1,6 +1,9 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Almost there: set location to “Always” and every drive is logged. Home shows you how.": "就差一步：把定位设为“始终”，每段行程都会被记录。首页会告诉你怎么做。",
+  "Add your drives from the Drives tab.": "在“行程”标签页添加你的行程。",
+  "Turn on automatic tracking from the home screen whenever you’re ready, or add a drive from the Drives tab.": "准备好后，在首页开启自动记录，或在“行程”标签页添加行程。",
   "Just drive. Each trip appears after you park.": "开就行。停车后，每段行程都会出现。",
   "…": "…",
   "…unless you set your work hours. Until then, a few swipes will do.": "……除非你设好工作时间。在那之前，滑几下就搞定。",
@@ -568,7 +571,6 @@ const dictionary: Dictionary = {
   "Turn on": "开启",
   "Turn on automatic tracking": "开启自动追踪",
   "Turn on automatic tracking and your drives will appear here.": "开启自动追踪，你的行程就会出现在这里。",
-  "Turn on automatic tracking from the home screen whenever you’re ready, or add trips with the + button.": "准备好后，随时可以在主屏幕开启自动追踪，或用 + 按钮添加行程。",
   "Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber. Car, van, moped or bike.": "Uber Eats、Deliveroo、Amazon Flex、Evri、DPD、Uber。汽车、货车、踏板车或自行车。",
   "UK": "英国",
   "United Kingdom": "英国",

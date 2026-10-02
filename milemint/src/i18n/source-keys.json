@@ -926,6 +926,12 @@
     ]
   },
   {
+    "key": "Add your drives from the Drives tab.",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Added manually",
     "files": [
       "components/trips/trip-row.tsx"
@@ -1005,6 +1011,12 @@
   },
   {
     "key": "ALMOST DONE!",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Almost there: set location to “Always” and every drive is logged. Home shows you how.",
     "files": [
       "app/welcome.tsx"
     ]
@@ -6133,7 +6145,7 @@
     ]
   },
   {
-    "key": "Turn on automatic tracking from the home screen whenever you’re ready, or add trips with the + button.",
+    "key": "Turn on automatic tracking from the home screen whenever you’re ready, or add a drive from the Drives tab.",
     "files": [
       "app/welcome.tsx"
     ]
