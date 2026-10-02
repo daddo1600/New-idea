@@ -86,6 +86,12 @@ const demoFlag = (name: string) =>
 /** `?demo=courier` (or `&courier`): shift mode is on, so the home screen leads with the shift bar. */
 export const DEMO_COURIER = demoParam === 'courier' || demoFlag('courier');
 
+/**
+ * `&purposes`: the last week's business drives (outside shifts) have no
+ * purpose yet, so home and Drives show several rows asking for one.
+ */
+const DEMO_NO_PURPOSES = demoFlag('purposes');
+
 /** `?demo=tutorial`: the practice run (sorting two sample drives) over home, as after setup. */
 export const DEMO_TUTORIAL = demoParam === 'tutorial';
 
@@ -382,7 +388,7 @@ export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
       endLabel: to,
       distanceMeters: milesToMeters(miles),
       classification,
-      purpose,
+      purpose: DEMO_NO_PURPOSES && daysAgo <= 7 ? '' : purpose,
       source: 'auto',
       startPlaceId: placeIds.get(from) ?? null,
       endPlaceId: placeIds.get(to) ?? null,
