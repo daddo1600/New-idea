@@ -6,10 +6,10 @@ import { displayLocale, type Region } from '@/domain/regions';
 import type { Classification } from '@/domain/trip';
 import { msg } from '@/i18n/i18n';
 
-/** What the trip rows share: the Business/Personal choice, the swipe and their styles. */
+/** What the trip rows share: the Work/Personal choice, the swipe and their styles. */
 
 export const CLASSIFY_OPTIONS = [
-  { value: 'business', label: msg('Business') },
+  { value: 'business', label: msg('Work (drive type)') },
   { value: 'personal', label: msg('Personal') },
 ] as const satisfies readonly { value: Classification; label: string }[];
 

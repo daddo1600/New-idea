@@ -29,10 +29,10 @@ const AUTO_NOTES: Record<AutoReason, string> = {
   'learned-route': msg('Auto: usual route'),
   'work-hours': msg('Auto: work hours'),
   commute: msg('Auto: commute'),
-  default: msg('Auto: business by default · swipe left if personal'),
+  default: msg('Auto: work by default · swipe left if personal'),
 };
 
-/** A drive in the lists: swipe or tap Business / Personal, tap to open, long press to delete. */
+/** A drive in the lists: swipe or tap Work / Personal, tap to open, long press to delete. */
 export function TripRow({
   trip,
   deduction,
@@ -113,13 +113,13 @@ export function TripRow({
       onChange={onClassify}
       accessibilityLabelFor={(option) =>
         option.value === 'business'
-          ? t('Mark {{from}} to {{to}} as business', { from: trip.startLabel, to: trip.endLabel })
+          ? t('Mark {{from}} to {{to}} as work', { from: trip.startLabel, to: trip.endLabel })
           : t('Mark {{from}} to {{to}} as personal', { from: trip.startLabel, to: trip.endLabel })
       }
     />
   );
 
-  // Swipe right = Business, left = Personal. The buttons below stay for
+  // Swipe right = Work, left = Personal. The buttons below stay for
   // VoiceOver and anyone who doesn't discover the gesture.
   return (
     <ReanimatedSwipeable
@@ -128,7 +128,7 @@ export function TripRow({
       leftThreshold={SWIPE_THRESHOLD}
       rightThreshold={SWIPE_THRESHOLD}
       renderLeftActions={() => (
-        <SwipeAction label={t('Business')} color={theme.accent} textColor={theme.onAccent} side="left" />
+        <SwipeAction label={t('Work (drive type)')} color={theme.accent} textColor={theme.onAccent} side="left" />
       )}
       renderRightActions={() => (
         <SwipeAction
@@ -198,8 +198,8 @@ export function TripRow({
           {unclassified && (
             <ThemedText type="smallBold" style={{ color: theme.accent }}>
               {potential > 0
-                ? t('Business or personal? Worth {{amount}} if business.', { amount: formatMoney(potential, region) })
-                : t('Business or personal?')}
+                ? t('Work or personal? Worth {{amount}} if work.', { amount: formatMoney(potential, region) })
+                : t('Work or personal?')}
             </ThemedText>
           )}
           {unclassified ? (

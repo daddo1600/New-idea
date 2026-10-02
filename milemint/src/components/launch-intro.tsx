@@ -264,7 +264,7 @@ function QuickIntro({
         <Text style={styles.distance}>{t('found this tax year')}</Text>
         {meters > 0 && (
           <Text style={styles.distance}>
-            {t('{{distance}} of business driving', {
+            {t('{{distance}} of work driving', {
               distance: formatDistance(meters * shown, region, { whole: true }),
             })}
           </Text>
@@ -388,8 +388,8 @@ function FullIntro({
         <Text style={styles.money}>{formatMoney(Math.round(units * ratePerUnit), region)}</Text>
         <Text style={styles.distance}>
           {region.unit === 'mi'
-            ? t('{{distance}} miles · a typical month of business driving', { count: units, distance })
-            : t('{{distance}} km · a typical month of business driving', { count: units, distance })}
+            ? t('{{distance}} miles · a typical month of work driving', { count: units, distance })
+            : t('{{distance}} km · a typical month of work driving', { count: units, distance })}
         </Text>
       </Animated.View>
     </Animated.View>

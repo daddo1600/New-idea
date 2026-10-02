@@ -179,7 +179,7 @@ export default function ReportScreen() {
     if (report.missingPurposeCount === 0) return go();
     Alert.alert(
       t('{{count}} work drives have no purpose', { count: report.missingPurposeCount }),
-      t('{{authority}} expects a purpose for every business drive. Add them before you export?', {
+      t('{{authority}} expects a purpose for every work drive. Add them before you export?', {
         authority: region.authority,
       }),
       [
@@ -257,7 +257,7 @@ export default function ReportScreen() {
                 ⚠️ {t('{{count}} work drives have no purpose', { count: report.missingPurposeCount })}
               </ThemedText>
               <ThemedText type="small" themeColor="textSecondary">
-                {t('{{authority}} expects a purpose for every business drive. One tap each.', {
+                {t('{{authority}} expects a purpose for every work drive. One tap each.', {
                   authority: region.authority,
                 })}
               </ThemedText>

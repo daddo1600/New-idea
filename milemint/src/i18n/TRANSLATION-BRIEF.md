@@ -1,6 +1,6 @@
 # Translation brief
 
-MileMint is an iPhone app that logs business drives automatically and works out what they're worth at tax time. Its users drive for work in the UK, US, Canada and Australia:
+MileMint is an iPhone app that logs work drives automatically and works out what they're worth at tax time. Its users drive for work in the UK, US, Canada and Australia:
 - delivery couriers (Uber Eats, Deliveroo, Amazon Flex, Evri, DPD);
 - tradespeople, carers and sales reps.
 
@@ -34,7 +34,7 @@ Many of them speak your language at home and use English at work. Write the way 
    - Nothing rude, sexual, religious, political, or about national or ethnic identity.
    - No slang that could offend or that only one region understands.
 9. **Money and tax.** Say "estimated" where the English does, and never promise a tax saving. Translate "deduction", "claim" and "business mileage" with the standard everyday terms people in your language would understand.
-10. **Consistency.** Choose one term for each key concept and use it everywhere: drive/trip, business, personal, shift, tax year, mileage rate, report, Pro, free plan, "sort" (mark a trip business or personal), "swipe".
+10. **Consistency.** Choose one term for each key concept and use it everywhere: drive/trip, work (the drive type; "business" only for tax terms, see TRANSLATOR-NOTES.md), personal, shift, tax year, mileage rate, report, Pro, free plan, "sort" (mark a trip work or personal), "swipe".
 
 ## Also write
 

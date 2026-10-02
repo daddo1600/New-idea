@@ -243,17 +243,17 @@ export function countdownReminders(
       before: 30,
       title: t('1 month left in the {{year}} tax year', { year: label }),
       body: km
-        ? t('Sort your drives and add any you missed before {{date}}. Every business kilometre is money back.', {
+        ? t('Sort your drives and add any you missed before {{date}}. Every work kilometre is money back.', {
             date: endDate,
           })
-        : t('Sort your drives and add any you missed before {{date}}. Every business mile is money back.', {
+        : t('Sort your drives and add any you missed before {{date}}. Every work mile is money back.', {
             date: endDate,
           }),
     },
     {
       before: 7,
       title: t('One week left in the {{year}} tax year 🏁', { year: label }),
-      body: t('Last chance: make sure every business drive is in MileSprout before {{date}}.', { date: endDate }),
+      body: t('Last chance: make sure every work drive is in MileSprout before {{date}}.', { date: endDate }),
     },
   ].map((r, i) => ({
     id: `year-end-${i}`,

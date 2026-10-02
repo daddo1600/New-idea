@@ -6,7 +6,7 @@ import { useTheme } from '@/hooks/use-theme';
 
 type Option<T extends string> = { value: T; label: string };
 
-/** Two-or-more option toggle, e.g. Business / Personal. */
+/** Two-or-more option toggle, e.g. Work / Personal. */
 export function Segmented<T extends string>({
   options,
   value,
@@ -17,7 +17,7 @@ export function Segmented<T extends string>({
   options: readonly Option<T>[];
   value: T | null;
   onChange: (value: T) => void;
-  /** Spoken label per option when the visible one lacks context, e.g. "Mark Home → Office as business". */
+  /** Spoken label per option when the visible one lacks context, e.g. "Mark Home → Office as work". */
   accessibilityLabelFor?: (option: Option<T>) => string;
   /** Small and only as wide as its labels: for a choice already made, e.g. a sorted trip. */
   compact?: boolean;

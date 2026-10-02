@@ -85,9 +85,9 @@ export function HomeEmptyLines({ trackingOn, style }: { trackingOn: boolean; sty
         purpose: shownPurpose(purpose ?? 'Deliveries', t),
       })
     : hours === 'varies'
-      ? t('Drives in your work hours are sorted as business for you.')
+      ? t('Drives in your work hours are sorted as work for you.')
       : hours
-        ? t('Drives in your hours ({{days}} {{from}}–{{to}}) are sorted as business for you.', {
+        ? t('Drives in your hours ({{days}} {{from}}–{{to}}) are sorted as work for you.', {
             days: formatWorkDays(hours.days, (day) => weekdayName(day, region)),
             from: clockTime(hours.start, region),
             to: clockTime(hours.end, region),

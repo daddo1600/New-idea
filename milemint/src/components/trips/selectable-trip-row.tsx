@@ -30,7 +30,7 @@ export function SelectableTripRow({
     trip.classification === 'unclassified'
       ? t('Not sorted')
       : trip.classification === 'business'
-        ? t('Business')
+        ? t('Work (drive type)')
         : t('Personal');
   return (
     <Pressable

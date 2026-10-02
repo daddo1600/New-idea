@@ -45,8 +45,8 @@ export function SummaryCard({
       </Text>
       <Text style={styles.heroLabel}>
         {summary.unclassifiedCount > 0
-          ? t('{{distance}} business · {{count}} to review', { distance, count: summary.unclassifiedCount })
-          : t('{{distance}} business', { distance })}
+          ? t('{{distance}} for work · {{count}} to review', { distance, count: summary.unclassifiedCount })
+          : t('{{distance}} for work', { distance })}
       </Text>
       <CostsLine summary={summary} />
       <Pressable
@@ -106,8 +106,8 @@ function EmployeeSummaryCard({ summary, year, paysLess }: { summary: TaxYearSumm
       )}
       <Text style={styles.heroLabel}>
         {summary.unclassifiedCount > 0
-          ? t('{{distance}} business · {{count}} to review', { distance, count: summary.unclassifiedCount })
-          : t('{{distance}} business', { distance })}
+          ? t('{{distance}} for work · {{count}} to review', { distance, count: summary.unclassifiedCount })
+          : t('{{distance}} for work', { distance })}
       </Text>
       <CostsLine summary={summary} />
       <View style={styles.heroButtons}>

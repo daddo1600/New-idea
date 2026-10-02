@@ -13,7 +13,8 @@ The user is always **আপনি**, with polite verb forms (করুন, দ�
 | drive / trip | ট্রিপ | One term for both, as the brief asks. It's the everyday loanword, and drivers use it already. |
 | driving (noun) | ড্রাইভিং | Familiar, and it works for cars, bikes and mopeds. |
 | to drive | চালানো / ড্রাইভ করা | চালানো goes in running text. "Just drive." is শুধু ড্রাইভ করুন। |
-| business (trip type) | ব্যবসায়িক | Standard adjective, and it reads as "for work", not as "a company". |
+| work (trip type; English “Work”, was “Business”) | কাজ (কাজের ট্রিপ, কাজের মাইল) | October 2026: what couriers say. Not ব্যবসায়িক. |
+| business (official tax term only) | ব্যবসায়িক | Kept in the report, exports, logbook, P87 and rate names. |
 | personal | ব্যক্তিগত | Standard. |
 | shift | শিফট | Loanword that couriers use. |
 | Start shift / End shift | শিফট শুরু করুন / শিফট শেষ করুন | Used the same way everywhere this button is quoted. |

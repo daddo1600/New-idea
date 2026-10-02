@@ -42,3 +42,7 @@ The tables of every change are in `<code>-accuracy.md` and `<code>-culture.md`.
 ## Round 3 (October 2026): logbook, P87, privacy, backup and the shift switch
 
 All nine languages gained 201 lines for the four new features, plus the two shift-switch lines. Each went through the same three checks (translate, cold back-translation, culture and length); every change is listed in each language's `-accuracy.md` and `-culture.md` under "Round 3". The translators found one code bug, now fixed: logbook amounts typed with a decimal comma ("2400,50") were read as 240050. Open questions for native reviewers on a real iPhone are mainly Apple's own names for iCloud Keychain and the Settings path; see each glossary's Unsure list.
+
+## October 2026: "Work", not "Business"
+
+Driver-facing text now says "Work" (Work / Personal, "work drive", "Mark as work", "{{distance}} for work"). "Business" stays only as the official tax term: the report, exports, logbook, P87, rate names and region guidance. See "Work vs business" in `TRANSLATOR-NOTES.md` for the full split and each language's word. French, Portuguese, Hindi, Punjabi and Bengali moved from their business word to *travail*, *trabalho*, काम, ਕੰਮ and কাজ. Spanish, Polish, Romanian and Chinese already said *trabajo*, *służbowy*, *de lucru* and 工作, so only their keys changed. The tables from earlier rounds, above and in the per-language files, still show the old business wording for these lines. They are history, not the current text. These lines haven't had a native read-through yet.

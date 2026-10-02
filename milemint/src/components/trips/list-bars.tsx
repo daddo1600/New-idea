@@ -90,7 +90,7 @@ export function BulkActions({
           onPress={onBusiness}
           style={[styles.bulkButton, { backgroundColor: theme.accent, opacity: disabled ? 0.5 : 1 }]}>
           <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-            {t('Business')}
+            {t('Work (drive type)')}
           </ThemedText>
         </Pressable>
         <Pressable

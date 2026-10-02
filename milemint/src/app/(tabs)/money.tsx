@@ -69,11 +69,11 @@ export default function MoneyScreen() {
           </ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
             {summary.unclassifiedCount > 0
-              ? t('{{distance}} business · {{count}} to review', {
+              ? t('{{distance}} for work · {{count}} to review', {
                   distance: formatDistance(summary.businessMeters, region),
                   count: summary.unclassifiedCount,
                 })
-              : t('{{distance}} business', { distance: formatDistance(summary.businessMeters, region) })}
+              : t('{{distance}} for work', { distance: formatDistance(summary.businessMeters, region) })}
           </ThemedText>
         </ThemedView>
         {money.nudge && <ReliefNudge nudge={money.nudge} />}

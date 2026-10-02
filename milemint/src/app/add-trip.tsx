@@ -203,7 +203,7 @@ export default function AddTripScreen() {
       );
     }
     if (kind === 'business' && !purpose.trim()) {
-      return setError(t('{{authority}} needs a business purpose, e.g. "Client meeting".', { authority: region.authority }));
+      return setError(t('{{authority}} needs a purpose for every work drive, e.g. "Client meeting".', { authority: region.authority }));
     }
     const paid = readCosts(costs);
     if ('error' in paid) {
@@ -280,7 +280,7 @@ export default function AddTripScreen() {
           keyboardShouldPersistTaps="handled">
           <Segmented
             options={[
-              { value: 'business', label: t('Business') },
+              { value: 'business', label: t('Work (drive type)') },
               { value: 'personal', label: t('Personal') },
             ]}
             value={kind}
@@ -421,7 +421,7 @@ export default function AddTripScreen() {
 
           <View style={styles.field}>
             <ThemedText type="small" themeColor="textSecondary">
-              {kind === 'business' ? t('Business purpose') : t('Note (optional)')}
+              {kind === 'business' ? t('Purpose') : t('Note (optional)')}
             </ThemedText>
             {kind === 'business' ? (
               <PurposePicker
@@ -459,7 +459,7 @@ export default function AddTripScreen() {
               note={
                 kind === 'business'
                   ? t(costsNote(region, employee))
-                  : t('Kept with the drive, but only counted on business drives.')
+                  : t('Kept with the drive, but only counted on work drives.')
               }
             />
           ) : (

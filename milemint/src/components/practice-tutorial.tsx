@@ -70,7 +70,7 @@ let replayAsked = false;
  * and never saved: no counters, free drives or milestones are touched.
  *
  * Home passes in its own trip row so the samples look and swipe exactly like
- * the real thing (swiping right is business, left personal; the Business and
+ * the real thing (swiping right is work, left personal; the Work and
  * Personal buttons on the row count too).
  */
 export function PracticeTutorial({
@@ -267,7 +267,7 @@ function TutorialOverlay({
     step === 'personal'
       ? t('Sorted as personal ✓')
       : step === 'business'
-        ? t('Sorted as business: worth {{amount}}', { amount: formatMoney(value, region) })
+        ? t('Sorted as work: worth {{amount}}', { amount: formatMoney(value, region) })
         : t('Your shift is on ✓');
   useEffect(() => {
     if (state.passed) AccessibilityInfo.announceForAccessibility(passedLine);
@@ -492,7 +492,7 @@ function SampleCard({
           onPress={() => onSort(expected)}
           style={[styles.voiceButton, { borderColor: GOLD }]}>
           <Text style={styles.voiceText}>
-            {expected === 'personal' ? t('Mark as personal') : t('Mark as business')}
+            {expected === 'personal' ? t('Mark as personal') : t('Mark as work')}
           </Text>
         </Pressable>
       )}
