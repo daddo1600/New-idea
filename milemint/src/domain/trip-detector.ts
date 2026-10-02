@@ -308,6 +308,15 @@ export function flush(
   return finishAtStop(state, config);
 }
 
+/**
+ * Ends a drive in progress right now, where the car stopped or was last seen
+ * (tracking switched off mid-drive), instead of waiting out the stop window.
+ */
+export function finishNow(state: DetectorState, config: DetectorConfig = DEFAULT_DETECTOR_CONFIG): StepResult {
+  if (state.mode !== 'driving') return { state, completed: [] };
+  return finishAtStop(state, config);
+}
+
 function startDriving(
   start: Fix,
   fix: Fix,

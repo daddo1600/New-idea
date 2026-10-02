@@ -31,7 +31,7 @@ import {
 } from '@/domain/tracker-policy';
 import { alertWorthy, trackingHealth, type TrackingHealth, type TrackingPermissions } from '@/domain/tracking-health';
 import { isoDateAtOffset } from '@/domain/trip';
-import type { DetectedTrip, LocationSample } from '@/domain/trip-detector';
+import { type DetectedTrip, finishNow, type LocationSample } from '@/domain/trip-detector';
 import { t } from '@/i18n/i18n';
 import { isNotWorkingDrive } from '@/live-activity/not-working';
 import { noteTrackerProgress } from '@/live-activity/sync';
@@ -418,6 +418,11 @@ export async function stopTracking(db: SQLiteDatabase): Promise<void> {
   await serial(async () => {
     // Switched off on purpose: nothing to warn about any more.
     const record = await loadTrackerRecord(db);
+    // A drive still being recorded is finished and kept, not thrown away.
+    if (record.mode === 'gps') {
+      const { keep } = await screenDetectedTrips(finishNow(record.detector).completed);
+      for (const trip of keep) await saveDetectedTrip(db, trip);
+    }
     await cancelHealthAlerts(record, Date.now()).catch(() => record);
     await saveTrackerRecord(db, INITIAL_TRACKER_RECORD);
     await stopTask(LOCATION_TASK, Location.hasStartedLocationUpdatesAsync, Location.stopLocationUpdatesAsync);

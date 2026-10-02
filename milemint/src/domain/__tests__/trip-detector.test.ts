@@ -3,6 +3,7 @@ import { describe, expect, it } from '@jest/globals';
 import { distanceMeters } from '../geo';
 import {
   DEFAULT_DETECTOR_CONFIG,
+  finishNow,
   flush,
   INITIAL_DETECTOR_STATE,
   stepAll,
@@ -136,6 +137,18 @@ describe('trip detector', () => {
     expect(completed).toHaveLength(1);
     expect(completed[0].endedAt).toBe(endOf(road));
     expect(after.mode).toBe('idle');
+  });
+
+  it('finishes a drive in progress at once when tracking is switched off', () => {
+    const start = parked(0, T0, 1);
+    const road = drive(0, 5000, endOf(start), 13);
+    const { state } = stepAll(INITIAL_DETECTOR_STATE, [...start, ...road]);
+    expect(state.mode).toBe('driving');
+    const { completed, state: after } = finishNow(state);
+    expect(completed).toHaveLength(1);
+    expect(completed[0].endedAt).toBe(endOf(road));
+    expect(after.mode).toBe('idle');
+    expect(finishNow(after).completed).toHaveLength(0);
   });
 
   it('survives being resumed from saved state mid-drive (app killed in background)', () => {
