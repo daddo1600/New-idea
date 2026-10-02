@@ -225,7 +225,7 @@ const dictionary: Dictionary = {
   "Employees: unreimbursed mileage can’t be deducted on your federal return. Use your log to get paid back by your employer; a few states still allow a deduction.": "雇员：未报销的里程不能在联邦报税表中抵扣。可以用你的行程记录向雇主申请报销；少数州仍允许抵扣。",
   "Employees: with a signed T2200 from your employer, claim vehicle expenses on form T777. Otherwise, use your log to get reimbursed at the per-km rate.": "雇员：如有雇主签署的 T2200，可用 T777 表格申报车辆费用。否则，可用你的行程记录按每公里费率申请报销。",
   "Employees: you can claim Mileage Allowance Relief on the difference between this total and any mileage allowance your employer paid you.": "雇员：这个总额与雇主已付给你的里程补贴之间的差额，可以申请 Mileage Allowance Relief（里程补贴减免）。",
-  "Encrypted on your iPhone, no ads": "在 iPhone 上加密保存，无广告",
+  "Encrypted on your iPhone, data never sold": "在 iPhone 上加密保存，数据绝不出售",
   "End is a saved place.": "终点是已保存的地点。",
   "End of {{year}}": "{{year}} 年度末",
   "End shift": "收工",

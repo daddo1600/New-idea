@@ -244,7 +244,7 @@ const dictionary: Dictionary = {
   "Employees: unreimbursed mileage can’t be deducted on your federal return. Use your log to get paid back by your employer; a few states still allow a deduction.": "ਮੁਲਾਜ਼ਮ: ਜਿਸ ਮਾਈਲੇਜ ਦੇ ਪੈਸੇ ਵਾਪਸ ਨਹੀਂ ਮਿਲੇ, ਉਸਦੀ ਕਟੌਤੀ ਫ਼ੈਡਰਲ ਰਿਟਰਨ ਵਿੱਚ ਨਹੀਂ ਲਈ ਜਾ ਸਕਦੀ। ਆਪਣੇ ਲੌਗ ਨਾਲ ਆਪਣੇ ਇੰਪਲਾਇਰ ਤੋਂ ਪੈਸੇ ਵਾਪਸ ਲਓ; ਕੁਝ ਸਟੇਟਾਂ ਹਾਲੇ ਵੀ ਕਟੌਤੀ ਦੀ ਇਜਾਜ਼ਤ ਦਿੰਦੀਆਂ ਹਨ।",
   "Employees: with a signed T2200 from your employer, claim vehicle expenses on form T777. Otherwise, use your log to get reimbursed at the per-km rate.": "ਮੁਲਾਜ਼ਮ: ਜੇ ਤੁਹਾਡੇ ਇੰਪਲਾਇਰ ਨੇ T2200 ’ਤੇ ਦਸਤਖ਼ਤ ਕਰਕੇ ਦਿੱਤਾ ਹੈ, ਤਾਂ form T777 ’ਤੇ ਗੱਡੀ ਦੇ ਖ਼ਰਚੇ ਕਲੇਮ ਕਰੋ। ਨਹੀਂ ਤਾਂ, ਆਪਣੇ ਲੌਗ ਨਾਲ ਪ੍ਰਤੀ ਕਿ.ਮੀ. ਰੇਟ ’ਤੇ ਪੈਸੇ ਵਾਪਸ ਲਓ।",
   "Employees: you can claim Mileage Allowance Relief on the difference between this total and any mileage allowance your employer paid you.": "ਮੁਲਾਜ਼ਮ: ਇਸ ਕੁੱਲ ਰਕਮ ਅਤੇ ਤੁਹਾਡੇ ਇੰਪਲਾਇਰ ਵੱਲੋਂ ਦਿੱਤੇ ਮਾਈਲੇਜ ਭੱਤੇ ਦੇ ਫ਼ਰਕ ’ਤੇ Mileage Allowance Relief ਕਲੇਮ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ।",
-  "Encrypted on your iPhone, no ads": "ਤੁਹਾਡੇ iPhone ’ਤੇ ਇਨਕ੍ਰਿਪਟਡ, ਕੋਈ ਇਸ਼ਤਿਹਾਰ ਨਹੀਂ",
+  "Encrypted on your iPhone, data never sold": "ਤੁਹਾਡੇ iPhone ’ਤੇ ਇਨਕ੍ਰਿਪਟਡ, ਡਾਟਾ ਕਦੇ ਨਹੀਂ ਵੇਚਿਆ ਜਾਂਦਾ",
   "End is a saved place.": "ਮੰਜ਼ਿਲ ਇੱਕ ਸੇਵ ਕੀਤੀ ਥਾਂ ਹੈ।",
   "End of {{year}}": "{{year}} ਦਾ ਅੰਤ",
   "End shift": "ਸ਼ਿਫਟ ਖ਼ਤਮ ਕਰੋ",

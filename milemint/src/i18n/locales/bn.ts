@@ -232,7 +232,7 @@ const dictionary: Dictionary = {
   "Employees: unreimbursed mileage can’t be deducted on your federal return. Use your log to get paid back by your employer; a few states still allow a deduction.": "কর্মচারী: যে মাইলেজের টাকা ফেরত পাননি, তা ফেডারেল রিটার্নে ছাড় হিসেবে নেওয়া যায় না। আপনার লগ দেখিয়ে নিয়োগকর্তার কাছ থেকে টাকা ফেরত নিন; এখনও কয়েকটি স্টেটে ছাড় পাওয়া যায়।",
   "Employees: with a signed T2200 from your employer, claim vehicle expenses on form T777. Otherwise, use your log to get reimbursed at the per-km rate.": "কর্মচারী: নিয়োগকর্তার সই করা T2200 থাকলে, T777 ফর্মে যানবাহনের খরচ দাবি করুন। না থাকলে, আপনার লগ দেখিয়ে প্রতি-কিমি রেটে টাকা ফেরত নিন।",
   "Employees: you can claim Mileage Allowance Relief on the difference between this total and any mileage allowance your employer paid you.": "কর্মচারী: এই মোট অঙ্ক আর আপনার নিয়োগকর্তার দেওয়া মাইলেজ ভাতার পার্থক্যের ওপর আপনি Mileage Allowance Relief দাবি করতে পারেন।",
-  "Encrypted on your iPhone, no ads": "আপনার iPhone-এ এনক্রিপ্ট করা, কোনো বিজ্ঞাপন নেই",
+  "Encrypted on your iPhone, data never sold": "আপনার iPhone-এ এনক্রিপ্ট করা, ডেটা কখনো বিক্রি হয় না",
   "End is a saved place.": "শেষের জায়গাটি একটি সেভ করা জায়গা।",
   "End of {{year}}": "{{year}}-এর শেষ",
   "End shift": "শিফট শেষ করুন",

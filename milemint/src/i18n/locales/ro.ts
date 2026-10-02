@@ -291,7 +291,7 @@ const dictionary: Dictionary = {
   "Employees: unreimbursed mileage can’t be deducted on your federal return. Use your log to get paid back by your employer; a few states still allow a deduction.": "Angajați: kilometrajul nedecontat nu se poate deduce în declarația federală. Folosește jurnalul ca să-ți recuperezi banii de la angajator; câteva state încă permit o deducere.",
   "Employees: with a signed T2200 from your employer, claim vehicle expenses on form T777. Otherwise, use your log to get reimbursed at the per-km rate.": "Angajați: cu un formular T2200 semnat de angajator, deduci cheltuielile cu vehiculul pe formularul T777. Altfel, folosește jurnalul ca să fii decontat la tariful pe km.",
   "Employees: you can claim Mileage Allowance Relief on the difference between this total and any mileage allowance your employer paid you.": "Angajați: poți cere Mileage Allowance Relief pentru diferența dintre acest total și orice decontare de kilometraj plătită de angajator.",
-  "Encrypted on your iPhone, no ads": "Criptat pe iPhone, fără reclame",
+  "Encrypted on your iPhone, data never sold": "Criptat pe iPhone, datele nu sunt vândute niciodată",
   "End is a saved place.": "Sfârșitul e un loc salvat.",
   "End of {{year}}": "Sfârșitul lui {{year}}",
   "End shift": "Încheie tura",

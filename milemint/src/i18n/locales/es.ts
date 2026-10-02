@@ -251,7 +251,7 @@ const dictionary: Dictionary = {
   "Employees: unreimbursed mileage can’t be deducted on your federal return. Use your log to get paid back by your employer; a few states still allow a deduction.": "Empleados: las millas no reembolsadas no se pueden deducir en tu declaración federal. Usa tu registro para que tu empleador te las reembolse; algunos estados todavía permiten una deducción.",
   "Employees: with a signed T2200 from your employer, claim vehicle expenses on form T777. Otherwise, use your log to get reimbursed at the per-km rate.": "Empleados: con un T2200 firmado por tu empleador, reclama los gastos del vehículo en el formulario T777. Si no, usa tu registro para que te reembolsen con la tarifa por km.",
   "Employees: you can claim Mileage Allowance Relief on the difference between this total and any mileage allowance your employer paid you.": "Empleados: puedes reclamar la Mileage Allowance Relief por la diferencia entre este total y lo que tu empleador te haya pagado por kilometraje.",
-  "Encrypted on your iPhone, no ads": "Cifrado en tu iPhone, sin anuncios",
+  "Encrypted on your iPhone, data never sold": "Cifrado en tu iPhone, tus datos nunca se venden",
   "End is a saved place.": "El destino es un lugar guardado.",
   "End of {{year}}": "Fin de {{year}}",
   "End shift": "Terminar turno",

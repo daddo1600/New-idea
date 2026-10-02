@@ -21,7 +21,7 @@ SHOTS = [
     ("trip", "Work or personal?\nOne tap.", "See the route of every drive,\nthen sort it in a tap."),
     ("money", "Know what to put\naside for tax.", "With Pro: quarterly figures for MTD\nand a weekly tax set-aside."),
     ("export", "Your mileage log,\nready for HMRC.", "With Pro: PDF report, spreadsheet\nand accounting exports."),
-    ("privacy", "Your trips stay\non your phone.", "Encrypted on your phone.\nNo account. No ads."),
+    ("privacy", "Your trips stay\non your phone.", "Encrypted on your phone.\nNo account. Never sold."),
     ("compare", "Tracking is free.\nNo monthly limit.", "Pro adds your report, exports,\nquarterly figures and tax set-aside."),
 ]
 
