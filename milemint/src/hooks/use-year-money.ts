@@ -13,8 +13,8 @@ import { useRegion } from '@/region/region';
  * deduction (or, for UK employees, Mileage Allowance Relief), relief left in
  * earlier years, and commutes marked business.
  *
- * `visible` and `deductions` come from useTripList: drives past the free
- * allowance are left out of every total until Pro.
+ * `visible` and `deductions` come from useTripList: every drive, on the free
+ * plan too.
  */
 export function useYearMoney(
   visible: readonly Trip[],

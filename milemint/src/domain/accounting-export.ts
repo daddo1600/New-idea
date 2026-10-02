@@ -28,9 +28,6 @@ export function formatsFor(region: Pick<Region, 'code'>): readonly ExportFormat[
   return region.code === 'GB' ? EXPORT_FORMATS : EXPORT_FORMATS.filter((format) => format !== 'freeagent');
 }
 
-/** Exports for accounting software need Pro; the plain spreadsheet and the claim form are free. */
-export const PRO_FORMATS: ReadonlySet<ExportFormat> = new Set(['xero', 'quickbooks', 'freeagent']);
-
 type Month = { key: string; lastDay: string; distance: number; deduction: number; costs: number };
 
 const costsOf = (row: ReportRow) => row.parking + row.tolls;
@@ -41,7 +38,7 @@ const costsOf = (row: ReportRow) => row.parking + row.tolls;
  */
 const businessRows = (report: MileageReport) =>
   report.rows.filter(
-    (row) => row.trip.classification === 'business' && !row.locked && (row.deduction > 0 || costsOf(row) > 0),
+    (row) => row.trip.classification === 'business' && (row.deduction > 0 || costsOf(row) > 0),
   );
 
 /**

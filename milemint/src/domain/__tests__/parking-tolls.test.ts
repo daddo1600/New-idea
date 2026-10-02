@@ -184,17 +184,14 @@ describe('summarizeTaxYear', () => {
 });
 
 describe('buildReport', () => {
-  it('totals business parking and tolls, leaving out locked drives like their value', () => {
+  it('totals parking and tolls on business drives only', () => {
     const paid = trip(US, { parkingMinor: 350, tollsMinor: 250 });
-    const locked = trip(US, { parkingMinor: 5000, tollsMinor: 5000 });
     const personal = trip(US, { classification: 'personal', parkingMinor: 900 });
-    const report = buildReport([paid, locked, personal], US, 2026, { locked: new Set([locked.id]) });
+    const report = buildReport([paid, personal], US, 2026);
     expect(report.parking).toBe(350);
     expect(report.tolls).toBe(250);
     expect(report.deduction).toBe(725);
     expect(report.total).toBe(725 + 600);
-    const lockedRow = report.rows.find((row) => row.trip.id === locked.id)!;
-    expect(lockedRow.parking + lockedRow.tolls).toBe(0);
   });
 
   const cases: [string, Region, boolean, boolean][] = [
@@ -219,20 +216,17 @@ describe('spreadsheet', () => {
     expect(columns.indexOf('Deduction (GBP)')).toBe(10);
   });
 
-  it('fills them per trip: business always, others when entered, locked never', () => {
+  it('fills them per trip: business always, others when entered', () => {
     const business = trip(GB, { parkingMinor: 350 });
     const plain = trip(GB);
     const personal = trip(GB, { classification: 'personal', tollsMinor: 120 });
     const personalNone = trip(GB, { classification: 'personal' });
-    const locked = trip(GB, { parkingMinor: 999 });
-    const rows = rowsOf(
-      toCsv(buildReport([business, plain, personal, personalNone, locked], GB, 2026, { locked: new Set([locked.id]) })),
-    );
+    const rows = rowsOf(toCsv(buildReport([business, plain, personal, personalNone], GB, 2026)));
     expect(rows[1].endsWith(',No,3.50,0.00')).toBe(true);
     expect(rows[2].endsWith(',No,0.00,0.00')).toBe(true);
     expect(rows[3].endsWith(',No,,1.20')).toBe(true);
     expect(rows[4].endsWith(',No,,')).toBe(true);
-    expect(rows[5].endsWith(',No,,')).toBe(true);
+    expect(rows).toHaveLength(5);
   });
 });
 

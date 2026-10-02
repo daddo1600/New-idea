@@ -7,8 +7,7 @@ import { LeafMark } from '@/components/leaf-mark';
 import { quickPurposes } from '@/components/purpose-picker';
 import { ShiftRow } from '@/components/shift-row';
 import { AddTripHeaderButton, AddTripLink, AddTripRow } from '@/components/trips/add-trip-links';
-import { BulkActions, SelectBar, ValueWaitsNotice } from '@/components/trips/list-bars';
-import { LockedTripRow } from '@/components/trips/locked-trip-row';
+import { BulkActions, SelectBar } from '@/components/trips/list-bars';
 import { SelectableTripRow } from '@/components/trips/selectable-trip-row';
 import { TripRow } from '@/components/trips/trip-row';
 import { ThemedText } from '@/components/themed-text';
@@ -38,7 +37,7 @@ type DriveItem = HomeItem | MonthItem;
  */
 export default function DrivesScreen() {
   const list = useTripList();
-  const { trips, reload, setPurpose, locked, visible, deductions, kindOf, selecting, selected } = list;
+  const { trips, reload, setPurpose, allTrips, deductions, kindOf, selecting, selected } = list;
   const purposeSettings = usePurposeSettings();
   const shiftMode = useShift(reload);
   const insets = useSafeAreaInsets();
@@ -67,7 +66,7 @@ export default function DrivesScreen() {
 
   if (!trips) return <ActivityIndicator style={styles.loading} />;
 
-  const potentialOf = potentialDeductions(visible, region);
+  const potentialOf = potentialDeductions(allTrips, region);
   const unsorted = trips.filter((trip) => trip.classification === 'unclassified');
   // Selecting works on drives, so it lists them one by one.
   const rows: HomeItem[] = selecting
@@ -127,12 +126,6 @@ export default function DrivesScreen() {
           const item = row.trip;
           const content = selecting ? (
             <SelectableTripRow trip={item} selected={selected.has(item.id)} onToggle={() => list.toggle(item)} />
-          ) : locked.has(item.id) ? (
-            <LockedTripRow
-              trip={item}
-              onClassify={(c) => list.sort([item], c)}
-              onLongPress={() => list.confirmDelete(item)}
-            />
           ) : (
             <TripRow
               trip={item}
@@ -155,7 +148,6 @@ export default function DrivesScreen() {
           );
         }}
       />
-      {list.waiting && <ValueWaitsNotice bottom={0} onClose={list.closeWaiting} />}
       {selecting && (
         <BulkActions
           count={selected.size}

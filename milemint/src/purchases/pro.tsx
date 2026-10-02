@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { AppState, Platform } from 'react-native';
 
 import { DEMO_MODE, DEMO_PRO, DEMO_REGION } from '@/dev/demo';
-import { formatPrice, trialStartOf } from '@/domain/pro-offer';
+import { formatPrice, startsFreeTrial, trialStartOf } from '@/domain/pro-offer';
 import { displayLocale, REGIONS, type RegionCode } from '@/domain/regions';
 import { msg } from '@/i18n/i18n';
 import { useRegion } from '@/region/region';
@@ -23,8 +23,8 @@ import {
 import { cancelTrialReminder, scheduleTrialReminder } from './trial-reminder';
 
 /**
- * Last status the App Store reported, so Pro users see their drives at once
- * (and offline) instead of a flash of locked trips while StoreKit answers.
+ * Last status the App Store reported, so Pro users see their exports at once
+ * (and offline) instead of a flash of Pro prompts while StoreKit answers.
  */
 const CACHE_KEY = 'milemint.pro-active';
 
@@ -123,10 +123,11 @@ export function ProProvider({ children }: { children: ReactNode }) {
           setError(null);
           remember(true);
           // The plan's trial is the intro offer the user was eligible for when they bought. Counted from
-          // the subscription's first purchase: a renewal or a resubscription is no new trial.
+          // the subscription's first purchase: a renewal or a resubscription is no new trial, and nor is
+          // a friend's offer code (paid up front instead of the trial).
           const { plans: offered, locale } = latest.current;
           const plan = offered.find((option) => option.id === purchase.productId);
-          if (plan?.trial) {
+          if (plan?.trial && startsFreeTrial('offerIOS' in purchase ? purchase : {})) {
             scheduleTrialReminder(db, plan, trialStartOf(purchase) || Date.now(), locale).catch((reminderError) =>
               console.warn('[pro] trial reminder not scheduled', reminderError),
             );

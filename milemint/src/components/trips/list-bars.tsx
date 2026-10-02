@@ -1,6 +1,6 @@
 import * as Haptics from 'expo-haptics';
 import { useEffect, useRef, useState } from 'react';
-import { AccessibilityInfo, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { AccessibilityInfo, Platform, Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { usePop } from '@/components/pop-press';
@@ -167,31 +167,6 @@ export function FillingBar({ count, onDone }: { count: number; onDone: () => voi
   );
 }
 
-/**
- * Said when a drive sorted back from personal has to wait for Pro because the
- * month's free drives are used: the one case where a drive the user touches
- * doesn't show its value (domain/plan explains why it's this drive and not
- * one already showing its value).
- */
-export function ValueWaitsNotice({ bottom, onClose }: { bottom: number; onClose: () => void }) {
-  const theme = useTheme();
-  const t = useT();
-  return (
-    <Pressable
-      accessibilityRole="alert"
-      accessibilityLiveRegion="polite"
-      accessibilityHint={t('Closes this message')}
-      onPress={onClose}
-      style={[styles.notice, { bottom: bottom + 96, backgroundColor: theme.text }]}>
-      <Text style={[styles.noticeText, { color: theme.background }]}>
-        {t(
-          'Saved. This month’s free drives are used, so a drive sorted back from personal waits for Pro to show its value. Drives already showing their value keep it.',
-        )}
-      </Text>
-    </Pressable>
-  );
-}
-
 const styles = StyleSheet.create({
   flex: { flex: 1, gap: Spacing.one },
   allFilled: { transformOrigin: 'left center' },
@@ -211,14 +186,4 @@ const styles = StyleSheet.create({
   bulkCount: { textAlign: 'center' },
   bulkButtons: { flexDirection: 'row', gap: Spacing.two, width: '100%', maxWidth: MaxContentWidth, alignSelf: 'center' },
   bulkButton: { flex: 1, alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12 },
-  notice: {
-    position: 'absolute',
-    left: Spacing.three,
-    right: Spacing.three,
-    maxWidth: MaxContentWidth,
-    alignSelf: 'center',
-    borderRadius: 14,
-    padding: Spacing.three,
-  },
-  noticeText: { fontSize: 14, lineHeight: 20, fontWeight: '600' },
 });

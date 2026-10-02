@@ -93,6 +93,18 @@ export function trialStartOf(purchase: { transactionDate: number; originalTransa
   return purchase.transactionDate;
 }
 
+/**
+ * Whether a purchase began with the free trial. A friend's offer code (50%
+ * off the first year, paid up front) is an offer of its own, used instead of
+ * the trial, so it mustn't be reminded about as a trial ending. With no offer
+ * details the plan's trial is taken at its word, as before.
+ */
+export function startsFreeTrial(purchase: { offerIOS?: { type?: string | null; paymentMode?: string | null } | null }): boolean {
+  const offer = purchase.offerIOS;
+  if (!offer) return true;
+  return /free.?trial/i.test(offer.paymentMode ?? '');
+}
+
 /** Whether an offer's trial is long enough to be reminded about before it ends. */
 export function remindsBeforeTrialEnds(offer: Offer): boolean {
   return !!offer.trial && trialReminderDate(new Date(2026, 0, 1), offer.trial) !== null;

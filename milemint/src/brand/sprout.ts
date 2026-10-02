@@ -17,10 +17,14 @@ export const SPROUT_COLORS = {
   shadow: '#085E42',
 } as const;
 
-/** Leaf colours: fresh green all year, turning gold and orange in autumn. */
+/** Leaf colours: fresh green all year, turning gold and orange in autumn; gold for drivers who invited friends. */
 export const LEAF_PALETTES = {
   mint: { light: '#77E8A0', deep: '#24B359', fold: '#085E42', vein: '#064E3B', foldVein: '#77E8A0' },
   autumn: { light: '#FDE68A', deep: '#EA580C', fold: '#9A3412', vein: '#7C2D12', foldVein: '#FDE68A' },
+  /** Earned by inviting friends (the Earnings by platform perk). */
+  gold: { light: '#FEF08A', deep: '#CA8A04', fold: '#854D0E', vein: '#713F12', foldVein: '#FEF9C3' },
+  /** Not grown yet: an invite perk still to earn. */
+  seedling: { light: '#E5E7EB', deep: '#A1A1AA', fold: '#71717A', vein: '#71717A', foldVein: '#F4F4F5' },
 } as const;
 export type LeafPalette = keyof typeof LEAF_PALETTES;
 

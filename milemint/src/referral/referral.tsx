@@ -5,7 +5,11 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { Alert, AppState, Platform, Share } from 'react-native';
 
 import { loadSettings, updateSettings, type AppSettings } from '@/db/settings-repo';
+import { DEMO_FRIENDS, DEMO_GIFT } from '@/dev/demo';
+import { earnedPerks, foundingBoost, friendGiftOpen, nextPerk, type Perk } from '@/domain/plan';
 import { msg, t } from '@/i18n/i18n';
+import { useRegion } from '@/region/region';
+import { rememberGoldLeaves } from '@/region/remembered-region';
 
 import { DRIVES_BEFORE_RECORDING, ReferralCloud } from './cloud';
 import { canRedeem as canRedeemNow, firstInstall, type RedeemProblem } from './code';
@@ -16,25 +20,26 @@ import {
   parseKeptRedemption,
   publishPending,
   redeemInvite,
-  referralAllowance,
   submitPendingClaim,
   type ClaimRefusal,
   type ClaimResult,
   type Redemption,
   type RedeemStatus,
 } from './invites';
-import { inviteText, withInvite } from './links';
+import { inviteText, offerCode, withInvite } from './links';
+import { PERK_NAMES } from './perks';
 
 /**
  * Referrals with single-use invites. Every share makes a new code
- * (./invites.ts), published to iCloud as this user's; a new user who enters
- * one gets 10 extra free automatic drives a month once iCloud confirms it,
- * and so does the sharer once that friend has made 3 real drives: for every
- * friend, with no cap. One invite per Apple Account, ever, so deleting the
+ * (./invites.ts), published to iCloud as this user's. A new user who enters
+ * one gets the friend's gift (50% off their first year of Pro, through an
+ * App Store offer code, once FRIEND_OFFER_CODE is set), and the sharer is
+ * credited once that friend has made 3 real drives: friends climb the perk
+ * ladder (domain/plan). One invite per Apple Account, ever, so deleting the
  * app and starting over earns nothing. Everything is kept in settings (so
  * it's in the iCloud backup). iCloud (./cloud.ts) is off until the container
  * is set up; until then invites wait to be published and a friend's code
- * waits, pending, without its bonus.
+ * waits, pending.
  */
 
 /**
@@ -67,16 +72,24 @@ type Referral = {
   invitesSent: number;
   /** The friend's code this user entered (pending or granted). */
   redeemedCode: string | null;
-  /** Whether that code has been confirmed in iCloud (only 'granted' earns the +10). */
+  /** Whether that code has been confirmed in iCloud (only 'granted' credits the friend). */
   redeemStatus: RedeemStatus | null;
   /** Why iCloud last turned a pending code down, until another is entered. */
   redeemRefusal: ClaimRefusal | null;
   /** Friends who joined with this user's invites (0 until iCloud counts them). */
   friendsJoined: number;
+  /** Perks earned by inviting friends, in ladder order; kept for good. */
+  perks: Perk[];
+  /** The next perk and how many more friends it needs; null once all are earned. */
+  next: { perk: Perk; more: number } | null;
+  /** The founding boost is on: perks unlock at 1, 2 and 3 friends. */
+  boost: boolean;
+  /** The App Store offer code for a friend's 50% off; empty until it's set up (every friend-discount line is hidden). */
+  offerCode: string;
+  /** This user entered a friend's code within the last year and the offer code is set: the Pro screen offers the gift. */
+  giftOpen: boolean;
   /** This build can check invites and count friends (CloudKit is switched on). */
   counting: boolean;
-  /** Free automatic drives a month, with every referral bonus. */
-  allowance: number;
   /** A friend's code can still be entered (none yet, within 30 days of install). */
   canRedeem: boolean;
   /** Redeems a friend's code: granted, pending, or why not. */
@@ -91,7 +104,15 @@ type Referral = {
 
 type Saved = Pick<
   AppSettings,
-  'invites' | 'redeemedCode' | 'redeemedAt' | 'redeemStatus' | 'redeemRefusal' | 'qualifiedAt' | 'friendsJoined' | 'installedAt'
+  | 'invites'
+  | 'redeemedCode'
+  | 'redeemedAt'
+  | 'redeemStatus'
+  | 'redeemRefusal'
+  | 'qualifiedAt'
+  | 'friendsJoined'
+  | 'perksEarned'
+  | 'installedAt'
 >;
 
 const EMPTY: Saved = {
@@ -102,6 +123,7 @@ const EMPTY: Saved = {
   redeemRefusal: null,
   qualifiedAt: null,
   friendsJoined: 0,
+  perksEarned: [],
   installedAt: null,
 };
 
@@ -128,8 +150,15 @@ const pickSaved = (settings: AppSettings): Saved => ({
   redeemRefusal: settings.redeemRefusal,
   qualifiedAt: settings.qualifiedAt,
   friendsJoined: settings.friendsJoined,
+  perksEarned: settings.perksEarned,
   installedAt: settings.installedAt,
 });
+
+/** Perks to save when the friends now reach more than is kept, or null when nothing's new. */
+function newPerks(saved: Pick<Saved, 'friendsJoined' | 'perksEarned'>, now: Date): Perk[] | null {
+  const earned = earnedPerks(saved.friendsJoined, now, saved.perksEarned);
+  return earned.length > saved.perksEarned.length ? earned : null;
+}
 
 const redemptionOf = (saved: Saved): Redemption | null =>
   saved.redeemedCode
@@ -157,6 +186,9 @@ async function prepare(db: SQLiteDatabase): Promise<Saved> {
     changes.redeemedAt = merged.at;
     changes.redeemStatus = merged.status;
   }
+  // Perks reached in an earlier build (or before a restore) are kept from now on.
+  const perksEarned = newPerks(settings, new Date());
+  if (perksEarned) changes.perksEarned = perksEarned;
   const next = { ...settings, ...changes };
   if (Object.keys(changes).length > 0) await updateSettings(db, changes);
   if (installedAt !== keptInstall) keychainSet(INSTALLED_KEY, installedAt);
@@ -169,6 +201,7 @@ const ReferralContext = createContext<Referral | null>(null);
 
 export function ReferralProvider({ children }: { children: ReactNode }) {
   const db = useSQLiteContext();
+  const { region } = useRegion();
   const [saved, setSaved] = useState<Saved>(EMPTY);
   const [loaded, setLoaded] = useState(false);
   const [sharing, setSharing] = useState(false);
@@ -240,7 +273,12 @@ export function ReferralProvider({ children }: { children: ReactNode }) {
       return { changes: {}, result: null };
     });
     if (settled?.kind === 'granted') {
-      Alert.alert(t('🎉 Your friend’s invite is confirmed'), t('You get 10 extra free drives every month.'));
+      Alert.alert(
+        t('🎉 Your friend’s invite is confirmed'),
+        offerCode()
+          ? t('Your friend’s gift is waiting: 50% off your first year of Pro, on the Pro screen.')
+          : t('Thanks for joining with a friend’s invite. It counts towards their perks.'),
+      );
     } else if (settled?.kind === 'cleared') {
       Alert.alert(t('Your friend’s invite couldn’t be used'), t(REFUSAL_MESSAGES[settled.reason]));
     }
@@ -260,10 +298,18 @@ export function ReferralProvider({ children }: { children: ReactNode }) {
     if (Date.now() - lastCount.current > COUNT_EVERY_MS) {
       lastCount.current = Date.now();
       const counted = await ReferralCloud.countQualifiedClaims();
-      await mutate(async (current) => {
+      const unlocked = await mutate<Perk[]>(async (current) => {
         const friendsJoined = nextFriendsJoined(current.friendsJoined, counted);
-        return { changes: friendsJoined !== current.friendsJoined ? { friendsJoined } : {}, result: null };
+        const perksEarned = newPerks({ friendsJoined, perksEarned: current.perksEarned }, new Date());
+        const changes: Partial<Saved> = {};
+        if (friendsJoined !== current.friendsJoined) changes.friendsJoined = friendsJoined;
+        if (perksEarned) changes.perksEarned = perksEarned;
+        return { changes, result: perksEarned ? perksEarned.filter((perk) => !current.perksEarned.includes(perk)) : [] };
       });
+      if (unlocked.length > 0) {
+        const perk = unlocked[unlocked.length - 1];
+        Alert.alert(t('🌱 New perk unlocked'), t(PERK_NAMES[perk]));
+      }
     }
   }, [db, loaded, mutate]);
 
@@ -314,7 +360,7 @@ export function ReferralProvider({ children }: { children: ReactNode }) {
           return { changes: { invites: [...current.invites, made] }, result: made };
         });
         setSharing(false);
-        const shared = await Share.share({ message: withInvite(message ?? inviteText(), invite.code) }).catch(
+        const shared = await Share.share({ message: withInvite(message ?? inviteText(region), invite.code) }).catch(
           () => null,
         );
         // Closed without sending: it isn't an invite sent (the code is simply never used).
@@ -328,28 +374,43 @@ export function ReferralProvider({ children }: { children: ReactNode }) {
         setSharing(false);
       }
     },
-    [mutate],
+    [mutate, region],
   );
 
-  const value = useMemo<Referral>(
-    () => ({
+  const friendsJoined = DEMO_FRIENDS ?? saved.friendsJoined;
+  const perks = useMemo(
+    () => earnedPerks(friendsJoined, new Date(), saved.perksEarned),
+    [friendsJoined, saved.perksEarned],
+  );
+  // The gold leaves in the opening come with earnings by platform; the opening reads them before the database opens.
+  const gold = perks.includes('platform-earnings');
+  useEffect(() => {
+    if (loaded) rememberGoldLeaves(gold);
+  }, [loaded, gold]);
+
+  const value = useMemo<Referral>(() => {
+    const now = new Date();
+    const redeemedAt = DEMO_GIFT ? now.toISOString() : saved.redeemedAt;
+    return {
       loaded,
       invitesSent: saved.invites.length,
-      redeemedCode: saved.redeemedCode,
-      redeemStatus: saved.redeemStatus,
+      redeemedCode: DEMO_GIFT ? 'TRVB-7K2' : saved.redeemedCode,
+      redeemStatus: DEMO_GIFT ? 'pending' : saved.redeemStatus,
       redeemRefusal: saved.redeemRefusal,
-      friendsJoined: saved.friendsJoined,
+      friendsJoined,
+      perks,
+      next: nextPerk(friendsJoined, now, perks),
+      boost: foundingBoost(now),
+      offerCode: offerCode(),
+      giftOpen: friendGiftOpen({ offerCode: offerCode(), redeemedAt, now }),
       counting: ReferralCloud.supported,
-      // A pending code earns nothing until iCloud confirms it.
-      allowance: referralAllowance(saved),
-      canRedeem: loaded && canRedeemNow(redeemState(saved), new Date()),
+      canRedeem: loaded && !DEMO_GIFT && canRedeemNow(redeemState(saved), now),
       redeem,
       shareInvite,
       sharing,
       reload,
-    }),
-    [loaded, saved, redeem, shareInvite, sharing, reload],
-  );
+    };
+  }, [loaded, saved, friendsJoined, perks, redeem, shareInvite, sharing, reload]);
 
   return <ReferralContext.Provider value={value}>{children}</ReferralContext.Provider>;
 }
@@ -359,6 +420,3 @@ export function useReferral(): Referral {
   if (!referral) throw new Error('useReferral must be used inside <ReferralProvider>');
   return referral;
 }
-
-/** Free automatic drives a month for this user, with their referral bonuses. */
-export const useAllowance = (): number => useReferral().allowance;

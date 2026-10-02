@@ -4,20 +4,19 @@ import { ActivityIndicator, Linking, Pressable, ScrollView, StyleSheet, Switch, 
 
 import { BrandGradient } from '@/components/brand-gradient';
 import { LeafMark } from '@/components/leaf-mark';
+import { ProExportPrompt } from '@/components/pro-prompt';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTrips } from '@/db/use-trips';
 import { DEMO_TODAY } from '@/dev/demo';
 import { marApplies, marSummary, type MarYear, P87_LIMIT_MINOR, P87_URL, TAX_BAND_RATES } from '@/domain/mar';
-import { lockedTripIds } from '@/domain/plan';
 import { formatDistance, formatLongDate, formatMoney, formatRate, fromUnits, ratePeriodFor, type Region } from '@/domain/regions';
 import { toLocalIsoDate } from '@/domain/trip';
 import { useMileagePay } from '@/hooks/use-mileage-pay';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
-import { useAllowance } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 import { PDF_AVAILABLE, shareP87Summary } from '@/reports/export';
 
@@ -30,7 +29,6 @@ export default function ClaimReliefScreen() {
   const t = useT();
   const { region } = useRegion();
   const { isPro } = usePro();
-  const allowance = useAllowance();
   const { trips } = useTrips();
   const { pay, update } = useMileagePay();
   const [busy, setBusy] = useState<'csv' | 'pdf' | null>(null);
@@ -42,12 +40,7 @@ export default function ClaimReliefScreen() {
     () => ({ employerRate: pay?.employerRate ?? 0, band: pay?.band ?? 'unsure' }) as const,
     [pay?.employerRate, pay?.band],
   );
-  // Drives over the free limit stay out until they're unlocked, as on the home screen.
-  const summary = useMemo(() => {
-    const locked = lockedTripIds(trips ?? [], isPro, allowance);
-    const visible = (trips ?? []).filter((trip) => !locked.has(trip.id));
-    return marSummary(visible, region, options, today);
-  }, [trips, isPro, allowance, region, options, today]);
+  const summary = useMemo(() => marSummary(trips ?? [], region, options, today), [trips, region, options, today]);
 
   if (!trips || !pay) return <ActivityIndicator style={styles.loading} />;
 
@@ -79,6 +72,8 @@ export default function ClaimReliefScreen() {
 
   const percent = TAX_BAND_RATES[pay.band];
   const share = async (kind: 'csv' | 'pdf') => {
+    // The figures on screen are free; the P87 summary file is an export, so it's Pro.
+    if (!isPro) return router.push('/pro');
     setError(null);
     setBusy(kind);
     try {
@@ -187,6 +182,11 @@ export default function ClaimReliefScreen() {
               {t(error)}
             </ThemedText>
           )}
+          {!isPro && (
+            <ProExportPrompt
+              body={t('The figures above stay free to copy into your claim. Pro saves them as a file.')}
+            />
+          )}
           <View style={styles.buttons}>
             <Pressable
               accessibilityRole="button"
@@ -195,6 +195,7 @@ export default function ClaimReliefScreen() {
               style={[styles.outline, { borderColor: theme.accent, opacity: busy ? 0.5 : 1 }]}>
               <ThemedText type="smallBold" style={{ color: theme.accent }}>
                 {busy === 'csv' ? t('Preparing…') : t('Spreadsheet (CSV)')}
+                {!isPro && ' · Pro'}
               </ThemedText>
             </Pressable>
             {PDF_AVAILABLE && (
@@ -205,6 +206,7 @@ export default function ClaimReliefScreen() {
                 style={[styles.outline, { borderColor: theme.accent, opacity: busy ? 0.5 : 1 }]}>
                 <ThemedText type="smallBold" style={{ color: theme.accent }}>
                   {busy === 'pdf' ? t('Preparing…') : t('PDF')}
+                  {!isPro && ' · Pro'}
                 </ThemedText>
               </Pressable>
             )}

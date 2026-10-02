@@ -48,6 +48,18 @@
     ]
   },
   {
+    "key": "{{authority}} allows {{rate}} a km, so it adds up fast.",
+    "files": [
+      "referral/links.ts"
+    ]
+  },
+  {
+    "key": "{{authority}} allows {{rate}} a mile, so it adds up fast.",
+    "files": [
+      "referral/links.ts"
+    ]
+  },
+  {
     "key": "{{authority}} expects a purpose for every business drive. Add them before you export?",
     "files": [
       "app/report.tsx"
@@ -104,12 +116,6 @@
     ]
   },
   {
-    "key": "{{count}} a month",
-    "files": [
-      "app/pro.tsx"
-    ]
-  },
-  {
     "key": "{{count}} business drives have no reason yet. The ATO asks for the reason for each journey.",
     "files": [
       "app/logbook.tsx"
@@ -159,27 +165,27 @@
     ]
   },
   {
-    "key": "{{count}} drives are saved and shown in full. Their value unlocks with Pro.",
-    "files": [
-      "components/home/plan-card.tsx"
-    ]
-  },
-  {
     "key": "{{count}} drives in this period aren’t sorted yet. They count as private until you sort them.",
     "files": [
       "app/logbook.tsx"
     ]
   },
   {
-    "key": "{{count}} drives past the free plan’s monthly limit aren’t in these totals. They’re in the spreadsheet; their value unlocks with Pro.",
-    "files": [
-      "app/report.tsx"
-    ]
-  },
-  {
     "key": "{{count}} drives since then look like deliveries. They’ll be added to the shift as business.",
     "files": [
       "components/shift-prompts.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} friends",
+    "files": [
+      "components/invite.tsx"
+    ]
+  },
+  {
+    "key": "{{count}} friends joined",
+    "files": [
+      "components/invite.tsx"
     ]
   },
   {
@@ -207,6 +213,12 @@
     ]
   },
   {
+    "key": "{{count}} more friend → {{perk}}",
+    "files": [
+      "components/invite.tsx"
+    ]
+  },
+  {
     "key": "{{count}} past trips may still have addresses and routes. Replace them with the area only and delete the routes?",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -216,12 +228,6 @@
     "key": "{{count}} purposes added",
     "files": [
       "components/trips/list-bars.tsx"
-    ]
-  },
-  {
-    "key": "{{count}} saved drives have their value waiting for Pro",
-    "files": [
-      "app/pro.tsx"
     ]
   },
   {
@@ -455,6 +461,18 @@
     ]
   },
   {
+    "key": "{{perk}}: {{count}} friends",
+    "files": [
+      "components/invite.tsx"
+    ]
+  },
+  {
+    "key": "{{perk}}: unlocked",
+    "files": [
+      "components/invite.tsx"
+    ]
+  },
+  {
     "key": "{{price}} a month",
     "files": [
       "app/pro.tsx"
@@ -557,13 +575,6 @@
     ]
   },
   {
-    "key": "{{used}} of {{limit}} free work drives in {{month}}",
-    "files": [
-      "components/home/plan-card.tsx",
-      "components/home/plan-meter.tsx"
-    ]
-  },
-  {
     "key": "{{vehicle}} has done {{distance}} of business driving this year. Cents per km stops counting at 5,000 km.",
     "files": [
       "components/logbook-nudge.tsx"
@@ -663,6 +674,12 @@
     ]
   },
   {
+    "key": "🌱 New perk unlocked",
+    "files": [
+      "referral/referral.tsx"
+    ]
+  },
+  {
     "key": "🎉 Your friend’s invite is confirmed",
     "files": [
       "referral/referral.tsx"
@@ -747,6 +764,12 @@
     ]
   },
   {
+    "key": "A Founding driver badge in Settings, for helping MileSprout grow.",
+    "files": [
+      "referral/perks.ts"
+    ]
+  },
+  {
     "key": "A friend’s code can only be entered in the first 30 days after installing MileSprout.",
     "files": [
       "components/redeem-code.tsx"
@@ -774,6 +797,12 @@
     "key": "A manual journal for each month of business mileage, ready to import in Xero (Accounting › Manual journals › Import). Check the account codes match your chart of accounts.",
     "files": [
       "app/report.tsx"
+    ]
+  },
+  {
+    "key": "A pot that shows what to put aside for tax. Yours for good, even without Pro.",
+    "files": [
+      "referral/perks.ts"
     ]
   },
   {
@@ -1091,12 +1120,6 @@
     ]
   },
   {
-    "key": "Automatic drive logging",
-    "files": [
-      "app/pro.tsx"
-    ]
-  },
-  {
     "key": "Automatic tracking",
     "files": [
       "app/_layout.tsx"
@@ -1139,6 +1162,12 @@
     "key": "Automatic tracking stopped running, so new drives aren’t being logged.",
     "files": [
       "components/tracking-health-card.tsx"
+    ]
+  },
+  {
+    "key": "Automatic tracking, no monthly limit",
+    "files": [
+      "app/pro.tsx"
     ]
   },
   {
@@ -1287,7 +1316,6 @@
       "app/add-trip.tsx",
       "app/trip/[id].tsx",
       "components/trips/list-bars.tsx",
-      "components/trips/locked-trip-row.tsx",
       "components/trips/row-parts.tsx",
       "components/trips/selectable-trip-row.tsx",
       "components/trips/trip-row.tsx"
@@ -1337,12 +1365,6 @@
     "key": "Business or personal?",
     "files": [
       "components/trips/trip-row.tsx"
-    ]
-  },
-  {
-    "key": "Business or personal? Personal drives don’t use your free drives.",
-    "files": [
-      "components/trips/locked-trip-row.tsx"
     ]
   },
   {
@@ -1602,15 +1624,8 @@
   {
     "key": "Close",
     "files": [
-      "components/plan-rules.tsx",
       "components/purpose-picker.tsx",
       "components/vehicle-sheet.tsx"
-    ]
-  },
-  {
-    "key": "Closes this message",
-    "files": [
-      "components/trips/list-bars.tsx"
     ]
   },
   {
@@ -1623,6 +1638,18 @@
     "key": "Code {{code}} saved",
     "files": [
       "components/redeem-code.tsx"
+    ]
+  },
+  {
+    "key": "Coming to Pro: earnings by platform and a tax set-aside pot.",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Coming to Pro: earnings by platform, a tax set-aside pot and MTD quarterly figures.",
+    "files": [
+      "app/pro.tsx"
     ]
   },
   {
@@ -1969,12 +1996,6 @@
     ]
   },
   {
-    "key": "Drives past the limit, saved and shown in full",
-    "files": [
-      "app/pro.tsx"
-    ]
-  },
-  {
     "key": "Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -2035,12 +2056,6 @@
     ]
   },
   {
-    "key": "Each automatic work drive counts once. Unsorted drives count until you sort them.",
-    "files": [
-      "components/plan-rules.tsx"
-    ]
-  },
-  {
     "key": "Each tax year’s business miles, HMRC’s approved amount, what your employer paid and the relief to claim, in English for HMRC.",
     "files": [
       "app/claim-relief.tsx"
@@ -2050,6 +2065,12 @@
     "key": "Earlier tax years",
     "files": [
       "app/(tabs)/money.tsx"
+    ]
+  },
+  {
+    "key": "Earnings by platform",
+    "files": [
+      "referral/perks.ts"
     ]
   },
   {
@@ -2206,7 +2227,13 @@
     ]
   },
   {
-    "key": "Enter it for 10 extra free drives every month.",
+    "key": "Enter it for 50% off your first year of Pro.",
+    "files": [
+      "components/redeem-code.tsx"
+    ]
+  },
+  {
+    "key": "Enter it so your friend gets the credit.",
     "files": [
       "components/redeem-code.tsx"
     ]
@@ -2310,21 +2337,9 @@
     ]
   },
   {
-    "key": "Every drive is logged and unlocked. Thanks for supporting MileSprout.",
-    "files": [
-      "app/pro.tsx"
-    ]
-  },
-  {
     "key": "Every drive is logged the moment you park. No buttons to press.",
     "files": [
       "app/setup-tracking.tsx"
-    ]
-  },
-  {
-    "key": "Every drive is unlocked.",
-    "files": [
-      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -2337,6 +2352,12 @@
     "key": "Every drive sorted. Tax time just got easier.",
     "files": [
       "domain/milestones.ts"
+    ]
+  },
+  {
+    "key": "Every drive tracked, with no monthly limit, plus your totals and year-end summary. Pro adds the itemised report and exports.",
+    "files": [
+      "app/welcome.tsx"
     ]
   },
   {
@@ -2354,10 +2375,21 @@
     ]
   },
   {
+    "key": "Every friend who joins unlocks Pro perks for you.",
+    "files": [
+      "components/celebration.tsx"
+    ]
+  },
+  {
     "key": "Every invite has its own code, for one friend.",
     "files": [
-      "app/(tabs)/settings.tsx",
-      "app/friends.tsx"
+      "components/invite.tsx"
+    ]
+  },
+  {
+    "key": "Every perk unlocked. Thank you for helping MileSprout grow!",
+    "files": [
+      "components/invite.tsx"
     ]
   },
   {
@@ -2367,13 +2399,13 @@
     ]
   },
   {
-    "key": "Every trip with date, places, kilometres, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.",
+    "key": "Every trip with date, places, kilometres, purpose and deduction. Opens in Excel, Numbers or Google Sheets.",
     "files": [
       "app/report.tsx"
     ]
   },
   {
-    "key": "Every trip with date, places, miles, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.",
+    "key": "Every trip with date, places, miles, purpose and deduction. Opens in Excel, Numbers or Google Sheets.",
     "files": [
       "app/report.tsx"
     ]
@@ -2427,12 +2459,6 @@
     ]
   },
   {
-    "key": "Export to Xero, QuickBooks and FreeAgent",
-    "files": [
-      "app/pro.tsx"
-    ]
-  },
-  {
     "key": "Export your {{year}} mileage report from MileSprout and you’re one step closer.",
     "files": [
       "domain/deadlines.ts"
@@ -2442,6 +2468,12 @@
     "key": "Export your mileage",
     "files": [
       "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Exports are part of Pro",
+    "files": [
+      "components/pro-prompt.tsx"
     ]
   },
   {
@@ -2529,7 +2561,7 @@
     ]
   },
   {
-    "key": "For delivery and courier work (Uber Eats, Deliveroo, Amazon Flex, Evri, DPD and the like): a Start shift button on the home screen. Every drive in a shift is business, and a whole shift counts as one drive on the free plan.",
+    "key": "For delivery and courier work (Uber Eats, Deliveroo, Amazon Flex, Evri, DPD and the like): a Start shift button on the home screen. Every drive in a shift is business.",
     "files": [
       "app/(tabs)/settings.tsx"
     ]
@@ -2565,33 +2597,46 @@
     ]
   },
   {
+    "key": "Founding boost",
+    "files": [
+      "components/invite.tsx"
+    ]
+  },
+  {
+    "key": "Founding boost: perks unlock faster until {{date}}",
+    "files": [
+      "components/invite.tsx"
+    ]
+  },
+  {
+    "key": "Founding driver",
+    "files": [
+      "components/invite.tsx"
+    ]
+  },
+  {
+    "key": "Founding driver badge",
+    "files": [
+      "referral/perks.ts"
+    ]
+  },
+  {
     "key": "Free",
     "files": [
+      "app/(tabs)/settings.tsx",
       "app/pro.tsx"
     ]
   },
   {
-    "key": "Free · {{used}} of {{limit}}",
+    "key": "Free for good",
     "files": [
-      "app/(tabs)/settings.tsx"
+      "app/welcome.tsx"
     ]
   },
   {
     "key": "Free money alert 💸",
     "files": [
       "domain/reminders.ts"
-    ]
-  },
-  {
-    "key": "Free plan: {{count}} work drives a month (personal drives don’t count), unlimited trips by hand and the spreadsheet export.",
-    "files": [
-      "app/(tabs)/settings.tsx"
-    ]
-  },
-  {
-    "key": "Free to start",
-    "files": [
-      "app/welcome.tsx"
     ]
   },
   {
@@ -2613,21 +2658,9 @@
     ]
   },
   {
-    "key": "Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.",
+    "key": "Free: every drive tracked, with no monthly limit, plus your totals and year-end summary. Pro adds the itemised report, the PDF and every export.",
     "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "Free: {{count}} work drives a month. Pro: unlimited.",
-    "files": [
-      "components/plan-rules.tsx"
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -2649,9 +2682,8 @@
     ]
   },
   {
-    "key": "Friends joined: {{count}} · +{{drives}} free drives a month",
+    "key": "Friends joined: {{count}}",
     "files": [
-      "app/(tabs)/settings.tsx",
       "app/friends.tsx"
     ]
   },
@@ -2723,6 +2755,12 @@
     ]
   },
   {
+    "key": "Give 50% off. Get Pro perks.",
+    "files": [
+      "components/invite.tsx"
+    ]
+  },
+  {
     "key": "Give the place a name, e.g. “Acme HQ”.",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -2731,9 +2769,7 @@
   {
     "key": "Go Pro",
     "files": [
-      "app/(tabs)/money.tsx",
-      "components/home/plan-card.tsx",
-      "components/home/plan-meter.tsx"
+      "app/(tabs)/money.tsx"
     ]
   },
   {
@@ -2758,19 +2794,6 @@
     "key": "Got a code from a friend?",
     "files": [
       "components/redeem-code.tsx"
-    ]
-  },
-  {
-    "key": "Got a code from a friend? It adds 10 free drives a month.",
-    "files": [
-      "app/pro.tsx",
-      "components/home/plan-card.tsx"
-    ]
-  },
-  {
-    "key": "Got it",
-    "files": [
-      "components/plan-rules.tsx"
     ]
   },
   {
@@ -2873,7 +2896,7 @@
     ]
   },
   {
-    "key": "How it works",
+    "key": "How it works ›",
     "files": [
       "app/(tabs)/settings.tsx"
     ]
@@ -2898,7 +2921,13 @@
     ]
   },
   {
-    "key": "I use MileSprout to log my business mileage automatically. It works out what every drive is worth at tax time, so nothing goes unclaimed. 🚗💸",
+    "key": "I log my work kilometres with MileSprout. It tracks every drive by itself, free, with no account.",
+    "files": [
+      "referral/links.ts"
+    ]
+  },
+  {
+    "key": "I log my work miles with MileSprout. It tracks every drive by itself, free, with no account.",
     "files": [
       "referral/links.ts"
     ]
@@ -3025,6 +3054,18 @@
     ]
   },
   {
+    "key": "Invite a driver",
+    "files": [
+      "components/invite.tsx"
+    ]
+  },
+  {
+    "key": "Invite a driver, unlock Pro perks",
+    "files": [
+      "components/invite.tsx"
+    ]
+  },
+  {
     "key": "Invite friends",
     "files": [
       "app/(tabs)/settings.tsx",
@@ -3032,7 +3073,7 @@
     ]
   },
   {
-    "key": "Invites are confirmed through iCloud, which is coming in an update. Friends who join before then get their extra drives once it’s switched on, and so do you.",
+    "key": "Invites are confirmed through iCloud, which is coming in an update. Friends who join before then count once it’s switched on.",
     "files": [
       "app/friends.tsx"
     ]
@@ -3078,6 +3119,18 @@
     "key": "It was still on, so MileSprout ended it. Drives from now on are left for you to sort. Tap to check the times.",
     "files": [
       "tracking/shift-notifications.ts"
+    ]
+  },
+  {
+    "key": "It’s confirmed once iCloud can check it, and counts towards your friend’s perks.",
+    "files": [
+      "components/redeem-code.tsx"
+    ]
+  },
+  {
+    "key": "Itemised mileage log and PDF report",
+    "files": [
+      "app/pro.tsx"
     ]
   },
   {
@@ -3297,12 +3350,6 @@
     ]
   },
   {
-    "key": "Log every drive with MileSprout Pro",
-    "files": [
-      "app/pro.tsx"
-    ]
-  },
-  {
     "key": "Logbook method",
     "files": [
       "app/logbook.tsx"
@@ -3354,14 +3401,12 @@
   {
     "key": "Mark {{from}} to {{to}} as business",
     "files": [
-      "components/trips/locked-trip-row.tsx",
       "components/trips/trip-row.tsx"
     ]
   },
   {
     "key": "Mark {{from}} to {{to}} as personal",
     "files": [
-      "components/trips/locked-trip-row.tsx",
       "components/trips/trip-row.tsx"
     ]
   },
@@ -3412,12 +3457,6 @@
     "key": "Mileage at {{authority}} rates",
     "files": [
       "app/report.tsx"
-    ]
-  },
-  {
-    "key": "Mileage log export (CSV)",
-    "files": [
-      "app/pro.tsx"
     ]
   },
   {
@@ -3604,6 +3643,12 @@
     ]
   },
   {
+    "key": "Money total and tax-year totals",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
     "key": "Monthly",
     "files": [
       "app/pro.tsx"
@@ -3613,12 +3658,6 @@
     "key": "Moped or motorbike",
     "files": [
       "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "More free drives for every friend",
-    "files": [
-      "app/friends.tsx"
     ]
   },
   {
@@ -3757,18 +3796,6 @@
     "key": "New drives start as business",
     "files": [
       "app/(tabs)/settings.tsx"
-    ]
-  },
-  {
-    "key": "New to Pro? Your first month is on me: {{url}}",
-    "files": [
-      "referral/links.ts"
-    ]
-  },
-  {
-    "key": "New work drives are still saved and shown in full. Their value unlocks with Pro.",
-    "files": [
-      "components/home/plan-card.tsx"
     ]
   },
   {
@@ -4053,9 +4080,9 @@
     ]
   },
   {
-    "key": "On shift, a whole shift counts as one drive a day.",
+    "key": "On the yearly plan, with code {{code}}. It’s one offer per purchase, so it’s instead of the free month. Pro then renews at the normal yearly price.",
     "files": [
-      "components/plan-rules.tsx"
+      "app/pro.tsx"
     ]
   },
   {
@@ -4131,16 +4158,15 @@
     ]
   },
   {
-    "key": "Opens a list of purposes",
+    "key": "Opening…",
     "files": [
-      "components/purpose-picker.tsx"
+      "components/invite.tsx"
     ]
   },
   {
-    "key": "Opens MileSprout Pro",
+    "key": "Opens a list of purposes",
     "files": [
-      "components/home/plan-meter.tsx",
-      "components/trips/locked-trip-row.tsx"
+      "components/purpose-picker.tsx"
     ]
   },
   {
@@ -4164,7 +4190,6 @@
   {
     "key": "Opens trip details. Long press to delete",
     "files": [
-      "components/trips/locked-trip-row.tsx",
       "components/trips/trip-row.tsx"
     ]
   },
@@ -4188,10 +4213,9 @@
     ]
   },
   {
-    "key": "Or invite a friend: you both get 10 more free drives a month.",
+    "key": "Or invite friends to unlock Pro perks for free ›",
     "files": [
-      "app/pro.tsx",
-      "components/home/plan-card.tsx"
+      "app/pro.tsx"
     ]
   },
   {
@@ -4318,12 +4342,6 @@
     ]
   },
   {
-    "key": "Past the limit nothing is hidden or lost: every drive is saved, shown in full, can be sorted and is in your spreadsheet export. Only its value waits for Pro.",
-    "files": [
-      "components/plan-rules.tsx"
-    ]
-  },
-  {
     "key": "Past trips keep their names.",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -4366,6 +4384,12 @@
     ]
   },
   {
+    "key": "PDF report, exports and your itemised log",
+    "files": [
+      "app/(tabs)/money.tsx"
+    ]
+  },
+  {
     "key": "PDF reports are created on iPhone.",
     "files": [
       "app/report.tsx"
@@ -4396,22 +4420,9 @@
       "app/add-trip.tsx",
       "app/trip/[id].tsx",
       "components/trips/list-bars.tsx",
-      "components/trips/locked-trip-row.tsx",
       "components/trips/row-parts.tsx",
       "components/trips/selectable-trip-row.tsx",
       "components/trips/trip-row.tsx"
-    ]
-  },
-  {
-    "key": "Personal drives don’t count.",
-    "files": [
-      "components/home/plan-card.tsx"
-    ]
-  },
-  {
-    "key": "Personal drives don’t count. Sort one personal and the next drive gets its place.",
-    "files": [
-      "components/plan-rules.tsx"
     ]
   },
   {
@@ -4514,7 +4525,7 @@
     ]
   },
   {
-    "key": "Pro is active: unlimited automatic drives.",
+    "key": "Pro is active: the itemised report, the PDF and every export.",
     "files": [
       "app/(tabs)/settings.tsx"
     ]
@@ -4553,6 +4564,18 @@
     "key": "Redeem",
     "files": [
       "components/redeem-code.tsx"
+    ]
+  },
+  {
+    "key": "Redeem your friend’s gift",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Redeem your friend’s gift ›",
+    "files": [
+      "app/friends.tsx"
     ]
   },
   {
@@ -4818,12 +4841,6 @@
     ]
   },
   {
-    "key": "Saved · value unlocks with Pro",
-    "files": [
-      "components/trips/locked-trip-row.tsx"
-    ]
-  },
-  {
     "key": "Saved.",
     "files": [
       "app/logbook.tsx"
@@ -4839,12 +4856,6 @@
     "key": "Saved. The PDF report includes these readings.",
     "files": [
       "app/report.tsx"
-    ]
-  },
-  {
-    "key": "Saved. This month’s free drives are used, so a drive sorted back from personal waits for Pro to show its value. Drives already showing their value keep it.",
-    "files": [
-      "components/trips/list-bars.tsx"
     ]
   },
   {
@@ -4881,15 +4892,21 @@
     ]
   },
   {
-    "key": "See Pro",
-    "files": [
-      "components/plan-rules.tsx"
-    ]
-  },
-  {
     "key": "See what each business drive saves you at tax time.",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "See what each delivery app pays you, plus gold leaves on your sprout.",
+    "files": [
+      "referral/perks.ts"
+    ]
+  },
+  {
+    "key": "See what Pro adds ›",
+    "files": [
+      "components/pro-prompt.tsx"
     ]
   },
   {
@@ -4971,15 +4988,9 @@
     ]
   },
   {
-    "key": "Send a friend an invite. When they join MileSprout with it, you both get 10 extra free automatic drives a month. For every friend, with no limit.",
+    "key": "Send your report to your accountant",
     "files": [
-      "app/friends.tsx"
-    ]
-  },
-  {
-    "key": "Send an invite",
-    "files": [
-      "app/friends.tsx"
+      "app/pro.tsx"
     ]
   },
   {
@@ -5031,15 +5042,21 @@
     ]
   },
   {
-    "key": "Share",
+    "key": "Share it · friends get 50% off Pro",
     "files": [
-      "app/(tabs)/settings.tsx"
+      "components/celebration.tsx"
     ]
   },
   {
-    "key": "Share it · friends get +10 drives",
+    "key": "Share it with a friend",
     "files": [
       "components/celebration.tsx"
+    ]
+  },
+  {
+    "key": "Share MileSprout with drivers you know. You unlock Pro perks for free as friends join.",
+    "files": [
+      "components/invite.tsx"
     ]
   },
   {
@@ -5203,6 +5220,12 @@
     "key": "Spreadsheet (CSV)",
     "files": [
       "app/claim-relief.tsx"
+    ]
+  },
+  {
+    "key": "Spreadsheet, CSV, Xero, QuickBooks and FreeAgent exports",
+    "files": [
+      "app/pro.tsx"
     ]
   },
   {
@@ -5584,9 +5607,15 @@
     ]
   },
   {
-    "key": "Tax-ready PDF report",
+    "key": "Tax set-aside",
     "files": [
-      "app/pro.tsx"
+      "referral/perks.ts"
+    ]
+  },
+  {
+    "key": "Tax set-aside and Earnings by platform are on their way. Perks you earn now unlock them as soon as they arrive.",
+    "files": [
+      "app/friends.tsx"
     ]
   },
   {
@@ -5605,6 +5634,18 @@
     "key": "Thank you for all you do for the people you care for. 💚",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Thanks for joining with a friend’s invite. It counts towards their perks.",
+    "files": [
+      "referral/referral.tsx"
+    ]
+  },
+  {
+    "key": "Thanks! It counts towards your friend’s perks.",
+    "files": [
+      "components/redeem-code.tsx"
     ]
   },
   {
@@ -5687,6 +5728,12 @@
     ]
   },
   {
+    "key": "The figures above stay free to copy into your claim. Pro saves them as a file.",
+    "files": [
+      "app/claim-relief.tsx"
+    ]
+  },
+  {
     "key": "The IRS asks for a record made at or near the time of each trip, showing the date, where you went, the business purpose and the miles.",
     "files": [
       "domain/regions.ts"
@@ -5725,21 +5772,9 @@
     ]
   },
   {
-    "key": "The month’s earliest drives go first, so a drive showing its value keeps it. The count starts again on the 1st.",
-    "files": [
-      "components/plan-rules.tsx"
-    ]
-  },
-  {
     "key": "The purchase didn’t go through. Please try again.",
     "files": [
       "purchases/pro.tsx"
-    ]
-  },
-  {
-    "key": "The value of drives past the limit",
-    "files": [
-      "app/pro.tsx"
     ]
   },
   {
@@ -5959,6 +5994,12 @@
     ]
   },
   {
+    "key": "Tracking stays free for good: every drive, with no monthly limit. Pro is for your report and exports.",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
     "key": "Tracking stopped {{from}}–{{to}}",
     "files": [
       "components/tracking-health-card.tsx"
@@ -6004,12 +6045,6 @@
     "key": "Trips already logged in it keep it in their record.",
     "files": [
       "app/(tabs)/settings.tsx"
-    ]
-  },
-  {
-    "key": "Trips you add by hand never count.",
-    "files": [
-      "components/plan-rules.tsx"
     ]
   },
   {
@@ -6123,21 +6158,15 @@
     ]
   },
   {
-    "key": "Unlimited",
-    "files": [
-      "app/pro.tsx"
-    ]
-  },
-  {
-    "key": "Unlimited drives, PDF reports and accounting exports",
-    "files": [
-      "app/(tabs)/money.tsx"
-    ]
-  },
-  {
     "key": "Unlock with Pro",
     "files": [
       "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Unlocked",
+    "files": [
+      "components/invite.tsx"
     ]
   },
   {
@@ -6156,6 +6185,18 @@
     "key": "Use",
     "files": [
       "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Use my invite code {{code}} when you set up MileSprout and your first year of Pro is 50% off.",
+    "files": [
+      "referral/links.ts"
+    ]
+  },
+  {
+    "key": "Use my invite code {{code}} when you set up MileSprout.",
+    "files": [
+      "referral/links.ts"
     ]
   },
   {
@@ -6288,13 +6329,6 @@
     ]
   },
   {
-    "key": "What counts?",
-    "files": [
-      "components/home/plan-card.tsx",
-      "components/plan-rules.tsx"
-    ]
-  },
-  {
     "key": "What do you drive?",
     "files": [
       "app/welcome.tsx"
@@ -6381,12 +6415,6 @@
     ]
   },
   {
-    "key": "Work hours, places, learned routes",
-    "files": [
-      "app/pro.tsx"
-    ]
-  },
-  {
     "key": "Work on {{day}}",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -6423,15 +6451,15 @@
     ]
   },
   {
-    "key": "Worth up to {{amount}} in deductions if they were for business.",
-    "files": [
-      "app/pro.tsx"
-    ]
-  },
-  {
     "key": "Wrap up warm out there ❄️",
     "files": [
       "domain/seasons.ts"
+    ]
+  },
+  {
+    "key": "Year-end summary on screen",
+    "files": [
+      "app/pro.tsx"
     ]
   },
   {
@@ -6465,13 +6493,6 @@
     ]
   },
   {
-    "key": "You both get +10 free drives a month when a friend joins.",
-    "files": [
-      "app/(tabs)/settings.tsx",
-      "components/celebration.tsx"
-    ]
-  },
-  {
     "key": "You can claim up to 5,000 business kilometres per car each income year. This report assumes one car.",
     "files": [
       "domain/regions.ts"
@@ -6496,27 +6517,20 @@
     ]
   },
   {
-    "key": "You entered {{code}}. Your 10 extra drives are on their way once the invite is confirmed.",
+    "key": "You entered {{code}}. It’s confirmed once iCloud can check it.",
     "files": [
       "app/(tabs)/settings.tsx",
       "app/friends.tsx"
     ]
   },
   {
-    "key": "You get 10 extra free drives every month.",
-    "files": [
-      "components/redeem-code.tsx",
-      "referral/referral.tsx"
-    ]
-  },
-  {
-    "key": "You have Pro, so your drives are already unlimited. Your friends still get their extra drives.",
+    "key": "You have Pro, so these are already yours. Your sprout garden still grows, and so does your badge.",
     "files": [
       "app/friends.tsx"
     ]
   },
   {
-    "key": "You joined with {{code}}: 10 extra free drives a month.",
+    "key": "You joined with {{code}}.",
     "files": [
       "app/(tabs)/settings.tsx",
       "app/friends.tsx"
@@ -6592,12 +6606,6 @@
     "key": "Your {{year}} tax return is due in a month",
     "files": [
       "domain/deadlines.ts"
-    ]
-  },
-  {
-    "key": "Your 10 extra drives are on their way once the invite is confirmed.",
-    "files": [
-      "components/redeem-code.tsx"
     ]
   },
   {
@@ -6679,15 +6687,29 @@
     ]
   },
   {
-    "key": "Your free plan: {{count}} automatic drives a month.",
-    "files": [
-      "app/friends.tsx"
-    ]
-  },
-  {
     "key": "Your free trial ends on {{date}}",
     "files": [
       "purchases/trial-reminder.ts"
+    ]
+  },
+  {
+    "key": "Your friend gets 50% off their first year of Pro. You unlock Pro perks for free as friends join.",
+    "files": [
+      "components/invite.tsx"
+    ]
+  },
+  {
+    "key": "Your friend’s gift is waiting: 50% off your first year of Pro, on the Pro screen.",
+    "files": [
+      "components/redeem-code.tsx",
+      "referral/referral.tsx"
+    ]
+  },
+  {
+    "key": "Your friend’s gift: 50% off your first year of Pro",
+    "files": [
+      "app/friends.tsx",
+      "app/pro.tsx"
     ]
   },
   {
@@ -6703,9 +6725,9 @@
     ]
   },
   {
-    "key": "Your invite code is {{code}}. Enter it when you set up MileSprout for 10 extra free drives a month.",
+    "key": "Your itemised report and every export are unlocked. Thanks for supporting MileSprout.",
     "files": [
-      "referral/links.ts"
+      "app/pro.tsx"
     ]
   },
   {
@@ -6730,6 +6752,12 @@
     "key": "Your mileage report is ready. Export it now so the figures are to hand.",
     "files": [
       "domain/deadlines.ts"
+    ]
+  },
+  {
+    "key": "Your mileage report, ready for tax time",
+    "files": [
+      "app/pro.tsx"
     ]
   },
   {
@@ -6763,6 +6791,12 @@
     ]
   },
   {
+    "key": "Your reports and exports are unlocked.",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
     "key": "Your shift ended after 16 hours",
     "files": [
       "tracking/shift-notifications.ts"
@@ -6772,6 +6806,18 @@
     "key": "Your shift is on ✓",
     "files": [
       "components/practice-tutorial.tsx"
+    ]
+  },
+  {
+    "key": "Your sprout garden",
+    "files": [
+      "components/invite.tsx"
+    ]
+  },
+  {
+    "key": "Your totals and year-end summary stay free. Pro adds the itemised log, the PDF report and every export.",
+    "files": [
+      "components/pro-prompt.tsx"
     ]
   },
   {

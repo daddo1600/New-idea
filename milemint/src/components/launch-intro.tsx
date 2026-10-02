@@ -32,7 +32,7 @@ import {
 import { type Season, seasonFor } from '@/domain/seasons';
 import { toLocalIsoDate } from '@/domain/trip';
 import { useT } from '@/i18n/i18n';
-import { type LaunchTotals, markTotalSeen, recallRegion, recallTotals } from '@/region/remembered-region';
+import { type LaunchTotals, markTotalSeen, recallGoldLeaves, recallRegion, recallTotals } from '@/region/remembered-region';
 
 /**
  * Plays on every launch while the app opens underneath: the seed (the logo's
@@ -108,20 +108,21 @@ const STEPS = 100;
  */
 export function LaunchIntro({ onDone }: { onDone: () => void }) {
   const t = useT();
-  const [mode, setMode] = useState<{ quick: LaunchTotals | null; code: RegionCode } | null>(null);
+  const [mode, setMode] = useState<{ quick: LaunchTotals | null; code: RegionCode; gold: boolean } | null>(null);
   const [skip, setSkip] = useState(false);
   useEffect(() => {
     let current = true;
     // Both are read from the keychain in milliseconds; the splash screen covers the wait.
-    Promise.all([recallRegion(), recallTotals()]).then(
-      ([remembered, totals]) =>
+    Promise.all([recallRegion(), recallTotals(), recallGoldLeaves()]).then(
+      ([remembered, totals, gold]) =>
         current &&
         setMode({
           code: remembered ?? phoneRegion(),
+          gold,
           // Real money to show: until the first business trip, keep the demo drive.
           quick: remembered && totals && totals.total > 0 ? totals : null,
         }),
-      () => current && setMode({ code: phoneRegion(), quick: null }),
+      () => current && setMode({ code: phoneRegion(), quick: null, gold: false }),
     );
     return () => {
       current = false;
@@ -144,7 +145,7 @@ export function LaunchIntro({ onDone }: { onDone: () => void }) {
           <SproutSeed size={SPLASH_SIZE} />
         </View>
       ) : mode.quick ? (
-        <QuickIntro code={mode.code} season={season} totals={mode.quick} skip={skip} onDone={onDone} />
+        <QuickIntro code={mode.code} season={season} gold={mode.gold} totals={mode.quick} skip={skip} onDone={onDone} />
       ) : (
         <FullIntro code={mode.code} season={season} skip={skip} onDone={onDone} />
       )}
@@ -156,12 +157,15 @@ export function LaunchIntro({ onDone }: { onDone: () => void }) {
 function QuickIntro({
   code,
   season,
+  gold,
   totals,
   skip,
   onDone,
 }: {
   code: RegionCode;
   season: Season | null;
+  /** Gold leaves, earned by inviting friends (the Earnings by platform perk). */
+  gold: boolean;
   totals: LaunchTotals;
   skip: boolean;
   onDone: () => void;
@@ -232,7 +236,7 @@ function QuickIntro({
       {season && <SeasonAmbient season={season.id} southern={code === 'AU'} />}
       {reduceMotion && <Seed drive={drive} />}
       <Animated.View style={logoStyle}>
-        <SeasonalSprout season={season} emerge={emerge} drive={drive} reduceMotion={reduceMotion} />
+        <SeasonalSprout season={season} gold={gold} emerge={emerge} drive={drive} reduceMotion={reduceMotion} />
         {season && hasRider(season.id) && !reduceMotion && (
           <SeasonRider
             season={season.id}
@@ -415,20 +419,23 @@ function Greeting({ text }: { text: string }) {
 
 /**
  * The sprout growing (or, with Reduce Motion, already grown), the car unless a
- * rider stands in, the season's hat and autumn's colours.
+ * rider stands in, the season's hat and autumn's colours, or gold leaves for
+ * a driver who earned them by inviting friends.
  */
 function SeasonalSprout({
   season,
+  gold = false,
   emerge,
   drive,
   reduceMotion,
 }: {
   season: Season | null;
+  gold?: boolean;
   emerge: SharedValue<number>;
   drive: SharedValue<number>;
   reduceMotion: boolean;
 }) {
-  const palette = season?.id === 'autumn' ? 'autumn' : 'mint';
+  const palette = gold ? 'gold' : season?.id === 'autumn' ? 'autumn' : 'mint';
   const hat = season ? <SeasonHat season={season.id} /> : undefined;
   if (reduceMotion) {
     return (

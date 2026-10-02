@@ -1,7 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import { randomBytes } from 'node:crypto';
 
-import { FREE_AUTO_DRIVES_PER_MONTH } from '@/domain/plan';
 
 import type { ClaimOutcome, InviteCloud, PublishOutcome } from '../cloud';
 import { canRedeem, checkRedeem, firstInstall, isReferralCode, type RedeemState } from '../code';
@@ -16,7 +15,6 @@ import {
   parseKeptRedemption,
   publishPending,
   redeemInvite,
-  referralAllowance,
   submitPendingClaim,
   type IssuedInvite,
 } from '../invites';
@@ -190,10 +188,9 @@ describe('redeeming a friend’s invite', () => {
     expect(cloud.claims.get('MNPQ-4X9')).toEqual({ claimer: 'bob', qualified: false });
   });
 
-  it('is saved as pending, with no bonus, when iCloud can’t check it', async () => {
+  it('is saved as pending when iCloud can’t check it', async () => {
     const result = await redeemInvite('MNPQ-4X9', state(), unavailable, NOW);
     expect(result).toEqual({ ok: true, redemption: { code: 'MNPQ-4X9', at: NOW.toISOString(), status: 'pending' } });
-    expect(referralAllowance({ redeemStatus: 'pending', friendsJoined: 0 })).toBe(FREE_AUTO_DRIVES_PER_MONTH);
   });
 
   it('says why iCloud turned it down: every outcome', async () => {
@@ -258,7 +255,6 @@ describe('a pending code', () => {
     expect(await submitPendingClaim(pending, cloud.as('bob'), NOW)).toEqual({ kind: 'pending' });
     cloud.online = true;
     expect(await submitPendingClaim(pending, cloud.as('bob'), NOW)).toEqual({ kind: 'granted' });
-    expect(referralAllowance({ redeemStatus: 'granted', friendsJoined: 0 })).toBe(FREE_AUTO_DRIVES_PER_MONTH + 10);
   });
 
   it('is cleared, with the reason, when the invite was used, is their own, or they already joined', async () => {
@@ -304,15 +300,6 @@ describe('a pending code', () => {
     expect(canRedeem(state({ redeemedCode: null, installedAt: daysAgo(31) }), NOW)).toBe(false);
     // While pending, it can't be swapped for another.
     expect(canRedeem(state({ redeemedCode: 'MNPQ-4X9' }), NOW)).toBe(false);
-  });
-});
-
-describe('the allowance', () => {
-  it('counts a friend’s invite only once granted', () => {
-    expect(referralAllowance({ redeemStatus: null, friendsJoined: 0 })).toBe(FREE_AUTO_DRIVES_PER_MONTH);
-    expect(referralAllowance({ redeemStatus: 'pending', friendsJoined: 0 })).toBe(FREE_AUTO_DRIVES_PER_MONTH);
-    expect(referralAllowance({ redeemStatus: 'granted', friendsJoined: 0 })).toBe(FREE_AUTO_DRIVES_PER_MONTH + 10);
-    expect(referralAllowance({ redeemStatus: 'pending', friendsJoined: 3 })).toBe(FREE_AUTO_DRIVES_PER_MONTH + 30);
   });
 });
 

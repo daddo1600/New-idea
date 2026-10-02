@@ -164,11 +164,11 @@ function BurstPiece({
 /**
  * A pat on the back: confetti in the brand colours, a gold badge and a warm
  * line, for a milestone reached. Share sends a ready-made brag message with a
- * new single-use invite code, so a friend who joins earns them both 10 drives a month.
+ * new single-use invite code, so a friend who joins counts towards their perks.
  */
 export function Celebration({ content, onClose }: { content: CelebrationContent | null; onClose: () => void }) {
   const t = useT();
-  const { shareInvite, sharing } = useReferral();
+  const { shareInvite, sharing, offerCode } = useReferral();
   const reduceMotion = useReducedMotion();
   const { width, height } = useWindowDimensions();
   const pop = useSharedValue(0);
@@ -206,10 +206,12 @@ export function Celebration({ content, onClose }: { content: CelebrationContent 
             disabled={sharing}
             onPress={() => shareInvite(content.share).catch(() => {})}
             style={[styles.share, sharing && styles.dim]}>
-            <Text style={styles.shareText}>{t('Share it · friends get +10 drives')}</Text>
+            <Text style={styles.shareText}>
+              {offerCode ? t('Share it · friends get 50% off Pro') : t('Share it with a friend')}
+            </Text>
           </Pressable>
           {/* The share carries a new single-use invite code (src/referral/invites.ts). */}
-          <Text style={styles.reward}>{t('You both get +10 free drives a month when a friend joins.')}</Text>
+          <Text style={styles.reward}>{t('Every friend who joins unlocks Pro perks for you.')}</Text>
           <Pressable accessibilityRole="button" hitSlop={8} onPress={onClose}>
             <Text style={styles.close}>{t('Keep going')}</Text>
           </Pressable>

@@ -1,18 +1,11 @@
-import * as SecureStore from 'expo-secure-store';
 import type { SQLiteDatabase } from 'expo-sqlite';
-import { Platform } from 'react-native';
 
 import { loadSettings } from '@/db/settings-repo';
 import { listTrips } from '@/db/trips-repo';
 import { marApplies, marForYear } from '@/domain/mar';
-import { lockedTripIds } from '@/domain/plan';
 import { currentTaxYear, REGIONS, summarizeTaxYear } from '@/domain/regions';
-import { referralAllowance } from '@/referral/invites';
 
 import { rememberTotal } from './remembered-region';
-
-/** Same key the Pro provider caches the App Store status under. */
-const PRO_CACHE_KEY = 'milemint.pro-active';
 
 /**
  * Recomputes this tax year's total for the opening animation. Called when the
@@ -23,11 +16,7 @@ export async function refreshLaunchTotal(db: SQLiteDatabase): Promise<void> {
   const settings = await loadSettings(db);
   if (!settings.onboarded || !settings.region) return;
   const region = REGIONS[settings.region];
-  const isPro = Platform.OS !== 'web' && (await SecureStore.getItemAsync(PRO_CACHE_KEY).catch(() => null)) === '1';
-  const trips = await listTrips(db);
-  const allowance = referralAllowance(settings);
-  const locked = lockedTripIds(trips, isPro, allowance);
-  const visible = trips.filter((trip) => !locked.has(trip.id));
+  const visible = await listTrips(db);
   const year = currentTaxYear(region);
   // As home's hero total: parking and tolls included where they count.
   const summary = summarizeTaxYear(visible, region, year);

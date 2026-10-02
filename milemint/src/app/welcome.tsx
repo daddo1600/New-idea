@@ -42,7 +42,6 @@ import {
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { loadSettings, updateSettings } from '@/db/settings-repo';
 import { marApplies, parsePence } from '@/domain/mar';
-import { FREE_AUTO_DRIVES_PER_MONTH } from '@/domain/plan';
 import { displayLocale, formatRate, REGIONS, vehicleRule, type RegionCode } from '@/domain/regions';
 import { type CheerKind, DONE, HOURS, PURPOSE, setupCheer } from '@/domain/setup-cheers';
 import { useTheme } from '@/hooks/use-theme';
@@ -841,22 +840,16 @@ export default function WelcomeScreen() {
               <View style={[styles.glass, styles.reminderRow]}>
                 <Text style={styles.tipIcon}>🎁</Text>
                 <View style={styles.flex}>
-                  <Text style={styles.pointTitle}>{t('Free to start')}</Text>
+                  <Text style={styles.pointTitle}>{t('Free for good')}</Text>
                   <Text style={styles.pointBody}>
-                    {/* The limit up front, in the same words as the plan meter's "What counts?" (domain/plan). */}
-                    {shifts
-                      ? t(
-                          'Free: {{count}} work drives a month. Personal drives don’t count, and a shift counts once a day. Trips you add by hand are always free. Pro: unlimited.',
-                          { count: FREE_AUTO_DRIVES_PER_MONTH },
-                        )
-                      : t(
-                          'Free: {{count}} work drives a month. Personal drives don’t count, and trips you add by hand are always free. Pro: unlimited.',
-                          { count: FREE_AUTO_DRIVES_PER_MONTH },
-                        )}
+                    {/* The split up front, in the same words as the Pro screen (domain/plan). */}
+                    {t(
+                      'Every drive tracked, with no monthly limit, plus your totals and year-end summary. Pro adds the itemised report and exports.',
+                    )}
                   </Text>
                 </View>
               </View>
-              {/* Optional: a friend's code adds 10 drives a month (also in Settings for 30 days). */}
+              {/* Optional: a friend's code (also in Settings for 30 days). */}
               <RedeemCode onBrand initialCode={linkCode} style={styles.glass} />
             </>
           )}

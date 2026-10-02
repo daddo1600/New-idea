@@ -22,7 +22,8 @@ const PROBLEMS: Record<RedeemProblem, string> = {
  * "Got a code from a friend?": a link that opens a box for a friend's invite
  * code. `onBrand` for the green welcome screen. `initialCode` (from an
  * invite link) opens it already filled in. A code iCloud can't check yet is
- * saved as pending, and says so: its drives come once it's confirmed. Renders
+ * saved as pending, and says so. Once the offer code is set, the code also
+ * opens the friend's gift (50% off the first year of Pro). Renders
  * nothing (not even `style`'s box) once a code can't be entered any more.
  */
 export function RedeemCode({
@@ -36,7 +37,7 @@ export function RedeemCode({
 }) {
   const t = useT();
   const theme = useTheme();
-  const { canRedeem, redeemedCode, redeemStatus, redeemRefusal, redeem } = useReferral();
+  const { canRedeem, redeemedCode, redeemStatus, redeemRefusal, redeem, offerCode } = useReferral();
   const [open, setOpen] = useState(!!initialCode);
   const [text, setText] = useState(String(initialCode ?? ''));
   const [problem, setProblem] = useState<RedeemProblem | null>(null);
@@ -54,13 +55,19 @@ export function RedeemCode({
         {redeemStatus === 'granted' ? (
           <>
             <Text style={[styles.title, { color }]}>🎉 {t('Code {{code}} added', { code: redeemedCode })}</Text>
-            <Text style={[styles.body, { color: soft }]}>{t('You get 10 extra free drives every month.')}</Text>
+            <Text style={[styles.body, { color: soft }]}>
+              {offerCode
+                ? t('Your friend’s gift is waiting: 50% off your first year of Pro, on the Pro screen.')
+                : t('Thanks! It counts towards your friend’s perks.')}
+            </Text>
           </>
         ) : (
           <>
             <Text style={[styles.title, { color }]}>{t('Code {{code}} saved', { code: redeemedCode })}</Text>
             <Text style={[styles.body, { color: soft }]}>
-              {t('Your 10 extra drives are on their way once the invite is confirmed.')}
+              {offerCode
+                ? t('Your friend’s gift is waiting: 50% off your first year of Pro, on the Pro screen.')
+                : t('It’s confirmed once iCloud can check it, and counts towards your friend’s perks.')}
             </Text>
           </>
         )}
@@ -101,7 +108,9 @@ export function RedeemCode({
   return (
     <View style={[styles.box, style]}>
       <Text style={[styles.title, { color }]}>{t('Got a code from a friend?')}</Text>
-      <Text style={[styles.body, { color: soft }]}>{t('Enter it for 10 extra free drives every month.')}</Text>
+      <Text style={[styles.body, { color: soft }]}>
+        {offerCode ? t('Enter it for 50% off your first year of Pro.') : t('Enter it so your friend gets the credit.')}
+      </Text>
       {refusal}
       <View style={styles.row}>
         <TextInput

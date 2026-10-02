@@ -14,14 +14,12 @@ import { PlaceAskCard } from '@/components/place-ask-card';
 import { BackdateOffer, EndShiftPrompt, UndoEndBar } from '@/components/shift-prompts';
 import { shortTime } from '@/components/shift-row';
 import { LiveDriveBanner } from '@/components/home/live-drive-banner';
-import { PlanMeter } from '@/components/home/plan-meter';
 import { PurposeNudge } from '@/components/home/purpose-nudge';
 import { ShiftBar } from '@/components/home/shift-bar';
 import { ReliefNudge, SummaryCard } from '@/components/home/summary-card';
 import { TrackingCard } from '@/components/home/tracking-card';
 import { AddTripLink } from '@/components/trips/add-trip-links';
-import { BulkActions, FillingBar, SelectBar, ValueWaitsNotice } from '@/components/trips/list-bars';
-import { LockedTripRow } from '@/components/trips/locked-trip-row';
+import { BulkActions, FillingBar, SelectBar } from '@/components/trips/list-bars';
 import { SelectableTripRow } from '@/components/trips/selectable-trip-row';
 import { LeavesWithPurpose, needsPurpose, TripRow } from '@/components/trips/trip-row';
 import { TrackingHealthCard } from '@/components/tracking-health-card';
@@ -43,7 +41,6 @@ import { useTheme } from '@/hooks/use-theme';
 import { useTripList } from '@/hooks/use-trip-list';
 import { useYearMoney } from '@/hooks/use-year-money';
 import { useT } from '@/i18n/i18n';
-import { usePro } from '@/purchases/pro';
 import { useRegion } from '@/region/region';
 import { rememberTotal } from '@/region/remembered-region';
 import { useShift } from '@/tracking/use-shift';
@@ -59,7 +56,7 @@ import { useMilestoneCelebration } from '@/milestones/use-milestones';
  */
 export default function HomeScreen() {
   const list = useTripList();
-  const { trips, places, reload, setPurpose, locked, visible, deductions, kindOf } = list;
+  const { trips, places, reload, setPurpose, allTrips, deductions, kindOf } = list;
   const { selecting, setSelecting, selected, setSelected, toggle, stopSelecting, markSelected, sort } = list;
   const purposeSettings = usePurposeSettings();
   /**
@@ -79,9 +76,8 @@ export default function HomeScreen() {
   }, [fill, sortAsked]);
   const insets = useSafeAreaInsets();
   const { status } = useTracking(reload);
-  const { isPro } = usePro();
   const { region, onboarded } = useRegion();
-  const money = useYearMoney(visible, deductions, places);
+  const money = useYearMoney(allTrips, deductions, places);
   const { taxYear, summary, relief, nudge } = money;
   // Opened from the report: show its year's drives without a purpose (once per visit).
   if (fillAsked !== fillSeen) {
@@ -115,7 +111,7 @@ export default function HomeScreen() {
     () => (shiftMode.shift ? (trips ?? []).filter((trip) => trip.shiftId === shiftMode.shift?.id) : []),
     [trips, shiftMode.shift],
   );
-  const celebration = useMilestoneCelebration(trips ? visible : null, deductions, region);
+  const celebration = useMilestoneCelebration(trips ? allTrips : null, deductions, region);
   // Tax offices want a purpose for every business drive: the one-tap choices, and the drives still missing one.
   const trackingHealth = useTrackingHealth();
   const trackingProblem = ['tracking-stopped', 'stale', 'precise-location-off'].includes(trackingHealth.health?.issue ?? '');
@@ -130,10 +126,9 @@ export default function HomeScreen() {
       }),
     [trips, purposeSettings.usual, purposeSettings.chosen, purposeSettings.shiftMode, purposeSettings.clientPrivacy],
   );
-  // Drives past the free allowance are left out, as in the report's count: their value isn't claimed yet.
   const needPurpose = useMemo(
-    () => visible.filter((trip) => needsPurpose(trip) && taxYearOf(trip.localDate, region) === (filling ?? taxYear)),
-    [visible, region, taxYear, filling],
+    () => allTrips.filter((trip) => needsPurpose(trip) && taxYearOf(trip.localDate, region) === (filling ?? taxYear)),
+    [allTrips, region, taxYear, filling],
   );
   // For the opening next time: this tax year's total and business distance, grown from zero.
   const launchTotal = money.yearTotal;
@@ -145,7 +140,6 @@ export default function HomeScreen() {
 
   if (!trips) return <ActivityIndicator style={styles.loading} />;
 
-  // Drives past the free allowance can be sorted too (sorting one personal frees a slot).
   const unsorted = trips.filter((trip) => trip.classification === 'unclassified');
   // From the Money tab's countdown: every unsorted drive picked, to sort at once.
   if (sortPending) {
@@ -156,7 +150,7 @@ export default function HomeScreen() {
   }
 
   // "Worth up to" on unsorted rows: the year's business distance added up once, not once per row.
-  const potentialOf = potentialDeductions(visible, region);
+  const potentialOf = potentialDeductions(allTrips, region);
 
   // Home lists what needs doing: the drives to sort, or the ones missing a purpose.
   const items: readonly Trip[] = filling !== null ? needPurpose : unsorted;
@@ -300,7 +294,7 @@ export default function HomeScreen() {
             {filling === null && needPurpose.length > 0 && (
               <PurposeNudge count={needPurpose.length} onFill={() => setFilling(taxYear)} />
             )}
-            {visible.length > 0 && <ReminderAsk />}
+            {allTrips.length > 0 && <ReminderAsk />}
             {garage.vehicles.length > 1 && garage.current && (
               <Pressable
                 accessibilityRole="button"
@@ -318,7 +312,6 @@ export default function HomeScreen() {
                 </ThemedText>
               </Pressable>
             )}
-            {!isPro && <PlanMeter trips={trips} locked={locked} />}
             {filling !== null && <FillingBar count={needPurpose.length} onDone={() => setFilling(null)} />}
             {filling === null && (unsorted.length > 0 || selecting) && (
               <SelectBar
@@ -359,18 +352,11 @@ export default function HomeScreen() {
         renderItem={({ item }) =>
           selecting ? (
             <SelectableTripRow trip={item} selected={selected.has(item.id)} onToggle={() => toggle(item)} />
-          ) : locked.has(item.id) ? (
-            <LockedTripRow
-              trip={item}
-              onClassify={(c) => sort([item], c)}
-              onLongPress={() => list.confirmDelete(item)}
-            />
           ) : (
             renderTripRow(item)
           )
         }
       />
-      {list.waiting && <ValueWaitsNotice bottom={0} onClose={list.closeWaiting} />}
       <Celebration content={celebration.content} onClose={celebration.close} />
       {/* Once after setup (or replayed from Settings): sort two sample drives, nothing saved. */}
       <PracticeTutorial

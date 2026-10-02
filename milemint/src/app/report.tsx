@@ -3,6 +3,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
+import { ProExportPrompt } from '@/components/pro-prompt';
 import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -14,8 +15,7 @@ import { listEditedTripIds } from '@/db/trips-repo';
 import { listAllVehicles } from '@/db/vehicles-repo';
 import type { Vehicle } from '@/domain/vehicles';
 import { useTrips } from '@/db/use-trips';
-import { lockedTripIds } from '@/domain/plan';
-import { formatsFor, PRO_FORMATS, type ExportFormat } from '@/domain/accounting-export';
+import { formatsFor, type ExportFormat } from '@/domain/accounting-export';
 import { logbooksForReport, summarizeLogbook, type CarExpenses, type Logbook } from '@/domain/logbook';
 import { buildReport, reportYears } from '@/domain/report';
 import { parseOdometer } from '@/domain/parse-number';
@@ -25,7 +25,6 @@ import { useMileagePay } from '@/hooks/use-mileage-pay';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
-import { useAllowance } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 import { PDF_AVAILABLE, shareCsv, shareLogbookCsv, sharePdf } from '@/reports/export';
 
@@ -59,8 +58,8 @@ export default function ReportScreen() {
   const db = useSQLiteContext();
   const theme = useTheme();
   const t = useT();
+  // The summary on screen is free; the itemised log and every export are Pro (domain/plan).
   const { isPro } = usePro();
-  const allowance = useAllowance();
   const { region } = useRegion();
   const { trips, places } = useTrips();
   // UK employees: parking and tolls are listed apart from Mileage Allowance Relief.
@@ -113,9 +112,7 @@ export default function ReportScreen() {
     return (withTrips.includes(current) ? withTrips : [current, ...withTrips]).slice(0, YEARS_SHOWN);
   }, [trips, region]);
 
-  // Drives past the free allowance are in the trip log, but their value (and every total) waits for Pro.
-  const locked = useMemo(() => lockedTripIds(trips ?? [], isPro, allowance), [trips, isPro, allowance]);
-  const visible = useMemo(() => (trips ?? []).filter((trip) => !locked.has(trip.id)), [trips, locked]);
+  const visible = useMemo(() => trips ?? [], [trips]);
   const today = toLocalIsoDate(new Date());
   const yearLogbooks = useMemo(
     () =>
@@ -145,7 +142,6 @@ export default function ReportScreen() {
   const report = useMemo(
     () =>
       buildReport(trips ?? [], region, Number(year), {
-        locked,
         employee,
         places,
         editedIds,
@@ -156,7 +152,7 @@ export default function ReportScreen() {
           expenses: expenses?.get(summary.logbook.vehicleId) ?? null,
         })),
       }),
-    [trips, locked, employee, region, year, places, editedIds, odometer, vehicles, yearLogbooks, expenses],
+    [trips, employee, region, year, places, editedIds, odometer, vehicles, yearLogbooks, expenses],
   );
 
   if (!trips) return <ActivityIndicator style={styles.loading} />;
@@ -244,16 +240,6 @@ export default function ReportScreen() {
               {t(region.caveat)}
             </ThemedText>
           )}
-          {report.lockedCount > 0 && (
-            <Pressable accessibilityRole="button" onPress={() => router.push('/pro')} hitSlop={8}>
-              <ThemedText type="small" style={{ color: theme.accent }}>
-                {t(
-                  '{{count}} drives past the free plan’s monthly limit aren’t in these totals. They’re in the spreadsheet; their value unlocks with Pro.',
-                  { count: report.lockedCount },
-                )}
-              </ThemedText>
-            </Pressable>
-          )}
           {report.unclassifiedCount > 0 && (
             <ThemedText type="small" themeColor="danger">
               {t('{{count}} trips aren’t classified yet. Sort them first so the report is complete.', {
@@ -300,6 +286,8 @@ export default function ReportScreen() {
           </ThemedText>
         )}
 
+        {!isPro && <ProExportPrompt />}
+
         <View style={styles.option}>
           <ThemedText type="smallBold">{t('Export your mileage')}</ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
@@ -322,7 +310,6 @@ export default function ReportScreen() {
                   ]}>
                   <ThemedText type="smallBold" style={{ color: selected ? theme.onAccent : theme.text }}>
                     {t(FORMAT_LABELS[option])}
-                    {PRO_FORMATS.has(option) && !isPro ? ' · Pro' : ''}
                   </ThemedText>
                 </Pressable>
               );
@@ -331,25 +318,19 @@ export default function ReportScreen() {
           <ThemedText type="small" themeColor="textSecondary">
             {format === 'spreadsheet'
               ? miles
-                ? t(
-                    'Every trip with date, places, miles, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.',
-                  )
+                ? t('Every trip with date, places, miles, purpose and deduction. Opens in Excel, Numbers or Google Sheets.')
                 : t(
-                    'Every trip with date, places, kilometres, purpose and deduction. Opens in Excel, Numbers or Google Sheets. Always free: it’s your data.',
+                    'Every trip with date, places, kilometres, purpose and deduction. Opens in Excel, Numbers or Google Sheets.',
                   )
               : t(FORMAT_NOTES[format])}
           </ThemedText>
           <Pressable
             accessibilityRole="button"
-            disabled={empty || busy !== null}
-            onPress={PRO_FORMATS.has(format) && !isPro ? () => router.push('/pro') : checkPurposes(() => run('csv'))}
-            style={[styles.outline, { borderColor: theme.accent, opacity: empty || busy ? 0.5 : 1 }]}>
+            disabled={(isPro && empty) || busy !== null}
+            onPress={isPro ? checkPurposes(() => run('csv')) : () => router.push('/pro')}
+            style={[styles.outline, { borderColor: theme.accent, opacity: (isPro && empty) || busy ? 0.5 : 1 }]}>
             <ThemedText type="smallBold" style={{ color: theme.accent }}>
-              {busy === 'csv'
-                ? t('Preparing…')
-                : PRO_FORMATS.has(format) && !isPro
-                  ? t('Unlock with Pro')
-                  : t('Export')}
+              {busy === 'csv' ? t('Preparing…') : isPro ? t('Export') : t('Unlock with Pro')}
             </ThemedText>
           </Pressable>
         </View>
@@ -376,9 +357,9 @@ export default function ReportScreen() {
           ) : (
             <Pressable
               accessibilityRole="button"
-              disabled={empty || busy !== null}
+              disabled={(isPro && empty) || busy !== null}
               onPress={isPro ? checkPurposes(() => run('pdf')) : () => router.push('/pro')}
-              style={[styles.filled, { backgroundColor: theme.accent, opacity: empty || busy ? 0.5 : 1 }]}>
+              style={[styles.filled, { backgroundColor: theme.accent, opacity: (isPro && empty) || busy ? 0.5 : 1 }]}>
               <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
                 {busy === 'pdf' ? t('Preparing…') : isPro ? t('Create PDF report') : t('Unlock with Pro')}
               </ThemedText>
@@ -402,6 +383,7 @@ export default function ReportScreen() {
                 accessibilityRole="button"
                 disabled={busy !== null}
                 onPress={async () => {
+                  if (!isPro) return router.push('/pro');
                   setError(null);
                   setBusy('logbook');
                   try {
@@ -414,7 +396,11 @@ export default function ReportScreen() {
                 }}
                 style={[styles.outline, { borderColor: theme.accent, opacity: busy ? 0.5 : 1 }]}>
                 <ThemedText type="smallBold" style={{ color: theme.accent }}>
-                  {busy === 'logbook' ? t('Preparing…') : t('Export logbook: {{vehicle}}', { vehicle: entry.vehicle })}
+                  {busy === 'logbook'
+                    ? t('Preparing…')
+                    : isPro
+                      ? t('Export logbook: {{vehicle}}', { vehicle: entry.vehicle })
+                      : t('Unlock with Pro')}
                 </ThemedText>
               </Pressable>
             ))}

@@ -1,158 +1,115 @@
-import type { Trip } from './trip';
+import { FOUNDING_BOOST_ENDS, FRIEND_GIFT_MONTHS } from '@/constants/rewards';
+
+import { toLocalIsoDate } from './trip';
 
 /**
- * Free plan: this many automatic work drives per calendar month, the same
- * allowance as MileIQ, so light drivers can stay free for good. Manual trips
- * and the spreadsheet export are always free. What counts (see `counts`):
- *  - personal drives never count: sorting a drive personal gives its slot back;
- *  - unsorted drives count until they're sorted;
- *  - in shift mode a whole shift counts once a day: a delivery shift is split
- *    into many drives by the waits at each pickup.
- * Drives past the allowance are never hidden or lost: they're recorded, shown
- * in full and sortable, and in the spreadsheet export. Only their value (the
- * money in totals, reports and accounting exports) waits for Pro.
+ * Free and Pro. Free is for keeping the record: unlimited automatic tracking
+ * (no monthly cap, nothing locked or hidden), sorting, the money totals, the
+ * tax-year totals and year-end summary on screen, trips added by hand and the
+ * practice run. Pro is for getting the record out and the extras built on it:
+ * the features below. Nothing here touches tracking, so a free user's drives
+ * are always all there and all counted.
  */
-export const FREE_AUTO_DRIVES_PER_MONTH = 40;
+export type ProFeature =
+  /** The itemised log or report and every export: PDF, CSV, the spreadsheet, accounting formats, the ATO logbook CSV and the P87 summary. */
+  | 'reports'
+  /** Sending the report to an accountant. */
+  | 'accountant'
+  /** Making Tax Digital quarterly figures (UK). */
+  | 'mtd'
+  /** Earnings by platform (Uber, Deliveroo…). */
+  | 'platform-earnings'
+  /** The tax set-aside pot. */
+  | 'tax-set-aside'
+  /** Importing a log from another app. */
+  | 'import';
 
-/**
- * Referrals, Dropbox style and uncapped: joining with a friend's single-use
- * invite adds this many automatic drives a month, and so does every friend
- * who joins with one of yours. Both sides get it, for good.
- */
-export const REFERRAL_BONUS_DRIVES = 10;
+/** Rewards for inviting friends. Never a report or an export: those are what Pro is paid for. */
+export type Perk = 'tax-set-aside' | 'platform-earnings' | 'founding-badge';
 
-/** No limit on friends in practice; this only stops a corrupted count reaching Infinity. */
-const MAX_FRIENDS_COUNTED = 10_000;
-
-/**
- * The free plan's automatic drives a month: the base allowance, plus a bonus
- * for having joined with a friend's invite (`redeemed`: only once iCloud has
- * confirmed it, never while it's pending) and one for each friend who joined
- * with this user's invites (counted in iCloud; 0 until that's switched on).
- */
-export function monthlyAllowance({ redeemed, friendsJoined }: { redeemed: boolean; friendsJoined: number }): number {
-  const friends = Number.isFinite(friendsJoined)
-    ? Math.min(MAX_FRIENDS_COUNTED, Math.max(0, Math.floor(friendsJoined)))
-    : 0;
-  return FREE_AUTO_DRIVES_PER_MONTH + REFERRAL_BONUS_DRIVES * ((redeemed ? 1 : 0) + friends);
-}
-
-/** YYYY-MM of a trip's local date: the month its drive counts towards. */
-function monthOf(trip: Pick<Trip, 'localDate'>): string {
-  return trip.localDate.slice(0, 7);
-}
-
-/**
- * What the plan looks at. `classification` and `rejoinedAt` are optional so
- * callers (and tests) without them treat every automatic drive as counting.
- */
-export type Countable = Pick<Trip, 'id' | 'localDate' | 'startedAt' | 'source'> &
-  Partial<Pick<Trip, 'classification' | 'rejoinedAt'>> & { shiftId?: string | null; offShiftId?: string | null };
-
-/** Whether a drive uses the free allowance: automatic and not sorted personal. */
-export function counts(trip: Pick<Countable, 'source' | 'classification'>): boolean {
-  return trip.source === 'auto' && trip.classification !== 'personal';
-}
-
-/**
- * What uses up the allowance: each drive on its own, or a shift's drives on
- * one day together. Per day, so a shift that's never ended can't make every
- * later drive free. The part of a drive cut off a shift's end goes with that
- * shift, so one drive never takes two slots.
- */
-function allowanceKey(
-  trip: Pick<Countable, 'id' | 'localDate'> & { shiftId?: string | null; offShiftId?: string | null },
-): string {
-  const shift = trip.shiftId ?? trip.offShiftId;
-  return shift ? `shift:${shift}:${trip.localDate}` : trip.id;
-}
-
-/**
- * Drives whose value waits for Pro: the ones past the monthly allowance.
- * They are still recorded and shown in full (see FREE_AUTO_DRIVES_PER_MONTH);
- * upgrading unlocks every one. Personal drives are never locked.
- *
- * Earliest first: within a month the allowance goes to drives (or shift days)
- * in the order they were driven, so logging a new drive never locks one the
- * user has already seen, and sorting one personal unlocks the earliest
- * locked one.
- *
- * Sorting back from personal: a drive sorted personal and later back to
- * business rejoins the queue when it was sorted back (`rejoinedAt`), not when
- * it was driven. It takes a free slot if there is one; otherwise its own value
- * waits for Pro, and every drive already showing its value keeps it. The only
- * drive that can change is the one the user just touched (home says so when it
- * happens), so nothing goes from unlocked to locked. A shift day keeps its
- * place while any of its drives still counts; if every one was personal and
- * one is sorted back, the day rejoins the same way.
- */
-export function lockedTripIds(
-  trips: readonly Countable[],
-  isPro: boolean,
-  allowance = FREE_AUTO_DRIVES_PER_MONTH,
-): Set<string> {
-  const locked = new Set<string>();
-  if (isPro) return locked;
-  for (const groups of groupsByMonth(trips).values()) {
-    const queue = groups.filter((group): group is Group & { at: string } => group.at !== null);
-    queue.sort((a, b) => a.at.localeCompare(b.at) || a.key.localeCompare(b.key));
-    for (const group of queue.slice(Math.max(0, allowance))) {
-      for (const id of group.ids) locked.add(id);
-    }
-  }
-  return locked;
-}
-
-type Group = {
-  key: string;
-  /** Drives in it that count; their value waits for Pro if the group is past the allowance. */
-  ids: string[];
-  /** Its place in the month's queue; null when nothing in it counts. */
-  at: string | null;
+export type PerkStep = {
+  perk: Perk;
+  /** Friends joined to earn it. */
+  friends: number;
+  /** The same during the founding boost (until FOUNDING_BOOST_ENDS). */
+  boosted: number;
 };
 
-/** Each month's automatic drives as allowance groups (a drive, or a shift day). */
-function groupsByMonth(trips: readonly Countable[]): Map<string, Group[]> {
-  const members = new Map<string, Map<string, Countable[]>>();
-  for (const trip of trips) {
-    if (trip.source !== 'auto') continue;
-    const month = monthOf(trip);
-    let groups = members.get(month);
-    if (!groups) members.set(month, (groups = new Map()));
-    const key = allowanceKey(trip);
-    const drives = groups.get(key);
-    if (drives) drives.push(trip);
-    else groups.set(key, [trip]);
-  }
-  const months = new Map<string, Group[]>();
-  for (const [month, groups] of members) {
-    months.set(
-      month,
-      [...groups].map(([key, drives]) => {
-        // Personal drives included: one sorted personal mustn't move its shift day later.
-        const start = drives.reduce((min, d) => (d.startedAt < min ? d.startedAt : min), drives[0].startedAt);
-        const group: Group = { key, ids: [], at: null };
-        for (const drive of drives) {
-          if (!counts(drive)) continue;
-          group.ids.push(drive.id);
-          const at = drive.rejoinedAt && drive.rejoinedAt > drive.startedAt ? drive.rejoinedAt : start;
-          if (group.at === null || at < group.at) group.at = at;
-        }
-        return group;
-      }),
-    );
-  }
-  return months;
+/** The ladder, in order: each step needs more friends than the one before. */
+export const PERK_LADDER: readonly PerkStep[] = [
+  { perk: 'tax-set-aside', friends: 1, boosted: 1 },
+  { perk: 'platform-earnings', friends: 3, boosted: 2 },
+  { perk: 'founding-badge', friends: 5, boosted: 3 },
+];
+
+/** The Pro feature a perk unlocks for good, if it unlocks one. */
+const PERK_FEATURES: Partial<Record<Perk, ProFeature>> = {
+  'tax-set-aside': 'tax-set-aside',
+  'platform-earnings': 'platform-earnings',
+};
+
+/** Whether the founding boost is on: up to and including FOUNDING_BOOST_ENDS, on the user's own calendar. */
+export function foundingBoost(now: Date, ends = FOUNDING_BOOST_ENDS): boolean {
+  return toLocalIsoDate(now) <= ends;
+}
+
+/** Friends needed for a step right now. */
+export function friendsNeeded(step: PerkStep, now: Date): number {
+  return foundingBoost(now) ? step.boosted : step.friends;
+}
+
+/** A friend count from storage or iCloud as a whole number from 0 (anything odd counts as 0). */
+function friendsOf(friendsJoined: number): number {
+  return Number.isFinite(friendsJoined) ? Math.max(0, Math.floor(friendsJoined)) : 0;
 }
 
 /**
- * Drives (or shift days) using the allowance in the given month (YYYY-MM),
- * for the "12 of 40" meter. Personal drives aren't counted.
+ * The perks earned, in ladder order: those the friends reach now, plus those
+ * `kept` from before. A perk is for good, so one earned during the founding
+ * boost stays after the thresholds go back up.
  */
-export function autoDrivesInMonth(trips: readonly Countable[], month: string): number {
-  const counted = new Set<string>();
-  for (const trip of trips) {
-    if (counts(trip) && monthOf(trip) === month) counted.add(allowanceKey(trip));
-  }
-  return counted.size;
+export function earnedPerks(friendsJoined: number, now: Date, kept: readonly Perk[] = []): Perk[] {
+  const friends = friendsOf(friendsJoined);
+  return PERK_LADDER.filter((step) => kept.includes(step.perk) || friends >= friendsNeeded(step, now)).map(
+    (step) => step.perk,
+  );
+}
+
+/** The next perk to earn and how many more friends it needs; null once every perk is earned. */
+export function nextPerk(
+  friendsJoined: number,
+  now: Date,
+  earned: readonly Perk[],
+): { perk: Perk; more: number } | null {
+  const step = PERK_LADDER.find((candidate) => !earned.includes(candidate.perk));
+  if (!step) return null;
+  return { perk: step.perk, more: Math.max(1, friendsNeeded(step, now) - friendsOf(friendsJoined)) };
+}
+
+/** Whether the user can use a Pro feature: with Pro, or through a perk (never reports or exports). */
+export function canUse(feature: ProFeature, { isPro, perks }: { isPro: boolean; perks: readonly Perk[] }): boolean {
+  if (isPro) return true;
+  return perks.some((perk) => PERK_FEATURES[perk] === feature);
+}
+
+/**
+ * Whether a friend's gift (50% off the first year of Pro) is still offered:
+ * an offer code is set, and a friend's code was entered in the last
+ * FRIEND_GIFT_MONTHS months.
+ */
+export function friendGiftOpen({
+  offerCode,
+  redeemedAt,
+  now,
+}: {
+  offerCode: string;
+  redeemedAt: string | null;
+  now: Date;
+}): boolean {
+  if (!offerCode || !redeemedAt) return false;
+  const since = new Date(redeemedAt);
+  if (Number.isNaN(since.getTime())) return false;
+  const until = new Date(since);
+  until.setMonth(until.getMonth() + FRIEND_GIFT_MONTHS);
+  return now < until;
 }

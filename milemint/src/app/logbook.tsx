@@ -40,7 +40,6 @@ import {
   type LogbookSummary,
 } from '@/domain/logbook';
 import { parseNumber, parseOdometer } from '@/domain/parse-number';
-import { lockedTripIds } from '@/domain/plan';
 import {
   currentTaxYear,
   displayLocale,
@@ -55,7 +54,6 @@ import { vehicleLabel, type Vehicle } from '@/domain/vehicles';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
-import { useAllowance } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 import { shareLogbookCsv } from '@/reports/export';
 import { useVehicles } from '@/vehicles/use-vehicles';
@@ -70,8 +68,6 @@ export default function LogbookScreen() {
   const theme = useTheme();
   const t = useT();
   const { region } = useRegion();
-  const { isPro } = usePro();
-  const allowance = useAllowance();
   const { trips } = useTrips();
   const garage = useVehicles();
   const [chosenId, setChosenId] = useState<string | null>(null);
@@ -93,11 +89,7 @@ export default function LogbookScreen() {
     cars[0] ??
     null;
 
-  // Drives over the free limit stay out until they're unlocked, as in reports.
-  const visible = useMemo(() => {
-    const locked = lockedTripIds(trips ?? [], isPro, allowance);
-    return (trips ?? []).filter((trip) => !locked.has(trip.id));
-  }, [trips, isPro, allowance]);
+  const visible = useMemo(() => trips ?? [], [trips]);
   const summaries = useMemo(
     () => (logbooks ?? []).map((logbook) => summarizeLogbook(logbook, visible, today)),
     [logbooks, visible, today],
@@ -354,6 +346,7 @@ function ProgressCard({
   const theme = useTheme();
   const t = useT();
   const { region } = useRegion();
+  const { isPro } = usePro();
   const { logbook } = summary;
   const show = (value: number | null) => (value === null ? '' : String(value));
   const [start, setStart] = useState(show(logbook.odometerStart));
@@ -584,10 +577,11 @@ function ProgressCard({
       <Pressable
         accessibilityRole="button"
         disabled={exporting}
-        onPress={exportCsv}
+        onPress={isPro ? exportCsv : () => router.push('/pro')}
         style={[styles.outline, { borderColor: theme.accent, opacity: exporting ? 0.5 : 1 }]}>
         <ThemedText type="smallBold" style={{ color: theme.accent }}>
           {exporting ? t('Preparing…') : t('Export ATO logbook (CSV)')}
+          {!isPro && ' · Pro'}
         </ThemedText>
       </Pressable>
 

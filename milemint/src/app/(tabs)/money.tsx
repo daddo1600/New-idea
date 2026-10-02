@@ -3,7 +3,6 @@ import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 
 import { LinkRow } from '@/components/link-row';
 import { LogbookNudge } from '@/components/logbook-nudge';
-import { PlanCard } from '@/components/home/plan-card';
 import { ReliefNudge } from '@/components/home/summary-card';
 import { TaxCountdown } from '@/components/tax-countdown';
 import { ThemedText } from '@/components/themed-text';
@@ -38,8 +37,8 @@ type Line = { key: string; label: string; meters: number; valueMinor: number };
  */
 export default function MoneyScreen() {
   const list = useTripList();
-  const { trips, visible, deductions, places, locked } = list;
-  const money = useYearMoney(visible, deductions, places);
+  const { trips, allTrips, deductions, places } = list;
+  const money = useYearMoney(allTrips, deductions, places);
   const { isPro } = usePro();
   const garage = useVehicles();
   const { region } = useRegion();
@@ -49,8 +48,8 @@ export default function MoneyScreen() {
   if (!trips) return <ActivityIndicator style={styles.loading} />;
 
   const { summary, taxYear, relief } = money;
-  const months = monthLines(visible, deductions, region, taxYear);
-  const years = earlierYears(visible, deductions, region, taxYear, money.employee);
+  const months = monthLines(allTrips, deductions, region, taxYear);
+  const years = earlierYears(allTrips, deductions, region, taxYear, money.employee);
   const unsortedCount = trips.filter((trip) => trip.classification === 'unclassified').length;
   // UK employees whose employer pays the full rate have no money to show: their distance is what counts.
   const distanceOnly = relief !== null && !relief.paysLess;
@@ -96,16 +95,15 @@ export default function MoneyScreen() {
           // Home lists the drives to sort: there, they're all picked to sort at once.
           onSortUnsorted={() => router.navigate({ pathname: '/', params: { sort: 'unsorted' } })}
         />
-        {!isPro && <PlanCard trips={trips} locked={locked} />}
         {/* Australia: past 5,000 km in a car, the logbook method usually claims more. */}
-        <LogbookNudge trips={visible} vehicles={garage.vehicles} />
+        <LogbookNudge trips={allTrips} vehicles={garage.vehicles} />
 
         <ThemedView type="backgroundElement" style={styles.links}>
           <LinkRow
             icon="star.fill"
             glyph="⭐"
             title={isPro ? 'MileSprout Pro' : t('Go Pro')}
-            detail={isPro ? t('Active · thank you!') : t('Unlimited drives, PDF reports and accounting exports')}
+            detail={isPro ? t('Active · thank you!') : t('PDF report, exports and your itemised log')}
             highlight={!isPro}
             onPress={() => router.push('/pro')}
           />
@@ -193,7 +191,7 @@ function Breakdown({ lines, region, distanceOnly }: { lines: readonly Line[]; re
 
 /** This tax year's months so far, newest first: business distance and value (parking and tolls where they're added). */
 function monthLines(
-  visible: readonly Trip[],
+  allTrips: readonly Trip[],
   deductions: ReadonlyMap<string, number>,
   region: Region,
   taxYear: number,
@@ -216,7 +214,7 @@ function monthLines(
     const label = name.charAt(0).toLocaleUpperCase() + name.slice(1);
     lines.set(key, { key, label, meters: 0, valueMinor: 0 });
   }
-  for (const trip of visible) {
+  for (const trip of allTrips) {
     if (trip.classification !== 'business' || taxYearOf(trip.localDate, region) !== taxYear) continue;
     const line = lines.get(trip.localDate.slice(0, 7));
     if (!line) continue;
@@ -228,17 +226,17 @@ function monthLines(
 
 /** Every earlier tax year with drives, newest first. */
 function earlierYears(
-  visible: readonly Trip[],
+  allTrips: readonly Trip[],
   deductions: ReadonlyMap<string, number>,
   region: Region,
   taxYear: number,
   employee: boolean,
 ): Line[] {
-  const years = [...new Set(visible.map((trip) => taxYearOf(trip.localDate, region)))]
+  const years = [...new Set(allTrips.map((trip) => taxYearOf(trip.localDate, region)))]
     .filter((year) => year < taxYear)
     .sort((a, b) => b - a);
   return years.map((year) => {
-    const summary = summarizeTaxYear(visible, region, year, deductions, { employee });
+    const summary = summarizeTaxYear(allTrips, region, year, deductions, { employee });
     return { key: String(year), label: taxYearLabel(year, region), meters: summary.businessMeters, valueMinor: summary.total };
   });
 }

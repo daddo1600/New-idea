@@ -1,24 +1,21 @@
 import { router, type Href } from 'expo-router';
 import { getLocales } from 'expo-localization';
 import * as WebBrowser from 'expo-web-browser';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, Alert, Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { GoldButton } from '@/components/gold-button';
-import { PlanRules } from '@/components/plan-rules';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
-import { useTrips } from '@/db/use-trips';
 import { DEMO_MODE } from '@/dev/demo';
-import { lockedTripIds } from '@/domain/plan';
 import { formatPrice, offerTermsKey, perMonthPrice, remindsBeforeTrialEnds } from '@/domain/pro-offer';
-import { formatMoney, potentialDeductions } from '@/domain/regions';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
-import type { ProPlan, ProTrial } from '@/purchases/store';
+import { presentOfferCodeSheet, type ProPlan, type ProTrial } from '@/purchases/store';
 import { trialRemindersAllowed } from '@/purchases/trial-reminder';
+import { redeemUrl } from '@/referral/links';
 import { useReferral } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 
@@ -27,19 +24,18 @@ const PRIVACY_URL =
   'https://github.com/daddo1600/New-idea/blob/claude/ios-app-ideas-market-of84qv/milemint/docs/privacy-policy.md';
 
 /**
- * What each plan includes: `true` is a tick, a string is shown translated, and
- * `null` is the free plan's monthly drive limit.
+ * What each plan includes (`true` is a tick): tracking and seeing the money
+ * are free for good, and Pro is for getting the record out (domain/plan).
  */
-const COMPARISON: readonly [feature: string, free: string | boolean | null, pro: string | boolean][] = [
-  [msg('Automatic drive logging'), null, msg('Unlimited')],
-  [msg('Drives past the limit, saved and shown in full'), true, true],
-  [msg('The value of drives past the limit'), false, true],
-  [msg('Add missed trips by hand'), true, true],
+const COMPARISON: readonly [feature: string, free: boolean, pro: boolean][] = [
+  [msg('Automatic tracking, no monthly limit'), true, true],
   [msg('Swipe to sort business trips'), true, true],
-  [msg('Work hours, places, learned routes'), true, true],
-  [msg('Mileage log export (CSV)'), true, true],
-  [msg('Export to Xero, QuickBooks and FreeAgent'), false, true],
-  [msg('Tax-ready PDF report'), false, true],
+  [msg('Money total and tax-year totals'), true, true],
+  [msg('Year-end summary on screen'), true, true],
+  [msg('Add missed trips by hand'), true, true],
+  [msg('Itemised mileage log and PDF report'), false, true],
+  [msg('Spreadsheet, CSV, Xero, QuickBooks and FreeAgent exports'), false, true],
+  [msg('Send your report to your accountant'), false, true],
   [msg('Encrypted on your iPhone, no ads'), true, true],
 ];
 
@@ -119,9 +115,8 @@ export default function ProScreen() {
   const theme = useTheme();
   const t = useT();
   const { isPro, plans, plansLoaded, storeAvailable, busy, error, buy, restore, manage } = usePro();
-  const { trips } = useTrips();
   const { region } = useRegion();
-  const { allowance, counting, canRedeem } = useReferral();
+  const { giftOpen, offerCode } = useReferral();
   const [selected, setSelected] = useState<string | null>(null);
   // The trial reminder is only promised when it can be sent; buying never asks.
   const [canRemind, setCanRemind] = useState(DEMO_MODE);
@@ -133,16 +128,6 @@ export default function ProScreen() {
       live = false;
     };
   }, []);
-
-  // What upgrading is worth to this user right now, if they've hit the limit.
-  const locked = useMemo(() => {
-    const ids = lockedTripIds(trips ?? [], false, allowance);
-    const visible = (trips ?? []).filter((trip) => !ids.has(trip.id));
-    const drives = (trips ?? []).filter((trip) => ids.has(trip.id));
-    const potentialOf = potentialDeductions(visible, region);
-    const value = drives.reduce((sum, trip) => sum + potentialOf(trip), 0);
-    return { count: drives.length, value };
-  }, [trips, region, allowance]);
 
   // Close once the subscription becomes active here, whether bought or restored.
   const wasPro = useRef(isPro);
@@ -159,7 +144,7 @@ export default function ProScreen() {
         <ScrollView contentContainerStyle={styles.content}>
           <ThemedText type="subtitle">{t('MileSprout Pro is active')}</ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
-            {t('Every drive is logged and unlocked. Thanks for supporting MileSprout.')}
+            {t('Your itemised report and every export are unlocked. Thanks for supporting MileSprout.')}
           </ThemedText>
           {storeAvailable && (
             <Pressable accessibilityRole="button" onPress={manage} hitSlop={8}>
@@ -183,6 +168,12 @@ export default function ProScreen() {
 
   const plan = plans.find((p) => p.id === selected) ?? plans[0];
 
+  // The friend's gift: Apple's own sheet for typing an offer code, or (no StoreKit here) the App Store's redeem page.
+  const redeemGift = async () => {
+    const shown = await presentOfferCodeSheet().catch(() => false);
+    if (!shown) Linking.openURL(redeemUrl(offerCode)).catch(() => {});
+  };
+
   const onRestore = async () => {
     const found = await restore();
     if (!found) Alert.alert(t('No subscription found'), t('This Apple Account doesn’t have MileSprout Pro.'));
@@ -191,39 +182,43 @@ export default function ProScreen() {
   return (
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        <ThemedText type="subtitle">{t('Log every drive with MileSprout Pro')}</ThemedText>
-        {locked.count > 0 && (
-          <ThemedView type="backgroundElement" style={[styles.locked, { borderColor: theme.accent }]}>
-            <ThemedText type="smallBold">
-              {t('{{count}} saved drives have their value waiting for Pro', { count: locked.count })}
+        <ThemedText type="subtitle">{t('Your mileage report, ready for tax time')}</ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          {t('Tracking stays free for good: every drive, with no monthly limit. Pro is for your report and exports.')}
+        </ThemedText>
+
+        {giftOpen && (
+          <ThemedView type="backgroundElement" style={styles.gift}>
+            <ThemedText type="smallBold">🎁 {t('Your friend’s gift: 50% off your first year of Pro')}</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">
+              {t(
+                'On the yearly plan, with code {{code}}. It’s one offer per purchase, so it’s instead of the free month. Pro then renews at the normal yearly price.',
+                { code: offerCode },
+              )}
             </ThemedText>
-            {locked.value > 0 && (
-              <ThemedText type="small" themeColor="textSecondary">
-                {t('Worth up to {{amount}} in deductions if they were for business.', {
-                  amount: formatMoney(locked.value, region),
-                })}
+            <Pressable
+              accessibilityRole="button"
+              onPress={redeemGift}
+              style={[styles.giftButton, { borderColor: theme.accent }]}>
+              <ThemedText type="smallBold" style={{ color: theme.accent }}>
+                {t('Redeem your friend’s gift')}
               </ThemedText>
-            )}
+            </Pressable>
           </ThemedView>
         )}
 
-        {/* The free plan's rules, the same words as home's "What counts?", so the paywall holds no surprises. */}
-        <ThemedView type="backgroundElement" style={styles.rules}>
-          <PlanRules allowance={allowance} />
-        </ThemedView>
+        <Comparison />
 
-        <Comparison allowance={allowance} />
-
-        {/* Staying free: friends add drives. The sharer's own bonus needs iCloud to count friends. */}
-        {(counting || canRedeem) && (
-          <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/friends' as Href)}>
-            <ThemedText type="small" style={{ color: theme.accent }}>
-              {counting
-                ? t('Or invite a friend: you both get 10 more free drives a month.')
-                : t('Got a code from a friend? It adds 10 free drives a month.')}
-            </ThemedText>
-          </Pressable>
-        )}
+        <ThemedText type="small" themeColor="textSecondary">
+          {region.code === 'GB'
+            ? t('Coming to Pro: earnings by platform, a tax set-aside pot and MTD quarterly figures.')
+            : t('Coming to Pro: earnings by platform and a tax set-aside pot.')}
+        </ThemedText>
+        <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/friends' as Href)}>
+          <ThemedText type="small" style={{ color: theme.accent }}>
+            {t('Or invite friends to unlock Pro perks for free ›')}
+          </ThemedText>
+        </Pressable>
 
         {!storeAvailable ? (
           <ThemedText type="small" themeColor="textSecondary">
@@ -351,22 +346,17 @@ export default function ProScreen() {
   );
 }
 
-function Comparison({ allowance }: { allowance: number }) {
+function Comparison() {
   const theme = useTheme();
   const t = useT();
-  const cell = (value: string | boolean | null, pro: boolean) =>
-    value === null || typeof value === 'string' ? (
-      <ThemedText type="small" style={[styles.planCell, pro && { color: theme.accent }]}>
-        {value === null ? t('{{count}} a month', { count: allowance }) : t(value)}
-      </ThemedText>
-    ) : (
-      <ThemedText
-        type="smallBold"
-        accessibilityLabel={value ? t('Included') : t('Not included')}
-        style={[styles.planCell, { color: value ? theme.accent : theme.textSecondary }]}>
-        {value ? '✓' : '–'}
-      </ThemedText>
-    );
+  const cell = (value: boolean) => (
+    <ThemedText
+      type="smallBold"
+      accessibilityLabel={value ? t('Included') : t('Not included')}
+      style={[styles.planCell, { color: value ? theme.accent : theme.textSecondary }]}>
+      {value ? '✓' : '–'}
+    </ThemedText>
+  );
   return (
     <ThemedView type="backgroundElement" style={styles.table}>
       <View style={styles.tableRow}>
@@ -385,8 +375,8 @@ function Comparison({ allowance }: { allowance: number }) {
           <ThemedText type="small" style={styles.feature}>
             {t(feature)}
           </ThemedText>
-          {cell(free, false)}
-          {cell(pro, true)}
+          {cell(free)}
+          {cell(pro)}
         </View>
       ))}
     </ThemedView>
@@ -407,8 +397,8 @@ const styles = StyleSheet.create({
     maxWidth: MaxContentWidth,
     alignSelf: 'center',
   },
-  locked: { borderRadius: 12, borderWidth: 1, padding: Spacing.three, gap: Spacing.half },
-  rules: { borderRadius: 12, padding: Spacing.three },
+  gift: { borderRadius: 12, borderWidth: 1, borderColor: '#EAB308', padding: Spacing.three, gap: Spacing.two },
+  giftButton: { alignItems: 'center', paddingVertical: Spacing.two + 2, borderRadius: 10, borderWidth: 1 },
   flex: { flex: 1, gap: Spacing.half },
   planHeader: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
   badge: { borderRadius: 999, paddingHorizontal: Spacing.two, paddingVertical: 2 },

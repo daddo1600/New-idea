@@ -6,6 +6,7 @@ import {
   offerTermsKey,
   perMonthPrice,
   remindsBeforeTrialEnds,
+  startsFreeTrial,
   trialEnd,
   trialReminderDate,
   trialStartOf,
@@ -108,5 +109,22 @@ describe('when a purchase’s trial began', () => {
     expect(trialStartOf({ transactionDate: first })).toBe(first);
     expect(trialStartOf({ transactionDate: first, originalTransactionDateIOS: null })).toBe(first);
     expect(trialStartOf({ transactionDate: first, originalTransactionDateIOS: 0 })).toBe(first);
+  });
+});
+
+describe('whether a purchase began with the free trial', () => {
+  it('trusts the plan when StoreKit gives no offer details', () => {
+    expect(startsFreeTrial({})).toBe(true);
+    expect(startsFreeTrial({ offerIOS: null })).toBe(true);
+  });
+
+  it('is a trial only when the offer is a free trial', () => {
+    expect(startsFreeTrial({ offerIOS: { type: 'introductory', paymentMode: 'free-trial' } })).toBe(true);
+    expect(startsFreeTrial({ offerIOS: { type: 'introductory', paymentMode: 'freeTrial' } })).toBe(true);
+  });
+
+  it('is no trial for a friend’s offer code paid up front', () => {
+    expect(startsFreeTrial({ offerIOS: { type: 'code', paymentMode: 'pay-up-front' } })).toBe(false);
+    expect(startsFreeTrial({ offerIOS: { type: 'offerCode', paymentMode: 'payUpFront' } })).toBe(false);
   });
 });

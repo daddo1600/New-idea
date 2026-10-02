@@ -103,7 +103,7 @@ The calls run on launch and whenever the app comes back to the foreground, only 
 
 1. **Publish waiting invites** (`publishPending`): invites made while iCloud was out of reach. One whose code turns out to be someone else's is dropped. This is astronomically rare: there are about 164 million codes.
 2. **Check a pending code** (`submitPendingClaim`):
-   - `ok`: the code is **granted** (+10 free drives a month) and the app shows a small "🎉 Your friend's invite is confirmed" alert.
+   - `ok`: the code is **granted** (it counts towards the sharer's perks, and the friend's 50% off shows on the Pro screen once the offer code is set) and the app shows a small "🎉 Your friend's invite is confirmed" alert.
    - `used`, `own` or `already-claimed`: the code is **cleared**, with an alert giving the reason. The box opens again if the user is still inside the 30 days, and shows the same reason.
    - `not-found`: the code waits up to 7 days, in case the sharer's own iPhone was offline when they sent it. After that it's cleared.
    - `unavailable`: nothing changes.

@@ -123,6 +123,18 @@ export async function restore(): Promise<boolean> {
   return checkPro();
 }
 
+/**
+ * Apple's offer-code sheet, where a friend's code (50% off the first year) is
+ * typed in. Resolves to false when there's no sheet here (the web preview,
+ * Expo Go), so the caller can open the App Store's redeem page instead.
+ */
+export async function presentOfferCodeSheet(): Promise<boolean> {
+  if (!STORE_AVAILABLE) return false;
+  await connect();
+  await iap().presentCodeRedemptionSheetIOS();
+  return true;
+}
+
 /** Opens the App Store's own screen for cancelling or changing the plan. */
 export async function manageSubscription(): Promise<void> {
   await connect();
