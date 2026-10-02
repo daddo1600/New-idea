@@ -17,8 +17,8 @@ export function SelectBar({
   onSelectUnsorted,
   onCancel,
 }: {
-  /** What the list is called ("Trips" when not given). */
-  title?: string;
+  /** What the list is called ("Trips" when not given; null for none, the actions on the right). */
+  title?: string | null;
   selecting: boolean;
   unsortedCount: number;
   onStart: () => void;
@@ -28,10 +28,12 @@ export function SelectBar({
   const theme = useTheme();
   const t = useT();
   return (
-    <View style={styles.selectBar}>
-      <ThemedText type="smallBold" themeColor="textSecondary">
-        {title ?? t('Trips')}
-      </ThemedText>
+    <View style={[styles.selectBar, title === null && styles.actionsOnly]}>
+      {title !== null && (
+        <ThemedText type="smallBold" themeColor="textSecondary">
+          {title ?? t('Trips')}
+        </ThemedText>
+      )}
       <View style={styles.selectActions}>
         {selecting && unsortedCount > 0 && (
           <Pressable accessibilityRole="button" hitSlop={8} onPress={onSelectUnsorted}>
@@ -144,6 +146,7 @@ export function ValueWaitsNotice({ bottom, onClose }: { bottom: number; onClose:
 const styles = StyleSheet.create({
   flex: { flex: 1, gap: Spacing.one },
   selectBar: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: Spacing.one },
+  actionsOnly: { justifyContent: 'flex-end' },
   selectActions: { flexDirection: 'row', gap: Spacing.four, alignItems: 'center' },
   bulkBar: {
     position: 'absolute',

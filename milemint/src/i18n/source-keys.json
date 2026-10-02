@@ -824,15 +824,16 @@
     ]
   },
   {
-    "key": "Add a missed drive",
+    "key": "Add a drive you missed",
     "files": [
-      "components/tax-countdown.tsx"
+      "components/trips/add-trip-links.tsx"
     ]
   },
   {
-    "key": "Add a missed trip",
+    "key": "Add a missed drive",
     "files": [
-      "components/trips/add-trip-button.tsx"
+      "components/tax-countdown.tsx",
+      "components/trips/add-trip-links.tsx"
     ]
   },
   {
@@ -851,7 +852,8 @@
     "key": "Add missed trip",
     "files": [
       "app/_layout.tsx",
-      "components/tracking-health-card.tsx"
+      "components/tracking-health-card.tsx",
+      "components/trips/add-trip-links.tsx"
     ]
   },
   {
@@ -1103,7 +1105,7 @@
     ]
   },
   {
-    "key": "Automatic tracking runs on your iPhone. Tap + to add a trip and try the app here.",
+    "key": "Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here.",
     "files": [
       "components/home/tracking-card.tsx"
     ]

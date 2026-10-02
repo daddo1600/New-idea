@@ -127,7 +127,6 @@ const dictionary: Dictionary = {
   "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "ਤੁਹਾਡੇ ਜਾਂ ਤੁਹਾਡੇ ਅਕਾਊਂਟੈਂਟ ਲਈ ਭਰਨ ਲਈ ਤਿਆਰ ਰਿਪੋਰਟ: ਤੁਹਾਡੇ Schedule C Part IV ਦੇ ਕੁੱਲ ਅੰਕੜੇ, ਹਰ {{authority}} ਰੇਟ ’ਤੇ ਕਟੌਤੀ, ਅਤੇ ਪੂਰਾ ਟ੍ਰਿਪ ਲੌਗ ਜੋ ਦਿਖਾਉਂਦਾ ਹੈ ਕਿ ਕਿਹੜੇ ਟ੍ਰਿਪ ਡਰਾਈਵਿੰਗ ਦੌਰਾਨ ਦਰਜ ਹੋਏ ਅਤੇ ਕਿਹੜੇ ਬਦਲੇ ਗਏ।",
   "Active · thank you!": "ਚਾਲੂ · ਸ਼ੁਕਰੀਆ!",
   "Add a missed drive": "ਰਹਿ ਗਿਆ ਟ੍ਰਿਪ ਜੋੜੋ",
-  "Add a missed trip": "ਰਹਿ ਗਿਆ ਟ੍ਰਿਪ ਜੋੜੋ",
   "Add another time": "ਇੱਕ ਹੋਰ ਸਮਾਂ ਜੋੜੋ",
   "Add missed trip": "ਰਹਿ ਗਿਆ ਟ੍ਰਿਪ ਜੋੜੋ",
   "Add missed trips by hand": "ਰਹਿ ਗਏ ਟ੍ਰਿਪ ਹੱਥੀਂ ਜੋੜੋ",
@@ -156,7 +155,6 @@ const dictionary: Dictionary = {
   "Automatic tracking": "ਆਟੋਮੈਟਿਕ ਟ੍ਰੈਕਿੰਗ",
   "Automatic tracking is off": "ਆਟੋਮੈਟਿਕ ਟ੍ਰੈਕਿੰਗ ਬੰਦ ਹੈ",
   "Automatic tracking is paused": "ਆਟੋਮੈਟਿਕ ਟ੍ਰੈਕਿੰਗ ਰੁਕੀ ਹੋਈ ਹੈ",
-  "Automatic tracking runs on your iPhone. Tap + to add a trip and try the app here.": "ਆਟੋਮੈਟਿਕ ਟ੍ਰੈਕਿੰਗ ਤੁਹਾਡੇ iPhone ’ਤੇ ਚੱਲਦੀ ਹੈ। ਟ੍ਰਿਪ ਜੋੜਨ ਲਈ + ’ਤੇ ਟੈਪ ਕਰੋ ਅਤੇ ਇੱਥੇ ਐਪ ਅਜ਼ਮਾਓ।",
   "Automatic tracking runs on your iPhone. This preview can’t track drives.": "ਆਟੋਮੈਟਿਕ ਟ੍ਰੈਕਿੰਗ ਤੁਹਾਡੇ iPhone ’ਤੇ ਚੱਲਦੀ ਹੈ। ਇਹ ਪ੍ਰੀਵਿਊ ਟ੍ਰਿਪ ਟ੍ਰੈਕ ਨਹੀਂ ਕਰ ਸਕਦਾ।",
   "Automatic tracking runs on your iPhone. You can still add trips by hand here.": "ਆਟੋਮੈਟਿਕ ਟ੍ਰੈਕਿੰਗ ਤੁਹਾਡੇ iPhone ’ਤੇ ਚੱਲਦੀ ਹੈ। ਇੱਥੇ ਫਿਰ ਵੀ ਹੱਥੀਂ ਟ੍ਰਿਪ ਜੋੜੇ ਜਾ ਸਕਦੇ ਹਨ।",
   "Autumn miles add up 🍂": "ਪੱਤਝੜ ਵਿੱਚ ਵੀ ਟ੍ਰਿਪ ਜੁੜਦੇ ਜਾਂਦੇ ਹਨ 🍂",
@@ -1241,6 +1239,8 @@ const dictionary: Dictionary = {
   "Backup & data": "ਬੈਕਅੱਪ ਅਤੇ ਡਾਟਾ",
   "Notifications": "ਸੂਚਨਾਵਾਂ",
   "About & support": "ਐਪ ਬਾਰੇ ਅਤੇ ਮਦਦ",
+  "Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here.": "ਆਟੋਮੈਟਿਕ ਟ੍ਰੈਕਿੰਗ ਤੁਹਾਡੇ iPhone ’ਤੇ ਚੱਲਦੀ ਹੈ। ਇੱਥੇ ਐਪ ਅਜ਼ਮਾਉਣ ਲਈ ਟ੍ਰਿਪ ਟੈਬ ਤੋਂ ਇੱਕ ਟ੍ਰਿਪ ਜੋੜੋ।",
+  "Add a drive you missed": "ਛੁੱਟਿਆ ਟ੍ਰਿਪ ਜੋੜੋ",
 };
 
 export default dictionary;

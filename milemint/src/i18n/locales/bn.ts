@@ -115,7 +115,6 @@ const dictionary: Dictionary = {
   "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "আপনার বা আপনার অ্যাকাউন্ট্যান্টের জন্য জমা দেওয়ার মতো তৈরি রিপোর্ট: আপনার Schedule C Part IV-এর মোট হিসাব, {{authority}}-এর প্রতিটি রেটে ট্যাক্স ছাড়, আর পুরো ট্রিপ লগ, যাতে দেখা যায় কোন ট্রিপ চালানোর সময় রেকর্ড হয়েছে আর কোনগুলো এডিট করা হয়েছে।",
   "Active · thank you!": "চালু · ধন্যবাদ!",
   "Add a missed drive": "বাদ পড়া ট্রিপ যোগ করুন",
-  "Add a missed trip": "বাদ পড়া ট্রিপ যোগ করুন",
   "Add another time": "আরেকটি সময় যোগ করুন",
   "Add missed trip": "বাদ পড়া ট্রিপ যোগ করুন",
   "Add missed trips by hand": "বাদ পড়া ট্রিপ নিজে যোগ করুন",
@@ -144,7 +143,6 @@ const dictionary: Dictionary = {
   "Automatic tracking": "অটোমেটিক ট্র্যাকিং",
   "Automatic tracking is off": "অটোমেটিক ট্র্যাকিং বন্ধ আছে",
   "Automatic tracking is paused": "অটোমেটিক ট্র্যাকিং থামানো আছে",
-  "Automatic tracking runs on your iPhone. Tap + to add a trip and try the app here.": "অটোমেটিক ট্র্যাকিং আপনার iPhone-এ চলে। এখানে অ্যাপটি চেষ্টা করতে + ট্যাপ করে একটি ট্রিপ যোগ করুন।",
   "Automatic tracking runs on your iPhone. This preview can’t track drives.": "অটোমেটিক ট্র্যাকিং আপনার iPhone-এ চলে। এই প্রিভিউ ট্রিপ ট্র্যাক করতে পারে না।",
   "Automatic tracking runs on your iPhone. You can still add trips by hand here.": "অটোমেটিক ট্র্যাকিং আপনার iPhone-এ চলে। এখানেও আপনি নিজে ট্রিপ যোগ করতে পারেন।",
   "Autumn miles add up 🍂": "শরতে ট্রিপের হিসাব জমছে 🍂",
@@ -1229,6 +1227,8 @@ const dictionary: Dictionary = {
   "Backup & data": "ব্যাকআপ ও ডেটা",
   "Notifications": "নোটিফিকেশন",
   "About & support": "অ্যাপ সম্পর্কে ও সাহায্য",
+  "Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here.": "অটোমেটিক ট্র্যাকিং আপনার iPhone-এ চলে। এখানে অ্যাপটি চেষ্টা করতে ট্রিপ ট্যাব থেকে একটি ট্রিপ যোগ করুন।",
+  "Add a drive you missed": "বাদ পড়া ট্রিপ যোগ করুন",
 };
 
 export default dictionary;

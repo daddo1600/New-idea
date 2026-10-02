@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LeafMark } from '@/components/leaf-mark';
 import { quickPurposes } from '@/components/purpose-picker';
 import { ShiftRow } from '@/components/shift-row';
-import { AddTripButton } from '@/components/trips/add-trip-button';
+import { AddTripHeaderButton, AddTripLink, AddTripRow } from '@/components/trips/add-trip-links';
 import { BulkActions, SelectBar, ValueWaitsNotice } from '@/components/trips/list-bars';
 import { LockedTripRow } from '@/components/trips/locked-trip-row';
 import { SelectableTripRow } from '@/components/trips/selectable-trip-row';
@@ -34,7 +34,7 @@ type DriveItem = HomeItem | MonthItem;
 /**
  * Every drive, newest first and grouped by month. A courier's shift is one
  * row that opens to its drives. Select several to sort at once, long press to
- * delete, + to add one tracking missed.
+ * delete, + (header, or the row under the list) to add one tracking missed.
  */
 export default function DrivesScreen() {
   const list = useTripList();
@@ -77,15 +77,22 @@ export default function DrivesScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      {/* The bulk actions bar takes the tab bar's place while selecting. */}
-      <Tabs.Screen options={{ tabBarStyle: selecting ? { display: 'none' } : undefined }} />
+      {/* The bulk actions bar takes the tab bar's place while selecting; + adds a drive tracking missed. */}
+      <Tabs.Screen
+        options={{
+          tabBarStyle: selecting ? { display: 'none' } : undefined,
+          headerRight: selecting ? undefined : () => <AddTripHeaderButton />,
+        }}
+      />
       <FlatList
         data={items}
         keyExtractor={(item) => (item.kind === 'month' ? `month:${item.month}` : itemKey(item))}
-        contentContainerStyle={[styles.list, { paddingBottom: selecting ? 160 + insets.bottom : 96 }]}
+        contentContainerStyle={[styles.list, selecting && { paddingBottom: 160 + insets.bottom }]}
         ListHeaderComponent={
           trips.length > 0 ? (
             <SelectBar
+              // The screen's title already says what the list is.
+              title={null}
               selecting={selecting}
               unsortedCount={unsorted.length}
               onStart={() => list.setSelecting(true)}
@@ -98,8 +105,10 @@ export default function DrivesScreen() {
           <View style={styles.empty}>
             <LeafMark size={72} />
             <ThemedText type="smallBold">{t('No drives yet')}</ThemedText>
+            <AddTripLink />
           </View>
         }
+        ListFooterComponent={trips.length > 0 && !selecting ? <AddTripRow /> : null}
         renderItem={({ item: row }) => {
           if (row.kind === 'month') return <MonthHeading item={row} region={region} />;
           if (row.kind === 'shift') {
@@ -146,7 +155,6 @@ export default function DrivesScreen() {
           );
         }}
       />
-      {!selecting && <AddTripButton bottom={0} />}
       {list.waiting && <ValueWaitsNotice bottom={0} onClose={list.closeWaiting} />}
       {selecting && (
         <BulkActions
@@ -209,6 +217,7 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   list: {
     padding: Spacing.three,
+    paddingBottom: Spacing.six,
     gap: Spacing.three,
     width: '100%',
     maxWidth: MaxContentWidth,

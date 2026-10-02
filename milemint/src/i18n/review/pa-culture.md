@@ -488,3 +488,5 @@ The app now opens on four tabs (Home, Drives, Money, Settings) instead of one lo
 | Backup & data | ਬੈਕਅੱਪ ਅਤੇ ਡਾਟਾ | Backup and data | Settings group heading: iCloud backup and restore. |
 | Notifications | ਸੂਚਨਾਵਾਂ | Notifications | Settings group heading: the Sunday reminder. |
 | About & support | ਐਪ ਬਾਰੇ ਅਤੇ ਮਦਦ | About the app and help | Settings group heading: language, the tutorial, help and feedback. |
+| Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here. | ਆਟੋਮੈਟਿਕ ਟ੍ਰੈਕਿੰਗ ਤੁਹਾਡੇ iPhone ’ਤੇ ਚੱਲਦੀ ਹੈ। ਇੱਥੇ ਐਪ ਅਜ਼ਮਾਉਣ ਲਈ ਟ੍ਰਿਪ ਟੈਬ ਤੋਂ ਇੱਕ ਟ੍ਰਿਪ ਜੋੜੋ। | Automatic tracking runs on your iPhone. To try the app here, add a trip from the Trips tab. | Web preview only (no tracking there): the + moved from home to the Drives tab. Name the tab as its label is translated. |
+| Add a drive you missed | ਛੁੱਟਿਆ ਟ੍ਰਿਪ ਜੋੜੋ | Add a missed trip | Drives tab: dashed row under the list, opens Add missed trip. A backup for drives tracking missed. |

@@ -115,7 +115,6 @@ const dictionary: Dictionary = {
   "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "आपके या आपके अकाउंटेंट के लिए फ़ाइल करने को तैयार रिपोर्ट: आपके Schedule C Part IV के कुल आँकड़े, हर {{authority}} रेट पर टैक्स कटौती, और पूरा ट्रिप लॉग, जिसमें दिखता है कि कौन-सी ट्रिप ड्राइव करते समय रिकॉर्ड हुईं और कौन-सी बदली गईं।",
   "Active · thank you!": "चालू है · धन्यवाद!",
   "Add a missed drive": "छूटी हुई ट्रिप जोड़ें",
-  "Add a missed trip": "छूटी हुई ट्रिप जोड़ें",
   "Add another time": "एक और समय जोड़ें",
   "Add missed trip": "छूटी ट्रिप जोड़ें",
   "Add missed trips by hand": "छूटी ट्रिप हाथ से जोड़ें",
@@ -144,7 +143,6 @@ const dictionary: Dictionary = {
   "Automatic tracking": "ऑटोमैटिक ट्रैकिंग",
   "Automatic tracking is off": "ऑटोमैटिक ट्रैकिंग बंद है",
   "Automatic tracking is paused": "ऑटोमैटिक ट्रैकिंग रुकी हुई है",
-  "Automatic tracking runs on your iPhone. Tap + to add a trip and try the app here.": "ऑटोमैटिक ट्रैकिंग आपके iPhone पर चलती है। ट्रिप जोड़ने और ऐप आज़माने के लिए यहाँ + पर टैप करें।",
   "Automatic tracking runs on your iPhone. This preview can’t track drives.": "ऑटोमैटिक ट्रैकिंग आपके iPhone पर चलती है। यह प्रीव्यू ट्रिप ट्रैक नहीं कर सकता।",
   "Automatic tracking runs on your iPhone. You can still add trips by hand here.": "ऑटोमैटिक ट्रैकिंग आपके iPhone पर चलती है। यहाँ फिर भी हाथ से ट्रिप जोड़ी जा सकती हैं।",
   "Autumn miles add up 🍂": "पतझड़ में भी ट्रिप जुड़ती जाती हैं 🍂",
@@ -1229,6 +1227,8 @@ const dictionary: Dictionary = {
   "Backup & data": "बैकअप और डेटा",
   "Notifications": "सूचनाएँ",
   "About & support": "ऐप के बारे में और मदद",
+  "Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here.": "ऑटोमैटिक ट्रैकिंग आपके iPhone पर चलती है। यहाँ ऐप आज़माने के लिए ट्रिप टैब से एक ट्रिप जोड़ें।",
+  "Add a drive you missed": "छूटी हुई ट्रिप जोड़ें",
 };
 
 export default dictionary;

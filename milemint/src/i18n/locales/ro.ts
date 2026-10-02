@@ -174,7 +174,6 @@ const dictionary: Dictionary = {
   "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "Un raport gata de depus, pentru tine sau contabilul tău: totalurile pentru Schedule C Part IV, deducerea la fiecare tarif {{authority}} și jurnalul complet al curselor, care arată ce curse au fost înregistrate în timpul condusului și care au fost modificate.",
   "Active · thank you!": "Activ · mulțumim!",
   "Add a missed drive": "Adaugă o cursă ratată",
-  "Add a missed trip": "Adaugă o cursă ratată",
   "Add another time": "Adaugă alt interval",
   "Add missed trip": "Adaugă o cursă ratată",
   "Add missed trips by hand": "Adăugare manuală a curselor ratate",
@@ -203,7 +202,6 @@ const dictionary: Dictionary = {
   "Automatic tracking": "Înregistrare automată",
   "Automatic tracking is off": "Înregistrarea automată e oprită",
   "Automatic tracking is paused": "Înregistrarea automată e în pauză",
-  "Automatic tracking runs on your iPhone. Tap + to add a trip and try the app here.": "Înregistrarea automată funcționează pe iPhone. Atinge + ca să adaugi o cursă și să încerci aplicația aici.",
   "Automatic tracking runs on your iPhone. This preview can’t track drives.": "Înregistrarea automată funcționează pe iPhone. Această previzualizare nu poate înregistra curse.",
   "Automatic tracking runs on your iPhone. You can still add trips by hand here.": "Înregistrarea automată funcționează pe iPhone. Aici poți adăuga totuși curse manual.",
   "Autumn miles add up 🍂": "Milele de toamnă se adună 🍂",
@@ -1322,6 +1320,8 @@ const dictionary: Dictionary = {
   "Backup & data": "Backup și date",
   "Notifications": "Notificări",
   "About & support": "Despre și asistență",
+  "Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here.": "Înregistrarea automată funcționează pe iPhone. Adaugă o cursă din fila Curse ca să încerci aplicația aici.",
+  "Add a drive you missed": "Adaugă o cursă care lipsește",
 };
 
 export default dictionary;

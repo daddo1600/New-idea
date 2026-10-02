@@ -108,7 +108,6 @@ const dictionary: Dictionary = {
   "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "一份可直接用于报税的报告，你自己或你的会计师都能用：Schedule C Part IV 所需的各项合计、按 {{authority}} 各档费率计算的抵扣额，以及完整的行程记录，标明哪些行程是开车时实时记录的、哪些经过编辑。",
   "Active · thank you!": "已开通 · 谢谢你！",
   "Add a missed drive": "补记漏掉的行程",
-  "Add a missed trip": "补记漏掉的行程",
   "Add another time": "再添加一个时段",
   "Add missed trip": "补记行程",
   "Add missed trips by hand": "手动补记漏掉的行程",
@@ -137,7 +136,6 @@ const dictionary: Dictionary = {
   "Automatic tracking": "自动追踪",
   "Automatic tracking is off": "自动追踪已关闭",
   "Automatic tracking is paused": "自动追踪已暂停",
-  "Automatic tracking runs on your iPhone. Tap + to add a trip and try the app here.": "自动追踪只能在 iPhone 上运行。轻点 + 添加行程，在这里试用 App。",
   "Automatic tracking runs on your iPhone. This preview can’t track drives.": "自动追踪只能在 iPhone 上运行。此预览版无法追踪行程。",
   "Automatic tracking runs on your iPhone. You can still add trips by hand here.": "自动追踪只能在 iPhone 上运行。你仍可在这里手动添加行程。",
   "Autumn miles add up 🍂": "秋天的里程，积少成多 🍂",
@@ -1188,6 +1186,8 @@ const dictionary: Dictionary = {
   "Backup & data": "备份与数据",
   "Notifications": "通知",
   "About & support": "关于与帮助",
+  "Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here.": "自动追踪只能在 iPhone 上运行。在“行程”标签页添加一次行程，在这里试用 App。",
+  "Add a drive you missed": "添加漏记的行程",
 };
 
 export default dictionary;

@@ -22,7 +22,7 @@ const TRACKING_MESSAGES: Record<Exclude<TrackingStatus, 'on'>, { title: string; 
   off: { title: msg('Automatic tracking is paused'), body: msg('Turn it back on to keep logging drives.') },
   unsupported: {
     title: msg('Preview mode'),
-    body: msg('Automatic tracking runs on your iPhone. Tap + to add a trip and try the app here.'),
+    body: msg('Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here.'),
   },
 };
 /** "Tracking on", or what to do to get there. */

@@ -19,7 +19,7 @@ import { PurposeNudge } from '@/components/home/purpose-nudge';
 import { ShiftBar } from '@/components/home/shift-bar';
 import { ReliefNudge, SummaryCard } from '@/components/home/summary-card';
 import { TrackingCard } from '@/components/home/tracking-card';
-import { AddTripButton } from '@/components/trips/add-trip-button';
+import { AddTripLink } from '@/components/trips/add-trip-links';
 import { BulkActions, FillingBar, SelectBar, ValueWaitsNotice } from '@/components/trips/list-bars';
 import { LockedTripRow } from '@/components/trips/locked-trip-row';
 import { SelectableTripRow } from '@/components/trips/selectable-trip-row';
@@ -195,8 +195,8 @@ export default function HomeScreen() {
       <FlatList
         data={items}
         keyExtractor={(trip) => trip.id}
-        // Room for the add-trip button, or the bulk actions bar while selecting.
-        contentContainerStyle={[styles.list, { paddingBottom: selecting ? 160 + insets.bottom : 96 }]}
+        // Room for the bulk actions bar while selecting.
+        contentContainerStyle={[styles.list, selecting && { paddingBottom: 160 + insets.bottom }]}
         ListHeaderComponent={
           <View style={styles.header}>
             {/* Couriers: the shift comes first, it's what they tap every day. */}
@@ -314,6 +314,7 @@ export default function HomeScreen() {
               <LeafMark size={72} />
               <ThemedText type="smallBold">{status === 'on' ? t('Ready when you are') : t('No drives yet')}</ThemedText>
               <HomeEmptyLines trackingOn={status === 'on'} style={styles.emptyBody} />
+              <AddTripLink />
             </View>
           ) : (
             // Nothing to sort: the rest are on the Drives tab.
@@ -355,7 +356,6 @@ export default function HomeScreen() {
           )
         }
       />
-      {!selecting && <AddTripButton bottom={0} />}
       {list.waiting && <ValueWaitsNotice bottom={0} onClose={list.closeWaiting} />}
       <Celebration content={celebration.content} onClose={celebration.close} />
       {/* Once after setup (or replayed from Settings): sort two sample drives, nothing saved. */}

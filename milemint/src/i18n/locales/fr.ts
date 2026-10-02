@@ -174,7 +174,6 @@ const dictionary: Dictionary = {
   "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "Un rapport prêt à remettre, pour vous ou votre comptable : vos totaux pour la Schedule C Part IV, la déduction à chaque taux de {{authority}} et le registre complet des trajets, qui indique ceux enregistrés pendant la conduite et ceux modifiés.",
   "Active · thank you!": "Actif · merci !",
   "Add a missed drive": "Ajouter un trajet oublié",
-  "Add a missed trip": "Ajouter un trajet oublié",
   "Add another time": "Ajouter une autre plage",
   "Add missed trip": "Ajouter un trajet oublié",
   "Add missed trips by hand": "Ajout à la main des trajets oubliés",
@@ -203,7 +202,6 @@ const dictionary: Dictionary = {
   "Automatic tracking": "Suivi automatique",
   "Automatic tracking is off": "Le suivi automatique est désactivé",
   "Automatic tracking is paused": "Le suivi automatique est en pause",
-  "Automatic tracking runs on your iPhone. Tap + to add a trip and try the app here.": "Le suivi automatique fonctionne sur votre iPhone. Touchez + pour ajouter un trajet et essayer l’app ici.",
   "Automatic tracking runs on your iPhone. This preview can’t track drives.": "Le suivi automatique fonctionne sur votre iPhone. Cet aperçu ne peut pas suivre vos trajets.",
   "Automatic tracking runs on your iPhone. You can still add trips by hand here.": "Le suivi automatique fonctionne sur votre iPhone. Ici, vous pouvez quand même ajouter des trajets à la main.",
   "Autumn miles add up 🍂": "Les trajets d’automne s’additionnent 🍂",
@@ -1322,6 +1320,8 @@ const dictionary: Dictionary = {
   "Backup & data": "Sauvegarde et données",
   "Notifications": "Notifications",
   "About & support": "À propos et aide",
+  "Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here.": "Le suivi automatique fonctionne sur votre iPhone. Ajoutez un trajet depuis l’onglet Trajets pour essayer l’app ici.",
+  "Add a drive you missed": "Ajouter un trajet manqué",
 };
 
 export default dictionary;

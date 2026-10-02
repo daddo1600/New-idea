@@ -134,7 +134,6 @@ const dictionary: Dictionary = {
   "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "Un informe listo para presentar, para ti o tu contador: tus totales del Schedule C Part IV, la deducción con cada tarifa de {{authority}} y el registro completo de viajes, que muestra cuáles se registraron mientras conducías y cuáles se editaron.",
   "Active · thank you!": "Activo · ¡gracias!",
   "Add a missed drive": "Agregar viaje faltante",
-  "Add a missed trip": "Agregar un viaje faltante",
   "Add another time": "Agregar otro horario",
   "Add missed trip": "Agregar viaje faltante",
   "Add missed trips by hand": "Agrega a mano los viajes que faltaron",
@@ -163,7 +162,6 @@ const dictionary: Dictionary = {
   "Automatic tracking": "Seguimiento automático",
   "Automatic tracking is off": "El seguimiento automático está desactivado",
   "Automatic tracking is paused": "El seguimiento automático está en pausa",
-  "Automatic tracking runs on your iPhone. Tap + to add a trip and try the app here.": "El seguimiento automático funciona en tu iPhone. Toca + para agregar un viaje y probar la app aquí.",
   "Automatic tracking runs on your iPhone. This preview can’t track drives.": "El seguimiento automático funciona en tu iPhone. Esta vista previa no puede registrar viajes.",
   "Automatic tracking runs on your iPhone. You can still add trips by hand here.": "El seguimiento automático funciona en tu iPhone. Aquí también puedes agregar viajes a mano.",
   "Autumn miles add up 🍂": "En otoño, cada viaje suma 🍂",
@@ -1282,6 +1280,8 @@ const dictionary: Dictionary = {
   "Backup & data": "Respaldo y datos",
   "Notifications": "Notificaciones",
   "About & support": "Información y ayuda",
+  "Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here.": "El seguimiento automático funciona en tu iPhone. Agrega un viaje desde la pestaña Viajes para probar la app aquí.",
+  "Add a drive you missed": "Agregar un viaje que faltó",
 };
 
 export default dictionary;

@@ -414,3 +414,5 @@ The app now opens on four tabs (Home, Drives, Money, Settings) instead of one lo
 | Backup & data | Sauvegarde et données | Backup and data | Settings group heading: iCloud backup and restore. |
 | Notifications | Notifications | Notifications | Settings group heading: the Sunday reminder. |
 | About & support | À propos et aide | About and help | Settings group heading: language, the tutorial, help and feedback. |
+| Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here. | Le suivi automatique fonctionne sur votre iPhone. Ajoutez un trajet depuis l’onglet Trajets pour essayer l’app ici. | Automatic tracking works on your iPhone. Add a journey from the Journeys tab to try the app here. | Web preview only (no tracking there): the + moved from home to the Drives tab. Name the tab as its label is translated. |
+| Add a drive you missed | Ajouter un trajet manqué | Add a missed journey | Drives tab: dashed row under the list, opens Add missed trip. A backup for drives tracking missed. |

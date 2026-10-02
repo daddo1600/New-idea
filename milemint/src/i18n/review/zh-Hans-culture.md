@@ -414,3 +414,5 @@ The app now opens on four tabs (Home, Drives, Money, Settings) instead of one lo
 | Backup & data | 备份与数据 | Backup and data | Settings group heading: iCloud backup and restore. |
 | Notifications | 通知 | Notifications | Settings group heading: the Sunday reminder. |
 | About & support | 关于与帮助 | About and help | Settings group heading: language, the tutorial, help and feedback. |
+| Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here. | 自动追踪只能在 iPhone 上运行。在“行程”标签页添加一次行程，在这里试用 App。 | Automatic tracking only runs on iPhone. Add a trip in the “Trips” tab to try the App here. | Web preview only (no tracking there): the + moved from home to the Drives tab. Name the tab as its label is translated. |
+| Add a drive you missed | 添加漏记的行程 | Add a missed trip | Drives tab: dashed row under the list, opens Add missed trip. A backup for drives tracking missed. |

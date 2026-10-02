@@ -197,7 +197,6 @@ const dictionary: Dictionary = {
   "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.": "Raport gotowy do złożenia dla Ciebie lub Twojego księgowego: sumy do Schedule C Part IV, odliczenie według każdej stawki {{authority}} i pełny rejestr przejazdów z informacją, które zapisano podczas jazdy, a które edytowano.",
   "Active · thank you!": "Aktywny · dziękujemy!",
   "Add a missed drive": "Dodaj pominięty przejazd",
-  "Add a missed trip": "Dodaj pominięty przejazd",
   "Add another time": "Dodaj kolejny przedział",
   "Add missed trip": "Dodaj pominięty przejazd",
   "Add missed trips by hand": "Ręczne dodawanie pominiętych przejazdów",
@@ -226,7 +225,6 @@ const dictionary: Dictionary = {
   "Automatic tracking": "Automatyczne śledzenie",
   "Automatic tracking is off": "Automatyczne śledzenie jest wyłączone",
   "Automatic tracking is paused": "Automatyczne śledzenie jest wstrzymane",
-  "Automatic tracking runs on your iPhone. Tap + to add a trip and try the app here.": "Automatyczne śledzenie działa na iPhonie. Stuknij +, aby dodać przejazd i wypróbować aplikację tutaj.",
   "Automatic tracking runs on your iPhone. This preview can’t track drives.": "Automatyczne śledzenie działa na iPhonie. W tym podglądzie przejazdy nie są śledzone.",
   "Automatic tracking runs on your iPhone. You can still add trips by hand here.": "Automatyczne śledzenie działa na iPhonie. Tutaj nadal możesz dodawać przejazdy ręcznie.",
   "Autumn miles add up 🍂": "Jesienne trasy też się liczą 🍂",
@@ -1379,6 +1377,8 @@ const dictionary: Dictionary = {
   "Backup & data": "Kopia i dane",
   "Notifications": "Powiadomienia",
   "About & support": "O aplikacji i pomoc",
+  "Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here.": "Automatyczne śledzenie działa na iPhonie. Dodaj przejazd na karcie Przejazdy, aby wypróbować aplikację tutaj.",
+  "Add a drive you missed": "Dodaj pominięty przejazd",
 };
 
 export default dictionary;
