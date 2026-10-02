@@ -173,6 +173,9 @@ async function seedDemoEarnings(db: SQLiteDatabase): Promise<void> {
   await updateSettings(db, { setAsideReminder: true, setAsideReminderDefaulted: true });
 }
 
+/** `&founding`: three friends have joined, so every invite perk (and the Founding driver badge) is earned. */
+export const DEMO_FOUNDING = demoFlag('founding');
+
 /** `&gift`: this user joined with a friend's code today, so the Pro screen offers the friend's gift (with `&offer`). */
 export const DEMO_GIFT = demoFlag('gift');
 
@@ -445,6 +448,12 @@ export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
   if ((existing?.n ?? 0) > 0) return;
   if (DEMO_COURIER) await updateSettings(db, { shiftMode: true });
   if (DEMO_PLACES) await updateSettings(db, { workHoursEnabled: true });
+  if (DEMO_FOUNDING) {
+    await updateSettings(db, {
+      friendsJoined: 3,
+      perksEarned: ['tax-set-aside', 'platform-earnings', 'founding-badge'],
+    });
+  }
   if (DEMO_EMPTY) {
     if (DEMO_HOURS) await updateSettings(db, { workHoursEnabled: true });
     return;
