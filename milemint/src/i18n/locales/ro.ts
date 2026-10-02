@@ -1320,6 +1320,11 @@ const dictionary: Dictionary = {
   "Parking and tolls are listed separately and not added to the per-km figure. Self-employed: business parking fees are deducted in full on T2125, not reduced to your business-use share. Ask your accountant whether your tolls can be claimed.": "Parcarea și taxele de drum sunt trecute separat și nu se adaugă la suma pe km. Pe cont propriu: taxele de parcare de lucru se deduc integral în T2125, fără să fie reduse la partea de folosire pentru lucru. Întreabă-ți contabilul dacă taxele de drum se pot deduce.",
   "Work parking and tolls aren’t covered by cents per km, so they’re claimed separately. Not parking at your regular workplace, or tolls on the way there.": "Cents per km nu acoperă parcarea și taxele de drum de lucru, așa că se cer separat. Nu și parcarea la locul tău obișnuit de muncă sau taxele de drum până acolo.",
   "Parking fees and tolls for work trips aren’t covered by the cents per km rate. Claim them separately: individuals as Work-related travel expenses (D2), sole traders with business expenses. Not parking at your regular workplace, or tolls between home and work.": "Cents per km nu acoperă parcarea și taxele de drum ale curselor de lucru. Cere-le separat: persoanele fizice la Work-related travel expenses (D2), cei pe cont propriu (sole traders) la cheltuielile afacerii. Nu și parcarea la locul tău obișnuit de muncă sau taxele de drum între casă și serviciu.",
+  "Nice one!": "Bravo!",
+  "Tracking’s set up": "Înregistrarea e pornită",
+  "Good start": "Un început bun",
+  "ALMOST DONE!": "APROAPE GATA!",
+  "YOU DID IT!": "AI REUȘIT!",
 };
 
 export default dictionary;

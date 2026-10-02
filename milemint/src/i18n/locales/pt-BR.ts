@@ -1318,6 +1318,11 @@ const dictionary: Dictionary = {
   "Parking and tolls are listed separately and not added to the per-km figure. Self-employed: business parking fees are deducted in full on T2125, not reduced to your business-use share. Ask your accountant whether your tolls can be claimed.": "Estacionamento e pedágios aparecem à parte e não são somados ao valor por km. Autônomos: o estacionamento profissional é deduzido integralmente no T2125, sem reduzir pela sua parte de uso profissional. Pergunte ao seu contador se os pedágios podem ser deduzidos.",
   "Work parking and tolls aren’t covered by cents per km, so they’re claimed separately. Not parking at your regular workplace, or tolls on the way there.": "O cents per km não cobre estacionamento nem pedágios do trabalho, então eles são declarados à parte. Exceto estacionamento no seu local de trabalho fixo ou pedágios no caminho até lá.",
   "Parking fees and tolls for work trips aren’t covered by the cents per km rate. Claim them separately: individuals as Work-related travel expenses (D2), sole traders with business expenses. Not parking at your regular workplace, or tolls between home and work.": "O cents per km não cobre estacionamento nem pedágios de trajetos de trabalho. Declare à parte: pessoas físicas, em Work-related travel expenses (D2); sole traders (autônomos), com as despesas do negócio. Exceto estacionamento no seu local de trabalho fixo ou pedágios entre casa e trabalho.",
+  "Nice one!": "Mandou bem!",
+  "Tracking’s set up": "Rastreamento ativado",
+  "Good start": "Bom começo",
+  "ALMOST DONE!": "QUASE LÁ!",
+  "YOU DID IT!": "VOCÊ CONSEGUIU!",
 };
 
 export default dictionary;

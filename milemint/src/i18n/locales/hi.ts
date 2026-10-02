@@ -1226,6 +1226,11 @@ const dictionary: Dictionary = {
   "Parking and tolls are listed separately and not added to the per-km figure. Self-employed: business parking fees are deducted in full on T2125, not reduced to your business-use share. Ask your accountant whether your tolls can be claimed.": "पार्किंग और टोल अलग दिखाए गए हैं और प्रति km वाली रकम में नहीं जोड़े गए। सेल्फ़-एम्प्लॉयड: बिज़नेस पार्किंग फ़ीस T2125 पर पूरी घटती है, बिज़नेस इस्तेमाल के हिस्से के हिसाब से कम नहीं होती। टोल क्लेम हो सकते हैं या नहीं, अपने अकाउंटेंट से पूछें।",
   "Work parking and tolls aren’t covered by cents per km, so they’re claimed separately. Not parking at your regular workplace, or tolls on the way there.": "काम की पार्किंग और टोल cents per km में शामिल नहीं होते, इसलिए ये अलग से क्लेम होते हैं। अपने रोज़ के काम की जगह की पार्किंग या वहाँ जाने के टोल नहीं।",
   "Parking fees and tolls for work trips aren’t covered by the cents per km rate. Claim them separately: individuals as Work-related travel expenses (D2), sole traders with business expenses. Not parking at your regular workplace, or tolls between home and work.": "काम की ट्रिप की पार्किंग फ़ीस और टोल cents per km रेट में शामिल नहीं होते। इन्हें अलग से क्लेम करें: व्यक्तिगत टैक्सपेयर Work-related travel expenses (D2) में, sole traders बिज़नेस खर्चों के साथ। अपने रोज़ के काम की जगह की पार्किंग या घर और काम के बीच के टोल नहीं।",
+  "Nice one!": "बहुत बढ़िया!",
+  "Tracking’s set up": "ट्रैकिंग चालू हो गई",
+  "Good start": "अच्छी शुरुआत",
+  "ALMOST DONE!": "बस थोड़ा और!",
+  "YOU DID IT!": "आपने कर दिखाया!",
 };
 
 export default dictionary;

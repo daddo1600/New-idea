@@ -1378,6 +1378,11 @@ const dictionary: Dictionary = {
   "Parking and tolls are listed separately and not added to the per-km figure. Self-employed: business parking fees are deducted in full on T2125, not reduced to your business-use share. Ask your accountant whether your tolls can be claimed.": "Parkingi i opłaty drogowe są wykazane osobno i nie są doliczane do kwoty za km. Samozatrudnieni: służbowe opłaty parkingowe odlicza się w całości w T2125, bez pomniejszania o udział jazdy służbowej. Zapytaj księgowego, czy możesz odliczyć opłaty drogowe.",
   "Work parking and tolls aren’t covered by cents per km, so they’re claimed separately. Not parking at your regular workplace, or tolls on the way there.": "Cents per km nie obejmuje służbowych parkingów i opłat drogowych, więc rozlicza się je osobno. Poza parkingiem przy stałym miejscu pracy i opłatami w drodze do niego.",
   "Parking fees and tolls for work trips aren’t covered by the cents per km rate. Claim them separately: individuals as Work-related travel expenses (D2), sole traders with business expenses. Not parking at your regular workplace, or tolls between home and work.": "Cents per km nie obejmuje parkingów i opłat drogowych w przejazdach służbowych. Rozlicz je osobno: osoby fizyczne jako Work-related travel expenses (D2), jednoosobowe firmy (sole traders) w kosztach firmy. Poza parkingiem przy stałym miejscu pracy i opłatami między domem a pracą.",
+  "Nice one!": "Świetnie!",
+  "Tracking’s set up": "Śledzenie włączone",
+  "Good start": "Dobry początek",
+  "ALMOST DONE!": "PRAWIE GOTOWE!",
+  "YOU DID IT!": "UDAŁO SIĘ!",
 };
 
 export default dictionary;

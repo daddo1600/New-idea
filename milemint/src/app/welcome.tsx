@@ -21,6 +21,7 @@ import { formatBackupDate, PROBLEM_TEXT } from '@/backup/copy';
 import { tripCount } from '@/backup/snapshot';
 import { AlwaysGuide } from '@/components/always-guide';
 import { BrandGradient } from '@/components/brand-gradient';
+import { CelebrationOverlay } from '@/components/celebration-overlay';
 import { CountryOptions, phoneRegion } from '@/components/country-options';
 import { LeafMark } from '@/components/leaf-mark';
 import { MotionCoach, MotionStep } from '@/components/motion-ask';
@@ -43,6 +44,7 @@ import { loadSettings, updateSettings } from '@/db/settings-repo';
 import { marApplies, parsePence } from '@/domain/mar';
 import { FREE_AUTO_DRIVES_PER_MONTH } from '@/domain/plan';
 import { displayLocale, formatRate, REGIONS, vehicleRule, type RegionCode } from '@/domain/regions';
+import { type CheerKind, DONE, HOURS, PURPOSE, setupCheer } from '@/domain/setup-cheers';
 import { useTheme } from '@/hooks/use-theme';
 import { LANGUAGES, msg, useLanguage, useT } from '@/i18n/i18n';
 import { Rich } from '@/i18n/rich';
@@ -78,10 +80,6 @@ const EXTRA_LABELS: Record<VehicleType, string> = {
   motorbike: msg('Moped or motorbike'),
   bicycle: msg('Bicycle'),
 };
-const HOURS = 3;
-/** "What are most of your work drives for?", right after how they work. */
-const PURPOSE = 4;
-const DONE = 5;
 
 const WELCOME_POINTS = [
   [msg('Automatic'), msg('Drives are logged in the background. No buttons to press.')],
@@ -151,6 +149,36 @@ export default function WelcomeScreen() {
   const [employerRateText, setEmployerRateText] = useState('45');
   /** The kinds of work drive picked, in the order tapped; undefined until one is (shift workers then see Deliveries chosen). */
   const [workChoices, setWorkChoices] = useState<string[] | undefined>(undefined);
+  /** The celebration on screen (one at a time), over the step that's already moved on underneath. */
+  const [cheer, setCheer] = useState<{ kind: CheerKind; text: string } | null>(null);
+  /** Each plays once a session: going back and forward again doesn't repeat it. */
+  const cheered = useRef(new Set<CheerKind>());
+  const celebrate = (kind: CheerKind, text: string) => {
+    if (cheered.current.has(kind)) return;
+    cheered.current.add(kind);
+    setCheer({ kind, text });
+  };
+  // A step forward cheers, bigger the nearer the end (domain/setup-cheers); back never does.
+  const lastStep = useRef(step);
+  useEffect(() => {
+    const kind = setupCheer(lastStep.current, step);
+    lastStep.current = step;
+    if (!kind) return;
+    // Says tracking is set up only when it is: skipped (or not on this phone) is still a good start.
+    const tracking = status === 'on' ? t('Tracking’s set up') : t('Good start');
+    celebrate(
+      kind,
+      kind === 'thumbs'
+        ? t('Nice one!')
+        : kind === 'tracking'
+          ? tracking
+          : kind === 'almost'
+            ? t('ALMOST DONE!')
+            : t('YOU DID IT!'),
+    );
+    // Runs on a step change; `status` is read as it is then.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
 
   // A new iPhone: look for a backup in iCloud while the welcome is read.
   useEffect(() => {
@@ -331,7 +359,16 @@ export default function WelcomeScreen() {
   const purposeOptions = quickPurposes({ shiftMode: false, clientPrivacy }, 10);
 
   // Under whichever way of working is chosen: care and support work comes in all three.
-  const privacyCheck = <ClientPrivacyCheck value={clientPrivacy} onChange={setClientPrivacy} />;
+  const privacyCheck = (
+    <ClientPrivacyCheck
+      value={clientPrivacy}
+      onChange={(on) => {
+        setClientPrivacy(on);
+        // Thanks for ticking it; taking it back (a tap by mistake) is quiet.
+        if (on) celebrate('thanks', t('Thank you for all you do for the people you care for. 💚'));
+      }}
+    />
+  );
 
   const finish = async () => {
     setBusy(true);
@@ -872,6 +909,9 @@ export default function WelcomeScreen() {
           {step === DONE && primary(t('Start using MileMint'), finish)}
         </View>
       </KeyboardAvoidingView>
+      {cheer && (
+        <CelebrationOverlay key={cheer.kind} kind={cheer.kind} text={cheer.text} onClose={() => setCheer(null)} />
+      )}
     </ThemedView>
   );
 }
