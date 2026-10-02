@@ -1190,6 +1190,11 @@ const dictionary: Dictionary = {
   "{{authority}} expects a purpose for every business drive. One tap each.": "{{authority}} cere un scop pentru fiecare cursă de lucru. O atingere pentru fiecare.",
   "Add purposes ›": "Adaugă scopurile ›",
   "Every work drive has a purpose ✓": "Toate cursele de lucru au scop ✓",
+  "{{count}} purposes added": {
+    "one": "{{count}} scop adăugat",
+    "few": "{{count}} scopuri adăugate",
+    "other": "{{count}} de scopuri adăugate"
+  },
   "Show all drives": "Arată toate cursele",
   "{{count}} work drives have no purpose": {
     "one": "{{count}} cursă de lucru nu are scop",

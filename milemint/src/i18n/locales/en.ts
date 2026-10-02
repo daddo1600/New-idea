@@ -60,6 +60,7 @@ const en: Dictionary = {
     one: '{{count}} work drive has no purpose',
     other: '{{count}} work drives have no purpose',
   },
+  '{{count}} purposes added': { one: '{{count}} purpose added', other: '{{count}} purposes added' },
   '{{count}}-day free trial': { one: '{{count}}-day free trial', other: '{{count}}-day free trial' },
   '{{count}}-month free trial': { one: '{{count}}-month free trial', other: '{{count}}-month free trial' },
   '{{count}} months': { one: '{{count}} month', other: '{{count}} months' },
