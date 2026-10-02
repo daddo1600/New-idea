@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { PopPress } from '@/components/pop-press';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
@@ -19,6 +20,9 @@ export const COMMON_PURPOSES = [
   ['🏦', msg('Bank or post office')],
   ['🧾', msg('Business errand')],
 ] as const;
+
+/** How long a picked row shows its ✓ before the sheet closes. */
+const PICKED_MS = 200;
 
 /** Listed first in client privacy mode: the usual purpose for care and support work. */
 const CLIENT_VISIT_PURPOSE = ['🩺', msg('Client visit')] as const;
@@ -104,6 +108,8 @@ export function PurposePicker({
   const [open, setOpen] = useState(false);
   const [typing, setTyping] = useState(false);
   const [custom, setCustom] = useState('');
+  /** The row just tapped: ticked while the sheet stays a moment, so the tap is seen. */
+  const [picked, setPicked] = useState<string | null>(null);
 
   const listed = [...(shiftMode ? [DELIVERIES_PURPOSE] : []), ...(clientPrivacy ? KNOWN_PURPOSES : COMMON_PURPOSES)];
   const common = [...KNOWN_PURPOSES, ...listed].map(([, text]) => text.toLowerCase());
@@ -122,12 +128,16 @@ export function PurposePicker({
   };
 
   const row = (key: string, emoji: string, text: string, label: string = text) => {
-    const selected = value.trim().toLowerCase() === text.toLowerCase();
+    const selected = (picked ?? value.trim()).toLowerCase() === text.toLowerCase();
     return (
-      <Pressable
+      <PopPress
         key={key}
         accessibilityRole="button"
         accessibilityState={{ selected }}
+        disabled={picked !== null && picked !== text}
+        onPop={() => setPicked(text)}
+        commitDelay={PICKED_MS}
+        scale={1.03}
         onPress={() => pick(text)}
         style={({ pressed }) => [
           styles.option,
@@ -139,7 +149,7 @@ export function PurposePicker({
           {label}
         </ThemedText>
         {selected && <ThemedText style={{ color: theme.accent }}>✓</ThemedText>}
-      </Pressable>
+      </PopPress>
     );
   };
 
@@ -153,6 +163,7 @@ export function PurposePicker({
         accessibilityHint={t('Opens a list of purposes')}
         onPress={() => {
           setCustom('');
+          setPicked(null);
           setOpen(true);
         }}
         style={[styles.field, { backgroundColor: theme.backgroundElement }]}>

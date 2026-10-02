@@ -1113,6 +1113,10 @@ const dictionary: Dictionary = {
   "{{authority}} expects a purpose for every business drive. One tap each.": "{{authority}} ਹਰ ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ਦਾ ਮਕਸਦ ਮੰਗਦਾ ਹੈ। ਹਰ ਇੱਕ ਲਈ ਬੱਸ ਇੱਕ ਟੈਪ।",
   "Add purposes ›": "ਮਕਸਦ ਜੋੜੋ ›",
   "Every work drive has a purpose ✓": "ਹਰ ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ਦਾ ਮਕਸਦ ਹੈ ✓",
+  "{{count}} purposes added": {
+    "one": "{{count}} ਮਕਸਦ ਜੋੜਿਆ ਗਿਆ",
+    "other": "{{count}} ਮਕਸਦ ਜੋੜੇ ਗਏ"
+  },
   "Show all drives": "ਸਾਰੇ ਟ੍ਰਿਪ ਦਿਖਾਓ",
   "{{count}} work drives have no purpose": {
     "one": "{{count}} ਬਿਜ਼ਨਸ ਟ੍ਰਿਪ ਦਾ ਕੋਈ ਮਕਸਦ ਨਹੀਂ",

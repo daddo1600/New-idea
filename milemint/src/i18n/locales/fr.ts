@@ -1190,6 +1190,11 @@ const dictionary: Dictionary = {
   "{{authority}} expects a purpose for every business drive. One tap each.": "{{authority}} exige un motif pour chaque trajet d’affaires. Une touche suffit.",
   "Add purposes ›": "Ajouter les motifs ›",
   "Every work drive has a purpose ✓": "Chaque trajet d’affaires a son motif ✓",
+  "{{count}} purposes added": {
+    "one": "{{count}} motif ajouté",
+    "many": "{{count}} motifs ajoutés",
+    "other": "{{count}} motifs ajoutés"
+  },
   "Show all drives": "Voir tous les trajets",
   "{{count}} work drives have no purpose": {
     "one": "{{count}} trajet d’affaires n’a pas de motif",

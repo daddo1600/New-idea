@@ -1064,6 +1064,9 @@ const dictionary: Dictionary = {
   "{{authority}} expects a purpose for every business drive. One tap each.": "{{authority}} 要求每次工作行程都有事由。每次点一下就好。",
   "Add purposes ›": "添加事由 ›",
   "Every work drive has a purpose ✓": "每次工作行程都有事由了 ✓",
+  "{{count}} purposes added": {
+    "other": "已添加 {{count}} 个事由"
+  },
   "Show all drives": "显示全部行程",
   "{{count}} work drives have no purpose": {
     "other": "{{count}} 次工作行程没有事由"

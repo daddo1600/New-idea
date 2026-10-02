@@ -25,6 +25,7 @@ import { CountryOptions, phoneRegion } from '@/components/country-options';
 import { LeafMark } from '@/components/leaf-mark';
 import { MotionCoach, MotionStep } from '@/components/motion-ask';
 import { PermissionPreview } from '@/components/permission-preview';
+import { PopPress } from '@/components/pop-press';
 import { purposeIcon, quickPurposes, shownPurpose } from '@/components/purpose-picker';
 import { MintWash, StepHeader } from '@/components/step-header';
 import { VehiclePicker } from '@/components/vehicle-picker';
@@ -719,11 +720,14 @@ export default function WelcomeScreen() {
                   const order = shownChoices.indexOf(purpose);
                   const on = order >= 0;
                   return (
-                    <Pressable
+                    // A pop either way; taking one back is the softer tap.
+                    <PopPress
                       key={purpose}
                       accessibilityRole="checkbox"
                       accessibilityState={{ checked: on }}
                       accessibilityHint={order === 0 ? t('Filled in for you') : undefined}
+                      haptic={on ? 'soft' : 'light'}
+                      scale={1.08}
                       onPress={() => toggleWork(purpose)}
                       style={[
                         styles.tile,
@@ -743,7 +747,7 @@ export default function WelcomeScreen() {
                           <ThemedText style={[styles.tileBadgeText, { color: theme.accent }]}>{t('Default')}</ThemedText>
                         </View>
                       )}
-                    </Pressable>
+                    </PopPress>
                   );
                 })}
               </View>

@@ -1186,6 +1186,12 @@ const dictionary: Dictionary = {
   "{{authority}} expects a purpose for every business drive. One tap each.": "O {{authority}} exige uma finalidade para cada trajeto profissional. Um toque em cada.",
   "Add purposes ›": "Adicionar finalidades ›",
   "Every work drive has a purpose ✓": "Todo trajeto profissional tem finalidade ✓",
+  "{{count}} purposes added": {
+    "zero": "{{count}} finalidades adicionadas",
+    "one": "{{count}} finalidade adicionada",
+    "many": "{{count}} finalidades adicionadas",
+    "other": "{{count}} finalidades adicionadas"
+  },
   "Show all drives": "Ver todos os trajetos",
   "{{count}} work drives have no purpose": {
     "zero": "{{count}} trajetos profissionais estão sem finalidade",

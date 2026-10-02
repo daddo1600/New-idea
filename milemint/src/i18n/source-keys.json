@@ -213,6 +213,12 @@
     ]
   },
   {
+    "key": "{{count}} purposes added",
+    "files": [
+      "app/index.tsx"
+    ]
+  },
+  {
     "key": "{{count}} saved drives have their value waiting for Pro",
     "files": [
       "app/pro.tsx"
@@ -373,7 +379,8 @@
   {
     "key": "{{distance}} of business driving",
     "files": [
-      "app/milestones.tsx"
+      "app/milestones.tsx",
+      "components/launch-intro.tsx"
     ]
   },
   {

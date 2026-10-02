@@ -1243,6 +1243,12 @@ const dictionary: Dictionary = {
   "{{authority}} expects a purpose for every business drive. One tap each.": "{{authority}} wymaga celu każdego przejazdu służbowego. Jedno dotknięcie na przejazd.",
   "Add purposes ›": "Dodaj cele ›",
   "Every work drive has a purpose ✓": "Każdy przejazd służbowy ma cel ✓",
+  "{{count}} purposes added": {
+    "one": "Dodano {{count}} cel",
+    "few": "Dodano {{count}} cele",
+    "many": "Dodano {{count}} celów",
+    "other": "Dodano {{count}} celu"
+  },
   "Show all drives": "Pokaż wszystkie przejazdy",
   "{{count}} work drives have no purpose": {
     "one": "{{count}} przejazd służbowy nie ma celu",
