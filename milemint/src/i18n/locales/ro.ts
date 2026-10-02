@@ -1405,6 +1405,56 @@ const dictionary: Dictionary = {
   "Add last week’s earnings to see how much to put aside for tax.": "Adaugă câștigurile de săptămâna trecută ca să vezi cât să pui deoparte pentru taxe.",
   "Your mileage covered last week’s earnings, so there’s nothing to put aside.": "Kilometrajul a acoperit câștigurile de săptămâna trecută, deci nu ai nimic de pus deoparte.",
   "Put {{amount}} aside from last week’s driving.": "Pune deoparte {{amount}} din câștigurile de săptămâna trecută.",
+  "Your week": "Săptămâna ta",
+  "Written on your iPhone by Apple Intelligence. The figures come from your drives.": "Scris pe iPhone-ul tău de Apple Intelligence. Cifrele vin din cursele tale.",
+  "Turn on Apple Intelligence in Settings to ask MileSprout about your drives.": "Activează Apple Intelligence în Configurări ca să întrebi MileSprout despre cursele tale.",
+  "Apple Intelligence is still getting ready. You can ask MileSprout about your drives once it’s done.": "Apple Intelligence încă se pregătește. Vei putea întreba MileSprout despre cursele tale când e gata.",
+  "Pro adds your full weekly recap: your busiest day and how the week compares with the last.": "Pro adaugă rezumatul complet al săptămânii: ziua cea mai plină și cum se compară săptămâna cu cea dinainte.",
+  "Pro adds your full weekly recap and Ask MileSprout: questions about your drives, answered on your iPhone.": "Pro adaugă rezumatul complet al săptămânii și Întreabă MileSprout: întrebări despre cursele tale, cu răspunsuri pe iPhone-ul tău.",
+  "How many work miles in {{month}}?": "Câte mile de lucru în {{month}}?",
+  "How many work km in {{month}}?": "Câți km de lucru în {{month}}?",
+  "What did I claim last month?": "Cât am dedus luna trecută?",
+  "Which day did I drive most?": "În ce zi am condus cel mai mult?",
+  "Ask MileSprout": "Întreabă MileSprout",
+  "Ask about your drives": "Întreabă despre cursele tale",
+  "Ask": "Întreabă",
+  "Thinking…": "Se gândește…",
+  "Sorry, I couldn’t answer that from your drives. Try asking about a month, a week or a day.": "Îmi pare rău, nu am putut răspunde din cursele tale. Încearcă să întrebi despre o lună, o săptămână sau o zi.",
+  "No work drives yet this week.": "Încă nicio cursă de lucru săptămâna asta.",
+  "No work drives last week.": "Nicio cursă de lucru săptămâna trecută.",
+  "{{count}} drives still to sort.": {
+    "one": "{{count}} cursă de sortat.",
+    "few": "{{count}} curse de sortat.",
+    "other": "{{count}} de curse de sortat."
+  },
+  "This week so far: {{distance}} for work over {{count}} drives, worth {{amount}} at {{authority}} rates.": {
+    "one": "Săptămâna asta până acum: {{distance}} de lucru în {{count}} cursă, în valoare de {{amount}} la tarifele {{authority}}.",
+    "few": "Săptămâna asta până acum: {{distance}} de lucru în {{count}} curse, în valoare de {{amount}} la tarifele {{authority}}.",
+    "other": "Săptămâna asta până acum: {{distance}} de lucru în {{count}} de curse, în valoare de {{amount}} la tarifele {{authority}}."
+  },
+  "This week so far: {{distance}} for work over {{count}} drives.": {
+    "one": "Săptămâna asta până acum: {{distance}} de lucru în {{count}} cursă.",
+    "few": "Săptămâna asta până acum: {{distance}} de lucru în {{count}} curse.",
+    "other": "Săptămâna asta până acum: {{distance}} de lucru în {{count}} de curse."
+  },
+  "Last week: {{distance}} for work over {{count}} drives, worth {{amount}} at {{authority}} rates.": {
+    "one": "Săptămâna trecută: {{distance}} de lucru în {{count}} cursă, în valoare de {{amount}} la tarifele {{authority}}.",
+    "few": "Săptămâna trecută: {{distance}} de lucru în {{count}} curse, în valoare de {{amount}} la tarifele {{authority}}.",
+    "other": "Săptămâna trecută: {{distance}} de lucru în {{count}} de curse, în valoare de {{amount}} la tarifele {{authority}}."
+  },
+  "Last week: {{distance}} for work over {{count}} drives.": {
+    "one": "Săptămâna trecută: {{distance}} de lucru în {{count}} cursă.",
+    "few": "Săptămâna trecută: {{distance}} de lucru în {{count}} curse.",
+    "other": "Săptămâna trecută: {{distance}} de lucru în {{count}} de curse."
+  },
+  "Busiest day: {{day}}, with {{distance}}.": "Ziua cea mai plină: {{day}}, cu {{distance}}.",
+  "About the same as the same days last week.": "Cam la fel ca în aceleași zile de săptămâna trecută.",
+  "About the same as the week before.": "Cam la fel ca în săptămâna dinainte.",
+  "Up {{percent}}% on the same days last week.": "Cu {{percent}}% mai mult decât în aceleași zile de săptămâna trecută.",
+  "Up {{percent}}% on the week before.": "Cu {{percent}}% mai mult decât în săptămâna dinainte.",
+  "Down {{percent}}% on the same days last week.": "Cu {{percent}}% mai puțin decât în aceleași zile de săptămâna trecută.",
+  "Down {{percent}}% on the week before.": "Cu {{percent}}% mai puțin decât în săptămâna dinainte.",
+  "Earnings by app: {{list}}.": "Câștiguri pe aplicație: {{list}}.",
 };
 
 export default dictionary;

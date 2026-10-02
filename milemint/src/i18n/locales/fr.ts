@@ -1405,6 +1405,56 @@ const dictionary: Dictionary = {
   "Add last week’s earnings to see how much to put aside for tax.": "Ajoutez les revenus de la semaine dernière pour voir combien mettre de côté pour les impôts.",
   "Your mileage covered last week’s earnings, so there’s nothing to put aside.": "Votre kilométrage couvre vos revenus de la semaine dernière : rien à mettre de côté.",
   "Put {{amount}} aside from last week’s driving.": "Mettez {{amount}} de côté sur vos revenus de conduite de la semaine dernière.",
+  "Your week": "Votre semaine",
+  "Written on your iPhone by Apple Intelligence. The figures come from your drives.": "Rédigé sur votre iPhone par Apple Intelligence. Les chiffres viennent de vos trajets.",
+  "Turn on Apple Intelligence in Settings to ask MileSprout about your drives.": "Activez Apple Intelligence dans Réglages pour poser des questions à MileSprout sur vos trajets.",
+  "Apple Intelligence is still getting ready. You can ask MileSprout about your drives once it’s done.": "Apple Intelligence est encore en préparation. Vous pourrez interroger MileSprout sur vos trajets dès que ce sera prêt.",
+  "Pro adds your full weekly recap: your busiest day and how the week compares with the last.": "Pro ajoute le bilan complet de la semaine : votre jour le plus chargé et la comparaison avec la semaine précédente.",
+  "Pro adds your full weekly recap and Ask MileSprout: questions about your drives, answered on your iPhone.": "Pro ajoute le bilan complet de la semaine et Demandez à MileSprout : vos questions sur vos trajets, avec la réponse sur votre iPhone.",
+  "How many work miles in {{month}}?": "Combien de miles de travail en {{month}} ?",
+  "How many work km in {{month}}?": "Combien de km de travail en {{month}} ?",
+  "What did I claim last month?": "Combien ai-je réclamé le mois dernier ?",
+  "Which day did I drive most?": "Quel jour ai-je le plus roulé ?",
+  "Ask MileSprout": "Demandez à MileSprout",
+  "Ask about your drives": "Posez une question sur vos trajets",
+  "Ask": "Demander",
+  "Thinking…": "Réflexion…",
+  "Sorry, I couldn’t answer that from your drives. Try asking about a month, a week or a day.": "Désolé, je n’ai pas pu répondre à partir de vos trajets. Essayez une question sur un mois, une semaine ou un jour.",
+  "No work drives yet this week.": "Pas encore de trajet de travail cette semaine.",
+  "No work drives last week.": "Aucun trajet de travail la semaine dernière.",
+  "{{count}} drives still to sort.": {
+    "one": "{{count}} trajet encore à trier.",
+    "many": "{{count}} trajets encore à trier.",
+    "other": "{{count}} trajets encore à trier."
+  },
+  "This week so far: {{distance}} for work over {{count}} drives, worth {{amount}} at {{authority}} rates.": {
+    "one": "Cette semaine pour l’instant : {{distance}} pour le travail en {{count}} trajet, soit {{amount}} aux taux de {{authority}}.",
+    "many": "Cette semaine pour l’instant : {{distance}} pour le travail en {{count}} trajets, soit {{amount}} aux taux de {{authority}}.",
+    "other": "Cette semaine pour l’instant : {{distance}} pour le travail en {{count}} trajets, soit {{amount}} aux taux de {{authority}}."
+  },
+  "This week so far: {{distance}} for work over {{count}} drives.": {
+    "one": "Cette semaine pour l’instant : {{distance}} pour le travail en {{count}} trajet.",
+    "many": "Cette semaine pour l’instant : {{distance}} pour le travail en {{count}} trajets.",
+    "other": "Cette semaine pour l’instant : {{distance}} pour le travail en {{count}} trajets."
+  },
+  "Last week: {{distance}} for work over {{count}} drives, worth {{amount}} at {{authority}} rates.": {
+    "one": "La semaine dernière : {{distance}} pour le travail en {{count}} trajet, soit {{amount}} aux taux de {{authority}}.",
+    "many": "La semaine dernière : {{distance}} pour le travail en {{count}} trajets, soit {{amount}} aux taux de {{authority}}.",
+    "other": "La semaine dernière : {{distance}} pour le travail en {{count}} trajets, soit {{amount}} aux taux de {{authority}}."
+  },
+  "Last week: {{distance}} for work over {{count}} drives.": {
+    "one": "La semaine dernière : {{distance}} pour le travail en {{count}} trajet.",
+    "many": "La semaine dernière : {{distance}} pour le travail en {{count}} trajets.",
+    "other": "La semaine dernière : {{distance}} pour le travail en {{count}} trajets."
+  },
+  "Busiest day: {{day}}, with {{distance}}.": "Jour le plus chargé : {{day}}, avec {{distance}}.",
+  "About the same as the same days last week.": "À peu près comme les mêmes jours la semaine dernière.",
+  "About the same as the week before.": "À peu près comme la semaine d’avant.",
+  "Up {{percent}}% on the same days last week.": "En hausse de {{percent}} % par rapport aux mêmes jours la semaine dernière.",
+  "Up {{percent}}% on the week before.": "En hausse de {{percent}} % par rapport à la semaine d’avant.",
+  "Down {{percent}}% on the same days last week.": "En baisse de {{percent}} % par rapport aux mêmes jours la semaine dernière.",
+  "Down {{percent}}% on the week before.": "En baisse de {{percent}} % par rapport à la semaine d’avant.",
+  "Earnings by app: {{list}}.": "Revenus par app : {{list}}.",
 };
 
 export default dictionary;

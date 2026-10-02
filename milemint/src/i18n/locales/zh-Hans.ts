@@ -1279,6 +1279,46 @@ const dictionary: Dictionary = {
   "Add last week’s earnings to see how much to put aside for tax.": "添加上周收入，看看该为税款预留多少。",
   "Your mileage covered last week’s earnings, so there’s nothing to put aside.": "你的里程抵扣已覆盖上周收入，无需预留。",
   "Put {{amount}} aside from last week’s driving.": "从上周开车的收入中预留 {{amount}}。",
+  "Your week": "你的一周",
+  "Written on your iPhone by Apple Intelligence. The figures come from your drives.": "由 Apple 智能在你的 iPhone 上撰写，数据来自你的行程。",
+  "Turn on Apple Intelligence in Settings to ask MileSprout about your drives.": "在“设置”中打开 Apple 智能，即可向 MileSprout 询问你的行程。",
+  "Apple Intelligence is still getting ready. You can ask MileSprout about your drives once it’s done.": "Apple 智能仍在准备中。准备好后，你就可以向 MileSprout 询问你的行程。",
+  "Pro adds your full weekly recap: your busiest day and how the week compares with the last.": "Pro 提供完整的每周回顾：你最忙的一天，以及与上周的对比。",
+  "Pro adds your full weekly recap and Ask MileSprout: questions about your drives, answered on your iPhone.": "Pro 提供完整的每周回顾和“问问 MileSprout”：关于行程的问题，直接在你的 iPhone 上解答。",
+  "How many work miles in {{month}}?": "{{month}}有多少工作英里？",
+  "How many work km in {{month}}?": "{{month}}有多少工作公里？",
+  "What did I claim last month?": "我上个月申报了多少？",
+  "Which day did I drive most?": "我哪天开车最多？",
+  "Ask MileSprout": "问问 MileSprout",
+  "Ask about your drives": "询问你的行程",
+  "Ask": "提问",
+  "Thinking…": "正在思考…",
+  "Sorry, I couldn’t answer that from your drives. Try asking about a month, a week or a day.": "抱歉，无法根据你的行程回答这个问题。试着问问某个月、某一周或某一天。",
+  "No work drives yet this week.": "本周还没有工作行程。",
+  "No work drives last week.": "上周没有工作行程。",
+  "{{count}} drives still to sort.": {
+    "other": "还有 {{count}} 个行程待分类。"
+  },
+  "This week so far: {{distance}} for work over {{count}} drives, worth {{amount}} at {{authority}} rates.": {
+    "other": "本周至今：{{count}} 个工作行程，共 {{distance}}，按 {{authority}} 费率价值 {{amount}}。"
+  },
+  "This week so far: {{distance}} for work over {{count}} drives.": {
+    "other": "本周至今：{{count}} 个工作行程，共 {{distance}}。"
+  },
+  "Last week: {{distance}} for work over {{count}} drives, worth {{amount}} at {{authority}} rates.": {
+    "other": "上周：{{count}} 个工作行程，共 {{distance}}，按 {{authority}} 费率价值 {{amount}}。"
+  },
+  "Last week: {{distance}} for work over {{count}} drives.": {
+    "other": "上周：{{count}} 个工作行程，共 {{distance}}。"
+  },
+  "Busiest day: {{day}}, with {{distance}}.": "最忙的一天：{{day}}，{{distance}}。",
+  "About the same as the same days last week.": "与上周同期大致相同。",
+  "About the same as the week before.": "与前一周大致相同。",
+  "Up {{percent}}% on the same days last week.": "比上周同期多 {{percent}}%。",
+  "Up {{percent}}% on the week before.": "比前一周多 {{percent}}%。",
+  "Down {{percent}}% on the same days last week.": "比上周同期少 {{percent}}%。",
+  "Down {{percent}}% on the week before.": "比前一周少 {{percent}}%。",
+  "Earnings by app: {{list}}.": "各应用收入：{{list}}。",
 };
 
 export default dictionary;

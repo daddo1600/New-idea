@@ -178,6 +178,12 @@
     ]
   },
   {
+    "key": "{{count}} drives still to sort.",
+    "files": [
+      "domain/recap.ts"
+    ]
+  },
+  {
     "key": "{{count}} friends",
     "files": [
       "components/invite.tsx"
@@ -875,6 +881,18 @@
     ]
   },
   {
+    "key": "About the same as the same days last week.",
+    "files": [
+      "domain/recap.ts"
+    ]
+  },
+  {
+    "key": "About the same as the week before.",
+    "files": [
+      "domain/recap.ts"
+    ]
+  },
+  {
     "key": "Active · thank you!",
     "files": [
       "app/(tabs)/money.tsx"
@@ -1083,6 +1101,12 @@
     ]
   },
   {
+    "key": "Apple Intelligence is still getting ready. You can ask MileSprout about your drives once it’s done.",
+    "files": [
+      "components/money/weekly-recap.tsx"
+    ]
+  },
+  {
     "key": "Apple Maps couldn’t place that one. Try another suggestion.",
     "files": [
       "components/place-field.tsx"
@@ -1104,6 +1128,24 @@
     "key": "Area only",
     "files": [
       "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Ask",
+    "files": [
+      "components/money/weekly-recap.tsx"
+    ]
+  },
+  {
+    "key": "Ask about your drives",
+    "files": [
+      "components/money/weekly-recap.tsx"
+    ]
+  },
+  {
+    "key": "Ask MileSprout",
+    "files": [
+      "components/money/weekly-recap.tsx"
     ]
   },
   {
@@ -1377,6 +1419,12 @@
     "key": "Both methods come out the same.",
     "files": [
       "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Busiest day: {{day}}, with {{distance}}.",
+    "files": [
+      "domain/recap.ts"
     ]
   },
   {
@@ -1988,6 +2036,18 @@
     ]
   },
   {
+    "key": "Down {{percent}}% on the same days last week.",
+    "files": [
+      "domain/recap.ts"
+    ]
+  },
+  {
+    "key": "Down {{percent}}% on the week before.",
+    "files": [
+      "domain/recap.ts"
+    ]
+  },
+  {
     "key": "Drive safely! 🚗",
     "files": [
       "domain/cheers.ts"
@@ -2143,6 +2203,12 @@
     "key": "Earned {{earned}}, minus {{mileage}} of mileage",
     "files": [
       "components/money/set-aside-card.tsx"
+    ]
+  },
+  {
+    "key": "Earnings by app: {{list}}.",
+    "files": [
+      "domain/recap.ts"
     ]
   },
   {
@@ -3018,6 +3084,18 @@
     ]
   },
   {
+    "key": "How many work km in {{month}}?",
+    "files": [
+      "components/money/weekly-recap.tsx"
+    ]
+  },
+  {
+    "key": "How many work miles in {{month}}?",
+    "files": [
+      "components/money/weekly-recap.tsx"
+    ]
+  },
+  {
     "key": "How to claim",
     "files": [
       "app/claim-relief.tsx",
@@ -3413,6 +3491,18 @@
     "key": "Last week",
     "files": [
       "components/money/earnings-sheet.tsx"
+    ]
+  },
+  {
+    "key": "Last week: {{distance}} for work over {{count}} drives, worth {{amount}} at {{authority}} rates.",
+    "files": [
+      "domain/recap.ts"
+    ]
+  },
+  {
+    "key": "Last week: {{distance}} for work over {{count}} drives.",
+    "files": [
+      "domain/recap.ts"
     ]
   },
   {
@@ -4036,6 +4126,18 @@
     "key": "No trips in {{year}} yet.",
     "files": [
       "app/report.tsx"
+    ]
+  },
+  {
+    "key": "No work drives last week.",
+    "files": [
+      "domain/recap.ts"
+    ]
+  },
+  {
+    "key": "No work drives yet this week.",
+    "files": [
+      "domain/recap.ts"
     ]
   },
   {
@@ -4694,6 +4796,18 @@
     "key": "Pro & friends",
     "files": [
       "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Pro adds your full weekly recap and Ask MileSprout: questions about your drives, answered on your iPhone.",
+    "files": [
+      "components/money/weekly-recap.tsx"
+    ]
+  },
+  {
+    "key": "Pro adds your full weekly recap: your busiest day and how the week compares with the last.",
+    "files": [
+      "components/money/weekly-recap.tsx"
     ]
   },
   {
@@ -5448,6 +5562,12 @@
     ]
   },
   {
+    "key": "Sorry, I couldn’t answer that from your drives. Try asking about a month, a week or a day.",
+    "files": [
+      "components/money/weekly-recap.tsx"
+    ]
+  },
+  {
     "key": "Sort {{count}} drives",
     "files": [
       "components/tax-countdown.tsx"
@@ -6133,6 +6253,12 @@
     ]
   },
   {
+    "key": "Thinking…",
+    "files": [
+      "components/money/weekly-recap.tsx"
+    ]
+  },
+  {
     "key": "This Apple Account doesn’t have MileSprout Pro.",
     "files": [
       "app/(tabs)/settings.tsx",
@@ -6205,6 +6331,18 @@
       "components/money/earnings-sheet.tsx",
       "components/money/set-aside-card.tsx",
       "domain/missed-miles.ts"
+    ]
+  },
+  {
+    "key": "This week so far: {{distance}} for work over {{count}} drives, worth {{amount}} at {{authority}} rates.",
+    "files": [
+      "domain/recap.ts"
+    ]
+  },
+  {
+    "key": "This week so far: {{distance}} for work over {{count}} drives.",
+    "files": [
+      "domain/recap.ts"
     ]
   },
   {
@@ -6406,6 +6544,12 @@
     ]
   },
   {
+    "key": "Turn on Apple Intelligence in Settings to ask MileSprout about your drives.",
+    "files": [
+      "components/money/weekly-recap.tsx"
+    ]
+  },
+  {
     "key": "Turn on automatic tracking",
     "files": [
       "app/setup-tracking.tsx"
@@ -6500,7 +6644,8 @@
     "key": "Unlock with Pro",
     "files": [
       "app/report.tsx",
-      "components/money/quarterly-figures.tsx"
+      "components/money/quarterly-figures.tsx",
+      "components/money/weekly-recap.tsx"
     ]
   },
   {
@@ -6513,6 +6658,18 @@
     "key": "Unlocked",
     "files": [
       "components/invite.tsx"
+    ]
+  },
+  {
+    "key": "Up {{percent}}% on the same days last week.",
+    "files": [
+      "domain/recap.ts"
+    ]
+  },
+  {
+    "key": "Up {{percent}}% on the week before.",
+    "files": [
+      "domain/recap.ts"
     ]
   },
   {
@@ -6705,6 +6862,12 @@
     ]
   },
   {
+    "key": "What did I claim last month?",
+    "files": [
+      "components/money/weekly-recap.tsx"
+    ]
+  },
+  {
     "key": "What did you drive for work?",
     "files": [
       "domain/reminders.ts"
@@ -6768,6 +6931,12 @@
     "key": "Where your shift started",
     "files": [
       "domain/shift-split.ts"
+    ]
+  },
+  {
+    "key": "Which day did I drive most?",
+    "files": [
+      "components/money/weekly-recap.tsx"
     ]
   },
   {
@@ -6889,6 +7058,12 @@
     "key": "worth about {{amount}}",
     "files": [
       "app/compare.tsx"
+    ]
+  },
+  {
+    "key": "Written on your iPhone by Apple Intelligence. The figures come from your drives.",
+    "files": [
+      "components/money/weekly-recap.tsx"
     ]
   },
   {
@@ -7301,6 +7476,12 @@
     "key": "Your vehicles",
     "files": [
       "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Your week",
+    "files": [
+      "components/money/weekly-recap.tsx"
     ]
   }
 ]

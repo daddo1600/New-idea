@@ -1316,6 +1316,51 @@ const dictionary: Dictionary = {
   "Add last week’s earnings to see how much to put aside for tax.": "ট্যাক্সের জন্য কত আলাদা রাখবেন দেখতে গত সপ্তাহের আয় যোগ করুন।",
   "Your mileage covered last week’s earnings, so there’s nothing to put aside.": "আপনার মাইলেজ গত সপ্তাহের আয় পুরোটা ঢেকে দিয়েছে, তাই কিছু আলাদা রাখার দরকার নেই।",
   "Put {{amount}} aside from last week’s driving.": "গত সপ্তাহে গাড়ি চালিয়ে আয় থেকে {{amount}} আলাদা রাখুন।",
+  "Your week": "আপনার সপ্তাহ",
+  "Written on your iPhone by Apple Intelligence. The figures come from your drives.": "আপনার iPhone-এ Apple Intelligence লিখেছে। হিসাবগুলো আপনার ট্রিপ থেকে।",
+  "Turn on Apple Intelligence in Settings to ask MileSprout about your drives.": "আপনার ট্রিপ নিয়ে MileSprout-কে জিজ্ঞাসা করতে সেটিংসে Apple Intelligence চালু করুন।",
+  "Apple Intelligence is still getting ready. You can ask MileSprout about your drives once it’s done.": "Apple Intelligence এখনও তৈরি হচ্ছে। তৈরি হলেই আপনার ট্রিপ নিয়ে MileSprout-কে জিজ্ঞাসা করতে পারবেন।",
+  "Pro adds your full weekly recap: your busiest day and how the week compares with the last.": "Pro-তে পুরো সাপ্তাহিক সারাংশ পাবেন: আপনার সবচেয়ে ব্যস্ত দিন আর আগের সপ্তাহের সঙ্গে তুলনা।",
+  "Pro adds your full weekly recap and Ask MileSprout: questions about your drives, answered on your iPhone.": "Pro-তে পুরো সাপ্তাহিক সারাংশ আর MileSprout-কে জিজ্ঞাসা করুন পাবেন: আপনার ট্রিপ নিয়ে প্রশ্ন, উত্তর আপনার iPhone-এই।",
+  "How many work miles in {{month}}?": "{{month}} মাসে কাজের কত মাইল?",
+  "How many work km in {{month}}?": "{{month}} মাসে কাজের কত কিমি?",
+  "What did I claim last month?": "গত মাসে আমি কত ক্লেম করেছি?",
+  "Which day did I drive most?": "কোন দিন আমি সবচেয়ে বেশি গাড়ি চালিয়েছি?",
+  "Ask MileSprout": "MileSprout-কে জিজ্ঞাসা করুন",
+  "Ask about your drives": "আপনার ট্রিপ নিয়ে জিজ্ঞাসা করুন",
+  "Ask": "জিজ্ঞাসা",
+  "Thinking…": "ভাবছে…",
+  "Sorry, I couldn’t answer that from your drives. Try asking about a month, a week or a day.": "দুঃখিত, আপনার ট্রিপ থেকে এর উত্তর দিতে পারলাম না। কোনো মাস, সপ্তাহ বা দিন নিয়ে জিজ্ঞাসা করে দেখুন।",
+  "No work drives yet this week.": "এই সপ্তাহে এখনও কাজের কোনো ট্রিপ নেই।",
+  "No work drives last week.": "গত সপ্তাহে কাজের কোনো ট্রিপ ছিল না।",
+  "{{count}} drives still to sort.": {
+    "one": "{{count}}টি ট্রিপ এখনও বাছাই বাকি।",
+    "other": "{{count}}টি ট্রিপ এখনও বাছাই বাকি।"
+  },
+  "This week so far: {{distance}} for work over {{count}} drives, worth {{amount}} at {{authority}} rates.": {
+    "one": "এই সপ্তাহে এখন পর্যন্ত: {{count}}টি ট্রিপে কাজের জন্য {{distance}}, {{authority}} রেটে যার মূল্য {{amount}}।",
+    "other": "এই সপ্তাহে এখন পর্যন্ত: {{count}}টি ট্রিপে কাজের জন্য {{distance}}, {{authority}} রেটে যার মূল্য {{amount}}।"
+  },
+  "This week so far: {{distance}} for work over {{count}} drives.": {
+    "one": "এই সপ্তাহে এখন পর্যন্ত: {{count}}টি ট্রিপে কাজের জন্য {{distance}}।",
+    "other": "এই সপ্তাহে এখন পর্যন্ত: {{count}}টি ট্রিপে কাজের জন্য {{distance}}।"
+  },
+  "Last week: {{distance}} for work over {{count}} drives, worth {{amount}} at {{authority}} rates.": {
+    "one": "গত সপ্তাহে: {{count}}টি ট্রিপে কাজের জন্য {{distance}}, {{authority}} রেটে যার মূল্য {{amount}}।",
+    "other": "গত সপ্তাহে: {{count}}টি ট্রিপে কাজের জন্য {{distance}}, {{authority}} রেটে যার মূল্য {{amount}}।"
+  },
+  "Last week: {{distance}} for work over {{count}} drives.": {
+    "one": "গত সপ্তাহে: {{count}}টি ট্রিপে কাজের জন্য {{distance}}।",
+    "other": "গত সপ্তাহে: {{count}}টি ট্রিপে কাজের জন্য {{distance}}।"
+  },
+  "Busiest day: {{day}}, with {{distance}}.": "সবচেয়ে ব্যস্ত দিন: {{day}}, {{distance}}।",
+  "About the same as the same days last week.": "গত সপ্তাহের একই দিনগুলোর মতোই।",
+  "About the same as the week before.": "তার আগের সপ্তাহের মতোই।",
+  "Up {{percent}}% on the same days last week.": "গত সপ্তাহের একই দিনগুলোর চেয়ে {{percent}}% বেশি।",
+  "Up {{percent}}% on the week before.": "তার আগের সপ্তাহের চেয়ে {{percent}}% বেশি।",
+  "Down {{percent}}% on the same days last week.": "গত সপ্তাহের একই দিনগুলোর চেয়ে {{percent}}% কম।",
+  "Down {{percent}}% on the week before.": "তার আগের সপ্তাহের চেয়ে {{percent}}% কম।",
+  "Earnings by app: {{list}}.": "অ্যাপ অনুযায়ী আয়: {{list}}।",
 };
 
 export default dictionary;

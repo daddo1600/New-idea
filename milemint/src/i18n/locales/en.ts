@@ -119,6 +119,26 @@ const en: Dictionary = {
   '{{count}} friends': { one: '{{count}} friend', other: '{{count}} friends' },
   '{{perk}}: {{count}} friends': { one: '{{perk}}: {{count}} friend', other: '{{perk}}: {{count}} friends' },
   '{{count}} more friend → {{perk}}': { one: '{{count}} more friend → {{perk}}', other: '{{count}} more friends → {{perk}}' },
+  "{{count}} drives still to sort.": {
+    "one": "{{count}} drive still to sort.",
+    "other": "{{count}} drives still to sort."
+  },
+  "This week so far: {{distance}} for work over {{count}} drives, worth {{amount}} at {{authority}} rates.": {
+    "one": "This week so far: {{distance}} for work over {{count}} drive, worth {{amount}} at {{authority}} rates.",
+    "other": "This week so far: {{distance}} for work over {{count}} drives, worth {{amount}} at {{authority}} rates."
+  },
+  "This week so far: {{distance}} for work over {{count}} drives.": {
+    "one": "This week so far: {{distance}} for work over {{count}} drive.",
+    "other": "This week so far: {{distance}} for work over {{count}} drives."
+  },
+  "Last week: {{distance}} for work over {{count}} drives, worth {{amount}} at {{authority}} rates.": {
+    "one": "Last week: {{distance}} for work over {{count}} drive, worth {{amount}} at {{authority}} rates.",
+    "other": "Last week: {{distance}} for work over {{count}} drives, worth {{amount}} at {{authority}} rates."
+  },
+  "Last week: {{distance}} for work over {{count}} drives.": {
+    "one": "Last week: {{distance}} for work over {{count}} drive.",
+    "other": "Last week: {{distance}} for work over {{count}} drives."
+  },
 };
 
 export default en;

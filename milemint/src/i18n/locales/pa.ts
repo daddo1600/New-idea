@@ -1328,6 +1328,51 @@ const dictionary: Dictionary = {
   "Add last week’s earnings to see how much to put aside for tax.": "ਟੈਕਸ ਲਈ ਕਿੰਨਾ ਵੱਖ ਰੱਖਣਾ ਹੈ, ਇਹ ਵੇਖਣ ਲਈ ਪਿਛਲੇ ਹਫ਼ਤੇ ਦੀ ਕਮਾਈ ਜੋੜੋ।",
   "Your mileage covered last week’s earnings, so there’s nothing to put aside.": "ਤੁਹਾਡੀ ਮਾਈਲੇਜ ਨੇ ਪਿਛਲੇ ਹਫ਼ਤੇ ਦੀ ਕਮਾਈ ਪੂਰੀ ਕਵਰ ਕਰ ਲਈ, ਇਸ ਲਈ ਕੁਝ ਵੱਖ ਨਹੀਂ ਰੱਖਣਾ।",
   "Put {{amount}} aside from last week’s driving.": "ਪਿਛਲੇ ਹਫ਼ਤੇ ਦੀ ਡਰਾਈਵਿੰਗ ਦੀ ਕਮਾਈ ਵਿੱਚੋਂ {{amount}} ਵੱਖ ਰੱਖੋ।",
+  "Your week": "ਤੁਹਾਡਾ ਹਫ਼ਤਾ",
+  "Written on your iPhone by Apple Intelligence. The figures come from your drives.": "Apple Intelligence ਨੇ ਤੁਹਾਡੇ iPhone ’ਤੇ ਲਿਖਿਆ। ਅੰਕੜੇ ਤੁਹਾਡੇ ਟ੍ਰਿਪਾਂ ਤੋਂ ਹਨ।",
+  "Turn on Apple Intelligence in Settings to ask MileSprout about your drives.": "ਆਪਣੇ ਟ੍ਰਿਪਾਂ ਬਾਰੇ MileSprout ਨੂੰ ਪੁੱਛਣ ਲਈ ਸੈਟਿੰਗਾਂ ਵਿੱਚ Apple Intelligence ਚਾਲੂ ਕਰੋ।",
+  "Apple Intelligence is still getting ready. You can ask MileSprout about your drives once it’s done.": "Apple Intelligence ਅਜੇ ਤਿਆਰ ਹੋ ਰਿਹਾ ਹੈ। ਤਿਆਰ ਹੁੰਦੇ ਹੀ ਤੁਸੀਂ ਆਪਣੇ ਟ੍ਰਿਪਾਂ ਬਾਰੇ MileSprout ਨੂੰ ਪੁੱਛ ਸਕੋਗੇ।",
+  "Pro adds your full weekly recap: your busiest day and how the week compares with the last.": "Pro ਵਿੱਚ ਪੂਰਾ ਹਫ਼ਤਾਵਾਰੀ ਸਾਰ ਮਿਲਦਾ ਹੈ: ਤੁਹਾਡਾ ਸਭ ਤੋਂ ਰੁੱਝਿਆ ਦਿਨ ਅਤੇ ਪਿਛਲੇ ਹਫ਼ਤੇ ਨਾਲ ਤੁਲਨਾ।",
+  "Pro adds your full weekly recap and Ask MileSprout: questions about your drives, answered on your iPhone.": "Pro ਵਿੱਚ ਪੂਰਾ ਹਫ਼ਤਾਵਾਰੀ ਸਾਰ ਅਤੇ MileSprout ਨੂੰ ਪੁੱਛੋ ਮਿਲਦਾ ਹੈ: ਤੁਹਾਡੇ ਟ੍ਰਿਪਾਂ ਬਾਰੇ ਸਵਾਲ, ਜਵਾਬ ਤੁਹਾਡੇ iPhone ’ਤੇ।",
+  "How many work miles in {{month}}?": "{{month}} ਵਿੱਚ ਕੰਮ ਦੇ ਕਿੰਨੇ ਮੀਲ?",
+  "How many work km in {{month}}?": "{{month}} ਵਿੱਚ ਕੰਮ ਦੇ ਕਿੰਨੇ ਕਿਲੋਮੀਟਰ?",
+  "What did I claim last month?": "ਪਿਛਲੇ ਮਹੀਨੇ ਮੈਂ ਕਿੰਨਾ ਕਲੇਮ ਕੀਤਾ?",
+  "Which day did I drive most?": "ਮੈਂ ਕਿਸ ਦਿਨ ਸਭ ਤੋਂ ਵੱਧ ਡਰਾਈਵ ਕੀਤਾ?",
+  "Ask MileSprout": "MileSprout ਨੂੰ ਪੁੱਛੋ",
+  "Ask about your drives": "ਆਪਣੇ ਟ੍ਰਿਪਾਂ ਬਾਰੇ ਪੁੱਛੋ",
+  "Ask": "ਪੁੱਛੋ",
+  "Thinking…": "ਸੋਚ ਰਿਹਾ ਹੈ…",
+  "Sorry, I couldn’t answer that from your drives. Try asking about a month, a week or a day.": "ਮਾਫ਼ ਕਰਨਾ, ਤੁਹਾਡੇ ਟ੍ਰਿਪਾਂ ਤੋਂ ਇਸ ਦਾ ਜਵਾਬ ਨਹੀਂ ਮਿਲ ਸਕਿਆ। ਕਿਸੇ ਮਹੀਨੇ, ਹਫ਼ਤੇ ਜਾਂ ਦਿਨ ਬਾਰੇ ਪੁੱਛ ਕੇ ਦੇਖੋ।",
+  "No work drives yet this week.": "ਇਸ ਹਫ਼ਤੇ ਅਜੇ ਤੱਕ ਕੰਮ ਦਾ ਕੋਈ ਟ੍ਰਿਪ ਨਹੀਂ।",
+  "No work drives last week.": "ਪਿਛਲੇ ਹਫ਼ਤੇ ਕੰਮ ਦਾ ਕੋਈ ਟ੍ਰਿਪ ਨਹੀਂ ਸੀ।",
+  "{{count}} drives still to sort.": {
+    "one": "{{count}} ਟ੍ਰਿਪ ਅਜੇ ਛਾਂਟਣਾ ਬਾਕੀ ਹੈ।",
+    "other": "{{count}} ਟ੍ਰਿਪ ਅਜੇ ਛਾਂਟਣੇ ਬਾਕੀ ਹਨ।"
+  },
+  "This week so far: {{distance}} for work over {{count}} drives, worth {{amount}} at {{authority}} rates.": {
+    "one": "ਇਸ ਹਫ਼ਤੇ ਹੁਣ ਤੱਕ: {{count}} ਟ੍ਰਿਪ ਵਿੱਚ ਕੰਮ ਲਈ {{distance}}, {{authority}} ਰੇਟਾਂ ’ਤੇ {{amount}} ਦੇ ਬਰਾਬਰ।",
+    "other": "ਇਸ ਹਫ਼ਤੇ ਹੁਣ ਤੱਕ: {{count}} ਟ੍ਰਿਪਾਂ ਵਿੱਚ ਕੰਮ ਲਈ {{distance}}, {{authority}} ਰੇਟਾਂ ’ਤੇ {{amount}} ਦੇ ਬਰਾਬਰ।"
+  },
+  "This week so far: {{distance}} for work over {{count}} drives.": {
+    "one": "ਇਸ ਹਫ਼ਤੇ ਹੁਣ ਤੱਕ: {{count}} ਟ੍ਰਿਪ ਵਿੱਚ ਕੰਮ ਲਈ {{distance}}।",
+    "other": "ਇਸ ਹਫ਼ਤੇ ਹੁਣ ਤੱਕ: {{count}} ਟ੍ਰਿਪਾਂ ਵਿੱਚ ਕੰਮ ਲਈ {{distance}}।"
+  },
+  "Last week: {{distance}} for work over {{count}} drives, worth {{amount}} at {{authority}} rates.": {
+    "one": "ਪਿਛਲੇ ਹਫ਼ਤੇ: {{count}} ਟ੍ਰਿਪ ਵਿੱਚ ਕੰਮ ਲਈ {{distance}}, {{authority}} ਰੇਟਾਂ ’ਤੇ {{amount}} ਦੇ ਬਰਾਬਰ।",
+    "other": "ਪਿਛਲੇ ਹਫ਼ਤੇ: {{count}} ਟ੍ਰਿਪਾਂ ਵਿੱਚ ਕੰਮ ਲਈ {{distance}}, {{authority}} ਰੇਟਾਂ ’ਤੇ {{amount}} ਦੇ ਬਰਾਬਰ।"
+  },
+  "Last week: {{distance}} for work over {{count}} drives.": {
+    "one": "ਪਿਛਲੇ ਹਫ਼ਤੇ: {{count}} ਟ੍ਰਿਪ ਵਿੱਚ ਕੰਮ ਲਈ {{distance}}।",
+    "other": "ਪਿਛਲੇ ਹਫ਼ਤੇ: {{count}} ਟ੍ਰਿਪਾਂ ਵਿੱਚ ਕੰਮ ਲਈ {{distance}}।"
+  },
+  "Busiest day: {{day}}, with {{distance}}.": "ਸਭ ਤੋਂ ਰੁੱਝਿਆ ਦਿਨ: {{day}}, {{distance}}।",
+  "About the same as the same days last week.": "ਪਿਛਲੇ ਹਫ਼ਤੇ ਦੇ ਇਨ੍ਹਾਂ ਹੀ ਦਿਨਾਂ ਜਿੰਨਾ ਹੀ।",
+  "About the same as the week before.": "ਉਸ ਤੋਂ ਪਹਿਲਾਂ ਵਾਲੇ ਹਫ਼ਤੇ ਜਿੰਨਾ ਹੀ।",
+  "Up {{percent}}% on the same days last week.": "ਪਿਛਲੇ ਹਫ਼ਤੇ ਦੇ ਇਨ੍ਹਾਂ ਹੀ ਦਿਨਾਂ ਨਾਲੋਂ {{percent}}% ਵੱਧ।",
+  "Up {{percent}}% on the week before.": "ਉਸ ਤੋਂ ਪਹਿਲਾਂ ਵਾਲੇ ਹਫ਼ਤੇ ਨਾਲੋਂ {{percent}}% ਵੱਧ।",
+  "Down {{percent}}% on the same days last week.": "ਪਿਛਲੇ ਹਫ਼ਤੇ ਦੇ ਇਨ੍ਹਾਂ ਹੀ ਦਿਨਾਂ ਨਾਲੋਂ {{percent}}% ਘੱਟ।",
+  "Down {{percent}}% on the week before.": "ਉਸ ਤੋਂ ਪਹਿਲਾਂ ਵਾਲੇ ਹਫ਼ਤੇ ਨਾਲੋਂ {{percent}}% ਘੱਟ।",
+  "Earnings by app: {{list}}.": "ਐਪ ਮੁਤਾਬਕ ਕਮਾਈ: {{list}}।",
 };
 
 export default dictionary;
