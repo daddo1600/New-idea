@@ -1,6 +1,16 @@
 import * as Haptics from 'expo-haptics';
 import { useEffect, useMemo } from 'react';
-import { Modal, Platform, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import {
+  Modal,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -23,7 +33,20 @@ const PIECES = 36;
 export type CelebrationContent = { emoji: string; title: string; message: string; share: string };
 
 /** One falling piece of confetti. */
-function Piece({ index, width, height }: { index: number; width: number; height: number }) {
+function Piece({
+  index,
+  width,
+  height,
+  colors,
+  duration,
+}: {
+  index: number;
+  width: number;
+  height: number;
+  colors: readonly string[];
+  /** The slowest piece's fall, in milliseconds (the quickest takes 60% of it). */
+  duration: number;
+}) {
   // Deterministic "random" spread so it looks scattered but never jumps between renders.
   const seed = (n: number) => {
     const x = Math.sin(index * 97.13 + n * 13.7) * 10_000;
@@ -33,13 +56,13 @@ function Piece({ index, width, height }: { index: number; width: number; height:
   const left = seed(1) * width;
   const drift = (seed(2) - 0.5) * 120;
   const spin = (seed(3) - 0.5) * 720;
-  const color = CONFETTI_COLORS[index % CONFETTI_COLORS.length];
+  const color = colors[index % colors.length];
   const size = 6 + seed(4) * 6;
 
   useEffect(() => {
     fall.value = withDelay(
-      seed(5) * 400,
-      withTiming(1, { duration: 1800 + seed(6) * 1200, easing: Easing.out(Easing.quad) }),
+      seed(5) * 400 * (duration / 3000),
+      withTiming(1, { duration: duration * (0.6 + seed(6) * 0.4), easing: Easing.out(Easing.quad) }),
     );
     // seed only depends on index, which never changes for a piece.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,6 +85,82 @@ function Piece({ index, width, height }: { index: number; width: number; height:
   );
 }
 
+/** Confetti falling over the whole of its parent (`width` × `height`), in `colors`. */
+export function Confetti({
+  width,
+  height,
+  colors = CONFETTI_COLORS,
+  count = PIECES,
+  duration = 3000,
+}: {
+  width: number;
+  height: number;
+  colors?: readonly string[];
+  count?: number;
+  duration?: number;
+}) {
+  const pieces = useMemo(() => Array.from({ length: count }, (_, i) => i), [count]);
+  return pieces.map((i) => (
+    <Piece key={i} index={i} width={width} height={height} colors={colors} duration={duration} />
+  ));
+}
+
+/**
+ * A small pop of confetti thrown out from one point (the top left of `style`'s
+ * box), for a step done right. `reach` scales how far it flies.
+ */
+export function Burst({
+  style,
+  colors = CONFETTI_COLORS,
+  count = 18,
+  reach = 1,
+}: {
+  style?: StyleProp<ViewStyle>;
+  colors?: readonly string[];
+  count?: number;
+  reach?: number;
+}) {
+  const pieces = useMemo(() => Array.from({ length: count }, (_, i) => i), [count]);
+  return (
+    <View pointerEvents="none" style={style}>
+      {pieces.map((i) => (
+        <BurstPiece key={i} index={i} count={count} colors={colors} scale={reach} />
+      ))}
+    </View>
+  );
+}
+
+function BurstPiece({
+  index,
+  count,
+  colors,
+  scale,
+}: {
+  index: number;
+  count: number;
+  colors: readonly string[];
+  scale: number;
+}) {
+  const fly = useSharedValue(0);
+  useEffect(() => {
+    fly.set(withTiming(1, { duration: 900 + (index % 5) * 90, easing: Easing.out(Easing.cubic) }));
+  }, [fly, index]);
+  const angle = (index / count) * Math.PI * 2 + (index % 3) * 0.2;
+  const reach = (70 + (index % 4) * 22) * scale;
+  const style = useAnimatedStyle(() => ({
+    opacity: 1 - Math.max(0, fly.value - 0.6) * 2.5,
+    transform: [
+      { translateX: Math.cos(angle) * reach * fly.value },
+      // Thrown out, then falling a little.
+      { translateY: Math.sin(angle) * reach * 0.6 * fly.value + 40 * fly.value * fly.value },
+      { rotate: `${index * 47 * fly.value}deg` },
+    ],
+  }));
+  return (
+    <Animated.View style={[styles.burstPiece, { backgroundColor: colors[index % colors.length] }, style]} />
+  );
+}
+
 /**
  * A pat on the back: confetti in the brand colours, a gold badge and a warm
  * line, for a milestone reached. Share sends a ready-made brag message with a
@@ -73,7 +172,6 @@ export function Celebration({ content, onClose }: { content: CelebrationContent 
   const reduceMotion = useReducedMotion();
   const { width, height } = useWindowDimensions();
   const pop = useSharedValue(0);
-  const pieces = useMemo(() => Array.from({ length: PIECES }, (_, i) => i), []);
 
   useEffect(() => {
     if (!content) return;
@@ -91,7 +189,7 @@ export function Celebration({ content, onClose }: { content: CelebrationContent 
   return (
     <Modal visible transparent animationType="fade" onRequestClose={onClose}>
       <View style={styles.backdrop}>
-        {!reduceMotion && pieces.map((i) => <Piece key={i} index={i} width={width} height={height} />)}
+        {!reduceMotion && <Confetti width={width} height={height} />}
         <Animated.View style={[styles.card, cardStyle]} accessibilityRole="alert">
           <BrandGradient />
           <View style={styles.leaf} pointerEvents="none">
@@ -131,6 +229,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   piece: { position: 'absolute', top: 0, borderRadius: 2 },
+  burstPiece: { position: 'absolute', width: 8, height: 12, borderRadius: 2 },
   card: {
     width: '100%',
     maxWidth: 360,
