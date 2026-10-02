@@ -92,11 +92,14 @@ public class ShiftActivityModule: Module {
       guard #available(iOS 16.2, *) else { return false }
       let state = contentState(content)
       var shown = false
-      for activity in liveActivities() {
-        if activity.attributes.shiftId == shiftId && !shown {
+      let live = liveActivities()
+      for activity in Activity<ShiftActivityAttributes>.activities {
+        if activity.attributes.shiftId == shiftId && !shown && live.contains(where: { $0.id == activity.id }) {
           await activity.update(activityContent(state))
           shown = true
         } else {
+          // Other shifts' cards go, including an earlier shift's "Shift ended"
+          // summary still lingering on the lock screen.
           await activity.end(nil, dismissalPolicy: .immediate)
         }
       }
@@ -126,13 +129,16 @@ public class ShiftActivityModule: Module {
     }
 
     /**
-     * Ends every card. With a final `content` (the shift's summary) it stays
-     * on the lock screen for `lingerSeconds`; without, it goes at once.
+     * Ends every card. With a final `content` (the shift's summary) one card
+     * stays on the lock screen for `lingerSeconds`; without, they go at once.
+     * Only one summary is ever left: summaries of earlier shifts, and any
+     * other card, go at once, so ending shifts never stacks up cards.
      */
     AsyncFunction("end") { (content: ShiftContentRecord?, lingerSeconds: Double) async in
       guard #available(iOS 16.2, *) else { return }
+      let keep = liveActivities().last
       for activity in Activity<ShiftActivityAttributes>.activities {
-        if let content = content, lingerSeconds > 0 {
+        if let content = content, lingerSeconds > 0, activity.id == keep?.id {
           let state = contentState(content)
           await activity.end(
             ActivityContent(state: state, staleDate: nil),

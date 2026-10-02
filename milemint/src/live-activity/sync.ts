@@ -90,17 +90,21 @@ async function run(db: SQLiteDatabase, { drivesChanged }: { drivesChanged: boole
   shown = ok ? { shiftId: shift.id, content, at: now } : null;
 }
 
-/** The last card's figures, marked ended: what stays on the lock screen for a while. */
+/**
+ * The last card's figures, marked ended: what stays on the lock screen for a
+ * while. Null for a shift with no drives: nothing to sum up, so the card goes.
+ */
 async function endedContent(
   db: SQLiteDatabase,
   last: NonNullable<typeof shown>,
-): Promise<ShiftActivityContent> {
+): Promise<ShiftActivityContent | null> {
   const settings = await loadSettings(db);
   const row = await db.getFirstAsync<{ ended_at: string | null }>('SELECT ended_at FROM shifts WHERE id = ?;', last.shiftId);
   const endedAt = row?.ended_at ? Date.parse(row.ended_at) : Date.now();
   if (!settings.region) return { ...last.content, ended: true, driving: false };
   const region = REGIONS[settings.region];
   const list = await shiftDrives(db, last.shiftId, region);
+  if (list.length === 0) return null;
   return shiftActivityContent(
     { startedAt: last.content.startedAt, endedAt, now: Date.now(), paused: false, drives: list, liveDrive: null, region },
     t,
