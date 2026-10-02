@@ -8,8 +8,7 @@ import ReanimatedSwipeable, {
   type SwipeableMethods,
 } from 'react-native-gesture-handler/ReanimatedSwipeable';
 
-import { PopPress } from '@/components/pop-press';
-import { purposeIcon, shownPurpose } from '@/components/purpose-picker';
+import { quickPurposes, shownPurpose } from '@/components/purpose-picker';
 import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -17,11 +16,13 @@ import { Spacing } from '@/constants/theme';
 import type { AutoReason } from '@/domain/classify-rules';
 import { shownLabel } from '@/domain/privacy';
 import { formatDistance, formatMoney } from '@/domain/regions';
+import { type PlacePurposes, suggestPurpose } from '@/domain/suggestions';
 import { type Classification, type Trip, tripCostsMinor } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { useRegion } from '@/region/region';
 
+import { PurposeLine } from './purpose-line';
 import { CLASSIFY_OPTIONS, formatTime, rowStyles, SWIPE_THRESHOLD, SwipeAction } from './row-parts';
 
 const AUTO_NOTES: Record<AutoReason, string> = {
@@ -42,6 +43,8 @@ export function TripRow({
   onLongPress,
   usualPurpose,
   purposeChoices,
+  purposeHistory,
+  clientPrivacy = false,
   onPurpose,
   rowLeaves = false,
   onOpen,
@@ -52,11 +55,15 @@ export function TripRow({
   onOpen?: () => void;
   /** Filled in for business drives with none; a trip still showing it is marked to check. */
   usualPurpose: string | null;
-  /** One-tap purposes for a business drive without one, most likely first. */
+  /** Purposes to offer for a business drive, most likely first (the sheet's tiles). */
   purposeChoices: readonly string[];
+  /** The purposes last used at each place (see purposesByPlace), so the suggestion fits the drive. */
+  purposeHistory?: PlacePurposes;
+  /** Client privacy mode: typing your own purpose suggests a client reference. */
+  clientPrivacy?: boolean;
   /** Saves the purpose (a failed save puts the choices back). */
   onPurpose: (purpose: string) => void | Promise<unknown>;
-  /** The whole row leaves once a purpose is picked (see LeavesWithPurpose), so the choices don't fold away first. */
+  /** The whole row leaves once a purpose is picked (see LeavesWithPurpose), rather than showing it saved. */
   rowLeaves?: boolean;
   /** Cut off a shift: the part after it ended (the drive home), or in a pause. */
   offShift?: 'after' | 'pause' | null;
@@ -76,16 +83,41 @@ export function TripRow({
   const details = [
     trip.localDate,
     trip.source === 'auto' ? formatTime(trip.startedAt, region) : t('Added manually'),
-    shownPurpose(trip.purpose, t),
+    // A business drive's purpose has a line of its own (see PurposeLine).
+    business ? '' : shownPurpose(trip.purpose, t),
     deduction > 0 ? formatMoney(deduction, region) : '',
   ].filter(Boolean);
   const openDetails = onOpen ?? (() => router.push({ pathname: '/trip/[id]', params: { id: trip.id } }));
   // Filled in by the app with the usual purpose and not checked since: said quietly, so it can be.
   const filledWithUsual =
+    business &&
     !!trip.purposeFilled &&
     !trip.shiftId &&
     usualPurpose !== null &&
     trip.purpose.trim().toLowerCase() === usualPurpose.trim().toLowerCase();
+
+  const autoNote = !trip.autoReason
+    ? null
+    : trip.shiftId
+      ? t('Auto: on shift')
+      : trip.autoReason === 'work-hours'
+        ? business
+          ? t('Auto: in your work hours')
+          : t('Auto: outside your work hours · swipe right if it was work')
+        : t(AUTO_NOTES[trip.autoReason]);
+  const classify = (
+    <Segmented
+      compact={!unclassified}
+      options={CLASSIFY_OPTIONS.map((option) => ({ ...option, label: t(option.label) }))}
+      value={unclassified ? null : trip.classification}
+      onChange={onClassify}
+      accessibilityLabelFor={(option) =>
+        option.value === 'business'
+          ? t('Mark {{from}} to {{to}} as business', { from: trip.startLabel, to: trip.endLabel })
+          : t('Mark {{from}} to {{to}} as personal', { from: trip.startLabel, to: trip.endLabel })
+      }
+    />
+  );
 
   // Swipe right = Business, left = Personal. The buttons below stay for
   // VoiceOver and anyone who doesn't discover the gesture.
@@ -124,20 +156,31 @@ export function TripRow({
           <ThemedText type="small" themeColor="textSecondary">
             {details.join(' · ')}
           </ThemedText>
+          {business && (
+            <PurposeLine
+              purpose={trip.purpose}
+              suggestion={
+                needsPurpose(trip)
+                  ? suggestPurpose(trip, { byPlace: purposeHistory, usual: usualPurpose, choices: purposeChoices })
+                  : null
+              }
+              // Never an empty sheet (the practice run passes no choices): the common purposes follow.
+              choices={[...purposeChoices, ...quickPurposes({}, 10)]}
+              route={`${shownLabel(trip.startLabel, t)} → ${shownLabel(trip.endLabel, t)}`}
+              filledWithUsual={filledWithUsual}
+              clientPrivacy={clientPrivacy}
+              rowLeaves={rowLeaves}
+              onPick={onPurpose}
+            />
+          )}
           {business && tripCostsMinor(trip) > 0 && (
             <ThemedText type="small" themeColor="textSecondary">
               {t('+{{amount}} parking & tolls', { amount: formatMoney(tripCostsMinor(trip), region) })}
             </ThemedText>
           )}
-          {trip.autoReason && (
+          {unclassified && autoNote && (
             <ThemedText type="small" themeColor="textSecondary">
-              {trip.shiftId
-                ? t('Auto: on shift')
-                : trip.autoReason === 'work-hours'
-                  ? trip.classification === 'business'
-                    ? t('Auto: in your work hours')
-                    : t('Auto: outside your work hours · swipe right if it was work')
-                  : t(AUTO_NOTES[trip.autoReason])}
+              {autoNote}
             </ThemedText>
           )}
           {offShift && (
@@ -159,31 +202,17 @@ export function TripRow({
                 : t('Business or personal?')}
             </ThemedText>
           )}
-          {business && filledWithUsual && (
-            <Pressable
-              accessibilityRole="button"
-              accessibilityHint={t('Opens trip details')}
-              onPress={openDetails}
-              hitSlop={8}
-              style={rowStyles.savedLine}>
-              <ThemedText type="small" themeColor="textSecondary">
-                {t('Usual purpose · tap to change')}
+          {unclassified ? (
+            classify
+          ) : (
+            // Sorted: the choice stays, smaller, beside how it was sorted.
+            <View style={styles.sorted}>
+              <ThemedText type="small" themeColor="textSecondary" style={styles.sortedNote}>
+                {autoNote}
               </ThemedText>
-            </Pressable>
+              {classify}
+            </View>
           )}
-          {needsPurpose(trip) && (
-            <PurposeNeeded choices={purposeChoices} onPick={onPurpose} onOther={openDetails} rowLeaves={rowLeaves} />
-          )}
-          <Segmented
-            options={CLASSIFY_OPTIONS.map((option) => ({ ...option, label: t(option.label) }))}
-            value={unclassified ? null : trip.classification}
-            onChange={onClassify}
-            accessibilityLabelFor={(option) =>
-              option.value === 'business'
-                ? t('Mark {{from}} to {{to}} as business', { from: trip.startLabel, to: trip.endLabel })
-                : t('Mark {{from}} to {{to}} as personal', { from: trip.startLabel, to: trip.endLabel })
-            }
-          />
         </ThemedView>
       </Pressable>
     </ReanimatedSwipeable>
@@ -195,91 +224,8 @@ export function needsPurpose(trip: Trip): boolean {
   return trip.classification === 'business' && !trip.purpose.trim();
 }
 
-/** How long a picked purpose shows green with its ✓ before it's saved and moves on. */
-const PICKED_MS = 300;
-/** How long a row (or the purpose box) takes to slide out and close up. */
+/** How long a row takes to slide out and close up. */
 const LEAVE_MS = 280;
-
-/**
- * Under a business drive with no purpose: hard to miss, and one tap to fix.
- * Tax offices (HMRC, the IRS, CRA, ATO) want a purpose for every business
- * drive. "Other…" opens the trip, with the full purpose list.
- *
- * The tapped chip pops and turns green with a ✓ (and the phone taps back),
- * then the box folds away and the purpose is saved. With `rowLeaves`, the
- * whole row slides out instead (filling in purposes, see LeavesWithPurpose).
- */
-function PurposeNeeded({
-  choices,
-  onPick,
-  onOther,
-  rowLeaves = false,
-}: {
-  choices: readonly string[];
-  onPick: (purpose: string) => void | Promise<unknown>;
-  onOther: () => void;
-  rowLeaves?: boolean;
-}) {
-  const theme = useTheme();
-  const t = useT();
-  /** The chip tapped: shown green until the save lands, and no second tap meanwhile. */
-  const [picked, setPicked] = useState<string | null>(null);
-  const [folding, setFolding] = useState(false);
-  /** Bumped when a save fails, to bring the box back as it was. */
-  const [round, bumpRound] = useReducer((n: number) => n + 1, 0);
-  const save = (purpose: string) =>
-    Promise.resolve(onPick(purpose)).catch(() => {
-      setPicked(null);
-      setFolding(false);
-      bumpRound();
-    });
-  const chip =
-    (on: boolean) =>
-    ({ pressed }: { pressed: boolean }) => [
-      styles.purposeChip,
-      on
-        ? { backgroundColor: theme.accent, borderColor: theme.accent }
-        : { backgroundColor: pressed ? theme.backgroundSelected : theme.background, borderColor: theme.warning },
-    ];
-  return (
-    <Leaving key={round} leaving={folding} gap={Spacing.two} onGone={() => picked !== null && save(picked)}>
-      <View style={[styles.purposeNeeded, { borderColor: theme.warning, backgroundColor: theme.warning + '1A' }]}>
-        <ThemedText type="smallBold">⚠️ {t('Purpose needed for your tax records')}</ThemedText>
-        <View style={styles.purposeChips}>
-          {choices.map((purpose) => {
-            const on = picked === purpose;
-            return (
-              <PopPress
-                key={purpose}
-                accessibilityRole="button"
-                accessibilityLabel={t('Business purpose: {{purpose}}', { purpose: shownPurpose(purpose, t) })}
-                accessibilityState={{ selected: on }}
-                disabled={picked !== null && !on}
-                onPop={() => setPicked(purpose)}
-                commitDelay={PICKED_MS}
-                onPress={() => (rowLeaves ? save(purpose) : setFolding(true))}
-                style={chip(on)}>
-                <ThemedText type="smallBold" numberOfLines={1} style={on && { color: theme.onAccent }}>
-                  {on ? '✓' : purposeIcon(purpose)} {shownPurpose(purpose, t)}
-                </ThemedText>
-              </PopPress>
-            );
-          })}
-          <Pressable
-            accessibilityRole="button"
-            accessibilityHint={t('Opens trip details')}
-            disabled={picked !== null}
-            onPress={onOther}
-            style={chip(false)}>
-            <ThemedText type="smallBold" style={{ color: theme.accent }}>
-              {t('Other…')}
-            </ThemedText>
-          </Pressable>
-        </View>
-      </View>
-    </Leaving>
-  );
-}
 
 /**
  * Filling in purposes: a drive given one is no longer listed. Rather than
@@ -368,14 +314,7 @@ function Leaving({
 }
 
 const styles = StyleSheet.create({
-  purposeNeeded: { borderWidth: 1, borderRadius: 10, padding: Spacing.two + 2, gap: Spacing.two },
-  purposeChips: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
-  purposeChip: {
-    borderWidth: 1,
-    borderRadius: 999,
-    paddingHorizontal: Spacing.three - 4,
-    paddingVertical: Spacing.one + 2,
-    maxWidth: '100%',
-  },
+  sorted: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
+  sortedNote: { flex: 1 },
   leaving: { overflow: 'hidden' },
 });

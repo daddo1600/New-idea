@@ -34,7 +34,7 @@ import { DEMO_MODE } from '@/dev/demo';
 import { isCommute } from '@/domain/classify-rules';
 import { offShiftKind } from '@/domain/shift-rows';
 import { backdateStart } from '@/domain/shift-split';
-import { frequentPurposes } from '@/domain/suggestions';
+import { frequentPurposes, purposesByPlace } from '@/domain/suggestions';
 import { formatDistance, formatMoney, potentialDeductions, taxYearOf } from '@/domain/regions';
 import { type Trip, VEHICLE_ICONS } from '@/domain/trip';
 import { usePlaceAsk } from '@/hooks/use-place-ask';
@@ -121,14 +121,23 @@ export default function HomeScreen() {
   const trackingProblem = ['tracking-stopped', 'stale', 'precise-location-off'].includes(trackingHealth.health?.issue ?? '');
   const purposeChoices = useMemo(
     () =>
-      quickPurposes({
-        usual: purposeSettings.usual,
-        chosen: purposeSettings.chosen,
-        recent: frequentPurposes(trips ?? []),
-        shiftMode: purposeSettings.shiftMode,
-        clientPrivacy: purposeSettings.clientPrivacy,
-      }),
+      quickPurposes(
+        {
+          usual: purposeSettings.usual,
+          chosen: purposeSettings.chosen,
+          recent: frequentPurposes(trips ?? []),
+          shiftMode: purposeSettings.shiftMode,
+          clientPrivacy: purposeSettings.clientPrivacy,
+        },
+        // Enough for the purpose sheet's tiles.
+        10,
+      ),
     [trips, purposeSettings.usual, purposeSettings.chosen, purposeSettings.shiftMode, purposeSettings.clientPrivacy],
+  );
+  // What each place's drives were last for: a drive without a purpose is offered the same again.
+  const purposeHistory = useMemo(
+    () => purposesByPlace(trips ?? [], (id) => places.some((place) => place.id === id && place.kind === 'home')),
+    [trips, places],
   );
   // Drives past the free allowance are left out, as in the report's count: their value isn't claimed yet.
   const needPurpose = useMemo(
@@ -199,6 +208,8 @@ export default function HomeScreen() {
       onLongPress={() => list.confirmDelete(item)}
       usualPurpose={purposeSettings.usual}
       purposeChoices={purposeChoices}
+      purposeHistory={purposeHistory}
+      clientPrivacy={purposeSettings.clientPrivacy}
       onPurpose={onPurpose}
       rowLeaves={rowLeaves}
     />

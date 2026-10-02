@@ -1049,9 +1049,12 @@ const dictionary: Dictionary = {
   "New drives aren’t being logged. Tap to turn tracking back on.": "新行程没有被记录。轻点即可重新开启追踪。",
   "No location since {{time}}, in the middle of a drive. Open MileSprout to pick it back up.": "行程途中，自 {{time}} 起没有位置信息。打开 MileSprout 即可继续追踪。",
   "Where your shift started": "开工地点",
-  "Opens trip details": "打开行程详情",
   "Usual purpose · tap to change": "常用事由 · 点按可更改",
-  "Purpose needed for your tax records": "报税记录需要填写事由",
+  "Type your own purpose": "自己输入事由",
+  "Needs a business purpose": "缺少工作事由",
+  "Purpose:": "事由：",
+  "Business purpose: {{purpose}}. Double-tap to confirm": "工作事由：{{purpose}}。点按两次以确认",
+  "{{purpose}}?": "{{purpose}}？",
   "Shows only the drives that need a purpose": "只显示需要填写事由的行程",
   "{{count}} work drives need a purpose": {
     "other": "{{count}} 次工作行程需要填写事由"
