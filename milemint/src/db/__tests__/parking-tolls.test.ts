@@ -72,6 +72,7 @@ describeSqlite('migration 11: parking and tolls', () => {
       ALTER TABLE trips DROP COLUMN tolls_minor;
       DROP TABLE weekly_earnings;
       DROP TABLE platform_earnings;
+      DROP TABLE perk_claims;
       PRAGMA user_version = 10;
       INSERT INTO trips (id, started_at, local_date, start_label, end_label, distance_meters, classification, source, created_at)
         VALUES ('t1', '2026-05-01T08:00:00.000Z', '2026-05-01', 'A', 'B', 1000, 'business', 'auto', '2026-05-01T08:30:00.000Z');

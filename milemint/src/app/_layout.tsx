@@ -73,7 +73,7 @@ export default function RootLayout() {
                   {/* Siri & Shortcuts: the summary they answer from. */}
                   <ShortcutsSync />
                   <Stack>
-                    {/* Home, Drives, Money and Settings; every other screen opens over them. */}
+                    {/* Home, Drives, Money, Perks and Settings; every other screen opens over them. */}
                     <Stack.Screen name="(tabs)" options={{ title: 'MileSprout', headerShown: false }} />
                     <Stack.Screen
                       name="welcome"
@@ -99,6 +99,8 @@ export default function RootLayout() {
                     <Stack.Screen name="logbook" options={{ title: t('ATO logbook') }} />
                     <Stack.Screen name="language" options={{ title: t('Language'), presentation: 'modal' }} />
                     <Stack.Screen name="friends" options={{ title: t('Invite friends') }} />
+                    {/* A claimed perk's QR code, shown at the till. */}
+                    <Stack.Screen name="perk/[code]" options={{ title: t('Your code'), presentation: 'modal' }} />
                     {/* milemint://invite/TRVB-7K2: notes the code, then opens "Invite friends" or the welcome. */}
                     <Stack.Screen name="invite/[code]" options={{ headerShown: false, animation: 'none' }} />
                   </Stack>

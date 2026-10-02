@@ -17,7 +17,8 @@ export const SNAPSHOT_VERSION = 2;
 /**
  * Tables in a backup, parents before children (foreign keys): restored in
  * this order, cleared in reverse. tracker_state is left out on purpose: it's
- * the drive in progress on this particular phone.
+ * the drive in progress on this particular phone. So is perk_claims: Perks
+ * codes are short-lived and claimed again on a new phone.
  */
 export const BACKUP_TABLES = [
   'settings',
@@ -236,6 +237,7 @@ const UPGRADES: Partial<Record<number, (tables: Tables) => Tables>> = {
   // every older trip rather than left out, so a restore never inserts null into them.
   // 12: weekly_earnings (a new table: missing in older backups, so restored empty).
   // 13: platform_earnings (likewise).
+  // 14: perk_claims (Perks codes: never backed up, like the drive in progress).
   11: (tables) => ({
     ...tables,
     trips: tables.trips.map((trip) => ({ parking_minor: 0, tolls_minor: 0, ...trip })),

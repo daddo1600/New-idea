@@ -91,6 +91,7 @@ describeSqlite('migration 10: indexes and the drive-in-progress route', () => {
       DROP TABLE tracker_route;
       DROP TABLE weekly_earnings;
       DROP TABLE platform_earnings;
+      DROP TABLE perk_claims;
       DROP INDEX trips_started_at;
       DROP INDEX trips_local_date_started_at;
       DROP INDEX trips_shift;
@@ -128,6 +129,7 @@ describeSqlite('migration 12: weekly earnings for the tax set-aside', () => {
     db.raw.exec(`
       DROP TABLE weekly_earnings;
       DROP TABLE platform_earnings;
+      DROP TABLE perk_claims;
       PRAGMA user_version = 11;
     `);
     await migrate(db as never);
@@ -163,12 +165,13 @@ describeSqlite('migration 13: earnings by platform', () => {
     await migrate(db as never);
     db.raw.exec(`
       DROP TABLE platform_earnings;
+      DROP TABLE perk_claims;
       PRAGMA user_version = 12;
     `);
     await saveWeeklyEarnings(db as never, '2026-09-21', 30_000);
-    expect(SCHEMA_VERSION).toBe(13);
+    expect(SCHEMA_VERSION).toBeGreaterThanOrEqual(13);
     await migrate(db as never);
-    expect(db.rows<{ user_version: number }>('PRAGMA user_version;')[0].user_version).toBe(13);
+    expect(db.rows<{ user_version: number }>('PRAGMA user_version;')[0].user_version).toBe(SCHEMA_VERSION);
     expect(await listPlatformEarnings(db as never)).toEqual([]);
     expect(await listWeeklyEarnings(db as never)).toEqual(new Map([['2026-09-21', 30_000]]));
   });
