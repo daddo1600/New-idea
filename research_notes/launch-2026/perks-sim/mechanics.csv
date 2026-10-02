@@ -1,0 +1,10 @@
+variant,all_redemptions_per100_month,instore_per100_month,pct_drivers_redeem_monthly,instore_netnew_pct,instore_cannibalised_pct,instore_repeat30_pct,instore_incremental_visits_per100_month,incremental_visits_per_100_instore_redemptions,gbp_per100_month,pct_attempts_expired,pct_attempts_blocked_park_to_claim,pct_attempts_lost_to_park_to_claim,all_redemptions_seed_range
+"baseline (30 min, cap 1/wk, park to claim, cards on)",174.1,170.1,58.1,60.0,21.2,68.9,163.8,96.3,139.6,15.8,13.7,6.9,171.9-176.4
+window 60 min,184.1,179.6,59.5,60.0,21.3,69.6,174.6,97.2,150.1,7.9,13.6,6.6,180.1-189.6
+window 15 min,157.1,152.7,56.2,59.8,20.9,67.9,152.9,100.1,135.3,32.4,13.7,6.8,152.6-161.2
+cap 2/week,213.7,209.5,58.4,59.0,16.9,69.8,205.7,98.2,159.9,16.2,14.3,7.1,209.2-221.7
+loyalty ladder on,187.5,183.1,59.8,60.1,21.8,75.0,178.2,97.3,148.3,15.7,13.8,6.9,184.9-192.7
+first-visit-only offer on,138.6,133.9,53.8,68.7,17.6,63.5,143.4,107.0,131.7,15.9,13.9,7.2,133.8-140.7
+ladder + first-visit-only,149.7,145.3,55.5,68.4,18.7,66.7,155.5,107.0,129.4,16.0,13.7,6.8,148.1-151.9
+park to claim off,182.8,178.6,59.7,60.5,20.9,70.5,172.5,96.6,146.8,16.9,0.0,0.0,180.7-184.5
+contextual cards off (tab only),108.0,103.9,41.6,60.7,20.4,63.4,106.8,102.8,104.0,15.8,13.6,6.6,104.8-110.4

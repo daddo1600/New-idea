@@ -1,0 +1,10 @@
+group,pct_redeem_at_least_once_a_month_mean,min_seed,max_seed
+all,58.1,57.2,59.7
+UK,58.3,56.8,59.3
+US,56.4,52.1,59.3
+CA,59.2,54.8,63.3
+AU,59.6,55.3,63.0
+enthusiast,85.6,84.3,87.2
+neutral,72.8,70.5,74.2
+sceptic,38.0,37.2,39.1
+never,7.8,6.6,9.4

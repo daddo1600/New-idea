@@ -1,0 +1,13 @@
+category,netnew_pct,cannibalised_pct,repeat30_pct_plain,repeat30_without_code_pct_plain,repeat30_pct_ladder,repeat30_without_code_pct_ladder,netnew_pct_first_visit_only,repeat30_pct_first_visit_only,incremental_visits_per100_month_true,incremental_per100_holdout_estimate_mean_(seed_range),incremental_visits_per_100_redemptions
+"Coffee, food and snacks",53.6,26.2,71.7,30.0,79.8,32.9,61.8,69.3,50.7,48.0 (34.1 to 60.1),90.5
+Fuel or EV charging,48.9,30.8,77.5,42.3,82.7,42.3,59.0,70.1,28.4,30.4 (8.3 to 41.8),88.4
+Car wash,73.6,6.0,47.7,22.5,45.6,15.4,85.2,35.4,4.0,6.2 (3.8 to 8.6),110.9
+Toilets/rest stop (loo + coffee),75.1,13.6,70.9,25.7,77.5,26.7,81.0,66.4,45.4,43.6 (35.9 to 49.8),105.1
+"Mounts, chargers, bike gear",89.1,,,,,,,,,,
+"Tyres, servicing, MOT",81.3,,,,,,,,,,
+Insurance and breakdown,75.8,,,,,,,,,,
+Accounting/tax help,79.8,,,,,,,,,,
+Gym or physio,82.9,9.3,43.7,43.7,49.1,39.2,97.0,43.5,0.6,-1.6 (-6.1 to 2.4),121.1
+Parking,61.8,15.3,57.2,22.4,62.7,24.0,70.0,48.8,8.4,1.5 (-9.7 to 7.5),97.6
+Phone plans,75.2,,,,,,,,,,
+Meal deals near hotspots,59.4,15.8,64.5,26.4,69.1,25.8,69.4,58.0,26.3,28.4 (22.8 to 38.2),100.9
