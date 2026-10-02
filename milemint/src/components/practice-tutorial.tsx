@@ -7,6 +7,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, {
   Easing,
   FadeIn,
+  FadeInDown,
   useAnimatedStyle,
   useReducedMotion,
   useSharedValue,
@@ -19,7 +20,6 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, G, Rect } from 'react-native-svg';
 
-import { GoldButton } from '@/components/gold-button';
 import { useLaunchIntroDone } from '@/components/launch-intro-state';
 import { LeafMark } from '@/components/leaf-mark';
 import { ShiftSwitch } from '@/components/shift-switch';
@@ -278,7 +278,11 @@ function TutorialOverlay({
   return (
     <Modal visible transparent animationType="fade" statusBarTranslucent onRequestClose={skip}>
       <GestureHandlerRootView style={styles.root}>
-        <View style={[styles.backdrop, { paddingTop: insets.top + Spacing.two, paddingBottom: insets.bottom + Spacing.three }]}>
+        <View
+          style={[
+            styles.backdrop,
+            { paddingTop: insets.top + Spacing.two, paddingBottom: insets.bottom + Spacing.three },
+          ]}>
           <View style={styles.topBar}>
             <Progress steps={state.steps} index={state.index} />
             {step !== 'done' && (
@@ -294,7 +298,7 @@ function TutorialOverlay({
           </View>
           <View style={styles.stage}>
             {step === 'done' ? (
-              <DoneStep onStart={() => dispatch({ type: 'next' })} />
+              <DoneStep TripRow={TripRow} samples={samples} value={value} onStart={() => dispatch({ type: 'next' })} />
             ) : (
               <>
                 <Text style={styles.eyebrow}>{t('PRACTICE RUN')}</Text>
@@ -516,36 +520,65 @@ function ShiftPractice({ passed, onStart }: { passed: boolean; onStart: () => vo
   );
 }
 
-/** The last step: just drive. Points at where trips will turn up. */
-function DoneStep({ onStart }: { onStart: () => void }) {
+/**
+ * The last step: just drive. The two practice drives, sorted, drop into a
+ * small list the way real ones will after each drive; then a swipe (the same
+ * feel as starting a shift) closes the practice run.
+ */
+function DoneStep({
+  TripRow,
+  samples,
+  value,
+  onStart,
+}: {
+  TripRow: ComponentType<SampleRowProps>;
+  samples: { personal: Trip; business: Trip };
+  value: number;
+  onStart: () => void;
+}) {
   const t = useT();
+  const theme = useTheme();
   const reduceMotion = useReducedMotion();
-  const bob = useSharedValue(0);
-  useEffect(() => {
-    if (reduceMotion) return;
-    bob.set(withRepeat(withSequence(withTiming(1, { duration: 520 }), withTiming(0, { duration: 520 })), -1, false));
-  }, [bob, reduceMotion]);
-  const arrow = useAnimatedStyle(() => ({ transform: [{ translateY: 8 * bob.value }] }));
+  const rows: { trip: Trip; deduction: number }[] = [
+    { trip: { ...samples.business, classification: 'business' }, deduction: value },
+    { trip: { ...samples.personal, classification: 'personal' }, deduction: 0 },
+  ];
   return (
     <Animated.View testID="practice-done" entering={reduceMotion ? undefined : FadeIn.duration(300)} style={styles.done}>
       <LeafMark size={64} />
       <Text style={styles.headline} accessibilityRole="header">
         {t('That’s it. Just drive: trips appear here after you park.')}
       </Text>
-      <Animated.Text style={[styles.downArrow, arrow]} accessible={false}>
-        ↓
-      </Animated.Text>
-      {/* Where the list is: two faint rows, as drives will look. */}
-      <View style={styles.ghosts} accessible={false}>
-        {[0, 1].map((i) => (
-          <View key={i} style={[styles.ghost, { opacity: 1 - i * 0.45 }]}>
-            <View style={styles.ghostLine} />
-            <View style={[styles.ghostLine, styles.ghostShort]} />
-          </View>
+      {/* What home's list will look like: the practice drives, one after the other. Just to look at. */}
+      <View style={[styles.doneList, { backgroundColor: theme.background }]} pointerEvents="none" accessible={false}>
+        {rows.map(({ trip, deduction }, i) => (
+          <Animated.View
+            key={trip.id}
+            entering={reduceMotion ? undefined : FadeInDown.delay(350 + i * 450).springify().damping(16)}>
+            <TripRow
+              trip={trip}
+              deduction={deduction}
+              potential={0}
+              commute={false}
+              onClassify={() => {}}
+              onLongPress={() => {}}
+              usualPurpose={null}
+              purposeChoices={[]}
+              onPurpose={() => {}}
+              onOpen={() => {}}
+            />
+          </Animated.View>
         ))}
       </View>
       <View style={styles.startButton}>
-        <GoldButton label={t('Start driving')} onPress={onStart} />
+        <ShiftSwitch
+          on={false}
+          startLabel={t('Swipe to start driving')}
+          startHint={t('Ends the practice run')}
+          endLabel={t('Swipe to start driving')}
+          onStart={onStart}
+          onEnd={() => {}}
+        />
       </View>
     </Animated.View>
   );
@@ -686,7 +719,8 @@ const styles = StyleSheet.create({
     gap: Spacing.three,
   },
   settingsText: { flex: 1, gap: Spacing.half },
-  backdrop: { flex: 1, backgroundColor: 'rgba(1,22,16,0.94)', paddingHorizontal: Spacing.three },
+  // Solid: home showing through behind the text made it hard to read.
+  backdrop: { flex: 1, backgroundColor: '#011610', paddingHorizontal: Spacing.three },
   topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', minHeight: 36 },
   dots: { flexDirection: 'row', gap: 6, alignItems: 'center' },
   dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.3)' },
@@ -753,17 +787,6 @@ const styles = StyleSheet.create({
   burst: { position: 'absolute', left: '50%', top: '45%' },
   piece: { position: 'absolute', width: 8, height: 12, borderRadius: 2 },
   done: { alignItems: 'center', gap: Spacing.three },
-  downArrow: { color: GOLD, fontSize: 34, fontWeight: '900', lineHeight: 38 },
-  ghosts: { width: '100%', gap: Spacing.two },
-  ghost: {
-    borderRadius: 12,
-    padding: Spacing.three,
-    gap: Spacing.two,
-    borderWidth: 1.5,
-    borderStyle: 'dashed',
-    borderColor: 'rgba(250,204,21,0.55)',
-  },
-  ghostLine: { height: 10, borderRadius: 5, width: '70%', backgroundColor: 'rgba(255,255,255,0.16)' },
-  ghostShort: { width: '40%' },
+  doneList: { width: '100%', borderRadius: 18, overflow: 'hidden', paddingVertical: Spacing.one },
   startButton: { width: '100%', marginTop: Spacing.two },
 });
