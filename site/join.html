@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Join the Founding 1,000 · MileMint</title>
+<meta name="description" content="Join the MileMint waitlist. The first 1,000 drivers get a Founding driver badge and keep the launch price of Pro for as long as they subscribe.">
+<link rel="canonical" href="https://milemint.app/join.html">
+<meta name="theme-color" content="#0B7A55">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/inter-extrabold.woff2" as="font" type="font/woff2" crossorigin>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MileMint">
+<meta property="og:locale" content="en_GB">
+<meta property="og:url" content="https://milemint.app/join.html">
+<meta property="og:title" content="Join the MileMint Founding 1,000">
+<meta property="og:description" content="Join the MileMint waitlist. The first 1,000 drivers get a Founding driver badge and keep the launch price of Pro for as long as they subscribe.">
+<meta property="og:image" content="https://milemint.app/assets/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MileMint leaf logo with the words: You'll know if a mile was missed.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Join the MileMint Founding 1,000">
+<meta name="twitter:description" content="Join the MileMint waitlist. The first 1,000 drivers get a Founding driver badge and keep the launch price of Pro for as long as they subscribe.">
+<meta name="twitter:image" content="https://milemint.app/assets/img/og.png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/config.js" defer></script>
+<script src="/assets/main.js" defer></script>
+<script src="/assets/join.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="MileMint home"><img src="/assets/img/leaf.png" alt="" width="26" height="30"><span>Mile<b>Mint</b></span></a>
+    <nav class="nav" aria-label="Main">
+      <a href="/calculator.html">Calculator</a>
+      <a class="hide-sm" href="/support.html">Support</a>
+      <a class="btn small-btn" href="/join.html" aria-current="page">Join</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero green" aria-labelledby="join-title">
+    <div class="wrap narrow">
+      <span class="eyebrow">Waitlist</span>
+      <h1 id="join-title">Join the Founding <span class="key">1,000</span></h1>
+      <p class="lede">The first 1,000 drivers on the list get a <strong>Founding driver</strong> badge in the app, keep the launch price of Pro for as long as they subscribe, and get a direct line to the founder: early features and a vote on what's next.</p>
+
+      <div class="counter" data-founders>
+        <div class="counter-bar" role="meter" aria-label="Founding places taken" aria-valuemin="0" aria-valuemax="1000" aria-valuenow="0"><span></span></div>
+        <p><span data-founders-taken>0</span> of <span data-founders-total>1,000</span> founding places taken</p>
+      </div>
+
+      <div class="card">
+        <!-- No-JavaScript fallback: add action="YOUR-PROVIDER-FORM-URL" to this <form> (same URL as FORM_ENDPOINT in assets/config.js). -->
+        <form class="form" data-waitlist data-thanks="join-thanks" method="post">
+          <div>
+            <label for="j-email">Email address</label>
+            <input id="j-email" data-field="email" name="email" type="email" autocomplete="email" inputmode="email" required>
+          </div>
+          <div class="form-row two">
+            <div>
+              <label for="j-country">Country</label>
+              <select id="j-country" data-field="country" name="fields[country]">
+                <option value="UK">United Kingdom</option>
+                <option value="US">United States</option>
+                <option value="Canada">Canada</option>
+                <option value="Australia">Australia</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="j-work">How do you work?</label>
+              <select id="j-work" data-field="work" name="fields[work]">
+                <option value="Courier/delivery">Courier / delivery</option>
+                <option value="Trades/sales">Trades / sales</option>
+                <option value="Care/support">Care / support</option>
+                <option value="Other self-employed">Other self-employed</option>
+              </select>
+            </div>
+          </div>
+          <div class="check-wrap">
+            <label class="check"><input type="checkbox" data-field="consent" name="consent" value="yes" required> <span>Email me launch news, tax-deadline reminders and tips. Unsubscribe any time.</span></label>
+          </div>
+          <button class="btn" type="submit">Join the Founding 1,000</button>
+          <p class="status" data-status role="status" aria-live="polite" hidden></p>
+          <p class="form-note">We ask for your country and how you work so we send the right tax dates and tips. We use your email only for MileMint news, never share or sell it, and you can unsubscribe from any email. Read the <a href="/privacy.html#website">privacy policy</a>.</p>
+          <noscript><p class="status soon">With JavaScript off, the form posts straight to our email provider. If nothing happens, email <a href="mailto:hello@milemint.app">hello@milemint.app</a> and we'll add you.</p></noscript>
+        </form>
+        <div class="thanks" id="join-thanks" hidden>
+          <h2>You're in.</h2>
+          <p>Check your inbox to confirm your address. Then share MileMint with a driver friend: the more drivers on the list, the sooner it's on their phone too.</p>
+          <button class="btn" type="button" data-share>Share MileMint</button>
+          <p class="status ok" data-share-status role="status" aria-live="polite" hidden></p>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="appstore" data-appstore href="#j-email" aria-label="MileMint on the App Store: coming soon. Join the waitlist above.">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 18.5h4"/></svg>
+          <span><small>App Store</small><strong>Coming soon</strong></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-alt" aria-labelledby="what-title">
+    <div class="wrap narrow">
+      <h2 id="what-title">What you'll get from us</h2>
+      <ul>
+        <li>One email when MileMint is on the App Store in your country.</li>
+        <li>Reminders before tax deadlines that matter to you (Self Assessment, quarterly updates, tax return dates).</li>
+        <li>Now and then, a short tip on claiming your miles. No spam, and an unsubscribe link in every email.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer green">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="MileMint home"><img src="/assets/img/leaf.png" alt="" width="26" height="30"><span>Mile<b>Mint</b></span></a>
+    <p>You'll know if a mile was missed.</p>
+    <nav aria-label="Footer">
+      <a href="/join.html">Founding 1,000</a>
+      <a href="/calculator.html">Calculator</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/support.html">Support</a>
+      <a href="mailto:hello@milemint.app">hello@milemint.app</a>
+    </nav>
+    <p class="small">No cookies, no trackers, no analytics on this site. Estimates on this site are not tax advice.</p>
+    <p class="small">© <span data-year>2026</span> MileMint. Apple, iPhone and App Store are trademarks of Apple Inc.</p>
+  </div>
+</footer>
+</body>
+</html>
