@@ -26,7 +26,7 @@ import { LeafMark } from '@/components/leaf-mark';
 import { MotionCoach, MotionStep } from '@/components/motion-ask';
 import { PermissionPreview } from '@/components/permission-preview';
 import { purposeIcon, quickPurposes, shownPurpose } from '@/components/purpose-picker';
-import { MintWash, StepHeader, StepIcon } from '@/components/step-header';
+import { MintWash, StepHeader } from '@/components/step-header';
 import { VehiclePicker } from '@/components/vehicle-picker';
 import { firstCode, RedeemCode } from '@/components/redeem-code';
 import { ThemedText } from '@/components/themed-text';
@@ -538,9 +538,6 @@ export default function WelcomeScreen() {
               </View>
             ) : (
               <>
-                <View style={styles.brandIcon}>
-                  <StepIcon glyph="location" size={30} />
-                </View>
                 <Text style={styles.brandEyebrow}>{t('STEP 2 · TRACKING')}</Text>
                 <Text style={styles.brandTitleSmall}>{t('Never miss a mile.')}</Text>
                 <Text style={styles.brandBody}>
@@ -555,13 +552,13 @@ export default function WelcomeScreen() {
                   </Text>
                 ) : (
                   <>
-                    <PermissionPreview />
-                    <View style={styles.glass}>
+                    <View style={styles.preview}>
+                      <PermissionPreview />
                       <Rich
                         text={t(
                           'iOS asks twice. Tap <b>Allow While Using App</b>, then <b>Change to Always Allow</b>.',
                         )}
-                        style={styles.pointBody}
+                        style={[styles.pointBody, styles.previewCaption]}
                         boldStyle={styles.pointTitle}
                       />
                     </View>
@@ -995,19 +992,12 @@ const styles = StyleSheet.create({
   },
   pointTickText: { color: '#064E3B', fontSize: 12, fontWeight: '800' },
   pointTitle: { color: '#FFFFFF', fontSize: 15, fontWeight: '700' },
-  brandIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.16)',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.3)',
-  },
   brandEyebrow: { color: '#FACC15', fontSize: 12, fontWeight: '800', letterSpacing: 1.2, marginTop: Spacing.one },
   brandTitleSmall: { color: '#FFFFFF', fontSize: 34, lineHeight: 40, fontWeight: '800', letterSpacing: -0.5 },
   brandCallout: { color: '#FACC15', fontSize: 17, lineHeight: 23, fontWeight: '800' },
+  // The pulsing copy of iOS's alert and its one-line caption, as one centred block.
+  preview: { alignItems: 'center', gap: Spacing.two, marginTop: Spacing.one },
+  previewCaption: { textAlign: 'center', maxWidth: 320 },
   pointBody: { color: '#D1FAE5', fontSize: 14, lineHeight: 20 },
   brandSoft: { color: '#D1FAE5' },
   glass: {
