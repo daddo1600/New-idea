@@ -12,6 +12,42 @@
     ]
   },
   {
+    "key": "“End my shift in MileSprout”",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "“How far have I driven this week in MileSprout”",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "“How far have I driven today in MileSprout”",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "“How many miles this week in MileSprout”",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "“How many miles today in MileSprout”",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "“Start my shift in MileSprout”",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
     "key": "{{achievement}} on MileSprout {{emoji}} The mileage app that counts every mile.",
     "files": [
       "milestones/copy.ts"
@@ -2457,6 +2493,12 @@
     ]
   },
   {
+    "key": "Ending your shift in MileSprout.",
+    "files": [
+      "domain/shortcuts-snapshot.ts"
+    ]
+  },
+  {
     "key": "Ends {{date}}",
     "files": [
       "app/logbook.tsx",
@@ -4304,7 +4346,14 @@
   {
     "key": "No work drives yet this week.",
     "files": [
-      "domain/recap.ts"
+      "domain/recap.ts",
+      "domain/shortcuts-snapshot.ts"
+    ]
+  },
+  {
+    "key": "No work drives yet today.",
+    "files": [
+      "domain/shortcuts-snapshot.ts"
     ]
   },
   {
@@ -4595,6 +4644,12 @@
     "files": [
       "app/(tabs)/settings.tsx",
       "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Open the Shortcuts app",
+    "files": [
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -5509,6 +5564,7 @@
   {
     "key": "See what Pro adds ›",
     "files": [
+      "app/(tabs)/settings.tsx",
       "components/pro-prompt.tsx"
     ]
   },
@@ -5761,6 +5817,24 @@
     ]
   },
   {
+    "key": "Siri & Shortcuts",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Siri & Shortcuts are part of MileSprout Pro. Open MileSprout to upgrade.",
+    "files": [
+      "domain/shortcuts-snapshot.ts"
+    ]
+  },
+  {
+    "key": "Siri & Shortcuts: start a shift, ask how far you’ve driven",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
     "key": "Site visit",
     "files": [
       "components/purpose-picker.tsx"
@@ -5978,6 +6052,12 @@
     ]
   },
   {
+    "key": "Start or end a shift and hear how far you’ve driven for work, hands-free. Say one of these to Siri, or find them in the Shortcuts app:",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
     "key": "Start shift",
     "files": [
       "i18n/i18n.ts"
@@ -5999,6 +6079,12 @@
     "key": "Started {{time}}",
     "files": [
       "components/shift-row.tsx"
+    ]
+  },
+  {
+    "key": "Starting your shift in MileSprout.",
+    "files": [
+      "domain/shortcuts-snapshot.ts"
     ]
   },
   {
@@ -6596,7 +6682,8 @@
       "app/scan-earnings.tsx",
       "components/money/earnings-sheet.tsx",
       "components/money/set-aside-card.tsx",
-      "domain/missed-miles.ts"
+      "domain/missed-miles.ts",
+      "domain/shortcuts-snapshot.ts"
     ]
   },
   {
@@ -6659,7 +6746,8 @@
     "files": [
       "app/add-trip.tsx",
       "app/scan-earnings.tsx",
-      "components/tax-countdown.tsx"
+      "components/tax-countdown.tsx",
+      "domain/shortcuts-snapshot.ts"
     ]
   },
   {
@@ -7346,6 +7434,12 @@
     ]
   },
   {
+    "key": "Worth about {{amount}}",
+    "files": [
+      "domain/shortcuts-snapshot.ts"
+    ]
+  },
+  {
     "key": "Written on your iPhone by Apple Intelligence. The figures come from your drives.",
     "files": [
       "components/money/weekly-recap.tsx"
@@ -7477,6 +7571,18 @@
     "key": "You’ve been parked at home since {{time}}. Drives after the shift aren’t counted as work.",
     "files": [
       "components/shift-prompts.tsx"
+    ]
+  },
+  {
+    "key": "You’ve driven {{distance}} for work this week, worth about {{amount}}.",
+    "files": [
+      "domain/shortcuts-snapshot.ts"
+    ]
+  },
+  {
+    "key": "You’ve driven {{distance}} for work today, worth about {{amount}}.",
+    "files": [
+      "domain/shortcuts-snapshot.ts"
     ]
   },
   {
