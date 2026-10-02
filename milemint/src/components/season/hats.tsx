@@ -10,13 +10,18 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Circle, Ellipse, G, Line, Path, Rect } from 'react-native-svg';
 
+import { RING_R, TOP } from '@/brand/sprout';
 import type { SeasonId } from '@/domain/seasons';
 
 /**
- * Seasonal headwear for the logo, drawn in leaf coordinates (see LeafMark):
- * the leaf's tip is at (0, -440) and "up" is negative y, so a hat sits over
- * the tip and tilts with the leaf.
+ * Seasonal headwear for the logo, worn by the gold dot at the top of the
+ * sprout. Each hat is drawn in its own units with the brim at y = -345 and
+ * "up" as negative y; SeasonHat sets it on the dot in mark coordinates (see
+ * LeafMark).
  */
+
+/** Hat units to mark units. */
+const HAT_SCALE = 0.04;
 
 const AnimatedLine = Animated.createAnimatedComponent(Line);
 const AnimatedEllipse = Animated.createAnimatedComponent(Ellipse);
@@ -148,14 +153,19 @@ function Blossom() {
 
 /** What the logo wears for `season`. Autumn changes the leaf's colour instead (see LEAF_PALETTES). */
 export function SeasonHat({ season }: { season: SeasonId }) {
-  // Drawn at a modest size, then enlarged around the leaf's tip so they read at a glance.
+  // Drawn at a modest size, then enlarged so they read at a glance: hats sit
+  // on the dot's ring, the sunglasses across the dot itself.
   return season === 'summer' ? (
-    <G transform="translate(0 -170) scale(1.3) translate(0 170)">
-      <HatArt season={season} />
+    <G transform={`translate(${TOP.x} ${TOP.y}) scale(${HAT_SCALE * 1.15}) translate(0 132)`}>
+      <G transform="translate(0 -170) scale(1.3) translate(0 170)">
+        <HatArt season={season} />
+      </G>
     </G>
   ) : (
-    <G transform="translate(0 -360) scale(1.45) translate(0 360)">
-      <HatArt season={season} />
+    <G transform={`translate(${TOP.x} ${TOP.y - RING_R + 1.2}) scale(${HAT_SCALE}) translate(0 345)`}>
+      <G transform="translate(0 -360) scale(1.45) translate(0 360)">
+        <HatArt season={season} />
+      </G>
     </G>
   );
 }
