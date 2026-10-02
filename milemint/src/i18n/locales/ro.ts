@@ -1345,6 +1345,15 @@ const dictionary: Dictionary = {
   "Light": "Luminos",
   "Dark": "Întunecat",
   "System follows your iPhone’s light or dark setting.": "Sistem urmează setarea luminoasă sau întunecată a iPhone-ului.",
+  // The shift on the lock screen (Live Activity).
+  "Show shift on lock screen": "Arată tura pe ecranul blocat",
+  "While a shift is on, your lock screen and the Dynamic Island show its time, distance and money so far, with a button to end it. Anyone who sees your phone can see the money.": "Cât timp o tură e în desfășurare, ecranul blocat și Dynamic Island arată durata, distanța și banii de până acum, cu un buton pentru a o încheia. Oricine îți vede telefonul poate vedea suma.",
+  "Paused": "Pauză",
+  "Driving · {{distance}}": "La volan · {{distance}}",
+  "Waiting for your next drive": "Se așteaptă următoarea cursă",
+  "Shift paused": "Tură în pauză",
+  "Shift on": "În tură",
+  "Not working": "Nu lucrez",
 };
 
 export default dictionary;

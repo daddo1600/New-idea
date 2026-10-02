@@ -1343,6 +1343,15 @@ const dictionary: Dictionary = {
   "Light": "Claro",
   "Dark": "Escuro",
   "System follows your iPhone’s light or dark setting.": "Sistema segue o modo claro ou escuro do seu iPhone.",
+  // The shift on the lock screen (Live Activity).
+  "Show shift on lock screen": "Mostrar o turno na tela bloqueada",
+  "While a shift is on, your lock screen and the Dynamic Island show its time, distance and money so far, with a button to end it. Anyone who sees your phone can see the money.": "Durante um turno, a tela bloqueada e a Dynamic Island mostram o tempo, a distância e o valor até agora, com um botão para encerrá-lo. Qualquer pessoa que veja seu celular pode ver o valor.",
+  "Paused": "Pausado",
+  "Driving · {{distance}}": "Dirigindo · {{distance}}",
+  "Waiting for your next drive": "Aguardando o próximo trajeto",
+  "Shift paused": "Turno pausado",
+  "Shift on": "Em turno",
+  "Not working": "Não estou trabalhando",
 };
 
 export default dictionary;

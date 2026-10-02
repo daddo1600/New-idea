@@ -19,6 +19,9 @@ import {
   type ShiftPause,
 } from '@/db/shifts-repo';
 
+import { onShiftChangedElsewhere } from '@/live-activity/actions';
+import { syncShiftActivity } from '@/live-activity/sync';
+
 import { cancelShiftAutoEnd, scheduleShiftAutoEnd } from './shift-notifications';
 
 /** How long "Shift ended · Undo" stays up after swiping a shift off. */
@@ -61,6 +64,8 @@ export function useShift(onTripsChanged?: () => unknown) {
     setPauses(allPauses);
     const closedSince = wasOpen.current && !open;
     wasOpen.current = open !== null;
+    // The lock-screen card follows: started, updated, or ended (also when a shift ended by itself).
+    syncShiftActivity(db).catch(() => {});
     return closedSince;
   }, [db]);
 
@@ -84,6 +89,9 @@ export function useShift(onTripsChanged?: () => unknown) {
     await load();
     await changed.current?.();
   }, [load]);
+
+  // Ended, or a drive taken off it, from the lock screen's buttons.
+  useEffect(() => onShiftChangedElsewhere(() => void after().catch(() => {})), [after]);
 
   const start = useCallback(async () => {
     const started = await startShift(db);

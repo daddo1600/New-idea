@@ -5,7 +5,7 @@ import { AppState, Platform } from 'react-native';
 
 import { getBackgroundDatabase } from '@/db/database';
 import { listPlaces } from '@/db/places-repo';
-import { loadSettings } from '@/db/settings-repo';
+import { loadSettings, updateSettings } from '@/db/settings-repo';
 import { shiftAround, shiftEndMs } from '@/db/shifts-repo';
 import { inWriteTransaction } from '@/db/transaction';
 import { refreshLaunchTotal } from '@/region/launch-total';
@@ -33,6 +33,8 @@ import { alertWorthy, trackingHealth, type TrackingHealth, type TrackingPermissi
 import { isoDateAtOffset } from '@/domain/trip';
 import type { DetectedTrip, LocationSample } from '@/domain/trip-detector';
 import { t } from '@/i18n/i18n';
+import { isNotWorkingDrive } from '@/live-activity/not-working';
+import { noteTrackerProgress } from '@/live-activity/sync';
 
 import { armDriveWatchdog, cancelHealthAlerts, queueHealthAlert } from './health-alerts';
 import { waitForPromptAnswer } from './prompt-answer';
@@ -165,6 +167,8 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
   // each part sorted on its own: the last delivery is work, the drive home isn't.
   const around = settings.shiftMode ? await shiftAround(db, new Date(trip.startedAt).toISOString()) : null;
   const legs = shiftLegs(trip, around && { ...around, end: shiftEndMs(around.shift) });
+  // "Not working" was tapped on the lock screen during this drive: it's personal, and not part of the shift.
+  const notWorking = isNotWorkingDrive(settings.notWorkingDriveAt, trip.startedAt);
   const startPlace = matchPlace(trip.start, places);
   const endPlace = matchPlace(trip.end, places);
   // Places the user named (Home, Work, a saved office) keep their names, private or not.
@@ -191,14 +195,16 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
       },
       { history, places, workHours: settings.workHoursEnabled ? settings.workWeek : null },
     );
-    const sorted = autoClassify({
-      inShift: leg.shiftId !== null,
-      offShift: leg.offShiftId !== null,
-      suggestion,
-      shiftMode: settings.shiftMode,
-      defaultBusiness: settings.defaultBusiness,
-      defaultPurpose: settings.defaultPurpose,
-    });
+    const sorted = notWorking
+      ? { classification: 'personal' as const, reason: null, purpose: '' }
+      : autoClassify({
+          inShift: leg.shiftId !== null,
+          offShift: leg.offShiftId !== null,
+          suggestion,
+          shiftMode: settings.shiftMode,
+          defaultBusiness: settings.defaultBusiness,
+          defaultPurpose: settings.defaultPurpose,
+        });
     const newTrip: NewTrip = {
       startedAt: started.toISOString(),
       // The date where the drive started, not where the phone is when it's saved.
@@ -217,8 +223,8 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
       autoReason: sorted.reason,
       vehicle: settings.vehicle,
       vehicleId: settings.currentVehicleId,
-      shiftId: leg.shiftId,
-      offShiftId: leg.offShiftId,
+      shiftId: notWorking ? null : leg.shiftId,
+      offShiftId: notWorking ? null : leg.offShiftId,
     };
     // Client privacy keeps no route at all: it would lead straight to the client's door.
     return { trip: newTrip, route: settings.clientPrivacy ? [] : leg.drive.route };
@@ -227,9 +233,13 @@ async function saveDetectedTrip(db: SQLiteDatabase, trip: DetectedTrip): Promise
   await inWriteTransaction(db, async () => {
     for (const row of rows) await insertTripUnlocked(db, row.trip, row.route);
   });
+  // The mark is used up by its drive (or by a later one: the marked drive was dropped as a walk).
+  if (settings.notWorkingDriveAt && trip.startedAt >= Date.parse(settings.notWorkingDriveAt) - 2_000) {
+    await updateSettings(db, { notWorkingDriveAt: null });
+  }
   // Parked at Home with the shift still on: ask in a while whether it's over.
   const lastLeg = legs[legs.length - 1];
-  if (around && !around.shift.endedAt && lastLeg.shiftId && endPlace?.kind === 'home') {
+  if (around && !around.shift.endedAt && lastLeg.shiftId && !notWorking && endPlace?.kind === 'home') {
     await scheduleEndShiftPrompt(trip.endedAt).catch(() => {});
   }
   // Keep the opening animation's total current for the next launch.
@@ -293,6 +303,11 @@ async function handleLocations(samples: LocationSample[]): Promise<void> {
     await stopTask(LOCATION_TASK, Location.hasStartedLocationUpdatesAsync, Location.stopLocationUpdatesAsync);
     await armGeofence(decision.switchToGeofenceAt);
   }
+  // The shift's lock-screen card: the drive's distance now and then, a saved drive at once.
+  await noteTrackerProgress(db, {
+    saved: keep.length > 0,
+    changed: decision.switchToGeofenceAt !== null || record.detector.mode !== next.detector.mode,
+  });
 }
 
 async function handleGeofenceExit(): Promise<void> {
@@ -306,6 +321,7 @@ async function handleGeofenceExit(): Promise<void> {
   await cancelEndShiftPrompt();
   await stopTask(GEOFENCE_TASK, Location.hasStartedGeofencingAsync, Location.stopGeofencingAsync);
   await startGps();
+  await noteTrackerProgress(db, { saved: false, changed: true });
 }
 
 if (TRACKING_SUPPORTED) {
@@ -422,6 +438,7 @@ export async function reconcileTracking(db: SQLiteDatabase): Promise<void> {
       const { keep, walks } = await screenDetectedTrips(decision.completed);
       for (const trip of keep) await saveDetectedTrip(db, trip);
       await saveTrackerRecord(db, withDroppedWalks(decision.record, walks));
+      if (keep.length > 0) await noteTrackerProgress(db, { saved: true, changed: true });
       if (decision.switchToGeofenceAt) {
         await stopTask(LOCATION_TASK, Location.hasStartedLocationUpdatesAsync, Location.stopLocationUpdatesAsync);
         await armGeofence(decision.switchToGeofenceAt);

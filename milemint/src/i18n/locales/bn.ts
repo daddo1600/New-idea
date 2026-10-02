@@ -1251,6 +1251,15 @@ const dictionary: Dictionary = {
   "Light": "লাইট",
   "Dark": "ডার্ক",
   "System follows your iPhone’s light or dark setting.": "সিস্টেম বেছে নিলে আপনার iPhone-এর লাইট বা ডার্ক সেটিং মেনে চলে।",
+  // The shift on the lock screen (Live Activity).
+  "Show shift on lock screen": "লক স্ক্রিনে শিফট দেখান",
+  "While a shift is on, your lock screen and the Dynamic Island show its time, distance and money so far, with a button to end it. Anyone who sees your phone can see the money.": "শিফট চলাকালীন লক স্ক্রিন ও Dynamic Island-এ এর সময়, দূরত্ব আর এখন পর্যন্ত টাকার পরিমাণ দেখায়, সঙ্গে শিফট শেষ করার বোতাম। আপনার ফোন যে কেউ দেখলে টাকার পরিমাণ দেখতে পাবে।",
+  "Paused": "বিরতিতে",
+  "Driving · {{distance}}": "গাড়ি চলছে · {{distance}}",
+  "Waiting for your next drive": "পরের ট্রিপের অপেক্ষায়",
+  "Shift paused": "শিফট বিরতিতে",
+  "Shift on": "শিফট চালু",
+  "Not working": "কাজে নেই",
 };
 
 export default dictionary;

@@ -12,6 +12,7 @@ import { DEMO_MODE, seedDemoTrips } from '@/dev/demo';
 import { Colors } from '@/constants/theme';
 import { describeError } from '@/errors/fatal-errors';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { ShiftActivitySync } from '@/live-activity/use-shift-activity';
 import { ProProvider } from '@/purchases/pro';
 import { loadLanguage, useT } from '@/i18n/i18n';
 import { ReferralProvider } from '@/referral/referral';
@@ -64,6 +65,8 @@ export default function RootLayout() {
         <Suspense fallback={<ActivityIndicator style={{ flex: 1 }} />}>
           <SQLiteProvider databaseName={DATABASE_NAME} onInit={onInit} useSuspense>
             <RegionProvider>
+              {/* The shift on the lock screen: its card, and the buttons tapped on it. */}
+              <ShiftActivitySync />
               <ProProvider>
                 <ReferralProvider>
                   <Stack>

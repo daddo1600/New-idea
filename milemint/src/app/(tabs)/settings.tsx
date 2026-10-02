@@ -53,6 +53,7 @@ import { type MileagePay, useMileagePay } from '@/hooks/use-mileage-pay';
 import { setAppearance, useAppearance } from '@/hooks/use-appearance';
 import { useTheme } from '@/hooks/use-theme';
 import { LANGUAGES, msg, useLanguage, useT } from '@/i18n/i18n';
+import { LIVE_ACTIVITY_SUPPORTED, syncShiftActivity } from '@/live-activity/sync';
 import { usePro } from '@/purchases/pro';
 import { RedeemCode } from '@/components/redeem-code';
 import { useReferral } from '@/referral/referral';
@@ -877,6 +878,8 @@ function DrivingSection() {
   const change = async (changes: Partial<AppSettings>) => {
     setSettings((shown) => shown && { ...shown, ...changes });
     setSettings(await updateSettings(db, changes));
+    // Shift mode or the lock-screen switch changed: show or take down the shift's card.
+    if ('shiftMode' in changes || 'shiftLiveActivity' in changes) syncShiftActivity(db).catch(() => {});
   };
 
   return (
@@ -952,6 +955,24 @@ function DrivingSection() {
             trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
           />
         </View>
+        {settings.shiftMode && LIVE_ACTIVITY_SUPPORTED && (
+          <View style={[styles.rowBetween, styles.spaced]}>
+            <View style={styles.flex}>
+              <ThemedText type="smallBold">{t('Show shift on lock screen')}</ThemedText>
+              <ThemedText type="small" themeColor="textSecondary">
+                {t(
+                  'While a shift is on, your lock screen and the Dynamic Island show its time, distance and money so far, with a button to end it. Anyone who sees your phone can see the money.',
+                )}
+              </ThemedText>
+            </View>
+            <Switch
+              accessibilityLabel={t('Show shift on lock screen')}
+              value={settings.shiftLiveActivity}
+              onValueChange={(shiftLiveActivity) => change({ shiftLiveActivity })}
+              trackColor={{ true: theme.accent }}
+            />
+          </View>
+        )}
       </ThemedView>
     </>
   );
