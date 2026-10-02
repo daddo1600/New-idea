@@ -183,6 +183,16 @@ const MIGRATIONS: readonly string[] = [
   ALTER TABLE trips ADD COLUMN parking_minor INTEGER NOT NULL DEFAULT 0;
   ALTER TABLE trips ADD COLUMN tolls_minor INTEGER NOT NULL DEFAULT 0;
   `,
+  `
+  -- Tax set-aside: what the user earned each week, all platforms together,
+  -- keyed by the week's Monday (YYYY-MM-DD), in minor units. Optional: a
+  -- week with nothing entered has no row.
+  CREATE TABLE weekly_earnings (
+    week_start TEXT PRIMARY KEY NOT NULL,
+    amount_minor INTEGER NOT NULL,
+    updated_at TEXT NOT NULL
+  );
+  `,
 ];
 
 /** The schema this build creates: stored in PRAGMA user_version, and in iCloud backups. */

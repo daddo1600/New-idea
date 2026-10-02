@@ -69,7 +69,7 @@ describe('the perk ladder', () => {
 });
 
 describe('what each plan can use', () => {
-  const ALL: ProFeature[] = ['reports', 'accountant', 'mtd', 'platform-earnings', 'tax-set-aside', 'import'];
+  const ALL: ProFeature[] = ['reports', 'accountant', 'quarterly', 'platform-earnings', 'tax-set-aside', 'import'];
 
   it('gives Pro everything', () => {
     for (const feature of ALL) expect(canUse(feature, { isPro: true, perks: [] })).toBe(true);
@@ -90,7 +90,7 @@ describe('what each plan can use', () => {
   it('never unlocks reports or exports through referrals, however many friends join', () => {
     const perks = earnedPerks(10_000, AFTER);
     expect(perks).toHaveLength(PERK_LADDER.length);
-    for (const feature of ['reports', 'accountant', 'mtd', 'import'] as const) {
+    for (const feature of ['reports', 'accountant', 'quarterly', 'import'] as const) {
       expect(canUse(feature, { isPro: false, perks })).toBe(false);
     }
   });

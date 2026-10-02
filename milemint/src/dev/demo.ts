@@ -1,6 +1,7 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
 import { Platform } from 'react-native';
 
+import { saveWeeklyEarnings } from '@/db/earnings-repo';
 import { insertPlace } from '@/db/places-repo';
 import { updateSettings } from '@/db/settings-repo';
 import { insertTrip } from '@/db/trips-repo';
@@ -9,6 +10,7 @@ import { distanceMeters, type LatLng } from '@/domain/geo';
 import type { PlaceKind } from '@/domain/places';
 import type { TrackingGap } from '@/domain/tracker-policy';
 import type { TrackingHealth } from '@/domain/tracking-health';
+import { addDays, weekStartOf } from '@/domain/set-aside';
 import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/trip';
 
 /**
@@ -32,6 +34,7 @@ import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/tri
  *   &region=GB   preview another country's currency, units and rules
  *   &friends=2   friends joined with this user's invites (the perk ladder)
  *   &offer=CODE  as if the friend's 50% off offer code were set; &gift: joined with a friend's code
+ *   &noearnings  no weekly earnings entered yet (the tax set-aside's first-use state)
  */
 const demoParam =
   __DEV__ && Platform.OS === 'web' && typeof window !== 'undefined'
@@ -151,6 +154,21 @@ export const DEMO_FRIENDS = (() => {
 
 /** `&offer=CODE`: preview the friend's 50% off as if FRIEND_OFFER_CODE were set. */
 export const DEMO_OFFER_CODE = demoValue('offer') ?? '';
+
+/** `&noearnings`: the tax set-aside before any earnings are entered. */
+const DEMO_NO_EARNINGS = demoFlag('noearnings');
+
+/** A believable 10 weeks of earnings (all apps together, whole units), oldest first; one week skipped. */
+const DEMO_EARNINGS: (number | null)[] = [1180, 1045, 1260, 990, null, 1120, 1210, 1075, 1150, 1300];
+
+async function seedDemoEarnings(db: SQLiteDatabase): Promise<void> {
+  const thisWeek = weekStartOf(toLocalIsoDate(new Date()));
+  for (const [index, amount] of DEMO_EARNINGS.entries()) {
+    if (amount === null) continue;
+    await saveWeeklyEarnings(db, addDays(thisWeek, -7 * (DEMO_EARNINGS.length - 1 - index)), amount * 100);
+  }
+  await updateSettings(db, { setAsideReminder: true, setAsideReminderDefaulted: true });
+}
 
 /** `&gift`: this user joined with a friend's code today, so the Pro screen offers the friend's gift (with `&offer`). */
 export const DEMO_GIFT = demoFlag('gift');
@@ -387,6 +405,7 @@ export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
     placeIds.set(place.name, (await insertPlace(db, place)).id);
   }
   if (DEMO_COURIER) await seedCourierShifts(db, placeIds);
+  if (!DEMO_NO_EARNINGS) await seedDemoEarnings(db);
   // A courier's own days are the shifts above; the office drives are history.
   for (const [daysAgo, hour, rawFrom, rawTo, miles, classification, purpose, autoReason] of [
     ...(DEMO_COURIER ? [] : TRIPS),

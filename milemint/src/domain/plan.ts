@@ -15,11 +15,11 @@ export type ProFeature =
   | 'reports'
   /** Sending the report to an accountant. */
   | 'accountant'
-  /** Making Tax Digital quarterly figures (UK). */
-  | 'mtd'
+  /** Quarterly figures and their deadlines (Making Tax Digital in the UK, estimated tax in the US). */
+  | 'quarterly'
   /** Earnings by platform (Uber, Deliveroo…). */
   | 'platform-earnings'
-  /** The tax set-aside pot. */
+  /** The tax set-aside: what to put aside from each week's earnings. */
   | 'tax-set-aside'
   /** Importing a log from another app. */
   | 'import';

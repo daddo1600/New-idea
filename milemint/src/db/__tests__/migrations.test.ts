@@ -1,5 +1,6 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
+import { listWeeklyEarnings, saveWeeklyEarnings } from '../earnings-repo';
 import { DatabaseTooNewError, migrate, SCHEMA_VERSION } from '../migrations';
 import { available, openTestDatabase, type TestDatabase } from '../testing/node-sqlite';
 
@@ -76,6 +77,7 @@ describeSqlite('migration 10: indexes and the drive-in-progress route', () => {
       ALTER TABLE trips DROP COLUMN parking_minor;
       ALTER TABLE trips DROP COLUMN tolls_minor;
       DROP TABLE tracker_route;
+      DROP TABLE weekly_earnings;
       DROP INDEX trips_started_at;
       DROP INDEX trips_local_date_started_at;
       DROP INDEX trips_shift;
@@ -103,5 +105,32 @@ describeSqlite('migration 10: indexes and the drive-in-progress route', () => {
       ),
     ).toContain('trip_edits_updates');
     expect(plan(db, "SELECT DISTINCT trip_id FROM trip_edits WHERE action = 'update';")).toContain('trip_edits_updates');
+  });
+});
+
+describeSqlite('migration 12: weekly earnings for the tax set-aside', () => {
+  it('upgrades a version 11 database with an empty table, and a week saves, replaces and clears', async () => {
+    const db = openTestDatabase();
+    await migrate(db as never);
+    db.raw.exec(`
+      DROP TABLE weekly_earnings;
+      PRAGMA user_version = 11;
+    `);
+    expect(SCHEMA_VERSION).toBe(12);
+    await migrate(db as never);
+    expect(db.rows<{ user_version: number }>('PRAGMA user_version;')[0].user_version).toBe(12);
+    expect(await listWeeklyEarnings(db as never)).toEqual(new Map());
+
+    await saveWeeklyEarnings(db as never, '2026-09-28', 45_000);
+    await saveWeeklyEarnings(db as never, '2026-09-21', 30_000);
+    await saveWeeklyEarnings(db as never, '2026-09-28', 47_550);
+    expect(await listWeeklyEarnings(db as never)).toEqual(
+      new Map([
+        ['2026-09-21', 30_000],
+        ['2026-09-28', 47_550],
+      ]),
+    );
+    await saveWeeklyEarnings(db as never, '2026-09-21', null);
+    expect([...(await listWeeklyEarnings(db as never)).keys()]).toEqual(['2026-09-28']);
   });
 });

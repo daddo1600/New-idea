@@ -117,7 +117,12 @@ export type MileageReport = {
   drivenDistance: number | null;
   /** Australia: the ATO logbook for each car, when there is one. */
   logbooks: ReportLogbook[];
+  /** Part of the tax year only (a quarter), or null for the whole year. */
+  range: ReportRange | null;
 };
+
+/** Part of a tax year: its first and last day (YYYY-MM-DD) and a short name for titles and file names, e.g. "Q2". */
+export type ReportRange = { start: string; end: string; name: string };
 
 /** Tax years that have trips, newest first. */
 export function reportYears(trips: readonly Pick<Trip, 'localDate'>[], region: Region): number[] {
@@ -139,6 +144,11 @@ export function buildReport(
     logbooks?: readonly { summary: LogbookSummary; expenses: CarExpenses | null }[];
     /** A UK employee (Mileage Allowance Relief): parking and tolls are listed apart, not added. */
     employee?: boolean;
+    /**
+     * Only these days of the tax year (a quarter). Drives are still priced
+     * over the whole year, so a tier limit crossed earlier is counted.
+     */
+    range?: ReportRange;
   } = {},
 ): MileageReport {
   const kindOf = (id: string | null) => options.places?.find((place) => place.id === id)?.kind ?? null;
@@ -148,8 +158,11 @@ export function buildReport(
   };
   // Tiers depend on every business trip of the year, so price them all first.
   const allParts = computeDeductionParts(trips, region);
+  const range = options.range ?? null;
+  const inRange = (localDate: string) =>
+    !range || (localDate.slice(0, 10) >= range.start && localDate.slice(0, 10) <= range.end);
   const rows: ReportRow[] = trips
-    .filter((trip) => taxYearOf(trip.localDate, region) === taxYear)
+    .filter((trip) => taxYearOf(trip.localDate, region) === taxYear && inRange(trip.localDate))
     .sort((a, b) => a.startedAt.localeCompare(b.startedAt))
     .map((trip) => {
       const parts = allParts.get(trip.id) ?? [];
@@ -185,11 +198,13 @@ export function buildReport(
     employee: options.employee ?? false,
     total: 0,
     byRate: [],
-    odometer: options.odometer ?? { start: null, end: null },
+    // Odometer readings and logbooks are for the whole year: left out of part of one.
+    odometer: (!range && options.odometer) || { start: null, end: null },
     drivenDistance: null,
     logbooks: [],
+    range,
   };
-  if (region.code === 'AU') {
+  if (region.code === 'AU' && !range) {
     report.logbooks = (options.logbooks ?? []).map(({ summary, expenses }) => {
       const car = options.vehicles?.find((v) => v.id === summary.logbook.vehicleId);
       const valid = logbookValidFor(summary, taxYear);
@@ -356,9 +371,11 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
   const distance = (value: number) => escapeHtml(formatDistance(fromUnits(value, region), region));
   const money = (minor: number) => escapeHtml(formatMoney(minor, region));
   const summaryHeading = escapeHtml(region.report.summaryHeading);
-  const yearName = report.label.length > 4 ? `${report.label} tax year` : report.label;
+  const yearName =
+    (report.range ? `${report.range.name}, ` : '') + (report.label.length > 4 ? `${report.label} tax year` : report.label);
   const bounds = taxYearBounds(report.taxYear, region);
-  const period = `${formatReportDate(bounds.start, region)} to ${formatReportDate(bounds.end, region)}`;
+  const shown = report.range ?? bounds;
+  const period = `${formatReportDate(shown.start, region)} to ${formatReportDate(shown.end, region)}`;
   const percent = (part: number, whole: number) => `${Math.round((part / whole) * 100)}%`;
   const loggedShare = report.totalDistance > 0 ? percent(report.businessDistance, report.totalDistance) : '–';
   const reading = (value: number | null) =>
