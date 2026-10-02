@@ -254,9 +254,9 @@ export function PurposeSheet({
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <Pressable accessibilityLabel={t('Close')} style={styles.backdrop} onPress={onClose} />
+      <Pressable accessibilityLabel={t('Close')} style={[styles.backdrop, { backgroundColor: theme.backdrop }]} onPress={onClose} />
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ThemedView style={[styles.sheet, { paddingBottom: insets.bottom + Spacing.three }]}>
+        <ThemedView type="sheet" style={[styles.sheet, { paddingBottom: insets.bottom + Spacing.three }]}>
           <View style={[styles.grabber, { backgroundColor: theme.backgroundSelected }]} />
           <ThemedText type="smallBold" style={styles.title}>
             {t('Business purpose')}
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   flex: { flex: 1 },
-  backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.3)' },
+  backdrop: { flex: 1 },
   sheet: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,

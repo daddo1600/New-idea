@@ -19,6 +19,9 @@ export const Colors = {
     danger: '#C62828',
     /** Amber: something to check or finish (a missed drive, a missing purpose), not an error. */
     warning: '#CA8A04',
+    /** Sheets that slide up over a screen, and the dimmed screen behind them. */
+    sheet: '#ffffff',
+    backdrop: 'rgba(0,0,0,0.3)',
   },
   dark: {
     text: '#ffffff',
@@ -30,6 +33,9 @@ export const Colors = {
     onAccent: '#04130D',
     danger: '#FF6B6B',
     warning: '#CA8A04',
+    // Lifted off the black page, as iOS does, so a sheet's edge shows.
+    sheet: '#1C1C1E',
+    backdrop: 'rgba(0,0,0,0.6)',
   },
 } as const;
 

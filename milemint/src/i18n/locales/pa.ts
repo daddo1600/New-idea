@@ -1255,6 +1255,11 @@ const dictionary: Dictionary = {
   "Good start": "ਵਧੀਆ ਸ਼ੁਰੂਆਤ",
   "ALMOST DONE!": "ਬੱਸ ਥੋੜ੍ਹਾ ਹੋਰ!",
   "YOU DID IT!": "ਤੁਸੀਂ ਕਰ ਦਿਖਾਇਆ!",
+  "Appearance": "ਦਿੱਖ",
+  "System": "ਸਿਸਟਮ",
+  "Light": "ਲਾਈਟ",
+  "Dark": "ਡਾਰਕ",
+  "System follows your iPhone’s light or dark setting.": "ਸਿਸਟਮ ਚੁਣਨ ’ਤੇ ਤੁਹਾਡੇ iPhone ਦੀ ਲਾਈਟ ਜਾਂ ਡਾਰਕ ਸੈਟਿੰਗ ਵਰਤੀ ਜਾਂਦੀ ਹੈ।",
 };
 
 export default dictionary;

@@ -66,8 +66,8 @@ export function PlanSheet({
   const insets = useSafeAreaInsets();
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <Pressable accessibilityLabel={t('Close')} style={styles.backdrop} onPress={onClose} />
-      <ThemedView style={[styles.sheet, { paddingBottom: insets.bottom + Spacing.three }]}>
+      <Pressable accessibilityLabel={t('Close')} style={[styles.backdrop, { backgroundColor: theme.backdrop }]} onPress={onClose} />
+      <ThemedView type="sheet" style={[styles.sheet, { paddingBottom: insets.bottom + Spacing.three }]}>
         <View style={[styles.grabber, { backgroundColor: theme.backgroundSelected }]} />
         <ScrollView contentContainerStyle={styles.content}>
           <ThemedText type="subtitle" accessibilityRole="header">
@@ -100,7 +100,7 @@ export function PlanSheet({
 }
 
 const styles = StyleSheet.create({
-  backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.3)' },
+  backdrop: { flex: 1 },
   sheet: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,

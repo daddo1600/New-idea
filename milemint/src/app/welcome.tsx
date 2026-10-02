@@ -667,7 +667,7 @@ export default function WelcomeScreen() {
                       accessibilityLabel={t('Employed, in your own vehicle?')}
                       value={employed}
                       onValueChange={setEmployed}
-                      trackColor={{ true: theme.accent }}
+                      trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
                     />
                   </View>
                   {employed && (

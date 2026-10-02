@@ -38,6 +38,7 @@ import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, updateSettings, type AppSettings } from '@/db/settings-repo';
 import { listTrips } from '@/db/trips-repo';
 import { frequentPurposes } from '@/domain/suggestions';
+import type { Appearance } from '@/domain/appearance';
 import { isValidShift, type WorkShift } from '@/domain/classify-rules';
 import { autoDrivesInMonth, REFERRAL_BONUS_DRIVES } from '@/domain/plan';
 import { marApplies, parsePence, TAX_BAND_RATES, type TaxBand } from '@/domain/mar';
@@ -49,6 +50,7 @@ import { addVehicle, removeVehicle, updateVehicle } from '@/db/vehicles-repo';
 import { useVehicles } from '@/vehicles/use-vehicles';
 import type { Place, PlaceKind } from '@/domain/places';
 import { type MileagePay, useMileagePay } from '@/hooks/use-mileage-pay';
+import { setAppearance, useAppearance } from '@/hooks/use-appearance';
 import { useTheme } from '@/hooks/use-theme';
 import { LANGUAGES, msg, useLanguage, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
@@ -190,7 +192,7 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
                 setMessage(null);
                 setEnabled(value);
               }}
-              trackColor={{ true: theme.accent }}
+              trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
             />
           </View>
 
@@ -205,7 +207,7 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
                       accessibilityLabel={t('Work on {{day}}', { day: t(name) })}
                       value={shifts.length > 0}
                       onValueChange={(on) => updateDay(weekday, on ? [{ ...NEW_SHIFT }] : [])}
-                      trackColor={{ true: theme.accent }}
+                      trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
                     />
                   </View>
                   {shifts.map((shift, index) => {
@@ -360,6 +362,8 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
 
         <LanguageSection />
 
+        <AppearanceSection />
+
         <ReplayTutorialSection />
 
         <ThemedText type="smallBold">{t('Help & feedback')}</ThemedText>
@@ -505,7 +509,7 @@ function ReminderSection() {
             disabled={on === null}
             value={on ?? false}
             onValueChange={change}
-            trackColor={{ true: theme.accent }}
+            trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
           />
         </View>
         {note && (
@@ -902,7 +906,7 @@ function DrivingSection() {
             accessibilityLabel={t('New drives start as business')}
             value={settings.defaultBusiness}
             onValueChange={(defaultBusiness) => change({ defaultBusiness })}
-            trackColor={{ true: theme.accent }}
+            trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
           />
         </View>
         <View style={[styles.purposeSetting, styles.spaced]}>
@@ -945,7 +949,7 @@ function DrivingSection() {
             accessibilityLabel={t('Shift mode')}
             value={settings.shiftMode}
             onValueChange={(shiftMode) => change({ shiftMode })}
-            trackColor={{ true: theme.accent }}
+            trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
           />
         </View>
       </ThemedView>
@@ -1031,7 +1035,7 @@ function ClientPrivacySection() {
             disabled={on === null}
             value={on ?? false}
             onValueChange={change}
-            trackColor={{ true: theme.accent }}
+            trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
           />
         </View>
         {on && (
@@ -1287,6 +1291,39 @@ function LanguageSection() {
             </ThemedText>
           </Pressable>
         </View>
+      </ThemedView>
+    </>
+  );
+}
+
+const APPEARANCE_OPTIONS = [
+  { value: 'system', label: msg('System') },
+  { value: 'light', label: msg('Light') },
+  { value: 'dark', label: msg('Dark') },
+] as const satisfies readonly { value: Appearance; label: string }[];
+
+/** Light or dark: follow the phone (the default), or always one. Applies straight away. */
+function AppearanceSection() {
+  const db = useSQLiteContext();
+  const t = useT();
+  const appearance = useAppearance();
+  const current = APPEARANCE_OPTIONS.find((option) => option.value === appearance) ?? APPEARANCE_OPTIONS[0];
+  const change = (next: Appearance) => {
+    setAppearance(next);
+    updateSettings(db, { appearance: next }).catch(() => {});
+  };
+  return (
+    <>
+      <SectionTitle title={t('Appearance')} value={t(current.label)} />
+      <ThemedView type="backgroundElement" style={styles.card}>
+        <Segmented
+          options={APPEARANCE_OPTIONS.map((option) => ({ value: option.value, label: t(option.label) }))}
+          value={appearance}
+          onChange={change}
+        />
+        <ThemedText type="small" themeColor="textSecondary">
+          {t('System follows your iPhone’s light or dark setting.')}
+        </ThemedText>
       </ThemedView>
     </>
   );

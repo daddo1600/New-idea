@@ -4,7 +4,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import { shownLabel } from '@/domain/privacy';
-import { formatDistance } from '@/domain/regions';
+import { formatDistance, formatShortDate } from '@/domain/regions';
 import type { Trip } from '@/domain/trip';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
@@ -25,6 +25,7 @@ export function SelectableTripRow({
   const theme = useTheme();
   const t = useT();
   const { region } = useRegion();
+  const date = formatShortDate(trip.localDate, region, undefined, t);
   const status =
     trip.classification === 'unclassified'
       ? t('Not sorted')
@@ -38,7 +39,7 @@ export function SelectableTripRow({
       accessibilityLabel={t('{{from}} to {{to}}, {{date}}, {{status}}', {
         from: trip.startLabel,
         to: trip.endLabel,
-        date: trip.localDate,
+        date,
         status,
       })}
       onPress={onToggle}>
@@ -65,7 +66,7 @@ export function SelectableTripRow({
             <ThemedText type="smallBold">{formatDistance(trip.distanceMeters, region)}</ThemedText>
           </View>
           <ThemedText type="small" themeColor="textSecondary">
-            {trip.localDate} · {status}
+            {date} · {status}
           </ThemedText>
         </View>
       </ThemedView>

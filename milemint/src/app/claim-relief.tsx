@@ -276,7 +276,7 @@ function YearCard({
             accessibilityLabel={t('I’ve claimed the {{year}} tax year', { year: year.label })}
             value={claimed}
             onValueChange={onClaimed}
-            trackColor={{ true: theme.accent }}
+            trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
           />
         </View>
       )}

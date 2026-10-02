@@ -991,6 +991,12 @@
     ]
   },
   {
+    "key": "Appearance",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
     "key": "Apple Maps couldn’t place that one. Try another suggestion.",
     "files": [
       "components/place-field.tsx"
@@ -1784,6 +1790,12 @@
     "key": "Customer",
     "files": [
       "components/practice-tutorial.tsx"
+    ]
+  },
+  {
+    "key": "Dark",
+    "files": [
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -3258,6 +3270,12 @@
     "files": [
       "app/setup-tracking.tsx",
       "components/motion-ask.tsx"
+    ]
+  },
+  {
+    "key": "Light",
+    "files": [
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -5484,6 +5502,18 @@
     "key": "Swipe to start your shift",
     "files": [
       "components/practice-tutorial.tsx"
+    ]
+  },
+  {
+    "key": "System",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "System follows your iPhone’s light or dark setting.",
+    "files": [
+      "app/(tabs)/settings.tsx"
     ]
   },
   {

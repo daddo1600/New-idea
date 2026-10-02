@@ -19,7 +19,7 @@ import {
   costsAdded,
   costsNote,
   describeTier,
-  formatDate,
+  formatReportDate,
   formatDistance,
   formatMoney,
   formatRate,
@@ -377,7 +377,7 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
   const summaryHeading = escapeHtml(region.report.summaryHeading);
   const yearName = report.label.length > 4 ? `${report.label} tax year` : report.label;
   const bounds = taxYearBounds(report.taxYear, region);
-  const period = `${formatDate(bounds.start, region)} to ${formatDate(bounds.end, region)}`;
+  const period = `${formatReportDate(bounds.start, region)} to ${formatReportDate(bounds.end, region)}`;
   const percent = (part: number, whole: number) => `${Math.round((part / whole) * 100)}%`;
   const loggedShare = report.totalDistance > 0 ? percent(report.businessDistance, report.totalDistance) : '–';
   const reading = (value: number | null) =>
@@ -391,8 +391,8 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
     region.report.askForOdometer || hasReadings
       ? `<h2>Odometer readings</h2>
   <table class="summary">
-    <tr><td>Odometer on ${formatDate(bounds.start, region)}</td>${reading(report.odometer.start)}</tr>
-    <tr><td>Odometer on ${formatDate(bounds.end, region)}</td>${reading(report.odometer.end)}</tr>
+    <tr><td>Odometer on ${formatReportDate(bounds.start, region)}</td>${reading(report.odometer.start)}</tr>
+    <tr><td>Odometer on ${formatReportDate(bounds.end, region)}</td>${reading(report.odometer.end)}</tr>
     <tr><td>Total ${units} driven in the year (end minus start)</td>${driven === null ? '<td class="blank"></td>' : `<td class="num">${distance(driven)}</td>`}</tr>
     <tr class="total"><td>Business-use share (business ${units} ÷ total ${units} driven)</td>${
       driven ? `<td class="num">${percent(report.businessDistance, driven)}</td>` : '<td class="blank"></td>'
@@ -442,7 +442,7 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
       const business = trip.classification === 'business';
       return (
         `<tr${business ? '' : ' class="dim"'}>` +
-        `<td>${formatDate(trip.localDate, region)}</td>` +
+        `<td>${formatReportDate(trip.localDate, region)}</td>` +
         `<td>${escapeHtml(trip.startLabel)} → ${escapeHtml(trip.endLabel)}</td>` +
         `<td class="num">${row.distance.toFixed(1)}</td>` +
         `<td>${CLASSIFICATION_LABELS[trip.classification]}${row.commute ? ' (commute)' : ''}` +
@@ -485,7 +485,7 @@ export function toReportHtml(report: MileageReport, generatedAt: Date = new Date
   tr { page-break-inside: avoid; }
 </style></head><body>
   <h1>Vehicle mileage log · ${escapeHtml(yearName)}</h1>
-  <p class="sub">${escapeHtml(region.name)} · ${period} · ${escapeHtml(region.authority)} rates · prepared with MileSprout on ${formatDate(toLocalIsoDate(generatedAt), region)}</p>
+  <p class="sub">${escapeHtml(region.name)} · ${period} · ${escapeHtml(region.authority)} rates · prepared with MileSprout on ${formatReportDate(toLocalIsoDate(generatedAt), region)}</p>
 
   <h2>${summaryHeading}</h2>
   <table class="summary">
@@ -538,7 +538,7 @@ function logbookHtml(
   const percent = summary.businessPercent === null ? '<td class="blank"></td>' : num(`${summary.businessPercent}%`);
   const rows = [
     row('Vehicle', `<td>${escapeHtml(entry.vehicle)}</td>`),
-    row('Logbook period', num(`${formatDate(logbook.startDate, region)} to ${formatDate(logbook.endDate, region)}`)),
+    row('Logbook period', num(`${formatReportDate(logbook.startDate, region)} to ${formatReportDate(logbook.endDate, region)}`)),
     row('Status', `<td>${escapeHtml(statusText(summary))}</td>`),
     row('Odometer at start of period', reading(logbook.odometerStart)),
     row('Odometer at end of period', reading(logbook.odometerEnd)),
