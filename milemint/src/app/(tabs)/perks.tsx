@@ -1,5 +1,5 @@
 import { router, type Href } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { OfferCard } from '@/components/perks/offer-card';
@@ -29,10 +29,15 @@ export default function PerksTab() {
   const { region } = useRegion();
   const { claims, loaded, claim, reset } = usePerkClaims();
   const [busy, setBusy] = useState<string | null>(null);
+  const [now, setNow] = useState(() => new Date());
+  // Codes last minutes: keep the cards current (a code running out goes back in the pool).
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 15_000);
+    return () => clearInterval(timer);
+  }, []);
 
   if (!loaded) return <ActivityIndicator style={styles.loading} />;
 
-  const now = new Date();
   const claimOffer = async (offer: PerkOffer) => {
     if (busy) return;
     setBusy(offer.id);
@@ -41,6 +46,7 @@ export default function PerksTab() {
       showCode(created.code);
     } finally {
       setBusy(null);
+      setNow(new Date());
     }
   };
 
@@ -73,6 +79,7 @@ export default function PerksTab() {
             state={offerState(offer, claims, now)}
             region={region}
             busy={busy === offer.id}
+            now={now}
             onClaim={() => claimOffer(offer)}
             onShow={showCode}
           />
@@ -82,9 +89,9 @@ export default function PerksTab() {
           <ThemedText type="smallBold" accessibilityRole="header">
             {t('How perks work')}
           </ThemedText>
-          <Bullet
-            text={t('Tap Claim and your phone makes a code just for you. Each code works once and has an expiry date.')}
-          />
+          <Bullet text={t('Claim when you’re at the till. Each code works once, for a short time (often 30 minutes).')} />
+          <Bullet text={t('Not used in time? It goes back in the pool, and you can claim again.')} />
+          <Bullet text={t('One per person a day, week or month: the partner sets it.')} />
           <Bullet text={t('Show the QR code at the till, or type the code in when you buy online.')} />
           <Bullet
             text={t('Partners pay MileSprout only when a code is used, never when you claim it. That helps keep MileSprout free.')}

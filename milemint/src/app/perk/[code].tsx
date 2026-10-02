@@ -12,9 +12,9 @@ import { Colors, Fonts, MaxContentWidth, Spacing } from '@/constants/theme';
 import { getPerkClaim, markPerkRedeemed } from '@/db/perks-repo';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
-import { claimStatus, timeLeft, type PerkClaim } from '@/perks/claims';
+import { claimStatus, secondsLeft, type PerkClaim } from '@/perks/claims';
 import { perkRedeemUrl } from '@/perks/code';
-import { claimDate, claimTime } from '@/perks/format';
+import { claimDate, claimTime, countdown } from '@/perks/format';
 import { findOffer } from '@/perks/offers';
 import { useRegion } from '@/region/region';
 
@@ -24,7 +24,7 @@ const QR_PAPER = '#FFFFFF';
 
 /**
  * A claimed perk's code: a big QR code to scan at the till, the same code in
- * letters to read out or type in online, and when it expires. "Mark as used"
+ * letters to read out or type in online, and a live countdown. "Demo: till scans"
  * stands in for the till's scan in this demo, to show the whole journey; in
  * the live version a server marks the code used when the partner scans it,
  * and that's when the partner pays.
@@ -42,9 +42,9 @@ export default function PerkCodeScreen() {
   useEffect(() => {
     getPerkClaim(db, code ?? '').then(setClaim, () => setClaim(null));
   }, [code, db]);
-  // The countdown, to the minute.
+  // The countdown, to the second.
   useEffect(() => {
-    const timer = setInterval(() => setNow(new Date()), 15_000);
+    const timer = setInterval(() => setNow(new Date()), 1_000);
     return () => clearInterval(timer);
   }, []);
 
@@ -59,7 +59,7 @@ export default function PerkCodeScreen() {
   }
 
   const status = claimStatus(claim, now);
-  const left = timeLeft(claim, now);
+  const left = secondsLeft(claim, now) ?? 0;
   const online = offer.kind === 'online';
 
   const copy = async () => {
@@ -117,11 +117,10 @@ export default function PerkCodeScreen() {
 
         {status === 'active' && (
           <ThemedView type="backgroundElement" style={styles.card}>
-            <ThemedText type="smallBold">
-              {left && left.days >= 1
-                ? // Counted up, so a code claimed for 7 days reads "7 days left", not 6.
-                  t('{{count}} days left', { count: left.days + (left.hours > 0 || left.minutes > 0 ? 1 : 0) })
-                : t('{{hours}} h {{minutes}} min left', { hours: left?.hours ?? 0, minutes: left?.minutes ?? 0 })}
+            <ThemedText
+              style={[styles.countdown, left < 5 * 60 && { color: theme.danger }]}
+              accessibilityRole="timer">
+              {t('Use within {{time}}', { time: countdown(left) })}
             </ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
               {t('Expires {{date}} at {{time}}. Works once.', {
@@ -150,10 +149,9 @@ export default function PerkCodeScreen() {
 
         {status === 'expired' && (
           <ThemedView type="backgroundElement" style={styles.card}>
+            <ThemedText type="smallBold">{t('Expired — back in the pool')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              {t('This code expired on {{date}}. You can claim a new one from Perks.', {
-                date: claimDate(claim.expiresAt, region),
-              })}
+              {t('Not used in time, so it doesn’t count. Claim again from Perks.')}
             </ThemedText>
           </ThemedView>
         )}
@@ -171,23 +169,23 @@ export default function PerkCodeScreen() {
         )}
 
         {status === 'active' && (
-          <View style={styles.demo}>
+          // Staff's side, not the driver's: the till marks a code used. Kept small, for showing the journey.
+          <View style={[styles.demo, { borderTopColor: theme.backgroundSelected }]}>
+            <ThemedText type="small" themeColor="textSecondary" style={styles.center}>
+              {t('Demo only — in the live version the till does this')}
+            </ThemedText>
             <PopPress
               accessibilityRole="button"
               onPress={markUsed}
               scale={1.04}
               style={({ pressed }) => [
-                styles.button,
-                styles.outline,
-                { borderColor: theme.accent, opacity: pressed ? 0.8 : 1 },
+                styles.demoButton,
+                { borderColor: theme.backgroundSelected, opacity: pressed ? 0.7 : 1 },
               ]}>
-              <ThemedText type="smallBold" style={{ color: theme.accent }}>
-                {t('Mark as used')}
+              <ThemedText type="small" themeColor="textSecondary">
+                {t('Demo: till scans the code')}
               </ThemedText>
             </PopPress>
-            <ThemedText type="small" themeColor="textSecondary" style={styles.center}>
-              {t('Demo: in the live version, this happens by itself when the till scans the code.')}
-            </ThemedText>
           </View>
         )}
 
@@ -250,9 +248,10 @@ const styles = StyleSheet.create({
   },
   ticketHint: { fontSize: 15, lineHeight: 20, fontWeight: '600', color: Colors.light.textSecondary, textAlign: 'center' },
   card: { borderRadius: 16, padding: Spacing.three, gap: Spacing.one },
+  countdown: { fontSize: 22, lineHeight: 28, fontWeight: '800', fontVariant: ['tabular-nums'] },
   done: { borderWidth: 1.5 },
   button: { borderRadius: 12, paddingVertical: Spacing.three, alignItems: 'center' },
-  outline: { borderWidth: 1.5 },
-  demo: { gap: Spacing.two },
+  demo: { gap: Spacing.two, borderTopWidth: StyleSheet.hairlineWidth, paddingTop: Spacing.three, alignItems: 'center' },
+  demoButton: { borderWidth: 1, borderRadius: 10, paddingVertical: Spacing.two, paddingHorizontal: Spacing.three },
   center: { textAlign: 'center' },
 });

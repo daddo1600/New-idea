@@ -179,7 +179,6 @@
   {
     "key": "{{count}} days left",
     "files": [
-      "app/perk/[code].tsx",
       "app/tax-dates.tsx",
       "components/money/quarterly-figures.tsx"
     ]
@@ -472,12 +471,6 @@
     "key": "{{hint}}. Swipe the button to the right, or double-tap.",
     "files": [
       "components/shift-switch.tsx"
-    ]
-  },
-  {
-    "key": "{{hours}} h {{minutes}} min left",
-    "files": [
-      "app/perk/[code].tsx"
     ]
   },
   {
@@ -1788,6 +1781,18 @@
     ]
   },
   {
+    "key": "Claim it when you’re at the till: the code lasts {{minutes}} min.",
+    "files": [
+      "components/perks/offer-card.tsx"
+    ]
+  },
+  {
+    "key": "Claim it when you’re ready to pay: the code lasts {{hours}} h.",
+    "files": [
+      "components/perks/offer-card.tsx"
+    ]
+  },
+  {
     "key": "Claim mileage relief",
     "files": [
       "app/(tabs)/money.tsx",
@@ -1807,6 +1812,12 @@
     ]
   },
   {
+    "key": "Claim when you’re at the till. Each code works once, for a short time (often 30 minutes).",
+    "files": [
+      "app/(tabs)/perks.tsx"
+    ]
+  },
+  {
     "key": "Claim with a P87 (or Self Assessment) by {{date}}.",
     "files": [
       "app/claim-relief.tsx"
@@ -1819,7 +1830,13 @@
     ]
   },
   {
-    "key": "Claimed · expires {{date}}",
+    "key": "Claimed · use by {{date}}, {{time}}",
+    "files": [
+      "components/perks/offer-card.tsx"
+    ]
+  },
+  {
+    "key": "Claimed · use by {{time}}",
     "files": [
       "components/perks/offer-card.tsx"
     ]
@@ -2231,7 +2248,13 @@
     ]
   },
   {
-    "key": "Demo: in the live version, this happens by itself when the till scans the code.",
+    "key": "Demo only — in the live version the till does this",
+    "files": [
+      "app/perk/[code].tsx"
+    ]
+  },
+  {
+    "key": "Demo: till scans the code",
     "files": [
       "app/perk/[code].tsx"
     ]
@@ -2879,6 +2902,13 @@
     "key": "Expired",
     "files": [
       "app/perk/[code].tsx"
+    ]
+  },
+  {
+    "key": "Expired — back in the pool",
+    "files": [
+      "app/perk/[code].tsx",
+      "components/perks/offer-card.tsx"
     ]
   },
   {
@@ -3989,12 +4019,6 @@
     ]
   },
   {
-    "key": "Mark as used",
-    "files": [
-      "app/perk/[code].tsx"
-    ]
-  },
-  {
     "key": "Mark as work",
     "files": [
       "components/practice-tutorial.tsx"
@@ -4439,6 +4463,18 @@
     ]
   },
   {
+    "key": "Next one {{day}}",
+    "files": [
+      "components/perks/offer-card.tsx"
+    ]
+  },
+  {
+    "key": "Next one tomorrow",
+    "files": [
+      "components/perks/offer-card.tsx"
+    ]
+  },
+  {
     "key": "No",
     "files": [
       "components/place-ask-card.tsx"
@@ -4593,6 +4629,18 @@
     "key": "Not that way. Try again.",
     "files": [
       "components/practice-tutorial.tsx"
+    ]
+  },
+  {
+    "key": "Not used in time, so it doesn’t count. Claim again from Perks.",
+    "files": [
+      "app/perk/[code].tsx"
+    ]
+  },
+  {
+    "key": "Not used in time? It goes back in the pool, and you can claim again.",
+    "files": [
+      "app/(tabs)/perks.tsx"
     ]
   },
   {
@@ -4791,6 +4839,12 @@
     "files": [
       "app/setup-tracking.tsx",
       "components/motion-ask.tsx"
+    ]
+  },
+  {
+    "key": "One per person a day, week or month: the partner sets it.",
+    "files": [
+      "app/(tabs)/perks.tsx"
     ]
   },
   {
@@ -6574,12 +6628,6 @@
     ]
   },
   {
-    "key": "Tap Claim and your phone makes a code just for you. Each code works once and has an expiry date.",
-    "files": [
-      "app/(tabs)/perks.tsx"
-    ]
-  },
-  {
     "key": "Tap trips to select them",
     "files": [
       "components/trips/list-bars.tsx"
@@ -6933,12 +6981,6 @@
     "key": "This can’t be undone. Dates, distances and purposes stay as they are; places you saved keep their names.",
     "files": [
       "app/(tabs)/settings.tsx"
-    ]
-  },
-  {
-    "key": "This code expired on {{date}}. You can claim a new one from Perks.",
-    "files": [
-      "app/perk/[code].tsx"
     ]
   },
   {
@@ -7416,6 +7458,12 @@
     "key": "Use other vehicles for work too?",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Use within {{time}}",
+    "files": [
+      "app/perk/[code].tsx"
     ]
   },
   {

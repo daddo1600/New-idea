@@ -31,9 +31,20 @@ export type PerkOffer = {
   weeklyCap: number;
   /** Demo value: codes other drivers have already claimed this week. */
   claimedByOthers: number;
-  /** How long a code works after it's claimed. */
-  validDays: number;
+  /**
+   * Minutes a code works for once claimed, set by the partner: short in store
+   * (claim it at the till), longer online. Not used in time, it goes back
+   * into the week's pool.
+   */
+  useWithinMinutes: number;
+  /** How often one person can have a code, set by the partner. */
+  perPerson: PerPersonLimit;
 };
+
+export type LimitPeriod = 'day' | 'week' | 'month';
+
+/** E.g. one a day. Used and still-live codes count; a code left to run out doesn't. */
+export type PerPersonLimit = { count: number; period: LimitPeriod };
 
 export const DEMO_OFFERS: readonly PerkOffer[] = [
   {
@@ -48,7 +59,8 @@ export const DEMO_OFFERS: readonly PerkOffer[] = [
     kind: 'in-store',
     weeklyCap: 50,
     claimedByOthers: 16,
-    validDays: 7,
+    useWithinMinutes: 30,
+    perPerson: { count: 1, period: 'day' },
   },
   {
     id: 'daybreak-coffee',
@@ -62,7 +74,8 @@ export const DEMO_OFFERS: readonly PerkOffer[] = [
     kind: 'in-store',
     weeklyCap: 120,
     claimedByOthers: 71,
-    validDays: 7,
+    useWithinMinutes: 30,
+    perPerson: { count: 1, period: 'day' },
   },
   {
     id: 'treadright-tyres',
@@ -76,7 +89,8 @@ export const DEMO_OFFERS: readonly PerkOffer[] = [
     kind: 'in-store',
     weeklyCap: 30,
     claimedByOthers: 9,
-    validDays: 14,
+    useWithinMinutes: 60,
+    perPerson: { count: 1, period: 'month' },
   },
   {
     id: 'sparkle-car-wash',
@@ -90,7 +104,8 @@ export const DEMO_OFFERS: readonly PerkOffer[] = [
     kind: 'in-store',
     weeklyCap: 40,
     claimedByOthers: 27,
-    validDays: 7,
+    useWithinMinutes: 30,
+    perPerson: { count: 1, period: 'week' },
   },
   {
     id: 'spokes-chains',
@@ -104,7 +119,8 @@ export const DEMO_OFFERS: readonly PerkOffer[] = [
     kind: 'in-store',
     weeklyCap: 25,
     claimedByOthers: 22,
-    validDays: 7,
+    useWithinMinutes: 30,
+    perPerson: { count: 1, period: 'month' },
   },
   {
     id: 'gripmount',
@@ -118,7 +134,8 @@ export const DEMO_OFFERS: readonly PerkOffer[] = [
     kind: 'online',
     weeklyCap: 60,
     claimedByOthers: 18,
-    validDays: 7,
+    useWithinMinutes: 24 * 60,
+    perPerson: { count: 1, period: 'month' },
   },
   {
     id: 'ledgerlite-tax',
@@ -132,7 +149,8 @@ export const DEMO_OFFERS: readonly PerkOffer[] = [
     kind: 'online',
     weeklyCap: 20,
     claimedByOthers: 6,
-    validDays: 30,
+    useWithinMinutes: 24 * 60,
+    perPerson: { count: 1, period: 'month' },
   },
 ];
 

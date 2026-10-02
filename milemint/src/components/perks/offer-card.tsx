@@ -9,12 +9,13 @@ import type { Region } from '@/domain/regions';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
 import type { OfferState } from '@/perks/claims';
-import { claimDate } from '@/perks/format';
+import { claimDate, claimTime, dayName, daysUntil } from '@/perks/format';
 import type { PerkOffer } from '@/perks/offers';
 
 /**
  * One partner's offer: who, what, the small print and how many are left this
- * week, then Claim, or the code already claimed. No distance or map: Perks
+ * week, then Claim (with when to claim it: codes last minutes), the code
+ * already claimed, or when this person's next one comes. No distance or map: Perks
  * never use the user's location.
  */
 export function OfferCard({
@@ -22,6 +23,7 @@ export function OfferCard({
   state,
   region,
   busy,
+  now,
   onClaim,
   onShow,
 }: {
@@ -29,12 +31,13 @@ export function OfferCard({
   state: OfferState;
   region: Region;
   busy: boolean;
+  now: Date;
   onClaim: () => void;
   onShow: (code: string) => void;
 }) {
   const t = useT();
   const theme = useTheme();
-  const { left, latest, status, canClaim } = state;
+  const { left, latest, status, nextAt, canClaim } = state;
   const low = left <= Math.max(3, offer.weeklyCap * 0.2);
   const barColor = left === 0 ? theme.textSecondary : low ? theme.warning : theme.accent;
 
@@ -71,11 +74,34 @@ export function OfferCard({
         </ThemedText>
       </View>
 
+      {canClaim && (
+        <View style={[styles.note, { backgroundColor: theme.accent + '14' }]}>
+          <ThemedText type="small" style={styles.noteIcon}>
+            ⏱
+          </ThemedText>
+          <ThemedText type="small" style={styles.flex}>
+            {offer.kind === 'online'
+              ? // Online codes last whole hours.
+                t('Claim it when you’re ready to pay: the code lasts {{hours}} h.', {
+                  hours: Math.round(offer.useWithinMinutes / 60),
+                })
+              : t('Claim it when you’re at the till: the code lasts {{minutes}} min.', {
+                  minutes: offer.useWithinMinutes,
+                })}
+          </ThemedText>
+        </View>
+      )}
+
       <View style={styles.footer}>
         <View style={styles.flex}>
           {status === 'active' && latest && (
             <ThemedText type="smallBold" style={{ color: theme.accent }}>
-              {t('Claimed · expires {{date}}', { date: claimDate(latest.expiresAt, region) })}
+              {daysUntil(new Date(latest.expiresAt), now) === 0
+                ? t('Claimed · use by {{time}}', { time: claimTime(latest.expiresAt, region) })
+                : t('Claimed · use by {{date}}, {{time}}', {
+                    date: claimDate(latest.expiresAt, region, now),
+                    time: claimTime(latest.expiresAt, region),
+                  })}
             </ThemedText>
           )}
           {status === 'redeemed' && latest?.redeemedAt && (
@@ -83,7 +109,12 @@ export function OfferCard({
               {t('Redeemed ✓ · {{date}}', { date: claimDate(latest.redeemedAt, region) })}
             </ThemedText>
           )}
-          {!canClaim && status !== 'active' && (
+          {status === 'expired' && (
+            <ThemedText type="small" themeColor="textSecondary">
+              {t('Expired — back in the pool')}
+            </ThemedText>
+          )}
+          {!canClaim && status !== 'active' && !nextAt && (
             <ThemedText type="small" themeColor="textSecondary">
               {t('More codes on Monday.')}
             </ThemedText>
@@ -104,6 +135,14 @@ export function OfferCard({
               {t('Show code')}
             </ThemedText>
           </PopPress>
+        ) : nextAt ? (
+          <View style={[styles.button, styles.next, { backgroundColor: theme.backgroundSelected }]}>
+            <ThemedText type="smallBold" themeColor="textSecondary">
+              {daysUntil(nextAt, now) === 1
+                ? t('Next one tomorrow')
+                : t('Next one {{day}}', { day: dayName(nextAt, region, now) })}
+            </ThemedText>
+          </View>
         ) : (
           canClaim && (
             <PopPress
@@ -117,7 +156,7 @@ export function OfferCard({
                 { backgroundColor: theme.accent, opacity: busy ? 0.6 : pressed ? 0.8 : 1 },
               ]}>
               <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-                {status === 'redeemed' ? t('Claim again') : t('Claim')}
+                {latest ? t('Claim again') : t('Claim')}
               </ThemedText>
             </PopPress>
           )
@@ -146,4 +185,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   outline: { borderWidth: 1.5 },
+  next: { paddingHorizontal: Spacing.three },
+  note: { flexDirection: 'row', gap: Spacing.two, borderRadius: 10, padding: Spacing.two + 2 },
+  noteIcon: { lineHeight: 20 },
 });
