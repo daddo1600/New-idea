@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { StyleSheet, Text, useWindowDimensions, View, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -95,21 +95,56 @@ export function MotionStep() {
 }
 
 /**
- * Shown behind iOS's own Motion & Fitness question while it's up. iOS puts
- * its alert mid-screen with "Allow" bottom right, so this sits low on the
- * right, pointing up at it, on a dark card that still reads while dimmed.
+ * Shown behind iOS's own Motion & Fitness question while it's up. We can't
+ * draw on Apple's alert, so this lines up just under it: iOS centres the alert
+ * across about 80% of the screen with "Allow" on the right half, so a gold
+ * arrow and a gold-outlined "Allow" sit under that half, pointing up at it.
  */
 export function MotionCoach() {
   const t = useT();
+  const { width, height } = useWindowDimensions();
+  const reduceMotion = useReducedMotion();
+  const box = useRef<View>(null);
+  const [origin, setOrigin] = useState<{ x: number; y: number } | null>(null);
+  const bob = useSharedValue(0);
+  useEffect(() => {
+    if (reduceMotion) return;
+    bob.set(withRepeat(withSequence(withTiming(1, { duration: 520 }), withTiming(0, { duration: 520 })), -1, false));
+  }, [bob, reduceMotion]);
+  const arrow = useAnimatedStyle(() => ({ transform: [{ translateY: -8 * bob.value }] }));
+
+  // Where Allow sits on screen: the right half of an alert ~80% wide, centred,
+  // whose bottom edge is a little under the middle of the screen.
+  const alertWidth = width * ALERT_WIDTH;
+  const column = { x: (width - alertWidth) / 2 + alertWidth / 2, y: height / 2 + ALERT_BELOW_MIDDLE };
   return (
-    <View style={styles.coach} accessibilityLiveRegion="polite">
-      <View style={styles.coachCard}>
-        <Text style={styles.coachArrow}>↑</Text>
-        <Text style={styles.coachText}>{t('Tap “{{button}}”', { button: t('Allow') })}</Text>
-      </View>
+    <View
+      ref={box}
+      style={styles.coach}
+      accessibilityLiveRegion="polite"
+      onLayout={() => box.current?.measureInWindow((x, y) => setOrigin({ x, y }))}>
+      {origin && (
+        <View
+          style={[
+            styles.coachColumn,
+            { left: column.x - origin.x, top: column.y - origin.y, width: alertWidth / 2 },
+          ]}>
+          <Animated.Text style={[styles.coachArrow, arrow]}>↑</Animated.Text>
+          <View style={styles.coachPill}>
+            <Text style={styles.coachText} numberOfLines={2} adjustsFontSizeToFit>
+              {t('Tap “{{button}}”', { button: t('Allow') })}
+            </Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 }
+
+/** iOS 26's alert: about this share of the screen's width… */
+const ALERT_WIDTH = 0.8;
+/** …with its buttons ending about this far below the middle of the screen (points). */
+const ALERT_BELOW_MIDDLE = 190;
 
 const styles = StyleSheet.create({
   wrap: { alignItems: 'center' },
@@ -165,15 +200,21 @@ const styles = StyleSheet.create({
   eyebrow: { color: '#FACC15', fontSize: 12, fontWeight: '800', letterSpacing: 1.2, marginTop: Spacing.one },
   title: { color: '#FFFFFF', fontSize: 30, lineHeight: 36, fontWeight: '800', letterSpacing: -0.5 },
   body: { color: '#D1FAE5', fontSize: 17, lineHeight: 24 },
-  coach: { flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end', paddingBottom: Spacing.four },
-  coachCard: {
+  coach: { flex: 1, alignSelf: 'stretch', minHeight: 1 },
+  coachColumn: { position: 'absolute', alignItems: 'center', gap: Spacing.one },
+  coachArrow: { color: '#FACC15', fontSize: 48, lineHeight: 52, fontWeight: '800' },
+  // Gold-outlined, like the button it points at.
+  coachPill: {
+    borderWidth: 3,
+    borderColor: '#FACC15',
+    borderRadius: 999,
     backgroundColor: 'rgba(1,28,20,0.85)',
-    borderRadius: 20,
-    paddingVertical: Spacing.three,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'flex-end',
-    maxWidth: '80%',
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
+    shadowColor: '#FACC15',
+    shadowOpacity: 0.6,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 0 },
   },
-  coachArrow: { color: '#FACC15', fontSize: 56, lineHeight: 60, fontWeight: '800', marginRight: Spacing.three },
-  coachText: { color: '#FACC15', fontSize: 28, lineHeight: 35, fontWeight: '800', textAlign: 'right' },
+  coachText: { color: '#FACC15', fontSize: 22, lineHeight: 28, fontWeight: '800', textAlign: 'center' },
 });
