@@ -216,6 +216,34 @@ describe('consistentTables', () => {
     expect(consistentTables(tables).shift_pauses.map((pause) => pause.id)).toEqual(['p1']);
   });
 
+  it('keeps earnings by platform and drops an entry missing what the table needs', () => {
+    const tables = sampleTables();
+    const entry = {
+      id: 'e1',
+      platform: 'uber-eats',
+      period_start: '2026-09-21',
+      period_end: '2026-09-27',
+      amount_minor: 41_235,
+      trip_count: 18,
+      distance_meters: null,
+      added_to_week: '2026-09-21',
+      created_at: '2026-09-28T09:00:00.000Z',
+    };
+    tables.platform_earnings = [
+      entry,
+      { ...entry, id: 'e2', platform: null },
+      { ...entry, id: 'e3', period_end: '2026-09-20' },
+      { ...entry, id: 'e4', amount_minor: null },
+    ];
+    expect(consistentTables(tables).platform_earnings).toEqual([entry]);
+  });
+
+  it('rejects a backup with a misread number in earnings by platform', () => {
+    const bad = sample();
+    bad.tables.platform_earnings = [{ id: 'e1', amount_minor: 100, trip_count: -1 }];
+    expect(() => validateSnapshot(bad, CURRENT)).toThrow(BackupError);
+  });
+
   it('leaves trips from before vehicles existed without a vehicle_id column', () => {
     const tables = { ...emptyTables(), trips: [{ id: 'old', start_label: 'A' }] };
     expect(consistentTables(tables).trips[0]).toEqual({ id: 'old', start_label: 'A' });

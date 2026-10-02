@@ -67,9 +67,7 @@ export default function FriendsScreen() {
             </ThemedText>
           )}
           <ThemedText type="small" themeColor="textSecondary">
-            {t(
-              'Tax set-aside is ready now, in the Money tab. Earnings by platform is on its way: earn it now and it unlocks as soon as it arrives.',
-            )}
+            {t('Tax set-aside and earnings by platform are both ready now, in the Money tab.')}
           </ThemedText>
           {isPro && (
             <ThemedText type="small" themeColor="textSecondary">

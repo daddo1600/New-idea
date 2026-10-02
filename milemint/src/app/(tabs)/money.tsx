@@ -3,6 +3,7 @@ import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 
 import { LinkRow } from '@/components/link-row';
 import { LogbookNudge } from '@/components/logbook-nudge';
+import { PlatformEarningsCard } from '@/components/money/platform-earnings-card';
 import { QuarterlyFigures } from '@/components/money/quarterly-figures';
 import { SetAsideCard } from '@/components/money/set-aside-card';
 import { ReliefNudge } from '@/components/home/summary-card';
@@ -83,6 +84,7 @@ export default function MoneyScreen() {
         {/* For the self-employed: UK employees claim relief once a year and pay tax through PAYE. */}
         {!money.employee && <QuarterlyFigures trips={allTrips} deductions={deductions} employee={money.employee} />}
         {!money.employee && <SetAsideCard trips={allTrips} deductions={deductions} employee={money.employee} />}
+        <PlatformEarningsCard trips={allTrips} />
 
         {/* Employees' relief is worked out for the whole year, so their months show distance only. */}
         <ThemedText type="smallBold">{t('By month')}</ThemedText>

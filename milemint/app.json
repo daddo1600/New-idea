@@ -68,6 +68,14 @@
         }
       ],
       "expo-iap",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "MileSprout reads the earnings screenshot you pick, on your iPhone, to fill in your earnings. It never sees your other photos, and nothing is uploaded.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
+      ],
       "./plugins/without-push-entitlement",
       "expo-localization",
       "@bacons/apple-targets"

@@ -1,11 +1,23 @@
 import { describe, expect, it, jest } from '@jest/globals';
 
-import { listWeeklyEarnings, saveWeeklyEarnings } from '../earnings-repo';
+import {
+  addPlatformEarning,
+  deletePlatformEarning,
+  listPlatformEarnings,
+  listWeeklyEarnings,
+  saveWeeklyEarnings,
+} from '../earnings-repo';
 import { DatabaseTooNewError, migrate, SCHEMA_VERSION } from '../migrations';
 import { available, openTestDatabase, type TestDatabase } from '../testing/node-sqlite';
 
 // Hoisted above the import by babel-jest: migrate() sees an iPhone.
 jest.mock('react-native', () => ({ Platform: { OS: 'ios' } }));
+jest.mock('expo-crypto', () => ({ randomUUID: () => jest.requireActual<typeof import('node:crypto')>('node:crypto').randomUUID() }));
+jest.mock('expo-secure-store', () => ({
+  AFTER_FIRST_UNLOCK: 0,
+  getItemAsync: async () => null,
+  setItemAsync: async () => {},
+}));
 
 /** A fake connection recording every statement, like the keyed SQLCipher connection. */
 function fakeDb(userVersion: number) {
@@ -78,6 +90,7 @@ describeSqlite('migration 10: indexes and the drive-in-progress route', () => {
       ALTER TABLE trips DROP COLUMN tolls_minor;
       DROP TABLE tracker_route;
       DROP TABLE weekly_earnings;
+      DROP TABLE platform_earnings;
       DROP INDEX trips_started_at;
       DROP INDEX trips_local_date_started_at;
       DROP INDEX trips_shift;
@@ -114,11 +127,11 @@ describeSqlite('migration 12: weekly earnings for the tax set-aside', () => {
     await migrate(db as never);
     db.raw.exec(`
       DROP TABLE weekly_earnings;
+      DROP TABLE platform_earnings;
       PRAGMA user_version = 11;
     `);
-    expect(SCHEMA_VERSION).toBe(12);
     await migrate(db as never);
-    expect(db.rows<{ user_version: number }>('PRAGMA user_version;')[0].user_version).toBe(12);
+    expect(db.rows<{ user_version: number }>('PRAGMA user_version;')[0].user_version).toBe(SCHEMA_VERSION);
     expect(await listWeeklyEarnings(db as never)).toEqual(new Map());
 
     await saveWeeklyEarnings(db as never, '2026-09-28', 45_000);
@@ -132,5 +145,75 @@ describeSqlite('migration 12: weekly earnings for the tax set-aside', () => {
     );
     await saveWeeklyEarnings(db as never, '2026-09-21', null);
     expect([...(await listWeeklyEarnings(db as never)).keys()]).toEqual(['2026-09-28']);
+  });
+});
+
+describeSqlite('migration 13: earnings by platform', () => {
+  const uberWeek = {
+    platform: 'uber-eats' as const,
+    start: '2026-09-21',
+    end: '2026-09-27',
+    amountMinor: 41_235,
+    trips: 18,
+    distanceMeters: 229_008.6,
+  };
+
+  it('upgrades a version 12 database, keeping its weekly earnings', async () => {
+    const db = openTestDatabase();
+    await migrate(db as never);
+    db.raw.exec(`
+      DROP TABLE platform_earnings;
+      PRAGMA user_version = 12;
+    `);
+    await saveWeeklyEarnings(db as never, '2026-09-21', 30_000);
+    expect(SCHEMA_VERSION).toBe(13);
+    await migrate(db as never);
+    expect(db.rows<{ user_version: number }>('PRAGMA user_version;')[0].user_version).toBe(13);
+    expect(await listPlatformEarnings(db as never)).toEqual([]);
+    expect(await listWeeklyEarnings(db as never)).toEqual(new Map([['2026-09-21', 30_000]]));
+  });
+
+  it('saves an entry, adding it to the week’s earnings, and deleting takes it back off', async () => {
+    const db = openTestDatabase();
+    await migrate(db as never);
+    await saveWeeklyEarnings(db as never, '2026-09-21', 10_000);
+
+    const added = await addPlatformEarning(db as never, uberWeek, '2026-09-21');
+    expect(added.distanceMeters).toBe(229_009);
+    const kept = await addPlatformEarning(db as never, { ...uberWeek, platform: 'deliveroo', amountMinor: 5_000, trips: null, distanceMeters: null }, null);
+    expect(await listWeeklyEarnings(db as never)).toEqual(new Map([['2026-09-21', 51_235]]));
+    expect(await listPlatformEarnings(db as never)).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ ...uberWeek, distanceMeters: 229_009, addedToWeek: '2026-09-21' }),
+        expect.objectContaining({ id: kept.id, platform: 'deliveroo', trips: null, distanceMeters: null, addedToWeek: null }),
+      ]),
+    );
+
+    await deletePlatformEarning(db as never, added.id);
+    expect(await listWeeklyEarnings(db as never)).toEqual(new Map([['2026-09-21', 10_000]]));
+    await deletePlatformEarning(db as never, kept.id);
+    expect(await listWeeklyEarnings(db as never)).toEqual(new Map([['2026-09-21', 10_000]]));
+    expect(await listPlatformEarnings(db as never)).toEqual([]);
+  });
+
+  it('starts a week that had no earnings, and clears it again when the entry goes', async () => {
+    const db = openTestDatabase();
+    await migrate(db as never);
+    const added = await addPlatformEarning(db as never, uberWeek, '2026-09-21');
+    expect(await listWeeklyEarnings(db as never)).toEqual(new Map([['2026-09-21', 41_235]]));
+    // The week was changed by hand in the meantime: never taken below nothing.
+    await saveWeeklyEarnings(db as never, '2026-09-21', 20_000);
+    await deletePlatformEarning(db as never, added.id);
+    expect(await listWeeklyEarnings(db as never)).toEqual(new Map());
+  });
+
+  it('reads an app this build doesn’t know as another app', async () => {
+    const db = openTestDatabase();
+    await migrate(db as never);
+    db.raw.exec(`
+      INSERT INTO platform_earnings (id, platform, period_start, period_end, amount_minor, created_at)
+        VALUES ('x', 'bolt-food', '2026-09-21', '2026-09-21', 1000, '2026-09-22T00:00:00.000Z');
+    `);
+    expect((await listPlatformEarnings(db as never))[0]).toMatchObject({ platform: 'other', trips: null, addedToWeek: null });
   });
 });
