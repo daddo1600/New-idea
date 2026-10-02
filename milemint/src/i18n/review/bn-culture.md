@@ -420,3 +420,9 @@ The app now opens on four tabs (Home, Drives, Money, Settings) instead of one lo
 | See all drives › | সব ট্রিপ দেখান › | Show all trips › | Home, next to the line above: opens the Drives tab. Keep the “›”. |
 | By month | মাস অনুযায়ী | By month | Money tab: heading over this tax year’s months. |
 | Earlier tax years | আগের ট্যাক্স বছর | Previous tax years | Money tab: heading over the years before this one. |
+| Tracking | ট্র্যাকিং | Tracking | Settings group heading, small capitals: the tracking check, work hours and places. |
+| Driving & tax | ড্রাইভিং ও ট্যাক্স | Driving and tax | Settings group heading: country, vehicles, how drives start, mileage pay, client privacy. |
+| Pro & friends | Pro ও বন্ধুরা | Pro and friends | Settings group heading: the Pro plan and inviting friends. |
+| Backup & data | ব্যাকআপ ও ডেটা | Backup and data | Settings group heading: iCloud backup and restore. |
+| Notifications | নোটিফিকেশন | Notifications | Settings group heading: the Sunday reminder. |
+| About & support | অ্যাপ সম্পর্কে ও সাহায্য | About the app and help | Settings group heading: language, the tutorial, help and feedback. |

@@ -156,30 +156,9 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
   return (
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <ProSection />
-
-        <InviteSection />
-
-        <CountrySection />
-
-        <LogbookSection />
-
-        <LanguageSection />
-
-        <ReplayTutorialSection />
-
-        <DrivingSection />
+        <GroupTitle title={t('Tracking')} />
 
         <TrackingCheckRow />
-
-        <MileagePaySection />
-
-        <ClientPrivacySection />
-
-        {REMINDERS_SUPPORTED && <ReminderSection />}
-
-        {/* Hidden on iPhone until iCloud is enabled for the app; the web preview explains it. */}
-        {(ICloudBackup.supported || Platform.OS === 'web') && <BackupSection onRestored={onRestored} />}
 
         <ThemedText type="smallBold">{t('Work hours')}</ThemedText>
         <ThemedView type="backgroundElement" style={styles.card}>
@@ -332,6 +311,45 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
           <AddPlace onAdded={async () => setPlaces(await listPlaces(db))} />
         </ThemedView>
 
+        <GroupTitle title={t('Driving & tax')} />
+
+        <CountrySection />
+
+        <DrivingSection />
+
+        <MileagePaySection />
+
+        <ClientPrivacySection />
+
+        <LogbookSection />
+
+        <GroupTitle title={t('Pro & friends')} />
+
+        <ProSection />
+
+        <InviteSection />
+
+        {/* Hidden on iPhone until iCloud is enabled for the app; the web preview explains it. */}
+        {(ICloudBackup.supported || Platform.OS === 'web') && (
+          <>
+            <GroupTitle title={t('Backup & data')} />
+            <BackupSection onRestored={onRestored} />
+          </>
+        )}
+
+        {REMINDERS_SUPPORTED && (
+          <>
+            <GroupTitle title={t('Notifications')} />
+            <ReminderSection />
+          </>
+        )}
+
+        <GroupTitle title={t('About & support')} />
+
+        <LanguageSection />
+
+        <ReplayTutorialSection />
+
         <ThemedText type="smallBold">{t('Help & feedback')}</ThemedText>
         <ThemedView type="backgroundElement" style={styles.links}>
           <LinkRow
@@ -344,6 +362,15 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
         </ThemedView>
       </ScrollView>
     </ThemedView>
+  );
+}
+
+/** A group of sections: tracking, driving and tax, Pro, backup, notifications, the app itself. */
+function GroupTitle({ title }: { title: string }) {
+  return (
+    <ThemedText type="small" themeColor="textSecondary" accessibilityRole="header" style={styles.groupTitle}>
+      {title}
+    </ThemedText>
   );
 }
 
@@ -1366,6 +1393,7 @@ const styles = StyleSheet.create({
   },
   card: { borderRadius: 12, padding: Spacing.three, gap: Spacing.three },
   links: { borderRadius: 12, padding: Spacing.one },
+  groupTitle: { marginTop: Spacing.three, textTransform: 'uppercase', letterSpacing: 0.6, fontWeight: '600' },
   rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.three },
   flex: { flex: 1, gap: Spacing.half },
   // Stacked blocks in a card: not stretched, so the next one can't slide under it.

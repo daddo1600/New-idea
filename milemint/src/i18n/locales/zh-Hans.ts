@@ -1182,6 +1182,12 @@ const dictionary: Dictionary = {
   "See all drives ›": "显示全部行程 ›",
   "By month": "按月",
   "Earlier tax years": "以往纳税年度",
+  "Tracking": "追踪",
+  "Driving & tax": "驾驶与税务",
+  "Pro & friends": "Pro 与好友",
+  "Backup & data": "备份与数据",
+  "Notifications": "通知",
+  "About & support": "关于与帮助",
 };
 
 export default dictionary;

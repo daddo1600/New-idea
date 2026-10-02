@@ -1223,6 +1223,12 @@ const dictionary: Dictionary = {
   "See all drives ›": "সব ট্রিপ দেখান ›",
   "By month": "মাস অনুযায়ী",
   "Earlier tax years": "আগের ট্যাক্স বছর",
+  "Tracking": "ট্র্যাকিং",
+  "Driving & tax": "ড্রাইভিং ও ট্যাক্স",
+  "Pro & friends": "Pro ও বন্ধুরা",
+  "Backup & data": "ব্যাকআপ ও ডেটা",
+  "Notifications": "নোটিফিকেশন",
+  "About & support": "অ্যাপ সম্পর্কে ও সাহায্য",
 };
 
 export default dictionary;

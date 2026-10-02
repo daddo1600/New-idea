@@ -1316,6 +1316,12 @@ const dictionary: Dictionary = {
   "See all drives ›": "Arată toate cursele ›",
   "By month": "Pe luni",
   "Earlier tax years": "Anii fiscali anteriori",
+  "Tracking": "Urmărire",
+  "Driving & tax": "Curse și taxe",
+  "Pro & friends": "Pro și prieteni",
+  "Backup & data": "Backup și date",
+  "Notifications": "Notificări",
+  "About & support": "Despre și asistență",
 };
 
 export default dictionary;

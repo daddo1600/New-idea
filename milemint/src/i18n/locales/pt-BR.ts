@@ -1313,6 +1313,12 @@ const dictionary: Dictionary = {
   "See all drives ›": "Ver todos os trajetos ›",
   "By month": "Por mês",
   "Earlier tax years": "Anos fiscais anteriores",
+  "Tracking": "Rastreamento",
+  "Driving & tax": "Trajetos e impostos",
+  "Pro & friends": "Pro e amigos",
+  "Backup & data": "Backup e dados",
+  "Notifications": "Notificações",
+  "About & support": "Sobre e suporte",
 };
 
 export default dictionary;

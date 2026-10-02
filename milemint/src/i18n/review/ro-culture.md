@@ -429,3 +429,9 @@ The app now opens on four tabs (Home, Drives, Money, Settings) instead of one lo
 | See all drives › | Arată toate cursele › | Show all runs › | Home, next to the line above: opens the Drives tab. Keep the “›”. |
 | By month | Pe luni | By month | Money tab: heading over this tax year’s months. |
 | Earlier tax years | Anii fiscali anteriori | Previous tax years | Money tab: heading over the years before this one. |
+| Tracking | Urmărire | Tracking | Settings group heading, small capitals: the tracking check, work hours and places. |
+| Driving & tax | Curse și taxe | Runs and taxes | Settings group heading: country, vehicles, how drives start, mileage pay, client privacy. |
+| Pro & friends | Pro și prieteni | Pro and friends | Settings group heading: the Pro plan and inviting friends. |
+| Backup & data | Backup și date | Backup and data | Settings group heading: iCloud backup and restore. |
+| Notifications | Notificări | Notifications | Settings group heading: the Sunday reminder. |
+| About & support | Despre și asistență | About and support | Settings group heading: language, the tutorial, help and feedback. |

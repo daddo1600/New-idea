@@ -408,3 +408,9 @@ The app now opens on four tabs (Home, Drives, Money, Settings) instead of one lo
 | See all drives › | Voir tous les trajets › | See all journeys › | Home, next to the line above: opens the Drives tab. Keep the “›”. |
 | By month | Par mois | By month | Money tab: heading over this tax year’s months. |
 | Earlier tax years | Années d’imposition précédentes | Previous tax years | Money tab: heading over the years before this one. |
+| Tracking | Suivi | Tracking | Settings group heading, small capitals: the tracking check, work hours and places. |
+| Driving & tax | Trajets et impôts | Journeys and taxes | Settings group heading: country, vehicles, how drives start, mileage pay, client privacy. |
+| Pro & friends | Pro et amis | Pro and friends | Settings group heading: the Pro plan and inviting friends. |
+| Backup & data | Sauvegarde et données | Backup and data | Settings group heading: iCloud backup and restore. |
+| Notifications | Notifications | Notifications | Settings group heading: the Sunday reminder. |
+| About & support | À propos et aide | About and help | Settings group heading: language, the tutorial, help and feedback. |

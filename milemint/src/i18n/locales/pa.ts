@@ -1235,6 +1235,12 @@ const dictionary: Dictionary = {
   "See all drives ›": "ਸਾਰੇ ਟ੍ਰਿਪ ਦਿਖਾਓ ›",
   "By month": "ਮਹੀਨੇ ਮੁਤਾਬਕ",
   "Earlier tax years": "ਪਿਛਲੇ ਟੈਕਸ ਸਾਲ",
+  "Tracking": "ਟ੍ਰੈਕਿੰਗ",
+  "Driving & tax": "ਡਰਾਈਵਿੰਗ ਅਤੇ ਟੈਕਸ",
+  "Pro & friends": "Pro ਅਤੇ ਦੋਸਤ",
+  "Backup & data": "ਬੈਕਅੱਪ ਅਤੇ ਡਾਟਾ",
+  "Notifications": "ਸੂਚਨਾਵਾਂ",
+  "About & support": "ਐਪ ਬਾਰੇ ਅਤੇ ਮਦਦ",
 };
 
 export default dictionary;

@@ -812,6 +812,12 @@
     ]
   },
   {
+    "key": "About & support",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
     "key": "Active · thank you!",
     "files": [
       "app/(tabs)/money.tsx"
@@ -1182,6 +1188,12 @@
   },
   {
     "key": "Backup",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Backup & data",
     "files": [
       "app/(tabs)/settings.tsx"
     ]
@@ -1951,6 +1963,12 @@
     "key": "Driving {{vehicle}}. Change vehicle",
     "files": [
       "app/(tabs)/index.tsx"
+    ]
+  },
+  {
+    "key": "Driving & tax",
+    "files": [
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -3867,6 +3885,12 @@
     ]
   },
   {
+    "key": "Notifications",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
     "key": "Notifications are off for MileMint. Turn them on in iPhone Settings → Notifications.",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -4434,6 +4458,12 @@
     "key": "Private",
     "files": [
       "app/setup-tracking.tsx"
+    ]
+  },
+  {
+    "key": "Pro & friends",
+    "files": [
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -5841,6 +5871,12 @@
     "key": "Total miles",
     "files": [
       "app/report.tsx"
+    ]
+  },
+  {
+    "key": "Tracking",
+    "files": [
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
