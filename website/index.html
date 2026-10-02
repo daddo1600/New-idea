@@ -18,8 +18,9 @@
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/img/screens/home.webp" as="image" type="image/webp">
-<link rel="stylesheet" href="/assets/site.css?v=4c4b72e8">
-<script src="/assets/site.js?v=0571f483" defer></script>
+<link rel="stylesheet" href="/assets/site.css?v=171bc4d5">
+<script src="/assets/intro-gate.js?v=4b6a6a89"></script>
+<script src="/assets/site.js?v=b5a106e0" defer></script>
 <noscript><style>
   /* Without JavaScript: every feature is listed, the deck is a still picture. */
   .feat { opacity: 1 !important; visibility: visible !important; transform: none !important; grid-area: auto !important; }
@@ -53,7 +54,8 @@
     <svg class="hero-mark" viewBox="10 6 80 54" aria-hidden="true" focusable="false" fill="#D1FAE5" opacity="0.08"><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z"/><path d="M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z"/></svg>
     <div class="wrap">
       <div class="copy">
-        <span class="pill">Launching in the UK, October 2026</span>
+        <svg class="hero-sprout" viewBox="12 9 77 84" aria-hidden="true" focusable="false"><defs><linearGradient id="ms-leaf-hero" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#77E8A0"/><stop offset="1" stop-color="#24B359"/></linearGradient></defs><g transform="translate(1.2 1.6)" fill="#085E42" opacity=".5"><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z"/><path d="M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z"/></g><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z" fill="url(#ms-leaf-hero)"/><path d="M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z" fill="url(#ms-leaf-hero)"/><path d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#064E3B" stroke-width="8" stroke-linecap="round" fill="none"/><path d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#FBF7EE" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="2.6 3.2" stroke-dashoffset="-3" fill="none"/><circle cx="51" cy="28" r="7.6" fill="#FFFFFF"/><circle cx="51" cy="28" r="5.6" fill="#FACC15"/></svg>
+        <span class="pill">Coming October 2026 · UK · US · Canada · Australia</span>
         <h1 id="hero-title">Every work mile adds up.</h1>
         <p class="lede">Free, automatic mileage tracking for couriers, delivery riders and self-employed drivers. Your drives log themselves. Sort each one Work or Personal with a tap.</p>
         <h2 class="wl-title" id="early-access">Get early access</h2>
@@ -69,27 +71,27 @@
               </span>
             </div>
             <div class="wl-opts">
-              <label><span>What do you drive for? <small>(optional)</small></span>
-                <select name="segment">
-                  <option value="">Choose…</option>
-                  <option value="food">Food delivery</option>
-                  <option value="parcels">Parcels</option>
-                  <option value="ridehail">Ride-hail</option>
-                  <option value="care">Care or home visits</option>
-                  <option value="trades">Trades</option>
-                  <option value="other">Other</option>
-                </select>
-              </label>
-              <label><span>Country <small>(optional)</small></span>
-                <select name="country">
-                  <option value="">Choose…</option>
-                  <option value="UK">UK</option>
-                  <option value="US">US</option>
-                  <option value="CA">Canada</option>
-                  <option value="AU">Australia</option>
-                  <option value="other">Other</option>
-                </select>
-              </label>
+              <fieldset class="chips" data-chips>
+                <legend>What do you drive for? <small>(optional)</small></legend>
+                <div class="chip-row">
+                  <label class="chip"><input type="radio" name="segment" value="food"><span>Food delivery</span></label>
+                  <label class="chip"><input type="radio" name="segment" value="parcels"><span>Parcels</span></label>
+                  <label class="chip"><input type="radio" name="segment" value="ridehail"><span>Ride-hail</span></label>
+                  <label class="chip"><input type="radio" name="segment" value="care"><span>Care or home visits</span></label>
+                  <label class="chip"><input type="radio" name="segment" value="trades"><span>Trades</span></label>
+                  <label class="chip"><input type="radio" name="segment" value="other"><span>Other</span></label>
+                </div>
+              </fieldset>
+              <fieldset class="chips" data-chips>
+                <legend>Country <small>(optional)</small></legend>
+                <div class="chip-row">
+                  <label class="chip"><input type="radio" name="country" value="UK"><span><svg class="flag" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#012169"/><path d="M0 0L40 28M40 0L0 28" stroke="#FFF" stroke-width="5"/><path d="M0 0L40 28M40 0L0 28" stroke="#C8102E" stroke-width="1.8"/><path d="M20 0V28M0 14H40" stroke="#FFF" stroke-width="8"/><path d="M20 0V28M0 14H40" stroke="#C8102E" stroke-width="4.6"/></svg>UK</span></label>
+                  <label class="chip"><input type="radio" name="country" value="US"><span><svg class="flag" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#FFF"/><path fill="#B22234" d="M0 0.000h40v2.154H0zM0 4.308h40v2.154H0zM0 8.615h40v2.154H0zM0 12.923h40v2.154H0zM0 17.231h40v2.154H0zM0 21.538h40v2.154H0zM0 25.846h40v2.154H0z"/><rect width="17" height="15.077" fill="#3C3B6E"/><g fill="#FFF"><circle cx="1.60" cy="1.60" r=".62"/><circle cx="4.35" cy="1.60" r=".62"/><circle cx="7.10" cy="1.60" r=".62"/><circle cx="9.85" cy="1.60" r=".62"/><circle cx="12.60" cy="1.60" r=".62"/><circle cx="15.35" cy="1.60" r=".62"/><circle cx="2.98" cy="4.35" r=".62"/><circle cx="5.72" cy="4.35" r=".62"/><circle cx="8.47" cy="4.35" r=".62"/><circle cx="11.22" cy="4.35" r=".62"/><circle cx="13.97" cy="4.35" r=".62"/><circle cx="1.60" cy="7.10" r=".62"/><circle cx="4.35" cy="7.10" r=".62"/><circle cx="7.10" cy="7.10" r=".62"/><circle cx="9.85" cy="7.10" r=".62"/><circle cx="12.60" cy="7.10" r=".62"/><circle cx="15.35" cy="7.10" r=".62"/><circle cx="2.98" cy="9.85" r=".62"/><circle cx="5.72" cy="9.85" r=".62"/><circle cx="8.47" cy="9.85" r=".62"/><circle cx="11.22" cy="9.85" r=".62"/><circle cx="13.97" cy="9.85" r=".62"/><circle cx="1.60" cy="12.60" r=".62"/><circle cx="4.35" cy="12.60" r=".62"/><circle cx="7.10" cy="12.60" r=".62"/><circle cx="9.85" cy="12.60" r=".62"/><circle cx="12.60" cy="12.60" r=".62"/><circle cx="15.35" cy="12.60" r=".62"/></g></svg>US</span></label>
+                  <label class="chip"><input type="radio" name="country" value="CA"><span><svg class="flag" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#FFF"/><path fill="#D52B1E" d="M0 0h10v28H0zM30 0h10v28H30z"/><polygon fill="#D52B1E" points="20,4.2 21.5,7.2 23.2,6.5 22.6,10.4 25.3,8.3 26,9.9 27.6,9.7 26.7,12.7 27.6,13.4 23.9,16.2 24.4,17.6 20.5,17.1 20.6,20.6 19.4,20.6 19.5,17.1 15.6,17.6 16.1,16.2 12.4,13.4 13.3,12.7 12.4,9.7 14,9.9 14.7,8.3 17.4,10.4 16.8,6.5 18.5,7.2"/></svg>Canada</span></label>
+                  <label class="chip"><input type="radio" name="country" value="AU"><span><svg class="flag" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#012169"/><g transform="scale(.5)"><rect width="40" height="28" fill="#012169"/><path d="M0 0L40 28M40 0L0 28" stroke="#FFF" stroke-width="5"/><path d="M0 0L40 28M40 0L0 28" stroke="#C8102E" stroke-width="1.8"/><path d="M20 0V28M0 14H40" stroke="#FFF" stroke-width="8"/><path d="M20 0V28M0 14H40" stroke="#C8102E" stroke-width="4.6"/></g><g fill="#FFF"><polygon points="10.00,17.90 10.78,19.88 12.81,19.26 11.75,21.10 13.51,22.30 11.41,22.62 11.56,24.74 10.00,23.30 8.44,24.74 8.59,22.62 6.49,22.30 8.25,21.10 7.19,19.26 9.22,19.88"/><polygon points="30.00,4.00 30.43,5.10 31.56,4.75 30.97,5.78 31.95,6.45 30.78,6.62 30.87,7.80 30.00,7.00 29.13,7.80 29.22,6.62 28.05,6.45 29.03,5.78 28.44,4.75 29.57,5.10"/><polygon points="25.00,11.00 25.43,12.10 26.56,11.75 25.97,12.78 26.95,13.45 25.78,13.62 25.87,14.80 25.00,14.00 24.13,14.80 24.22,13.62 23.05,13.45 24.03,12.78 23.44,11.75 24.57,12.10"/><polygon points="34.50,9.00 34.93,10.10 36.06,9.75 35.47,10.78 36.45,11.45 35.28,11.62 35.37,12.80 34.50,12.00 33.63,12.80 33.72,11.62 32.55,11.45 33.53,10.78 32.94,9.75 34.07,10.10"/><polygon points="30.00,20.90 30.46,22.05 31.64,21.69 31.02,22.77 32.05,23.47 30.82,23.65 30.91,24.89 30.00,24.05 29.09,24.89 29.18,23.65 27.95,23.47 28.98,22.77 28.36,21.69 29.54,22.05"/><polygon points="32.60,15.30 32.89,16.00 33.65,16.06 33.07,16.55 33.25,17.29 32.60,16.89 31.95,17.29 32.13,16.55 31.55,16.06 32.31,16.00"/></g></svg>Australia</span></label>
+                  <label class="chip"><input type="radio" name="country" value="other"><span>Other</span></label>
+                </div>
+              </fieldset>
             </div>
             <label class="wl-consent"><input type="checkbox" name="consent" value="yes" required> <span>Email me when MileSprout launches. Unsubscribe any time. <a href="/privacy#waitlist">How we use your email</a></span></label>
             <div class="wl-hp" aria-hidden="true"><label>Company <input type="text" name="company" tabindex="-1" autocomplete="off"></label></div>
@@ -104,7 +106,7 @@
         <p class="note"><a class="store-btn" href="#" aria-disabled="true">
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6" y="2" width="12" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 18.5h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           <span><small>iPhone app</small>Coming to the App Store</span>
-        </a> UK first. MileSprout also works in the US, Canada and Australia.</p>
+        </a> For iPhone, in the UK, US, Canada and Australia.</p>
       </div>
       <div class="hero-phone">
         <div class="phone" id="hero-phone">
@@ -245,8 +247,8 @@
       <h2 id="plans-title" class="center">Tracking is free. No monthly limit.</h2>
       <p class="intro center">Free keeps your whole record, every drive, for as long as you like. Pro is for getting it out, and the money extras built on it.</p>
       <div class="plans">
-        <div class="card">
-          <h3>Free</h3>
+        <div class="card plan-free">
+          <h3>Free, for good</h3>
           <p class="sub">Everything you need to keep the record.</p>
           <ul>
             <li>Automatic tracking, no monthly limit</li>
@@ -257,19 +259,29 @@
             <li>Encrypted on your iPhone, data never sold</li>
           </ul>
         </div>
-        <div class="card pro">
-          <h3>Pro</h3>
+        <div class="card plan-pro">
+          <svg class="pro-mark" viewBox="10 6 80 54" aria-hidden="true" focusable="false" fill="#D1FAE5" opacity="0.08"><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z"/><path d="M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z"/></svg>
+          <p class="pro-ribbon">Most useful at tax time</p>
+          <h3 class="pro-title">MileSprout <span class="pro-badge-wrap"><span class="pro-badge">Pro</span><span class="sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i></span></span></h3>
           <p class="sub">Everything in Free, plus:</p>
+          <h4>Reports &amp; exports</h4>
           <ul>
             <li>Itemised mileage log and PDF report</li>
             <li>Spreadsheet, CSV, Xero, QuickBooks and FreeAgent exports</li>
             <li>Send your report to your accountant</li>
+          </ul>
+          <h4>Money</h4>
+          <ul>
             <li>Quarterly figures for your MTD updates</li>
             <li>Tax set-aside: what to put aside each week</li>
             <li>Earnings by platform, read from your screenshots</li>
+          </ul>
+          <h4>Smart extras</h4>
+          <ul>
             <li>Weekly recap in full, and Ask MileSprout (Apple Intelligence, on your iPhone)</li>
             <li>Siri &amp; Shortcuts: start a shift, ask how far you've driven</li>
           </ul>
+          <p class="pro-cta"><span class="wl-go"><a class="btn-gold" href="#early-access">Join early access</a><span class="sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i></span></span></p>
         </div>
       </div>
       <p class="fine center" style="margin-top:20px">Pro is a subscription through the App Store, with prices shown in the app. Cancel any time in your Apple Account settings.</p>
@@ -278,22 +290,118 @@
 
   <section aria-labelledby="where-title">
     <div class="wrap">
-      <h2 id="where-title" class="center">Made for the UK, works further afield</h2>
-      <div class="grid3">
-        <div class="card">
-          <h3>United Kingdom</h3>
-          <p>HMRC mileage rates, the tax year from 6 April, and quarterly figures for Making Tax Digital. Launching October 2026.</p>
+      <h2 id="where-title" class="center">Built for drivers in the UK, US, Canada and Australia</h2>
+      <p class="intro center">Pick your country and MileSprout uses its tax office's rate, its distance unit and its tax year.</p>
+      <div class="grid4">
+        <div class="card country">
+          <h3><svg class="flag flag-lg" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#012169"/><path d="M0 0L40 28M40 0L0 28" stroke="#FFF" stroke-width="5"/><path d="M0 0L40 28M40 0L0 28" stroke="#C8102E" stroke-width="1.8"/><path d="M20 0V28M0 14H40" stroke="#FFF" stroke-width="8"/><path d="M20 0V28M0 14H40" stroke="#C8102E" stroke-width="4.6"/></svg><span>United Kingdom</span></h3>
+          <p>HMRC mileage rates, the tax year from 6 April, and quarterly figures for Making Tax Digital.</p>
         </div>
-        <div class="card">
-          <h3>US and Canada</h3>
-          <p>IRS and CRA rates in miles or kilometres, with quarterly figures for estimated tax or instalments.</p>
+        <div class="card country">
+          <h3><svg class="flag flag-lg" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#FFF"/><path fill="#B22234" d="M0 0.000h40v2.154H0zM0 4.308h40v2.154H0zM0 8.615h40v2.154H0zM0 12.923h40v2.154H0zM0 17.231h40v2.154H0zM0 21.538h40v2.154H0zM0 25.846h40v2.154H0z"/><rect width="17" height="15.077" fill="#3C3B6E"/><g fill="#FFF"><circle cx="1.60" cy="1.60" r=".62"/><circle cx="4.35" cy="1.60" r=".62"/><circle cx="7.10" cy="1.60" r=".62"/><circle cx="9.85" cy="1.60" r=".62"/><circle cx="12.60" cy="1.60" r=".62"/><circle cx="15.35" cy="1.60" r=".62"/><circle cx="2.98" cy="4.35" r=".62"/><circle cx="5.72" cy="4.35" r=".62"/><circle cx="8.47" cy="4.35" r=".62"/><circle cx="11.22" cy="4.35" r=".62"/><circle cx="13.97" cy="4.35" r=".62"/><circle cx="1.60" cy="7.10" r=".62"/><circle cx="4.35" cy="7.10" r=".62"/><circle cx="7.10" cy="7.10" r=".62"/><circle cx="9.85" cy="7.10" r=".62"/><circle cx="12.60" cy="7.10" r=".62"/><circle cx="15.35" cy="7.10" r=".62"/><circle cx="2.98" cy="9.85" r=".62"/><circle cx="5.72" cy="9.85" r=".62"/><circle cx="8.47" cy="9.85" r=".62"/><circle cx="11.22" cy="9.85" r=".62"/><circle cx="13.97" cy="9.85" r=".62"/><circle cx="1.60" cy="12.60" r=".62"/><circle cx="4.35" cy="12.60" r=".62"/><circle cx="7.10" cy="12.60" r=".62"/><circle cx="9.85" cy="12.60" r=".62"/><circle cx="12.60" cy="12.60" r=".62"/><circle cx="15.35" cy="12.60" r=".62"/></g></svg><span>United States</span></h3>
+          <p>The IRS standard mileage rate, in miles, with quarterly figures for your estimated tax.</p>
         </div>
-        <div class="card">
-          <h3>Australia</h3>
+        <div class="card country">
+          <h3><svg class="flag flag-lg" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#FFF"/><path fill="#D52B1E" d="M0 0h10v28H0zM30 0h10v28H30z"/><polygon fill="#D52B1E" points="20,4.2 21.5,7.2 23.2,6.5 22.6,10.4 25.3,8.3 26,9.9 27.6,9.7 26.7,12.7 27.6,13.4 23.9,16.2 24.4,17.6 20.5,17.1 20.6,20.6 19.4,20.6 19.5,17.1 15.6,17.6 16.1,16.2 12.4,13.4 13.3,12.7 12.4,9.7 14,9.9 14.7,8.3 17.4,10.4 16.8,6.5 18.5,7.2"/></svg><span>Canada</span></h3>
+          <p>CRA per-kilometre rates, a trip log with your odometer readings, and quarterly figures for your instalments.</p>
+        </div>
+        <div class="card country">
+          <h3><svg class="flag flag-lg" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#012169"/><g transform="scale(.5)"><rect width="40" height="28" fill="#012169"/><path d="M0 0L40 28M40 0L0 28" stroke="#FFF" stroke-width="5"/><path d="M0 0L40 28M40 0L0 28" stroke="#C8102E" stroke-width="1.8"/><path d="M20 0V28M0 14H40" stroke="#FFF" stroke-width="8"/><path d="M20 0V28M0 14H40" stroke="#C8102E" stroke-width="4.6"/></g><g fill="#FFF"><polygon points="10.00,17.90 10.78,19.88 12.81,19.26 11.75,21.10 13.51,22.30 11.41,22.62 11.56,24.74 10.00,23.30 8.44,24.74 8.59,22.62 6.49,22.30 8.25,21.10 7.19,19.26 9.22,19.88"/><polygon points="30.00,4.00 30.43,5.10 31.56,4.75 30.97,5.78 31.95,6.45 30.78,6.62 30.87,7.80 30.00,7.00 29.13,7.80 29.22,6.62 28.05,6.45 29.03,5.78 28.44,4.75 29.57,5.10"/><polygon points="25.00,11.00 25.43,12.10 26.56,11.75 25.97,12.78 26.95,13.45 25.78,13.62 25.87,14.80 25.00,14.00 24.13,14.80 24.22,13.62 23.05,13.45 24.03,12.78 23.44,11.75 24.57,12.10"/><polygon points="34.50,9.00 34.93,10.10 36.06,9.75 35.47,10.78 36.45,11.45 35.28,11.62 35.37,12.80 34.50,12.00 33.63,12.80 33.72,11.62 32.55,11.45 33.53,10.78 32.94,9.75 34.07,10.10"/><polygon points="30.00,20.90 30.46,22.05 31.64,21.69 31.02,22.77 32.05,23.47 30.82,23.65 30.91,24.89 30.00,24.05 29.09,24.89 29.18,23.65 27.95,23.47 28.98,22.77 28.36,21.69 29.54,22.05"/><polygon points="32.60,15.30 32.89,16.00 33.65,16.06 33.07,16.55 33.25,17.29 32.60,16.89 31.95,17.29 32.13,16.55 31.55,16.06 32.31,16.00"/></g></svg><span>Australia</span></h3>
           <p>ATO cents per kilometre, 12-week logbook periods and quarterly figures for your BAS.</p>
         </div>
       </div>
       <p class="fine center" style="margin-top:20px">MileSprout helps you keep a record. It isn't tax advice: check with an accountant or your tax office if you're not sure what you can claim.</p>
+    </div>
+  </section>
+
+  <section class="section-alt langs" aria-labelledby="langs-title">
+    <div class="wrap center">
+      <h2 id="langs-title">In your language</h2>
+      <ul class="lang-chips" aria-label="App languages">
+        <li lang="en">English</li>
+        <li lang="es">Español</li>
+        <li lang="fr">Français</li>
+        <li lang="pl">Polski</li>
+        <li lang="pt-BR">Português (Brasil)</li>
+        <li lang="ro">Română</li>
+        <li lang="hi">हिन्दी</li>
+        <li lang="pa">ਪੰਜਾਬੀ</li>
+        <li lang="bn">বাংলা</li>
+        <li lang="zh-Hans">简体中文</li>
+      </ul>
+      <p class="intro">The whole app is translated, tax terms included. It follows your iPhone's language, or you can pick one in Settings. Reports for the tax office stay in English.</p>
+    </div>
+  </section>
+
+  <section class="compare" aria-labelledby="compare-title">
+    <div class="wrap">
+      <h2 id="compare-title" class="center">How MileSprout compares</h2>
+      <p class="intro center">Side by side with the best-known mileage apps, from their App Store listings.</p>
+      <p class="scroll-hint" aria-hidden="true">Swipe the table to see every app →</p>
+      <div class="table-scroll compare-scroll" role="region" aria-labelledby="compare-title" tabindex="0">
+        <table class="compare-table">
+          <caption class="sr-only">MileSprout compared with MileIQ, Driversnote, Everlance and Gridwise. Checked October 2026.</caption>
+          <thead>
+            <tr>
+              <td></td>
+              <th scope="col" class="us-col">MileSprout</th>
+              <th scope="col">MileIQ</th>
+              <th scope="col">Driversnote</th>
+              <th scope="col">Everlance</th>
+              <th scope="col">Gridwise</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Automatic tracking on the free plan</th>
+              <td class="us-col"><b>Yes</b>, no monthly limit</td>
+              <td><b>Limited</b>: 40 drives a month</td>
+              <td><b>Limited</b>: a monthly trip limit<sup><a href="#cmp-1" aria-label="Note 1">1</a></sup></td>
+              <td><b>Limited</b>: 30 automatic trips a month</td>
+              <td><b>No</b>: automatic tracking is in Plus<sup><a href="#cmp-2" aria-label="Note 2">2</a></sup></td>
+            </tr>
+            <tr>
+              <th scope="row">Your location collected by the app maker<sup><a href="#cmp-3" aria-label="Note 3">3</a></sup></th>
+              <td class="us-col"><b>No</b>: trips stay on your iPhone</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <th scope="row">Data used to track you across other companies' apps<sup><a href="#cmp-3" aria-label="Note 3">3</a></sup></th>
+              <td class="us-col"><b>None</b></td>
+              <td>Usage data</td>
+              <td>None listed</td>
+              <td>Contact info, identifiers, usage data</td>
+              <td>None listed</td>
+            </tr>
+            <tr>
+              <th scope="row">Languages</th>
+              <td class="us-col"><b>10</b>, including Hindi, Punjabi, Bengali, Romanian and Polish</td>
+              <td>English</td>
+              <td>11: English and European languages</td>
+              <td>English, French, Spanish</td>
+              <td>English, Spanish</td>
+            </tr>
+            <tr>
+              <th scope="row">Paid plan (UK App Store)</th>
+              <td class="us-col"><b>Free</b>; Pro optional<sup><a href="#cmp-4" aria-label="Note 4">4</a></sup></td>
+              <td>£9.49 a month, £94.99 a year</td>
+              <td>£10 a month, £104.99 a year</td>
+              <td>From £9.99 a month, £89.99 a year</td>
+              <td>Not on the UK App Store (US: $14.99 a month, $107.99 a year)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="compare-checked fine">Checked October 2026. Prices and features change; see each app's site.</p>
+      <ol class="compare-notes fine">
+        <li id="cmp-1">Driversnote's free plan limits how many trips you can report each month. See their site for today's number.</li>
+        <li id="cmp-2">Gridwise's help centre lists automatic mileage and time tracking as a Plus feature. Manual tracking is free.</li>
+        <li id="cmp-3">From each app's App Store privacy label ("Data Linked to You" and "Data Used to Track You"). For MileSprout, see our <a href="/privacy">privacy policy</a>.</li>
+        <li id="cmp-4">Pro prices are shown in the app.</li>
+      </ol>
     </div>
   </section>
 
@@ -313,27 +421,27 @@
             </span>
           </div>
           <div class="wl-opts">
-            <label><span>What do you drive for? <small>(optional)</small></span>
-              <select name="segment">
-                <option value="">Choose…</option>
-                <option value="food">Food delivery</option>
-                <option value="parcels">Parcels</option>
-                <option value="ridehail">Ride-hail</option>
-                <option value="care">Care or home visits</option>
-                <option value="trades">Trades</option>
-                <option value="other">Other</option>
-              </select>
-            </label>
-            <label><span>Country <small>(optional)</small></span>
-              <select name="country">
-                <option value="">Choose…</option>
-                <option value="UK">UK</option>
-                <option value="US">US</option>
-                <option value="CA">Canada</option>
-                <option value="AU">Australia</option>
-                <option value="other">Other</option>
-              </select>
-            </label>
+            <fieldset class="chips" data-chips>
+              <legend>What do you drive for? <small>(optional)</small></legend>
+              <div class="chip-row">
+                <label class="chip"><input type="radio" name="segment" value="food"><span>Food delivery</span></label>
+                <label class="chip"><input type="radio" name="segment" value="parcels"><span>Parcels</span></label>
+                <label class="chip"><input type="radio" name="segment" value="ridehail"><span>Ride-hail</span></label>
+                <label class="chip"><input type="radio" name="segment" value="care"><span>Care or home visits</span></label>
+                <label class="chip"><input type="radio" name="segment" value="trades"><span>Trades</span></label>
+                <label class="chip"><input type="radio" name="segment" value="other"><span>Other</span></label>
+              </div>
+            </fieldset>
+            <fieldset class="chips" data-chips>
+              <legend>Country <small>(optional)</small></legend>
+              <div class="chip-row">
+                <label class="chip"><input type="radio" name="country" value="UK"><span><svg class="flag" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#012169"/><path d="M0 0L40 28M40 0L0 28" stroke="#FFF" stroke-width="5"/><path d="M0 0L40 28M40 0L0 28" stroke="#C8102E" stroke-width="1.8"/><path d="M20 0V28M0 14H40" stroke="#FFF" stroke-width="8"/><path d="M20 0V28M0 14H40" stroke="#C8102E" stroke-width="4.6"/></svg>UK</span></label>
+                <label class="chip"><input type="radio" name="country" value="US"><span><svg class="flag" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#FFF"/><path fill="#B22234" d="M0 0.000h40v2.154H0zM0 4.308h40v2.154H0zM0 8.615h40v2.154H0zM0 12.923h40v2.154H0zM0 17.231h40v2.154H0zM0 21.538h40v2.154H0zM0 25.846h40v2.154H0z"/><rect width="17" height="15.077" fill="#3C3B6E"/><g fill="#FFF"><circle cx="1.60" cy="1.60" r=".62"/><circle cx="4.35" cy="1.60" r=".62"/><circle cx="7.10" cy="1.60" r=".62"/><circle cx="9.85" cy="1.60" r=".62"/><circle cx="12.60" cy="1.60" r=".62"/><circle cx="15.35" cy="1.60" r=".62"/><circle cx="2.98" cy="4.35" r=".62"/><circle cx="5.72" cy="4.35" r=".62"/><circle cx="8.47" cy="4.35" r=".62"/><circle cx="11.22" cy="4.35" r=".62"/><circle cx="13.97" cy="4.35" r=".62"/><circle cx="1.60" cy="7.10" r=".62"/><circle cx="4.35" cy="7.10" r=".62"/><circle cx="7.10" cy="7.10" r=".62"/><circle cx="9.85" cy="7.10" r=".62"/><circle cx="12.60" cy="7.10" r=".62"/><circle cx="15.35" cy="7.10" r=".62"/><circle cx="2.98" cy="9.85" r=".62"/><circle cx="5.72" cy="9.85" r=".62"/><circle cx="8.47" cy="9.85" r=".62"/><circle cx="11.22" cy="9.85" r=".62"/><circle cx="13.97" cy="9.85" r=".62"/><circle cx="1.60" cy="12.60" r=".62"/><circle cx="4.35" cy="12.60" r=".62"/><circle cx="7.10" cy="12.60" r=".62"/><circle cx="9.85" cy="12.60" r=".62"/><circle cx="12.60" cy="12.60" r=".62"/><circle cx="15.35" cy="12.60" r=".62"/></g></svg>US</span></label>
+                <label class="chip"><input type="radio" name="country" value="CA"><span><svg class="flag" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#FFF"/><path fill="#D52B1E" d="M0 0h10v28H0zM30 0h10v28H30z"/><polygon fill="#D52B1E" points="20,4.2 21.5,7.2 23.2,6.5 22.6,10.4 25.3,8.3 26,9.9 27.6,9.7 26.7,12.7 27.6,13.4 23.9,16.2 24.4,17.6 20.5,17.1 20.6,20.6 19.4,20.6 19.5,17.1 15.6,17.6 16.1,16.2 12.4,13.4 13.3,12.7 12.4,9.7 14,9.9 14.7,8.3 17.4,10.4 16.8,6.5 18.5,7.2"/></svg>Canada</span></label>
+                <label class="chip"><input type="radio" name="country" value="AU"><span><svg class="flag" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#012169"/><g transform="scale(.5)"><rect width="40" height="28" fill="#012169"/><path d="M0 0L40 28M40 0L0 28" stroke="#FFF" stroke-width="5"/><path d="M0 0L40 28M40 0L0 28" stroke="#C8102E" stroke-width="1.8"/><path d="M20 0V28M0 14H40" stroke="#FFF" stroke-width="8"/><path d="M20 0V28M0 14H40" stroke="#C8102E" stroke-width="4.6"/></g><g fill="#FFF"><polygon points="10.00,17.90 10.78,19.88 12.81,19.26 11.75,21.10 13.51,22.30 11.41,22.62 11.56,24.74 10.00,23.30 8.44,24.74 8.59,22.62 6.49,22.30 8.25,21.10 7.19,19.26 9.22,19.88"/><polygon points="30.00,4.00 30.43,5.10 31.56,4.75 30.97,5.78 31.95,6.45 30.78,6.62 30.87,7.80 30.00,7.00 29.13,7.80 29.22,6.62 28.05,6.45 29.03,5.78 28.44,4.75 29.57,5.10"/><polygon points="25.00,11.00 25.43,12.10 26.56,11.75 25.97,12.78 26.95,13.45 25.78,13.62 25.87,14.80 25.00,14.00 24.13,14.80 24.22,13.62 23.05,13.45 24.03,12.78 23.44,11.75 24.57,12.10"/><polygon points="34.50,9.00 34.93,10.10 36.06,9.75 35.47,10.78 36.45,11.45 35.28,11.62 35.37,12.80 34.50,12.00 33.63,12.80 33.72,11.62 32.55,11.45 33.53,10.78 32.94,9.75 34.07,10.10"/><polygon points="30.00,20.90 30.46,22.05 31.64,21.69 31.02,22.77 32.05,23.47 30.82,23.65 30.91,24.89 30.00,24.05 29.09,24.89 29.18,23.65 27.95,23.47 28.98,22.77 28.36,21.69 29.54,22.05"/><polygon points="32.60,15.30 32.89,16.00 33.65,16.06 33.07,16.55 33.25,17.29 32.60,16.89 31.95,17.29 32.13,16.55 31.55,16.06 32.31,16.00"/></g></svg>Australia</span></label>
+                <label class="chip"><input type="radio" name="country" value="other"><span>Other</span></label>
+              </div>
+            </fieldset>
           </div>
           <label class="wl-consent"><input type="checkbox" name="consent" value="yes" required> <span>Email me when MileSprout launches. Unsubscribe any time. <a href="/privacy#waitlist">How we use your email</a></span></label>
           <div class="wl-hp" aria-hidden="true"><label>Company <input type="text" name="company" tabindex="-1" autocomplete="off"></label></div>

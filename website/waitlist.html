@@ -10,8 +10,8 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/assets/site.css?v=4c4b72e8">
-<script src="/assets/site.js?v=0571f483" defer></script>
+<link rel="stylesheet" href="/assets/site.css?v=171bc4d5">
+<script src="/assets/site.js?v=b5a106e0" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -56,27 +56,27 @@
             </span>
           </div>
           <div class="wl-opts">
-            <label><span>What do you drive for? <small>(optional)</small></span>
-              <select name="segment">
-                <option value="">Choose…</option>
-                <option value="food">Food delivery</option>
-                <option value="parcels">Parcels</option>
-                <option value="ridehail">Ride-hail</option>
-                <option value="care">Care or home visits</option>
-                <option value="trades">Trades</option>
-                <option value="other">Other</option>
-              </select>
-            </label>
-            <label><span>Country <small>(optional)</small></span>
-              <select name="country">
-                <option value="">Choose…</option>
-                <option value="UK">UK</option>
-                <option value="US">US</option>
-                <option value="CA">Canada</option>
-                <option value="AU">Australia</option>
-                <option value="other">Other</option>
-              </select>
-            </label>
+            <fieldset class="chips" data-chips>
+              <legend>What do you drive for? <small>(optional)</small></legend>
+              <div class="chip-row">
+                <label class="chip"><input type="radio" name="segment" value="food"><span>Food delivery</span></label>
+                <label class="chip"><input type="radio" name="segment" value="parcels"><span>Parcels</span></label>
+                <label class="chip"><input type="radio" name="segment" value="ridehail"><span>Ride-hail</span></label>
+                <label class="chip"><input type="radio" name="segment" value="care"><span>Care or home visits</span></label>
+                <label class="chip"><input type="radio" name="segment" value="trades"><span>Trades</span></label>
+                <label class="chip"><input type="radio" name="segment" value="other"><span>Other</span></label>
+              </div>
+            </fieldset>
+            <fieldset class="chips" data-chips>
+              <legend>Country <small>(optional)</small></legend>
+              <div class="chip-row">
+                <label class="chip"><input type="radio" name="country" value="UK"><span><svg class="flag" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#012169"/><path d="M0 0L40 28M40 0L0 28" stroke="#FFF" stroke-width="5"/><path d="M0 0L40 28M40 0L0 28" stroke="#C8102E" stroke-width="1.8"/><path d="M20 0V28M0 14H40" stroke="#FFF" stroke-width="8"/><path d="M20 0V28M0 14H40" stroke="#C8102E" stroke-width="4.6"/></svg>UK</span></label>
+                <label class="chip"><input type="radio" name="country" value="US"><span><svg class="flag" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#FFF"/><path fill="#B22234" d="M0 0.000h40v2.154H0zM0 4.308h40v2.154H0zM0 8.615h40v2.154H0zM0 12.923h40v2.154H0zM0 17.231h40v2.154H0zM0 21.538h40v2.154H0zM0 25.846h40v2.154H0z"/><rect width="17" height="15.077" fill="#3C3B6E"/><g fill="#FFF"><circle cx="1.60" cy="1.60" r=".62"/><circle cx="4.35" cy="1.60" r=".62"/><circle cx="7.10" cy="1.60" r=".62"/><circle cx="9.85" cy="1.60" r=".62"/><circle cx="12.60" cy="1.60" r=".62"/><circle cx="15.35" cy="1.60" r=".62"/><circle cx="2.98" cy="4.35" r=".62"/><circle cx="5.72" cy="4.35" r=".62"/><circle cx="8.47" cy="4.35" r=".62"/><circle cx="11.22" cy="4.35" r=".62"/><circle cx="13.97" cy="4.35" r=".62"/><circle cx="1.60" cy="7.10" r=".62"/><circle cx="4.35" cy="7.10" r=".62"/><circle cx="7.10" cy="7.10" r=".62"/><circle cx="9.85" cy="7.10" r=".62"/><circle cx="12.60" cy="7.10" r=".62"/><circle cx="15.35" cy="7.10" r=".62"/><circle cx="2.98" cy="9.85" r=".62"/><circle cx="5.72" cy="9.85" r=".62"/><circle cx="8.47" cy="9.85" r=".62"/><circle cx="11.22" cy="9.85" r=".62"/><circle cx="13.97" cy="9.85" r=".62"/><circle cx="1.60" cy="12.60" r=".62"/><circle cx="4.35" cy="12.60" r=".62"/><circle cx="7.10" cy="12.60" r=".62"/><circle cx="9.85" cy="12.60" r=".62"/><circle cx="12.60" cy="12.60" r=".62"/><circle cx="15.35" cy="12.60" r=".62"/></g></svg>US</span></label>
+                <label class="chip"><input type="radio" name="country" value="CA"><span><svg class="flag" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#FFF"/><path fill="#D52B1E" d="M0 0h10v28H0zM30 0h10v28H30z"/><polygon fill="#D52B1E" points="20,4.2 21.5,7.2 23.2,6.5 22.6,10.4 25.3,8.3 26,9.9 27.6,9.7 26.7,12.7 27.6,13.4 23.9,16.2 24.4,17.6 20.5,17.1 20.6,20.6 19.4,20.6 19.5,17.1 15.6,17.6 16.1,16.2 12.4,13.4 13.3,12.7 12.4,9.7 14,9.9 14.7,8.3 17.4,10.4 16.8,6.5 18.5,7.2"/></svg>Canada</span></label>
+                <label class="chip"><input type="radio" name="country" value="AU"><span><svg class="flag" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#012169"/><g transform="scale(.5)"><rect width="40" height="28" fill="#012169"/><path d="M0 0L40 28M40 0L0 28" stroke="#FFF" stroke-width="5"/><path d="M0 0L40 28M40 0L0 28" stroke="#C8102E" stroke-width="1.8"/><path d="M20 0V28M0 14H40" stroke="#FFF" stroke-width="8"/><path d="M20 0V28M0 14H40" stroke="#C8102E" stroke-width="4.6"/></g><g fill="#FFF"><polygon points="10.00,17.90 10.78,19.88 12.81,19.26 11.75,21.10 13.51,22.30 11.41,22.62 11.56,24.74 10.00,23.30 8.44,24.74 8.59,22.62 6.49,22.30 8.25,21.10 7.19,19.26 9.22,19.88"/><polygon points="30.00,4.00 30.43,5.10 31.56,4.75 30.97,5.78 31.95,6.45 30.78,6.62 30.87,7.80 30.00,7.00 29.13,7.80 29.22,6.62 28.05,6.45 29.03,5.78 28.44,4.75 29.57,5.10"/><polygon points="25.00,11.00 25.43,12.10 26.56,11.75 25.97,12.78 26.95,13.45 25.78,13.62 25.87,14.80 25.00,14.00 24.13,14.80 24.22,13.62 23.05,13.45 24.03,12.78 23.44,11.75 24.57,12.10"/><polygon points="34.50,9.00 34.93,10.10 36.06,9.75 35.47,10.78 36.45,11.45 35.28,11.62 35.37,12.80 34.50,12.00 33.63,12.80 33.72,11.62 32.55,11.45 33.53,10.78 32.94,9.75 34.07,10.10"/><polygon points="30.00,20.90 30.46,22.05 31.64,21.69 31.02,22.77 32.05,23.47 30.82,23.65 30.91,24.89 30.00,24.05 29.09,24.89 29.18,23.65 27.95,23.47 28.98,22.77 28.36,21.69 29.54,22.05"/><polygon points="32.60,15.30 32.89,16.00 33.65,16.06 33.07,16.55 33.25,17.29 32.60,16.89 31.95,17.29 32.13,16.55 31.55,16.06 32.31,16.00"/></g></svg>Australia</span></label>
+                <label class="chip"><input type="radio" name="country" value="other"><span>Other</span></label>
+              </div>
+            </fieldset>
           </div>
           <label class="wl-consent"><input type="checkbox" name="consent" value="yes" required> <span>Email me when MileSprout launches. Unsubscribe any time. <a href="/privacy#waitlist">How we use your email</a></span></label>
           <div class="wl-hp" aria-hidden="true"><label>Company <input type="text" name="company" tabindex="-1" autocomplete="off"></label></div>

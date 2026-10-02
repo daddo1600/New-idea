@@ -19,3 +19,6 @@
 
 /assets/site.js
   Cache-Control: public, max-age=86400
+
+/assets/intro-gate.js
+  Cache-Control: public, max-age=86400

@@ -8,6 +8,122 @@
   function still() { return reduce.matches; }
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
 
+  /* ---------- Home intro: the sprout grows, as in the app's opening, then becomes the header logo ----------
+     Only when intro-gate.js has put up its cover (first visit this session, motion allowed).
+     Everything is drawn from one clock in requestAnimationFrame, so a skip or an error just ends it. */
+  (function intro() {
+    var root = document.documentElement;
+    if (!root.classList.contains('ms-intro')) return;
+    var overlay = null;
+    function cleanup() {
+      root.classList.remove('ms-intro');
+      if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+      overlay = null;
+    }
+    try {
+      try { window.sessionStorage.setItem('ms-intro-seen', '1'); } catch (err) { /* fine */ }
+      var ROAD = 'M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30';
+      var LOW = 'M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z';
+      var UP = 'M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z';
+      overlay = document.createElement('div');
+      overlay.className = 'sprout-intro';
+      overlay.setAttribute('aria-hidden', 'true');
+      overlay.innerHTML =
+        '<div class="intro-bg"></div>' +
+        '<div class="intro-stage"><svg class="intro-art" viewBox="12 9 77 84" fill="none">' +
+          '<defs><linearGradient id="ms-intro-leaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#77E8A0"/><stop offset="1" stop-color="#24B359"/></linearGradient>' +
+          '<mask id="ms-intro-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100"><path class="i-mask" d="' + ROAD + '" stroke="#FFF" stroke-width="10" stroke-linecap="round" fill="none"/></mask></defs>' +
+          '<path class="i-soil" d="M30 88 Q50 84 70 88" stroke="#064E3B" stroke-opacity=".55" stroke-width="2.4" stroke-linecap="round"/>' +
+          '<g class="i-leaf i-low"><path d="' + LOW + '" fill="#085E42" opacity=".5" transform="translate(1.2 1.6)"/><path d="' + LOW + '" fill="url(#ms-intro-leaf)"/></g>' +
+          '<g class="i-leaf i-up"><path d="' + UP + '" fill="#085E42" opacity=".5" transform="translate(1.2 1.6)"/><path d="' + UP + '" fill="url(#ms-intro-leaf)"/></g>' +
+          '<path class="i-road" d="' + ROAD + '" stroke="#064E3B" stroke-width="8" stroke-linecap="round"/>' +
+          '<path class="i-dash" d="' + ROAD + '" stroke="#FBF7EE" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="2.6 3.2" stroke-dashoffset="-3" mask="url(#ms-intro-mask)"/>' +
+          '<g class="i-dot"><circle class="i-ring" r="7.6" fill="#FFFFFF"/><circle r="5.6" fill="#FACC15"/></g>' +
+        '</svg>' +
+        '<p class="intro-word"><span class="wm-mile">Mile</span><span class="wm-sprout">Sprout</span></p></div>' +
+        '<button type="button" class="intro-skip" tabindex="-1">Skip intro</button>';
+      document.body.appendChild(overlay);
+      root.classList.remove('ms-intro'); // the overlay takes over from the plain cover
+
+      var q = function (s) { return overlay.querySelector(s); };
+      var bg = q('.intro-bg'), stage = q('.intro-stage'), art = q('.intro-art'), word = q('.intro-word'), skip = q('.intro-skip');
+      var road = q('.i-road'), mask = q('.i-mask'), dot = q('.i-dot'), ring = q('.i-ring');
+      var low = q('.i-low'), up = q('.i-up');
+      var L = road.getTotalLength();
+      road.style.strokeDasharray = mask.style.strokeDasharray = L + ' ' + (L + 1);
+
+      var T_DRIVE = 250, DRIVE = 1400, T_LOW = 1050, T_UP = 1400, LEAF = 300, T_RING = 1650, T_WORD = 1700,
+          T_MORPH = 2450, MORPH = 600, END = 3200;
+      var inOut = function (x) { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+      var back = function (x, k) { var c3 = k + 1; return 1 + c3 * Math.pow(x - 1, 3) + k * Math.pow(x - 1, 2); };
+      var leaf = function (el, t0, ox, oy, k) {
+        var x = clamp((t - t0) / LEAF, 0, 1);
+        var s = x === 0 ? 0.001 : back(x, k);
+        el.setAttribute('transform', 'translate(' + ox + ' ' + oy + ') rotate(' + (-25 * (1 - x)).toFixed(2) + ') scale(' + s.toFixed(3) + ') translate(' + -ox + ' ' + -oy + ')');
+      };
+      var t = 0, start = null, target = null, ending = false, raf = 0;
+
+      function frame(now) {
+        if (!overlay) return;
+        if (start === null) start = now;
+        t = now - start;
+        var p = inOut(clamp((t - T_DRIVE) / DRIVE, 0, 1));
+        road.style.strokeDashoffset = (L * (1 - p)).toFixed(2);
+        mask.style.strokeDashoffset = (L * (1 - clamp(p - 0.035, 0, 1))).toFixed(2);
+        // the seed wakes: rises out of the soil with a small pop, then drives up the road
+        var wake = clamp(t / T_DRIVE, 0, 1);
+        var pt = road.getPointAtLength(L * p);
+        var lift = -2 * Math.sin(wake * Math.PI / 2) * (1 - p);
+        var pop = 1 + 0.08 * Math.sin(wake * Math.PI) * (1 - p);
+        var glint = t > T_RING + 150 ? 1 + 0.12 * Math.sin(clamp((t - T_RING - 150) / 240, 0, 1) * Math.PI) : 1;
+        dot.setAttribute('transform', 'translate(' + pt.x.toFixed(2) + ' ' + (pt.y + lift - (p === 1 ? 2 : 2 * p)).toFixed(2) + ') scale(' + (pop * glint).toFixed(3) + ')');
+        ring.setAttribute('r', (5.6 + 2 * clamp((t - T_RING) / 150, 0, 1)).toFixed(2));
+        leaf(low, T_LOW, 47, 54, 1.0);
+        leaf(up, T_UP, 52, 31, 1.3);
+        var w = clamp((t - T_WORD) / 400, 0, 1);
+        word.style.opacity = w;
+        word.style.transform = 'translateY(' + (12 * (1 - w)).toFixed(1) + 'px)';
+
+        // the sprout flies to the header logo while the green lifts away
+        if (t >= T_MORPH) {
+          if (!target) {
+            var logo = document.querySelector('.site-header .brand svg');
+            var a = art.getBoundingClientRect(), b = logo ? logo.getBoundingClientRect() : null;
+            target = b && b.width ? { x: b.left + b.width / 2 - (a.left + a.width / 2), y: b.top + b.height / 2 - (a.top + a.height / 2), s: b.height / a.height } : { x: 0, y: 0, s: 1 };
+          }
+          var m = inOut(clamp((t - T_MORPH) / MORPH, 0, 1));
+          art.style.transform = 'translate(' + (target.x * m).toFixed(1) + 'px,' + (target.y * m).toFixed(1) + 'px) scale(' + (1 + (target.s - 1) * m).toFixed(4) + ')';
+          bg.style.opacity = 1 - m;
+          word.style.opacity = Math.max(0, 1 - m * 2.5);
+          skip.style.opacity = 1 - m;
+          if (m === 1) art.style.opacity = 1 - clamp((t - T_MORPH - MORPH) / (END - T_MORPH - MORPH), 0, 1);
+        }
+        if (t >= END) return cleanup();
+        raf = requestAnimationFrame(frame);
+      }
+
+      function finish() {
+        if (ending || !overlay) return;
+        ending = true;
+        cancelAnimationFrame(raf);
+        overlay.classList.add('intro-out');
+        setTimeout(cleanup, 260);
+        unlisten();
+      }
+      var evs = ['keydown', 'wheel', 'touchmove', 'scroll'];
+      function unlisten() {
+        evs.forEach(function (e) { window.removeEventListener(e, finish, true); });
+      }
+      evs.forEach(function (e) { window.addEventListener(e, finish, { capture: true, passive: true }); });
+      overlay.addEventListener('pointerdown', finish);
+      skip.addEventListener('click', finish);
+      setTimeout(function () { if (overlay) finish(); }, END + 2000); // never get stuck
+      raf = requestAnimationFrame(frame);
+    } catch (err) {
+      cleanup();
+    }
+  })();
+
   /* ---------- Hero: the phone turns to face you as you scroll; the sprout drifts ---------- */
   (function hero() {
     var section = document.querySelector('.hero');
@@ -233,6 +349,23 @@
       g = g.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/-{2,}/g, '-').slice(0, 40).replace(/^-+|-+$/g, '');
       Array.prototype.forEach.call(document.querySelectorAll('form[data-waitlist] input[name="group"]'), function (i) { i.value = g; });
     }
+
+    // Choice chips are optional radios: tapping the chosen one again clears it.
+    Array.prototype.forEach.call(document.querySelectorAll('[data-chips]'), function (fs) {
+      var was = null;
+      fs.addEventListener('pointerdown', function (e) {
+        var input = e.target.closest('.chip') && e.target.closest('.chip').querySelector('input');
+        was = input && input.checked ? input : null;
+      });
+      fs.addEventListener('keydown', function (e) {
+        was = (e.key === ' ' && e.target.checked) ? e.target : null;
+      });
+      fs.addEventListener('click', function (e) {
+        if (e.target.type !== 'radio') return;
+        if (was === e.target) e.target.checked = false;
+        was = null;
+      });
+    });
 
     Array.prototype.forEach.call(forms, function (f) {
       var status = f.querySelector('.wl-status');

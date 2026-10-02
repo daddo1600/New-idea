@@ -17,14 +17,17 @@ The public website for MileSprout: plain static HTML, one CSS file and one small
 | `robots.txt`, `sitemap.xml` | For search engines |
 | `favicon.svg`, `favicon-32.png`, `apple-touch-icon.png` | Icons (the PNGs are made from `milemint/assets/images/icon.png`) |
 | `assets/site.css` | All styles, light and dark mode, including the CSS-built iPhone frame |
-| `assets/site.js` | Hero phone tilt, the feature deck (drag, swipe, trackpad, keys, dots) and the waitlist form. The page reads fine without it |
+| `assets/site.js` | The sprout intro, hero phone tilt, the feature deck (drag, swipe, trackpad, keys, dots), the form's choice chips and the waitlist form. The page reads fine without it |
+| `assets/intro-gate.js` | Home page only, loaded before paint (not deferred): decides whether the intro plays and puts up a green cover so the hero doesn't flash first |
 | `assets/img/screens/` | Raw app captures (`milemint/assets/store/raw/`, `milemint/docs/screenshots/perks/`) as 640 px WebP, with the top and bottom rows extended to leave room for the CSS status bar and home indicator. `trip.webp` has an invented street map drawn under the route (the capture's map panel was blank); `perks.webp` has the Expo dev button painted out of the tab bar |
 | `assets/img/og.jpg` | Link preview image |
-| `docs/` | Preview screenshots of the home page (not linked from the site): `scroll-*.png` for the hero and deck at desktop and mobile sizes, `waitlist-*.png` for the form states, `testers-*.png` for `/testers?g=fb-test` (page, filled form, success) at 1440 and 390 px |
+| `docs/` | Preview screenshots of the home page (not linked from the site): `scroll-*.png` for the hero and deck at desktop and mobile sizes, `waitlist-*.png` for the form states, `testers-*.png` for `/testers?g=fb-test` (page, filled form, success) at 1440 and 390 px, `intro-*.png` for the sprout intro (frames at 0.0–3.2 s and the final hero), `chips-*.png` for the choice chips (green hero and light), and `pro-*`, `countries-*`, `languages-*`, `compare-*.png` for those home sections |
 
 Links between pages are extensionless (`/privacy`), which is how Cloudflare Pages serves `privacy.html`. To preview locally with working links, use `npx wrangler pages dev website`. A quick look also works with `python3 -m http.server 8080 -d website` and opening `/index.html`, `/privacy.html` and so on.
 
 ## How the home page moves
+
+- **Intro (first visit in a browser session):** the app's opening, about 3.2 s. The seed wakes in the soil, the road grows up with the gold dot at its tip laying the lane dashes, the leaves unfold, the dot's white ring draws in and "MileSprout" fades up. Then the sprout flies to the header logo while the green lifts away. Click, tap, any key, scrolling or "Skip intro" ends it. It never plays with reduced motion or without JavaScript, and it's `aria-hidden` (the page is in the DOM underneath the whole time). `sessionStorage` key `ms-intro-seen` marks it as played.
 
 - **Hero:** the phone starts turned away (`rotateY(-22deg) rotateX(8deg)`) and straightens over the first ~300 px of scroll; the big faint sprout drifts slower than the page. Gold glints twinkle by the sign-up button.
 - **Feature deck:** eight phones in a fanned stack. Hover fans it out; flick with a horizontal trackpad swipe (one swipe = one card), a mouse drag or touch swipe (throw it), the arrow keys, the dots or the buttons. The caption beside it crossfades to the matching feature, and a polite live region announces "3 of 8: …".
@@ -34,7 +37,7 @@ Links between pages are extensionless (`/privacy`), which is how Cloudflare Page
 
 ## Waitlist
 
-The hero, the closing section and `/waitlist` have the same form: email, optional "What do you drive for?" and country, a consent box, and a hidden honeypot field. With JavaScript it posts JSON to `/api/waitlist` and shows "You're on the list" in place; without it, it's a normal form post and the function redirects back to `/waitlist`.
+The hero, the closing section and `/waitlist` have the same form: email, optional "What do you drive for?" and country (choice chips: radio buttons styled as pills, tap a chosen one again to clear it), a consent box, and a hidden honeypot field. With JavaScript it posts JSON to `/api/waitlist` and shows "You're on the list" in place; without it, it's a normal form post and the function redirects back to `/waitlist`.
 
 The function needs a D1 database bound as `DB`. Set-up, in short (details in [`functions/README.md`](../functions/README.md)):
 
@@ -99,16 +102,16 @@ Email Routing only receives. To reply *from* @milesprout.app, set up sending sep
 - User copy says **Work** and **Personal**, never "Business". No statistics or "save £X" claims.
 - The privacy policy must match the app. If the app starts sending data anywhere (for example iCloud invite checking, or Perks redemption through a server), update `privacy.html` before that version ships.
 
-## Updating site.css or site.js
+## Updating site.css, site.js or intro-gate.js
 
-Browsers cache `site.css` and `site.js` for a day, so every page links them with a version
-(`/assets/site.css?v=…`). After changing either file, refresh the versions so visitors get the
+Browsers cache `site.css`, `site.js` and `intro-gate.js` for a day, so pages link them with a version
+(`/assets/site.css?v=…`). After changing any of them, refresh the versions so visitors get the
 new one straight away:
 
 ```sh
 cd website
-CSSV=$(sha1sum assets/site.css | cut -c1-8); JSV=$(sha1sum assets/site.js | cut -c1-8)
-for f in $(grep -rl '/assets/site' --include=*.html .); do
-  sed -i -E "s#/assets/site\.css(\?v=[0-9a-f]+)?\"#/assets/site.css?v=$CSSV\"#; s#/assets/site\.js(\?v=[0-9a-f]+)?\"#/assets/site.js?v=$JSV\"#" "$f"
+CSSV=$(sha1sum assets/site.css | cut -c1-8); JSV=$(sha1sum assets/site.js | cut -c1-8); GV=$(sha1sum assets/intro-gate.js | cut -c1-8)
+for f in $(grep -rl '/assets/' --include=*.html .); do
+  sed -i -E "s#/assets/site\.css(\?v=[0-9a-f]+)?\"#/assets/site.css?v=$CSSV\"#; s#/assets/site\.js(\?v=[0-9a-f]+)?\"#/assets/site.js?v=$JSV\"#; s#/assets/intro-gate\.js(\?v=[0-9a-f]+)?\"#/assets/intro-gate.js?v=$GV\"#" "$f"
 done
 ```
