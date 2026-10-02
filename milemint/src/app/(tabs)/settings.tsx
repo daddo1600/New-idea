@@ -20,6 +20,7 @@ import { backedUpText, formatBackupDate, PROBLEM_TEXT } from '@/backup/copy';
 import { backupAge } from '@/backup/schedule';
 import { tripCount, type Snapshot } from '@/backup/snapshot';
 import { GoldButton } from '@/components/gold-button';
+import { ProBadge } from '@/components/pro-prompt';
 import { FoundingBadge, InviteHero, SproutGarden } from '@/components/invite';
 import { clockTime, weekdayName } from '@/components/home-empty';
 import { LinkRow } from '@/components/link-row';
@@ -34,6 +35,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { countPastTrips, scrubPastTrips } from '@/db/privacy-repo';
+import { DEMO_MODE } from '@/dev/demo';
 import { AREA_EXAMPLES, clientVisitLabel } from '@/domain/privacy';
 import { deletePlace, insertPlace, listPlaces } from '@/db/places-repo';
 import { loadSettings, updateSettings, type AppSettings } from '@/db/settings-repo';
@@ -51,6 +53,7 @@ import { useVehicles } from '@/vehicles/use-vehicles';
 import type { Place, PlaceKind } from '@/domain/places';
 import { type MileagePay, useMileagePay } from '@/hooks/use-mileage-pay';
 import { setAppearance, useAppearance } from '@/hooks/use-appearance';
+import { useCanUse } from '@/hooks/use-feature';
 import { useTheme } from '@/hooks/use-theme';
 import { LANGUAGES, msg, useLanguage, useT } from '@/i18n/i18n';
 import { LIVE_ACTIVITY_SUPPORTED, syncShiftActivity } from '@/live-activity/sync';
@@ -64,6 +67,8 @@ import {
   enableWeeklyReminder,
   REMINDERS_SUPPORTED,
 } from '@/reminders/weekly';
+import { cancelQuarterlyReminders, cancelSetAsideReminder, scheduleQuarterlyReminders } from '@/reminders/money';
+import { queueSetAsideReminder } from '@/reminders/use-money-reminders';
 
 import { ICloudBackup, type BackupKeyInfo } from '../../../modules/icloud-backup';
 
@@ -352,7 +357,8 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
           </>
         )}
 
-        {REMINDERS_SUPPORTED && (
+        {/* The web demo shows the switches as on iPhone (for screenshots). */}
+        {(REMINDERS_SUPPORTED || DEMO_MODE) && (
           <>
             <GroupTitle title={t('Notifications')} />
             <ReminderSection />
@@ -472,47 +478,79 @@ function AddPlace({ onAdded }: { onAdded: () => void }) {
   );
 }
 
+type ReminderKey = 'weeklyReminder' | 'setAsideReminder' | 'quarterlyReminder';
+
 function ReminderSection() {
   const db = useSQLiteContext();
-  const theme = useTheme();
   const t = useT();
   const { region } = useRegion();
-  const [on, setOn] = useState<boolean | null>(null);
+  const { isPro } = usePro();
+  const setAsideOpen = useCanUse('tax-set-aside');
+  const [on, setOn] = useState<Record<ReminderKey, boolean> | null>(null);
   const [note, setNote] = useState<string | null>(null);
 
   useEffect(() => {
-    loadSettings(db).then((settings) => setOn(settings.weeklyReminder), () => setOn(false));
+    loadSettings(db).then(
+      (settings) =>
+        setOn({
+          weeklyReminder: settings.weeklyReminder,
+          setAsideReminder: settings.setAsideReminder,
+          quarterlyReminder: settings.quarterlyReminder,
+        }),
+      () => setOn({ weeklyReminder: false, setAsideReminder: false, quarterlyReminder: false }),
+    );
   }, [db]);
 
-  const change = async (value: boolean) => {
+  /** Switches one on (asking for permission if needed) or off; resolves to whether it's now queued. */
+  const schedule = async (which: ReminderKey, value: boolean): Promise<boolean> => {
+    // The web demo has no notifications: the switch just flips.
+    if (DEMO_MODE && !REMINDERS_SUPPORTED) return value;
+    if (!value) {
+      if (which === 'weeklyReminder') await disableWeeklyReminder();
+      else if (which === 'setAsideReminder') await cancelSetAsideReminder();
+      else await cancelQuarterlyReminders();
+      return false;
+    }
+    if (which === 'weeklyReminder') return enableWeeklyReminder(region.unit);
+    if (which === 'setAsideReminder') return queueSetAsideReminder(db, region, true);
+    return scheduleQuarterlyReminders(region, true);
+  };
+
+  const change = (which: ReminderKey) => async (value: boolean) => {
     setNote(null);
-    const scheduled = value ? await enableWeeklyReminder(region.unit) : (await disableWeeklyReminder(), false);
+    const scheduled = await schedule(which, value).catch(() => false);
     if (value && !scheduled) {
       setNote(t('Notifications are off for MileSprout. Turn them on in iPhone Settings → Notifications.'));
     }
-    setOn(scheduled);
-    await updateSettings(db, { weeklyReminder: scheduled });
+    setOn((current) => current && { ...current, [which]: scheduled });
+    await updateSettings(db, { [which]: scheduled });
   };
 
+  const anyOn = on !== null && (on.weeklyReminder || (setAsideOpen && on.setAsideReminder) || (isPro && on.quarterlyReminder));
   return (
     <>
-      <SectionTitle title={t('Reminders')} value={on === null ? null : on ? t('On') : t('Off')} />
+      <SectionTitle title={t('Reminders')} value={on === null ? null : anyOn ? t('On') : t('Off')} />
       <ThemedView type="backgroundElement" style={styles.card}>
-        <View style={styles.rowBetween}>
-          <View style={styles.flex}>
-            <ThemedText type="smallBold">{t('Weekly reminder')}</ThemedText>
-            <ThemedText type="small" themeColor="textSecondary">
-              {t('A short reminder on Sunday evening to sort the week’s drives.')}
-            </ThemedText>
-          </View>
-          <Switch
-            accessibilityLabel={t('Weekly reminder')}
-            disabled={on === null}
-            value={on ?? false}
-            onValueChange={change}
-            trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
-          />
-        </View>
+        <ReminderRow
+          title={t('Weekly reminder')}
+          detail={t('A short reminder on Sunday evening to sort the week’s drives.')}
+          value={on?.weeklyReminder ?? null}
+          onChange={change('weeklyReminder')}
+        />
+        <ReminderRow
+          title={t('Tax set-aside')}
+          detail={t('Monday morning: how much to put aside from last week’s driving.')}
+          value={on?.setAsideReminder ?? null}
+          onChange={change('setAsideReminder')}
+          locked={!setAsideOpen}
+        />
+        <ReminderRow
+          title={t('Quarterly deadlines')}
+          detail={t('Two weeks before each quarterly deadline, with your figures ready.')}
+          value={on?.quarterlyReminder ?? null}
+          onChange={change('quarterlyReminder')}
+          locked={!isPro}
+        />
         {note && (
           <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
             {note}
@@ -520,6 +558,43 @@ function ReminderSection() {
         )}
       </ThemedView>
     </>
+  );
+}
+
+/** One reminder's switch. Locked: shown off with a Pro tag, and tapping the row opens the Pro screen. */
+function ReminderRow({
+  title,
+  detail,
+  value,
+  onChange,
+  locked = false,
+}: {
+  title: string;
+  detail: string;
+  value: boolean | null;
+  onChange: (value: boolean) => void;
+  locked?: boolean;
+}) {
+  const theme = useTheme();
+  return (
+    <Pressable accessible={false} disabled={!locked} onPress={() => router.push('/pro')} style={styles.rowBetween}>
+      <View style={styles.flex}>
+        <View style={styles.titleWithBadge}>
+          <ThemedText type="smallBold">{title}</ThemedText>
+          {locked && <ProBadge />}
+        </View>
+        <ThemedText type="small" themeColor="textSecondary">
+          {detail}
+        </ThemedText>
+      </View>
+      <Switch
+        accessibilityLabel={title}
+        disabled={value === null || locked}
+        value={!locked && (value ?? false)}
+        onValueChange={onChange}
+        trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
+      />
+    </Pressable>
   );
 }
 
@@ -1461,6 +1536,7 @@ const styles = StyleSheet.create({
   links: { borderRadius: 12, padding: Spacing.one },
   groupTitle: { marginTop: Spacing.three, textTransform: 'uppercase', letterSpacing: 0.6, fontWeight: '600' },
   rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.three },
+  titleWithBadge: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
   flex: { flex: 1, gap: Spacing.half },
   // Stacked blocks in a card: not stretched, so the next one can't slide under it.
   stack: { gap: Spacing.half },

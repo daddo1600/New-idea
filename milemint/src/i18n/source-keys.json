@@ -143,7 +143,8 @@
   {
     "key": "{{count}} days left",
     "files": [
-      "app/tax-dates.tsx"
+      "app/tax-dates.tsx",
+      "components/money/quarterly-figures.tsx"
     ]
   },
   {
@@ -466,6 +467,18 @@
     "key": "{{percent}}% business use so far",
     "files": [
       "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "{{percent}}% is a rough guide for the self-employed in {{country}}. Change it to suit you.",
+    "files": [
+      "components/money/earnings-sheet.tsx"
+    ]
+  },
+  {
+    "key": "{{percent}}% of profit",
+    "files": [
+      "components/money/set-aside-card.tsx"
     ]
   },
   {
@@ -899,6 +912,12 @@
     ]
   },
   {
+    "key": "Add last week’s earnings to see how much to put aside for tax.",
+    "files": [
+      "reminders/money.ts"
+    ]
+  },
+  {
     "key": "Add missed trip",
     "files": [
       "app/_layout.tsx",
@@ -929,6 +948,18 @@
     "key": "Add the odometer reading from the last day to finish the logbook.",
     "files": [
       "app/logbook.tsx"
+    ]
+  },
+  {
+    "key": "Add this week’s earnings",
+    "files": [
+      "components/money/set-aside-card.tsx"
+    ]
+  },
+  {
+    "key": "Add this week’s earnings to see what to put aside.",
+    "files": [
+      "components/money/set-aside-card.tsx"
     ]
   },
   {
@@ -998,6 +1029,12 @@
     ]
   },
   {
+    "key": "All your apps and platforms together, before tax.",
+    "files": [
+      "components/money/earnings-sheet.tsx"
+    ]
+  },
+  {
     "key": "Allow",
     "files": [
       "components/motion-ask.tsx"
@@ -1037,6 +1074,12 @@
     "key": "Always",
     "files": [
       "components/always-guide.tsx"
+    ]
+  },
+  {
+    "key": "An estimate to help you save for your tax bill. Your real bill depends on your total income.",
+    "files": [
+      "components/money/set-aside-card.tsx"
     ]
   },
   {
@@ -1299,6 +1342,12 @@
     ]
   },
   {
+    "key": "BAS due in 2 weeks",
+    "files": [
+      "domain/quarters.ts"
+    ]
+  },
+  {
     "key": "BAS: if you’re registered for GST or pay PAYG instalments, you lodge quarterly by 28 October, 28 February, 28 April and 28 July. Rideshare drivers must register for GST from their first ride; delivery riders only once turnover reaches $75,000.",
     "files": [
       "domain/deadlines.ts"
@@ -1510,6 +1559,12 @@
     ]
   },
   {
+    "key": "Change this week’s earnings",
+    "files": [
+      "components/money/set-aside-card.tsx"
+    ]
+  },
+  {
     "key": "Change to Always Allow",
     "files": [
       "components/permission-preview.tsx"
@@ -1610,7 +1665,8 @@
   {
     "key": "Clear",
     "files": [
-      "app/(tabs)/settings.tsx"
+      "app/(tabs)/settings.tsx",
+      "components/money/earnings-sheet.tsx"
     ]
   },
   {
@@ -1653,6 +1709,7 @@
   {
     "key": "Close",
     "files": [
+      "components/money/earnings-sheet.tsx",
       "components/purpose-picker.tsx",
       "components/route-map/route-map-card.tsx",
       "components/vehicle-sheet.tsx"
@@ -1671,13 +1728,7 @@
     ]
   },
   {
-    "key": "Coming to Pro: earnings by platform and a tax set-aside pot.",
-    "files": [
-      "app/pro.tsx"
-    ]
-  },
-  {
-    "key": "Coming to Pro: earnings by platform, a tax set-aside pot and MTD quarterly figures.",
+    "key": "Coming to Pro: earnings by platform, and bringing in your log from another app.",
     "files": [
       "app/pro.tsx"
     ]
@@ -1755,7 +1806,8 @@
     "files": [
       "app/claim-relief.tsx",
       "app/logbook.tsx",
-      "app/report.tsx"
+      "app/report.tsx",
+      "components/money/quarterly-figures.tsx"
     ]
   },
   {
@@ -1792,6 +1844,12 @@
     "key": "Couldn’t save the place. Please try again.",
     "files": [
       "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Couldn’t save. Please try again.",
+    "files": [
+      "components/money/earnings-sheet.tsx"
     ]
   },
   {
@@ -2038,6 +2096,12 @@
     ]
   },
   {
+    "key": "Drives still to sort: {{number}}",
+    "files": [
+      "components/money/quarterly-figures.tsx"
+    ]
+  },
+  {
     "key": "Drives that start during your hours are marked business, others personal. Your usual routes and commutes take priority.",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -2080,9 +2144,21 @@
     ]
   },
   {
+    "key": "Due {{date}}",
+    "files": [
+      "components/money/quarterly-figures.tsx"
+    ]
+  },
+  {
     "key": "Due {{date}}. Your mileage report for {{year}} is ready to export.",
     "files": [
       "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "Due today",
+    "files": [
+      "components/money/quarterly-figures.tsx"
     ]
   },
   {
@@ -2104,6 +2180,12 @@
     ]
   },
   {
+    "key": "Each quarter’s figures and deadline, a reminder two weeks before, and an export for the quarter.",
+    "files": [
+      "components/money/quarterly-figures.tsx"
+    ]
+  },
+  {
     "key": "Each tax year’s business miles, HMRC’s approved amount, what your employer paid and the relief to claim, in English for HMRC.",
     "files": [
       "app/claim-relief.tsx"
@@ -2116,9 +2198,21 @@
     ]
   },
   {
+    "key": "Earned {{earned}}, minus {{mileage}} of mileage",
+    "files": [
+      "components/money/set-aside-card.tsx"
+    ]
+  },
+  {
     "key": "Earnings by platform",
     "files": [
       "referral/perks.ts"
+    ]
+  },
+  {
+    "key": "Earnings, in {{currency}}",
+    "files": [
+      "components/money/earnings-sheet.tsx"
     ]
   },
   {
@@ -2270,6 +2364,12 @@
     ]
   },
   {
+    "key": "Enter a whole number from {{min}} to {{max}} for the rate.",
+    "files": [
+      "components/money/earnings-sheet.tsx"
+    ]
+  },
+  {
     "key": "Enter amounts as numbers, e.g. 2400 or 2,400.50.",
     "files": [
       "app/logbook.tsx"
@@ -2326,9 +2426,27 @@
     ]
   },
   {
+    "key": "Enter what you earn each week and see how much to put aside for tax, after your mileage, so the tax bill is no surprise.",
+    "files": [
+      "components/money/set-aside-card.tsx"
+    ]
+  },
+  {
+    "key": "Enter what you earn each week, all apps together. MileSprout takes off your mileage and shows how much to put aside for tax.",
+    "files": [
+      "components/money/set-aside-card.tsx"
+    ]
+  },
+  {
     "key": "Enter where you drove from and to.",
     "files": [
       "app/trip/[id].tsx"
+    ]
+  },
+  {
+    "key": "Enter your earnings as an amount, e.g. 450 or 450.50.",
+    "files": [
+      "components/money/earnings-sheet.tsx"
     ]
   },
   {
@@ -2341,6 +2459,12 @@
     "key": "Estimated tax back",
     "files": [
       "app/claim-relief.tsx"
+    ]
+  },
+  {
+    "key": "Estimated tax due in 2 weeks",
+    "files": [
+      "domain/quarters.ts"
     ]
   },
   {
@@ -2502,6 +2626,12 @@
     ]
   },
   {
+    "key": "Export this quarter (CSV)",
+    "files": [
+      "components/money/quarterly-figures.tsx"
+    ]
+  },
+  {
     "key": "Export your {{year}} mileage report from MileSprout and you’re one step closer.",
     "files": [
       "domain/deadlines.ts"
@@ -2523,6 +2653,30 @@
     "key": "Fall is here 🍂",
     "files": [
       "domain/seasons.ts"
+    ]
+  },
+  {
+    "key": "Figures ready for your BAS",
+    "files": [
+      "domain/quarters.ts"
+    ]
+  },
+  {
+    "key": "Figures ready for your estimated tax payment",
+    "files": [
+      "domain/quarters.ts"
+    ]
+  },
+  {
+    "key": "Figures ready for your MTD update",
+    "files": [
+      "domain/quarters.ts"
+    ]
+  },
+  {
+    "key": "Figures ready for your tax instalment",
+    "files": [
+      "domain/quarters.ts"
     ]
   },
   {
@@ -2782,7 +2936,8 @@
   {
     "key": "Go Pro",
     "files": [
-      "app/(tabs)/money.tsx"
+      "app/(tabs)/money.tsx",
+      "components/money/set-aside-card.tsx"
     ]
   },
   {
@@ -3079,6 +3234,12 @@
     ]
   },
   {
+    "key": "Invite a friend",
+    "files": [
+      "components/money/set-aside-card.tsx"
+    ]
+  },
+  {
     "key": "Invite friends",
     "files": [
       "app/(tabs)/settings.tsx",
@@ -3301,6 +3462,12 @@
     ]
   },
   {
+    "key": "Last week",
+    "files": [
+      "components/money/earnings-sheet.tsx"
+    ]
+  },
+  {
     "key": "Let MileSprout sort for you ⏱️",
     "files": [
       "reminders/weekly.ts"
@@ -3475,7 +3642,14 @@
   {
     "key": "Mileage at {{authority}} rates",
     "files": [
-      "app/report.tsx"
+      "app/report.tsx",
+      "components/money/quarterly-figures.tsx"
+    ]
+  },
+  {
+    "key": "Mileage for the week: {{amount}}",
+    "files": [
+      "components/money/earnings-sheet.tsx"
     ]
   },
   {
@@ -3650,6 +3824,12 @@
     ]
   },
   {
+    "key": "Monday morning: how much to put aside from last week’s driving.",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
     "key": "Money",
     "files": [
       "app/(tabs)/_layout.tsx"
@@ -3701,6 +3881,12 @@
     "key": "Motorbike or scooter",
     "files": [
       "domain/trip.ts"
+    ]
+  },
+  {
+    "key": "MTD update due in 2 weeks",
+    "files": [
+      "domain/quarters.ts"
     ]
   },
   {
@@ -4257,7 +4443,7 @@
     ]
   },
   {
-    "key": "Or invite friends to unlock Pro perks for free ›",
+    "key": "Or invite 1 friend to unlock the tax set-aside for free ›",
     "files": [
       "app/pro.tsx"
     ]
@@ -4306,6 +4492,12 @@
     ]
   },
   {
+    "key": "Over {{max}} in one week? Check the amount.",
+    "files": [
+      "components/money/earnings-sheet.tsx"
+    ]
+  },
+  {
     "key": "Over 5,000 business km in a car? Keep a 12-week logbook and claim the business share of its running costs.",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -4346,6 +4538,18 @@
     "key": "Parking & tolls: {{amount}} (recorded)",
     "files": [
       "components/home/summary-card.tsx"
+    ]
+  },
+  {
+    "key": "Parking and tolls",
+    "files": [
+      "components/money/quarterly-figures.tsx"
+    ]
+  },
+  {
+    "key": "Parking and tolls (listed apart)",
+    "files": [
+      "components/money/quarterly-figures.tsx"
     ]
   },
   {
@@ -4510,7 +4714,8 @@
     "files": [
       "app/claim-relief.tsx",
       "app/logbook.tsx",
-      "app/report.tsx"
+      "app/report.tsx",
+      "components/money/quarterly-figures.tsx"
     ]
   },
   {
@@ -4553,6 +4758,84 @@
     "key": "Purpose:",
     "files": [
       "components/trips/purpose-line.tsx"
+    ]
+  },
+  {
+    "key": "Put {{amount}} aside from last week’s driving.",
+    "files": [
+      "reminders/money.ts"
+    ]
+  },
+  {
+    "key": "Put aside for tax from last week",
+    "files": [
+      "components/money/set-aside-card.tsx"
+    ]
+  },
+  {
+    "key": "Put aside for tax this week",
+    "files": [
+      "components/money/set-aside-card.tsx"
+    ]
+  },
+  {
+    "key": "Put aside this tax year",
+    "files": [
+      "components/money/set-aside-card.tsx"
+    ]
+  },
+  {
+    "key": "Put aside: {{amount}}",
+    "files": [
+      "components/money/earnings-sheet.tsx"
+    ]
+  },
+  {
+    "key": "Q{{number}}",
+    "files": [
+      "components/money/quarterly-figures.tsx"
+    ]
+  },
+  {
+    "key": "Quarterly deadlines",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Quarterly figures",
+    "files": [
+      "components/money/quarterly-figures.tsx"
+    ]
+  },
+  {
+    "key": "Quarterly figures for estimated tax",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Quarterly figures for tax instalments",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Quarterly figures for your BAS",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Quarterly figures for your MTD updates",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Rate",
+    "files": [
+      "components/money/earnings-sheet.tsx"
     ]
   },
   {
@@ -4750,6 +5033,12 @@
     ]
   },
   {
+    "key": "Same as last week ({{amount}})",
+    "files": [
+      "components/money/earnings-sheet.tsx"
+    ]
+  },
+  {
     "key": "Sat",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -4759,7 +5048,8 @@
     "key": "Save",
     "files": [
       "app/region.tsx",
-      "app/trip/[id].tsx"
+      "app/trip/[id].tsx",
+      "components/money/earnings-sheet.tsx"
     ]
   },
   {
@@ -5010,6 +5300,12 @@
     "key": "Set up auto-logging",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Set-aside rate, in percent",
+    "files": [
+      "components/money/earnings-sheet.tsx"
     ]
   },
   {
@@ -5384,7 +5680,8 @@
   {
     "key": "Starts {{date}}",
     "files": [
-      "app/logbook.tsx"
+      "app/logbook.tsx",
+      "components/money/quarterly-figures.tsx"
     ]
   },
   {
@@ -5627,6 +5924,12 @@
     ]
   },
   {
+    "key": "Tax instalment due in 2 weeks",
+    "files": [
+      "domain/quarters.ts"
+    ]
+  },
+  {
     "key": "Tax offices want a purpose for every business drive. We’ll fill this in for you, and you can change it on any trip.",
     "files": [
       "app/welcome.tsx"
@@ -5659,13 +5962,22 @@
   {
     "key": "Tax set-aside",
     "files": [
-      "referral/perks.ts"
+      "app/(tabs)/settings.tsx",
+      "components/money/set-aside-card.tsx",
+      "referral/perks.ts",
+      "reminders/money.ts"
     ]
   },
   {
-    "key": "Tax set-aside and Earnings by platform are on their way. Perks you earn now unlock them as soon as they arrive.",
+    "key": "Tax set-aside is ready now, in the Money tab. Earnings by platform is on its way: earn it now and it unlocks as soon as it arrives.",
     "files": [
       "app/friends.tsx"
+    ]
+  },
+  {
+    "key": "Tax set-aside: what to put aside each week",
+    "files": [
+      "app/pro.tsx"
     ]
   },
   {
@@ -5915,6 +6227,8 @@
   {
     "key": "This week",
     "files": [
+      "components/money/earnings-sheet.tsx",
+      "components/money/set-aside-card.tsx",
       "domain/missed-miles.ts"
     ]
   },
@@ -6154,6 +6468,12 @@
     ]
   },
   {
+    "key": "Two weeks before each quarterly deadline, with your figures ready.",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
     "key": "Type your own purpose",
     "files": [
       "components/purpose-picker.tsx"
@@ -6204,7 +6524,14 @@
   {
     "key": "Unlock with Pro",
     "files": [
-      "app/report.tsx"
+      "app/report.tsx",
+      "components/money/quarterly-figures.tsx"
+    ]
+  },
+  {
+    "key": "Unlock with Pro, or invite 1 friend",
+    "files": [
+      "components/money/set-aside-card.tsx"
     ]
   },
   {
@@ -6324,6 +6651,12 @@
     ]
   },
   {
+    "key": "Was due {{date}}",
+    "files": [
+      "components/money/quarterly-figures.tsx"
+    ]
+  },
+  {
     "key": "We couldn’t find that invite. Check the code with your friend.",
     "files": [
       "referral/referral.tsx"
@@ -6361,6 +6694,18 @@
     ]
   },
   {
+    "key": "Week of {{date}}: {{amount}}",
+    "files": [
+      "components/money/set-aside-card.tsx"
+    ]
+  },
+  {
+    "key": "Week of {{date}}: no earnings entered",
+    "files": [
+      "components/money/set-aside-card.tsx"
+    ]
+  },
+  {
     "key": "Weekly reminder",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -6388,6 +6733,12 @@
     "key": "What did you drive for work?",
     "files": [
       "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "What did you earn?",
+    "files": [
+      "components/money/earnings-sheet.tsx"
     ]
   },
   {
@@ -6474,6 +6825,24 @@
       "app/(tabs)/settings.tsx",
       "app/trip/[id].tsx",
       "hooks/use-place-ask.ts"
+    ]
+  },
+  {
+    "key": "Work distance",
+    "files": [
+      "components/money/quarterly-figures.tsx"
+    ]
+  },
+  {
+    "key": "Work drives",
+    "files": [
+      "components/money/quarterly-figures.tsx"
+    ]
+  },
+  {
+    "key": "Work drives without a purpose: {{number}}",
+    "files": [
+      "components/money/quarterly-figures.tsx"
     ]
   },
   {
@@ -6749,6 +7118,18 @@
     ]
   },
   {
+    "key": "Your figures for {{period}} are ready for your BAS, due {{date}}.",
+    "files": [
+      "domain/quarters.ts"
+    ]
+  },
+  {
+    "key": "Your figures for {{period}} are ready for your MTD update, due {{date}}.",
+    "files": [
+      "domain/quarters.ts"
+    ]
+  },
+  {
     "key": "Your free month ends on {{date}}",
     "files": [
       "purchases/trial-reminder.ts"
@@ -6796,6 +7177,24 @@
     "key": "Your itemised report and every export are unlocked. Thanks for supporting MileSprout.",
     "files": [
       "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Your mileage covered last week’s earnings, so there’s nothing to put aside.",
+    "files": [
+      "reminders/money.ts"
+    ]
+  },
+  {
+    "key": "Your mileage for {{period}} is ready for your estimated tax payment, due {{date}}.",
+    "files": [
+      "domain/quarters.ts"
+    ]
+  },
+  {
+    "key": "Your mileage for {{period}} is ready for your tax instalment, due {{date}}.",
+    "files": [
+      "domain/quarters.ts"
     ]
   },
   {

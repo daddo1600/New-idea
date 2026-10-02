@@ -68,7 +68,7 @@ export default function FriendsScreen() {
           )}
           <ThemedText type="small" themeColor="textSecondary">
             {t(
-              'Tax set-aside and Earnings by platform are on their way. Perks you earn now unlock them as soon as they arrive.',
+              'Tax set-aside is ready now, in the Money tab. Earnings by platform is on its way: earn it now and it unlocks as soon as it arrives.',
             )}
           </ThemedText>
           {isPro && (

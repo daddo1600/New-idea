@@ -10,6 +10,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { useUnsortedCount } from '@/hooks/use-unsorted-count';
 import { useT } from '@/i18n/i18n';
 import { useRegion } from '@/region/region';
+import { useMoneyReminders } from '@/reminders/use-money-reminders';
 import { useReminders } from '@/reminders/use-reminders';
 import { useTrackingAlerts } from '@/tracking/use-tracking-health';
 
@@ -79,6 +80,8 @@ function AppEffects() {
   const { region } = useRegion();
   // Sunday reminders, the tax-year countdown, and opening the screen a tapped reminder points to.
   useReminders(region);
+  // Monday's tax set-aside and two weeks before each quarterly deadline, where the plan includes them.
+  useMoneyReminders(region);
   // Encrypted copy in the user's own iCloud, so a lost phone doesn't take the log with it.
   useAutoBackup(!DEMO_MODE);
   // Tracking problems found as the app goes into the background, told later if still there.

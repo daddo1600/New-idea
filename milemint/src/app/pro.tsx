@@ -10,6 +10,7 @@ import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { DEMO_MODE } from '@/dev/demo';
 import { formatPrice, offerTermsKey, perMonthPrice, remindsBeforeTrialEnds } from '@/domain/pro-offer';
+import type { RegionCode } from '@/domain/regions';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
 import { usePro } from '@/purchases/pro';
@@ -22,6 +23,16 @@ import { useRegion } from '@/region/region';
 const TERMS_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
 const PRIVACY_URL =
   'https://github.com/daddo1600/New-idea/blob/claude/ios-app-ideas-market-of84qv/milemint/docs/privacy-policy.md';
+
+/** Stands in for the quarterly figures row, named for the user's tax office (QUARTERLY_ROWS). */
+const QUARTERLY_ROW = 'quarterly';
+
+const QUARTERLY_ROWS: Record<RegionCode, string> = {
+  GB: msg('Quarterly figures for your MTD updates'),
+  US: msg('Quarterly figures for estimated tax'),
+  CA: msg('Quarterly figures for tax instalments'),
+  AU: msg('Quarterly figures for your BAS'),
+};
 
 /**
  * What each plan includes (`true` is a tick): tracking and seeing the money
@@ -36,6 +47,8 @@ const COMPARISON: readonly [feature: string, free: boolean, pro: boolean][] = [
   [msg('Itemised mileage log and PDF report'), false, true],
   [msg('Spreadsheet, CSV, Xero, QuickBooks and FreeAgent exports'), false, true],
   [msg('Send your report to your accountant'), false, true],
+  [QUARTERLY_ROW, false, true],
+  [msg('Tax set-aside: what to put aside each week'), false, true],
   [msg('Encrypted on your iPhone, no ads'), true, true],
 ];
 
@@ -115,7 +128,6 @@ export default function ProScreen() {
   const theme = useTheme();
   const t = useT();
   const { isPro, plans, plansLoaded, storeAvailable, busy, error, buy, restore, manage } = usePro();
-  const { region } = useRegion();
   const { giftOpen, offerCode } = useReferral();
   const [selected, setSelected] = useState<string | null>(null);
   // The trial reminder is only promised when it can be sent; buying never asks.
@@ -210,13 +222,11 @@ export default function ProScreen() {
         <Comparison />
 
         <ThemedText type="small" themeColor="textSecondary">
-          {region.code === 'GB'
-            ? t('Coming to Pro: earnings by platform, a tax set-aside pot and MTD quarterly figures.')
-            : t('Coming to Pro: earnings by platform and a tax set-aside pot.')}
+          {t('Coming to Pro: earnings by platform, and bringing in your log from another app.')}
         </ThemedText>
         <Pressable accessibilityRole="button" hitSlop={8} onPress={() => router.push('/friends' as Href)}>
           <ThemedText type="small" style={{ color: theme.accent }}>
-            {t('Or invite friends to unlock Pro perks for free ›')}
+            {t('Or invite 1 friend to unlock the tax set-aside for free ›')}
           </ThemedText>
         </Pressable>
 
@@ -349,6 +359,7 @@ export default function ProScreen() {
 function Comparison() {
   const theme = useTheme();
   const t = useT();
+  const { region } = useRegion();
   const cell = (value: boolean) => (
     <ThemedText
       type="smallBold"
@@ -373,7 +384,7 @@ function Comparison() {
       {COMPARISON.map(([feature, free, pro]) => (
         <View key={feature} style={[styles.tableRow, { borderTopColor: theme.backgroundSelected }, styles.divided]}>
           <ThemedText type="small" style={styles.feature}>
-            {t(feature)}
+            {t(feature === QUARTERLY_ROW ? QUARTERLY_ROWS[region.code] : feature)}
           </ThemedText>
           {cell(free)}
           {cell(pro)}
