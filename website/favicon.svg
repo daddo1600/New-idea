@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0E9F6E"/><stop offset="1" stop-color="#053D2E"/></linearGradient>
+    <linearGradient id="leaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#77E8A0"/><stop offset="1" stop-color="#24B359"/></linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="22" fill="url(#bg)"/>
+  <path d="M30 88 Q50 84 70 88" stroke="#064E3B" stroke-opacity=".55" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+  <g transform="translate(1.2 1.6)" fill="#085E42" opacity=".5">
+    <path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z"/>
+    <path d="M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z"/>
+  </g>
+  <path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z" fill="url(#leaf)"/>
+  <path d="M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z" fill="url(#leaf)"/>
+  <g stroke="#064E3B" stroke-opacity=".35" stroke-width="1" stroke-linecap="round" fill="none">
+    <path d="M46 53 Q30 44 18 37"/><path d="M53 30 Q68 20 82 14"/>
+  </g>
+  <path d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#064E3B" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <path d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#FBF7EE" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="2.6 3.2" stroke-dashoffset="-3" fill="none"/>
+  <circle cx="51" cy="28" r="7.6" fill="#FFFFFF"/>
+  <circle cx="51" cy="28" r="5.6" fill="#FACC15"/>
+</svg>

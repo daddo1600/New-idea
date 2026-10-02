@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /r/
+Disallow: /docs/
+
+Sitemap: https://milesprout.app/sitemap.xml
