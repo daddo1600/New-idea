@@ -1,15 +1,17 @@
 import { useSQLiteContext } from 'expo-sqlite';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import Svg, { Circle, Polyline } from 'react-native-svg';
 
 import { shownPurpose } from '@/components/purpose-picker';
+import { RouteMapCard } from '@/components/route-map/route-map-card';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
+import { loadSettings } from '@/db/settings-repo';
 import { getRoute } from '@/db/trips-repo';
 import type { LatLng } from '@/domain/geo';
 import { displayLocale, formatDistance, formatMoney, formatShortDate, type Region } from '@/domain/regions';
+import { displayRoute, privateEnds, type DisplayRoute } from '@/domain/route-display';
 import type { ShiftGroup } from '@/domain/shift-rows';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/i18n/i18n';
@@ -165,70 +167,46 @@ function TimeStepper({
   );
 }
 
-const MAP_HEIGHT = 140;
+const MAP_HEIGHT = 160;
 
-/** The shift's routes drawn to fit, each leg its own line: enough to see the round at a glance. */
+/**
+ * The shift's drives on one map, each its own line: enough to see the round
+ * at a glance. Only mounted while the shift is open, never in a closed row.
+ */
 function ShiftMap({ group }: { group: ShiftGroup }) {
   const db = useSQLiteContext();
-  const theme = useTheme();
   const t = useT();
-  const [routes, setRoutes] = useState<LatLng[][] | null>(null);
-  const [width, setWidth] = useState(0);
+  const [loaded, setLoaded] = useState<{ routes: LatLng[][]; clientPrivacy: boolean } | null>(null);
   const ids = group.legs.map((leg) => leg.id).join(',');
   useEffect(() => {
     let current = true;
-    Promise.all(ids.split(',').map((id) => getRoute(db, id))).then(
-      (loaded) => current && setRoutes(loaded.filter((route) => route.length > 1)),
-      () => current && setRoutes([]),
+    Promise.all([
+      Promise.all(ids.split(',').map((id) => getRoute(db, id))),
+      // Unread settings count as privacy on: better a shorter line than a client's door.
+      loadSettings(db).then((settings) => settings.clientPrivacy, () => true),
+    ]).then(
+      ([routes, clientPrivacy]) => current && setLoaded({ routes, clientPrivacy }),
+      () => current && setLoaded({ routes: [], clientPrivacy: true }),
     );
     return () => {
       current = false;
     };
   }, [db, ids]);
-  if (!routes || routes.length === 0) return null;
-  const points = routes.flat();
-  const lats = points.map((p) => p.latitude);
-  const lngs = points.map((p) => p.longitude);
-  const [minLat, maxLat, minLng, maxLng] = [Math.min(...lats), Math.max(...lats), Math.min(...lngs), Math.max(...lngs)];
-  // Longitude shrinks towards the poles: scale it so the shape isn't stretched.
-  const lngScale = Math.cos((((minLat + maxLat) / 2) * Math.PI) / 180);
-  const spanX = Math.max((maxLng - minLng) * lngScale, 1e-6);
-  const spanY = Math.max(maxLat - minLat, 1e-6);
-  const pad = 10;
-  const scale = width > 0 ? Math.min((width - 2 * pad) / spanX, (MAP_HEIGHT - 2 * pad) / spanY) : 0;
-  const offsetX = (width - spanX * scale) / 2;
-  const offsetY = (MAP_HEIGHT - spanY * scale) / 2;
-  const xy = (p: LatLng) => [offsetX + (p.longitude - minLng) * lngScale * scale, offsetY + (maxLat - p.latitude) * scale];
-  const first = xy(routes[0][0]);
-  const lastRoute = routes[routes.length - 1];
-  const last = xy(lastRoute[lastRoute.length - 1]);
-  return (
-    <View
-      accessible
-      accessibilityRole="image"
-      accessibilityLabel={t('Map of the drives in this shift')}
-      onLayout={(event) => setWidth(event.nativeEvent.layout.width)}
-      style={[styles.map, { backgroundColor: theme.background }]}>
-      {width > 0 && (
-        <Svg width={width} height={MAP_HEIGHT}>
-          {routes.map((route, index) => (
-            <Polyline
-              key={index}
-              points={route.map((p) => xy(p).join(',')).join(' ')}
-              fill="none"
-              stroke={theme.accent}
-              strokeOpacity={0.55 + (0.45 * (index + 1)) / routes.length}
-              strokeWidth={3}
-              strokeLinejoin="round"
-              strokeLinecap="round"
-            />
-          ))}
-          <Circle cx={first[0]} cy={first[1]} r={5} fill={theme.background} stroke={theme.accent} strokeWidth={2.5} />
-          <Circle cx={last[0]} cy={last[1]} r={5} fill={theme.accent} />
-        </Svg>
-      )}
-    </View>
-  );
+  const legs = group.legs;
+  const routes = useMemo(() => {
+    if (!loaded) return null;
+    const shown = loaded.routes
+      .map((route, index) => (legs[index] ? displayRoute(route, privateEnds(legs[index], loaded.clientPrivacy)) : null))
+      .filter((route): route is DisplayRoute => route !== null);
+    // One dot where the shift's driving began and one where it ended, not one per drive.
+    return shown.map((route, index) => ({
+      ...route,
+      startDot: route.startDot && index === 0,
+      endDot: route.endDot && index === shown.length - 1,
+    }));
+  }, [loaded, legs]);
+  if (!routes) return null;
+  return <RouteMapCard routes={routes} label={t('Map of the drives in this shift')} height={MAP_HEIGHT} />;
 }
 
 const styles = StyleSheet.create({
@@ -238,7 +216,6 @@ const styles = StyleSheet.create({
   badge: { borderRadius: 999, paddingHorizontal: Spacing.two, paddingVertical: 1 },
   flex: { flex: 1 },
   details: { paddingHorizontal: Spacing.three, paddingBottom: Spacing.three, gap: Spacing.three },
-  map: { height: MAP_HEIGHT, borderRadius: 10, overflow: 'hidden' },
   times: { gap: Spacing.two },
   stepper: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
   step: { borderRadius: 8, paddingHorizontal: Spacing.three, paddingVertical: Spacing.one + 2, minWidth: 52, alignItems: 'center' },
