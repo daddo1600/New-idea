@@ -1851,12 +1851,6 @@
     ]
   },
   {
-    "key": "Client addresses are never saved or shared. MileSprout keeps only the area, and everything stays on your phone.",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
     "key": "Client meeting",
     "files": [
       "components/purpose-picker.tsx"
@@ -2204,6 +2198,12 @@
     "key": "Deliveries",
     "files": [
       "components/purpose-picker.tsx"
+    ]
+  },
+  {
+    "key": "Delivery and ride apps.",
+    "files": [
+      "app/welcome.tsx"
     ]
   },
   {
@@ -6015,7 +6015,7 @@
     ]
   },
   {
-    "key": "Shifts or blocks (delivery and ride apps)",
+    "key": "Shifts or blocks",
     "files": [
       "app/welcome.tsx"
     ]
@@ -6680,6 +6680,12 @@
     ]
   },
   {
+    "key": "Thank you for all you do. 💚",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Thanks for joining with a friend’s invite. It counts towards their perks.",
     "files": [
       "referral/referral.tsx"
@@ -7157,7 +7163,7 @@
     ]
   },
   {
-    "key": "Trades, sales, care, office. Drives in your hours count as work.",
+    "key": "Trades, care or office work.",
     "files": [
       "app/welcome.tsx"
     ]
@@ -7294,12 +7300,6 @@
     "key": "Tyres & servicing",
     "files": [
       "perks/offers.ts"
-    ]
-  },
-  {
-    "key": "Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber. Car, van, moped or bike.",
-    "files": [
-      "app/welcome.tsx"
     ]
   },
   {
@@ -7871,12 +7871,6 @@
     "key": "You stopped here for the night. Trips to and from it will read “Home”.",
     "files": [
       "components/place-ask-card.tsx"
-    ]
-  },
-  {
-    "key": "You’ll choose which one when you start a shift.",
-    "files": [
-      "app/welcome.tsx"
     ]
   },
   {

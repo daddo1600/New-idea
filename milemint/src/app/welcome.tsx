@@ -99,12 +99,12 @@ const WORK_STYLE_TEXT: Record<WorkStyle, { emoji: string; title: string; detail:
   hours: {
     emoji: '🗓️',
     title: msg('Set hours'),
-    detail: msg('Trades, sales, care, office. Drives in your hours count as work.'),
+    detail: msg('Trades, care or office work.'),
   },
   shifts: {
     emoji: '📦',
-    title: msg('Shifts or blocks (delivery and ride apps)'),
-    detail: msg('Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber. Car, van, moped or bike.'),
+    title: msg('Shifts or blocks'),
+    detail: msg('Delivery and ride apps.'),
   },
   neither: { emoji: '✋', title: msg('Neither'), detail: msg('I’ll swipe each drive myself.') },
 };
@@ -445,9 +445,6 @@ export default function WelcomeScreen() {
             );
           })}
       </View>
-      <ThemedText type="small" themeColor="textSecondary">
-        {t('You’ll choose which one when you start a shift.')}
-      </ThemedText>
     </View>
   );
 
@@ -959,9 +956,8 @@ export default function WelcomeScreen() {
  */
 /**
  * For anyone who visits people at home (care, nursing, support work): keep
- * only the area of a client's address. A card of its own so it isn't missed,
- * and once ticked it says plainly that nothing is saved or shared, and thanks
- * them.
+ * only the area of a client's address. A card of its own so it isn't missed;
+ * once ticked it just says thank you (the line above already says what's kept).
  */
 function ClientPrivacyCheck({ value, onChange }: { value: boolean; onChange: (value: boolean) => void }) {
   const theme = useTheme();
@@ -995,14 +991,8 @@ function ClientPrivacyCheck({ value, onChange }: { value: boolean; onChange: (va
       </View>
       {value && (
         <View style={styles.privacyThanks}>
-          <ThemedText type="small">
-            🔒{' '}
-            {t(
-              'Client addresses are never saved or shared. MileSprout keeps only the area, and everything stays on your phone.',
-            )}
-          </ThemedText>
           <ThemedText type="smallBold" style={{ color: theme.accent }}>
-            {t('Thank you for all you do for the people you care for. 💚')}
+            {t('Thank you for all you do. 💚')}
           </ThemedText>
         </View>
       )}
