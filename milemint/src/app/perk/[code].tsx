@@ -24,7 +24,7 @@ const QR_PAPER = '#FFFFFF';
 
 /**
  * A claimed perk's code: a big QR code to scan at the till, the same code in
- * letters to read out or type in online, and when it expires. "Mark as used"
+ * letters to read out or type in online, and a live countdown. "Demo: till scans"
  * stands in for the till's scan in this demo, to show the whole journey; in
  * the live version a server marks the code used when the partner scans it,
  * and that's when the partner pays.
@@ -169,23 +169,23 @@ export default function PerkCodeScreen() {
         )}
 
         {status === 'active' && (
-          <View style={styles.demo}>
+          // Staff's side, not the driver's: the till marks a code used. Kept small, for showing the journey.
+          <View style={[styles.demo, { borderTopColor: theme.backgroundSelected }]}>
+            <ThemedText type="small" themeColor="textSecondary" style={styles.center}>
+              {t('Demo only — in the live version the till does this')}
+            </ThemedText>
             <PopPress
               accessibilityRole="button"
               onPress={markUsed}
               scale={1.04}
               style={({ pressed }) => [
-                styles.button,
-                styles.outline,
-                { borderColor: theme.accent, opacity: pressed ? 0.8 : 1 },
+                styles.demoButton,
+                { borderColor: theme.backgroundSelected, opacity: pressed ? 0.7 : 1 },
               ]}>
-              <ThemedText type="smallBold" style={{ color: theme.accent }}>
-                {t('Mark as used')}
+              <ThemedText type="small" themeColor="textSecondary">
+                {t('Demo: till scans the code')}
               </ThemedText>
             </PopPress>
-            <ThemedText type="small" themeColor="textSecondary" style={styles.center}>
-              {t('Demo: in the live version, this happens by itself when the till scans the code.')}
-            </ThemedText>
           </View>
         )}
 
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
   countdown: { fontSize: 22, lineHeight: 28, fontWeight: '800', fontVariant: ['tabular-nums'] },
   done: { borderWidth: 1.5 },
   button: { borderRadius: 12, paddingVertical: Spacing.three, alignItems: 'center' },
-  outline: { borderWidth: 1.5 },
-  demo: { gap: Spacing.two },
+  demo: { gap: Spacing.two, borderTopWidth: StyleSheet.hairlineWidth, paddingTop: Spacing.three, alignItems: 'center' },
+  demoButton: { borderWidth: 1, borderRadius: 10, paddingVertical: Spacing.two, paddingHorizontal: Spacing.three },
   center: { textAlign: 'center' },
 });

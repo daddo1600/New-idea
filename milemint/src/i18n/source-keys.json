@@ -2248,7 +2248,13 @@
     ]
   },
   {
-    "key": "Demo: in the live version, this happens by itself when the till scans the code.",
+    "key": "Demo only — in the live version the till does this",
+    "files": [
+      "app/perk/[code].tsx"
+    ]
+  },
+  {
+    "key": "Demo: till scans the code",
     "files": [
       "app/perk/[code].tsx"
     ]
@@ -4010,12 +4016,6 @@
     "key": "Mark as personal",
     "files": [
       "components/practice-tutorial.tsx"
-    ]
-  },
-  {
-    "key": "Mark as used",
-    "files": [
-      "app/perk/[code].tsx"
     ]
   },
   {
