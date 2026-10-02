@@ -79,7 +79,7 @@ export async function scheduleWorkHoursNudge(): Promise<void> {
   await Notifications.scheduleNotificationAsync({
     identifier: WORK_HOURS_NUDGE_ID,
     content: {
-      title: t('Set it and forget it ⏱️'),
+      title: t('Let MileSprout sort for you ⏱️'),
       body: t('Tell MileSprout your work hours once and it sorts most drives for you. Takes 30 seconds.'),
       data: { url: '/settings' },
     },

@@ -81,7 +81,7 @@ export function HomeEmptyLines({ trackingOn, style }: { trackingOn: boolean; sty
   const hours = answers.workHoursEnabled ? summarizeWorkHours(answers.workWeek) : null;
   const purpose = usualPurpose(answers);
   const how = answers.shiftMode
-    ? t('Swipe on your shift when you start work. Every drive in it counts as {{purpose}}.', {
+    ? t('When you start work, swipe to start your shift. Every drive in it counts as {{purpose}}.', {
         purpose: shownPurpose(purpose ?? 'Deliveries', t),
       })
     : hours === 'varies'
@@ -92,7 +92,7 @@ export function HomeEmptyLines({ trackingOn, style }: { trackingOn: boolean; sty
             from: clockTime(hours.start, region),
             to: clockTime(hours.end, region),
           })
-        : t('After each drive, swipe right for business or left for personal.');
+        : t('After each drive, swipe right if it was for work (deliveries, pickups), left if it was personal.');
 
   // Today's rate for their vehicle (the first band, where the rate drops after a distance).
   const rate = ratePeriodFor(toLocalIsoDate(new Date()), region, answers.vehicle)?.tiers[0]?.rate;

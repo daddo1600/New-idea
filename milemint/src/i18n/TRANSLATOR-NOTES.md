@@ -57,9 +57,9 @@ Context for short or ambiguous lines, by the part of the app they come from. Key
 
 - Use: applies a purpose the user typed. Other…: opens a box to type your own purpose. Close: backdrop that closes the sheet.
 - Start / Finish: start and end time of a work slot. Start earlier/later, Finish earlier/later: −/+ buttons moving a time by 30 minutes.
-- Automatic / Private / Worth money / Light on battery: short feature headings.
+- Automatic / Private / Worth money / Uses little battery: short feature headings.
 - Home / Work: saved place names and field labels. {{label}} address: spoken name of the address box.
-- Neither: no set hours and no shifts. Set hours: "I work fixed hours" (noun phrase). Shifts & rounds (delivery apps): courier work pattern.
+- Neither: no set hours and no shifts. Set hours: "I work fixed hours" (noun phrase). Shifts or blocks (delivery and ride apps): courier and rideshare work pattern ("block" is Amazon Flex's word for a booked shift).
 - Car or van / Motorbike / Moped or motorbike / Bicycle: vehicle buttons, must fit a third of the screen width.
 - USA / UK / Canada / Australia: short country names in a half-width tile. miles / km: unit after currency symbol "£ · miles".
 - ↑ {{step}} OF 2: all caps; arrow points at iOS's pop-up. STEP 2 · TRACKING: all-caps eyebrow. Step 1 · Country etc: shown in capitals; translate in normal case.
@@ -68,10 +68,10 @@ Context for short or ambiguous lines, by the part of the app they come from. Key
 **iOS wording** (must match Apple's official translation for the language): Allow While Using App; Change to Always Allow; Open Settings; Location; Always; Never; Ask Next Time Or When I Share; While Using the App; ALLOW LOCATION ACCESS (iOS Settings section header, caps); Allow Once; Keep Only While Using; Settings → Notifications.
 ## Domain helper
 
-- WEEKLY_MESSAGES are jokes/puns: ADAPT, don't translate literally; short, friendly, about sorting this week's drives. Knock-knock: use a local joke format or rewrite. "Sunday scaries" = Sunday-evening dread. "Swipe right on savings"/"Easiest date of the week" = dating-app pun. Shoebox of receipts = messy paper records. '…unless you set your work hours' continues 'Miles don't sort themselves…'.
-- Neutral shift cheers: casual send-offs ("Game on!" = let's start; "Time to roll!" = start driving).
-- Season greetings: 'Spring has sprung' idiom; 'G’day!' = casual hello; Fall/Autumn miles add up = same meaning.
-- 'You’ve earned every penny of it.': "every penny" = every bit; don't name a currency.
+- WEEKLY_MESSAGES: short, plain and friendly reminders to sort this week's drives (no puns since October 2026). Write them the way a friend would say it; "work" drives = the business ones. '…unless you set your work hours' continues 'Miles don't sort themselves…'.
+- Neutral shift cheers: casual send-offs when a shift starts ("Have a good shift!", "Drive safely!"). Use what people really say to a driver or courier heading out, not a literal translation.
+- Season greetings: plain "Spring/Summer/Autumn is here"; Fall and Autumn mean the same.
+- Plain-English wording: the English avoids idioms and slang for second-language readers. Keep the translations just as plain; where a hint names courier work (deliveries, pickups), use the everyday words drivers use in your language.
 - Tax terms keep as written (gloss in brackets OK): Self Assessment, Making Tax Digital/MTD, Mileage Allowance Relief, Car, van and travel expenses, Schedule C Part IV, Car and truck expenses, Form 1040/1040-ES, T2125, T2200, T777, P87, BAS, PAYG, GST, D1 Work-related car expenses, cents per km method, simplified expenses.
 - {{rate}} a mile / a km: rate is a formatted amount like "55p"; "a mile" = per mile.
 - {{year}}: tax-year label "2026", "2026/27", "2026–27". {{date}}: formatted date.

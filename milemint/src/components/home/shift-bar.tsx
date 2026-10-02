@@ -54,7 +54,7 @@ export function ShiftBar({
         on={!!shift}
         revision={revision}
         startLabel={t('Swipe to start shift')}
-        startHint={t('Every drive until you end it counts as business')}
+        startHint={t('Every drive until you end your shift counts as work')}
         endLabel={t('On shift for {{elapsed}}, {{count}} drives', { elapsed, count: drives })}
         onStart={() => {
           setCheer(shiftCheer(region.code, Math.floor(Date.now() / 1000), getLanguage()));
@@ -86,7 +86,7 @@ export function ShiftBar({
               <Text style={styles.shiftSub} numberOfLines={1}>
                 {drives > 0
                   ? t('{{distance}} · {{value}} · {{count}} drives', { distance, value, count: drives })
-                  : t('Every drive counts as business')}
+                  : t('Every drive counts as work')}
               </Text>
             </View>
           </>
@@ -95,8 +95,8 @@ export function ShiftBar({
       {/* No pause: a personal errand mid-shift is just swiped to personal afterwards. */}
       <ThemedText type="small" themeColor="textSecondary" style={styles.shiftHint}>
         {shift
-          ? t('Swipe back to end your shift. A personal errand? Swipe that drive left afterwards.')
-          : t('Every drive until you end it counts as business.')}
+          ? t('Swipe back to end your shift. Stopped for something personal? Swipe that drive left afterwards.')
+          : t('Every drive until you end your shift counts as work.')}
       </ThemedText>
     </View>
   );

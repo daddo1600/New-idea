@@ -2,61 +2,62 @@ import { msg, t } from '../i18n/i18n';
 import type { DistanceUnit } from './regions';
 
 /**
- * Sunday-evening nudges. A different one each week so they stay worth
- * reading. Lines that name the distance unit have a kilometres version
- * (`titleKm`), used where the region counts in km.
+ * Sunday-evening reminders. A different one each week so they stay worth
+ * reading. Plain and friendly rather than punny: many drivers read English
+ * as a second language, and jokes like "Knock knock" or "Swipe right on
+ * savings" don't cross languages. Lines that name the distance unit have a
+ * kilometres version (`titleKm`), used where the region counts in km.
  */
 export const WEEKLY_MESSAGES: readonly { title: string; titleKm?: string; body: string }[] = [
   {
-    title: msg('Your miles called 📞'),
-    titleKm: msg('Your kilometres called 📞'),
-    body: msg('They’d like to be sorted before Monday. It takes a minute.'),
+    title: msg('Your drives are waiting 📋'),
+    body: msg('Sort them before Monday. It takes a minute.'),
   },
   {
-    title: msg('Plot twist: driving pays'),
-    body: msg('Swipe this week’s trips business or personal and see what you’ve earned back.'),
+    title: msg('What did you drive for work?'),
+    body: msg('Sort this week’s drives and see what they’re worth.'),
   },
   {
-    title: msg('Free money alert 💸'),
-    body: msg('Well, technically it’s your money. Sort this week’s drives to claim it back.'),
+    title: msg('Count every work drive 🚗'),
+    body: msg('Sort this week’s drives so none are left out.'),
   },
   {
     title: msg('Your car did the hard part'),
-    body: msg('Now spend one minute taking the credit. Sort this week’s drives.'),
+    body: msg('Now take one minute to sort this week’s drives.'),
   },
   {
-    title: msg('Knock knock 🚪'),
-    body: msg('Who’s there? This week’s drives. They’d like to know if they were business.'),
+    title: msg('A quick question 🙋'),
+    body: msg('Were this week’s drives for work or personal? Swipe to sort them.'),
   },
   {
-    title: msg('Low effort, high reward'),
-    body: msg('A few swipes tonight beats a shoebox of receipts at tax time.'),
+    title: msg('It only takes a minute ⏱️'),
+    body: msg('A few swipes tonight saves you a lot of work at tax time.'),
   },
   {
-    title: msg('Sunday scaries? Not for your taxes'),
-    body: msg('Sort this week’s drives and bank the deduction. Done in a minute.'),
+    title: msg('Sunday check-in 🗓️'),
+    body: msg('Sort this week’s drives and keep your records up to date.'),
   },
   {
-    title: msg('Future you says thanks 🙌'),
+    title: msg('Make tax time easy 🙌'),
     body: msg('Sort this week’s drives now and tax time becomes a two-minute job.'),
   },
   {
     title: msg('Every business mile counts'),
     titleKm: msg('Every business kilometre counts'),
-    body: msg('Literally. We counted them. Come and sort this week’s.'),
+    body: msg('Take a minute to sort this week’s drives.'),
   },
   {
     title: msg('The weekend’s nearly over 🛋️'),
-    body: msg('Before Monday shows up, give this week’s drives a quick sort.'),
+    body: msg('Sort this week’s drives before the new week starts.'),
   },
   {
-    title: msg('Swipe right on savings'),
-    body: msg('Business drives swipe right, personal swipe left. Easiest date of the week.'),
+    title: msg('Swipe right for work 👉'),
+    body: msg('Swipe left for personal. This week’s drives are ready to sort.'),
   },
   {
     title: msg('Miles don’t sort themselves…'),
     titleKm: msg('Kilometres don’t sort themselves…'),
-    body: msg('…unless you set your work hours. Until then, a few swipes will do.'),
+    body: msg('…unless you set your work hours. Until then, it only takes a few swipes.'),
   },
 ];
 

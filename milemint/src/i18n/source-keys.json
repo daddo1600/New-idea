@@ -6,7 +6,7 @@
     ]
   },
   {
-    "key": "…unless you set your work hours. Until then, a few swipes will do.",
+    "key": "…unless you set your work hours. Until then, it only takes a few swipes.",
     "files": [
       "domain/reminders.ts"
     ]
@@ -18,15 +18,15 @@
     ]
   },
   {
-    "key": "{{amount}} back in your pocket",
-    "files": [
-      "milestones/copy.ts"
-    ]
-  },
-  {
     "key": "{{amount}} found",
     "files": [
       "components/home/summary-card.tsx"
+    ]
+  },
+  {
+    "key": "{{amount}} found for you",
+    "files": [
+      "milestones/copy.ts"
     ]
   },
   {
@@ -748,15 +748,15 @@
     ]
   },
   {
-    "key": "A (slightly cheeky) nudge on Sunday evening to sort the week’s drives.",
-    "files": [
-      "app/(tabs)/settings.tsx"
-    ]
-  },
-  {
     "key": "A claim line for every business trip (date, from, to, purpose, distance, rate, amount, parking and tolls) for your employer’s expense system.",
     "files": [
       "app/report.tsx"
+    ]
+  },
+  {
+    "key": "A drive is part of the shift if it started during the shift. If it goes past the end, it’s cut there.",
+    "files": [
+      "components/shift-row.tsx"
     ]
   },
   {
@@ -766,7 +766,7 @@
     ]
   },
   {
-    "key": "A few swipes tonight beats a shoebox of receipts at tax time.",
+    "key": "A few swipes tonight saves you a lot of work at tax time.",
     "files": [
       "domain/reminders.ts"
     ]
@@ -808,15 +808,9 @@
     ]
   },
   {
-    "key": "A pot that shows what to put aside for tax. Yours for good, even without Pro.",
+    "key": "A quick question 🙋",
     "files": [
-      "referral/perks.ts"
-    ]
-  },
-  {
-    "key": "A quick (slightly cheeky) reminder each Sunday evening to sort the week’s drives, so nothing goes unclaimed.",
-    "files": [
-      "components/reminder-ask.tsx"
+      "domain/reminders.ts"
     ]
   },
   {
@@ -829,6 +823,18 @@
     "key": "A ready-to-file report for you or your accountant: your Schedule C Part IV totals, the deduction at each {{authority}} rate, and the full trip log showing which trips were recorded while driving and which were edited.",
     "files": [
       "app/report.tsx"
+    ]
+  },
+  {
+    "key": "A short reminder each Sunday evening to sort the week’s drives, so you don’t miss anything you can claim.",
+    "files": [
+      "components/reminder-ask.tsx"
+    ]
+  },
+  {
+    "key": "A short reminder on Sunday evening to sort the week’s drives.",
+    "files": [
+      "app/(tabs)/settings.tsx"
     ]
   },
   {
@@ -950,7 +956,7 @@
     ]
   },
   {
-    "key": "After each drive, swipe right for business or left for personal.",
+    "key": "After each drive, swipe right if it was for work (deliveries, pickups), left if it was personal.",
     "files": [
       "components/home-empty.tsx"
     ]
@@ -1190,7 +1196,7 @@
     ]
   },
   {
-    "key": "Autumn miles add up 🍂",
+    "key": "Autumn is here 🍂",
     "files": [
       "domain/seasons.ts"
     ]
@@ -1304,12 +1310,6 @@
     ]
   },
   {
-    "key": "Before Monday shows up, give this week’s drives a quick sort.",
-    "files": [
-      "domain/reminders.ts"
-    ]
-  },
-  {
     "key": "Between workplaces",
     "files": [
       "components/purpose-picker.tsx"
@@ -1338,12 +1338,6 @@
       "components/trips/row-parts.tsx",
       "components/trips/selectable-trip-row.tsx",
       "components/trips/trip-row.tsx"
-    ]
-  },
-  {
-    "key": "Business drives swipe right, personal swipe left. Easiest date of the week.",
-    "files": [
-      "domain/reminders.ts"
     ]
   },
   {
@@ -1793,6 +1787,12 @@
     ]
   },
   {
+    "key": "Count every work drive 🚗",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
     "key": "Country",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -1980,6 +1980,12 @@
     ]
   },
   {
+    "key": "Drive safely! 🚗",
+    "files": [
+      "domain/cheers.ts"
+    ]
+  },
+  {
     "key": "Drives",
     "files": [
       "app/(tabs)/_layout.tsx"
@@ -2007,12 +2013,6 @@
     "key": "Drives in your work hours are sorted as business for you.",
     "files": [
       "components/home-empty.tsx"
-    ]
-  },
-  {
-    "key": "Drives join or leave the shift by when they started. A drive past the end is cut there.",
-    "files": [
-      "components/shift-row.tsx"
     ]
   },
   {
@@ -2366,9 +2366,15 @@
     ]
   },
   {
-    "key": "Every drive counts as business",
+    "key": "Every drive counts as work",
     "files": [
       "components/home/shift-bar.tsx"
+    ]
+  },
+  {
+    "key": "Every drive in it counted as work.",
+    "files": [
+      "domain/milestones.ts"
     ]
   },
   {
@@ -2378,26 +2384,20 @@
     ]
   },
   {
-    "key": "Every drive of it counted as business.",
-    "files": [
-      "domain/milestones.ts"
-    ]
-  },
-  {
     "key": "Every drive sorted. Tax time just got easier.",
     "files": [
       "domain/milestones.ts"
     ]
   },
   {
-    "key": "Every drive until you end it counts as business",
+    "key": "Every drive until you end your shift counts as work",
     "files": [
       "components/home/shift-bar.tsx",
       "components/practice-tutorial.tsx"
     ]
   },
   {
-    "key": "Every drive until you end it counts as business.",
+    "key": "Every drive until you end your shift counts as work.",
     "files": [
       "components/home/shift-bar.tsx",
       "components/practice-tutorial.tsx"
@@ -2506,7 +2506,7 @@
     ]
   },
   {
-    "key": "Fall miles add up 🍂",
+    "key": "Fall is here 🍂",
     "files": [
       "domain/seasons.ts"
     ]
@@ -2590,7 +2590,7 @@
     ]
   },
   {
-    "key": "For delivery and courier work (Uber Eats, Deliveroo, Amazon Flex, Evri, DPD and the like): a Start shift button on the home screen. Every drive in a shift is business.",
+    "key": "For delivery and ride app work (Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber and others): a Start shift button on the home screen. Every drive in a shift counts as work.",
     "files": [
       "app/(tabs)/settings.tsx"
     ]
@@ -2654,12 +2654,6 @@
     "files": [
       "app/(tabs)/settings.tsx",
       "app/pro.tsx"
-    ]
-  },
-  {
-    "key": "Free money alert 💸",
-    "files": [
-      "domain/reminders.ts"
     ]
   },
   {
@@ -2727,24 +2721,6 @@
     "key": "Fuel and oil",
     "files": [
       "domain/logbook.ts"
-    ]
-  },
-  {
-    "key": "Future you says thanks 🙌",
-    "files": [
-      "domain/reminders.ts"
-    ]
-  },
-  {
-    "key": "G’day! Summer on the road ☀️",
-    "files": [
-      "domain/seasons.ts"
-    ]
-  },
-  {
-    "key": "Game on! 🎯",
-    "files": [
-      "domain/cheers.ts"
     ]
   },
   {
@@ -2820,6 +2796,12 @@
     ]
   },
   {
+    "key": "Great!",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Happy Halloween 🎃",
     "files": [
       "domain/seasons.ts"
@@ -2838,9 +2820,9 @@
     ]
   },
   {
-    "key": "Have to hand: your employer’s name and PAYE reference (on your payslip or P60), your National Insurance number, and for each tax year your business miles and the mileage allowance you were paid. The P87 summary below has the figures.",
+    "key": "Have a good shift! 👋",
     "files": [
-      "app/claim-relief.tsx"
+      "domain/cheers.ts"
     ]
   },
   {
@@ -3109,7 +3091,7 @@
     ]
   },
   {
-    "key": "iOS only offers “Always” in Settings. It takes ten seconds, and MileSprout carries on by itself when you come back.",
+    "key": "iOS only offers “Always” in Settings. It takes ten seconds, and MileSprout continues by itself when you come back.",
     "files": [
       "components/always-guide.tsx"
     ]
@@ -3130,6 +3112,12 @@
     "key": "Is this work? {{place}}",
     "files": [
       "components/place-ask-card.tsx"
+    ]
+  },
+  {
+    "key": "It only takes a minute ⏱️",
+    "files": [
+      "domain/reminders.ts"
     ]
   },
   {
@@ -3243,12 +3231,6 @@
     ]
   },
   {
-    "key": "Knock knock 🚪",
-    "files": [
-      "domain/reminders.ts"
-    ]
-  },
-  {
     "key": "Language",
     "files": [
       "app/(tabs)/settings.tsx",
@@ -3263,7 +3245,7 @@
     ]
   },
   {
-    "key": "Last call: make sure every business drive is in MileSprout before {{date}}.",
+    "key": "Last chance: make sure every business drive is in MileSprout before {{date}}.",
     "files": [
       "domain/deadlines.ts"
     ]
@@ -3305,6 +3287,12 @@
     ]
   },
   {
+    "key": "Let MileSprout sort for you ⏱️",
+    "files": [
+      "reminders/weekly.ts"
+    ]
+  },
+  {
     "key": "Let’s do this! 💪",
     "files": [
       "domain/cheers.ts"
@@ -3327,18 +3315,6 @@
     "key": "Light",
     "files": [
       "app/(tabs)/settings.tsx"
-    ]
-  },
-  {
-    "key": "Light on battery",
-    "files": [
-      "app/setup-tracking.tsx"
-    ]
-  },
-  {
-    "key": "Literally. We counted them. Come and sort this week’s.",
-    "files": [
-      "domain/reminders.ts"
     ]
   },
   {
@@ -3391,7 +3367,7 @@
     ]
   },
   {
-    "key": "Low effort, high reward",
+    "key": "Make tax time easy 🙌",
     "files": [
       "domain/reminders.ts"
     ]
@@ -3532,25 +3508,25 @@
     ]
   },
   {
-    "key": "MileSprout has now found {{amount}} in business mileage for you. Hard work, properly rewarded.",
+    "key": "MileSprout has now found {{amount}} in business mileage for you. It all counts at tax time.",
     "files": [
       "milestones/copy.ts"
     ]
   },
   {
-    "key": "MileSprout has now found {{amount}} in business mileage for you. Nicely done. Keep it rolling.",
+    "key": "MileSprout has now found {{amount}} in business mileage for you. That’s your hard work, counted.",
     "files": [
       "milestones/copy.ts"
     ]
   },
   {
-    "key": "MileSprout has now found {{amount}} in business mileage for you. That’s real money back at tax time.",
+    "key": "MileSprout has now found {{amount}} in business mileage for you. Well done. Keep going.",
     "files": [
       "milestones/copy.ts"
     ]
   },
   {
-    "key": "MileSprout has now found {{amount}} in business mileage for you. You’ve earned every penny of it.",
+    "key": "MileSprout has now found {{amount}} in business mileage for you. You earned all of it.",
     "files": [
       "milestones/copy.ts"
     ]
@@ -3574,12 +3550,6 @@
     ]
   },
   {
-    "key": "MileSprout is on the job. Just drive.",
-    "files": [
-      "domain/milestones.ts"
-    ]
-  },
-  {
     "key": "MileSprout logged",
     "files": [
       "app/compare.tsx"
@@ -3589,6 +3559,12 @@
     "key": "MileSprout logs your drives automatically and works out what they’re worth at tax time.",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "MileSprout logs your drives for you. Just drive.",
+    "files": [
+      "domain/milestones.ts"
     ]
   },
   {
@@ -3810,7 +3786,7 @@
     ]
   },
   {
-    "key": "Never miss a mile.",
+    "key": "Never miss a drive.",
     "files": [
       "app/welcome.tsx"
     ]
@@ -3837,12 +3813,6 @@
     "key": "Next month",
     "files": [
       "components/calendar-picker.tsx"
-    ]
-  },
-  {
-    "key": "Nice one!",
-    "files": [
-      "app/welcome.tsx"
     ]
   },
   {
@@ -4016,13 +3986,19 @@
     ]
   },
   {
-    "key": "Now a work drive. Work drives are worth money back.",
+    "key": "Now a delivery. Deliveries and pickups are work drives, and they count at tax time.",
     "files": [
       "components/practice-tutorial.tsx"
     ]
   },
   {
-    "key": "Now spend one minute taking the credit. Sort this week’s drives.",
+    "key": "Now a work drive. Work drives count at tax time.",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
+    "key": "Now take one minute to sort this week’s drives.",
     "files": [
       "domain/reminders.ts"
     ]
@@ -4491,12 +4467,6 @@
     ]
   },
   {
-    "key": "Plot twist: driving pays",
-    "files": [
-      "domain/reminders.ts"
-    ]
-  },
-  {
     "key": "Practice drive · not saved",
     "files": [
       "components/practice-tutorial.tsx"
@@ -4566,7 +4536,7 @@
     ]
   },
   {
-    "key": "Ready when you are",
+    "key": "Ready for your first drive",
     "files": [
       "app/(tabs)/index.tsx"
     ]
@@ -5011,12 +4981,6 @@
     ]
   },
   {
-    "key": "Set it and forget it ⏱️",
-    "files": [
-      "reminders/weekly.ts"
-    ]
-  },
-  {
     "key": "Set location to “Always” and MileSprout logs every drive, even when it’s closed.",
     "files": [
       "app/welcome.tsx"
@@ -5102,7 +5066,7 @@
     ]
   },
   {
-    "key": "Shifts & rounds (delivery apps)",
+    "key": "Shifts or blocks (delivery and ride apps)",
     "files": [
       "app/welcome.tsx"
     ]
@@ -5123,6 +5087,12 @@
     "key": "Show shift on lock screen",
     "files": [
       "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Shows how much to save for tax. Yours to keep, even without Pro.",
+    "files": [
+      "referral/perks.ts"
     ]
   },
   {
@@ -5187,13 +5157,37 @@
     ]
   },
   {
-    "key": "Sort this week’s drives and bank the deduction. Done in a minute.",
+    "key": "Sort them before Monday. It takes a minute.",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Sort this week’s drives and keep your records up to date.",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Sort this week’s drives and see what they’re worth.",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Sort this week’s drives before the new week starts.",
     "files": [
       "domain/reminders.ts"
     ]
   },
   {
     "key": "Sort this week’s drives now and tax time becomes a two-minute job.",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
+    "key": "Sort this week’s drives so none are left out.",
     "files": [
       "domain/reminders.ts"
     ]
@@ -5211,7 +5205,7 @@
     ]
   },
   {
-    "key": "Sort your drives each week and your figures are ready whenever a deadline comes round. MileSprout reminds you two months, one month and one week before the tax year ends.",
+    "key": "Sort your drives each week and your figures are ready for every deadline. MileSprout reminds you two months, one month and one week before the tax year ends.",
     "files": [
       "app/tax-dates.tsx"
     ]
@@ -5247,7 +5241,7 @@
     ]
   },
   {
-    "key": "Spring has sprung 🌸",
+    "key": "Spring is here 🌸",
     "files": [
       "domain/seasons.ts"
     ]
@@ -5374,6 +5368,12 @@
     ]
   },
   {
+    "key": "Stay warm and drive safely ❄️",
+    "files": [
+      "domain/seasons.ts"
+    ]
+  },
+  {
     "key": "Step {{step}} of {{total}}",
     "files": [
       "app/welcome.tsx",
@@ -5430,21 +5430,27 @@
     ]
   },
   {
+    "key": "Summer is here ☀️",
+    "files": [
+      "domain/seasons.ts"
+    ]
+  },
+  {
+    "key": "Summer on the road ☀️",
+    "files": [
+      "domain/seasons.ts"
+    ]
+  },
+  {
     "key": "Sun",
     "files": [
       "app/(tabs)/settings.tsx"
     ]
   },
   {
-    "key": "Sunday scaries? Not for your taxes",
+    "key": "Sunday check-in 🗓️",
     "files": [
       "domain/reminders.ts"
-    ]
-  },
-  {
-    "key": "Sunny days, business miles ☀️",
-    "files": [
-      "domain/seasons.ts"
     ]
   },
   {
@@ -5460,43 +5466,37 @@
     ]
   },
   {
-    "key": "Swipe back to end your shift. A personal errand? Swipe that drive left afterwards.",
+    "key": "Swipe back to end your shift. Stopped for something personal? Swipe that drive left afterwards.",
     "files": [
       "components/home/shift-bar.tsx"
     ]
   },
   {
-    "key": "Swipe left for personal",
-    "files": [
-      "components/practice-tutorial.tsx"
-    ]
-  },
-  {
-    "key": "Swipe on your shift when you start work. Every drive in it counts as {{purpose}}.",
-    "files": [
-      "components/home-empty.tsx"
-    ]
-  },
-  {
-    "key": "Swipe right for business",
-    "files": [
-      "components/practice-tutorial.tsx"
-    ]
-  },
-  {
-    "key": "Swipe right on savings",
+    "key": "Swipe left for personal. This week’s drives are ready to sort.",
     "files": [
       "domain/reminders.ts"
     ]
   },
   {
-    "key": "Swipe this week’s trips business or personal and see what you’ve earned back.",
+    "key": "Swipe left if it was personal",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
+    "key": "Swipe right for work 👉",
     "files": [
       "domain/reminders.ts"
     ]
   },
   {
-    "key": "Swipe to sort business trips",
+    "key": "Swipe right if it was for work",
+    "files": [
+      "components/practice-tutorial.tsx"
+    ]
+  },
+  {
+    "key": "Swipe to sort your trips",
     "files": [
       "app/pro.tsx"
     ]
@@ -5530,6 +5530,12 @@
     "key": "System follows your iPhone’s light or dark setting.",
     "files": [
       "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Take a minute to sort this week’s drives.",
+    "files": [
+      "domain/reminders.ts"
     ]
   },
   {
@@ -5814,12 +5820,6 @@
     ]
   },
   {
-    "key": "They’d like to be sorted before Monday. It takes a minute.",
-    "files": [
-      "domain/reminders.ts"
-    ]
-  },
-  {
     "key": "This Apple Account doesn’t have MileSprout Pro.",
     "files": [
       "app/(tabs)/settings.tsx",
@@ -5911,12 +5911,6 @@
     ]
   },
   {
-    "key": "Time to roll! 🚗",
-    "files": [
-      "domain/cheers.ts"
-    ]
-  },
-  {
     "key": "to",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -5999,6 +5993,12 @@
     ]
   },
   {
+    "key": "Tracking is always free: every drive, with no monthly limit. Pro is for your report and exports.",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
     "key": "Tracking may have stopped",
     "files": [
       "components/tracking-health-card.tsx",
@@ -6009,12 +6009,6 @@
     "key": "Tracking on",
     "files": [
       "components/home/tracking-card.tsx"
-    ]
-  },
-  {
-    "key": "Tracking stays free for good: every drive, with no monthly limit. Pro is for your report and exports.",
-    "files": [
-      "app/pro.tsx"
     ]
   },
   {
@@ -6242,6 +6236,12 @@
     ]
   },
   {
+    "key": "Uses little battery",
+    "files": [
+      "app/setup-tracking.tsx"
+    ]
+  },
+  {
     "key": "Usual business purpose",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -6292,7 +6292,7 @@
     ]
   },
   {
-    "key": "Want a Sunday nudge?",
+    "key": "Want a reminder on Sundays?",
     "files": [
       "components/reminder-ask.tsx"
     ]
@@ -6341,7 +6341,7 @@
     ]
   },
   {
-    "key": "Well, technically it’s your money. Sort this week’s drives to claim it back.",
+    "key": "Were this week’s drives for work or personal? Swipe to sort them.",
     "files": [
       "domain/reminders.ts"
     ]
@@ -6356,6 +6356,12 @@
     "key": "What are you driving?",
     "files": [
       "app/(tabs)/index.tsx"
+    ]
+  },
+  {
+    "key": "What did you drive for work?",
+    "files": [
+      "domain/reminders.ts"
     ]
   },
   {
@@ -6380,6 +6386,12 @@
     "key": "When and how to claim with {{authority}}",
     "files": [
       "app/(tabs)/money.tsx"
+    ]
+  },
+  {
+    "key": "When you start work, swipe to start your shift. Every drive in it counts as {{purpose}}.",
+    "files": [
+      "components/home-empty.tsx"
     ]
   },
   {
@@ -6422,12 +6434,6 @@
     "key": "While Using the App",
     "files": [
       "components/always-guide.tsx"
-    ]
-  },
-  {
-    "key": "Who’s there? This week’s drives. They’d like to know if they were business.",
-    "files": [
-      "domain/reminders.ts"
     ]
   },
   {
@@ -6478,12 +6484,6 @@
     "key": "worth about {{amount}}",
     "files": [
       "app/compare.tsx"
-    ]
-  },
-  {
-    "key": "Wrap up warm out there ❄️",
-    "files": [
-      "domain/seasons.ts"
     ]
   },
   {
@@ -6576,6 +6576,12 @@
     "key": "You’ll choose which one when you start a shift.",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "You’ll need: your employer’s name and PAYE reference (on your payslip or P60), your National Insurance number, and for each tax year your business miles and the mileage allowance you were paid. The P87 summary below has the figures.",
+    "files": [
+      "app/claim-relief.tsx"
     ]
   },
   {
@@ -6675,6 +6681,12 @@
     ]
   },
   {
+    "key": "Your drives are waiting 📋",
+    "files": [
+      "domain/reminders.ts"
+    ]
+  },
+  {
     "key": "Your drives stay. Only the logbook period and its odometer readings are deleted.",
     "files": [
       "app/logbook.tsx"
@@ -6761,12 +6773,6 @@
     ]
   },
   {
-    "key": "Your kilometres called 📞",
-    "files": [
-      "domain/reminders.ts"
-    ]
-  },
-  {
     "key": "Your mileage log for {{authority}}",
     "files": [
       "app/(tabs)/money.tsx"
@@ -6779,7 +6785,7 @@
     ]
   },
   {
-    "key": "Your mileage report is ready. Export it now so the figures are to hand.",
+    "key": "Your mileage report is ready. Export it now so you have the figures ready.",
     "files": [
       "domain/deadlines.ts"
     ]
@@ -6788,12 +6794,6 @@
     "key": "Your mileage report, ready for tax time",
     "files": [
       "app/pro.tsx"
-    ]
-  },
-  {
-    "key": "Your miles called 📞",
-    "files": [
-      "domain/reminders.ts"
     ]
   },
   {

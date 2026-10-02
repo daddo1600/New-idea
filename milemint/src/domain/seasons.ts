@@ -32,11 +32,11 @@ const GREETINGS: Record<SeasonId, (code: RegionCode) => string> = {
   festive: () => msg('Happy holidays from MileSprout 🎁'),
   'new-year': () => msg('Happy New Year 🎆'),
   halloween: () => msg('Happy Halloween 🎃'),
-  'aussie-summer': () => msg('G’day! Summer on the road ☀️'),
-  winter: () => msg('Wrap up warm out there ❄️'),
-  spring: () => msg('Spring has sprung 🌸'),
-  summer: () => msg('Sunny days, business miles ☀️'),
-  autumn: (code) => (code === 'US' || code === 'CA' ? msg('Fall miles add up 🍂') : msg('Autumn miles add up 🍂')),
+  'aussie-summer': () => msg('Summer on the road ☀️'),
+  winter: () => msg('Stay warm and drive safely ❄️'),
+  spring: () => msg('Spring is here 🌸'),
+  summer: () => msg('Summer is here ☀️'),
+  autumn: (code) => (code === 'US' || code === 'CA' ? msg('Fall is here 🍂') : msg('Autumn is here 🍂')),
 };
 
 /** The season to dress the opening in on `date`, or null for the everyday look. */

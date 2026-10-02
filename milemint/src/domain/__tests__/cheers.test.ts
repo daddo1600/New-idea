@@ -1,12 +1,17 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { SHIFT_CHEERS, shiftCheer } from '../cheers';
+import { NEUTRAL_CHEERS, SHIFT_CHEERS, shiftCheer } from '../cheers';
 
 describe('shiftCheer', () => {
-  it('speaks the local lingo', () => {
+  it('keeps a light local touch in plain English', () => {
     expect(SHIFT_CHEERS.GB).toContain(shiftCheer('GB', 0));
-    expect(shiftCheer('GB', 0)).toBe('Tally ho! 🚗');
-    expect(shiftCheer('AU', 0)).toBe('Righto, let’s go! 👍');
+    expect(shiftCheer('GB', 0)).toBe('Off you go! 🚗');
+    expect(shiftCheer('AU', 0)).toBe('No worries, let’s go! 🚗');
+  });
+
+  it('avoids slang a second-language speaker may not know', () => {
+    const all = [...Object.values(SHIFT_CHEERS).flat(), ...NEUTRAL_CHEERS].join(' ');
+    expect(all).not.toMatch(/tally ho|crack on|chocks|giv’er|giddy|she’ll be right|bread|pedal|game on|too easy/i);
   });
 
   it('rotates through every cheer and wraps around', () => {

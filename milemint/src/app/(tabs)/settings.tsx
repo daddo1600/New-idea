@@ -502,7 +502,7 @@ function ReminderSection() {
           <View style={styles.flex}>
             <ThemedText type="smallBold">{t('Weekly reminder')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              {t('A (slightly cheeky) nudge on Sunday evening to sort the week’s drives.')}
+              {t('A short reminder on Sunday evening to sort the week’s drives.')}
             </ThemedText>
           </View>
           <Switch
@@ -944,7 +944,7 @@ function DrivingSection() {
             <ThemedText type="smallBold">{t('Shift mode')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
               {t(
-                'For delivery and courier work (Uber Eats, Deliveroo, Amazon Flex, Evri, DPD and the like): a Start shift button on the home screen. Every drive in a shift is business.',
+                'For delivery and ride app work (Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber and others): a Start shift button on the home screen. Every drive in a shift counts as work.',
               )}
             </ThemedText>
           </View>
