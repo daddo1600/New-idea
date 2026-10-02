@@ -10,6 +10,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
+import { GoldTrace } from '@/components/gold-trace';
 import { StepIcon } from '@/components/step-header';
 import { Spacing } from '@/constants/theme';
 import { useT } from '@/i18n/i18n';
@@ -131,6 +132,8 @@ export function MotionCoach() {
           ]}>
           <Animated.Text style={[styles.coachArrow, arrow]}>↑</Animated.Text>
           <View style={styles.coachPill}>
+            {/* The same gold light as the language button, quicker here: it's the one thing to tap. */}
+            <GoldTrace stroke={3} lapMs={1400} restMs={500} restingOpacity={0.9} />
             <Text style={styles.coachText} numberOfLines={2} adjustsFontSizeToFit>
               {t('Tap “{{button}}”', { button: t('Allow') })}
             </Text>
@@ -205,8 +208,6 @@ const styles = StyleSheet.create({
   coachArrow: { color: '#FACC15', fontSize: 48, lineHeight: 52, fontWeight: '800' },
   // Gold-outlined, like the button it points at.
   coachPill: {
-    borderWidth: 3,
-    borderColor: '#FACC15',
     borderRadius: 999,
     backgroundColor: 'rgba(1,28,20,0.85)',
     paddingHorizontal: Spacing.three,
