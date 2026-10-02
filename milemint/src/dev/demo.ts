@@ -160,12 +160,15 @@ const DEMO_NO_EARNINGS = demoFlag('noearnings');
 
 /** A believable 10 weeks of earnings (all apps together, whole units), oldest first; one week skipped. */
 const DEMO_EARNINGS: (number | null)[] = [1180, 1045, 1260, 990, null, 1120, 1210, 1075, 1150, 1300];
+/** The courier's: five shifts a week, mostly evenings. */
+const DEMO_COURIER_EARNINGS: (number | null)[] = [415, 452, 398, 470, null, 436, 488, 421, 447, 462];
 
 async function seedDemoEarnings(db: SQLiteDatabase): Promise<void> {
   const thisWeek = weekStartOf(toLocalIsoDate(new Date()));
-  for (const [index, amount] of DEMO_EARNINGS.entries()) {
+  const earnings = DEMO_COURIER ? DEMO_COURIER_EARNINGS : DEMO_EARNINGS;
+  for (const [index, amount] of earnings.entries()) {
     if (amount === null) continue;
-    await saveWeeklyEarnings(db, addDays(thisWeek, -7 * (DEMO_EARNINGS.length - 1 - index)), amount * 100);
+    await saveWeeklyEarnings(db, addDays(thisWeek, -7 * (earnings.length - 1 - index)), amount * 100);
   }
   await updateSettings(db, { setAsideReminder: true, setAsideReminderDefaulted: true });
 }
@@ -245,18 +248,25 @@ function historyTrips(): DemoTrip[] {
 /** Where the courier demo's drives go, in Leeds (any coordinates do for the shift map). */
 const SPOTS: Record<string, LatLng> = {
   Home: { latitude: 53.8243, longitude: -1.5715 },
-  'McDonald’s, Kirkstall Rd': { latitude: 53.8027, longitude: -1.5727 },
+  'Kirkstall Rd': { latitude: 53.8027, longitude: -1.5727 },
   'Burley Rd': { latitude: 53.8086, longitude: -1.5797 },
-  'Nando’s, Headingley': { latitude: 53.8196, longitude: -1.5768 },
+  'Otley Rd, Headingley': { latitude: 53.8196, longitude: -1.5768 },
   'Cardigan Rd': { latitude: 53.8143, longitude: -1.5846 },
-  'Wagamama, Trinity Leeds': { latitude: 53.7962, longitude: -1.5442 },
+  'Boar Lane, City Centre': { latitude: 53.7962, longitude: -1.5442 },
   'Hyde Park': { latitude: 53.8106, longitude: -1.5664 },
-  'Five Guys, The Headrow': { latitude: 53.8004, longitude: -1.5459 },
+  'The Headrow, City Centre': { latitude: 53.8004, longitude: -1.5459 },
   'Meanwood Rd': { latitude: 53.8195, longitude: -1.5531 },
   'Chapel Allerton': { latitude: 53.8296, longitude: -1.5376 },
-  'KFC, Kirkstall': { latitude: 53.8155, longitude: -1.6012 },
+  'Bridge Rd, Kirkstall': { latitude: 53.8155, longitude: -1.6012 },
   'Bramley': { latitude: 53.8102, longitude: -1.6371 },
+  Armley: { latitude: 53.799, longitude: -1.593 },
+  Woodhouse: { latitude: 53.809, longitude: -1.553 },
+  Horsforth: { latitude: 53.837, longitude: -1.639 },
 };
+
+/** Courier history: where orders are picked up, and where they go (street names, no brands). */
+const PICKUPS = ['Kirkstall Rd', 'Otley Rd, Headingley', 'Boar Lane, City Centre', 'The Headrow, City Centre', 'Bridge Rd, Kirkstall'];
+const DROPS = ['Burley Rd', 'Cardigan Rd', 'Hyde Park', 'Meanwood Rd', 'Chapel Allerton', 'Bramley', 'Armley', 'Woodhouse', 'Horsforth'];
 
 type CourierLeg = [startMinute: number, minutes: number, from: string, to: string, miles: number];
 
@@ -281,14 +291,14 @@ const COURIER_SHIFTS: CourierShift[] = [
     start: 17 * 60 + 30,
     end: 21 * 60 + 49,
     legs: [
-      [17 * 60 + 34, 11, 'Home', 'McDonald’s, Kirkstall Rd', 2.6],
-      [17 * 60 + 58, 8, 'McDonald’s, Kirkstall Rd', 'Burley Rd', 1.4],
-      [18 * 60 + 31, 7, 'Burley Rd', 'Nando’s, Headingley', 1.2],
-      [18 * 60 + 52, 10, 'Nando’s, Headingley', 'Cardigan Rd', 1.9],
-      [19 * 60 + 40, 12, 'Cardigan Rd', 'Wagamama, Trinity Leeds', 2.3],
-      [20 * 60 + 5, 11, 'Wagamama, Trinity Leeds', 'Hyde Park', 1.8],
-      [21 * 60 + 10, 9, 'Hyde Park', 'Five Guys, The Headrow', 1.5],
-      [21 * 60 + 36, 13, 'Five Guys, The Headrow', 'Meanwood Rd', 2.7],
+      [17 * 60 + 34, 11, 'Home', 'Kirkstall Rd', 2.6],
+      [17 * 60 + 58, 8, 'Kirkstall Rd', 'Burley Rd', 1.4],
+      [18 * 60 + 31, 7, 'Burley Rd', 'Otley Rd, Headingley', 1.2],
+      [18 * 60 + 52, 10, 'Otley Rd, Headingley', 'Cardigan Rd', 1.9],
+      [19 * 60 + 40, 12, 'Cardigan Rd', 'Boar Lane, City Centre', 2.3],
+      [20 * 60 + 5, 11, 'Boar Lane, City Centre', 'Hyde Park', 1.8],
+      [21 * 60 + 10, 9, 'Hyde Park', 'The Headrow, City Centre', 1.5],
+      [21 * 60 + 36, 13, 'The Headrow, City Centre', 'Meanwood Rd', 2.7],
     ],
     after: [21 * 60 + 49, 13, 'Meanwood Rd', 'Home', 2.2],
   },
@@ -297,14 +307,54 @@ const COURIER_SHIFTS: CourierShift[] = [
     start: 21 * 60 + 2,
     end: 24 * 60 + 41,
     legs: [
-      [21 * 60 + 6, 14, 'Home', 'KFC, Kirkstall', 2.4],
-      [21 * 60 + 41, 12, 'KFC, Kirkstall', 'Bramley', 2.1],
-      [22 * 60 + 30, 15, 'Bramley', 'Five Guys, The Headrow', 4.3],
-      [23 * 60 + 18, 14, 'Five Guys, The Headrow', 'Chapel Allerton', 2.6],
+      [21 * 60 + 6, 14, 'Home', 'Bridge Rd, Kirkstall', 2.4],
+      [21 * 60 + 41, 12, 'Bridge Rd, Kirkstall', 'Bramley', 2.1],
+      [22 * 60 + 30, 15, 'Bramley', 'The Headrow, City Centre', 4.3],
+      [23 * 60 + 18, 14, 'The Headrow, City Centre', 'Chapel Allerton', 2.6],
       [24 * 60 + 20, 16, 'Chapel Allerton', 'Home', 1.6],
     ],
   },
 ];
+
+/**
+ * The courier's earlier shifts this year, so the totals look like a real
+ * courier's by autumn: evenings on Monday and Wednesday to Friday, lunch and
+ * evening on Saturday; pickup, drop, pickup, drop… and home. Deterministic.
+ */
+function courierHistory(): CourierShift[] {
+  const shifts: CourierShift[] = [];
+  const today = new Date();
+  const days = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 1).getTime()) / 86_400_000);
+  for (let daysAgo = 3; daysAgo <= days; daysAgo++) {
+    const day = new Date(today);
+    day.setDate(day.getDate() - daysAgo);
+    const weekday = day.getDay();
+    if (weekday === 0 || weekday === 2) continue;
+    const start = (weekday === 6 ? 11 * 60 + 45 : 17 * 60) + ((daysAgo * 13) % 40);
+    const orders = weekday === 6 ? 8 : 3 + (daysAgo % 3);
+    const legs: CourierLeg[] = [];
+    let minute = start + 4;
+    let at = 'Home';
+    for (let order = 0; order <= orders * 2; order++) {
+      const to =
+        order === orders * 2
+          ? 'Home'
+          : order % 2 === 0
+            ? PICKUPS[(daysAgo + order * 3) % PICKUPS.length]
+            : DROPS[(daysAgo * 7 + order * 5) % DROPS.length];
+      if (to === at) continue;
+      // Roads aren't straight: about a third longer than as the crow flies.
+      const miles = Math.max(0.6, Math.round((distanceMeters(SPOTS[at], SPOTS[to]) / 1609.344) * 13.5) / 10);
+      const minutes = Math.round(4 + miles * 3.5);
+      legs.push([minute, minutes, at, to, miles]);
+      minute += minutes + (order % 2 === 0 ? 4 + ((daysAgo + order) % 5) : 8 + ((daysAgo * order) % 14));
+      at = to;
+    }
+    const last = legs[legs.length - 1];
+    shifts.push({ daysAgo, start, end: last[0] + last[1] + 2, legs });
+  }
+  return shifts;
+}
 
 /** Where the `?demo=places` drives go, under the street names they'd be logged with. */
 const PLACE_SPOTS: Record<string, LatLng> = {
@@ -372,7 +422,7 @@ async function seedCourierShifts(db: SQLiteDatabase, placeIds: Map<string, strin
       demoRoute(from, to),
     );
   };
-  for (const [index, shift] of COURIER_SHIFTS.entries()) {
+  for (const [index, shift] of [...COURIER_SHIFTS, ...courierHistory()].entries()) {
     const id = `demo-shift-${index}`;
     await db.runAsync(
       'INSERT INTO shifts (id, started_at, ended_at) VALUES (?, ?, ?);',
@@ -386,8 +436,8 @@ async function seedCourierShifts(db: SQLiteDatabase, placeIds: Map<string, strin
   // Today: two drops before the shift was started, so "Start shift from …?" shows.
   const now = new Date();
   const minuteNow = now.getHours() * 60 + now.getMinutes();
-  await drive([minuteNow - 75, 12, 'Home', 'Nando’s, Headingley', 1.9], 0, {});
-  await drive([minuteNow - 41, 11, 'Nando’s, Headingley', 'Cardigan Rd', 1.3], 0, {});
+  await drive([minuteNow - 75, 12, 'Home', 'Otley Rd, Headingley', 1.9], 0, {});
+  await drive([minuteNow - 41, 11, 'Otley Rd, Headingley', 'Cardigan Rd', 1.3], 0, {});
 }
 
 export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
@@ -400,17 +450,19 @@ export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
     return;
   }
   const placeIds = new Map<string, string>();
-  for (const place of PLACES) {
+  // A courier's only saved place is home, in Leeds with the shifts.
+  const places = DEMO_COURIER ? [{ name: 'Home', kind: 'home' as const, at: SPOTS.Home }] : PLACES;
+  for (const place of places) {
     if (DEMO_PLACES && place.kind !== 'client') continue;
     placeIds.set(place.name, (await insertPlace(db, place)).id);
   }
   if (DEMO_COURIER) await seedCourierShifts(db, placeIds);
   if (!DEMO_NO_EARNINGS) await seedDemoEarnings(db);
-  // A courier's own days are the shifts above; the office drives are history.
-  for (const [daysAgo, hour, rawFrom, rawTo, miles, classification, purpose, autoReason] of [
-    ...(DEMO_COURIER ? [] : TRIPS),
-    ...historyTrips(),
-  ].reverse()) {
+  // A courier's days are all shifts (above); everyone else gets the office drives.
+  for (const [daysAgo, hour, rawFrom, rawTo, miles, classification, purpose, autoReason] of (DEMO_COURIER
+    ? []
+    : [...TRIPS, ...historyTrips()]
+  ).reverse()) {
     const [from, to] = DEMO_PLACES ? [UNNAMED[rawFrom] ?? rawFrom, UNNAMED[rawTo] ?? rawTo] : [rawFrom, rawTo];
     const start = new Date();
     start.setDate(start.getDate() - daysAgo);
