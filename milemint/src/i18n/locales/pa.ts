@@ -1256,6 +1256,9 @@ const dictionary: Dictionary = {
   "A Founding driver badge in Settings, for helping MileSprout grow.": "ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਫ਼ਾਊਂਡਿੰਗ ਡਰਾਈਵਰ ਬੈਜ, MileSprout ਨੂੰ ਵਧਾਉਣ ਵਿੱਚ ਮਦਦ ਲਈ।",
   "Thanks for joining with a friend’s invite. It counts towards their perks.": "ਦੋਸਤ ਦੇ ਸੱਦੇ ਨਾਲ ਜੁੜਨ ਲਈ ਧੰਨਵਾਦ। ਇਹ ਉਨ੍ਹਾਂ ਦੇ ਫ਼ਾਇਦਿਆਂ ਵਿੱਚ ਗਿਣਿਆ ਜਾਂਦਾ ਹੈ।",
   "🌱 New perk unlocked": "🌱 ਨਵਾਂ ਫ਼ਾਇਦਾ ਅਨਲੌਕ ਹੋਇਆ",
+  // "How do you work?": the chosen way of working on its own, with a "Change" pill.
+  "{{option}} selected. Double-tap Change to pick another": "{{option}} ਚੁਣਿਆ ਗਿਆ। ਕੋਈ ਹੋਰ ਚੁਣਨ ਲਈ ਬਦਲੋ 'ਤੇ ਦੋ ਵਾਰ ਟੈਪ ਕਰੋ",
+  "Shows all three ways of working again": "ਕੰਮ ਦੇ ਤਿੰਨੇ ਤਰੀਕੇ ਮੁੜ ਦਿਖਾਉਂਦਾ ਹੈ",
 };
 
 export default dictionary;

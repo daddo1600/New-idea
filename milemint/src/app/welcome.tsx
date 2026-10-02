@@ -1,19 +1,30 @@
 import { router, useLocalSearchParams, type Href } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { useSQLiteContext } from 'expo-sqlite';
 import {
+  AccessibilityInfo,
   KeyboardAvoidingView,
   Linking,
   Platform,
   Pressable,
-  ScrollView,
+  type ScrollView,
   StyleSheet,
   Switch,
   Text,
   TextInput,
   View,
 } from 'react-native';
+import { ScrollView as GestureScrollView } from 'react-native-gesture-handler';
+import Animated, {
+  Easing,
+  FadeIn,
+  FadeInDown,
+  FadeOut,
+  LayoutAnimationConfig,
+  LinearTransition,
+  useReducedMotion,
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { findLatestBackup, isDatabaseEmpty, problemOf, restoreBackup, type FoundBackup } from '@/backup/backup';
@@ -31,6 +42,7 @@ import { purposeIcon, quickPurposes, shownPurpose } from '@/components/purpose-p
 import { LanguageButton } from '@/components/language-button';
 import { MintWash, StepHeader } from '@/components/step-header';
 import { VehiclePicker } from '@/components/vehicle-picker';
+import { WorkStyleCard } from '@/components/work-style-card';
 import { firstCode, RedeemCode } from '@/components/redeem-code';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -45,6 +57,7 @@ import { loadSettings, updateSettings } from '@/db/settings-repo';
 import { marApplies, parsePence } from '@/domain/mar';
 import { displayLocale, REGIONS, vehicleRule, type RegionCode } from '@/domain/regions';
 import { type CheerKind, DONE, HOURS, PURPOSE, setupCheer } from '@/domain/setup-cheers';
+import { shownStyles, type WorkStyle } from '@/domain/work-focus';
 import { useTheme } from '@/hooks/use-theme';
 import { LANGUAGES, msg, useLanguage, useT } from '@/i18n/i18n';
 import { Rich } from '@/i18n/rich';
@@ -79,6 +92,41 @@ const EXTRA_LABELS: Record<VehicleType, string> = {
   car: msg('Car or van'),
   motorbike: msg('Moped or motorbike'),
   bicycle: msg('Bicycle'),
+};
+
+/** The three ways of working, as the menu shows them. */
+const WORK_STYLE_TEXT: Record<WorkStyle, { emoji: string; title: string; detail: string }> = {
+  hours: {
+    emoji: '🗓️',
+    title: msg('Set hours'),
+    detail: msg('Trades, sales, care, office. Drives in your hours are business.'),
+  },
+  shifts: {
+    emoji: '📦',
+    title: msg('Shifts & rounds (delivery apps)'),
+    detail: msg('Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber. Car, van, moped or bike.'),
+  },
+  neither: { emoji: '✋', title: msg('Neither'), detail: msg('I’ll swipe each drive myself.') },
+};
+
+/**
+ * Choosing a way of working: the other two fade out, the chosen card springs
+ * to the top and its questions come in beneath it, one after another. Going
+ * back reverses it, the two cards fading back in once it has moved.
+ */
+const FOCUS_MOTION = {
+  // A spring on iPhone; the web runs layout moves as CSS, so a curve that overshoots a little instead.
+  card:
+    Platform.OS === 'web'
+      ? LinearTransition.duration(380).easing(Easing.bezier(0.3, 1.25, 0.5, 1))
+      : LinearTransition.springify().mass(1).damping(20).stiffness(190),
+  cardIn: FadeIn.duration(220).delay(140),
+  cardOut: FadeOut.duration(150),
+  // A question growing (the privacy tick's thank-you) slides the ones below; not on the web,
+  // which would stretch the growing card's text instead of laying it out again.
+  follow: Platform.OS === 'web' ? undefined : LinearTransition.duration(240).easing(Easing.bezier(0.2, 0, 0, 1)),
+  followIn: (i: number) => FadeInDown.duration(260).delay(170 + i * 70),
+  followOut: FadeOut.duration(110),
 };
 
 export default function WelcomeScreen() {
@@ -132,7 +180,8 @@ export default function WelcomeScreen() {
   const [week, setWeek] = useState<SimpleWeek>(DEFAULT_SIMPLE_WEEK);
   const [hoursSet, setHoursSet] = useState(false);
   const [vehicle, setVehicle] = useState<VehicleType>('car');
-  const [workStyle, setWorkStyle] = useState<'hours' | 'shifts' | 'neither' | null>(null);
+  /** The way of working chosen, shown on its own with its questions; null shows the menu of all three. */
+  const [workStyle, setWorkStyle] = useState<WorkStyle | null>(null);
   const [extraVehicles, setExtraVehicles] = useState<VehicleType[]>([]);
   /** Visits clients or patients at home: keep only the area of each visit (domain/privacy). */
   const [clientPrivacy, setClientPrivacy] = useState(false);
@@ -352,7 +401,7 @@ export default function WelcomeScreen() {
   };
   const purposeOptions = quickPurposes({ shiftMode: false, clientPrivacy }, 10);
 
-  // Under whichever way of working is chosen: care and support work comes in all three.
+  /** Under whichever way of working is chosen. */
   const privacyCheck = (
     <ClientPrivacyCheck
       value={clientPrivacy}
@@ -363,6 +412,131 @@ export default function WelcomeScreen() {
       }}
     />
   );
+
+  /** Couriers often switch between a car and a moped: the others they also use. */
+  const extraVehiclesPicker = (
+    <View style={styles.vehicles}>
+      <ThemedText type="smallBold">{t('Use other vehicles for work too?')}</ThemedText>
+      <View style={styles.extraRow}>
+        {(['car', 'motorbike', 'bicycle'] as const)
+          .filter((type) => type !== vehicle)
+          .map((type) => {
+            const on = extraVehicles.includes(type);
+            return (
+              <Pressable
+                key={type}
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: on }}
+                onPress={() =>
+                  setExtraVehicles(
+                    on ? extraVehicles.filter((other) => other !== type) : [...extraVehicles, type],
+                  )
+                }
+                style={[
+                  styles.extraChip,
+                  on
+                    ? { backgroundColor: theme.accent, borderColor: theme.accent }
+                    : { borderColor: theme.backgroundSelected },
+                ]}>
+                <ThemedText type="smallBold" style={{ color: on ? theme.onAccent : theme.text }}>
+                  {on ? '✓' : '+'} {VEHICLE_ICONS[type]} {t(EXTRA_LABELS[type])}
+                </ThemedText>
+              </Pressable>
+            );
+          })}
+      </View>
+      <ThemedText type="small" themeColor="textSecondary">
+        {t('You’ll choose which one when you start a shift.')}
+      </ThemedText>
+    </View>
+  );
+
+  /** UK only: employed and using their own vehicle (Mileage Allowance Relief). */
+  const employedCard = (
+    <View style={[styles.employed, { borderColor: theme.backgroundSelected }]}>
+      <View style={styles.employedRow}>
+        <View style={styles.flex}>
+          <ThemedText type="smallBold">{t('Employed, in your own vehicle?')}</ThemedText>
+          <ThemedText type="small" themeColor="textSecondary">
+            {t('MileSprout works out the tax relief you can claim. Optional.')}
+          </ThemedText>
+        </View>
+        <Switch
+          accessibilityLabel={t('Employed, in your own vehicle?')}
+          value={employed}
+          onValueChange={setEmployed}
+          trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
+        />
+      </View>
+      {employed && (
+        <View style={styles.employedRow}>
+          <ThemedText type="small">{t('Your employer pays')}</ThemedText>
+          {!employerPaysNothing && (
+            <>
+              <TextInput
+                accessibilityLabel={t('Pence per mile your employer pays')}
+                value={employerRateText}
+                onChangeText={setEmployerRateText}
+                keyboardType="decimal-pad"
+                maxLength={5}
+                style={[styles.penceInput, { color: theme.text, backgroundColor: theme.backgroundElement }]}
+              />
+              <ThemedText type="small">{t('p a mile')}</ThemedText>
+            </>
+          )}
+          <Pressable
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: employerPaysNothing }}
+            onPress={() => setEmployerPaysNothing(!employerPaysNothing)}
+            style={[
+              styles.extraChip,
+              employerPaysNothing
+                ? { backgroundColor: theme.accent, borderColor: theme.accent }
+                : { borderColor: theme.backgroundSelected },
+            ]}>
+            <ThemedText
+              type="smallBold"
+              style={{ color: employerPaysNothing ? theme.onAccent : theme.text }}>
+              {employerPaysNothing ? '✓ ' : ''}
+              {t('Nothing')}
+            </ThemedText>
+          </Pressable>
+        </View>
+      )}
+      {employed && !employerPaysNothing && parsePence(employerRateText) === null && (
+        <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
+          {t('Enter pence a mile as a number, e.g. 45.')}
+        </ThemedText>
+      )}
+    </View>
+  );
+
+  /** The questions under each way of working, in order, keyed so each animates in once. */
+  const followUps = (style: WorkStyle) => {
+    const list: [string, ReactNode][] = [];
+    if (style === 'hours') {
+      list.push(['hours', <WorkHoursQuick key="hours" value={week} onChange={setWeek} locale={displayLocale(picked)} />]);
+    }
+    if (style === 'shifts') list.push(['vehicles', extraVehiclesPicker]);
+    // Care and support work comes in all three.
+    list.push(['privacy', privacyCheck]);
+    if (marApplies(picked)) list.push(['employed', employedCard]);
+    return list;
+  };
+
+  const reduceMotion = useReducedMotion();
+  /** The menu-to-focus motion; none with Reduce Motion, so the swap is instant. */
+  const focusMotion = reduceMotion ? null : FOCUS_MOTION;
+  const chooseWorkStyle = (style: WorkStyle) => {
+    setWorkStyle(style);
+    // The chosen card goes to the top: bring the top into view if they'd scrolled.
+    scroller.current?.scrollTo({ y: 0, animated: !reduceMotion });
+    AccessibilityInfo.announceForAccessibility(
+      t('{{option}} selected. Double-tap Change to pick another', { option: t(WORK_STYLE_TEXT[style].title) }),
+    );
+  };
+  /** Back to all three; the hours, vehicles and ticks entered are kept for coming back. */
+  const backToMenu = () => setWorkStyle(null);
 
   const finish = async () => {
     setBusy(true);
@@ -468,7 +642,8 @@ export default function WelcomeScreen() {
       </View>
 
       <KeyboardAvoidingView style={styles.flexFill} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView
+        {/* Gesture handler's, so a pull down on the chosen way of working (work-style-card) isn't also a scroll. */}
+        <GestureScrollView
           ref={scroller}
           contentContainerStyle={[
             styles.content,
@@ -587,134 +762,43 @@ export default function WelcomeScreen() {
             ))}
 
           {step === HOURS && (
-            <>
+            // Opening the step shows it as it is (no entrances), and leaving it plays no exits.
+            <LayoutAnimationConfig skipEntering skipExiting>
               <StepHeader glyph="clock" eyebrow={t('Step 3 · Your work')} title={t('How do you work?')}>
                 {t('MileSprout sorts your drives to match. You can always swipe to change a trip.')}
               </StepHeader>
-              <WorkStyleOption
-                selected={workStyle === 'hours'}
-                emoji="🗓️"
-                title={t('Set hours')}
-                detail={t('Trades, sales, care, office. Drives in your hours are business.')}
-                onPress={() => setWorkStyle('hours')}
-              />
-              {workStyle === 'hours' && (
-                <>
-                  <WorkHoursQuick value={week} onChange={setWeek} locale={displayLocale(picked)} />
-                  {privacyCheck}
-                </>
-              )}
-              <WorkStyleOption
-                selected={workStyle === 'shifts'}
-                emoji="📦"
-                title={t('Shifts & rounds (delivery apps)')}
-                detail={t('Uber Eats, Deliveroo, Amazon Flex, Evri, DPD, Uber. Car, van, moped or bike.')}
-                onPress={() => setWorkStyle('shifts')}
-              />
-              {workStyle === 'shifts' && (
-                <View style={styles.vehicles}>
-                  <ThemedText type="smallBold">{t('Use other vehicles for work too?')}</ThemedText>
-                  <View style={styles.extraRow}>
-                    {(['car', 'motorbike', 'bicycle'] as const)
-                      .filter((type) => type !== vehicle)
-                      .map((type) => {
-                        const on = extraVehicles.includes(type);
-                        return (
-                          <Pressable
-                            key={type}
-                            accessibilityRole="checkbox"
-                            accessibilityState={{ checked: on }}
-                            onPress={() =>
-                              setExtraVehicles(
-                                on ? extraVehicles.filter((other) => other !== type) : [...extraVehicles, type],
-                              )
-                            }
-                            style={[
-                              styles.extraChip,
-                              on
-                                ? { backgroundColor: theme.accent, borderColor: theme.accent }
-                                : { borderColor: theme.backgroundSelected },
-                            ]}>
-                            <ThemedText type="smallBold" style={{ color: on ? theme.onAccent : theme.text }}>
-                              {on ? '✓' : '+'} {VEHICLE_ICONS[type]} {t(EXTRA_LABELS[type])}
-                            </ThemedText>
-                          </Pressable>
-                        );
-                      })}
-                  </View>
-                  <ThemedText type="small" themeColor="textSecondary">
-                    {t('You’ll choose which one when you start a shift.')}
-                  </ThemedText>
-                </View>
-              )}
-              {workStyle === 'shifts' && privacyCheck}
-              <WorkStyleOption
-                selected={workStyle === 'neither'}
-                emoji="✋"
-                title={t('Neither')}
-                detail={t('I’ll swipe each drive myself.')}
-                onPress={() => setWorkStyle('neither')}
-              />
-              {workStyle === 'neither' && privacyCheck}
-              {marApplies(picked) && (
-                <View style={[styles.employed, { borderColor: theme.backgroundSelected }]}>
-                  <View style={styles.employedRow}>
-                    <View style={styles.flex}>
-                      <ThemedText type="smallBold">{t('Employed, in your own vehicle?')}</ThemedText>
-                      <ThemedText type="small" themeColor="textSecondary">
-                        {t('MileSprout works out the tax relief you can claim. Optional.')}
-                      </ThemedText>
-                    </View>
-                    <Switch
-                      accessibilityLabel={t('Employed, in your own vehicle?')}
-                      value={employed}
-                      onValueChange={setEmployed}
-                      trackColor={{ false: theme.backgroundSelected, true: theme.accent }}
-                    />
-                  </View>
-                  {employed && (
-                    <View style={styles.employedRow}>
-                      <ThemedText type="small">{t('Your employer pays')}</ThemedText>
-                      {!employerPaysNothing && (
-                        <>
-                          <TextInput
-                            accessibilityLabel={t('Pence per mile your employer pays')}
-                            value={employerRateText}
-                            onChangeText={setEmployerRateText}
-                            keyboardType="decimal-pad"
-                            maxLength={5}
-                            style={[styles.penceInput, { color: theme.text, backgroundColor: theme.backgroundElement }]}
-                          />
-                          <ThemedText type="small">{t('p a mile')}</ThemedText>
-                        </>
-                      )}
-                      <Pressable
-                        accessibilityRole="checkbox"
-                        accessibilityState={{ checked: employerPaysNothing }}
-                        onPress={() => setEmployerPaysNothing(!employerPaysNothing)}
-                        style={[
-                          styles.extraChip,
-                          employerPaysNothing
-                            ? { backgroundColor: theme.accent, borderColor: theme.accent }
-                            : { borderColor: theme.backgroundSelected },
-                        ]}>
-                        <ThemedText
-                          type="smallBold"
-                          style={{ color: employerPaysNothing ? theme.onAccent : theme.text }}>
-                          {employerPaysNothing ? '✓ ' : ''}
-                          {t('Nothing')}
-                        </ThemedText>
-                      </Pressable>
-                    </View>
-                  )}
-                  {employed && !employerPaysNothing && parsePence(employerRateText) === null && (
-                    <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
-                      {t('Enter pence a mile as a number, e.g. 45.')}
-                    </ThemedText>
-                  )}
-                </View>
-              )}
-            </>
+              {/* The menu, or only the chosen one: the others fade away and it springs to the top. */}
+              {shownStyles(workStyle).map((style) => (
+                <Animated.View
+                  key={style}
+                  layout={focusMotion?.card}
+                  entering={focusMotion?.cardIn}
+                  exiting={focusMotion?.cardOut}
+                  style={workStyle === style ? styles.chosen : styles.raised}>
+                  <WorkStyleCard
+                    {...WORK_STYLE_TEXT[style]}
+                    title={t(WORK_STYLE_TEXT[style].title)}
+                    detail={t(WORK_STYLE_TEXT[style].detail)}
+                    focused={workStyle === style}
+                    onChoose={() => chooseWorkStyle(style)}
+                    onChange={backToMenu}
+                    reduceMotion={reduceMotion}
+                    scroller={scroller}
+                  />
+                </Animated.View>
+              ))}
+              {/* Its questions, one after another beneath it. */}
+              {workStyle &&
+                followUps(workStyle).map(([key, node], i) => (
+                  <Animated.View
+                    key={key}
+                    layout={focusMotion?.follow}
+                    entering={focusMotion?.followIn(i)}
+                    exiting={focusMotion?.followOut}>
+                    {node}
+                  </Animated.View>
+                ))}
+            </LayoutAnimationConfig>
           )}
 
           {step === PURPOSE && (
@@ -793,7 +877,7 @@ export default function WelcomeScreen() {
               <RedeemCode onBrand initialCode={linkCode} style={styles.glass} />
             </>
           )}
-        </ScrollView>
+        </GestureScrollView>
 
         <View style={styles.actions}>
           {step === 0 &&
@@ -846,52 +930,6 @@ export default function WelcomeScreen() {
         <CelebrationOverlay key={cheer.kind} kind={cheer.kind} text={cheer.text} onClose={() => setCheer(null)} />
       )}
     </ThemedView>
-  );
-}
-
-/** One of the "How do you work?" choices: a card that fills with a mint tint and a tick when chosen. */
-function WorkStyleOption({
-  selected,
-  emoji,
-  title,
-  detail,
-  onPress,
-}: {
-  selected: boolean;
-  emoji: string;
-  title: string;
-  detail: string;
-  onPress: () => void;
-}) {
-  const theme = useTheme();
-  return (
-    <Pressable
-      accessibilityRole="radio"
-      accessibilityState={{ selected }}
-      onPress={onPress}
-      style={[
-        styles.workStyle,
-        {
-          borderColor: selected ? theme.accent : theme.backgroundSelected,
-          backgroundColor: selected ? theme.accent + '14' : theme.backgroundElement,
-        },
-      ]}>
-      <Text style={styles.workStyleEmoji}>{emoji}</Text>
-      <View style={styles.flex}>
-        <ThemedText type="smallBold">{title}</ThemedText>
-        <ThemedText type="small" themeColor="textSecondary">
-          {detail}
-        </ThemedText>
-      </View>
-      <View
-        style={[
-          styles.radio,
-          { borderColor: selected ? theme.accent : theme.backgroundSelected },
-          selected && { backgroundColor: theme.accent },
-        ]}>
-        {selected && <Text style={[styles.radioTick, { color: theme.onAccent }]}>✓</Text>}
-      </View>
-    </Pressable>
   );
 }
 
@@ -966,23 +1004,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 1,
   },
-  workStyle: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.three,
-    borderWidth: 1.5,
-    borderRadius: 16,
-    padding: Spacing.three,
-  },
-  workStyleEmoji: { fontSize: 26, lineHeight: 32 },
-  radio: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  /**
+   * The cards stay above the questions (a card moving back to its place passes
+   * over them as they fade, the chosen one is pulled over them), and the
+   * chosen one above the two fading away.
+   */
+  raised: { zIndex: 2 },
+  chosen: { zIndex: 3 },
   radioTick: { fontSize: 13, fontWeight: '800' },
   container: { flex: 1, paddingHorizontal: Spacing.four },
   brandTitle: { color: '#FFFFFF', fontSize: 40, lineHeight: 46, fontWeight: '800', letterSpacing: -0.5 },

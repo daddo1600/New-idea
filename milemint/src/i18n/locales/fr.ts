@@ -1333,6 +1333,9 @@ const dictionary: Dictionary = {
   "A Founding driver badge in Settings, for helping MileSprout grow.": "Un badge de conducteur fondateur dans les Réglages, pour avoir aidé MileSprout à grandir.",
   "Thanks for joining with a friend’s invite. It counts towards their perks.": "Merci de vous être inscrit avec l’invitation d’un ami. Cela compte pour ses avantages.",
   "🌱 New perk unlocked": "🌱 Nouvel avantage débloqué",
+  // "How do you work?": the chosen way of working on its own, with a "Change" pill.
+  "{{option}} selected. Double-tap Change to pick another": "Choix : {{option}}. Touchez deux fois Modifier pour en choisir un autre",
+  "Shows all three ways of working again": "Affiche à nouveau les trois façons de travailler",
 };
 
 export default dictionary;

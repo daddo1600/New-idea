@@ -1207,6 +1207,9 @@ const dictionary: Dictionary = {
   "A Founding driver badge in Settings, for helping MileSprout grow.": "设置中的创始司机徽章，感谢你帮助 MileSprout 成长。",
   "Thanks for joining with a friend’s invite. It counts towards their perks.": "感谢你通过朋友的邀请加入。这会计入他们的福利。",
   "🌱 New perk unlocked": "🌱 解锁了新福利",
+  // "How do you work?": the chosen way of working on its own, with a "Change" pill.
+  "{{option}} selected. Double-tap Change to pick another": "已选择“{{option}}”。点按两次“更改”可另选一项",
+  "Shows all three ways of working again": "重新显示全部三种工作方式",
 };
 
 export default dictionary;
