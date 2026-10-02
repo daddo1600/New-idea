@@ -61,16 +61,16 @@ const COUNTER_TOP = 40;
 /** The first launch: slow enough to watch the sprout grow, each sign and leaf in turn. */
 const DRIVE_MS = 4400;
 const HOLD_MS = 1500;
-/** Every launch after: the sprout grows as their own money and miles count up. */
-const QUICK_DRIVE_MS = 2600;
+/** Every launch after: the sprout grows as their own money and miles count up, at the same unhurried pace. */
+const QUICK_DRIVE_MS = 4400;
 /** The total stays up, still, long enough to read and take in. */
-const QUICK_HOLD_MS = 1800;
+const QUICK_HOLD_MS = 2000;
 /** A little longer to enjoy the seasonal touches. */
 const SEASON_HOLD_MS = 2200;
 const FADE_MS = 300;
 /** The seed breaking out of the soil before the climb: longer the first time. */
 const EMERGE_MS = 1000;
-const QUICK_EMERGE_MS = 700;
+const QUICK_EMERGE_MS = 1000;
 /** How far in (extra scale) the view moves onto the soil as the seed breaks out… */
 const EMERGE_ZOOM = 1.2;
 /** …keeping the soil, this far below the logo's centre, where it is. */
@@ -100,8 +100,8 @@ const DEMO_MONTH = { mi: 400, km: 650 } as const;
 const STEPS = 100;
 
 /**
- * Opening sequence. Before set-up: the full demo drive (about 6 s) that
- * shows what MileMint does. Once set up: a shorter one (about 4.5 s) where
+ * Opening sequence. Before set-up: the full demo drive (about 7 s) that
+ * shows what MileMint does. Once set up: the same pace (about 7.5 s) where
  * the sprout grows as the user's own tax-year money and distance count up
  * from zero, so every launch is a reminder of the money coming back. A tap
  * skips either.
@@ -179,8 +179,8 @@ function QuickIntro({
   const [shown, setShown] = useState(reduceMotion ? 1 : 0);
 
   useEffect(() => {
-    // Eases in and out, so the car doesn't dart off the line.
-    const easing = reduceMotion ? Easing.linear : Easing.inOut(Easing.cubic);
+    // Gentle: a steady climb, easing in and out only a little, as on the first launch.
+    const easing = reduceMotion ? Easing.linear : Easing.inOut(Easing.sin);
     const drivingFor = reduceMotion ? CROSS_FADE_MS : QUICK_DRIVE_MS;
     const lead = 80 + (reduceMotion ? 0 : QUICK_EMERGE_MS);
     if (!reduceMotion) emerge.value = withDelay(80, withTiming(1, { duration: QUICK_EMERGE_MS, easing: Easing.linear }));
@@ -214,7 +214,7 @@ function QuickIntro({
   );
 
   const logoStyle = useAnimatedStyle(() => {
-    const grow = reduceMotion ? 1 : Math.min(1, drive.value * 2);
+    const grow = reduceMotion ? 1 : Math.min(1, drive.value / 0.6);
     return {
       opacity: reduceMotion ? drive.value : 1,
       transform: [
