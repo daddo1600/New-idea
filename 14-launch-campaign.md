@@ -49,6 +49,8 @@ Ads stop when the money stops. Growth that comes from people using the app keeps
 
 ## 2. The offer: more free drives for every friend
 
+> **Superseded (Oct 2026).** Tracking is now free with no drive limit, so "+10 drives" no longer means anything. The app ships the invite-reward panel's variant B instead: the friend gets **50% off their first year of Pro** (an App Store offer code), and the inviter climbs a perk ladder (1 friend: tax set-aside; 3, or 2 in the founding boost: earnings by platform and gold leaves; 5, or 3: the Founding driver badge). Reports and exports are never given away. See [`research_notes/launch-2026/invite-reward-panel.md`](research_notes/launch-2026/invite-reward-panel.md) and [`research_notes/launch-2026/offer-code-setup.md`](research_notes/launch-2026/offer-code-setup.md). The rest of this section is kept for the record.
+
 Simple enough to say in one breath: **"Use my invite and we both get 10 more free drives a month. Every friend, no limit."** It's Dropbox's "more space for every friend", in drives. Each invite is single-use: every share makes a new code for one friend, and each Apple Account can join with one invite, ever, so deleting the app and starting over earns nothing.
 
 | Who | Gets | When |
@@ -84,7 +86,7 @@ Why drives: they cost nothing, can't be cashed in, and every friend makes the fr
   Then pending codes are confirmed (+10 for the friend, with a small 🎉) and "Friends joined: N · +X free drives a month" appears.
 - **Until then nobody gets referral drives.** A friend's code is saved as pending ("Your 10 extra drives are on their way once the invite is confirmed."), and the Invite friends screen says invites are confirmed through iCloud, coming in an update. Plan the referral push for **after** the CloudKit build ships. For the first few hundred users, thank the best sharers **by hand** too.
 
-**Also, once the app is live:** create one Apple **offer code** for "1 month Pro free" in App Store Connect and put it in `src/referral/links.ts` (`FRIEND_OFFER_CODE`). Shares then also carry a one-tap "redeem your free month" link for friends who want Pro. (Apple only allows offer codes after the app is on the store.)
+**Also, once the app is live:** create the friend's **offer code** ("50% off the first year", new subscribers, yearly plan) in App Store Connect and put it in `milemint/src/constants/rewards.ts` (`FRIEND_OFFER_CODE`). Until then every friend-discount line stays hidden. Steps: [`research_notes/launch-2026/offer-code-setup.md`](research_notes/launch-2026/offer-code-setup.md). (Apple only allows offer codes after the app is on the store.)
 
 **Apple rules to respect:** never reward ratings or reviews; keep referral rewards inside the app (free drives, never cash or gift cards); and wherever a free Pro month is offered, say clearly that Pro renews at the normal price after it.
 
@@ -238,7 +240,7 @@ Each page gets its own campaign link, so App Store Connect shows which audience 
    - **EntreCourier** (entrecourier.com, Ron Walter; courier since 2018, quoted by NYT/CNN; podcast "Deliver on Your Business"). Grades mileage trackers with letter-grade report cards (mileage and expenses count double). Step: once the app is stable in the US, offer a review copy (free Pro offer code) via entrecourier.com/contact, with a short note on what's different (shift rows, missed-drive warnings, no account).
 0. **Must do at launch:** lead every gig-worker channel with "Uber only sees Uber" (see the box at the top), using real TestFlight couriers' missed-miles numbers, collected with permission.
 1. Submit 1.0 for App Store review (needs a contact phone number in App Store Connect).
-2. On approval: create the "1 month Pro free" offer code and set `FRIEND_OFFER_CODE` in `milemint/src/referral/links.ts`.
+2. On approval: create the friend's "50% off the first year" offer code and set `FRIEND_OFFER_CODE` in `milemint/src/constants/rewards.ts` (see `research_notes/launch-2026/offer-code-setup.md`).
 3. One-page site with the Founding 1,000 counter.
 4. Record the three videos from the latest TestFlight build.
 5. Book three accountant conversations and plan courier week.
