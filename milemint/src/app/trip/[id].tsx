@@ -1,11 +1,12 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, TextInput } from 'react-native';
 
 import { CostFields, EMPTY_COSTS, maxCost, readCosts, type CostDraft } from '@/components/cost-fields';
 import { GaragePicker } from '@/components/garage-picker';
 import { PurposePicker } from '@/components/purpose-picker';
+import { RouteMapCard } from '@/components/route-map/route-map-card';
 import { Segmented } from '@/components/segmented';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -26,6 +27,7 @@ import { isAreaOnly, isPrivateLabel, placeNameSet } from '@/domain/privacy';
 import { loadSettings } from '@/db/settings-repo';
 import { minorToInput } from '@/domain/parse-number';
 import { costsNote, formatDistance } from '@/domain/regions';
+import { displayRoute, privateEnds } from '@/domain/route-display';
 import { frequentPurposes } from '@/domain/suggestions';
 import { type Classification, type Trip, type VehicleType } from '@/domain/trip';
 import type { Vehicle } from '@/domain/vehicles';
@@ -101,6 +103,12 @@ export default function TripScreen() {
     };
   }, [db, id]);
 
+  // Thinned for drawing, and in client privacy mode without the ends: see privateEnds.
+  const shownRoute = useMemo(
+    () => (trip ? displayRoute(route, privateEnds(trip, clientPrivacy)) : null),
+    [trip, route, clientPrivacy],
+  );
+
   if (trip === undefined) return <ActivityIndicator style={styles.loading} />;
   if (trip === null) {
     return (
@@ -175,6 +183,16 @@ export default function TripScreen() {
     }
   };
 
+  // Client privacy keeps no route: the record is the date, the areas, the distance and the purpose.
+  // Only said when it's true: a drive from before privacy was on can still show its addresses.
+  const privacyNote =
+    route.length === 0 &&
+    trip.source === 'auto' &&
+    (clientPrivacy || isPrivateLabel(trip.startLabel) || isPrivateLabel(trip.endLabel)) &&
+    placeNames !== null &&
+    isAreaOnly(trip.startLabel, placeNames) &&
+    isAreaOnly(trip.endLabel, placeNames);
+
   const inputStyle = [styles.input, { color: theme.text, backgroundColor: theme.backgroundElement }];
   // Manual trips have no GPS route, so there is nothing to pin a place to.
   const pointFor = (end: End) => (end === 'start' ? route[0] : route[route.length - 1]);
@@ -190,6 +208,10 @@ export default function TripScreen() {
               })
             : `${trip.localDate} · ${formatDistance(trip.distanceMeters, region)}`}
         </ThemedText>
+        {/* Manual trips never had a route; a private one says why lower down. */}
+        {trip.source === 'auto' && placeNames !== null && !privacyNote && (
+          <RouteMapCard routes={shownRoute ? [shownRoute] : []} label={t('Map of this drive')} />
+        )}
         <Segmented
           options={CLASSIFY_OPTIONS.map((option) => ({ ...option, label: t(option.label) }))}
           value={trip.classification === 'unclassified' ? null : trip.classification}
@@ -252,23 +274,16 @@ export default function TripScreen() {
           </ThemedText>
         </Pressable>
 
-        {/* Client privacy keeps no route: the record is the date, the areas, the distance and the purpose.
-            Only said when it's true: a drive from before privacy was on can still show its addresses. */}
-        {route.length === 0 &&
-          trip.source === 'auto' &&
-          (clientPrivacy || isPrivateLabel(trip.startLabel) || isPrivateLabel(trip.endLabel)) &&
-          placeNames !== null &&
-          isAreaOnly(trip.startLabel, placeNames) &&
-          isAreaOnly(trip.endLabel, placeNames) && (
-            <ThemedView type="backgroundElement" style={styles.placeCard}>
-              <ThemedText type="smallBold">{t('🔒 Client privacy')}</ThemedText>
-              <ThemedText type="small" themeColor="textSecondary">
-                {t('No route or address was kept for this drive, only the area and the distance: {{distance}}.', {
-                  distance: formatDistance(trip.distanceMeters, region),
-                })}
-              </ThemedText>
-            </ThemedView>
-          )}
+        {privacyNote && (
+          <ThemedView type="backgroundElement" style={styles.placeCard}>
+            <ThemedText type="smallBold">{t('🔒 Client privacy')}</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">
+              {t('No route or address was kept for this drive, only the area and the distance: {{distance}}.', {
+                distance: formatDistance(trip.distanceMeters, region),
+              })}
+            </ThemedText>
+          </ThemedView>
+        )}
 
         {route.length > 0 && (
           <>

@@ -1604,6 +1604,7 @@
     "files": [
       "components/plan-rules.tsx",
       "components/purpose-picker.tsx",
+      "components/route-map/route-map-card.tsx",
       "components/vehicle-sheet.tsx"
     ]
   },
@@ -3352,6 +3353,12 @@
     ]
   },
   {
+    "key": "Map of this drive",
+    "files": [
+      "app/trip/[id].tsx"
+    ]
+  },
+  {
     "key": "Mark {{from}} to {{to}} as business",
     "files": [
       "components/trips/locked-trip-row.tsx",
@@ -3834,6 +3841,12 @@
     ]
   },
   {
+    "key": "No route recorded",
+    "files": [
+      "components/route-map/route-map-card.tsx"
+    ]
+  },
+  {
     "key": "No subscription found",
     "files": [
       "app/(tabs)/settings.tsx",
@@ -4147,6 +4160,12 @@
     "key": "Opens the logbook method",
     "files": [
       "components/logbook-nudge.tsx"
+    ]
+  },
+  {
+    "key": "Opens the map full screen",
+    "files": [
+      "components/route-map/route-map-card.tsx"
     ]
   },
   {
