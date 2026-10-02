@@ -1,6 +1,7 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Swipe back to end your shift. A personal errand? Swipe that drive left afterwards.": "Glisează înapoi ca să închei tura. O treabă personală? Glisează apoi cursa aceea la stânga.",
   "Almost there: set location to “Always” and every drive is logged. Home shows you how.": "Aproape gata: setează localizarea pe „Întotdeauna” și fiecare cursă va fi înregistrată. Ecranul principal îți arată cum.",
   "Add your drives from the Drives tab.": "Adaugă-ți cursele din fila Curse.",
   "Turn on automatic tracking from the home screen whenever you’re ready, or add a drive from the Drives tab.": "Pornește urmărirea automată din ecranul principal când ești gata sau adaugă o cursă din fila Curse.",
@@ -963,7 +964,6 @@ const dictionary: Dictionary = {
   "{{amount}} of business mileage logged": "Kilometraj de lucru înregistrat: {{amount}}",
   "MileSprout has now logged {{amount}} of business mileage at {{authority}} rates, ready for your expense and relief claims.": "MileSprout a înregistrat până acum kilometraj de lucru în valoare de {{amount}} la tarifele {{authority}}, gata pentru deconturile și deducerile tale.",
   "I’ve logged {{amount}} of business mileage with MileSprout 🚗 Every mile counted, automatically.": "Am înregistrat cu MileSprout kilometraj de lucru în valoare de {{amount}} 🚗 Fiecare milă numărată, automat.",
-  "Swipe back to end your shift.": "Glisează înapoi ca să închei tura.",
   "{{hint}}. Swipe the button to the left, or double-tap.": "{{hint}}. Glisează butonul spre stânga sau atinge de două ori.",
   "Invite friends": "Invită prieteni",
   "Friends count once they’ve logged a few drives.": "Prietenii contează după ce au înregistrat câteva curse.",
@@ -1017,12 +1017,6 @@ const dictionary: Dictionary = {
   "It was still on, so MileSprout ended it. Drives from now on are left for you to sort. Tap to check the times.": "Era încă pornită, așa că MileSprout a încheiat-o. Cursele de acum încolo rămân să le sortezi tu. Atinge ca să verifici orele.",
   "Map of the drives in this shift": "Harta curselor din această tură",
   "On shift": "În tură",
-  "Pause": "Pauză",
-  "Pause the shift for a personal errand": "Pune tura pe pauză pentru o treabă personală",
-  "Paused · {{elapsed}}": "Pauză · {{elapsed}}",
-  "Paused: drives now aren’t counted as work. Resume when you’re back.": "Pauză: cursele de acum nu contează ca muncă. Reia când te întorci.",
-  "Resume": "Reia",
-  "Resume the shift": "Reia tura",
   "Shift": "Tură",
   "Shift ended": "Tura s-a încheiat",
   "Shift on {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}}": "Tura din {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}}",

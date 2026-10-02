@@ -1,6 +1,7 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Swipe back to end your shift. A personal errand? Swipe that drive left afterwards.": "শিফট শেষ করতে উল্টো দিকে সোয়াইপ করুন। ব্যক্তিগত কাজে গেলেন? পরে সেই ড্রাইভটি বাঁয়ে সোয়াইপ করুন।",
   "Almost there: set location to “Always” and every drive is logged. Home shows you how.": "প্রায় হয়ে গেছে: লোকেশন “সবসময়” করে দিন, তাহলে প্রতিটি ড্রাইভ লগ হবে। হোম স্ক্রিন দেখিয়ে দেবে কীভাবে।",
   "Add your drives from the Drives tab.": "ট্রিপ ট্যাব থেকে আপনার ড্রাইভ যোগ করুন।",
   "Turn on automatic tracking from the home screen whenever you’re ready, or add a drive from the Drives tab.": "যখন প্রস্তুত, হোম স্ক্রিন থেকে স্বয়ংক্রিয় ট্র্যাকিং চালু করুন, অথবা ট্রিপ ট্যাব থেকে একটি ড্রাইভ যোগ করুন।",
@@ -889,7 +890,6 @@ const dictionary: Dictionary = {
   "{{amount}} of business mileage logged": "{{amount}}-এর ব্যবসায়িক মাইলেজ রেকর্ড হয়েছে",
   "MileSprout has now logged {{amount}} of business mileage at {{authority}} rates, ready for your expense and relief claims.": "MileSprout এখন পর্যন্ত {{authority}} রেটে {{amount}}-এর ব্যবসায়িক মাইলেজ রেকর্ড করেছে, আপনার খরচ আর রিলিফের দাবির জন্য তৈরি।",
   "I’ve logged {{amount}} of business mileage with MileSprout 🚗 Every mile counted, automatically.": "MileSprout দিয়ে আমি {{amount}}-এর ব্যবসায়িক মাইলেজ রেকর্ড করেছি 🚗 প্রতিটি ট্রিপের হিসাব, অটোমেটিক।",
-  "Swipe back to end your shift.": "শিফট শেষ করতে উল্টো দিকে সোয়াইপ করুন।",
   "{{hint}}. Swipe the button to the left, or double-tap.": "{{hint}}। বোতামটি বাঁয়ে সোয়াইপ করুন, বা দুবার ট্যাপ করুন।",
   "Invite friends": "বন্ধুদের আমন্ত্রণ জানান",
   "Friends count once they’ve logged a few drives.": "কয়েকটি ট্রিপ রেকর্ড হওয়ার পরে বন্ধুদের গোনা হয়।",
@@ -939,12 +939,6 @@ const dictionary: Dictionary = {
   "It was still on, so MileSprout ended it. Drives from now on are left for you to sort. Tap to check the times.": "এটি তখনও চালু ছিল, তাই MileSprout এটি শেষ করেছে। এখন থেকে ট্রিপগুলো আপনাকেই বাছাই করতে হবে। সময় দেখে নিতে ট্যাপ করুন।",
   "Map of the drives in this shift": "এই শিফটের ট্রিপগুলোর ম্যাপ",
   "On shift": "শিফটে",
-  "Pause": "বিরতি",
-  "Pause the shift for a personal errand": "ব্যক্তিগত কাজের জন্য শিফটে বিরতি দিন",
-  "Paused · {{elapsed}}": "বিরতিতে · {{elapsed}}",
-  "Paused: drives now aren’t counted as work. Resume when you’re back.": "বিরতিতে: এখনকার ট্রিপ কাজ হিসেবে গোনা হবে না। ফিরে এসে আবার শুরু করুন।",
-  "Resume": "আবার শুরু",
-  "Resume the shift": "শিফট আবার শুরু করুন",
   "Shift": "শিফট",
   "Shift ended": "শিফট শেষ হয়েছে",
   "Shift on {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}}": "{{date}}-এর শিফট, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}}",

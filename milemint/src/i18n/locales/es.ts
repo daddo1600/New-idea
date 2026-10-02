@@ -1,6 +1,7 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Swipe back to end your shift. A personal errand? Swipe that drive left afterwards.": "Desliza hacia atrás para terminar el turno. ¿Un recado personal? Desliza ese viaje a la izquierda después.",
   "Almost there: set location to “Always” and every drive is logged. Home shows you how.": "Ya casi: pon la ubicación en “Siempre” y se registrará cada viaje. Inicio te muestra cómo.",
   "Add your drives from the Drives tab.": "Añade tus viajes desde la pestaña Viajes.",
   "Turn on automatic tracking from the home screen whenever you’re ready, or add a drive from the Drives tab.": "Activa el registro automático desde la pantalla de inicio cuando quieras, o añade un viaje desde la pestaña Viajes.",
@@ -923,7 +924,6 @@ const dictionary: Dictionary = {
   "{{amount}} of business mileage logged": "{{amount}} en kilometraje de trabajo registrado",
   "MileSprout has now logged {{amount}} of business mileage at {{authority}} rates, ready for your expense and relief claims.": "MileSprout ya registró {{amount}} en kilometraje de trabajo con las tarifas de {{authority}}: todo listo para reclamar tus gastos y tu beneficio fiscal.",
   "I’ve logged {{amount}} of business mileage with MileSprout 🚗 Every mile counted, automatically.": "Registré {{amount}} en kilometraje de trabajo con MileSprout 🚗 Cada viaje, contado automáticamente.",
-  "Swipe back to end your shift.": "Desliza atrás para terminar el turno.",
   "{{hint}}. Swipe the button to the left, or double-tap.": "{{hint}}. Desliza el botón hacia la izquierda o toca dos veces.",
   "Invite friends": "Invita a tus amigos",
   "Friends count once they’ve logged a few drives.": "Tus amigos cuentan una vez que registren algunos viajes.",
@@ -977,12 +977,6 @@ const dictionary: Dictionary = {
   "It was still on, so MileSprout ended it. Drives from now on are left for you to sort. Tap to check the times.": "Seguía activo, así que MileSprout lo terminó. Los viajes de ahora en adelante quedan para que tú los clasifiques. Toca para revisar los horarios.",
   "Map of the drives in this shift": "Mapa de los viajes de este turno",
   "On shift": "En turno",
-  "Pause": "Pausar",
-  "Pause the shift for a personal errand": "Pausar el turno para un asunto personal",
-  "Paused · {{elapsed}}": "En pausa · {{elapsed}}",
-  "Paused: drives now aren’t counted as work. Resume when you’re back.": "En pausa: los viajes de ahora no cuentan como trabajo. Reanuda cuando vuelvas.",
-  "Resume": "Reanudar",
-  "Resume the shift": "Reanudar el turno",
   "Shift": "Turno",
   "Shift ended": "Turno terminado",
   "Shift on {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}}": "Turno del {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}}",

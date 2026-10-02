@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import Animated, { ZoomIn } from 'react-native-reanimated';
 
 import { ShiftSwitch } from '@/components/shift-switch';
@@ -7,7 +7,6 @@ import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import type { Shift } from '@/db/shifts-repo';
 import { shiftCheer } from '@/domain/cheers';
-import { useTheme } from '@/hooks/use-theme';
 import { getLanguage, useT } from '@/i18n/i18n';
 import { useRegion } from '@/region/region';
 
@@ -16,20 +15,15 @@ import { LiveDot } from './live-dot';
 /** Shift mode: swipe to start, swipe back to end; every drive in between is work. */
 export function ShiftBar({
   shift,
-  paused,
   drives,
   distance,
   value,
   revision,
   onStart,
   onEnd,
-  onTogglePause,
 }: {
   revision: number;
   shift: Shift | null;
-  /** On a break for a personal errand: drives now aren't work. */
-  paused: boolean;
-  onTogglePause: () => void;
   drives: number;
   distance: string;
   value: string;
@@ -37,7 +31,6 @@ export function ShiftBar({
   onEnd: () => void;
 }) {
   const t = useT();
-  const theme = useTheme();
   const { region } = useRegion();
   const [now, setNow] = useState(() => Date.now());
   /** A send-off shown for a few seconds after swiping to start. */
@@ -87,7 +80,7 @@ export function ShiftBar({
                 </Animated.Text>
               ) : (
                 <Text style={styles.shiftTitle} numberOfLines={1}>
-                  {paused ? t('Paused · {{elapsed}}', { elapsed }) : t('On shift · {{elapsed}}', { elapsed })}
+                  {t('On shift · {{elapsed}}', { elapsed })}
                 </Text>
               )}
               <Text style={styles.shiftSub} numberOfLines={1}>
@@ -99,27 +92,12 @@ export function ShiftBar({
           </>
         )}
       </ShiftSwitch>
-      <View style={styles.shiftFoot}>
-        <ThemedText type="small" themeColor="textSecondary" style={[styles.shiftHint, styles.flex]}>
-          {!shift
-            ? t('Every drive until you end it counts as business.')
-            : paused
-              ? t('Paused: drives now aren’t counted as work. Resume when you’re back.')
-              : t('Swipe back to end your shift.')}
-        </ThemedText>
-        {shift && (
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={paused ? t('Resume the shift') : t('Pause the shift for a personal errand')}
-            hitSlop={8}
-            onPress={onTogglePause}
-            style={[styles.pauseButton, { borderColor: theme.accent }]}>
-            <ThemedText type="smallBold" style={{ color: theme.accent }}>
-              {paused ? t('Resume') : t('Pause')}
-            </ThemedText>
-          </Pressable>
-        )}
-      </View>
+      {/* No pause: a personal errand mid-shift is just swiped to personal afterwards. */}
+      <ThemedText type="small" themeColor="textSecondary" style={styles.shiftHint}>
+        {shift
+          ? t('Swipe back to end your shift. A personal errand? Swipe that drive left afterwards.')
+          : t('Every drive until you end it counts as business.')}
+      </ThemedText>
     </View>
   );
 }
@@ -128,8 +106,6 @@ const styles = StyleSheet.create({
   flex: { flex: 1, gap: Spacing.one },
   shiftStart: { gap: Spacing.one + 2 },
   shiftHint: { textAlign: 'center' },
-  shiftFoot: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
-  pauseButton: { borderWidth: 1, borderRadius: 999, paddingHorizontal: Spacing.three, paddingVertical: Spacing.one },
   cheer: { color: '#FEF3C7', fontSize: 19, fontWeight: '800' },
   shiftTitle: { color: '#FFFFFF', fontSize: 15, fontWeight: '800' },
   shiftSub: { color: '#FEF3C7', fontSize: 12 },

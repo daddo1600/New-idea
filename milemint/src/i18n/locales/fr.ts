@@ -1,6 +1,7 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Swipe back to end your shift. A personal errand? Swipe that drive left afterwards.": "Glissez en arrière pour finir votre quart. Une course perso ? Glissez ce trajet vers la gauche ensuite.",
   "Almost there: set location to “Always” and every drive is logged. Home shows you how.": "Presque fini : réglez la localisation sur « Toujours » et chaque trajet sera enregistré. L’accueil vous montre comment.",
   "Add your drives from the Drives tab.": "Ajoutez vos trajets depuis l’onglet Trajets.",
   "Turn on automatic tracking from the home screen whenever you’re ready, or add a drive from the Drives tab.": "Activez le suivi automatique depuis l’accueil quand vous voulez, ou ajoutez un trajet depuis l’onglet Trajets.",
@@ -963,7 +964,6 @@ const dictionary: Dictionary = {
   "{{amount}} of business mileage logged": "{{amount}} de déplacements d’affaires enregistrés",
   "MileSprout has now logged {{amount}} of business mileage at {{authority}} rates, ready for your expense and relief claims.": "MileSprout a maintenant enregistré {{amount}} de déplacements d’affaires aux taux de {{authority}}, prêts pour vos notes de frais et vos demandes d’allègement.",
   "I’ve logged {{amount}} of business mileage with MileSprout 🚗 Every mile counted, automatically.": "J’ai enregistré {{amount}} de déplacements d’affaires avec MileSprout 🚗 Chaque trajet compté, automatiquement.",
-  "Swipe back to end your shift.": "Glissez à gauche pour terminer le quart.",
   "{{hint}}. Swipe the button to the left, or double-tap.": "{{hint}}. Faites glisser le bouton vers la gauche ou touchez deux fois.",
   "Invite friends": "Inviter des amis",
   "Friends count once they’ve logged a few drives.": "Un ami compte une fois qu’il a enregistré quelques trajets.",
@@ -1017,12 +1017,6 @@ const dictionary: Dictionary = {
   "It was still on, so MileSprout ended it. Drives from now on are left for you to sort. Tap to check the times.": "Il était encore en cours, alors MileSprout l’a terminé. Les trajets suivants sont à classer par vous. Touchez pour vérifier les heures.",
   "Map of the drives in this shift": "Carte des trajets de ce quart",
   "On shift": "En quart",
-  "Pause": "Pause",
-  "Pause the shift for a personal errand": "Mettre le quart en pause pour une sortie personnelle",
-  "Paused · {{elapsed}}": "En pause · {{elapsed}}",
-  "Paused: drives now aren’t counted as work. Resume when you’re back.": "En pause : les trajets ne comptent pas comme travail. Reprenez à votre retour.",
-  "Resume": "Reprendre",
-  "Resume the shift": "Reprendre le quart",
   "Shift": "Quart",
   "Shift ended": "Quart terminé",
   "Shift on {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}}": "Quart du {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}}",

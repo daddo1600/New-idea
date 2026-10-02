@@ -233,8 +233,6 @@ export default function HomeScreen() {
             {shiftMode.enabled && (
               <ShiftBar
                 shift={shiftMode.shift}
-                paused={shiftMode.pause !== null}
-                onTogglePause={() => shiftMode.togglePause().catch(() => {})}
                 drives={shiftTrips.length}
                 distance={formatDistance(
                   shiftTrips.reduce((sum, trip) => sum + trip.distanceMeters, 0),

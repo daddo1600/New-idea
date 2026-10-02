@@ -4401,33 +4401,9 @@
     ]
   },
   {
-    "key": "Pause",
-    "files": [
-      "components/home/shift-bar.tsx"
-    ]
-  },
-  {
-    "key": "Pause the shift for a personal errand",
-    "files": [
-      "components/home/shift-bar.tsx"
-    ]
-  },
-  {
     "key": "Paused",
     "files": [
       "live-activity/model.ts"
-    ]
-  },
-  {
-    "key": "Paused · {{elapsed}}",
-    "files": [
-      "components/home/shift-bar.tsx"
-    ]
-  },
-  {
-    "key": "Paused: drives now aren’t counted as work. Resume when you’re back.",
-    "files": [
-      "components/home/shift-bar.tsx"
     ]
   },
   {
@@ -4781,18 +4757,6 @@
     "files": [
       "app/(tabs)/settings.tsx",
       "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "Resume",
-    "files": [
-      "components/home/shift-bar.tsx"
-    ]
-  },
-  {
-    "key": "Resume the shift",
-    "files": [
-      "components/home/shift-bar.tsx"
     ]
   },
   {
@@ -5496,7 +5460,7 @@
     ]
   },
   {
-    "key": "Swipe back to end your shift.",
+    "key": "Swipe back to end your shift. A personal errand? Swipe that drive left afterwards.",
     "files": [
       "components/home/shift-bar.tsx"
     ]

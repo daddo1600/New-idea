@@ -1,6 +1,7 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Swipe back to end your shift. A personal errand? Swipe that drive left afterwards.": "向回滑动即可结束班次。办私事了？之后把那段行程向左滑。",
   "Almost there: set location to “Always” and every drive is logged. Home shows you how.": "就差一步：把定位设为“始终”，每段行程都会被记录。首页会告诉你怎么做。",
   "Add your drives from the Drives tab.": "在“行程”标签页添加你的行程。",
   "Turn on automatic tracking from the home screen whenever you’re ready, or add a drive from the Drives tab.": "准备好后，在首页开启自动记录，或在“行程”标签页添加行程。",
@@ -867,7 +868,6 @@ const dictionary: Dictionary = {
   "{{amount}} of business mileage logged": "已记录价值 {{amount}} 的工作里程",
   "MileSprout has now logged {{amount}} of business mileage at {{authority}} rates, ready for your expense and relief claims.": "MileSprout 已按 {{authority}} 费率为你记录了价值 {{amount}} 的工作里程，可用于报销和减免申请。",
   "I’ve logged {{amount}} of business mileage with MileSprout 🚗 Every mile counted, automatically.": "我用 MileSprout 记录了价值 {{amount}} 的工作里程 🚗 每一段路都自动记下。",
-  "Swipe back to end your shift.": "往回滑动即可收工。",
   "{{hint}}. Swipe the button to the left, or double-tap.": "{{hint}}。向左滑动按钮，或连按两下。",
   "Invite friends": "邀请朋友",
   "Friends count once they’ve logged a few drives.": "朋友记录几次行程后才会计入。",
@@ -913,12 +913,6 @@ const dictionary: Dictionary = {
   "It was still on, so MileSprout ended it. Drives from now on are left for you to sort. Tap to check the times.": "班次一直没收工，MileSprout 已帮你收工。之后的行程留给你自己分类。轻点查看时间。",
   "Map of the drives in this shift": "这个班次的行程地图",
   "On shift": "开工中",
-  "Pause": "暂停",
-  "Pause the shift for a personal errand": "为私事暂停班次",
-  "Paused · {{elapsed}}": "已暂停 · {{elapsed}}",
-  "Paused: drives now aren’t counted as work. Resume when you’re back.": "已暂停：现在的行程不算工作。回来后再继续。",
-  "Resume": "继续",
-  "Resume the shift": "继续班次",
   "Shift": "班次",
   "Shift ended": "已收工",
   "Shift on {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}}": "{{date}} 的班次，{{span}}，{{hours}}，{{distance}}，{{drives}}，{{value}}",

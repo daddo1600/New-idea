@@ -1,6 +1,7 @@
 import type { Dictionary } from '../i18n';
 
 const dictionary: Dictionary = {
+  "Swipe back to end your shift. A personal errand? Swipe that drive left afterwards.": "शिफ्ट खत्म करने के लिए वापस स्वाइप करें। कोई निजी काम? बाद में उस ड्राइव को बाईं ओर स्वाइप करें।",
   "Almost there: set location to “Always” and every drive is logged. Home shows you how.": "बस थोड़ा और: लोकेशन “हमेशा” पर सेट करें, तो हर ड्राइव लॉग होगी। होम स्क्रीन बताएगी कैसे।",
   "Add your drives from the Drives tab.": "ट्रिप टैब से अपनी ड्राइव जोड़ें।",
   "Turn on automatic tracking from the home screen whenever you’re ready, or add a drive from the Drives tab.": "जब तैयार हों, होम स्क्रीन से ऑटोमैटिक ट्रैकिंग चालू करें, या ट्रिप टैब से कोई ड्राइव जोड़ें।",
@@ -889,7 +890,6 @@ const dictionary: Dictionary = {
   "{{amount}} of business mileage logged": "{{amount}} का बिज़नेस माइलेज लॉग हुआ",
   "MileSprout has now logged {{amount}} of business mileage at {{authority}} rates, ready for your expense and relief claims.": "MileSprout अब तक {{authority}} रेट पर {{amount}} का बिज़नेस माइलेज लॉग कर चुका है, आपके खर्च और राहत के क्लेम के लिए तैयार।",
   "I’ve logged {{amount}} of business mileage with MileSprout 🚗 Every mile counted, automatically.": "मैंने MileSprout से {{amount}} का बिज़नेस माइलेज लॉग किया 🚗 हर ट्रिप गिनी गई, अपने-आप।",
-  "Swipe back to end your shift.": "वापस स्वाइप करके शिफ्ट खत्म करें।",
   "{{hint}}. Swipe the button to the left, or double-tap.": "{{hint}}। बटन को बाईं ओर स्वाइप करें, या दो बार टैप करें।",
   "Invite friends": "दोस्तों को इनवाइट करें",
   "Friends count once they’ve logged a few drives.": "दोस्त कुछ ट्रिप दर्ज होने के बाद गिने जाते हैं।",
@@ -939,12 +939,6 @@ const dictionary: Dictionary = {
   "It was still on, so MileSprout ended it. Drives from now on are left for you to sort. Tap to check the times.": "यह अभी भी चालू थी, इसलिए MileSprout ने इसे खत्म कर दिया। अब से होने वाली ट्रिप आपको खुद सॉर्ट करनी होंगी। समय जांचने के लिए टैप करें।",
   "Map of the drives in this shift": "इस शिफ्ट की ट्रिप का नक्शा",
   "On shift": "शिफ्ट पर",
-  "Pause": "ब्रेक लें",
-  "Pause the shift for a personal errand": "पर्सनल काम के लिए शिफ्ट पर ब्रेक लें",
-  "Paused · {{elapsed}}": "ब्रेक पर · {{elapsed}}",
-  "Paused: drives now aren’t counted as work. Resume when you’re back.": "ब्रेक पर: अभी की ट्रिप काम में नहीं गिनी जाएंगी। लौटकर फिर शुरू करें।",
-  "Resume": "फिर शुरू करें",
-  "Resume the shift": "शिफ्ट फिर शुरू करें",
   "Shift": "शिफ्ट",
   "Shift ended": "शिफ्ट खत्म हुई",
   "Shift on {{date}}, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}}": "{{date}} की शिफ्ट, {{span}}, {{hours}}, {{distance}}, {{drives}}, {{value}}",

@@ -56,10 +56,12 @@ export function useShift(onTripsChanged?: () => unknown) {
   /** Loads it all; resolves to whether the shift open last time has closed since. */
   const load = useCallback(async () => {
     const [settings, open] = await Promise.all([loadSettings(db), currentShift(db)]);
-    const [all, allPauses, running] = await Promise.all([listShifts(db), listPauses(db), currentPause(db)]);
+    // Pausing is gone: a shift left paused by an older version carries on as on shift.
+    if (open && (await currentPause(db))) await resumeShift(db);
+    const [all, allPauses] = await Promise.all([listShifts(db), listPauses(db)]);
     setEnabled(settings.shiftMode);
     setShift(open);
-    setPause(open ? running : null);
+    setPause(null);
     setShifts(all);
     setPauses(allPauses);
     const closedSince = wasOpen.current && !open;
