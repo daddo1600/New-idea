@@ -14,8 +14,8 @@
  * @bacons/apple-targets' `_shared` folder; that folder is also compiled into
  * the widget extension, where App Shortcuts don't belong.)
  *
- * Also copied, as the app's resources: AppShortcuts.xcstrings (the phrases,
- * translated) and Localizable.xcstrings (the intents' titles). They're JSON
+ * Also copied, as the app's resources: Localizable.xcstrings (the intents'
+ * titles; the phrases' AppShortcuts.xcstrings waits, see CATALOGS). They're JSON
  * String Catalogs, compiled by Xcode (15+) into each language's .lproj.
  *
  * No new capability, entitlement or target: App Intents need no Siri
@@ -29,7 +29,13 @@ const { IOSConfig, withDangerousMod, withXcodeProject } = require('expo/config-p
 /** Relative to the project root (milemint/). */
 const SOURCE_DIR = path.join('native', 'siri-shortcuts');
 const SOURCES = ['MileSproutShortcuts.swift'];
-const CATALOGS = ['AppShortcuts.xcstrings', 'Localizable.xcstrings'];
+/*
+ * AppShortcuts.xcstrings (the spoken phrases, translated) isn't included: Xcode only accepts it
+ * for apps that need iOS 17, and MileSprout supports iOS 16.4 (iPhone 8 and X, which many drivers
+ * still use). EAS build 60 failed on it. Until the phrases move to per-language AppShortcuts.strings,
+ * Siri's phrases are in English; the intents' titles (Localizable.xcstrings) stay translated.
+ */
+const CATALOGS = ['Localizable.xcstrings'];
 
 /** Copies the files next to AppDelegate.swift. */
 function withSiriShortcutsFiles(config) {
