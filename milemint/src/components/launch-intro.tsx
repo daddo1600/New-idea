@@ -98,6 +98,35 @@ const ALWAYS = ReduceMotion.Never;
  */
 const DEMO_MONTH = { mi: 400, km: 650 } as const;
 
+/**
+ * A typical year (twelve typical months) at today's rates, in minor units,
+ * with the tiers applied: 55p then 25p a mile in the UK, CRA's lower rate past
+ * 5,000 km, and Australia's 5,000 km cap. What not logging miles leaves unclaimed.
+ */
+function typicalYearOf(region: (typeof REGIONS)[RegionCode]): number {
+  const period = ratePeriodFor(toLocalIsoDate(new Date()), region) ?? region.rates[region.rates.length - 1];
+  let left = DEMO_MONTH[region.unit] * 12;
+  let from = 0;
+  let total = 0;
+  for (const tier of period.tiers) {
+    const room = tier.upTo === null ? left : Math.max(0, Math.min(left, tier.upTo - from));
+    total += (room * tier.rate) / 10;
+    left -= room;
+    from += room;
+    if (left <= 0) break;
+  }
+  return Math.round(total);
+}
+
+/** A rounded amount for estimates ("£220", "$5,526"): pennies would only clutter them. */
+function wholeMoney(minor: number, region: (typeof REGIONS)[RegionCode]): string {
+  return new Intl.NumberFormat(region.locale, {
+    style: 'currency',
+    currency: region.currency,
+    maximumFractionDigits: 0,
+  }).format(Math.round(minor / 100));
+}
+
 /** Today's rate in minor units (pence, cents) per mile or km: the first tier. */
 function ratePerUnitOf(region: (typeof REGIONS)[RegionCode]): number {
   const period = ratePeriodFor(toLocalIsoDate(new Date()), region) ?? region.rates[region.rates.length - 1];
@@ -279,7 +308,11 @@ function QuickIntro({
       </Animated.View>
       <Animated.View style={[styles.counter, counterStyle]}>
         {season && <Greeting text={season.greeting} />}
-        <Text style={styles.money}>{formatMoney(Math.round(headline.amount * shown), region)}</Text>
+        <Text style={styles.money}>
+          {headline.kind === 'year'
+            ? formatMoney(Math.round(headline.amount * shown), region)
+            : wholeMoney(headline.amount * shown, region)}
+        </Text>
         {headline.kind === 'year' ? (
           <>
             <Text style={styles.distance}>{t('found this tax year')}</Text>
@@ -306,6 +339,7 @@ function QuickIntro({
                       distance: new Intl.NumberFormat(region.locale).format(typicalUnits),
                     })}
             </Text>
+            {headline.kind === 'typical' && <Unclaimed region={region} />}
             {/* Their own money so far, under the month: honest, and it grows every drive. */}
             <Text style={styles.soFar}>
               {t('{{amount}} found so far this tax year', { amount: formatMoney(totals.total, region) })}
@@ -425,14 +459,26 @@ function FullIntro({
       </Animated.View>
       <Animated.View style={[styles.counter, counterStyle]}>
         {season && <Greeting text={season.greeting} />}
-        <Text style={styles.money}>{formatMoney(Math.round(units * ratePerUnit), region)}</Text>
+        <Text style={styles.money}>{wholeMoney(units * ratePerUnit, region)}</Text>
         <Text style={styles.distance}>
           {region.unit === 'mi'
             ? t('{{distance}} miles · a typical month of work driving', { count: units, distance })
             : t('{{distance}} km · a typical month of work driving', { count: units, distance })}
         </Text>
+        <Unclaimed region={region} />
       </Animated.View>
     </Animated.View>
+  );
+}
+
+/** Under a typical month: what a year of it is worth, framed as what goes unclaimed without a log. */
+function Unclaimed({ region }: { region: (typeof REGIONS)[RegionCode] }) {
+  const t = useT();
+  const year = useMemo(() => typicalYearOf(region), [region]);
+  return (
+    <Text style={styles.unclaimed}>
+      {t('That’s {{amount}} a year left unclaimed if your drives aren’t logged.', { amount: wholeMoney(year, region) })}
+    </Text>
   );
 }
 
@@ -521,6 +567,15 @@ const styles = StyleSheet.create({
   seed: { position: 'absolute' },
   counter: { position: 'absolute', top: '50%', marginTop: COUNTER_TOP, alignItems: 'center', gap: 2 },
   money: { color: '#FFFFFF', fontSize: 40, fontWeight: '800', fontVariant: ['tabular-nums'] },
+  unclaimed: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    lineHeight: 21,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginTop: 8,
+    maxWidth: 300,
+  },
   soFar: { color: '#D1FAE5', fontSize: 15, lineHeight: 20, fontWeight: '600', textAlign: 'center', marginTop: 4 },
   distance: {
     color: '#FACC15',

@@ -348,6 +348,7 @@ const dictionary: Dictionary = {
   "First trip logged": "Pierwszy przejazd zapisany",
   "Found for you so far": "Znalezione dla Ciebie do tej pory",
   "found this tax year": "znaleziono w tym roku podatkowym",
+  "That’s {{amount}} a year left unclaimed if your drives aren’t logged.": "To {{amount}} rocznie, których nie odzyskasz, jeśli przejazdy nie są zapisywane.",
   "a month of work driving, at your pace": "miesiąc jazdy służbowej w Twoim tempie",
   "{{amount}} found so far this tax year": "{{amount}} znalezione do tej pory w tym roku podatkowym",
   "Free": "Darmowy",

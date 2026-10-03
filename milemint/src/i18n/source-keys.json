@@ -6818,6 +6818,12 @@
     ]
   },
   {
+    "key": "That’s {{amount}} a year left unclaimed if your drives aren’t logged.",
+    "files": [
+      "components/launch-intro.tsx"
+    ]
+  },
+  {
     "key": "That’s it. Just drive: trips appear here after you park.",
     "files": [
       "components/practice-tutorial.tsx"

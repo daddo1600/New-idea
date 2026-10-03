@@ -266,6 +266,7 @@ const dictionary: Dictionary = {
   "First trip logged": "पहली ट्रिप लॉग हुई",
   "Found for you so far": "अब तक आपके लिए मिला",
   "found this tax year": "इस टैक्स वर्ष में मिला",
+  "That’s {{amount}} a year left unclaimed if your drives aren’t logged.": "अगर आपकी ड्राइव्स लॉग नहीं होतीं, तो यह साल के {{amount}} हैं जो बिना क्लेम रह जाते हैं।",
   "a month of work driving, at your pace": "आपकी रफ़्तार से एक महीने की काम की ड्राइविंग",
   "{{amount}} found so far this tax year": "इस टैक्स वर्ष में अब तक {{amount}} मिले",
   "Free": "फ़्री",
