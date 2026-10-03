@@ -33,3 +33,12 @@ The founder signs these off; the team builds from them. The newest decision wins
 - **Keep building** new scenes and dates as research finds more.
 - **Publishing:** a scene or seasonal artwork goes live once it passes **marketing and QA**. It doesn't need a separate "publish" from the founder. Changes to the rest of the site still wait for "publish".
 - **Priority by date:** whatever comes up soonest goes first. A celebration more than 3 months away is not a priority. Start each one with enough lead time for it to look great and be live before its date or season, and skip a date that's too close to do well.
+
+## 3 Oct 2026: Pro price, testers and badge (approved)
+- **Show the Pro price on the website:** £3.99 a month or £29.99 a year, with local prices in $ for US, Canadian and Australian visitors. This is the launch price.
+  - It appears in a gold chip on the Pro card, and in our row of the comparison table.
+  - The heading becomes clearer, e.g. "Logging is free. Pro is a paid upgrade."
+  - On phones the Free card comes first, and the Pro card carries a "Paid upgrade" label.
+  - Research must confirm the App Store price tiers for USD, CAD and AUD before go-live.
+- **Testing is open to the UK, US, Canada and Australia.**
+- **The Founding driver badge goes to testers (2a):** a TestFlight install before launch day earns `founding-badge`, which is kept for good. The method is in `tester-tour.md` §6.1, line 15.
