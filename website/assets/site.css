@@ -691,3 +691,10 @@ html.ms-intro::after {
 .signup .wl-title { color: #FFFFFF; font-size: clamp(1.6rem, 5vw, 2.1rem); margin: 0 0 .3em; }
 .signup-sub { color: #F0FDF7; margin: 0 0 18px; }
 .signup .tester-link a { color: #FFFFFF; }
+/* On phones the app comes first: the phone, then what it is and the money. */
+@media (max-width: 899px) {
+  .hero-phone { order: -1; }
+  .hero-phone .phone { --w: clamp(190px, 50vw, 230px); }
+  .hero .wrap { gap: 28px; padding-top: 28px; }
+  .hero .hero-sprout { display: none; }
+}
