@@ -76,7 +76,7 @@ export function TrackingCard({
             ? t('Until {{time}}. Drives now count as work.', { time: clockLabel(shift.end, region) })
             : workWeek
               ? t('Outside work hours. Drives are saved when you park.')
-              : t('Every work drive is money back at tax time.')}
+              : t('Every work drive adds to what you can claim.')}
         </ThemedText>
       </View>
     );

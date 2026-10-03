@@ -147,7 +147,7 @@ export default function MoneyScreen() {
             icon="trophy.fill"
             glyph="🏆"
             title={t('Milestones')}
-            detail={t('Your money back and badges')}
+            detail={t('Your mileage value and badges')}
             onPress={() => router.push('/milestones')}
           />
           <LinkRow

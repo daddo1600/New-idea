@@ -96,10 +96,10 @@ const dictionary: Dictionary = {
     "few": "{{distance}} km",
     "other": "{{distance}} km"
   },
-  "{{distance}} km · a typical month of work driving": {
-    "one": "{{distance}} km · o lună obișnuită de condus pentru lucru",
-    "few": "{{distance}} km · o lună obișnuită de condus pentru lucru",
-    "other": "{{distance}} km · o lună obișnuită de condus pentru lucru"
+  "{{distance}} km · an example month of part-time work driving": {
+    "one": "{{distance}} km · o lună de exemplu de condus pentru lucru cu normă parțială",
+    "few": "{{distance}} km · o lună de exemplu de condus pentru lucru cu normă parțială",
+    "other": "{{distance}} km · o lună de exemplu de condus pentru lucru cu normă parțială"
   },
   "{{distance}} km logged for work, every one counted. That’s a lot of road.": {
     "one": "{{distance}} km înregistrat pentru lucru, numărat. E un început!",
@@ -111,10 +111,10 @@ const dictionary: Dictionary = {
     "few": "{{distance}} mile",
     "other": "{{distance}} de mile"
   },
-  "{{distance}} miles · a typical month of work driving": {
-    "one": "{{distance}} milă · o lună obișnuită de condus pentru lucru",
-    "few": "{{distance}} mile · o lună obișnuită de condus pentru lucru",
-    "other": "{{distance}} de mile · o lună obișnuită de condus pentru lucru"
+  "{{distance}} miles · an example month of part-time work driving": {
+    "one": "{{distance}} milă · o lună de exemplu de condus pentru lucru cu normă parțială",
+    "few": "{{distance}} mile · o lună de exemplu de condus pentru lucru cu normă parțială",
+    "other": "{{distance}} de mile · o lună de exemplu de condus pentru lucru cu normă parțială"
   },
   "{{distance}} miles logged for work, every one counted. That’s a lot of road.": {
     "one": "{{distance}} milă înregistrată pentru lucru, numărată. E un început!",
@@ -324,7 +324,12 @@ const dictionary: Dictionary = {
   "First trip logged": "Prima cursă înregistrată",
   "Found for you so far": "Găsit pentru tine până acum",
   "found this tax year": "suma găsită în acest an fiscal",
-  "That’s {{amount}} a year left unclaimed if your drives aren’t logged.": "Înseamnă {{amount}} pe an nerevendicați dacă cursele tale nu sunt înregistrate.",
+  "A year of this is worth {{amount}} at {{authority}}’s rate.": "Un an ca acesta valorează {{amount}} la tariful {{authority}}.",
+  "A year of this is worth about {{amount}} at {{authority}}’s allowance rate.": "Un an ca acesta valorează aproximativ {{amount}} la tariful {{authority}} de decontare.",
+  "HMRC": "HMRC",
+  "the IRS": "IRS",
+  "the CRA": "CRA",
+  "the ATO": "ATO",
   "a month of work driving, at your pace": "o lună de condus pentru muncă, în ritmul tău",
   "{{amount}} found so far this tax year": "{{amount}} găsiți până acum în acest an fiscal",
   "Free": "Gratuit",
@@ -417,7 +422,7 @@ const dictionary: Dictionary = {
   "Milestones": "Realizări",
   "Missed miles check": "Verificare mile ratate",
   "Mon": "Lun",
-  "Money back": "Bani înapoi",
+  "Mileage value": "Valoarea kilometrajului",
   "Monthly": "Lunar",
   "Moped or motorbike": "Moped sau motocicletă",
   "Motorbike": "Motocicletă",
@@ -558,8 +563,8 @@ const dictionary: Dictionary = {
   },
   "Sort this week’s drives and keep your records up to date.": "Sortează cursele săptămânii și ține-ți evidența la zi.",
   "Sort this week’s drives now and tax time becomes a two-minute job.": "Sortează acum cursele săptămânii și pregătirea pentru taxe devine o treabă de două minute.",
-  "Sort your drives and add any you missed before {{date}}. Every work kilometre is money back.": "Sortează-ți cursele și adaugă-le pe cele ratate înainte de {{date}}. Fiecare kilometru de lucru înseamnă bani înapoi.",
-  "Sort your drives and add any you missed before {{date}}. Every work mile is money back.": "Sortează-ți cursele și adaugă-le pe cele ratate înainte de {{date}}. Fiecare milă de lucru înseamnă bani înapoi.",
+  "Sort your drives and add any you missed before {{date}}. Every work kilometre adds to what you can claim.": "Sortează-ți cursele și adaugă-le pe cele ratate înainte de {{date}}. Fiecare kilometru de lucru se adaugă la ce poți revendica.",
+  "Sort your drives and add any you missed before {{date}}. Every work mile adds to what you can claim.": "Sortează-ți cursele și adaugă-le pe cele ratate înainte de {{date}}. Fiecare milă de lucru se adaugă la ce poți revendica.",
   "Sort your drives each week and your figures are ready for every deadline. MileSprout reminds you two months, one month and one week before the tax year ends.": "Sortează-ți cursele în fiecare săptămână și cifrele sunt gata oricând vine un termen. MileSprout îți amintește cu două luni, o lună și o săptămână înainte de sfârșitul anului fiscal.",
   "Spring is here 🌸": "A venit primăvara 🌸",
   "Start": "Început",
@@ -626,7 +631,7 @@ const dictionary: Dictionary = {
   "Total miles": "Total mile",
   "Counting your miles": "Îți numărăm milele",
   "Counting your km": "Îți numărăm km",
-  "Every work drive is money back at tax time.": "Fiecare cursă de muncă înseamnă bani înapoi la impozit.",
+  "Every work drive adds to what you can claim.": "Fiecare cursă de muncă se adaugă la ce poți revendica.",
   "Outside work hours. Drives are saved when you park.": "În afara programului. Cursele se salvează când parchezi.",
   "Until {{time}}. Drives now count as work.": "Până la {{time}}. Cursele contează acum ca muncă.",
   "{{money}} · {{distance}}": "{{money}} · {{distance}}",
@@ -696,7 +701,7 @@ const dictionary: Dictionary = {
   "Your mileage log is ready for your tax return.": "Jurnalul tău de kilometraj e gata pentru declarația fiscală.",
   "Your mileage report is ready. Export it now so you have the figures ready.": "Raportul tău de kilometraj e gata. Exportă-l acum, ca să ai cifrele la îndemână.",
   "Your drives are waiting 📋": "Cursele tale te așteaptă 📋",
-  "Your money back and badges": "Banii înapoi și insignele tale",
+  "Your mileage value and badges": "Valoarea kilometrajului tău și insignele",
   "Your own purpose": "Scopul tău",
   "Your trips are stored encrypted on your iPhone and are never sent to MileSprout.": "Cursele tale sunt stocate criptat pe iPhone și nu sunt trimise niciodată la MileSprout.",
   "Your vehicles": "Vehiculele tale",

@@ -243,10 +243,10 @@ export function countdownReminders(
       before: 30,
       title: t('1 month left in the {{year}} tax year', { year: label }),
       body: km
-        ? t('Sort your drives and add any you missed before {{date}}. Every work kilometre is money back.', {
+        ? t('Sort your drives and add any you missed before {{date}}. Every work kilometre adds to what you can claim.', {
             date: endDate,
           })
-        : t('Sort your drives and add any you missed before {{date}}. Every work mile is money back.', {
+        : t('Sort your drives and add any you missed before {{date}}. Every work mile adds to what you can claim.', {
             date: endDate,
           }),
     },

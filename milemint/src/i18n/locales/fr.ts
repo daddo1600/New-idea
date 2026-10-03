@@ -96,10 +96,10 @@ const dictionary: Dictionary = {
     "many": "{{distance}} km",
     "other": "{{distance}} km"
   },
-  "{{distance}} km · a typical month of work driving": {
-    "one": "{{distance}} km · un mois typique de trajets de travail",
-    "many": "{{distance}} km · un mois typique de trajets de travail",
-    "other": "{{distance}} km · un mois typique de trajets de travail"
+  "{{distance}} km · an example month of part-time work driving": {
+    "one": "{{distance}} km · exemple d’un mois de trajets de travail à temps partiel",
+    "many": "{{distance}} km · exemple d’un mois de trajets de travail à temps partiel",
+    "other": "{{distance}} km · exemple d’un mois de trajets de travail à temps partiel"
   },
   "{{distance}} km logged for work, every one counted. That’s a lot of road.": {
     "one": "{{distance}} km parcouru pour le travail, et chacun compte. Ça fait du chemin !",
@@ -111,10 +111,10 @@ const dictionary: Dictionary = {
     "many": "{{distance}} miles",
     "other": "{{distance}} miles"
   },
-  "{{distance}} miles · a typical month of work driving": {
-    "one": "{{distance}} mile · un mois typique de trajets de travail",
-    "many": "{{distance}} miles · un mois typique de trajets de travail",
-    "other": "{{distance}} miles · un mois typique de trajets de travail"
+  "{{distance}} miles · an example month of part-time work driving": {
+    "one": "{{distance}} mile · exemple d’un mois de trajets de travail à temps partiel",
+    "many": "{{distance}} miles · exemple d’un mois de trajets de travail à temps partiel",
+    "other": "{{distance}} miles · exemple d’un mois de trajets de travail à temps partiel"
   },
   "{{distance}} miles logged for work, every one counted. That’s a lot of road.": {
     "one": "{{distance}} mile parcouru pour le travail, et chacun compte. Ça fait du chemin !",
@@ -324,7 +324,12 @@ const dictionary: Dictionary = {
   "First trip logged": "Premier trajet enregistré",
   "Found for you so far": "Trouvé pour vous jusqu’ici",
   "found this tax year": "trouvés cette année d’imposition",
-  "That’s {{amount}} a year left unclaimed if your drives aren’t logged.": "Soit {{amount}} par an non réclamés si vos trajets ne sont pas enregistrés.",
+  "A year of this is worth {{amount}} at {{authority}}’s rate.": "Une année comme celle-ci vaut {{amount}} au tarif fixé par {{authority}}.",
+  "A year of this is worth about {{amount}} at {{authority}}’s allowance rate.": "Une année comme celle-ci vaut environ {{amount}} au taux de remboursement fixé par {{authority}}.",
+  "HMRC": "HMRC",
+  "the IRS": "l’IRS",
+  "the CRA": "la CRA",
+  "the ATO": "l’ATO",
   "a month of work driving, at your pace": "un mois de trajets pro, à votre rythme",
   "{{amount}} found so far this tax year": "{{amount}} trouvés jusqu’ici cette année d’imposition",
   "Free": "Gratuit",
@@ -417,7 +422,7 @@ const dictionary: Dictionary = {
   "Milestones": "Réussites",
   "Missed miles check": "Distance non comptée",
   "Mon": "Lun",
-  "Money back": "Déductions trouvées",
+  "Mileage value": "Valeur kilométrique",
   "Monthly": "Mensuel",
   "Moped or motorbike": "Scooter ou moto",
   "Motorbike": "Moto",
@@ -558,8 +563,8 @@ const dictionary: Dictionary = {
   },
   "Sort this week’s drives and keep your records up to date.": "Classez les trajets de la semaine pour garder vos relevés à jour.",
   "Sort this week’s drives now and tax time becomes a two-minute job.": "Classez les trajets de la semaine dès maintenant, et les impôts deviendront une affaire de deux minutes.",
-  "Sort your drives and add any you missed before {{date}}. Every work kilometre is money back.": "Classez vos trajets et ajoutez ceux que vous avez oubliés avant le {{date}}. Chaque kilomètre pour le travail compte au moment des impôts.",
-  "Sort your drives and add any you missed before {{date}}. Every work mile is money back.": "Classez vos trajets et ajoutez ceux que vous avez oubliés avant le {{date}}. Chaque mile pour le travail compte au moment des impôts.",
+  "Sort your drives and add any you missed before {{date}}. Every work kilometre adds to what you can claim.": "Classez vos trajets et ajoutez ceux que vous avez oubliés avant le {{date}}. Chaque kilomètre pour le travail s’ajoute à ce que vous pouvez réclamer.",
+  "Sort your drives and add any you missed before {{date}}. Every work mile adds to what you can claim.": "Classez vos trajets et ajoutez ceux que vous avez oubliés avant le {{date}}. Chaque mile pour le travail s’ajoute à ce que vous pouvez réclamer.",
   "Sort your drives each week and your figures are ready for every deadline. MileSprout reminds you two months, one month and one week before the tax year ends.": "Classez vos trajets chaque semaine et vos chiffres seront prêts à chaque échéance. MileSprout vous fait un rappel deux mois, un mois et une semaine avant la fin de l’année d’imposition.",
   "Spring is here 🌸": "Le printemps est arrivé 🌸",
   "Start": "Début",
@@ -626,7 +631,7 @@ const dictionary: Dictionary = {
   "Total miles": "Total miles",
   "Counting your miles": "Vos miles sont comptés",
   "Counting your km": "Vos km sont comptés",
-  "Every work drive is money back at tax time.": "Chaque trajet pro, c’est de l’argent récupéré aux impôts.",
+  "Every work drive adds to what you can claim.": "Chaque trajet pro s’ajoute à ce que vous pouvez réclamer.",
   "Outside work hours. Drives are saved when you park.": "Hors horaires de travail. Les trajets sont enregistrés quand vous vous garez.",
   "Until {{time}}. Drives now count as work.": "Jusqu’à {{time}}. Les trajets comptent maintenant comme pro.",
   "{{money}} · {{distance}}": "{{money}} · {{distance}}",
@@ -696,7 +701,7 @@ const dictionary: Dictionary = {
   "Your mileage log is ready for your tax return.": "Votre registre des déplacements est prêt pour votre déclaration.",
   "Your mileage report is ready. Export it now so you have the figures ready.": "Votre rapport de déplacements est prêt. Exportez-le maintenant pour avoir vos chiffres sous la main.",
   "Your drives are waiting 📋": "Vos trajets vous attendent 📋",
-  "Your money back and badges": "Vos déductions et vos badges",
+  "Your mileage value and badges": "Votre valeur kilométrique et vos badges",
   "Your own purpose": "Votre propre motif",
   "Your trips are stored encrypted on your iPhone and are never sent to MileSprout.": "Vos trajets sont stockés chiffrés sur votre iPhone et ne sont jamais envoyés à MileSprout.",
   "Your vehicles": "Vos véhicules",

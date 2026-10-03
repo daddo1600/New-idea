@@ -51,6 +51,12 @@ export type Region = {
   unit: DistanceUnit;
   /** Tax office, as users know it. */
   authority: string;
+  /**
+   * The tax office in a sentence, where English wants "the" ("at the IRS’s
+   * rate", but "at HMRC’s rate"). Translated, so each language can add its own
+   * article to fit the sentence it's used in.
+   */
+  authorityName: string;
   /** First day of the tax year. */
   taxYearStart: { month: number; day: number };
   /** Rates for cars and vans. */
@@ -109,6 +115,7 @@ export const REGIONS: Record<RegionCode, Region> = {
     locale: 'en-US',
     unit: 'mi',
     authority: 'IRS',
+    authorityName: msg('the IRS'),
     taxYearStart: { month: 1, day: 1 },
     rates: [
       { from: '2024-01-01', tiers: [{ upTo: null, rate: 670 }] },
@@ -146,6 +153,7 @@ export const REGIONS: Record<RegionCode, Region> = {
     locale: 'en-GB',
     unit: 'mi',
     authority: 'HMRC',
+    authorityName: msg('HMRC'),
     taxYearStart: { month: 4, day: 6 },
     rates: [
       { from: '2011-04-06', tiers: [{ upTo: 10_000, rate: 450 }, { upTo: null, rate: 250 }] },
@@ -185,6 +193,7 @@ export const REGIONS: Record<RegionCode, Region> = {
     locale: 'en-CA',
     unit: 'km',
     authority: 'CRA',
+    authorityName: msg('the CRA'),
     taxYearStart: { month: 1, day: 1 },
     rates: [
       { from: '2024-01-01', tiers: [{ upTo: 5_000, rate: 700 }, { upTo: null, rate: 640 }] },
@@ -222,6 +231,7 @@ export const REGIONS: Record<RegionCode, Region> = {
     locale: 'en-AU',
     unit: 'km',
     authority: 'ATO',
+    authorityName: msg('the ATO'),
     taxYearStart: { month: 7, day: 1 },
     rates: [
       { from: '2023-07-01', tiers: [{ upTo: 5_000, rate: 850 }, { upTo: null, rate: 0 }] },

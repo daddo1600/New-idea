@@ -93,17 +93,19 @@ const CROSS_FADE_MS = 200;
 const ALWAYS = ReduceMotion.Never;
 /** The drive the counter shows. */
 /**
- * The demo counts up a typical month of business driving (about 400 miles or
- * 650 km): big enough to show what's at stake, labelled so it promises nothing.
+ * The demo counts up an example month of part-time work driving: 400 miles or
+ * 650 km, about 100 miles (160 km) a week. Labelled as an example, not
+ * "typical": full-time drivers do far more and casual ones far less.
  */
 const DEMO_MONTH = { mi: 400, km: 650 } as const;
 
 /**
- * A typical year (twelve typical months) at today's rates, in minor units,
+ * A year of the example month (twelve of them) at today's rates, in minor units,
  * with the tiers applied: 55p then 25p a mile in the UK, CRA's lower rate past
- * 5,000 km, and Australia's 5,000 km cap. What not logging miles leaves unclaimed.
+ * 5,000 km, and Australia's 5,000 km cap. What those miles are worth at the
+ * tax office's rate, not tax money back (that depends on the driver's tax band).
  */
-function typicalYearOf(region: (typeof REGIONS)[RegionCode]): number {
+function exampleYearOf(region: (typeof REGIONS)[RegionCode]): number {
   const period = ratePeriodFor(toLocalIsoDate(new Date()), region) ?? region.rates[region.rates.length - 1];
   let left = DEMO_MONTH[region.unit] * 12;
   let from = 0;
@@ -139,7 +141,7 @@ const STEPS = 100;
  * Opening sequence. Before set-up: the full demo drive (about 7 s) that
  * shows what MileSprout does. Once set up: the same pace (about 7.5 s) where
  * the sprout grows as the user's own tax-year money and distance count up
- * from zero, so every launch is a reminder of the money coming back. A tap
+ * from zero, so every launch is a reminder of what their drives are worth. A tap
  * skips either.
  */
 export function LaunchIntro({ onDone }: { onDone: () => void }) {
@@ -213,16 +215,16 @@ function QuickIntro({
   const gained = totals.total - Math.max(0, Math.min(totals.seen, totals.total));
   const meters = totals.meters ?? 0;
   // A new user's first weeks lead with a month's worth, not the first drive's few pence.
-  const typicalUnits = DEMO_MONTH[region.unit];
+  const exampleUnits = DEMO_MONTH[region.unit];
   const headline = useMemo(
     () =>
       launchHeadline({
         total: totals.total,
         since: totals.since ?? null,
-        typicalMonth: Math.round(typicalUnits * ratePerUnitOf(region)),
+        typicalMonth: Math.round(exampleUnits * ratePerUnitOf(region)),
         now: new Date(),
       }),
-    [totals, typicalUnits, region],
+    [totals, exampleUnits, region],
   );
   // With Reduce Motion the same value runs the short cross-fade instead of the climb.
   const emerge = useSharedValue(reduceMotion ? 1 : 0);
@@ -330,13 +332,13 @@ function QuickIntro({
               {headline.kind === 'pace'
                 ? t('a month of work driving, at your pace')
                 : region.unit === 'mi'
-                  ? t('{{distance}} miles · a typical month of work driving', {
-                      count: typicalUnits,
-                      distance: new Intl.NumberFormat(region.locale).format(typicalUnits),
+                  ? t('{{distance}} miles · an example month of part-time work driving', {
+                      count: exampleUnits,
+                      distance: new Intl.NumberFormat(region.locale).format(exampleUnits),
                     })
-                  : t('{{distance}} km · a typical month of work driving', {
-                      count: typicalUnits,
-                      distance: new Intl.NumberFormat(region.locale).format(typicalUnits),
+                  : t('{{distance}} km · an example month of part-time work driving', {
+                      count: exampleUnits,
+                      distance: new Intl.NumberFormat(region.locale).format(exampleUnits),
                     })}
             </Text>
             {headline.kind === 'typical' && <Unclaimed region={region} />}
@@ -462,8 +464,8 @@ function FullIntro({
         <Text style={styles.money}>{wholeMoney(units * ratePerUnit, region)}</Text>
         <Text style={styles.distance}>
           {region.unit === 'mi'
-            ? t('{{distance}} miles · a typical month of work driving', { count: units, distance })
-            : t('{{distance}} km · a typical month of work driving', { count: units, distance })}
+            ? t('{{distance}} miles · an example month of part-time work driving', { count: units, distance })
+            : t('{{distance}} km · an example month of part-time work driving', { count: units, distance })}
         </Text>
         <Unclaimed region={region} />
       </Animated.View>
@@ -471,13 +473,20 @@ function FullIntro({
   );
 }
 
-/** Under a typical month: what a year of it is worth, framed as what goes unclaimed without a log. */
+/**
+ * Under the example month: what a year of it is worth at the tax office's rate.
+ * Canada's per-km figure is CRA's allowance rate for employees (see `caveat`
+ * in regions.ts), so there it says so, and "about".
+ */
 function Unclaimed({ region }: { region: (typeof REGIONS)[RegionCode] }) {
   const t = useT();
-  const year = useMemo(() => typicalYearOf(region), [region]);
+  const year = useMemo(() => exampleYearOf(region), [region]);
+  const params = { amount: wholeMoney(year, region), authority: t(region.authorityName) };
   return (
     <Text style={styles.unclaimed}>
-      {t('That’s {{amount}} a year left unclaimed if your drives aren’t logged.', { amount: wholeMoney(year, region) })}
+      {region.code === 'CA'
+        ? t('A year of this is worth about {{amount}} at {{authority}}’s allowance rate.', params)
+        : t('A year of this is worth {{amount}} at {{authority}}’s rate.', params)}
     </Text>
   );
 }

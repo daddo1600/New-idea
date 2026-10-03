@@ -115,7 +115,7 @@ export default function MilestonesScreen() {
             </View>
           )}
         </View>
-        {section(t('Money back'), 'money')}
+        {section(t('Mileage value'), 'money')}
         {section(miles ? t('Work miles') : t('Work km'), 'distance')}
         {section(t('Good habits'), 'habit')}
       </ScrollView>
