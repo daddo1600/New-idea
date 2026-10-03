@@ -182,3 +182,28 @@ Notes for marketing and coding:
   Apple's help pages don't state the tax treatment per country outright. Schedule 2 Exhibit B, which would, couldn't be downloaded.
 - gov.uk, accc.gov.au, competition-bureau.canada.ca and the US code sites are blocked from this session. Rows citing them rely on search-result summaries of those pages and are marked medium. Check the UK subscription-regime date and Australia's 1 Jul 2027 start against the primary pages before quoting them anywhere public.
 - This is not legal advice. The lines above follow each regulator's published guidance for advertising a price. They do not replace the checkout disclosures Apple and our paywall already make.
+
+## Prices set in App Store Connect
+
+Changed on 3 Oct 2026 by the app-store agent, following the decision of 3 Oct 2026, "Pro price set, with a price promise" (`decisions.md`). This clears the blocker in the short answer above: App Store Connect now holds the approved prices.
+
+**Before the change (read first):**
+- App version 1.0 is PREPARE_FOR_SUBMISSION and has never been released. Both subscriptions are READY_TO_SUBMIT and have never been approved, so there are no subscribers and no existing prices to preserve.
+- The app is available in GBR, USA, CAN and AUS only (4 of 175 territories; "available in new territories" is off).
+- The old prices were £5.99 / £49.99, US$5.99 / US$49.99, CA$7.99 / CA$69.99 and A$9.99 / A$79.99.
+
+**What changed:** eight prices, set through `POST /v1/subscriptionPrices` with an immediate start (no start date) and `preserveCurrentPrice: false`. GBR is the base. CAN and AUS yearly are set by hand, because Apple's equalisation from £29.99 gives CA$39.99 and A$49.99.
+
+**Read back from the API after the change:**
+
+| Storefront | Monthly (`com.milemint.app.pro.monthly`) | Yearly (`com.milemint.app.pro.yearly`) | Apple's equalisation from the UK, for comparison |
+|---|---|---|---|
+| GBR | £3.99 (proceeds £2.82) | £29.99 (proceeds £21.18) | (base) |
+| USA | US$3.99 (proceeds US$3.39) | US$29.99 (proceeds US$25.49) | same as set |
+| CAN | CA$4.99 (proceeds CA$4.24) | CA$37.99 (proceeds CA$32.29) | yearly CA$39.99 |
+| AUS | A$5.99 (proceeds A$4.63) | A$44.99 (proceeds A$34.77) | yearly A$49.99 |
+
+**Left as it was:**
+- **Trial.** The yearly plan's introductory offer is still a free month (FREE_TRIAL, one month, from 30 Sep 2026, no end date) in all 175 territories, and is identical before and after. The monthly plan has no introductory offer.
+- **Other territories.** The app is sold only in the four countries, so the other 171 territories were not re-equalised. They still hold the old equalised prices (for example IRL/DEU €6.99 / €59.99, NZL NZ$9.99 / NZ$99.99). Customers can't see them. If availability is ever widened, re-equalise from the £3.99 / £29.99 base first.
+- Subscription names, review notes, states, the listing, app availability and review submissions were not touched. Nothing was submitted for review.
