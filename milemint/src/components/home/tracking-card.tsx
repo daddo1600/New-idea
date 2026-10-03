@@ -125,6 +125,8 @@ export function TrackingCard({
       accessibilityLabel={`${t(message.title)}. ${t('Turn on')}`}
       accessibilityHint={t(message.body)}
       onPress={() => router.push('/setup-tracking')}
+      // The row looks 36pt tall; the tap target reaches 44pt.
+      hitSlop={{ top: 4, bottom: 4 }}
       style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
       {pill}
       <View style={[styles.turnOn, { backgroundColor: theme.accent }]}>
