@@ -26,3 +26,9 @@
    - The app now keeps a Keychain copy of claims, so reinstalling doesn't reset limits. A new phone or an erased iPhone still starts afresh.
    - For the server-side per-person limit without an account, consider Apple's DeviceCheck: two bits per device, kept by Apple and readable only by our server. Or use an anonymous install ID stored in the Keychain.
    - `REDEEM_URL_BASE` in `milemint/src/perks/code.ts` points at the placeholder `https://milesprout.app/r/`.
+8. **Perks: two-step claim like Three+.** The user's screen recording of Three+ "My codes" shows "£1 weekly drink, Expires: 04/10/26", and the code screen itself recorded black.
+   - **Claim (reserve):** any time, even before a shift. The code sits in "My codes" until the hold date (e.g. the end of the partner's week). A hold left unused lapses and goes back into the pool without using up the allowance.
+   - **Use now (activate):** at the till, this starts the short window (30 min in store). The QR and code show only after activation. Once activated, it counts against the allowance.
+   - **Park rule:** applies to "Use now" (and claiming), not just claiming.
+   - **Screen-recording protection, as Three does:** hide the code while the screen is being recorded or mirrored (iOS `isCaptured`, e.g. expo-screen-capture), so codes can't be shared as videos. Screenshots can only be detected, not blocked.
+   - **Changes:** a schema migration (`activated_at`, `hold_until`), `claims.ts` statuses (held, active, redeemed, lapsed), the Keychain ledger format, the offer card and code screen, new strings in 10 languages, and the server: activation should be checked by the server once it exists.
