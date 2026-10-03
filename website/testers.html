@@ -17,8 +17,8 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/assets/site.css?v=13378188">
-<script src="/assets/site.js?v=b7801408" defer></script>
+<link rel="stylesheet" href="/assets/site.css?v=3c3da7f7">
+<script src="/assets/site.js?v=e5b81a58" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -66,7 +66,7 @@
           <h3>You get</h3>
           <ul>
             <li>Early access on your iPhone, through Apple's TestFlight app</li>
-            <li><strong>12 months of Pro free</strong> when it launches (on the early-access list too? You get the 12 months instead of the list's 3, not both)</li>
+            <li><strong>12 months of Pro free</strong> when it launches, in place of the waitlist's 3 months. It doesn't renew. <a href="#offer-terms">Terms below the form.</a></li>
             <li>The <strong>Founding driver</strong> badge in the app</li>
             <li>A direct line to the team: tell us what's annoying and we'll fix it</li>
           </ul>
@@ -97,9 +97,10 @@
       <p class="wl-error wl-target" id="error" tabindex="-1">Sorry, that didn't work. Check your email address, tick the box, and try again. Or email <a href="mailto:hello@milesprout.app">hello@milesprout.app</a>.</p>
       <p class="wl-error wl-target" id="error-js" tabindex="-1">Please turn on JavaScript so we can check you're not a bot, then try again. Or email <a href="mailto:hello@milesprout.app">hello@milesprout.app</a> and we'll add you.</p>
       <p class="wl-error wl-target" id="error-rate" tabindex="-1">That's a lot of sign-ups from one connection. Please try again in an hour, or email <a href="mailto:hello@milesprout.app">hello@milesprout.app</a>.</p>
-      <!-- Turnstile site key: 1x00000000000000000000AA is Cloudflare's always-passes test key, for the preview.
-         TODO(founder): put the real site key here (Cloudflare → Turnstile → milesprout.app); see website/README.md. -->
-      <form class="waitlist" action="/api/waitlist" method="post" data-waitlist data-turnstile-sitekey="1x00000000000000000000AA">
+      <!-- Bot check (Cloudflare Turnstile) is OFF until the founder's site key is in: with no data-turnstile-sitekey
+         the script never loads and the form posts as before. TODO(founder): add data-turnstile-sitekey="<site key>"
+         to this form (and the other two) AND set TURNSTILE_SECRET_KEY on the Pages project, both at once; see website/README.md. -->
+      <form class="waitlist" action="/api/waitlist" method="post" data-waitlist>
         <input type="hidden" name="source" value="testers">
         <!-- site.js copies ?g= from the link here (no JS: the server reads it from the Referer) -->
         <input type="hidden" name="group" value="">
@@ -145,6 +146,7 @@
             </fieldset>
           </div>
           <label class="wl-consent"><input type="checkbox" name="consent" value="yes" required> <span>Email me a TestFlight invite and testing updates, and the launch email. Unsubscribe any time. <a href="/privacy#waitlist">How we use your email</a></span></label>
+          <p class="fine wl-terms" id="offer-terms">For founding testers who join before launch. We'll email you a one-time App Store code within 3 days of launch; redeem it within 60 days. One per person and per Apple Account. <strong>It doesn't renew: after 12 months Pro simply stops, and you're never charged unless you choose to subscribe.</strong> Testers get this instead of the 3-month waitlist offer, not as well as it.</p>
           <div class="wl-hp" aria-hidden="true"><label>Company <input type="text" name="company" tabindex="-1" autocomplete="off"></label></div>
         </div>
         <p class="wl-done" tabindex="-1" hidden><strong>You're in.</strong> We'll email your TestFlight invite within a few days.</p>

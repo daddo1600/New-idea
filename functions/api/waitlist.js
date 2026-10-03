@@ -14,7 +14,8 @@
 //   - At most 5 sign-ups an hour from one IP address. Only a SHA-256 hash of the address with a salt
 //     that changes daily is kept, in its own table (created on first use), and only for that hour:
 //       CREATE TABLE waitlist_rate (ip_hash TEXT NOT NULL, at INTEGER NOT NULL)
-//     Set RATE_LIMIT_SALT on the project to make the hashes impossible to reverse by brute force.
+//     With RATE_LIMIT_SALT (a random secret on the project) the day's salt is HMAC(RATE_LIMIT_SALT, day),
+//     so the hashes can't be brute-forced back to addresses; without it the salt is the day alone.
 //
 // Accepts JSON (from the site's script) or a normal form post (no JavaScript).
 // JSON gets JSON back; a form post gets a 303 redirect to /waitlist?joined=1#joined
@@ -88,12 +89,21 @@ function redirect(request, path) {
   });
 }
 
-// SHA-256 of the IP with a salt that changes every day (UTC): the raw address is never stored.
-async function hashIp(ip, salt) {
+const hex = (buf) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+
+// Today's salt (UTC day): HMAC-SHA256(RATE_LIMIT_SALT, day) when the secret is set, else the day alone.
+async function daySalt(secret) {
   const day = new Date().toISOString().slice(0, 10);
-  const bytes = new TextEncoder().encode(`${salt}|${day}|${ip}`);
-  const digest = await crypto.subtle.digest('SHA-256', bytes);
-  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+  if (!secret) return day;
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  return hex(await crypto.subtle.sign('HMAC', key, enc.encode(day)));
+}
+
+// SHA-256 of the IP with today's salt: the raw address is never stored.
+async function hashIp(ip, secret) {
+  const salt = await daySalt(secret);
+  return hex(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${salt}|${ip}`)));
 }
 
 // True when this IP hash already has RATE_LIMIT sign-ups in the last hour. Old rows are cleared as we go.
@@ -108,14 +118,18 @@ async function overLimit(DB, ipHash, now) {
   return Number(row && row.n) >= RATE_LIMIT;
 }
 
-// Cloudflare Turnstile: is this token good? Network trouble counts as a failure.
-async function turnstileOk(token, secret, ip) {
+// Cloudflare Turnstile: is this token good, for this site and this form? Network trouble or no
+// answer within 5 s counts as a failure.
+async function turnstileOk(token, secret, ip, host) {
   const form = new URLSearchParams({ secret, response: token });
   if (ip) form.set('remoteip', ip);
   try {
-    const res = await fetch(SITEVERIFY, { method: 'POST', body: form });
+    const res = await fetch(SITEVERIFY, { method: 'POST', body: form, signal: AbortSignal.timeout(5000) });
     const out = await res.json();
-    return !!(out && out.success);
+    if (!out || !out.success) return false;
+    if (out.action && out.action !== 'waitlist') return false;
+    if (out.hostname && host && out.hostname !== host) return false;
+    return true;
   } catch (err) {
     console.error('turnstile siteverify failed', err && err.message);
     return false;
@@ -206,7 +220,7 @@ export async function handleWaitlist(request, env) {
   const token = str(data['cf-turnstile-response']).trim();
   if (secret) {
     if (!token) return isForm ? redirect(request, errorPage('js')) : refuse('bot', 400, 'js');
-    if (!(await turnstileOk(token, secret, ip))) return refuse('bot', 403, 'js');
+    if (!(await turnstileOk(token, secret, ip, new URL(request.url).hostname))) return refuse('bot', 403, 'js');
   } else if (!warnedNoSecret) {
     warnedNoSecret = true;
     console.warn('waitlist: TURNSTILE_SECRET_KEY is not set, so the Turnstile bot check is skipped');

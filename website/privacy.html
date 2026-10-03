@@ -10,7 +10,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/assets/site.css?v=13378188">
+<link rel="stylesheet" href="/assets/site.css?v=3c3da7f7">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -137,7 +137,7 @@
     <p>Before launch you can join our waitlist on this website.</p>
     <ul>
       <li><strong>What we keep.</strong> Your email address, what you drive for and your country if you choose to tell us, which form you used, and the time you gave consent. Nothing else: not your IP address, not your browser details.</li>
-      <li><strong>Stopping floods of sign-ups.</strong> To allow at most 5 sign-ups an hour from one connection, we keep a scrambled code made from your IP address (a SHA-256 hash with a value that changes every day, so it can't be turned back into the address) for one hour, then delete it. It isn't stored with your email.</li>
+      <li><strong>Stopping floods of sign-ups.</strong> To allow at most 5 sign-ups an hour from one connection, we keep a scrambled code made from your IP address (a SHA-256 hash with a secret value that changes every day), so we never store the address itself; it's deleted after an hour, and it isn't stored with your email.</li>
       <li><strong>What for.</strong> To email you when MileSprout launches, with your App Store code for 3 months of Pro free (12 months for founding testers). We'll only send other launch news if you've agreed to it. We never sell or share your email, and never use it for advertising.</li>
       <li><strong>Where.</strong> In a Cloudflare D1 database. Cloudflare stores and processes it for us, as our processor.</li>
       <li><strong>How long.</strong> Until 12 months after launch, or sooner if you unsubscribe (every email has a link) or ask us to delete it at <a href="mailto:privacy@milesprout.app">privacy@milesprout.app</a>.</li>

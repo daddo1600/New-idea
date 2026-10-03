@@ -245,12 +245,12 @@ function fakeDB2() {
 }
 
 // Replaces fetch with a fake siteverify; returns the calls made.
-function mockSiteverify(success) {
+function mockSiteverify(success, { hostname = 'milesprout.app', action = 'waitlist' } = {}) {
   const calls = [];
   const orig = globalThis.fetch;
   globalThis.fetch = async (url, init) => {
     calls.push({ url: String(url), body: new URLSearchParams(String(init.body)) });
-    return new Response(JSON.stringify({ success, 'error-codes': success ? [] : ['invalid-input-response'] }), { headers: { 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ success, hostname, action, 'error-codes': success ? [] : ['invalid-input-response'] }), { headers: { 'Content-Type': 'application/json' } });
   };
   calls.restore = () => { globalThis.fetch = orig; };
   return calls;
@@ -384,4 +384,29 @@ test('honeypot still wins: pretends success before any Turnstile or rate check',
   assert.equal(calls.length, 0);
   assert.equal(DB.rows.size, 0);
   assert.equal(DB.sqls.length, 0);
+});
+
+test('turnstile: a token for another site or another form is refused', async () => {
+  for (const other of [{ hostname: 'evil.example' }, { action: 'login' }]) {
+    resetForTests();
+    const DB = fakeDB2();
+    const calls = mockSiteverify(true, other);
+    try {
+      const res = await handleWaitlist(postJSON({ email: 'x@ex.com', consent: 'yes', 'cf-turnstile-response': 'tok' }), { DB, ...SECRET });
+      assert.equal(res.status, 403);
+    } finally { calls.restore(); }
+    assert.equal(DB.rows.size, 0);
+  }
+});
+
+test('rate limit: with RATE_LIMIT_SALT the stored hash changes (a secret per-day salt)', async () => {
+  const ip = { 'CF-Connecting-IP': '198.51.100.99' };
+  const hashes = [];
+  for (const env of [{}, { RATE_LIMIT_SALT: 'one secret' }, { RATE_LIMIT_SALT: 'another secret' }]) {
+    resetForTests();
+    const DB = fakeDB2();
+    await handleWaitlist(postJSON({ email: 's@ex.com', consent: 'yes' }, ip), { DB, ...env });
+    hashes.push(DB.rate[0].ip_hash);
+  }
+  assert.equal(new Set(hashes).size, 3);
 });

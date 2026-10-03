@@ -18,10 +18,10 @@
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/img/screens/home.webp" as="image" type="image/webp">
-<link rel="stylesheet" href="/assets/site.css?v=13378188">
+<link rel="stylesheet" href="/assets/site.css?v=3c3da7f7">
 <script src="/assets/intro-gate.js?v=06c94b49"></script>
 <script src="/assets/season.js?v=06a20cf1" defer></script>
-<script src="/assets/site.js?v=b7801408" defer></script>
+<script src="/assets/site.js?v=e5b81a58" defer></script>
 <noscript><style>
   /* Without JavaScript: every feature is listed, the deck is a still picture. */
   .feat { opacity: 1 !important; visibility: visible !important; transform: none !important; grid-area: auto !important; }
@@ -74,7 +74,8 @@
       </div>
       <div class="hero-phone">
         <figure class="scene" id="scene">
-          <div class="scene-view" role="img" aria-label="A phone in a car mount while driving: the car parks, the drive (Meanwood Road to Home, 2.2 miles) appears on the MileSprout Home screen, it's swiped to Work, worth £1.21, and the year's total goes up.">
+          <div class="scene-view">
+            <div class="scene-pic" role="img" aria-label="A phone in a car mount while driving: the car parks, the drive (Meanwood Road to Home, 2.2 miles) appears on the MileSprout Home screen, it's swiped to Work, worth £1.21, and the year's total goes up.">
             <svg class="scene-road" viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
               <defs>
                 <linearGradient id="rd-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0B7A55"/><stop offset=".55" stop-color="#3FBF86"/><stop offset="1" stop-color="#BFF2D6"/></linearGradient>
@@ -93,17 +94,18 @@
             <div class="phone" id="hero-phone">
               <div class="screen">
                 <video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture
-                  poster="/assets/video/drive-logged-saved.webp" data-poster-saved="/assets/video/drive-logged-saved.webp" data-poster-drive="/assets/video/drive-logged-poster.webp" width="540" height="1258">
-                  <source src="/assets/video/drive-logged.webm" type="video/webm">
-                  <source src="/assets/video/drive-logged.mp4" type="video/mp4">
+                  poster="/assets/video/drive-logged-poster.webp?v=c030ce84" data-poster-saved="/assets/video/drive-logged-saved.webp?v=1dae25fd" data-poster-drive="/assets/video/drive-logged-poster.webp?v=c030ce84" width="390" height="908">
+                  <source src="/assets/video/drive-logged.webm?v=2d981edb" type="video/webm">
+                  <source src="/assets/video/drive-logged.mp4?v=7391f591" type="video/mp4">
                 </video>
                 <span class="sbar" aria-hidden="true"><b>9:41</b></span>
               </div>
             </div>
-          </div>
-          <div class="scene-ctl" hidden>
-            <button type="button" data-scene="toggle" aria-controls="scene">Pause</button>
-            <button type="button" data-scene="replay" aria-controls="scene" aria-label="Replay the animation">Replay</button>
+            </div>
+            <div class="scene-ctl" hidden>
+              <button type="button" data-scene="toggle" aria-controls="scene">Pause</button>
+              <button type="button" data-scene="replay" aria-controls="scene" aria-label="Replay the animation">Replay</button>
+            </div>
           </div>
           <figcaption class="scene-cap">Park. The drive is already there. Swipe it to Work, and watch it add up.</figcaption>
         </figure>
@@ -242,7 +244,7 @@
       <section class="calc" id="calc" aria-labelledby="calc-title">
         <h2 id="calc-title" class="calc-title">What are your work miles worth?</h2>
         <p class="calc-country" data-calc-js hidden><label for="calc-country">Rates for</label>
-          <select id="calc-country" aria-label="Country for the tax rate">
+          <select id="calc-country">
             <option value="UK">the UK</option>
             <option value="US">the US</option>
             <option value="CA">Canada</option>
@@ -263,10 +265,11 @@
       <!-- Waitlist reward (founder signed off 3 Oct 2026). Small print: research's version,
            research_notes/launch-2026/website-claims-check.md, "Decisions". Once the launch date is fixed,
            add "by {date}" to the small print, and take the offer off the site on launch day. -->
-      <p class="signup-sub signup-offer">Join the list and get <strong>3 months of Pro free</strong> at launch.</p>
-      <!-- Turnstile site key: 1x00000000000000000000AA is Cloudflare's always-passes test key, for the preview.
-         TODO(founder): put the real site key here (Cloudflare → Turnstile → milesprout.app); see website/README.md. -->
-      <form class="waitlist on-dark" action="/api/waitlist" method="post" data-waitlist data-turnstile-sitekey="1x00000000000000000000AA">
+      <p class="signup-sub signup-offer">Join the list and get <strong>3 months of Pro free</strong> at launch. <a class="offer-terms-link" href="#offer-terms">Doesn't renew. Terms below the form.</a></p>
+      <!-- Bot check (Cloudflare Turnstile) is OFF until the founder's site key is in: with no data-turnstile-sitekey
+         the script never loads and the form posts as before. TODO(founder): add data-turnstile-sitekey="<site key>"
+         to this form (and the other two) AND set TURNSTILE_SECRET_KEY on the Pages project, both at once; see website/README.md. -->
+      <form class="waitlist on-dark" action="/api/waitlist" method="post" data-waitlist>
         <input type="hidden" name="source" value="home">
         <div class="wl-fields">
           <label class="wl-label" for="wl-email-h">Your email</label>
@@ -307,7 +310,7 @@
             </fieldset>
           </div>
           <label class="wl-consent"><input type="checkbox" name="consent" value="yes" required> <span>Email me when MileSprout launches. <a href="/privacy#waitlist">How we use your email</a></span></label>
-          <p class="fine wl-terms">For people who join before MileSprout launches in the App Store. We'll email you a one-time App Store code within 3 days of launch; redeem it within 60 days. One code per person and per Apple Account, for new Pro subscribers. It can't be combined with the free trial. <strong>It doesn't renew: after 3 months Pro simply stops, and you're never charged unless you choose to subscribe.</strong> Free logging stays free either way. Founding testers get 12 months instead.</p>
+          <p class="fine wl-terms" id="offer-terms">For people who join before MileSprout launches in the App Store. We'll email you a one-time App Store code within 3 days of launch; redeem it within 60 days. One code per person and per Apple Account, for new Pro subscribers. It can't be combined with the free trial. <strong>It doesn't renew: after 3 months Pro simply stops, and you're never charged unless you choose to subscribe.</strong> Free logging stays free either way. Founding testers get 12 months instead.</p>
           <div class="wl-hp" aria-hidden="true"><label>Company <input type="text" name="company" tabindex="-1" autocomplete="off"></label></div>
         </div>
         <p class="wl-done" tabindex="-1" hidden><strong>You're on the list.</strong> We'll email you once at launch with your code for 3 months of Pro free.</p>
@@ -483,7 +486,7 @@
   <section class="cta" aria-labelledby="cta-title">
     <div class="wrap">
       <h2 id="cta-title">Be on the road with it from day one</h2>
-      <p>Join the list and we'll email you a code for 3 months of Pro free when MileSprout is in the App Store. No spam, and we never share your email.</p>
+      <p>Join the list and we'll email you a code for 3 months of Pro free when MileSprout is in the App Store. No spam, and we never share your email. <a href="#offer-terms">Doesn't renew. Terms below the sign-up form.</a></p>
       <p class="cta-actions"><a class="btn-gold" href="#early-access">Get early access</a></p>
       <p class="tester-link"><a href="/testers">Want to test it early? Become a founding tester →</a></p>
     </div>

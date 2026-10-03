@@ -36,7 +36,8 @@ import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/tri
  *   &offer=CODE  as if the friend's 50% off offer code were set; &gift: joined with a friend's code
  *   &noearnings  no weekly earnings entered yet (the tax set-aside's first-use state)
  *   &clip        the website's clip: the drive to sort is Meanwood Rd → Home (2.2 mi)
- *                and every work drive has a purpose, so the row sits under the total;
+ *                and every work drive (that one too, "Deliveries") has a purpose, so the row
+ *                sits under the total and no purpose nudge follows the swipe;
  *                with ?demo=driving, that drive is the one still being recorded
  */
 const demoParam =
@@ -479,7 +480,7 @@ export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
   // A courier's days are all shifts (above); everyone else gets the office drives.
   const trips = DEMO_CLIP
     ? [
-        ...(DEMO_DRIVING ? [] : [[0, new Date().getHours(), 'Meanwood Rd', 'Home', 2.2, 'unclassified', ''] as DemoTrip]),
+        ...(DEMO_DRIVING ? [] : [[0, new Date().getHours(), 'Meanwood Rd', 'Home', 2.2, 'unclassified', 'Deliveries'] as DemoTrip]),
         ...[...TRIPS.slice(1), ...historyTrips()].map((trip): DemoTrip => {
           const [daysAgo, hour, from, to, miles, classification, purpose, autoReason] = trip;
           const filled = classification === 'business' && !purpose ? 'Client visit' : purpose;

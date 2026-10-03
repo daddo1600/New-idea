@@ -125,6 +125,7 @@ section.hero { padding: 0; }
   position: relative; height: var(--sh); border-radius: 22px; overflow: hidden; isolation: isolate; background: #0B5E40;
   box-shadow: 0 14px 36px rgba(3, 28, 20, .35), inset 0 0 0 1px rgba(255, 255, 255, .12);
 }
+.scene-pic { position: absolute; inset: 0; }
 .scene-road { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .rd-surface { fill: #22332C; }
 .rd-line, .rd-post { fill: #FBF7EE; }
@@ -158,6 +159,10 @@ section.hero { padding: 0; }
 }
 .scene-ctl button:hover { background: rgba(6, 38, 28, .95); border-color: var(--gold); }
 .scene-ctl button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+/* tablets and wide phones: a band capped in width, so the sky, hills and road all show */
+@media (min-width: 600px) and (max-width: 899px) {
+  .scene { max-width: 460px; margin-inline: auto; --sh: 236px; }
+}
 @media (min-width: 900px) {
   .scene { --sh: clamp(440px, 46vw, 540px); --pw: calc((var(--sh) - 50px) / 2.24); --pl: 10%; --pb: 26px; }
   .scene-view { border-radius: 28px; }
@@ -741,7 +746,7 @@ html.ms-intro::after {
 
 /* ---------- Money line (under the hero h1) and the "What are your work miles worth?" calculator ---------- */
 .hero .money-line { color: #FFFFFF; font-size: 1.1rem; font-weight: 600; line-height: 1.4; margin: -.15em 0 .6em; max-width: 30em; }
-.hero .money-line strong { color: var(--gold); font-weight: 800; }
+.hero .money-line strong { color: var(--gold); font-weight: 800; font-size: max(1.2rem, 1em); } /* large bold text, so 3:1 on the green is enough */
 
 .calc {
   padding: 0 0 28px; margin: 0 0 30px; border-bottom: 1px solid rgba(255, 255, 255, .22);
@@ -785,3 +790,8 @@ html.ms-intro::after {
 /* Turnstile's box: empty unless Cloudflare needs the visitor to tick it */
 .wl-turnstile { margin-top: 10px; }
 .wl-turnstile:empty { margin: 0; }
+
+/* "Doesn't renew. Terms below the form." beside each offer */
+.offer-terms-link { font-size: .85rem; font-weight: 600; }
+.signup .offer-terms-link { color: #FFFFFF; }
+#offer-terms { scroll-margin-top: 24px; }

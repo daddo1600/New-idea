@@ -16,8 +16,9 @@ B = glob.glob(REC + '/demo_1_clip_region_GB/*.webm')[0]
 OUT = sys.argv[1]
 os.makedirs(OUT, exist_ok=True)
 
-A_IN, A_LEN = 53.6, 2.8     # driving: "Recording a drive"
-B_IN, B_LEN = 27.6, 7.2     # parked: drive to sort, swipe, total up
+# Cut points in each take's video time (find them from frames: the swipe should start 1.6 s into B).
+A_IN = float(os.environ.get('A_IN', 50.5)); A_LEN = 2.8   # driving: "Recording a drive"
+B_IN = float(os.environ.get('B_IN', 28.7)); B_LEN = 7.2   # parked: drive to sort, swipe, total up
 XF = 0.4
 W, H, CH = 390, 908, 844    # output; the recording's app content (390×844 CSS px, top left of the frame)
 TOP = 48                    # room for the site's CSS status bar

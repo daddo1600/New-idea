@@ -22,9 +22,12 @@
     if (!root.classList.contains('ms-intro')) return;
     var overlay = null;
     function cleanup() {
+      var was = root.classList.contains('ms-intro') || !!overlay;
       root.classList.remove('ms-intro');
       if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
       overlay = null;
+      // the hero clip waits for this (it doesn't play under the intro)
+      if (was) { try { window.dispatchEvent(new Event('ms-intro-end')); } catch (err) { /* old browser */ } }
     }
     try {
       try { window.sessionStorage.setItem('ms-intro-seen', '1'); } catch (err) { /* fine */ }
@@ -405,8 +408,9 @@
       toggle.textContent = playing ? 'Pause' : 'Play';
       toggle.setAttribute('aria-label', playing ? 'Pause the animation' : 'Play the animation');
     }
+    function introShowing() { return document.documentElement.classList.contains('ms-intro') || !!document.querySelector('.sprout-intro'); }
     function play() {
-      if (still() || userPaused || !inView) return;
+      if (still() || userPaused || !inView || introShowing()) return;
       if (video.getAttribute('preload') === 'none') video.setAttribute('preload', 'auto');
       var p = video.play();
       if (p && p.catch) p.catch(function () { /* can't play: the poster and a still road stay */ });
@@ -424,11 +428,15 @@
     video.addEventListener('play', loop);
     video.addEventListener('playing', loop);
 
+    // the HTML poster is the clip's first frame (driving), so playing starts seamlessly; Reduce Motion swaps in the saved state
     if (still()) rest();
-    else {
-      video.poster = video.getAttribute('data-poster-drive'); // the clip's first frame, so playing starts seamlessly
-      road.draw(shapes, 0, 0, 0);
-    }
+    else road.draw(shapes, 0, 0, 0);
+
+    // First visit: the sprout intro covers the page; start the clip from the top once it's gone
+    window.addEventListener('ms-intro-end', function () {
+      try { video.currentTime = 0; } catch (err) {}
+      play();
+    });
 
     toggle.addEventListener('click', function () {
       userPaused = !userPaused;
@@ -453,12 +461,21 @@
       }, { passive: true });
     }
 
-    if ('IntersectionObserver' in window) {
+    // Watch for it on screen only after the page has loaded and settled (a link to /#early-access
+    // jumps past the hero first), so the clip is never fetched or played off screen.
+    function watch() {
+      if (!('IntersectionObserver' in window)) { inView = true; play(); return; }
+      // With a #link the page may still be scrolling there (smoothly) at the first report: ignore it
+      // and wait for the next, so the clip isn't fetched for a hero that's about to leave the screen.
+      var skipFirst = !!location.hash && location.hash !== '#main';
       new IntersectionObserver(function (es) {
+        if (skipFirst) { skipFirst = false; if (es[0].isIntersecting) return; }
         inView = es[0].isIntersecting;
         if (inView) play(); else video.pause();
       }, { threshold: 0.25 }).observe(root);
-    } else { inView = true; play(); }
+    }
+    function afterLoad() { requestAnimationFrame(function () { requestAnimationFrame(watch); }); }
+    if (document.readyState === 'complete') afterLoad(); else window.addEventListener('load', afterLoad);
 
     if (reduce.addEventListener) {
       reduce.addEventListener('change', function () {
@@ -478,19 +495,19 @@
      The country comes from season.js (time zone, then language; ?country=CA previews one);
      without JS the UK text shows. */
   var RATES = {
-    UK: { unit: 'mi', cur: 'GBP', locale: 'en-GB', at: "HMRC's rate", example: 2640,
+    UK: { unit: 'mi', cur: 'GBP', locale: 'en-GB', at: "HMRC's rate",
       tiers: [[10000, 0.55], [Infinity, 0.25]],
       note: "HMRC's rate for cars and vans in 2026/27: 55p a mile for the first 10,000 miles, then 25p.",
       source: 'https://www.gov.uk/government/publications/increase-to-approved-mileage-allowance-payments-amaps-and-self-employed-simplified-mileage-rates/increasing-mileage-rates' },
-    US: { unit: 'mi', cur: 'USD', locale: 'en-US', at: "the IRS's rate", example: 3648,
+    US: { unit: 'mi', cur: 'USD', locale: 'en-US', at: "the IRS's rate",
       tiers: [[Infinity, 0.76]],
       note: "The IRS's standard mileage rate from 1 July 2026: 76¢ a mile.",
       source: 'https://www.irs.gov/forms-pubs/the-standard-mileage-rates-and-maximum-automobile-fair-market-values-have-been-updated-for-2026' },
-    CA: { unit: 'km', cur: 'CAD', locale: 'en-CA', at: "the CRA's allowance rate", example: 5526,
+    CA: { unit: 'km', cur: 'CAD', locale: 'en-CA', at: "the CRA's allowance rate",
       tiers: [[5000, 0.73], [Infinity, 0.67]],
       note: "The CRA's allowance rate for 2026 (provinces): 73¢ a km for the first 5,000 km, then 67¢. It's the most an employer can pay tax-free; self-employed drivers claim their actual costs.",
       source: 'https://www.canada.ca/en/department-finance/news/2026/01/government-announces-the-2026-automobile-deduction-limits-and-expense-benefit-rates-for-businesses.html' },
-    AU: { unit: 'km', cur: 'AUD', locale: 'en-AU', at: "the ATO's rate", example: 4550,
+    AU: { unit: 'km', cur: 'AUD', locale: 'en-AU', at: "the ATO's rate",
       tiers: [[5000, 0.91]], // capped: nothing above 5,000 km a year
       note: "The ATO's cents per km rate for 2026–27: 91c a km, for up to 5,000 km a year per car.",
       source: 'https://www.ato.gov.au/individuals-and-families/income-deductions-offsets-and-records/deductions-you-can-claim/work-related-deductions/cars-transport-and-travel/motor-vehicle-and-car-expenses/expenses-for-a-car-you-own-or-lease/cents-per-kilometre-method' }
@@ -518,11 +535,17 @@
     return c === 'GB' ? 'UK' : RATES[c] ? c : 'UK';
   })();
 
+  // The calculator's starting point (100 miles or 160 km a week); the hero's example year is the same sum, so they always agree.
+  function defaultWeek(r) { return r.unit === 'km' ? 160 : 100; }
+
   (function moneyLine() {
     var line = document.querySelector('[data-money]');
-    if (!line || COUNTRY === 'UK') return; // the page's own text is the UK one
+    if (!line || COUNTRY === 'UK') return; // the page's own text is the UK one (£2,640)
     var r = RATES[COUNTRY];
-    line.innerHTML = 'An example year of part-time work driving is worth <strong>' + money(r, r.example) + '</strong> at ' + r.at + '.';
+    var amount = money(r, yearWorth(r, defaultWeek(r)));
+    line.innerHTML = COUNTRY === 'CA'
+      ? 'An example year of part-time work driving is worth about <strong>' + amount + '</strong> at the CRA\'s allowance rate (the most an employer can pay tax-free).'
+      : 'An example year of part-time work driving is worth <strong>' + amount + '</strong> at ' + r.at + '.';
   })();
 
   (function calculator() {
@@ -569,7 +592,8 @@
       }
     }
     select.value = COUNTRY;
-    if (r.unit === 'km') { range.min = 15; range.max = 1000; range.value = 160; }
+    if (r.unit === 'km') { range.min = 15; range.max = 1000; }
+    range.value = defaultWeek(r);
     setCountry(COUNTRY, false);
     range.addEventListener('input', function () { show(false); });
     range.addEventListener('change', function () { show(true); }); // the slider stopped: read the result out once
@@ -805,7 +829,12 @@
       var s = document.createElement('script');
       s.src = TS_SRC;
       s.async = true;
-      s.onerror = function () { tsState = 'failed'; tsQueue.length = 0; };
+      s.onerror = function () {
+        // blocked or offline: send any sign-up that was waiting for a token (the server decides)
+        tsState = 'failed';
+        tsQueue.length = 0;
+        Array.prototype.forEach.call(forms, function (f) { if (f._ts) f._ts.waiting.splice(0).forEach(function (go) { go(); }); });
+      };
       document.head.appendChild(s);
     }
     function botCheck(f, where) {
@@ -826,14 +855,14 @@
         });
       });
     }
-    // Calls go() once the form has a token (or straight away if there's no check, or after 12 s).
+    // Calls go() once the form has a token (or straight away if there's no check, or after 5 s).
     function whenChecked(f, go) {
       var field = f.querySelector('input[name="cf-turnstile-response"]');
       if (!f._ts || tsState === 'failed' || (field && field.value)) { go(); return; }
       var done = false;
       var once = function () { if (!done) { done = true; go(); } };
       f._ts.waiting.push(once);
-      setTimeout(once, 12000);
+      setTimeout(once, 5000);
     }
     function resetCheck(f) {
       if (f._ts && f._ts.id !== null && window.turnstile) { try { window.turnstile.reset(f._ts.id); } catch (err) {} }
@@ -852,8 +881,6 @@
       (opts || consent).parentNode.insertBefore(more, opts || consent);
       if (opts) inner.appendChild(opts);
       inner.appendChild(consent);
-      var terms = f.querySelector('.wl-terms'); // the reward's small print shows with the consent box
-      if (terms) inner.appendChild(terms);
       // screen readers hear once that more fields appeared (sighted users see them slide in)
       var live = document.createElement('p');
       live.className = 'sr-only';
@@ -870,7 +897,7 @@
         f.classList.add('wl-open');
         more.inert = false;
         btn.setAttribute('aria-expanded', 'true');
-        if (announce) live.textContent = 'A few optional questions, the consent box and the offer terms have appeared after the button.';
+        if (announce) live.textContent = 'A few optional questions and the consent box have appeared after the button.';
       }
       function check() { if (FULL_EMAIL.test(email.value.trim())) { reveal(true); botCheck(f, inner); } }
       email.addEventListener('input', check);
