@@ -74,3 +74,9 @@ The founder signs these off; the team builds from them. The newest decision wins
 - **Order:** UK first (London is live; then Manchester, Glasgow, Liverpool, Birmingham, Edinburgh, Leeds, Cardiff, Belfast…), then the US (New York, Los Angeles, Chicago, Houston, San Jose/Bay Area, and other major and state-capital cities), then Australia (Sydney, Melbourne, Brisbane, Perth, Adelaide, Canberra…) and Canada (Toronto, Montréal, Vancouver, Calgary, Ottawa…).
 - **Fallbacks:** a visitor in an unbuilt city gets their country's best-matching regional scene, then the standard scene. City detection comes from Cloudflare's coarse location only; nothing is stored.
 - City styling combines with the persona journeys (`journey-scenes.md`) and the seasons calendar.
+
+## 3 Oct 2026: Scenery scope cut back (founder)
+- Scenery is **website-only**, never the app's launch.
+- Finish what is running: the re-recorded on-shift clip (`journey-scenes.md` phase 1a) and the Manchester scene. Then **pause** further city scenes and the journey streets (phases 1b–3) until after launch work.
+- `city-scenes-reference.md` still gets written (cheap, needed later).
+- Sessions go to: the Pro price and promise on the website, the persona deck, the tester tour, the on-shift nudge.
