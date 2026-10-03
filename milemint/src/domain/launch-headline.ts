@@ -2,8 +2,8 @@
  * The opening's big number. In the first weeks the real tax-year total is
  * tiny (one short drive: £1.09), which says nothing about what MileSprout is
  * worth, so until there's a month to show it leads with a month instead:
- * their own pace once a week of driving shows it beats a typical month, else
- * what a typical month of work driving is worth. Their real total stays
+ * their own pace once a week of driving shows it beats the example month, else
+ * what an example month of part-time work driving is worth. Their real total stays
  * underneath. Pure, so it's unit-tested.
  */
 export type LaunchHeadline =
@@ -23,7 +23,7 @@ export function launchHeadline(input: {
   total: number;
   /** When the first total was seen (ISO); null for totals kept before this was recorded. */
   since: string | null;
-  /** What a typical month of work driving is worth, in minor units. */
+  /** What an example month of part-time work driving (about 100 miles or 160 km a week) is worth, in minor units. */
   typicalMonth: number;
   now: Date;
 }): LaunchHeadline {

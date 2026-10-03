@@ -69,10 +69,15 @@ export default function PerksTab() {
           </View>
         </View>
 
-        <View style={styles.steps}>
-          <Step glyph="①" text={t('Claim a deal')} />
-          <Step glyph="②" text={t('Show the code at the till')} />
-          <Step glyph="③" text={t('The partner pays only when it’s used')} />
+        <View style={styles.howTo}>
+          <ThemedText type="smallBold" accessibilityRole="header">
+            {t('Claim. Show. Save.')}
+          </ThemedText>
+          <View style={styles.steps}>
+            <Step glyph="①" text={t('Claim it when you’re ready to pay: the timer starts straight away.')} />
+            <Step glyph="②" text={t('Show the code before it runs out: scan it at the till, or type it in online.')} />
+            <Step glyph="③" text={t('Save: the deal comes off what you pay.')} />
+          </View>
         </View>
 
         <SectionTitle title={t('This week’s offers')} value={t('Resets each Monday')} />
@@ -163,6 +168,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   banner: { flexDirection: 'row', gap: Spacing.three, borderWidth: 1.5, borderRadius: 16, padding: Spacing.three },
   bannerIcon: { fontSize: 22, lineHeight: 28 },
+  howTo: { gap: Spacing.two },
   steps: { flexDirection: 'row', gap: Spacing.two },
   step: { flex: 1, borderRadius: 12, padding: Spacing.two + 2, gap: Spacing.one },
   stepGlyph: { fontSize: 20, lineHeight: 24, fontWeight: '700' },

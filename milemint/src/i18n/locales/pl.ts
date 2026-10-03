@@ -110,11 +110,11 @@ const dictionary: Dictionary = {
     "many": "{{distance}} km",
     "other": "{{distance}} km"
   },
-  "{{distance}} km · a typical month of work driving": {
-    "one": "{{distance}} km · typowy miesiąc jazdy służbowej",
-    "few": "{{distance}} km · typowy miesiąc jazdy służbowej",
-    "many": "{{distance}} km · typowy miesiąc jazdy służbowej",
-    "other": "{{distance}} km · typowy miesiąc jazdy służbowej"
+  "{{distance}} km · an example month of part-time work driving": {
+    "one": "{{distance}} km · przykładowy miesiąc jazdy służbowej w niepełnym wymiarze",
+    "few": "{{distance}} km · przykładowy miesiąc jazdy służbowej w niepełnym wymiarze",
+    "many": "{{distance}} km · przykładowy miesiąc jazdy służbowej w niepełnym wymiarze",
+    "other": "{{distance}} km · przykładowy miesiąc jazdy służbowej w niepełnym wymiarze"
   },
   "{{distance}} km logged for work, every one counted. That’s a lot of road.": {
     "one": "{{distance}} km przejechany służbowo, każdy policzony. To kawał drogi.",
@@ -128,11 +128,11 @@ const dictionary: Dictionary = {
     "many": "{{distance}} mil",
     "other": "{{distance}} mili"
   },
-  "{{distance}} miles · a typical month of work driving": {
-    "one": "{{distance}} mila · typowy miesiąc jazdy służbowej",
-    "few": "{{distance}} mile · typowy miesiąc jazdy służbowej",
-    "many": "{{distance}} mil · typowy miesiąc jazdy służbowej",
-    "other": "{{distance}} mili · typowy miesiąc jazdy służbowej"
+  "{{distance}} miles · an example month of part-time work driving": {
+    "one": "{{distance}} mila · przykładowy miesiąc jazdy służbowej w niepełnym wymiarze",
+    "few": "{{distance}} mile · przykładowy miesiąc jazdy służbowej w niepełnym wymiarze",
+    "many": "{{distance}} mil · przykładowy miesiąc jazdy służbowej w niepełnym wymiarze",
+    "other": "{{distance}} mili · przykładowy miesiąc jazdy służbowej w niepełnym wymiarze"
   },
   "{{distance}} miles logged for work, every one counted. That’s a lot of road.": {
     "one": "{{distance}} mila przejechana służbowo, każda policzona. To kawał drogi.",
@@ -347,7 +347,12 @@ const dictionary: Dictionary = {
   "First trip logged": "Pierwszy przejazd zapisany",
   "Found for you so far": "Znalezione dla Ciebie do tej pory",
   "found this tax year": "znaleziono w tym roku podatkowym",
-  "That’s {{amount}} a year left unclaimed if your drives aren’t logged.": "To {{amount}} rocznie, których nie odzyskasz, jeśli przejazdy nie są zapisywane.",
+  "A year of this is worth {{amount}} at {{authority}}’s rate.": "Rok takiej jazdy jest wart {{amount}} według stawki {{authority}}.",
+  "A year of this is worth about {{amount}} at {{authority}}’s allowance rate.": "Rok takiej jazdy jest wart około {{amount}} według stawki zwrotu {{authority}}.",
+  "HMRC": "HMRC",
+  "the IRS": "IRS",
+  "the CRA": "CRA",
+  "the ATO": "ATO",
   "a month of work driving, at your pace": "miesiąc jazdy służbowej w Twoim tempie",
   "{{amount}} found so far this tax year": "{{amount}} znalezione do tej pory w tym roku podatkowym",
   "Free": "Darmowy",
@@ -440,7 +445,7 @@ const dictionary: Dictionary = {
   "Milestones": "Osiągnięcia",
   "Missed miles check": "Pominięty przebieg",
   "Mon": "Pn",
-  "Money back": "Odliczenia",
+  "Mileage value": "Wartość przebiegu",
   "Monthly": "Miesięcznie",
   "Moped or motorbike": "Skuter lub motocykl",
   "Motorbike": "Motocykl",
@@ -584,8 +589,8 @@ const dictionary: Dictionary = {
   },
   "Sort this week’s drives and keep your records up to date.": "Oznacz przejazdy z tego tygodnia i miej porządek w rejestrze.",
   "Sort this week’s drives now and tax time becomes a two-minute job.": "Oznacz teraz przejazdy z tego tygodnia, a rozliczenie podatkowe zajmie Ci dwie minuty.",
-  "Sort your drives and add any you missed before {{date}}. Every work kilometre is money back.": "Oznacz przejazdy i dodaj pominięte przed {{date}}. Każdy służbowy kilometr ma swoją wartość.",
-  "Sort your drives and add any you missed before {{date}}. Every work mile is money back.": "Oznacz przejazdy i dodaj pominięte przed {{date}}. Każda służbowa mila ma swoją wartość.",
+  "Sort your drives and add any you missed before {{date}}. Every work kilometre adds to what you can claim.": "Oznacz przejazdy i dodaj pominięte przed {{date}}. Każdy służbowy kilometr powiększa kwotę do rozliczenia.",
+  "Sort your drives and add any you missed before {{date}}. Every work mile adds to what you can claim.": "Oznacz przejazdy i dodaj pominięte przed {{date}}. Każda służbowa mila powiększa kwotę do rozliczenia.",
   "Sort your drives each week and your figures are ready for every deadline. MileSprout reminds you two months, one month and one week before the tax year ends.": "Oznaczaj przejazdy co tydzień, a Twoje dane będą gotowe na każdy termin. MileSprout przypomni Ci o tym dwa miesiące, miesiąc i tydzień przed końcem roku podatkowego.",
   "Spring is here 🌸": "Przyszła wiosna 🌸",
   "Start": "Początek",
@@ -652,7 +657,7 @@ const dictionary: Dictionary = {
   "Total miles": "Łącznie mile",
   "Counting your miles": "Liczymy Twoje mile",
   "Counting your km": "Liczymy Twoje km",
-  "Every work drive is money back at tax time.": "Każdy przejazd służbowy to pieniądze z powrotem przy podatkach.",
+  "Every work drive adds to what you can claim.": "Każdy przejazd służbowy powiększa kwotę do rozliczenia.",
   "Outside work hours. Drives are saved when you park.": "Poza godzinami pracy. Przejazdy zapisują się, gdy zaparkujesz.",
   "Until {{time}}. Drives now count as work.": "Do {{time}}. Przejazdy liczą się teraz jako służbowe.",
   "{{money}} · {{distance}}": "{{money}} · {{distance}}",
@@ -695,7 +700,7 @@ const dictionary: Dictionary = {
   "Where do you drive?": "Gdzie jeździsz?",
   "Which vehicle today?": "Który pojazd dzisiaj?",
   "Were this week’s drives for work or personal? Swipe to sort them.": "Przejazdy z tego tygodnia były służbowe czy prywatne? Przesuń, żeby je oznaczyć.",
-  "Without “Always”, drives go unlogged and unclaimed.": "Bez „Zawsze” przejazdy nie zostaną zapisane ani odliczone.",
+  "Without “Always”, drives get missed, and missed miles are hard to prove.": "Bez „Zawsze” część przejazdów przepada, a pominięte mile trudno udokumentować.",
   "Work": "Praca",
   "Work hours": "Godziny pracy",
   "Work on {{day}}": "Praca: {{day}}",
@@ -722,7 +727,7 @@ const dictionary: Dictionary = {
   "Your mileage log is ready for your tax return.": "Twój rejestr przebiegu jest gotowy do zeznania podatkowego.",
   "Your mileage report is ready. Export it now so you have the figures ready.": "Twój raport przebiegu jest gotowy. Wyeksportuj go teraz, żeby mieć dane pod ręką.",
   "Your drives are waiting 📋": "Twoje przejazdy czekają 📋",
-  "Your money back and badges": "Odliczenia i odznaki",
+  "Your mileage value and badges": "Wartość przebiegu i odznaki",
   "Your own purpose": "Własny cel",
   "Your trips are stored encrypted on your iPhone and are never sent to MileSprout.": "Przejazdy są przechowywane zaszyfrowane na Twoim iPhonie i nigdy nie trafiają do MileSprout.",
   "Your vehicles": "Twoje pojazdy",
@@ -1566,11 +1571,20 @@ const dictionary: Dictionary = {
   "MileSprout carries on by itself when you come back.": "MileSprout sam wznowi działanie, gdy wrócisz.",
   // Perks tab (demo partner offers; the brand names stay in English).
   "Perks": "Oferty",
+  "Home, {{count}} drives to sort": {
+    "one": "Start, {{count}} przejazd do oznaczenia",
+    "few": "Start, {{count}} przejazdy do oznaczenia",
+    "many": "Start, {{count}} przejazdów do oznaczenia",
+    "other": "Start, {{count}} przejazdu do oznaczenia"
+  },
+  "Perks, new offers": "Oferty, nowe oferty",
+  "{{label}}, tab, {{index}} of {{total}}": "{{label}}, karta, {{index}} z {{total}}",
   "Demo offers — these partners are examples": "Oferty demo — ci partnerzy to przykłady",
   "They’re not real businesses, and the codes won’t work in shops yet.": "To nie są prawdziwe firmy, a kody jeszcze nie działają w sklepach.",
-  "Claim a deal": "Odbierz ofertę",
-  "Show the code at the till": "Pokaż kod przy kasie",
-  "The partner pays only when it’s used": "Partner płaci tylko za użyty kod",
+  "Claim. Show. Save.": "Odbierz. Pokaż. Oszczędzaj.",
+  "Claim it when you’re ready to pay: the timer starts straight away.": "Odbierz tuż przed płaceniem: odliczanie rusza od razu.",
+  "Show the code before it runs out: scan it at the till, or type it in online.": "Pokaż kod, zanim wygaśnie: zeskanuj go przy kasie albo wpisz online.",
+  "Save: the deal comes off what you pay.": "Oszczędzaj: oferta zmniejsza kwotę do zapłaty.",
   "This week’s offers": "Oferty w tym tygodniu",
   "Resets each Monday": "Odnawiane w każdy poniedziałek",
   "How perks work": "Jak działają oferty",

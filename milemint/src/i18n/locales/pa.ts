@@ -70,18 +70,18 @@ const dictionary: Dictionary = {
     "one": "{{distance}} ਕਿ.ਮੀ.",
     "other": "{{distance}} ਕਿ.ਮੀ."
   },
-  "{{distance}} km · a typical month of work driving": {
-    "one": "{{distance}} ਕਿ.ਮੀ. · ਆਮ ਤੌਰ ’ਤੇ ਇੱਕ ਮਹੀਨੇ ਦੀ ਕੰਮ ਦੀ ਡਰਾਈਵਿੰਗ",
-    "other": "{{distance}} ਕਿ.ਮੀ. · ਆਮ ਤੌਰ ’ਤੇ ਇੱਕ ਮਹੀਨੇ ਦੀ ਕੰਮ ਦੀ ਡਰਾਈਵਿੰਗ"
+  "{{distance}} km · an example month of part-time work driving": {
+    "one": "{{distance}} ਕਿ.ਮੀ. · ਉਦਾਹਰਨ ਵਜੋਂ, ਪਾਰਟ-ਟਾਈਮ ਕੰਮ ਦੀ ਡਰਾਈਵਿੰਗ ਦਾ ਇੱਕ ਮਹੀਨਾ",
+    "other": "{{distance}} ਕਿ.ਮੀ. · ਉਦਾਹਰਨ ਵਜੋਂ, ਪਾਰਟ-ਟਾਈਮ ਕੰਮ ਦੀ ਡਰਾਈਵਿੰਗ ਦਾ ਇੱਕ ਮਹੀਨਾ"
   },
   "{{distance}} km logged for work, every one counted. That’s a lot of road.": "ਕੰਮ ਲਈ {{distance}} ਕਿ.ਮੀ. ਦਰਜ, ਹਰ ਇੱਕ ਗਿਣਿਆ ਗਿਆ। ਇਹ ਤਾਂ ਬਹੁਤ ਲੰਮਾ ਸਫ਼ਰ ਹੈ।",
   "{{distance}} miles": {
     "one": "{{distance}} ਮੀਲ",
     "other": "{{distance}} ਮੀਲ"
   },
-  "{{distance}} miles · a typical month of work driving": {
-    "one": "{{distance}} ਮੀਲ · ਆਮ ਤੌਰ ’ਤੇ ਇੱਕ ਮਹੀਨੇ ਦੀ ਕੰਮ ਦੀ ਡਰਾਈਵਿੰਗ",
-    "other": "{{distance}} ਮੀਲ · ਆਮ ਤੌਰ ’ਤੇ ਇੱਕ ਮਹੀਨੇ ਦੀ ਕੰਮ ਦੀ ਡਰਾਈਵਿੰਗ"
+  "{{distance}} miles · an example month of part-time work driving": {
+    "one": "{{distance}} ਮੀਲ · ਉਦਾਹਰਨ ਵਜੋਂ, ਪਾਰਟ-ਟਾਈਮ ਕੰਮ ਦੀ ਡਰਾਈਵਿੰਗ ਦਾ ਇੱਕ ਮਹੀਨਾ",
+    "other": "{{distance}} ਮੀਲ · ਉਦਾਹਰਨ ਵਜੋਂ, ਪਾਰਟ-ਟਾਈਮ ਕੰਮ ਦੀ ਡਰਾਈਵਿੰਗ ਦਾ ਇੱਕ ਮਹੀਨਾ"
   },
   "{{distance}} miles logged for work, every one counted. That’s a lot of road.": "ਕੰਮ ਲਈ {{distance}} ਮੀਲ ਦਰਜ, ਹਰ ਇੱਕ ਗਿਣਿਆ ਗਿਆ। ਇਹ ਤਾਂ ਬਹੁਤ ਲੰਮਾ ਸਫ਼ਰ ਹੈ।",
   "{{distance}} of work driving": "{{distance}} ਕੰਮ ਦੀ ਡਰਾਈਵਿੰਗ",
@@ -277,7 +277,12 @@ const dictionary: Dictionary = {
   "First trip logged": "ਪਹਿਲਾ ਟ੍ਰਿਪ ਦਰਜ",
   "Found for you so far": "ਹੁਣ ਤੱਕ ਤੁਹਾਡੇ ਲਈ ਲੱਭੇ",
   "found this tax year": "ਇਸ ਟੈਕਸ ਸਾਲ ਲੱਭੇ",
-  "That’s {{amount}} a year left unclaimed if your drives aren’t logged.": "ਜੇ ਤੁਹਾਡੀਆਂ ਡਰਾਈਵਾਂ ਲੌਗ ਨਹੀਂ ਹੁੰਦੀਆਂ, ਤਾਂ ਇਹ ਸਾਲ ਦੇ {{amount}} ਹਨ ਜੋ ਬਿਨਾਂ ਕਲੇਮ ਰਹਿ ਜਾਂਦੇ ਹਨ।",
+  "A year of this is worth {{amount}} at {{authority}}’s rate.": "{{authority}} ਦੀ ਦਰ ਨਾਲ, ਅਜਿਹੇ ਇੱਕ ਸਾਲ ਦੀ ਕੀਮਤ {{amount}} ਹੈ।",
+  "A year of this is worth about {{amount}} at {{authority}}’s allowance rate.": "{{authority}} ਦੀ ਭੱਤਾ ਦਰ ਨਾਲ, ਅਜਿਹੇ ਇੱਕ ਸਾਲ ਦੀ ਕੀਮਤ ਲਗਭਗ {{amount}} ਹੈ।",
+  "HMRC": "HMRC",
+  "the IRS": "IRS",
+  "the CRA": "CRA",
+  "the ATO": "ATO",
   "a month of work driving, at your pace": "ਤੁਹਾਡੀ ਰਫ਼ਤਾਰ ਨਾਲ ਇੱਕ ਮਹੀਨੇ ਦੀ ਕੰਮ ਦੀ ਡਰਾਈਵਿੰਗ",
   "{{amount}} found so far this tax year": "ਇਸ ਟੈਕਸ ਸਾਲ ਵਿੱਚ ਹੁਣ ਤੱਕ {{amount}} ਮਿਲੇ",
   "Free": "ਮੁਫ਼ਤ",
@@ -370,7 +375,7 @@ const dictionary: Dictionary = {
   "Milestones": "ਮੀਲ-ਪੱਥਰ",
   "Missed miles check": "ਰਹਿ ਗਈ ਦੂਰੀ ਦੀ ਜਾਂਚ",
   "Mon": "ਸੋਮ",
-  "Money back": "ਲੱਭੀ ਰਕਮ",
+  "Mileage value": "ਮਾਈਲੇਜ ਦੀ ਕੀਮਤ",
   "Monthly": "ਮਹੀਨਾਵਾਰ",
   "Moped or motorbike": "ਮੋਪੇਡ ਜਾਂ ਮੋਟਰਸਾਈਕਲ",
   "Motorbike": "ਮੋਟਰਸਾਈਕਲ",
@@ -508,8 +513,8 @@ const dictionary: Dictionary = {
   },
   "Sort this week’s drives and keep your records up to date.": "ਇਸ ਹਫ਼ਤੇ ਦੇ ਟ੍ਰਿਪ ਛਾਂਟੋ ਅਤੇ ਆਪਣਾ ਰਿਕਾਰਡ ਅੱਪ-ਟੂ-ਡੇਟ ਰੱਖੋ।",
   "Sort this week’s drives now and tax time becomes a two-minute job.": "ਇਸ ਹਫ਼ਤੇ ਦੇ ਟ੍ਰਿਪ ਹੁਣੇ ਛਾਂਟ ਲਓ, ਟੈਕਸ ਵੇਲੇ ਬੱਸ ਦੋ ਮਿੰਟ ਦਾ ਕੰਮ ਰਹਿ ਜਾਵੇਗਾ।",
-  "Sort your drives and add any you missed before {{date}}. Every work kilometre is money back.": "{{date}} ਤੋਂ ਪਹਿਲਾਂ ਆਪਣੇ ਟ੍ਰਿਪ ਛਾਂਟੋ ਅਤੇ ਰਹਿ ਗਏ ਟ੍ਰਿਪ ਜੋੜੋ। ਕੰਮ ਦੇ ਹਰ ਕਿਲੋਮੀਟਰ ਦੀ ਆਪਣੀ ਕੀਮਤ ਹੈ।",
-  "Sort your drives and add any you missed before {{date}}. Every work mile is money back.": "{{date}} ਤੋਂ ਪਹਿਲਾਂ ਆਪਣੇ ਟ੍ਰਿਪ ਛਾਂਟੋ ਅਤੇ ਰਹਿ ਗਏ ਟ੍ਰਿਪ ਜੋੜੋ। ਕੰਮ ਦੇ ਹਰ ਮੀਲ ਦੀ ਆਪਣੀ ਕੀਮਤ ਹੈ।",
+  "Sort your drives and add any you missed before {{date}}. Every work kilometre adds to what you can claim.": "{{date}} ਤੋਂ ਪਹਿਲਾਂ ਆਪਣੇ ਟ੍ਰਿਪ ਛਾਂਟੋ ਅਤੇ ਰਹਿ ਗਏ ਟ੍ਰਿਪ ਜੋੜੋ। ਕੰਮ ਦੇ ਹਰ ਕਿਲੋਮੀਟਰ ਨਾਲ ਤੁਹਾਡਾ ਕਲੇਮ ਵਧਦਾ ਹੈ।",
+  "Sort your drives and add any you missed before {{date}}. Every work mile adds to what you can claim.": "{{date}} ਤੋਂ ਪਹਿਲਾਂ ਆਪਣੇ ਟ੍ਰਿਪ ਛਾਂਟੋ ਅਤੇ ਰਹਿ ਗਏ ਟ੍ਰਿਪ ਜੋੜੋ। ਕੰਮ ਦੇ ਹਰ ਮੀਲ ਨਾਲ ਤੁਹਾਡਾ ਕਲੇਮ ਵਧਦਾ ਹੈ।",
   "Sort your drives each week and your figures are ready for every deadline. MileSprout reminds you two months, one month and one week before the tax year ends.": "ਹਰ ਹਫ਼ਤੇ ਆਪਣੇ ਟ੍ਰਿਪ ਛਾਂਟੋ ਅਤੇ ਜਦੋਂ ਵੀ ਆਖ਼ਰੀ ਤਾਰੀਖ਼ ਆਵੇ, ਤੁਹਾਡੇ ਅੰਕੜੇ ਤਿਆਰ ਹੋਣਗੇ। MileSprout ਟੈਕਸ ਸਾਲ ਖ਼ਤਮ ਹੋਣ ਤੋਂ ਦੋ ਮਹੀਨੇ, ਇੱਕ ਮਹੀਨਾ ਅਤੇ ਇੱਕ ਹਫ਼ਤਾ ਪਹਿਲਾਂ ਯਾਦ ਕਰਵਾਉਂਦਾ ਹੈ।",
   "Spring is here 🌸": "ਬਹਾਰ ਆ ਗਈ 🌸",
   "Start": "ਸ਼ੁਰੂ",
@@ -576,7 +581,7 @@ const dictionary: Dictionary = {
   "Total miles": "ਕੁੱਲ ਮੀਲ",
   "Counting your miles": "ਤੁਹਾਡੇ ਮੀਲ ਗਿਣੇ ਜਾ ਰਹੇ ਹਨ",
   "Counting your km": "ਤੁਹਾਡੇ ਕਿਮੀ ਗਿਣੇ ਜਾ ਰਹੇ ਹਨ",
-  "Every work drive is money back at tax time.": "ਕੰਮ ਦੀ ਹਰ ਡਰਾਈਵ ਟੈਕਸ ਵੇਲੇ ਪੈਸਾ ਵਾਪਸ ਹੈ।",
+  "Every work drive adds to what you can claim.": "ਕੰਮ ਦੀ ਹਰ ਡਰਾਈਵ ਨਾਲ ਤੁਹਾਡਾ ਕਲੇਮ ਵਧਦਾ ਹੈ।",
   "Outside work hours. Drives are saved when you park.": "ਕੰਮ ਦੇ ਘੰਟਿਆਂ ਤੋਂ ਬਾਹਰ। ਪਾਰਕ ਕਰਦੇ ਹੀ ਡਰਾਈਵਾਂ ਸੇਵ ਹੁੰਦੀਆਂ ਹਨ।",
   "Until {{time}}. Drives now count as work.": "{{time}} ਤੱਕ। ਹੁਣ ਦੀਆਂ ਡਰਾਈਵਾਂ ਕੰਮ ਵਿੱਚ ਗਿਣੀਆਂ ਜਾਣਗੀਆਂ।",
   "{{money}} · {{distance}}": "{{money}} · {{distance}}",
@@ -619,7 +624,7 @@ const dictionary: Dictionary = {
   "Where do you drive?": "ਤੁਹਾਡੀ ਡਰਾਈਵਿੰਗ ਕਿਸ ਦੇਸ਼ ਵਿੱਚ ਹੁੰਦੀ ਹੈ?",
   "Which vehicle today?": "ਅੱਜ ਕਿਹੜੀ ਗੱਡੀ?",
   "Were this week’s drives for work or personal? Swipe to sort them.": "ਇਸ ਹਫ਼ਤੇ ਦੇ ਟ੍ਰਿਪ ਕੰਮ ਦੇ ਸਨ ਜਾਂ ਨਿੱਜੀ? ਸਵਾਈਪ ਕਰਕੇ ਛਾਂਟੋ।",
-  "Without “Always”, drives go unlogged and unclaimed.": "“ਹਮੇਸ਼ਾਂ” ਤੋਂ ਬਿਨਾਂ, ਟ੍ਰਿਪ ਨਾ ਦਰਜ ਹੁੰਦੇ ਹਨ ਨਾ ਕਲੇਮ।",
+  "Without “Always”, drives get missed, and missed miles are hard to prove.": "“ਹਮੇਸ਼ਾਂ” ਤੋਂ ਬਿਨਾਂ ਟ੍ਰਿਪ ਛੁੱਟ ਜਾਂਦੇ ਹਨ, ਅਤੇ ਛੁੱਟੇ ਮੀਲਾਂ ਦਾ ਸਬੂਤ ਦੇਣਾ ਔਖਾ ਹੁੰਦਾ ਹੈ।",
   "Work": "ਕੰਮ",
   "Work hours": "ਕੰਮ ਦੇ ਘੰਟੇ",
   "Work on {{day}}": "{{day}} ਨੂੰ ਕੰਮ",
@@ -646,7 +651,7 @@ const dictionary: Dictionary = {
   "Your mileage log is ready for your tax return.": "ਤੁਹਾਡਾ ਮਾਈਲੇਜ ਲੌਗ ਤੁਹਾਡੀ ਟੈਕਸ ਰਿਟਰਨ ਲਈ ਤਿਆਰ ਹੈ।",
   "Your mileage report is ready. Export it now so you have the figures ready.": "ਤੁਹਾਡੀ ਮਾਈਲੇਜ ਰਿਪੋਰਟ ਤਿਆਰ ਹੈ। ਹੁਣੇ ਐਕਸਪੋਰਟ ਕਰ ਲਓ ਤਾਂ ਜੋ ਅੰਕੜੇ ਤਿਆਰ ਰਹਿਣ।",
   "Your drives are waiting 📋": "ਤੁਹਾਡੇ ਟ੍ਰਿਪ ਉਡੀਕ ਰਹੇ ਹਨ 📋",
-  "Your money back and badges": "ਲੱਭੀ ਰਕਮ ਅਤੇ ਬੈਜ",
+  "Your mileage value and badges": "ਮਾਈਲੇਜ ਦੀ ਕੀਮਤ ਅਤੇ ਬੈਜ",
   "Your own purpose": "ਤੁਹਾਡਾ ਆਪਣਾ ਮਕਸਦ",
   "Your trips are stored encrypted on your iPhone and are never sent to MileSprout.": "ਤੁਹਾਡੀਆਂ ਟ੍ਰਿੱਪਾਂ ਤੁਹਾਡੇ iPhone 'ਤੇ ਇਨਕ੍ਰਿਪਟ ਹੋ ਕੇ ਰਹਿੰਦੀਆਂ ਹਨ ਅਤੇ ਕਦੇ MileSprout ਨੂੰ ਨਹੀਂ ਭੇਜੀਆਂ ਜਾਂਦੀਆਂ।",
   "Your vehicles": "ਤੁਹਾਡੀਆਂ ਗੱਡੀਆਂ",
@@ -1449,11 +1454,18 @@ const dictionary: Dictionary = {
   "MileSprout carries on by itself when you come back.": "ਵਾਪਸ ਆਉਣ ’ਤੇ MileSprout ਆਪਣੇ-ਆਪ ਜਾਰੀ ਰਹਿੰਦਾ ਹੈ।",
   // Perks tab (demo partner offers; the brand names stay in English).
   "Perks": "ਆਫ਼ਰ",
+  "Home, {{count}} drives to sort": {
+    "one": "ਹੋਮ, ਛਾਂਟਣ ਲਈ {{count}} ਟ੍ਰਿਪ",
+    "other": "ਹੋਮ, ਛਾਂਟਣ ਲਈ {{count}} ਟ੍ਰਿਪ"
+  },
+  "Perks, new offers": "ਆਫ਼ਰ, ਨਵੇਂ ਆਫ਼ਰ",
+  "{{label}}, tab, {{index}} of {{total}}": "{{label}}, ਟੈਬ, {{total}} ਵਿੱਚੋਂ {{index}}",
   "Demo offers — these partners are examples": "ਡੈਮੋ ਆਫ਼ਰ — ਇਹ ਪਾਰਟਨਰ ਸਿਰਫ਼ ਮਿਸਾਲਾਂ ਹਨ",
   "They’re not real businesses, and the codes won’t work in shops yet.": "ਇਹ ਅਸਲੀ ਕਾਰੋਬਾਰ ਨਹੀਂ ਹਨ, ਅਤੇ ਕੋਡ ਅਜੇ ਦੁਕਾਨਾਂ ਵਿੱਚ ਨਹੀਂ ਚੱਲਣਗੇ।",
-  "Claim a deal": "ਆਫ਼ਰ ਲਓ",
-  "Show the code at the till": "ਕਾਊਂਟਰ ’ਤੇ ਕੋਡ ਦਿਖਾਓ",
-  "The partner pays only when it’s used": "ਪਾਰਟਨਰ ਤਾਂ ਹੀ ਪੈਸੇ ਦਿੰਦਾ ਹੈ ਜਦੋਂ ਕੋਡ ਵਰਤਿਆ ਜਾਵੇ",
+  "Claim. Show. Save.": "ਲਓ। ਦਿਖਾਓ। ਬਚਾਓ।",
+  "Claim it when you’re ready to pay: the timer starts straight away.": "ਪੈਸੇ ਦੇਣ ਤੋਂ ਠੀਕ ਪਹਿਲਾਂ ਲਓ: ਟਾਈਮਰ ਤੁਰੰਤ ਸ਼ੁਰੂ ਹੋ ਜਾਂਦਾ ਹੈ।",
+  "Show the code before it runs out: scan it at the till, or type it in online.": "ਸਮਾਂ ਖ਼ਤਮ ਹੋਣ ਤੋਂ ਪਹਿਲਾਂ ਕੋਡ ਦਿਖਾਓ: ਕਾਊਂਟਰ ’ਤੇ ਸਕੈਨ ਕਰਾਓ, ਜਾਂ ਔਨਲਾਈਨ ਪਾਓ।",
+  "Save: the deal comes off what you pay.": "ਬਚਾਓ: ਆਫ਼ਰ ਤੁਹਾਡੇ ਭੁਗਤਾਨ ਵਿੱਚੋਂ ਘੱਟ ਜਾਂਦਾ ਹੈ।",
   "This week’s offers": "ਇਸ ਹਫ਼ਤੇ ਦੇ ਆਫ਼ਰ",
   "Resets each Monday": "ਹਰ ਸੋਮਵਾਰ ਨਵੇਂ",
   "How perks work": "ਆਫ਼ਰ ਕਿਵੇਂ ਕੰਮ ਕਰਦੇ ਹਨ",

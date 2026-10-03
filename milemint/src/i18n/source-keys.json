@@ -388,7 +388,7 @@
     ]
   },
   {
-    "key": "{{distance}} km · a typical month of work driving",
+    "key": "{{distance}} km · an example month of part-time work driving",
     "files": [
       "components/launch-intro.tsx"
     ]
@@ -407,7 +407,7 @@
     ]
   },
   {
-    "key": "{{distance}} miles · a typical month of work driving",
+    "key": "{{distance}} miles · an example month of part-time work driving",
     "files": [
       "components/launch-intro.tsx"
     ]
@@ -491,6 +491,12 @@
     "key": "{{label}} address",
     "files": [
       "components/place-field.tsx"
+    ]
+  },
+  {
+    "key": "{{label}}, tab, {{index}} of {{total}}",
+    "files": [
+      "app/(tabs)/_layout.tsx"
     ]
   },
   {
@@ -968,6 +974,18 @@
     "key": "A short reminder on Sunday evening to sort the week’s drives.",
     "files": [
       "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "A year of this is worth {{amount}} at {{authority}}’s rate.",
+    "files": [
+      "components/launch-intro.tsx"
+    ]
+  },
+  {
+    "key": "A year of this is worth about {{amount}} at {{authority}}’s allowance rate.",
+    "files": [
+      "components/launch-intro.tsx"
     ]
   },
   {
@@ -1793,12 +1811,6 @@
     ]
   },
   {
-    "key": "Claim a deal",
-    "files": [
-      "app/(tabs)/perks.tsx"
-    ]
-  },
-  {
     "key": "Claim again",
     "files": [
       "components/perks/offer-card.tsx"
@@ -1832,6 +1844,12 @@
     "key": "Claim it when you’re ready to pay: the code lasts {{hours}} h.",
     "files": [
       "components/perks/offer-card.tsx"
+    ]
+  },
+  {
+    "key": "Claim it when you’re ready to pay: the timer starts straight away.",
+    "files": [
+      "app/(tabs)/perks.tsx"
     ]
   },
   {
@@ -1869,6 +1887,12 @@
     "key": "Claim: {{offer}}",
     "files": [
       "components/perks/offer-card.tsx"
+    ]
+  },
+  {
+    "key": "Claim. Show. Save.",
+    "files": [
+      "app/(tabs)/perks.tsx"
     ]
   },
   {
@@ -2929,15 +2953,15 @@
     ]
   },
   {
-    "key": "Every work drive has a purpose ✓",
+    "key": "Every work drive adds to what you can claim.",
     "files": [
-      "components/trips/list-bars.tsx"
+      "components/home/tracking-card.tsx"
     ]
   },
   {
-    "key": "Every work drive is money back at tax time.",
+    "key": "Every work drive has a purpose ✓",
     "files": [
-      "components/home/tracking-card.tsx"
+      "components/trips/list-bars.tsx"
     ]
   },
   {
@@ -3451,6 +3475,12 @@
     ]
   },
   {
+    "key": "HMRC",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
     "key": "HMRC approved amount",
     "files": [
       "app/claim-relief.tsx"
@@ -3488,6 +3518,12 @@
     "files": [
       "app/(tabs)/settings.tsx",
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Home, {{count}} drives to sort",
+    "files": [
+      "app/(tabs)/_layout.tsx"
     ]
   },
   {
@@ -4191,6 +4227,12 @@
     ]
   },
   {
+    "key": "Mileage value",
+    "files": [
+      "app/milestones.tsx"
+    ]
+  },
+  {
     "key": "miles",
     "files": [
       "app/add-trip.tsx",
@@ -4402,12 +4444,6 @@
     "key": "Money",
     "files": [
       "app/(tabs)/_layout.tsx"
-    ]
-  },
-  {
-    "key": "Money back",
-    "files": [
-      "app/milestones.tsx"
     ]
   },
   {
@@ -5345,6 +5381,12 @@
     ]
   },
   {
+    "key": "Perks, new offers",
+    "files": [
+      "app/(tabs)/_layout.tsx"
+    ]
+  },
+  {
     "key": "Personal",
     "files": [
       "app/add-trip.tsx",
@@ -5916,6 +5958,12 @@
     ]
   },
   {
+    "key": "Save: the deal comes off what you pay.",
+    "files": [
+      "app/(tabs)/perks.tsx"
+    ]
+  },
+  {
     "key": "Saved.",
     "files": [
       "app/logbook.tsx"
@@ -6239,7 +6287,7 @@
     ]
   },
   {
-    "key": "Show the code at the till",
+    "key": "Show the code before it runs out: scan it at the till, or type it in online.",
     "files": [
       "app/(tabs)/perks.tsx"
     ]
@@ -6390,13 +6438,13 @@
     ]
   },
   {
-    "key": "Sort your drives and add any you missed before {{date}}. Every work kilometre is money back.",
+    "key": "Sort your drives and add any you missed before {{date}}. Every work kilometre adds to what you can claim.",
     "files": [
       "domain/deadlines.ts"
     ]
   },
   {
-    "key": "Sort your drives and add any you missed before {{date}}. Every work mile is money back.",
+    "key": "Sort your drives and add any you missed before {{date}}. Every work mile adds to what you can claim.",
     "files": [
       "domain/deadlines.ts"
     ]
@@ -6898,12 +6946,6 @@
     ]
   },
   {
-    "key": "That’s {{amount}} a year left unclaimed if your drives aren’t logged.",
-    "files": [
-      "components/launch-intro.tsx"
-    ]
-  },
-  {
     "key": "That’s it. Just drive: trips appear here after you park.",
     "files": [
       "components/practice-tutorial.tsx"
@@ -6931,6 +6973,12 @@
     "key": "The App Store couldn’t start the purchase. Please try again.",
     "files": [
       "purchases/pro.tsx"
+    ]
+  },
+  {
+    "key": "the ATO",
+    "files": [
+      "domain/regions.ts"
     ]
   },
   {
@@ -6964,6 +7012,12 @@
     ]
   },
   {
+    "key": "the CRA",
+    "files": [
+      "domain/regions.ts"
+    ]
+  },
+  {
     "key": "The CRA per-km rate is for cars. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.",
     "files": [
       "domain/regions.ts"
@@ -6980,6 +7034,12 @@
     "key": "The figures above stay free to copy into your claim. Pro saves them as a file.",
     "files": [
       "app/claim-relief.tsx"
+    ]
+  },
+  {
+    "key": "the IRS",
+    "files": [
+      "domain/regions.ts"
     ]
   },
   {
@@ -7030,12 +7090,6 @@
     "key": "The logbook method looks better: about {{amount}} more.",
     "files": [
       "app/logbook.tsx"
-    ]
-  },
-  {
-    "key": "The partner pays only when it’s used",
-    "files": [
-      "app/(tabs)/perks.tsx"
     ]
   },
   {
@@ -7812,7 +7866,7 @@
     ]
   },
   {
-    "key": "Without “Always”, drives go unlogged and unclaimed.",
+    "key": "Without “Always”, drives get missed, and missed miles are hard to prove.",
     "files": [
       "app/welcome.tsx"
     ]
@@ -8322,7 +8376,7 @@
     ]
   },
   {
-    "key": "Your money back and badges",
+    "key": "Your mileage value and badges",
     "files": [
       "app/(tabs)/money.tsx"
     ]
