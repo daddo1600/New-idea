@@ -17,12 +17,12 @@ FONT_DIRS = [Path.home() / ".fonts", Path("/usr/local/share/fonts")]
 # exports, quarterly figures and the set-aside are Pro, and say so.
 SHOTS = [
     ("home", "Every work mile\nadds up.", "Your claim grows with every shift,\nworked out at HMRC rates."),
-    ("drives", "Drives log\nthemselves.", "Free, unlimited automatic tracking.\nOne row per shift. No buttons."),
+    ("drives", "Drives log\nthemselves.", "Free, unlimited automatic logging.\nOne row per shift. No buttons."),
     ("trip", "Work or personal?\nOne tap.", "See the route of every drive,\nthen sort it in a tap."),
     ("money", "Know what to put\naside for tax.", "With Pro: quarterly figures for MTD\nand a weekly tax set-aside."),
     ("export", "Your mileage log,\nready for HMRC.", "With Pro: PDF report, spreadsheet\nand accounting exports."),
     ("privacy", "Your trips stay\non your phone.", "Encrypted on your phone.\nNo account. Never sold."),
-    ("compare", "Tracking is free.\nNo monthly limit.", "Pro adds your report, exports,\nquarterly figures and tax set-aside."),
+    ("compare", "Logging is free.\nNo monthly limit.", "Pro adds your report, exports,\nquarterly figures and tax set-aside."),
 ]
 
 # Brand palette (research_notes/launch-2026/milesprout-brand-brief.md): the icon's 135° gradient.
