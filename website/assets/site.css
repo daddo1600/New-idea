@@ -1043,7 +1043,8 @@ html[data-cc="CA"] .money-line [data-for="CA"], html[data-cc="AU"] .money-line [
 
 /* Scenery chips (desktop only, under the scene): the visitor can always pick the standard scene */
 .scene-pick { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 10px 0 0; }
-.scene-pick[hidden] { display: none; }
+/* the chips need JS: until it runs they keep their space but don't show (no layout shift when they appear) */
+.scene-pick[hidden] { display: flex; visibility: hidden; }
 @media (max-width: 899px) { .scene-pick { display: none !important; } }
 .scene-pick-label { color: #D1FAE5; font-size: .85rem; font-weight: 700; }
 .scene-chips { display: flex; gap: 6px; }
