@@ -758,7 +758,7 @@
         clouds: null, cloudMarkup: cloudsG ? cloudsG.innerHTML : '', sun: sun && { cx: sun.getAttribute('cx'), cy: sun.getAttribute('cy'), r: sun.getAttribute('r') } };
       var bayG = null, bayYellow = null, bayWhite = null;
       var cur = null, curId = 'standard', sign = { list: [], parked: null }, passingEl = null, parkedEl = null, ambEl = null;
-      var loopIdx = 0, sLoop = 0, lastT = 0, cloudX = 0, depthEls = [];
+      var loopIdx = 0, lastT = 0, cloudX = 0, depthEls = [];
       var ctx = {
         text: SCENES.text,
         rate: function (c) {
@@ -776,7 +776,7 @@
       }
       // a sign: its face on one or two posts, drawn with the post's foot at 0,0 (sign px)
       function signMarkup(sp) {
-        var postPx = 0.8 * sp.w / sp.world, pc = sp.post || '#C9D3CE', pw = Math.max(2.5, sp.w * 0.022);
+        var postPx = (sp.postH || 0.8) * sp.w / sp.world, pc = sp.post || '#C9D3CE', pw = Math.max(2.5, sp.w * 0.022);
         var posts = sp.posts === 2 ? [sp.w * 0.22, sp.w * 0.78] : [sp.w / 2];
         var s = '';
         posts.forEach(function (px) { s += '<rect x="' + (px - sp.w / 2 - pw / 2) + '" y="' + (-postPx - 2) + '" width="' + pw + '" height="' + (postPx + 2) + '" fill="' + pc + '"/>'; });
@@ -819,9 +819,16 @@
         signsG.innerHTML = ''; ambientG.innerHTML = ''; overlayG.innerHTML = '';
         sign = def.signs ? def.signs(ctx) : { passing: [], parked: null };
         passingEl = el('g', 'sc-sign', signsG); parkedEl = el('g', 'sc-sign', signsG);
-        if (sign.parked) parkedEl.innerHTML = signMarkup(sign.parked);
+        if (sign.parked) {
+          // on a wide (desktop) scene it stands on the right verge, its face hanging back over the road
+          var spk = sign.parked, pk = def.parked || {};
+          if (window.innerWidth >= 900 && pk.wideAnchor != null) { spk = {}; for (var key in sign.parked) spk[key] = sign.parked[key]; spk.anchor = pk.wideAnchor; }
+          parkedEl.innerHTML = signMarkup(spk);
+        }
         showPassing();
-        ambEl = def.ambient ? el('g', 'sc-amb', ambientG, def.ambient.markup(ctx)) : null;
+        // the ambient detail can live in the mid layer (London's bus on the Embankment: behind every sign, post,
+        // tree and bollard), or above the signs (the default)
+        ambEl = def.ambient ? el('g', 'sc-amb', def.ambient.layer === 'mid' ? midG : ambientG, def.ambient.markup(ctx)) : null;
         if (ambEl) ambEl.setAttribute('opacity', '0');
         SCENES.overlayFor(id, visitorCountry(), function (ov) { if (curId === id && ov.draw) ov.draw(overlayG, ctx); });
         if (still()) place(0, true);
@@ -841,6 +848,14 @@
       // How far the car has gone in the loop when it parks (9 units/s to 1.8 s, then slowing to 2.7 s), so
       // things placed "where the car stops" come to rest exactly there.
       var D_PARK = 9 * 1.8 + 9 * 0.9 * 0.5;
+      // How far the car has gone at t on the clip's clock (the integral of pace): worked out from the clock, not
+      // added up frame by frame, so the signs and the bay land in the same place every loop however the frames fall
+      function distAt(t) {
+        if (t < 1.8) return 9 * t;
+        if (t < 2.7) { var x = (t - 1.8) / 0.9; return 16.2 + 8.1 * (x - x * x * x + x * x * x * x / 2); }
+        if (t < 9.0) return D_PARK;
+        var y = Math.min(1, (t - 9.0) / 0.6); return D_PARK + 5.4 * (y * y * y - y * y * y * y / 2);
+      }
       // Where the parked sign stands: by the kerb where the car stops, near enough to read on a phone; on a
       // wide (desktop) scene the left kerb is behind the phone, so across the road on the right verge.
       function parkedSpot() {
@@ -870,7 +885,7 @@
       function place(t, rest, s, c, shift) {
         if (!cur) return;
         var X = cur.signX || 3.9, spot = parkedSpot();
-        var d = rest ? D_PARK : s - sLoop;
+        var d = rest ? D_PARK : distAt(t);
         if (rest) {
           put(passingEl, null);
           put(parkedEl, sign.parked, spot.X, spot.z, PARKED, 0, 0.8);
@@ -879,6 +894,9 @@
           put(parkedEl, sign.parked, spot.X, spot.z + D_PARK - d, c, shift, 0.8);
           // the parked sign comes into view only as the car slows (1.8 s), not while it's far off
           if (cur.parked && cur.parked.from && t < cur.parked.from) parkedEl.setAttribute('opacity', '0');
+          // and as the car pulls away it fades (fadeOut: [from, to] s) before it can grow past the frame's edge
+          var fo = cur.parked && cur.parked.fadeOut;
+          if (fo && t > fo[0]) parkedEl.setAttribute('opacity', String(Number(parkedEl.getAttribute('opacity')) * clamp(1 - (t - fo[0]) / (fo[1] - fo[0]), 0, 1)));
         }
         bayDraw(d, rest ? PARKED : c, rest ? 0 : shift, rest);
         if (ambEl && cur.ambient) {
@@ -893,7 +911,7 @@
       return {
         // the scene's clock ticks: parallax, clouds, signs, the ambient detail
         frame: function (t, dt, s, c, steerPx) {
-          if (t < lastT - 1) { loopIdx++; sLoop = s; if (sign.passing.length > 1) showPassing(); }
+          if (t < lastT - 1) { loopIdx++; if (sign.passing.length > 1) showPassing(); }
           lastT = t;
           depthEls.forEach(function (g) { g.setAttribute('transform', 'translate(' + (steerPx * Number(g.getAttribute('data-depth'))).toFixed(2) + ' 0)'); });
           if (cloudsG) { cloudX = (cloudX + 2 * dt) % 520; cloudsG.setAttribute('transform', 'translate(' + (cloudX > 260 ? cloudX - 520 : cloudX).toFixed(1) + ' 0)'); }

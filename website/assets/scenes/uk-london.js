@@ -130,17 +130,17 @@
       face += rosette(22, 20, 11, WHITE) + T('Westminster', 'uk.medium', c, 40, 20 + c / 2, WHITE);
       list.push({ w: w, h: h, face: face, world: 3.02, posts: 2 });
     })();
-    // Parked: a big blue P with a one-line plate, "Drive logged" (its cap height is about 9-10 CSS px on a
-    // 390 px phone, where it stands by the bay)
+    // Parked: a blue P (about 30 CSS px on a 390 px phone, at rest) over a wider one-line plate, "Drive
+    // logged" (cap height at least 9 CSS px), on a grey post at the kerb by the far end of the bay
     var parked = (function () {
-      var w = 104, ph = 104, c = 14.5;
+      var w = 104, ph = 104, c = 27;
       var face = '<rect x="0" y="0" width="' + w + '" height="' + ph + '" rx="6" fill="' + BLUE + '"/><rect x="3" y="3" width="' + (w - 6) + '" height="' + (ph - 6) + '" rx="4.5" fill="none" stroke="' + WHITE + '" stroke-width="2.6"/>';
       face += T('P', 'uk.heavy', 64, w / 2, 84, WHITE, 'middle');
       var pw = Math.max(w, T.width('Drive logged', 'uk.medium', c) + 16), py = ph + 4, plh = c + 14;
       face += '<rect x="' + (w - pw) / 2 + '" y="' + py + '" width="' + pw + '" height="' + plh + '" rx="4" fill="' + BLUE + '"/><rect x="' + ((w - pw) / 2 + 2.5) + '" y="' + (py + 2.5) + '" width="' + (pw - 5) + '" height="' + (plh - 5) + '" rx="3" fill="none" stroke="' + WHITE + '" stroke-width="1.8"/>';
       face += T('Drive logged', 'uk.medium', c, w / 2, py + 7 + c, WHITE, 'middle');
-      // its post near the left edge, so the whole sign stands clear of the phone on a 390 px screen
-      return { w: w, h: py + plh, face: face, world: 1.6, posts: 1, anchor: 0.12 };
+      // its post near the plate's left end, so the whole sign stands clear of the phone on a 390 px screen
+      return { w: w, h: py + plh, face: face, world: 0.82, posts: 1, anchor: 0.12, postH: 0.6 };
     })();
     return { passing: list, parked: parked };
   }
@@ -171,7 +171,7 @@
     bay: { yellow: [[-0.87, -0.83], [-0.78, -0.74]], kerb: -0.95, x: 0.3, zA: 0.6, zB: 3.0 },
     // the P sign by the bay where the car stops (on wide screens across the road, clear of the phone);
     // it comes into view as the car slows (1.8 s)
-    parked: { X: -1.3, z: 3.35, wideX: 3.6, wideZ: 8, from: 1.8 },
+    parked: { X: -1.05, z: 3.0, wideX: 3.3, wideZ: 6, wideAnchor: 0.88, from: 1.8, fadeOut: [9.1, 9.4] },
     dash: 'rd-dash-w',
     templates: {
       // London plane: an irregular, wider crown in 3-4 lobes with a paler mottled patch; a pale mottled trunk
@@ -188,6 +188,7 @@
     signs: signs,
     glyphs: 'uk',
     ambient: {
+      layer: 'mid', // behind every sign, post, near tree and bollard
       markup: bus,
       // right to left along the Embankment, in front of Elizabeth Tower, while the camera is wide: from
       // 8.6 s (the zoom easing out) to 1.2 s into the next loop; at rest it waits beside the tower
