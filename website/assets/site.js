@@ -468,6 +468,113 @@
     setLabel();
   })();
 
+  /* ---------- Money: the hero's money line and the "What are your work miles worth?" calculator ----------
+     Each country's real rules, as in the app (milemint/src/domain/regions.ts; checked in
+     research_notes/launch-2026/website-claims-check.md): UK 55p for the first 10,000 miles a year
+     then 25p; US 76¢ (from 1 Jul 2026); Canada 73¢ for the first 5,000 km then 67¢ (the CRA's
+     allowance rate, provinces); Australia 91c a km, capped at 5,000 km a year. 48 working weeks.
+     Figures are what the miles are worth at that rate: never "money back" or "tax saved".
+     The country comes from season.js (time zone, then language; ?country=CA previews one);
+     without JS the UK text shows. */
+  var RATES = {
+    UK: { unit: 'mi', cur: 'GBP', locale: 'en-GB', at: "HMRC's rate", example: 2640,
+      tiers: [[10000, 0.55], [Infinity, 0.25]],
+      note: "HMRC's rate for cars and vans in 2026/27: 55p a mile for the first 10,000 miles, then 25p.",
+      source: 'https://www.gov.uk/government/publications/increase-to-approved-mileage-allowance-payments-amaps-and-self-employed-simplified-mileage-rates/increasing-mileage-rates' },
+    US: { unit: 'mi', cur: 'USD', locale: 'en-US', at: "the IRS's rate", example: 3648,
+      tiers: [[Infinity, 0.76]],
+      note: "The IRS's standard mileage rate from 1 July 2026: 76¢ a mile.",
+      source: 'https://www.irs.gov/forms-pubs/the-standard-mileage-rates-and-maximum-automobile-fair-market-values-have-been-updated-for-2026' },
+    CA: { unit: 'km', cur: 'CAD', locale: 'en-CA', at: "the CRA's allowance rate", example: 5526,
+      tiers: [[5000, 0.73], [Infinity, 0.67]],
+      note: "The CRA's allowance rate for 2026 (provinces): 73¢ a km for the first 5,000 km, then 67¢. It's the most an employer can pay tax-free; self-employed drivers claim their actual costs.",
+      source: 'https://www.canada.ca/en/department-finance/news/2026/01/government-announces-the-2026-automobile-deduction-limits-and-expense-benefit-rates-for-businesses.html' },
+    AU: { unit: 'km', cur: 'AUD', locale: 'en-AU', at: "the ATO's rate", example: 4550,
+      tiers: [[5000, 0.91]], // capped: nothing above 5,000 km a year
+      note: "The ATO's cents per km rate for 2026–27: 91c a km, for up to 5,000 km a year per car.",
+      source: 'https://www.ato.gov.au/individuals-and-families/income-deductions-offsets-and-records/deductions-you-can-claim/work-related-deductions/cars-transport-and-travel/motor-vehicle-and-car-expenses/expenses-for-a-car-you-own-or-lease/cents-per-kilometre-method' }
+  };
+  var WEEKS = 48;
+  /** What a year of `perWeek` work miles (or km) is worth: each band at its rate, anything past the last band at nothing. */
+  function yearWorth(r, perWeek) {
+    var left = perWeek * WEEKS, total = 0;
+    for (var i = 0; i < r.tiers.length && left > 0; i++) {
+      var band = Math.min(left, r.tiers[i][0]);
+      total += band * r.tiers[i][1];
+      left -= band;
+    }
+    return total;
+  }
+  function money(r, n) {
+    try { return new Intl.NumberFormat(r.locale, { style: 'currency', currency: r.cur, maximumFractionDigits: 0, minimumFractionDigits: 0 }).format(Math.round(n)); }
+    catch (err) { return (r.cur === 'GBP' ? '£' : '$') + Math.round(n).toLocaleString('en'); }
+  }
+  var COUNTRY = (function () {
+    var c = 'GB';
+    try { c = window.MSSeason && window.MSSeason.country ? window.MSSeason.country() : 'GB'; } catch (err) { c = 'GB'; }
+    var forced = /[?&]country=(UK|GB|US|CA|AU)\b/i.exec(location.search);
+    if (forced) c = forced[1].toUpperCase();
+    return c === 'GB' ? 'UK' : RATES[c] ? c : 'UK';
+  })();
+
+  (function moneyLine() {
+    var line = document.querySelector('[data-money]');
+    if (!line || COUNTRY === 'UK') return; // the page's own text is the UK one
+    var r = RATES[COUNTRY];
+    line.innerHTML = 'An example year of part-time work driving is worth <strong>' + money(r, r.example) + '</strong> at ' + r.at + '.';
+  })();
+
+  (function calculator() {
+    var root = document.getElementById('calc');
+    if (!root) return;
+    var select = root.querySelector('#calc-country');
+    var range = root.querySelector('#calc-range');
+    var q = function (k) { return root.querySelector('[data-calc="' + k + '"]'); };
+    var label = q('label'), dist = q('dist'), unitEl = q('unit'), result = q('result'), live = q('live'), note = q('note'), source = q('source');
+    if (!select || !range || !result) return;
+    var r = RATES[COUNTRY];
+    Array.prototype.forEach.call(root.querySelectorAll('[data-calc-js]'), function (el) { el.hidden = false; });
+    var eg = root.querySelector('.calc-eg');
+    if (eg) eg.hidden = true; // "An example:" is for the still, no-JS version
+
+    function units(n) { return r.unit === 'mi' ? (n === 1 ? 'mile' : 'miles') : 'km'; }
+    function show(announce) {
+      var n = Number(range.value);
+      var amount = money(r, yearWorth(r, n));
+      dist.textContent = n.toLocaleString('en');
+      unitEl.textContent = units(n) + ' a week';
+      range.setAttribute('aria-valuetext', n.toLocaleString('en') + ' ' + units(n) + ' a week');
+      result.innerHTML = "That's about <strong>" + amount + ' a year</strong> at ' + r.at + '.';
+      if (announce) live.textContent = 'About ' + amount + ' a year at ' + r.at + '.';
+    }
+    function setCountry(c, fromUser) {
+      var was = r;
+      r = RATES[c];
+      if (was.unit !== r.unit) {
+        // the same driving in the other unit, to the slider's step of 5
+        var v = Number(range.value) * (r.unit === 'km' ? 1.609344 : 1 / 1.609344);
+        range.min = r.unit === 'km' ? 15 : 10;
+        range.max = r.unit === 'km' ? 1000 : 600;
+        range.value = Math.round(v / 5) * 5;
+      }
+      label.textContent = r.unit === 'km' ? 'Work km a week' : 'Work miles a week';
+      note.textContent = r.note;
+      source.href = r.source;
+      show(fromUser);
+      if (fromUser) {
+        // one fewer tap in the form below
+        var chip = document.querySelector('form[data-waitlist] input[name="country"][value="' + c + '"]');
+        if (chip) chip.checked = true;
+      }
+    }
+    select.value = COUNTRY;
+    if (r.unit === 'km') { range.min = 15; range.max = 1000; range.value = 160; }
+    setCountry(COUNTRY, false);
+    range.addEventListener('input', function () { show(false); });
+    range.addEventListener('change', function () { show(true); }); // the slider stopped: read the result out once
+    select.addEventListener('change', function () { setCountry(select.value, true); });
+  })();
+
   /* ---------- Feature deck ---------- */
   (function deck() {
     var root = document.getElementById('deck');

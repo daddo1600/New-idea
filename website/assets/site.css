@@ -101,6 +101,7 @@ section.hero { padding: 0; }
 .hero .wrap { position: relative; display: grid; gap: 40px; padding-top: 40px; padding-bottom: 48px; align-items: center; }
 .hero h1 { color: #FFFFFF; }
 .hero .lede { color: #F0FDF7; font-size: 1.15rem; max-width: 34em; }
+@media (max-width: 899px) { .hero .lede { font-size: 1rem; line-height: 1.55; } .hero .money-line { font-size: 1.02rem; } }
 .hero .wm-mile { color: #FFFFFF; }
 .hero .wm-sprout { color: var(--mint); }
 .hero .note { color: var(--mint); font-size: .95rem; margin: 18px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
@@ -148,6 +149,9 @@ section.hero { padding: 0; }
 }
 .scene-ctl { position: absolute; z-index: 3; right: 10px; bottom: 10px; display: flex; gap: 6px; }
 .scene-ctl[hidden], .scene.is-still .scene-ctl { display: none; }
+.scene-cap { margin: 12px 4px 0; color: #D1FAE5; font-size: .95rem; text-align: center; }
+/* phones: the headline comes first, so the caption is for screen readers only there */
+@media (max-width: 899px) { .scene-cap { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
 .scene-ctl button {
   font: 700 .78rem/1 var(--font); color: #FFFFFF; background: rgba(6, 38, 28, .78); cursor: pointer;
   border: 1px solid rgba(255, 255, 255, .35); border-radius: 999px; min-height: 30px; padding: 0 12px;
@@ -734,3 +738,37 @@ html.ms-intro::after {
   .hero .pill { margin-bottom: 10px; }
   .hero .season-greeting { display: none; } /* the sprout it belongs to is hidden here too */
 }
+
+/* ---------- Money line (under the hero h1) and the "What are your work miles worth?" calculator ---------- */
+.hero .money-line { color: #FFFFFF; font-size: 1.1rem; font-weight: 600; line-height: 1.4; margin: -.15em 0 .6em; max-width: 30em; }
+.hero .money-line strong { color: var(--gold); font-weight: 800; }
+
+.calc {
+  padding: 0 0 28px; margin: 0 0 30px; border-bottom: 1px solid rgba(255, 255, 255, .22);
+}
+.calc-title { color: #FFFFFF; font-size: clamp(1.45rem, 4.4vw, 1.9rem); margin: 0 0 .4em; }
+.calc-country { margin: 0 0 14px; color: #F0FDF7; font-size: .95rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.calc-country[hidden], .calc-slide[hidden], .calc-eg[hidden] { display: none; }
+.calc-country select {
+  font: inherit; font-size: .95rem; font-weight: 700; color: #14261F; background: #FFFFFF;
+  border: 1.5px solid #9DB5A9; border-radius: 10px; padding: 6px 10px; min-height: 38px;
+}
+.calc-country select:focus-visible { outline: 3px solid var(--gold); outline-offset: 1px; }
+.calc-label { display: block; font-weight: 700; font-size: .9rem; color: #FFFFFF; margin-bottom: 4px; }
+.calc input[type="range"] { width: 100%; margin: 4px 0 2px; accent-color: var(--gold); min-height: 32px; cursor: pointer; }
+.calc input[type="range"]:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; border-radius: 8px; }
+.calc-dist { margin: 0 0 4px; color: #F0FDF7; }
+.calc-dist strong { color: #FFFFFF; font-size: 1.15rem; }
+.calc-result { margin: 0 0 10px; color: #FFFFFF; font-size: 1.2rem; line-height: 1.4; }
+.calc-result strong { color: var(--gold); font-size: 1.6rem; font-weight: 800; white-space: nowrap; }
+.calc-note { margin: 0 0 14px; color: #D1FAE5; font-size: .85rem; line-height: 1.5; }
+.signup .calc-note a, .signup .calc-go a { color: #FFFFFF; }
+.calc-go { margin: 0; font-weight: 700; }
+
+/* Under the email row: one short line, then three ticks (they wrap to two lines on a phone) */
+.wl-micro { margin: 8px 0 0; font-size: .88rem; color: var(--text); }
+.on-dark .wl-micro { color: #D1FAE5; }
+.wl-ticks { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: .9rem; font-weight: 600; color: var(--ink); }
+.on-dark .wl-ticks { color: #FFFFFF; }
+.wl-ticks li::before { content: "✓"; color: var(--brand); font-weight: 800; margin-right: 6px; }
+.on-dark .wl-ticks li::before { color: var(--gold); }

@@ -276,6 +276,8 @@
 
   window.MSSeason = {
     detect: detect, signs: signs, signState: signState, hat: hat, palette: palette, rider: rider, ambient: ambient,
+    /** The visitor's country from the time zone, then the language: 'GB', 'US', 'CA' or 'AU' (the calculator uses it too). */
+    country: country,
     /** Exposed for tests: the app's date rules. */
     seasonId: seasonId
   };

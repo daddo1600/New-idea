@@ -18,10 +18,10 @@
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/img/screens/home.webp" as="image" type="image/webp">
-<link rel="stylesheet" href="/assets/site.css?v=074cd23d">
+<link rel="stylesheet" href="/assets/site.css?v=166d0416">
 <script src="/assets/intro-gate.js?v=06c94b49"></script>
-<script src="/assets/season.js?v=ad21733e" defer></script>
-<script src="/assets/site.js?v=4ec637c4" defer></script>
+<script src="/assets/season.js?v=06a20cf1" defer></script>
+<script src="/assets/site.js?v=ae7c6b56" defer></script>
 <noscript><style>
   /* Without JavaScript: every feature is listed, the deck is a still picture. */
   .feat { opacity: 1 !important; visibility: visible !important; transform: none !important; grid-area: auto !important; }
@@ -58,7 +58,8 @@
         <svg class="hero-sprout" viewBox="12 9 77 84" aria-hidden="true" focusable="false"><defs><linearGradient id="ms-leaf-hero" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#77E8A0"/><stop offset="1" stop-color="#24B359"/></linearGradient></defs><g transform="translate(1.2 1.6)" fill="#085E42" opacity=".5"><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z"/><path d="M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z"/></g><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z" fill="url(#ms-leaf-hero)"/><path d="M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z" fill="url(#ms-leaf-hero)"/><path d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#064E3B" stroke-width="8" stroke-linecap="round" fill="none"/><path d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#FBF7EE" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="2.6 3.2" stroke-dashoffset="-3" fill="none"/><circle cx="51" cy="28" r="7.6" fill="#FFFFFF"/><circle cx="51" cy="28" r="5.6" fill="#FACC15"/></svg>
         <span class="pill">Coming October 2026 · UK · US · Canada · Australia</span>
         <h1 id="hero-title">Every work mile adds up.</h1>
-        <p class="lede">The free mileage log that fills itself in, for couriers, delivery riders, care workers and anyone who drives for work. Every work mile becomes money back at tax time.</p>
+        <p class="money-line" data-money>An example year of part-time work driving is worth <strong>£2,640</strong> at HMRC's rate.</p>
+        <p class="lede">The free mileage log that fills itself in, for couriers, delivery riders, care workers and anyone who drives for work. Every work mile is logged and valued at the tax office's rate.</p>
         <p class="hero-actions">
           <a class="btn-gold" href="#how">See how it works</a>
           <a class="hero-link" href="#early-access">Get early access</a>
@@ -104,7 +105,7 @@
             <button type="button" data-scene="toggle" aria-controls="scene">Pause</button>
             <button type="button" data-scene="replay" aria-controls="scene" aria-label="Replay the animation">Replay</button>
           </div>
-          <!-- Caption: marketing is writing it. <figcaption class="scene-cap">…</figcaption> -->
+          <figcaption class="scene-cap">Park. The drive is already there. Swipe it to Work, and watch it add up.</figcaption>
         </figure>
       </div>
     </div>
@@ -238,8 +239,32 @@
 
   <section class="signup" aria-labelledby="early-access">
     <div class="wrap">
+      <section class="calc" id="calc" aria-labelledby="calc-title">
+        <h2 id="calc-title" class="calc-title">What are your work miles worth?</h2>
+        <p class="calc-country" data-calc-js hidden><label for="calc-country">Rates for</label>
+          <select id="calc-country" aria-label="Country for the tax rate">
+            <option value="UK">the UK</option>
+            <option value="US">the US</option>
+            <option value="CA">Canada</option>
+            <option value="AU">Australia</option>
+          </select></p>
+        <div class="calc-slide" data-calc-js hidden>
+          <label for="calc-range" class="calc-label" data-calc="label">Work miles a week</label>
+          <input id="calc-range" type="range" min="10" max="600" step="5" value="100" aria-valuetext="100 miles a week">
+        </div>
+        <p class="calc-dist"><span class="calc-eg">An example: </span><strong data-calc="dist">100</strong> <span data-calc="unit">miles a week</span></p>
+        <p class="calc-result" data-calc="result">That's about <strong>£2,640 a year</strong> at HMRC's rate.</p>
+        <p class="sr-only" data-calc="live" role="status" aria-live="polite"></p>
+        <p class="calc-note"><span data-calc="note">HMRC's rate for cars and vans in 2026/27: 55p a mile for the first 10,000 miles, then 25p.</span> Based on 48 working weeks. A guide, not tax advice. <a data-calc="source" href="https://www.gov.uk/government/publications/increase-to-approved-mileage-allowance-payments-amaps-and-self-employed-simplified-mileage-rates/increasing-mileage-rates" rel="noopener">Source</a></p>
+        <p class="calc-go"><a href="#early-access">Log every one of them. Get early access ↓</a></p>
+      </section>
+
       <h2 class="wl-title" id="early-access">Get early access</h2>
-      <p class="signup-sub">Be first to know when MileSprout is in the App Store. One email at launch, no spam, never shared.</p>
+      <p class="signup-sub">Be first to know when MileSprout is in the App Store.</p>
+      <!-- Waitlist reward, waiting for the founder's sign-off: the offer line replaces .signup-sub above,
+           and research's small print goes under the consent box (research_notes/launch-2026/website-claims-check.md, "Decisions").
+      <p class="signup-offer">Join the list and get <strong>3 months of Pro free</strong> at launch.</p>
+      -->
       <form class="waitlist on-dark" action="/api/waitlist" method="post" data-waitlist>
         <input type="hidden" name="source" value="home">
         <div class="wl-fields">
@@ -251,6 +276,12 @@
             <span class="sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
             </span>
           </div>
+          <p class="wl-micro">One email at launch. Never shared. Unsubscribe any time.</p>
+          <ul class="wl-ticks">
+            <li>No account</li>
+            <li>No ads</li>
+            <li>Your trips stay on your phone</li>
+          </ul>
           <div class="wl-opts">
             <fieldset class="chips" data-chips>
             <legend>What do you drive for? <small>(optional)</small></legend>
@@ -274,7 +305,7 @@
             </div>
             </fieldset>
           </div>
-          <label class="wl-consent"><input type="checkbox" name="consent" value="yes" required> <span>Email me when MileSprout launches. Unsubscribe any time. <a href="/privacy#waitlist">How we use your email</a></span></label>
+          <label class="wl-consent"><input type="checkbox" name="consent" value="yes" required> <span>Email me when MileSprout launches. <a href="/privacy#waitlist">How we use your email</a></span></label>
           <div class="wl-hp" aria-hidden="true"><label>Company <input type="text" name="company" tabindex="-1" autocomplete="off"></label></div>
         </div>
         <p class="wl-done" tabindex="-1" hidden><strong>You're on the list.</strong> We'll email you once, when MileSprout is ready.</p>
