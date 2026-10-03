@@ -734,7 +734,7 @@ export default function WelcomeScreen() {
                   {t('Set location to “Always” and MileSprout logs every drive, even when it’s closed.')}
                 </Text>
                 {status === 'needs-permission' && !asked && (
-                  <Text style={styles.brandCallout}>{t('Without “Always”, drives go unlogged and unclaimed.')}</Text>
+                  <Text style={styles.brandCallout}>{t('Without “Always”, drives get missed, and missed miles are hard to prove.')}</Text>
                 )}
                 {status === 'needs-always' ? (
                   // iOS asks about "Always" by itself later on: no detour to Settings during set-up.

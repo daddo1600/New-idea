@@ -1805,12 +1805,6 @@
     ]
   },
   {
-    "key": "Claim a deal",
-    "files": [
-      "app/(tabs)/perks.tsx"
-    ]
-  },
-  {
     "key": "Claim again",
     "files": [
       "components/perks/offer-card.tsx"
@@ -1844,6 +1838,12 @@
     "key": "Claim it when you’re ready to pay: the code lasts {{hours}} h.",
     "files": [
       "components/perks/offer-card.tsx"
+    ]
+  },
+  {
+    "key": "Claim it when you’re ready to pay: the timer starts straight away.",
+    "files": [
+      "app/(tabs)/perks.tsx"
     ]
   },
   {
@@ -1881,6 +1881,12 @@
     "key": "Claim: {{offer}}",
     "files": [
       "components/perks/offer-card.tsx"
+    ]
+  },
+  {
+    "key": "Claim. Show. Save.",
+    "files": [
+      "app/(tabs)/perks.tsx"
     ]
   },
   {
@@ -5934,6 +5940,12 @@
     ]
   },
   {
+    "key": "Save: the deal comes off what you pay.",
+    "files": [
+      "app/(tabs)/perks.tsx"
+    ]
+  },
+  {
     "key": "Saved.",
     "files": [
       "app/logbook.tsx"
@@ -6257,7 +6269,7 @@
     ]
   },
   {
-    "key": "Show the code at the till",
+    "key": "Show the code before it runs out: scan it at the till, or type it in online.",
     "files": [
       "app/(tabs)/perks.tsx"
     ]
@@ -7063,12 +7075,6 @@
     ]
   },
   {
-    "key": "The partner pays only when it’s used",
-    "files": [
-      "app/(tabs)/perks.tsx"
-    ]
-  },
-  {
     "key": "The purchase didn’t go through. Please try again.",
     "files": [
       "purchases/pro.tsx"
@@ -7842,7 +7848,7 @@
     ]
   },
   {
-    "key": "Without “Always”, drives go unlogged and unclaimed.",
+    "key": "Without “Always”, drives get missed, and missed miles are hard to prove.",
     "files": [
       "app/welcome.tsx"
     ]
