@@ -83,9 +83,12 @@ function NotificationStack({ region }: { region: Region }) {
   const now = useMemo(() => nowLabel(lang), [lang]);
   // Real notifications MileSprout sends (domain/reminders, domain/deadlines), in the current language.
   const recap = WEEKLY_MESSAGES[0];
-  const countdown = t('One week left in the {{year}} tax year 🏁', {
+  // The flag goes first: the line is cut short with "…" on narrow phones and long languages.
+  const countdown = `🏁 ${t('One week left in the {{year}} tax year 🏁', {
     year: taxYearLabel(currentTaxYear(region), region),
-  });
+  })
+    .replace(/\s*🏁\s*$/u, '')
+    .trim()}`;
   const first = useSharedValue(reduceMotion ? 1 : 0);
   const second = useSharedValue(reduceMotion ? 1 : 0);
 
