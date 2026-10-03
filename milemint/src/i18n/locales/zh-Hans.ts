@@ -743,6 +743,8 @@ const dictionary: Dictionary = {
   "Nothing to back up yet. Your trips are backed up once you have some.": "还没有可备份的内容。有了行程后就会备份。",
   "iCloud isn’t available. Sign in to iCloud and turn on iCloud Drive in iPhone Settings.": "iCloud 不可用。请在 iPhone 的“设置”中登录 iCloud，并打开 iCloud 云盘。",
   "Couldn’t back up. Check your connection and try again.": "无法备份。请检查网络连接后重试。",
+  "Couldn’t back up ({{code}}). Check your connection and try again.": "无法备份（{{code}}）。请检查网络连接后重试。",
+  "The last backup didn’t finish ({{code}}). Tap Back up now to try again. If it keeps happening, send us this code.": "上次备份未完成（{{code}}）。点按“立即备份”重试。如果反复出现，请把这个代码发给我们。",
   "Restored {{count}} trips from iCloud.": {
     "other": "已从 iCloud 恢复 {{count}} 次行程。"
   },

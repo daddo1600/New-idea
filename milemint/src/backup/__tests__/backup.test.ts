@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 
 import { noteScrubbed, pendingScrub } from '../after-scrub';
-import { backUp, restoreSnapshot } from '../backup';
+import { backUp, BackupStepError, loadBackupFailure, restoreSnapshot, STEP_TIMEOUT_MS } from '../backup';
 import { emptyTables, makeSnapshot, SNAPSHOT_VERSION } from '../snapshot';
 
 const writes: { name: string; keep: number }[] = [];
@@ -108,5 +108,30 @@ describe('backUp', () => {
       format: 'milemint-backup',
       version: SNAPSHOT_VERSION,
     });
+  });
+
+  it('gives up on a step that never answers, saves why, and lets the next backup run', async () => {
+    const native = (jest.requireMock('../../../modules/icloud-backup') as { ICloudBackup: Record<string, unknown> })
+      .ICloudBackup;
+    const write = native.write;
+    native.write = () => new Promise(() => {}); // iCloud never answers
+    jest.useFakeTimers({ doNotFake: ['nextTick', 'setImmediate'] });
+    try {
+      const stuck = backUp(fakeDb() as never, { force: true });
+      const caught = stuck.catch((error: unknown) => error);
+      // Let the read and seal steps run (the fake database ticks on timers too).
+      for (let i = 0; i < 50 && writes.length === 0; i++) await jest.advanceTimersByTimeAsync(5);
+      await jest.advanceTimersByTimeAsync(STEP_TIMEOUT_MS.write);
+      const error = await caught;
+      expect(error).toBeInstanceOf(BackupStepError);
+      expect(error).toMatchObject({ step: 'write', code: 'ERR_TIMEOUT' });
+      expect(await loadBackupFailure()).toMatchObject({ step: 'write', code: 'ERR_TIMEOUT' });
+    } finally {
+      native.write = write;
+      jest.useRealTimers();
+    }
+    // The queue isn't stuck: the next one goes through and clears the failure.
+    await expect(backUp(fakeDb() as never, { force: true })).resolves.toBe('written');
+    expect(await loadBackupFailure()).toBeNull();
   });
 });

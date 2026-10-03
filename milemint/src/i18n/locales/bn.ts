@@ -757,6 +757,8 @@ const dictionary: Dictionary = {
   "Nothing to back up yet. Your trips are backed up once you have some.": "এখনো ব্যাকআপ করার মতো কিছু নেই। ট্রিপ রেকর্ড হলেই সেগুলোর ব্যাকআপ হবে।",
   "iCloud isn’t available. Sign in to iCloud and turn on iCloud Drive in iPhone Settings.": "iCloud পাওয়া যাচ্ছে না। iPhone-এর সেটিংসে iCloud-এ সাইন ইন করে iCloud Drive চালু করুন।",
   "Couldn’t back up. Check your connection and try again.": "ব্যাকআপ করা যায়নি। কানেকশন দেখে আবার চেষ্টা করুন।",
+  "Couldn’t back up ({{code}}). Check your connection and try again.": "ব্যাকআপ নেওয়া যায়নি ({{code}})। আপনার সংযোগ দেখে আবার চেষ্টা করুন।",
+  "The last backup didn’t finish ({{code}}). Tap Back up now to try again. If it keeps happening, send us this code.": "শেষ ব্যাকআপ শেষ হয়নি ({{code}})। আবার চেষ্টা করতে এখনই ব্যাকআপ নিন-এ ট্যাপ করুন। বারবার হলে, আমাদের এই কোডটি পাঠান।",
   "Restored {{count}} trips from iCloud.": {
     "one": "iCloud থেকে {{count}}টি ট্রিপ পুনরুদ্ধার হয়েছে।",
     "other": "iCloud থেকে {{count}}টি ট্রিপ পুনরুদ্ধার হয়েছে।"

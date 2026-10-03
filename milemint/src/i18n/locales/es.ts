@@ -783,6 +783,8 @@ const dictionary: Dictionary = {
   "Nothing to back up yet. Your trips are backed up once you have some.": "Aún no hay nada que respaldar. Tus viajes se respaldarán cuando tengas alguno.",
   "iCloud isn’t available. Sign in to iCloud and turn on iCloud Drive in iPhone Settings.": "iCloud no está disponible. Inicia sesión en iCloud y activa iCloud Drive en Configuración del iPhone.",
   "Couldn’t back up. Check your connection and try again.": "No se pudo respaldar. Revisa tu conexión e inténtalo de nuevo.",
+  "Couldn’t back up ({{code}}). Check your connection and try again.": "No se pudo hacer la copia ({{code}}). Revisa tu conexión e inténtalo de nuevo.",
+  "The last backup didn’t finish ({{code}}). Tap Back up now to try again. If it keeps happening, send us this code.": "La última copia no terminó ({{code}}). Toca Respaldar ahora para reintentarlo. Si sigue pasando, envíanos este código.",
   "Restored {{count}} trips from iCloud.": {
     "one": "Se restauró {{count}} viaje desde iCloud.",
     "many": "Se restauraron {{count}} viajes desde iCloud.",

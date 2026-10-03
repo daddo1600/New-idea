@@ -823,6 +823,8 @@ const dictionary: Dictionary = {
   "Nothing to back up yet. Your trips are backed up once you have some.": "Rien à sauvegarder pour l’instant. Vos trajets seront sauvegardés dès que vous en aurez.",
   "iCloud isn’t available. Sign in to iCloud and turn on iCloud Drive in iPhone Settings.": "iCloud n’est pas disponible. Connectez-vous à iCloud et activez iCloud Drive dans Réglages sur votre iPhone.",
   "Couldn’t back up. Check your connection and try again.": "Sauvegarde impossible. Vérifiez votre connexion et réessayez.",
+  "Couldn’t back up ({{code}}). Check your connection and try again.": "Sauvegarde impossible ({{code}}). Vérifiez votre connexion et réessayez.",
+  "The last backup didn’t finish ({{code}}). Tap Back up now to try again. If it keeps happening, send us this code.": "La dernière sauvegarde n’a pas abouti ({{code}}). Touchez Sauvegarder maintenant pour réessayer. Si cela se reproduit, envoyez-nous ce code.",
   "Restored {{count}} trips from iCloud.": {
     "one": "{{count}} trajet restauré depuis iCloud.",
     "many": "{{count}} trajets restaurés depuis iCloud.",

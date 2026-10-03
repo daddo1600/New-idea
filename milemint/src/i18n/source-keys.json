@@ -1999,6 +1999,12 @@
     ]
   },
   {
+    "key": "Couldn’t back up ({{code}}). Check your connection and try again.",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
     "key": "Couldn’t back up. Check your connection and try again.",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -6858,6 +6864,12 @@
     "key": "The IRS standard mileage rate is for cars, vans and pickups. Motorbike and bicycle trips are logged for your records; claim their actual costs instead.",
     "files": [
       "domain/regions.ts"
+    ]
+  },
+  {
+    "key": "The last backup didn’t finish ({{code}}). Tap Back up now to try again. If it keeps happening, send us this code.",
+    "files": [
+      "app/(tabs)/settings.tsx"
     ]
   },
   {

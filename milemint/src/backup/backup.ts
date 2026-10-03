@@ -61,6 +61,69 @@ async function saveBackupState(state: BackupState): Promise<void> {
   await SecureStore.setItemAsync(STATE_KEY, JSON.stringify(state), STORE_OPTIONS);
 }
 
+/**
+ * The last backup that didn't finish: when, at which step and why. Automatic
+ * backups run silently, so this is how Settings can say something is wrong
+ * (and what) instead of "Not backed up yet" for ever. Cleared by a backup that works.
+ */
+export type BackupFailure = { at: string; step: BackupStep; code: string };
+export type BackupStep = 'check' | 'read' | 'seal' | 'write';
+
+const FAILURE_KEY = 'milemint.backup.failure';
+
+export async function loadBackupFailure(): Promise<BackupFailure | null> {
+  if (Platform.OS === 'web') return null;
+  try {
+    const stored = await SecureStore.getItemAsync(FAILURE_KEY, STORE_OPTIONS);
+    const parsed = stored ? (JSON.parse(stored) as Partial<BackupFailure>) : null;
+    return typeof parsed?.at === 'string' && typeof parsed.step === 'string' && typeof parsed.code === 'string'
+      ? { at: parsed.at, step: parsed.step as BackupStep, code: parsed.code }
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Short and safe to show: the step and an error code, never file names or contents. */
+export const failureCode = (failure: Pick<BackupFailure, 'step' | 'code'>) => `${failure.step}: ${failure.code}`;
+
+function codeOf(error: unknown): string {
+  const code = (error as { code?: unknown } | null)?.code;
+  return typeof code === 'string' && /^[A-Za-z0-9_-]{1,40}$/.test(code) ? code : 'ERR_UNKNOWN';
+}
+
+/** How long each native step may take before the backup gives up (and the next one can start). */
+export const STEP_TIMEOUT_MS: Record<BackupStep, number> = { check: 30_000, read: 60_000, seal: 60_000, write: 90_000 };
+
+/**
+ * A step that never answers (iCloud stuck setting up the container, say)
+ * mustn't hold the queue for ever: every later backup, and Back up now, would
+ * wait behind it with nothing on screen.
+ */
+function timed<T>(step: BackupStep, task: Promise<T>): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      const error = new Error(`Backup step "${step}" timed out.`) as Error & { code: string };
+      error.code = 'ERR_TIMEOUT';
+      reject(error);
+    }, STEP_TIMEOUT_MS[step]);
+    task.then(
+      (value) => (clearTimeout(timer), resolve(value)),
+      (error: unknown) => (clearTimeout(timer), reject(error)),
+    );
+  });
+}
+
+/** A failed step: the error, tagged with where it happened, to save and show. */
+export class BackupStepError extends Error {
+  constructor(
+    readonly step: BackupStep,
+    readonly code: string,
+  ) {
+    super(`Backup failed at ${step} (${code}).`);
+  }
+}
+
 const appVersion = () => Constants.expoConfig?.version ?? 'unknown';
 
 // ─── Reading the database ──────────────────────────────────────────────────
@@ -150,29 +213,40 @@ export function backUp(db: SQLiteDatabase, { force = false } = {}): Promise<Back
 }
 
 async function run(db: SQLiteDatabase, force: boolean): Promise<BackupOutcome> {
-  if (!(await ICloudBackup.isAvailable())) return 'unavailable';
-  const last = await loadBackupState();
-  const scrubbedAt = await pendingScrub();
-  const now = new Date();
-  const decision = force || scrubbedAt !== null ? 'always' : backupDecision(now, last);
-  if (decision === 'skip') return 'not-due';
-  const current = await fingerprint(db);
-  if (!shouldWrite({ decision, last, ...current })) return current.trips === 0 ? 'empty' : 'unchanged';
+  let step: BackupStep = 'check';
+  try {
+    if (!(await timed('check', ICloudBackup.isAvailable()))) return 'unavailable';
+    const last = await loadBackupState();
+    const scrubbedAt = await pendingScrub();
+    const now = new Date();
+    const decision = force || scrubbedAt !== null ? 'always' : backupDecision(now, last);
+    if (decision === 'skip') return 'not-due';
+    step = 'read';
+    const current = await timed('read', fingerprint(db));
+    if (!shouldWrite({ decision, last, ...current })) return current.trips === 0 ? 'empty' : 'unchanged';
 
-  const snapshot = makeSnapshot(await readTables(db), { appVersion: appVersion(), createdAt: now });
-  // Plaintext goes only as far as the native module, which encrypts it before anything is written.
-  const sealed = await seal(JSON.stringify(snapshot));
-  if (scrubbedAt === null) {
-    await ICloudBackup.write(backupFileName(now), sealed, BACKUPS_KEPT);
-  } else {
-    // Every older backup still has the addresses. The native side always keeps the newest two, so the
-    // same backup goes in twice, a second apart: together the two copies push all the older ones out.
-    await ICloudBackup.write(backupFileName(now), sealed, 1);
-    await ICloudBackup.write(backupFileName(new Date(now.getTime() + 1000)), sealed, 1);
-    await clearScrub(scrubbedAt);
+    const snapshot = makeSnapshot(await timed('read', readTables(db)), { appVersion: appVersion(), createdAt: now });
+    // Plaintext goes only as far as the native module, which encrypts it before anything is written.
+    step = 'seal';
+    const sealed = await timed('seal', seal(JSON.stringify(snapshot)));
+    step = 'write';
+    if (scrubbedAt === null) {
+      await timed('write', ICloudBackup.write(backupFileName(now), sealed, BACKUPS_KEPT));
+    } else {
+      // Every older backup still has the addresses. The native side always keeps the newest two, so the
+      // same backup goes in twice, a second apart: together the two copies push all the older ones out.
+      await timed('write', ICloudBackup.write(backupFileName(now), sealed, 1));
+      await timed('write', ICloudBackup.write(backupFileName(new Date(now.getTime() + 1000)), sealed, 1));
+      await clearScrub(scrubbedAt);
+    }
+    await saveBackupState({ at: snapshot.createdAt, fingerprint: current.fingerprint });
+    await SecureStore.deleteItemAsync(FAILURE_KEY, STORE_OPTIONS).catch(() => {});
+    return 'written';
+  } catch (error) {
+    const failure: BackupFailure = { at: new Date().toISOString(), step, code: codeOf(error) };
+    await SecureStore.setItemAsync(FAILURE_KEY, JSON.stringify(failure), STORE_OPTIONS).catch(() => {});
+    throw new BackupStepError(failure.step, failure.code);
   }
-  await saveBackupState({ at: snapshot.createdAt, fingerprint: current.fingerprint });
-  return 'written';
 }
 
 // ─── Finding and restoring ─────────────────────────────────────────────────

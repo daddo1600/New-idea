@@ -15,7 +15,17 @@ import {
   View,
 } from 'react-native';
 
-import { backUp, findLatestBackup, loadBackupState, restoreBackup, type FoundBackup } from '@/backup/backup';
+import {
+  backUp,
+  BackupStepError,
+  failureCode,
+  findLatestBackup,
+  loadBackupFailure,
+  loadBackupState,
+  restoreBackup,
+  type BackupFailure,
+  type FoundBackup,
+} from '@/backup/backup';
 import { backedUpText, formatBackupDate, PROBLEM_TEXT } from '@/backup/copy';
 import { backupAge } from '@/backup/schedule';
 import { tripCount, type Snapshot } from '@/backup/snapshot';
@@ -619,16 +629,20 @@ function BackupSection({ onRestored }: { onRestored: () => void }) {
   const [lastAt, setLastAt] = useState<Date | null>(null);
   const [busy, setBusy] = useState<'backup' | 'restore' | null>(null);
   const [note, setNote] = useState<{ error: boolean; text: string } | null>(null);
+  const [failure, setFailure] = useState<BackupFailure | null>(null);
 
   const refresh = useCallback(async () => {
-    const [isAvailable, keyInfo, state] = await Promise.all([
+    const [isAvailable, keyInfo, state, failed] = await Promise.all([
       ICloudBackup.isAvailable(),
       ICloudBackup.keyInfo().catch(() => null),
       loadBackupState(),
+      loadBackupFailure(),
     ]);
     setAvailable(isAvailable);
     setKey(keyInfo);
     setLastAt(state ? new Date(state.at) : null);
+    // Only if nothing has worked since.
+    setFailure(failed && (!state || failed.at > state.at) ? failed : null);
   }, []);
 
   useFocusEffect(
@@ -652,8 +666,14 @@ function BackupSection({ onRestored }: { onRestored: () => void }) {
                 text: t('iCloud isn’t available. Sign in to iCloud and turn on iCloud Drive in iPhone Settings.'),
               },
       );
-    } catch {
-      setNote({ error: true, text: t('Couldn’t back up. Check your connection and try again.') });
+    } catch (error) {
+      setNote({
+        error: true,
+        text:
+          error instanceof BackupStepError
+            ? t('Couldn’t back up ({{code}}). Check your connection and try again.', { code: failureCode(error) })
+            : t('Couldn’t back up. Check your connection and try again.'),
+      });
     } finally {
       setBusy(null);
       refresh().catch(() => {});
@@ -738,6 +758,13 @@ function BackupSection({ onRestored }: { onRestored: () => void }) {
             {t(
               'iCloud Keychain isn’t available, so the backup key is kept on this iPhone only. These backups can’t be restored on a new iPhone.',
             )}
+          </ThemedText>
+        )}
+        {failure && !note && (
+          <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
+            {t('The last backup didn’t finish ({{code}}). Tap Back up now to try again. If it keeps happening, send us this code.', {
+              code: failureCode(failure),
+            })}
           </ThemedText>
         )}
         {note && (

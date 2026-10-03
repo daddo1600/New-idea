@@ -823,6 +823,8 @@ const dictionary: Dictionary = {
   "Nothing to back up yet. Your trips are backed up once you have some.": "Nimic de salvat încă. Cursele tale intră în backup după ce ai câteva.",
   "iCloud isn’t available. Sign in to iCloud and turn on iCloud Drive in iPhone Settings.": "iCloud nu e disponibil. Conectează-te la iCloud și pornește iCloud Drive din Configurări pe iPhone.",
   "Couldn’t back up. Check your connection and try again.": "Backupul n-a reușit. Verifică-ți conexiunea și încearcă din nou.",
+  "Couldn’t back up ({{code}}). Check your connection and try again.": "Nu s-a putut face backup ({{code}}). Verifică conexiunea și încearcă din nou.",
+  "The last backup didn’t finish ({{code}}). Tap Back up now to try again. If it keeps happening, send us this code.": "Ultimul backup nu s-a terminat ({{code}}). Atinge Fă backup acum ca să încerci din nou. Dacă se tot întâmplă, trimite-ne acest cod.",
   "Restored {{count}} trips from iCloud.": {
     "one": "S-a restaurat {{count}} cursă din iCloud.",
     "few": "S-au restaurat {{count}} curse din iCloud.",
