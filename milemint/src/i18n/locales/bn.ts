@@ -266,6 +266,8 @@ const dictionary: Dictionary = {
   "First trip logged": "প্রথম ট্রিপ রেকর্ড হলো",
   "Found for you so far": "এখন পর্যন্ত আপনার জন্য পাওয়া গেছে",
   "found this tax year": "এই ট্যাক্স বছরে পাওয়া গেছে",
+  "a month of work driving, at your pace": "আপনার গতিতে এক মাসের কাজের ড্রাইভিং",
+  "{{amount}} found so far this tax year": "এই ট্যাক্স বছরে এখন পর্যন্ত {{amount}} পাওয়া গেছে",
   "Free": "ফ্রি",
   "Count every work drive 🚗": "প্রতিটি কাজের ট্রিপ গুনে রাখুন 🚗",
   "Free trial": "ফ্রি ট্রায়াল",

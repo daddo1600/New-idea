@@ -285,6 +285,8 @@ const dictionary: Dictionary = {
   "First trip logged": "Primer viaje registrado",
   "Found for you so far": "Encontrado para ti hasta ahora",
   "found this tax year": "en deducciones este año fiscal",
+  "a month of work driving, at your pace": "un mes de conducción de trabajo, a tu ritmo",
+  "{{amount}} found so far this tax year": "{{amount}} en deducciones en lo que va del año fiscal",
   "Free": "Gratis",
   "Count every work drive 🚗": "Que cuente cada viaje de trabajo 🚗",
   "Free trial": "Prueba gratis",

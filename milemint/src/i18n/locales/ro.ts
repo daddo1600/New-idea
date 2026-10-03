@@ -325,6 +325,8 @@ const dictionary: Dictionary = {
   "First trip logged": "Prima cursă înregistrată",
   "Found for you so far": "Găsit pentru tine până acum",
   "found this tax year": "suma găsită în acest an fiscal",
+  "a month of work driving, at your pace": "o lună de condus pentru muncă, în ritmul tău",
+  "{{amount}} found so far this tax year": "{{amount}} găsiți până acum în acest an fiscal",
   "Free": "Gratuit",
   "Count every work drive 🚗": "Pune la socoteală fiecare cursă de lucru 🚗",
   "Free trial": "Probă gratuită",

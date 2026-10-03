@@ -259,6 +259,8 @@ const dictionary: Dictionary = {
   "First trip logged": "首次行程已记录",
   "Found for you so far": "目前已为你找到",
   "found this tax year": "本纳税年度已找到",
+  "a month of work driving, at your pace": "按你的节奏，一个月的工作驾驶",
+  "{{amount}} found so far this tax year": "本纳税年度至今已找到 {{amount}}",
   "Free": "免费版",
   "Count every work drive 🚗": "每段工作行程都要算上 🚗",
   "Free trial": "免费试用",

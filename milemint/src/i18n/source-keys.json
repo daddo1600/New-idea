@@ -66,6 +66,12 @@
     ]
   },
   {
+    "key": "{{amount}} found so far this tax year",
+    "files": [
+      "components/launch-intro.tsx"
+    ]
+  },
+  {
     "key": "{{amount}} of work mileage logged",
     "files": [
       "milestones/copy.ts"
@@ -920,6 +926,12 @@
     "key": "A manual journal for each month of business mileage, ready to import in Xero (Accounting › Manual journals › Import). Check the account codes match your chart of accounts.",
     "files": [
       "app/report.tsx"
+    ]
+  },
+  {
+    "key": "a month of work driving, at your pace",
+    "files": [
+      "components/launch-intro.tsx"
     ]
   },
   {

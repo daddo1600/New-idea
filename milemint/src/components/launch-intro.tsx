@@ -29,6 +29,7 @@ import {
   REGIONS,
   type RegionCode,
 } from '@/domain/regions';
+import { launchHeadline } from '@/domain/launch-headline';
 import { type Season, seasonFor } from '@/domain/seasons';
 import { toLocalIsoDate } from '@/domain/trip';
 import { useT } from '@/i18n/i18n';
@@ -96,6 +97,12 @@ const ALWAYS = ReduceMotion.Never;
  * 650 km): big enough to show what's at stake, labelled so it promises nothing.
  */
 const DEMO_MONTH = { mi: 400, km: 650 } as const;
+
+/** Today's rate in minor units (pence, cents) per mile or km: the first tier. */
+function ratePerUnitOf(region: (typeof REGIONS)[RegionCode]): number {
+  const period = ratePeriodFor(toLocalIsoDate(new Date()), region) ?? region.rates[region.rates.length - 1];
+  return period.tiers[0].rate / 10;
+}
 /** The demo counter moves in 1% steps: smooth to the eye without hundreds of re-renders. */
 const STEPS = 100;
 
@@ -176,6 +183,18 @@ function QuickIntro({
   // Grows from nothing every time; what's new since last time is called out below it.
   const gained = totals.total - Math.max(0, Math.min(totals.seen, totals.total));
   const meters = totals.meters ?? 0;
+  // A new user's first weeks lead with a month's worth, not the first drive's few pence.
+  const typicalUnits = DEMO_MONTH[region.unit];
+  const headline = useMemo(
+    () =>
+      launchHeadline({
+        total: totals.total,
+        since: totals.since ?? null,
+        typicalMonth: Math.round(typicalUnits * ratePerUnitOf(region)),
+        now: new Date(),
+      }),
+    [totals, typicalUnits, region],
+  );
   // With Reduce Motion the same value runs the short cross-fade instead of the climb.
   const emerge = useSharedValue(reduceMotion ? 1 : 0);
   const drive = useSharedValue(0);
@@ -260,16 +279,40 @@ function QuickIntro({
       </Animated.View>
       <Animated.View style={[styles.counter, counterStyle]}>
         {season && <Greeting text={season.greeting} />}
-        <Text style={styles.money}>{formatMoney(Math.round(totals.total * shown), region)}</Text>
-        <Text style={styles.distance}>{t('found this tax year')}</Text>
-        {meters > 0 && (
-          <Text style={styles.distance}>
-            {t('{{distance}} of work driving', {
-              distance: formatDistance(meters * shown, region, { whole: true }),
-            })}
-          </Text>
+        <Text style={styles.money}>{formatMoney(Math.round(headline.amount * shown), region)}</Text>
+        {headline.kind === 'year' ? (
+          <>
+            <Text style={styles.distance}>{t('found this tax year')}</Text>
+            {meters > 0 && (
+              <Text style={styles.distance}>
+                {t('{{distance}} of work driving', {
+                  distance: formatDistance(meters * shown, region, { whole: true }),
+                })}
+              </Text>
+            )}
+          </>
+        ) : (
+          <>
+            <Text style={styles.distance}>
+              {headline.kind === 'pace'
+                ? t('a month of work driving, at your pace')
+                : region.unit === 'mi'
+                  ? t('{{distance}} miles · a typical month of work driving', {
+                      count: typicalUnits,
+                      distance: new Intl.NumberFormat(region.locale).format(typicalUnits),
+                    })
+                  : t('{{distance}} km · a typical month of work driving', {
+                      count: typicalUnits,
+                      distance: new Intl.NumberFormat(region.locale).format(typicalUnits),
+                    })}
+            </Text>
+            {/* Their own money so far, under the month: honest, and it grows every drive. */}
+            <Text style={styles.soFar}>
+              {t('{{amount}} found so far this tax year', { amount: formatMoney(totals.total, region) })}
+            </Text>
+          </>
         )}
-        {gained > 0 && (
+        {headline.kind === 'year' && gained > 0 && (
           <Text style={styles.gained}>
             {t('+{{amount}} since you last looked', { amount: formatMoney(gained, region) })}
           </Text>
@@ -294,10 +337,7 @@ function FullIntro({
   const t = useT();
   const reduceMotion = useReducedMotion();
   const region = REGIONS[code];
-  const ratePerUnit = useMemo(() => {
-    const period = ratePeriodFor(toLocalIsoDate(new Date()), region) ?? region.rates[region.rates.length - 1];
-    return period.tiers[0].rate / 10; // minor units (cents, pence) per mile or km
-  }, [region]);
+  const ratePerUnit = useMemo(() => ratePerUnitOf(region), [region]);
 
   // With Reduce Motion `drive` runs the short cross-fade instead of the climb.
   const emerge = useSharedValue(reduceMotion ? 1 : 0);
@@ -481,6 +521,7 @@ const styles = StyleSheet.create({
   seed: { position: 'absolute' },
   counter: { position: 'absolute', top: '50%', marginTop: COUNTER_TOP, alignItems: 'center', gap: 2 },
   money: { color: '#FFFFFF', fontSize: 40, fontWeight: '800', fontVariant: ['tabular-nums'] },
+  soFar: { color: '#D1FAE5', fontSize: 15, lineHeight: 20, fontWeight: '600', textAlign: 'center', marginTop: 4 },
   distance: {
     color: '#FACC15',
     fontSize: 17,

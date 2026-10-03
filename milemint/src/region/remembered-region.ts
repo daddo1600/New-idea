@@ -37,7 +37,8 @@ export function rememberRegion(code: RegionCode): void {
 const TOTALS_KEY = 'milemint.launch-totals';
 
 /** Money in minor units; `meters` is this tax year's business distance (absent before it was stored). */
-export type LaunchTotals = { total: number; seen: number; meters?: number };
+/** `since`: when a total was first kept (ISO), so the opening knows a new user's first weeks. */
+export type LaunchTotals = { total: number; seen: number; meters?: number; since?: string };
 
 async function read(key: string): Promise<string | null> {
   return Platform.OS === 'web' ? (globalThis.localStorage?.getItem(key) ?? null) : SecureStore.getItemAsync(key);
@@ -58,7 +59,7 @@ export async function recallTotals(): Promise<LaunchTotals | null> {
     if (!stored) return null;
     const parsed = JSON.parse(stored) as Partial<LaunchTotals>;
     return typeof parsed.total === 'number'
-      ? { total: parsed.total, seen: parsed.seen ?? parsed.total, meters: parsed.meters }
+      ? { total: parsed.total, seen: parsed.seen ?? parsed.total, meters: parsed.meters, since: parsed.since }
       : null;
   } catch {
     return null;
@@ -68,8 +69,9 @@ export async function recallTotals(): Promise<LaunchTotals | null> {
 /** The home screen's current tax-year total, in minor units (pence, cents). */
 export async function rememberTotal(total: number, meters: number): Promise<void> {
   const previous = await recallTotals();
-  if (previous?.total === total && previous.meters === meters) return;
-  write(TOTALS_KEY, JSON.stringify({ total, seen: previous?.seen ?? total, meters }));
+  const since = previous?.since ?? (total > 0 ? new Date().toISOString() : undefined);
+  if (previous?.total === total && previous.meters === meters && previous.since === since) return;
+  write(TOTALS_KEY, JSON.stringify({ total, seen: previous?.seen ?? total, meters, since }));
 }
 
 /** The opening has shown this total; next time it counts up from here. */
