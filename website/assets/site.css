@@ -128,6 +128,11 @@ section.hero { padding: 0; }
   box-shadow: 0 14px 36px rgba(3, 28, 20, .35), inset 0 0 0 1px rgba(255, 255, 255, .12);
 }
 .scene-pic { position: absolute; inset: 0; }
+/* The camera: when the car parks, the phone (with its mount) comes up close so the app can be read,
+   the road dims behind it; it eases back as the car pulls away. site.js sets the transforms. */
+.rig { position: absolute; inset: 0; z-index: 1; transform-origin: 0 0; }
+.scene-dim { position: absolute; inset: 0; z-index: 1; background: rgba(3, 30, 21, .62); opacity: 0; pointer-events: none; }
+.scene-road { transform-origin: 50% 60%; }
 .scene-road { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .rd-surface { fill: #22332C; }
 .rd-line, .rd-post { fill: #FBF7EE; }

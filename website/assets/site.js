@@ -384,6 +384,52 @@
     }
     var posters = { drive: video.getAttribute('data-poster-drive'), saved: video.getAttribute('data-poster-saved') };
 
+    // The camera (the founder's "when it parks, the screen comes closer"): on the same clock, the phone
+    // zooms in once parked (2.7-3.4 s), looks at the new drive while it's swiped, pans up to the total
+    // as it ticks over (5.4-6.0 s), and eases back out as the car pulls away (8.9-9.6 s).
+    var rig = root.querySelector('.rig');
+    var dim = root.querySelector('.scene-dim');
+    var phoneEl = root.querySelector('.phone');
+    var geo = null;
+    function measure() {
+      var view = root.querySelector('.scene-view');
+      geo = { W: view.clientWidth, H: view.clientHeight, px: phoneEl.offsetLeft, py: phoneEl.offsetTop, pw: phoneEl.offsetWidth, ph: phoneEl.offsetHeight };
+    }
+    window.addEventListener('resize', function () { geo = null; });
+    function zoomAt(t) {
+      if (t < 2.7) return 0;
+      if (t < 3.4) return smooth((t - 2.7) / 0.7);
+      if (t < 8.9) return 1;
+      return 1 - smooth((t - 8.9) / 0.7);
+    }
+    // where on the phone the camera looks (0 = top, 1 = bottom): the new drive, then the total
+    // (with the video blocked the screen is the saved-state poster, so it looks at the total throughout)
+    function focusAt(t) {
+      if (blocked) return 0.22;
+      return t < 5.4 ? 0.74 : t < 6.0 ? 0.74 - 0.52 * smooth((t - 5.4) / 0.6) : 0.22;
+    }
+    function camera(t) {
+      var z = zoomAt(t);
+      if (!rig) return;
+      if (z <= 0) {
+        if (rig.style.transform) { rig.style.transform = ''; rig.style.willChange = ''; dim.style.opacity = ''; svg.style.transform = ''; }
+        return;
+      }
+      if (!geo) measure();
+      var g = geo;
+      var S = Math.min(3.6, Math.max(1.2, 0.86 * g.W / g.pw));       // the phone fills about 86% of the width
+      var fx = g.px + g.pw / 2, fy = g.py + g.ph * focusAt(t);
+      var tx = g.W / 2 - fx * S;
+      var ty = g.H / 2 - fy * S;
+      ty = clamp(ty, g.H - (g.py + g.ph) * S, -g.py * S);           // never past the phone's top or bottom
+      var k = z;
+      var sc = 1 + (S - 1) * k;
+      rig.style.willChange = 'transform';
+      rig.style.transform = 'translate3d(' + (tx * k).toFixed(1) + 'px,' + (ty * k).toFixed(1) + 'px,0) scale(' + sc.toFixed(4) + ')';
+      dim.style.opacity = (0.8 * k).toFixed(3);
+      svg.style.transform = 'scale(' + (1 + 0.05 * k).toFixed(4) + ')'; // a little camera move on the road
+    }
+
     var s = 0, steer = 0, steerTo = 0, last = 0, raf = 0;
     var clock = 0;                     // seconds into the loop
     var inView = false, videoOk = false, blocked = false, poster = '';
@@ -411,6 +457,7 @@
       steer += (steerTo - steer) * Math.min(1, dt * 3);
       road.draw(shapes, s, PARKED * smooth(k), steer * 14);
       if (hills) hills.setAttribute('transform', 'translate(' + (-steer * 6).toFixed(2) + ' 0)');
+      camera(clock);
       raf = requestAnimationFrame(tick);
     }
     function start() {
@@ -465,6 +512,7 @@
       video.removeAttribute('autoplay');
       showPoster('saved');
       road.draw(shapes, 0, PARKED, 0);
+      camera(0); // no zoom: the still is readable as it is
       root.classList.add('is-still');
     }
     // the HTML poster is the clip's first frame (driving); Reduce Motion swaps in the saved state
