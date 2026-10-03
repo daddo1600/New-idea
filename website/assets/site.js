@@ -263,42 +263,208 @@
     update();
   })();
 
-  /* ---------- Hero: the phone turns to face you as you scroll; the sprout drifts ---------- */
-  (function hero() {
+  /* ---------- Hero: the big faint sprout drifts slower than the page ---------- */
+  (function heroMark() {
     var section = document.querySelector('.hero');
-    var phone = document.getElementById('hero-phone');
     var mark = document.querySelector('.hero-mark');
-    if (!section || !phone) return;
+    if (!section || !mark) return;
     var visible = true, queued = false;
-    var wide = window.matchMedia('(min-width: 900px)');
-
     function frame() {
       queued = false;
-      if (still()) { phone.style.transform = 'none'; if (mark) mark.style.transform = ''; return; }
       var y = window.scrollY || window.pageYOffset;
-      var p;
-      if (wide.matches) {
-        p = y / 320;
-      } else {
-        // phone sits under the copy on small screens: straighten as it comes up the screen
-        var r = phone.getBoundingClientRect(), vh = window.innerHeight;
-        p = Math.max(y / 320, (vh * 0.95 - r.top) / (vh * 0.55));
-      }
-      p = clamp(p, 0, 1);
-      var e = 1 - p * p * (3 - 2 * p) ; // smoothstep, inverted: 1 = fully turned
-      phone.style.transform = 'rotateY(' + (-22 * e).toFixed(2) + 'deg) rotateX(' + (8 * e).toFixed(2) +
-        'deg) rotateZ(' + (1.5 * e).toFixed(2) + 'deg)';
-      if (mark) mark.style.transform = 'translate3d(0,' + (y * 0.3).toFixed(1) + 'px,0)';
+      mark.style.transform = still() ? '' : 'translate3d(0,' + (y * 0.3).toFixed(1) + 'px,0)';
     }
     function queue() { if (visible && !queued) { queued = true; requestAnimationFrame(frame); } }
-
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) queue(); }).observe(section);
     }
     window.addEventListener('scroll', queue, { passive: true });
-    window.addEventListener('resize', queue);
     if (reduce.addEventListener) reduce.addEventListener('change', queue);
     frame();
+  })();
+
+  /* ---------- The hero scene's road, in perspective (viewBox 0 0 400 300, horizon at y 150) ----------
+     Ground items sit at a lateral X (road units, the left kerb at -1) and a depth z; they're
+     projected as x = vx + (X - c) * F / z, y = 150 + (1 - height) * F / z, where c is how far the
+     car has pulled in to the left (UK) kerb. One shared draw(), so the no-JS markup in index.html
+     is this same picture, parked (made with node; see website/README.md). */
+  var ROAD = (function () {
+    var NS = 'http://www.w3.org/2000/svg';
+    var HZ = 150, F = 150, ZMIN = 0.5, ZMAX = 48;
+    var KERB = -1, CENTRE = 1.1, FAR = 3.2;
+    // [kind, X, spacing, first z, count]
+    var ROWS = [['tree', -3.4, 7, 3, 7], ['tree', 5.4, 6, 4.5, 8], ['post', -1.5, 5, 1.5, 10], ['post', 3.7, 5, 4, 10], ['dash', CENTRE, 2.6, 0.8, 18]];
+    function f(n) { return Math.round(n * 10) / 10; }
+    function quad(vx, c, x1, x2, z1, z2) {
+      var a = F / z1, b = F / z2;
+      return f(vx + (x1 - c) * a) + ',' + f(HZ + a) + ' ' + f(vx + (x2 - c) * a) + ',' + f(HZ + a) + ' ' +
+        f(vx + (x2 - c) * b) + ',' + f(HZ + b) + ' ' + f(vx + (x1 - c) * b) + ',' + f(HZ + b);
+    }
+    // make(name, class, parent) creates an element; the no-JS markup is made with a make() that writes text
+    function build(g, make) {
+      if (!make) {
+        while (g.firstChild) g.removeChild(g.firstChild);
+        make = function (name, cls, parent) { var e = document.createElementNS(NS, name); e.setAttribute('class', cls); (parent || g).appendChild(e); return e; };
+      }
+      var out = { surface: make('polygon', 'rd-surface'), kerb: make('polygon', 'rd-line'), edge: make('polygon', 'rd-line'), items: [] };
+      ROWS.forEach(function (r) {
+        var row = make('g', 'rd-row');
+        for (var i = r[4] - 1; i >= 0; i--) { // far ones first, so nearer ones paint over them
+          var it = { kind: r[0], X: r[1], z0: r[3] + i * r[2], span: r[2] * r[4], row: row, z: null };
+          if (it.kind === 'tree') { it.g = make('g', 'rd-tree', row); it.trunk = make('rect', 'rd-trunk', it.g); it.crown = make('circle', 'rd-crown', it.g); }
+          else it.g = it.el = make('polygon', 'rd-' + it.kind, row);
+          out.items.push(it);
+        }
+      });
+      return out;
+    }
+    function draw(sh, s, c, shift) {
+      var vx = 200 + (shift || 0);
+      sh.surface.setAttribute('points', quad(vx, c, KERB, FAR, ZMIN, ZMAX));
+      sh.kerb.setAttribute('points', quad(vx, c, KERB + 0.05, KERB + 0.11, ZMIN, ZMAX));
+      sh.edge.setAttribute('points', quad(vx, c, FAR - 0.11, FAR - 0.05, ZMIN, ZMAX));
+      sh.items.forEach(function (it) {
+        var z = ZMIN + (((it.z0 - s) % it.span) + it.span) % it.span;
+        // went past the car and came round again, far away: paint it behind the rest of its row
+        if (it.z !== null && z > it.z + 1 && it.row.insertBefore) it.row.insertBefore(it.g, it.row.firstChild);
+        it.z = z;
+        var k = F / z, x = vx + (it.X - c) * k, fog = f(clamp(1.3 - z / ZMAX * 1.4, 0, 1) * 100) / 100;
+        if (it.kind === 'dash') { it.el.setAttribute('points', quad(vx, c, it.X - 0.05, it.X + 0.05, z, z + 1)); it.el.setAttribute('opacity', fog); return; }
+        if (it.kind === 'post') {
+          var w = 0.035 * k, h = 0.32 * k, y = HZ + k;
+          it.el.setAttribute('points', f(x - w) + ',' + f(y) + ' ' + f(x + w) + ',' + f(y) + ' ' + f(x + w) + ',' + f(y - h) + ' ' + f(x - w) + ',' + f(y - h));
+          it.el.setAttribute('opacity', fog);
+          return;
+        }
+        var tw = 0.08 * k;
+        it.trunk.setAttribute('x', f(x - tw)); it.trunk.setAttribute('y', f(HZ + k - 0.8 * k));
+        it.trunk.setAttribute('width', f(tw * 2)); it.trunk.setAttribute('height', f(0.8 * k));
+        it.crown.setAttribute('cx', f(x)); it.crown.setAttribute('cy', f(HZ + k - 1.3 * k)); it.crown.setAttribute('r', f(0.6 * k));
+        it.trunk.setAttribute('opacity', fog); it.crown.setAttribute('opacity', fog);
+      });
+    }
+    return { build: build, draw: draw, PARKED: -0.55 };
+  })();
+
+  /* ---------- Hero scene: the phone in a car mount, the road going by ----------
+     The phone's screen is a recording of the real app (assets/video/drive-logged.*, 9.6 s):
+     driving ("Recording a drive"), parked, the new drive on Home (Meanwood Rd → Home, 2.2 mi),
+     swiped to Work, the total up by £1.21. The road is drawn here from the video's clock, so the
+     car slows, pulls in to the kerb and stops as the drive is saved, and sets off when the clip loops.
+     It plays only while on screen; Pause / Play and Replay buttons, and tapping the phone replays.
+     Reduce Motion (and no JS): the saved state on the screen and a still road, parked. */
+  (function scene() {
+    var root = document.getElementById('scene');
+    if (!root) return;
+    var svg = root.querySelector('.scene-road');
+    var live = svg && svg.querySelector('.rd-live');
+    var hills = svg && svg.querySelector('.rd-hills');
+    var video = root.querySelector('video');
+    var phone = root.querySelector('.phone');
+    var toggle = root.querySelector('[data-scene="toggle"]');
+    var replay = root.querySelector('[data-scene="replay"]');
+    if (!live || !video) return;
+    root.querySelector('.scene-ctl').hidden = false;
+
+    var road = ROAD;
+    var shapes = road.build(live);
+    var PARKED = road.PARKED;
+    var D = 9.6;                       // the clip's length
+    var smooth = function (x) { x = clamp(x, 0, 1); return x * x * (3 - 2 * x); };
+    // From the clip's clock: driving to 1.8 s, slowing and pulling in to 2.7 s, parked, setting off from 9 s.
+    function pace(t) {
+      if (t < 1.8) return 0;
+      if (t < 2.7) return smooth((t - 1.8) / 0.9);
+      if (t < 9.0) return 1;
+      return 1 - smooth((t - 9.0) / 0.6);
+    }
+
+    var s = 0, steer = 0, steerTo = 0, last = 0, raf = 0;
+    var inView = false, userPaused = false;
+
+    function draw(parked, dt) {
+      var k = parked;                          // 0 = cruising, 1 = parked
+      s += (1 - k) * 9 * dt;                   // road units per second
+      steer += (steerTo - steer) * Math.min(1, dt * 3);
+      road.draw(shapes, s, PARKED * smooth(k), steer * 14);
+      if (hills) hills.setAttribute('transform', 'translate(' + (-steer * 6).toFixed(2) + ' 0)');
+    }
+    function tick(now) {
+      raf = 0;
+      var dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
+      last = now;
+      draw(pace(video.currentTime % D), dt);
+      if (!video.paused) raf = requestAnimationFrame(tick);
+    }
+    function loop() { if (!raf) { last = 0; raf = requestAnimationFrame(tick); } }
+
+    function setLabel() {
+      var playing = !userPaused;
+      toggle.textContent = playing ? 'Pause' : 'Play';
+      toggle.setAttribute('aria-label', playing ? 'Pause the animation' : 'Play the animation');
+    }
+    function play() {
+      if (still() || userPaused || !inView) return;
+      if (video.getAttribute('preload') === 'none') video.setAttribute('preload', 'auto');
+      var p = video.play();
+      if (p && p.catch) p.catch(function () { /* can't play: the poster and a still road stay */ });
+    }
+    function rest() {
+      // Reduce Motion: the saved state, parked; nothing moves
+      video.pause();
+      try { video.currentTime = 0; } catch (err) {}
+      video.removeAttribute('autoplay');
+      video.poster = video.getAttribute('data-poster-saved');
+      road.draw(shapes, 0, PARKED, 0);
+      root.classList.add('is-still');
+    }
+
+    video.addEventListener('play', loop);
+    video.addEventListener('playing', loop);
+
+    if (still()) rest();
+    else {
+      video.poster = video.getAttribute('data-poster-drive'); // the clip's first frame, so playing starts seamlessly
+      road.draw(shapes, 0, 0, 0);
+    }
+
+    toggle.addEventListener('click', function () {
+      userPaused = !userPaused;
+      setLabel();
+      if (userPaused) video.pause(); else play();
+    });
+    function again() {
+      if (still()) return;
+      userPaused = false;
+      setLabel();
+      try { video.currentTime = 0; } catch (err) {}
+      play();
+    }
+    replay.addEventListener('click', again);
+    phone.addEventListener('click', again);
+
+    // Desktop: the road leans gently with the pointer (as if steering a little)
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      root.closest('.hero').addEventListener('pointermove', function (e) {
+        steerTo = clamp(e.clientX / window.innerWidth * 2 - 1, -1, 1);
+        if (video.paused && !still()) { road.draw(shapes, s, PARKED * smooth(pace(video.currentTime % D)), steerTo * 14); }
+      }, { passive: true });
+    }
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        inView = es[0].isIntersecting;
+        if (inView) play(); else video.pause();
+      }, { threshold: 0.25 }).observe(root);
+    } else { inView = true; play(); }
+
+    if (reduce.addEventListener) {
+      reduce.addEventListener('change', function () {
+        if (still()) rest();
+        else { root.classList.remove('is-still'); video.poster = video.getAttribute('data-poster-drive'); play(); }
+      });
+    }
+    setLabel();
   })();
 
   /* ---------- Feature deck ---------- */

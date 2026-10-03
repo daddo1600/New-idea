@@ -116,15 +116,49 @@ section.hero { padding: 0; }
 }
 @media (max-width: 899px) { .hero-mark { right: -30%; top: 30%; } }
 
-/* The hero phone starts turned away and straightens as you scroll (site.js sets the transform). */
-.hero-phone { justify-self: center; perspective: 1400px; }
-.hero-phone .phone {
-  --w: clamp(220px, 62vw, 270px);
-  transform: rotateY(-22deg) rotateX(8deg) rotateZ(1.5deg);
-  transform-origin: 50% 50%;
+/* ---------- Hero scene: the phone in a car mount, the road going by (site.js draws the road from the clip's clock) ----------
+   --sh is the scene's height; the phone's width follows it. A wide band on phones, fuller on desktop. */
+.hero-phone { width: 100%; min-width: 0; }
+.scene { --sh: clamp(186px, 55vw, 240px); --pw: calc((var(--sh) - 22px) / 2.24); --pl: 9%; --pb: 12px; position: relative; margin: 0; }
+.scene-view {
+  position: relative; height: var(--sh); border-radius: 22px; overflow: hidden; isolation: isolate; background: #0B5E40;
+  box-shadow: 0 14px 36px rgba(3, 28, 20, .35), inset 0 0 0 1px rgba(255, 255, 255, .12);
 }
-@media (min-width: 900px) { .hero-phone .phone { --w: clamp(240px, 22vw, 300px); } }
-@media (prefers-reduced-motion: reduce) { .hero-phone .phone { transform: none !important; } }
+.scene-road { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.rd-surface { fill: #22332C; }
+.rd-line, .rd-post { fill: #FBF7EE; }
+.rd-dash { fill: var(--gold); }
+.rd-crown { fill: #0F6B45; }
+.rd-trunk { fill: #0A3D2C; }
+.rd-sun { fill: var(--gold); opacity: .85; }
+.rd-pillar, .rd-board { fill: #06261C; }
+.rd-trim { stroke: var(--gold); stroke-width: 2.2; opacity: .9; }
+.scene .phone { --w: var(--pw); position: absolute; z-index: 2; left: var(--pl); bottom: var(--pb); cursor: pointer; }
+.scene .screen { -webkit-mask-image: none; }
+.scene .screen video { width: 100%; height: 100%; object-fit: cover; display: block; background: #FFFFFF; }
+/* the cradle's side clamps peek out behind the phone; its arm runs down into the dashboard */
+.mount {
+  position: absolute; z-index: 1; left: calc(var(--pl) - 5px); width: calc(var(--pw) + 10px);
+  bottom: calc(var(--pb) + var(--pw) * .9); height: calc(var(--pw) * .22);
+  background: #141917; border-radius: 6px; box-shadow: 0 2px 6px rgba(0, 0, 0, .35);
+}
+.mount::after {
+  content: ""; position: absolute; left: 50%; top: 100%; width: 12px; height: calc(var(--pw) * .9 + var(--pb));
+  transform: translateX(-50%); background: linear-gradient(90deg, #0E1210, #2A302D 50%, #0E1210); border-radius: 4px;
+}
+.scene-ctl { position: absolute; z-index: 3; right: 10px; bottom: 10px; display: flex; gap: 6px; }
+.scene-ctl[hidden], .scene.is-still .scene-ctl { display: none; }
+.scene-ctl button {
+  font: 700 .78rem/1 var(--font); color: #FFFFFF; background: rgba(6, 38, 28, .78); cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, .35); border-radius: 999px; min-height: 30px; padding: 0 12px;
+}
+.scene-ctl button:hover { background: rgba(6, 38, 28, .95); border-color: var(--gold); }
+.scene-ctl button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+@media (min-width: 900px) {
+  .scene { --sh: clamp(440px, 46vw, 540px); --pw: calc((var(--sh) - 50px) / 2.24); --pl: 10%; --pb: 26px; }
+  .scene-view { border-radius: 28px; }
+  .scene-ctl { right: 14px; bottom: 14px; }
+}
 
 .store-btn {
   display: inline-flex; align-items: center; gap: 10px;
@@ -694,7 +728,7 @@ html.ms-intro::after {
 /* On phones the app comes first: the phone, then what it is and the money. */
 @media (max-width: 899px) {
   .hero-phone { order: -1; }
-  .hero-phone .phone { --w: clamp(190px, 50vw, 230px); }
-  .hero .wrap { gap: 28px; padding-top: 28px; }
+  .hero .wrap { gap: 18px; padding-top: 16px; }
   .hero .hero-sprout { display: none; }
+  .hero .pill { margin-bottom: 10px; }
 }
