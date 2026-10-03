@@ -551,27 +551,62 @@
   (function calculator() {
     var root = document.getElementById('calc');
     if (!root) return;
-    var select = root.querySelector('#calc-country');
+    var radios = root.querySelectorAll('input[name="calc-country"]');
     var range = root.querySelector('#calc-range');
     var q = function (k) { return root.querySelector('[data-calc="' + k + '"]'); };
-    var label = q('label'), dist = q('dist'), unitEl = q('unit'), result = q('result'), live = q('live'), note = q('note'), source = q('source');
-    if (!select || !range || !result) return;
+    var label = q('label'), dist = q('dist'), unitEl = q('unit'), amountEl = q('amount'), atEl = q('at'),
+      live = q('live'), note = q('note'), source = q('source');
+    if (!radios.length || !range || !amountEl) return;
+    var strong = amountEl.parentNode;
     var r = RATES[COUNTRY];
     Array.prototype.forEach.call(root.querySelectorAll('[data-calc-js]'), function (el) { el.hidden = false; });
     var eg = root.querySelector('.calc-eg');
     if (eg) eg.hidden = true; // "An example:" is for the still, no-JS version
 
+    // The yearly amount rolls to its new value (about half a second, easing out), then shimmers once
+    // if it crossed a milestone (every 1,000 of the currency). Reduce Motion: it just changes.
+    var shown = null, target = 0, rollFrom = 0, rollStart = 0, raf = 0;
+    function easeOut(x) { return 1 - Math.pow(1 - x, 3); }
+    function roll(now) {
+      var k = Math.min(1, (now - rollStart) / 520);
+      var v = rollFrom + (target - rollFrom) * easeOut(k);
+      amountEl.textContent = money(r, k < 1 ? v : target);
+      raf = k < 1 ? requestAnimationFrame(roll) : 0;
+    }
+    function shimmer() {
+      strong.classList.remove('is-shimmer');
+      void strong.offsetWidth; // restart the animation
+      strong.classList.add('is-shimmer');
+    }
+    function setAmount(value, instant) {
+      var from = shown === null ? value : shown;
+      target = value;
+      shown = value;
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
+      if (instant || still() || from === value) { amountEl.textContent = money(r, value); return; }
+      rollFrom = from; rollStart = performance.now();
+      raf = requestAnimationFrame(roll);
+      if (Math.floor(from / 1000) !== Math.floor(value / 1000)) shimmer();
+    }
+    strong.addEventListener('animationend', function () { strong.classList.remove('is-shimmer'); });
+
     function units(n) { return r.unit === 'mi' ? (n === 1 ? 'mile' : 'miles') : 'km'; }
-    function show(announce) {
+    function fill() {
+      var p = (Number(range.value) - Number(range.min)) / (Number(range.max) - Number(range.min)) * 100;
+      range.style.setProperty('--fill', p.toFixed(2) + '%');
+    }
+    function show(announce, instant) {
       var n = Number(range.value);
-      var amount = money(r, yearWorth(r, n));
+      var worth = Math.round(yearWorth(r, n));
       dist.textContent = n.toLocaleString('en');
       unitEl.textContent = units(n) + ' a week';
       range.setAttribute('aria-valuetext', n.toLocaleString('en') + ' ' + units(n) + ' a week');
-      result.innerHTML = "That's about <strong>" + amount + ' a year</strong> at ' + r.at + '.';
-      if (announce) live.textContent = 'About ' + amount + ' a year at ' + r.at + '.';
+      atEl.textContent = r.at;
+      fill();
+      setAmount(worth, instant);
+      if (announce) live.textContent = 'About ' + money(r, worth) + ' a year at ' + r.at + '.'; // the final value only
     }
-    function setCountry(c, fromUser) {
+    function setCountry(c, fromUser, instant) {
       var was = r;
       r = RATES[c];
       if (was.unit !== r.unit) {
@@ -584,20 +619,31 @@
       label.textContent = r.unit === 'km' ? 'Work km a week' : 'Work miles a week';
       note.textContent = r.note;
       source.href = r.source;
-      show(fromUser);
+      if (was.cur !== r.cur && !instant) shown = 0; // a new currency counts up from 0 (never a £ → $ roll)
+      show(fromUser, instant);
       if (fromUser) {
         // one fewer tap in the form below
         var chip = document.querySelector('form[data-waitlist] input[name="country"][value="' + c + '"]');
         if (chip) chip.checked = true;
       }
     }
-    select.value = COUNTRY;
+    Array.prototype.forEach.call(radios, function (input) {
+      input.checked = input.value === COUNTRY;
+      input.addEventListener('change', function () {
+        if (!input.checked) return;
+        var chip = input.parentNode;
+        chip.classList.remove('is-pop');
+        void chip.offsetWidth;
+        chip.classList.add('is-pop');
+        setCountry(input.value, true, false);
+      });
+      input.parentNode.addEventListener('animationend', function () { input.parentNode.classList.remove('is-pop'); });
+    });
     if (r.unit === 'km') { range.min = 15; range.max = 1000; }
     range.value = defaultWeek(r);
-    setCountry(COUNTRY, false);
+    setCountry(COUNTRY, false, true);
     range.addEventListener('input', function () { show(false); });
     range.addEventListener('change', function () { show(true); }); // the slider stopped: read the result out once
-    select.addEventListener('change', function () { setCountry(select.value, true); });
   })();
 
   /* ---------- Feature deck ---------- */

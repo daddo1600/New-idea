@@ -752,16 +752,71 @@ html.ms-intro::after {
   padding: 0 0 28px; margin: 0 0 30px; border-bottom: 1px solid rgba(255, 255, 255, .22);
 }
 .calc-title { color: #FFFFFF; font-size: clamp(1.45rem, 4.4vw, 1.9rem); margin: 0 0 .4em; }
-.calc-country { margin: 0 0 14px; color: #F0FDF7; font-size: .95rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.calc-country { margin: 0 0 16px; }
 .calc-country[hidden], .calc-slide[hidden], .calc-eg[hidden] { display: none; }
-.calc-country select {
-  font: inherit; font-size: .95rem; font-weight: 700; color: #14261F; background: #FFFFFF;
-  border: 1.5px solid #9DB5A9; border-radius: 10px; padding: 6px 10px; min-height: 38px;
+.calc-country-label { display: block; color: #F0FDF7; font-size: .9rem; font-weight: 700; margin-bottom: 8px; }
+
+/* Flag chips: a radio group (arrow keys move between them). The chosen one lifts, ringed in gold, with a small pop. */
+.flag-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.flag-chip { position: relative; display: inline-flex; }
+.flag-chip input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.flag-chip > span {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 14px 6px 10px;
+  border-radius: 999px; border: 1.5px solid rgba(255, 255, 255, .35); background: rgba(255, 255, 255, .1);
+  color: #FFFFFF; font-weight: 700; font-size: .95rem; line-height: 1; pointer-events: none;
+  transition: transform .2s ease, background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
-.calc-country select:focus-visible { outline: 3px solid var(--gold); outline-offset: 1px; }
+.flag-chip .flag { width: 26px; height: 18px; border-radius: 4px; flex: none; box-shadow: 0 0 0 1px rgba(0, 0, 0, .2); }
+.flag-chip:hover > span { background: rgba(255, 255, 255, .18); border-color: rgba(255, 255, 255, .7); }
+.flag-chip input:checked + span {
+  background: rgba(250, 204, 21, .16); border-color: var(--gold); transform: translateY(-2px);
+  box-shadow: 0 0 0 1px var(--gold), 0 6px 18px rgba(250, 204, 21, .3);
+}
+.flag-chip input:focus-visible + span { outline: 3px solid #FFFFFF; outline-offset: 3px; }
+.flag-chip.is-pop > span { animation: flag-pop .36s cubic-bezier(.34, 1.56, .64, 1); }
+@keyframes flag-pop { 0% { transform: translateY(0) scale(.94); } 60% { transform: translateY(-3px) scale(1.06); } 100% { transform: translateY(-2px) scale(1); } }
+
+/* The slider: a gold thumb with a soft glow, the track filled in gold up to it (site.js sets --fill) */
+.calc-range {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 32px; margin: 4px 0 2px; background: transparent; cursor: pointer;
+  --fill: 15%; --thumb: 24px;
+}
+@media (pointer: coarse) { .calc-range { --thumb: 32px; height: 40px; } }
+.calc-range::-webkit-slider-runnable-track {
+  height: 8px; border-radius: 999px;
+  background: linear-gradient(90deg, var(--gold) 0 var(--fill), rgba(255, 255, 255, .22) var(--fill) 100%);
+}
+.calc-range::-moz-range-track { height: 8px; border-radius: 999px; background: rgba(255, 255, 255, .22); }
+.calc-range::-moz-range-progress { height: 8px; border-radius: 999px; background: var(--gold); }
+.calc-range::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; width: var(--thumb); height: var(--thumb); margin-top: calc((8px - var(--thumb)) / 2);
+  border-radius: 50%; background: var(--gold); border: 3px solid #FFFFFF;
+  box-shadow: 0 0 0 6px rgba(250, 204, 21, .22), 0 3px 10px rgba(0, 0, 0, .3); transition: box-shadow .2s ease, transform .15s ease;
+}
+.calc-range::-moz-range-thumb {
+  width: var(--thumb); height: var(--thumb); border-radius: 50%; background: var(--gold); border: 3px solid #FFFFFF;
+  box-shadow: 0 0 0 6px rgba(250, 204, 21, .22), 0 3px 10px rgba(0, 0, 0, .3);
+}
+.calc-range:active::-webkit-slider-thumb { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(250, 204, 21, .28), 0 3px 10px rgba(0, 0, 0, .3); }
+.calc-range:focus-visible { outline: none; }
+.calc-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px #14261F, 0 0 0 6px #FFFFFF; }
+.calc-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px #14261F, 0 0 0 6px #FFFFFF; }
+
+/* The amount: tabular figures so the roll doesn't jiggle; a single shimmer when it crosses a 1,000 */
+.calc-num { font-variant-numeric: tabular-nums; }
+.calc-amount.is-shimmer {
+  background: linear-gradient(100deg, var(--gold) 0%, var(--gold) 40%, #FFF6C2 50%, var(--gold) 60%, var(--gold) 100%);
+  background-size: 250% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: amount-shimmer .9s ease-out;
+}
+@keyframes amount-shimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .flag-chip > span { transition: none; }
+  .flag-chip.is-pop > span, .calc-amount.is-shimmer { animation: none; }
+  .calc-amount.is-shimmer { background: none; color: var(--gold); }
+  .calc-range::-webkit-slider-thumb { transition: none; }
+}
 .calc-label { display: block; font-weight: 700; font-size: .9rem; color: #FFFFFF; margin-bottom: 4px; }
-.calc input[type="range"] { width: 100%; margin: 4px 0 2px; accent-color: var(--gold); min-height: 32px; cursor: pointer; }
-.calc input[type="range"]:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; border-radius: 8px; }
 .calc-dist { margin: 0 0 4px; color: #F0FDF7; }
 .calc-dist strong { color: #FFFFFF; font-size: 1.15rem; }
 .calc-result { margin: 0 0 10px; color: #FFFFFF; font-size: 1.2rem; line-height: 1.4; }
