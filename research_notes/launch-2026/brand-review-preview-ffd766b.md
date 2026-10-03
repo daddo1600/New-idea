@@ -76,3 +76,44 @@ The car pulls in by a kerb painted with double yellows, next to our "Drive logge
 1. Coding makes fixes 1 to 5 and the calculator link, and shares the new zoom head.
 2. Marketing re-checks the new zoom size and fixes 1 to 4 from fresh 390 and 1280 strips, including a frame-by-frame check of the clip seams.
 3. QA signs off. Then the founder gets screenshots and decides on "publish".
+
+---
+
+## Re-check: website-preview at 442f1c3 (3 October 2026)
+
+I looked at the coding agent's frames (`zoom-strip-390/1280`, `zoom-peak-390`, `london-uk-london-390/1280` and the stills, `calc-link-390`). I also rendered my own London loops with Playwright, at 390 and 1280, every ~0.3 s across the whole loop, including the loop seam.
+
+### Verdict: PASS with 2 exact fixes (London only)
+
+Everything except the London scene is signed off for publish. London needs the two fixes below, both small. I re-check them on screenshots, not a full review. **If the founder wants to publish before then,** the fallback is to publish with UK visitors on the standard scene until London passes. That's the founder's call.
+
+| Item | Ruling |
+|---|---|
+| Bigger zoom | **Pass.** At 390 the app screen fills the frame, and "Work or personal? Worth £1.21 if work." can be read at a glance. The touch dot and its ripple read as a real thumb. At 1280 it's about 1.9x and clear. It's what the founder asked for. |
+| Clip, hard cuts | **Pass.** No double image in any frame I rendered, including the zoom-out and the loop seam: "£2,267.54" switches cleanly to "£2,266.33". |
+| Passing signs, main line at 9.2 px | **Pass.** "55p a work mile" and "Westminster" read at their nearest frame. |
+| London bay | **Pass.** The double yellows stop and there's a white bay where the car pulls in. |
+| "Work out yours ↓" | **Pass.** The gold link sits under the money line. The amount links to `#calc` with `aria-hidden`/`tabindex="-1"`, and there's a screen-reader copy of the figure. It works in all four countries. |
+| Panel 2 "£0" | **Pass.** |
+| **Bus in front of the signs** | **Fix A.** |
+| **P sign floating in the sky** | **Fix B.** |
+
+### Fix A: the bus is drawn on top of the signs
+
+At 1280 (around 0.3–0.8 s, and again at 9.1–9.4 s), the red bus crosses *in front of* the "55p a work mile / first 10,000" sign and covers "first 10,000". At 9.1–9.4 s it also covers the "Drive logged" plate. The coding agent's own `london-uk-london-390.png` has it covering "Home" on the Westminster sign, in frame 1. The signs are nearer to us than the bus, so this is a layering error, and it hides our best sign.
+
+- Draw the bus in the **mid layer, behind every sign and post** (and behind the near trees and bollards).
+- Acceptance: at 390 and 1280, no frame in the loop has the bus over any sign face.
+
+### Fix B: ground the P sign, and make it a little smaller
+
+At 390 the P panel now grows to about 45 CSS px, at the very top of the frame. It has no post and sits over the road and the Palace roofline. It reads as a badge pasted on the sky, not a sign by the kerb, and it outshouts Elizabeth Tower. At 1280 its top is cut off by the frame during the zoom-out. The 2.5x was my number; it overshot once the sign moved closer.
+
+- **Give it a post:** a grey pole (the same as the other sign posts) from the bottom of the plate down to the **left kerb, at the far end of the bay**. It should stand on the ground, beside where the car stops.
+- **Scale it down to about 1.7x the original P panel** (about 30 CSS px at 390, at rest). Keep the "Drive logged" plate text at **≥9 CSS px cap height**, the rule that matters. The plate may be wider than the P panel.
+- **The whole sign stays inside the frame**, at 390 and 1280, at rest and throughout the zoom-in and zoom-out. Its top stays below the top of Elizabeth Tower's clock face, so the tower stays the hero.
+- **Reduce Motion stills:** the same sign, grounded, in the same place.
+
+### Next
+
+Coding makes fixes A and B and sends 390 and 1280 London strips and stills. Marketing signs off on those images only, then QA, then the founder decides on "publish".
