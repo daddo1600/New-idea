@@ -162,3 +162,29 @@ test("the hero's four money lines are in the page, with the figures the calculat
   assert.ok(read('website/assets/intro-gate.js').includes("setAttribute('data-cc', country())"));
   assert.ok(read('website/assets/site.css').includes('html[data-cc="CA"] .money-line [data-for="CA"]'));
 });
+
+// Panel 1 ("Your shift at a glance"): the Home screenshot's £1,754.62 is 3,190.22 work miles at HMRC's 55p; other
+// countries see the same distance (in km for Canada and Australia) at their own rate, worked out like the calculator.
+test("panel 1's example is the Home screenshot's distance at each country's rate", () => {
+  const m = /var HOME_EXAMPLE = \{ mi: ([\d.]+), km: ([\d.]+) \};/.exec(site);
+  assert.ok(m, 'HOME_EXAMPLE in site.js');
+  const dist = { mi: Number(m[1]), km: Number(m[2]) };
+  assert.ok(Math.abs(dist.km / 1.609344 - dist.mi) < 0.01, 'km is the same distance');
+  assert.ok(site.includes('worthOf(r, HOME_EXAMPLE[r.unit])'), 'valued with worthOf, as the calculator');
+  const worth = (code) => {
+    const h = heroTiers(code);
+    let left = dist[h.unit], total = 0;
+    for (const [upTo, rate] of h.tiers) {
+      if (left <= 0) break;
+      const band = upTo === null ? left : Math.min(left, upTo);
+      total += band * rate; left -= band;
+    }
+    return (Math.round(total * 100) / 100).toFixed(2);
+  };
+  assert.equal(worth('UK'), '1754.62', 'UK matches the screenshot');
+  assert.equal(worth('US'), '2424.57');
+  assert.equal(worth('CA'), '3739.89');
+  assert.equal(worth('AU'), '4550.00');
+  const html = read('website/index.html');
+  assert.ok(html.includes('<b data-count="1754.62" data-prefix="£" data-dec="2" data-home-worth>£1,754.62</b>'), 'UK figure without JS');
+});

@@ -667,9 +667,13 @@
     function measure() {
       var view = root.querySelector('.scene-view');
       var scr = root.querySelector('.screen');
-      // layout sizes (transforms don't change them), so measuring mid-zoom is fine
+      // the screen's box in the scene, untransformed (the zoom is lifted for the measurement, then put back)
+      var was = rig.style.transform;
+      rig.style.transform = '';
+      var vr = view.getBoundingClientRect(), sr = scr.getBoundingClientRect();
+      rig.style.transform = was;
       geo = { W: view.clientWidth, H: view.clientHeight, VW: document.documentElement.clientWidth,
-        sx: phoneEl.offsetLeft + scr.offsetLeft, sy: phoneEl.offsetTop + scr.offsetTop, sw: scr.offsetWidth, sh: scr.offsetHeight };
+        sx: sr.left - vr.left - view.clientLeft, sy: sr.top - vr.top - view.clientTop, sw: sr.width, sh: sr.height };
     }
     window.addEventListener('resize', function () { geo = null; });
     function zoomAt(t) {
@@ -711,10 +715,10 @@
       }
       if (!geo) measure();
       var g = geo;
-      // Phones: the app's screen fills about 95% of the viewport's width (the bezel and mount crop off the
-      // scene's edges), so its text reads at about real iPhone size. Wider: the screen comes up to about
+      // Phones: the app's screen fills the scene's width (about 90-92% of the viewport; the bezel and mount crop off
+      // the scene's edges), so its text reads at about real iPhone size. Wider: the screen comes up to about
       // real size (390 CSS px wide, or 90% of the scene), its text readable too.
-      var S = g.VW <= 600 ? 0.95 * g.VW / g.sw : Math.min(0.9 * g.W, 390) / g.sw;
+      var S = g.VW <= 600 ? Math.min(0.95 * g.VW, g.W) / g.sw : Math.min(0.9 * g.W, 390) / g.sw; // never wider than the scene, so the whole card shows
       S = clamp(S, 1.2, 6);
       var fx = g.sx + g.sw / 2, fy = g.sy + g.sh * focusAt(t);
       var tx = g.W / 2 - fx * S;
@@ -1014,9 +1018,11 @@
       if (picker) {
         picker.hidden = false;
         mark('standard');
-        picker.addEventListener('change', function (e) { if (e.target.checked) world.set(e.target.value); });
+        picker.addEventListener('change', function (e) { if (e.target.checked) { picked = true; world.set(e.target.value); } });
       }
-      SCENES.pick(function (id) { if (id !== 'standard') world.set(id); mark(id); });
+      // a late answer from /api/scene never overrides a chip the visitor has already picked
+      var picked = false;
+      SCENES.pick(function (id) { if (picked) return; if (id !== 'standard') world.set(id); mark(id); });
     }
 
     // the HTML poster is the clip's first frame (driving); Reduce Motion swaps in the saved state
@@ -1088,8 +1094,10 @@
   };
   // WEEKS (48) is set with the intro's example, above.
   /** What a year of `perWeek` work miles (or km) is worth: each band at its rate, anything past the last band at nothing. */
-  function yearWorth(r, perWeek) {
-    var left = perWeek * WEEKS, total = 0;
+  function yearWorth(r, perWeek) { return worthOf(r, perWeek * WEEKS); }
+  /** What `dist` work miles (or km) are worth at a country's rate: each band at its rate, past the last band nothing. */
+  function worthOf(r, dist) {
+    var left = dist, total = 0;
     for (var i = 0; i < r.tiers.length && left > 0; i++) {
       var band = Math.min(left, r.tiers[i][0]);
       total += band * r.tiers[i][1];
@@ -1106,6 +1114,9 @@
     return c === 'GB' ? 'UK' : RATES[c] ? c : 'UK';
   })();
 
+  // Panel 1's example: the Home screenshot's 3,190.22 work miles (£1,754.62 at HMRC's 55p), the same distance in km
+  // for Canada and Australia, valued at each country's rate with the calculator's sum (so no new claim)
+  var HOME_EXAMPLE = { mi: 3190.22, km: 5134.16 };
   // The calculator's starting point (100 miles or 160 km a week); the hero's example year is the same sum, so they always agree.
   function defaultWeek(r) { return EXAMPLE_WEEK[r.unit]; }
 
@@ -1540,6 +1551,27 @@
         el.setAttribute('data-prefix', sym);
         el.textContent = sym + '0';
       });
+      var homeWorth = document.querySelector('[data-home-worth]'), homeNote = document.querySelector('[data-home-note]');
+      if (homeWorth) {
+        var hw = Math.round(worthOf(r, HOME_EXAMPLE[r.unit]) * 100) / 100;
+        homeWorth.setAttribute('data-count', hw.toFixed(2));
+        homeWorth.setAttribute('data-prefix', COUNTRY === 'UK' ? '£' : '$');
+        homeWorth.textContent = fmtStat(homeWorth)(hw);
+      }
+      if (homeNote) homeNote.textContent = {
+        UK: 'Example: 3,190.2 work miles this tax year, shown on Home',
+        US: "Example: 3,190.2 work miles this year, at the IRS's rate",
+        CA: "Example: 5,134.2 work km this year, at the CRA's allowance rate",
+        AU: "Example: 5,134.2 work km this year, at the ATO's rate"
+      }[COUNTRY];
+      // Perks' demo offer: 10p off a litre (UK), 10¢ off a gallon (US), 10¢ (Canada) or 10c (Australia) off a litre
+      var perkStat = document.querySelector('[data-perk-stat]'), perkNote = document.querySelector('[data-perk-note]');
+      if (perkStat) {
+        var perkSuf = { UK: 'p off', US: '¢ off', CA: '¢ off', AU: 'c off' }[COUNTRY];
+        perkStat.setAttribute('data-suffix', perkSuf);
+        perkStat.textContent = '10' + perkSuf;
+      }
+      if (perkNote && COUNTRY === 'US') perkNote.textContent = 'a gallon of gas: a demo offer while Perks is in testing';
       var pdfTotal = document.querySelector('.pdf-total b'), pdfHead = document.querySelector('.pdf-head');
       if (pdfTotal) pdfTotal.textContent = money(r, yearWorth(r, defaultWeek(r)));
       if (pdfHead) pdfHead.textContent = 'Mileage log ' + { UK: '2026/27', US: '2026', CA: '2026', AU: '2026–27' }[COUNTRY];

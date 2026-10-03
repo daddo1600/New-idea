@@ -89,3 +89,27 @@ test('nothing is logged', async () => {
   } finally { Object.assign(console, orig); }
   assert.equal(seen.length, 0);
 });
+
+test('legacy time zone aliases map to their country (older browsers and settings still report them)', () => {
+  for (const tz of ['America/Indianapolis', 'America/Louisville', 'America/Fort_Wayne', 'America/Knox_IN', 'America/Shiprock', 'America/Atka', 'Navajo',
+    'US/Eastern', 'US/Central', 'US/Mountain', 'US/Pacific', 'US/Alaska', 'US/Hawaii', 'US/East-Indiana', 'US/Michigan', 'US/Arizona', 'US/Aleutian']) assert.equal(countryOfZone(tz), 'US', tz);
+  for (const tz of ['Canada/Eastern', 'Canada/Central', 'Canada/Mountain', 'Canada/Pacific', 'Canada/Atlantic', 'Canada/Newfoundland', 'Canada/Saskatchewan', 'Canada/Yukon', 'America/Coral_Harbour', 'America/Montreal']) assert.equal(countryOfZone(tz), 'CA', tz);
+  for (const tz of ['Australia/ACT', 'Australia/Canberra', 'Australia/NSW', 'Australia/North', 'Australia/Queensland', 'Australia/South', 'Australia/Tasmania', 'Australia/Victoria', 'Australia/West', 'Australia/Yancowinna', 'Australia/LHI']) assert.equal(countryOfZone(tz), 'AU', tz);
+  for (const tz of ['GB', 'GB-Eire', 'Europe/Belfast']) assert.equal(countryOfZone(tz), 'GB', tz);
+  // a visitor on a legacy zone isn't taken for "VPN-like"
+  assert.equal(sceneKey({ country: 'GB', city: 'London' }, 'GB'), 'uk-london');
+  assert.equal(sceneKey({ country: 'US', city: 'Indianapolis', regionCode: 'IN' }, 'America/Indianapolis'), 'us-city');
+  assert.equal(sceneKey({ country: 'CA', regionCode: 'ON', city: 'Toronto' }, 'Canada/Eastern'), 'ca-toronto');
+  assert.equal(sceneKey({ country: 'AU', regionCode: 'ACT', city: 'Canberra' }, 'Australia/ACT'), 'au-town');
+});
+
+test('the page decides the country from the same zone lists as /api/scene (intro-gate.js)', async () => {
+  const { readFileSync } = await import('node:fs');
+  const fn = readFileSync(new URL('../functions/api/scene.js', import.meta.url), 'utf8');
+  const gate = readFileSync(new URL('../website/assets/intro-gate.js', import.meta.url), 'utf8');
+  for (const name of ['CA_ZONES', 'US_ZONES']) {
+    const re = new RegExp(name + ' = (/.*/);');
+    assert.equal(re.exec(gate)[1], re.exec(fn)[1], name + ' in step');
+  }
+  assert.ok(gate.includes("/^(Europe\\/(London|Belfast)|GB|GB-Eire)$/"), 'GB aliases on the page too');
+});

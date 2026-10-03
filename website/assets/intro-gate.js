@@ -8,15 +8,15 @@
      Decided here, before the page paints, and put on <html data-cc>, so the hero's money line shows the
      right country's text from the first frame (index.html carries all four; site.css shows one). No location
      is asked for. season.js and site.js use window.MSCountry. */
-  var CA_ZONES = /^America\/(Toronto|Montreal|Vancouver|Edmonton|Winnipeg|Halifax|St_Johns|Regina|Moncton|Glace_Bay|Goose_Bay|Whitehorse|Dawson|Dawson_Creek|Fort_Nelson|Creston|Iqaluit|Rankin_Inlet|Resolute|Cambridge_Bay|Inuvik|Yellowknife|Swift_Current|Atikokan|Blanc-Sablon|Nipigon|Thunder_Bay|Rainy_River|Pangnirtung)$/;
-  var US_ZONES = /^(America\/(New_York|Chicago|Denver|Los_Angeles|Phoenix|Anchorage|Adak|Boise|Detroit|Juneau|Sitka|Metlakatla|Nome|Yakutat|Menominee|Indiana\/.+|Kentucky\/.+|North_Dakota\/.+)|Pacific\/Honolulu|US\/.+)$/;
+  var CA_ZONES = /^America\/(Toronto|Montreal|Vancouver|Edmonton|Winnipeg|Halifax|St_Johns|Regina|Moncton|Glace_Bay|Goose_Bay|Whitehorse|Dawson|Dawson_Creek|Fort_Nelson|Creston|Iqaluit|Rankin_Inlet|Resolute|Cambridge_Bay|Inuvik|Yellowknife|Swift_Current|Atikokan|Blanc-Sablon|Nipigon|Thunder_Bay|Rainy_River|Pangnirtung|Coral_Harbour)$|^Canada\//;
+  var US_ZONES = /^(America\/(New_York|Chicago|Denver|Los_Angeles|Phoenix|Anchorage|Adak|Boise|Detroit|Juneau|Sitka|Metlakatla|Nome|Yakutat|Menominee|Indianapolis|Louisville|Fort_Wayne|Knox_IN|Shiprock|Atka|Indiana\/.+|Kentucky\/.+|North_Dakota\/.+)|Pacific\/Honolulu|US\/.+|Navajo)$/;
 
   /** The country a time zone belongs to, of the four: 'GB', 'US', 'CA', 'AU', or null. */
   function zoneCountry(tz) {
     if (/^Australia\//.test(tz)) return 'AU';
     if (CA_ZONES.test(tz)) return 'CA';
     if (US_ZONES.test(tz)) return 'US';
-    if (tz === 'Europe/London' || tz === 'Europe/Belfast') return 'GB';
+    if (/^(Europe\/(London|Belfast)|GB|GB-Eire)$/.test(tz)) return 'GB';
     return null;
   }
   function zone() {
