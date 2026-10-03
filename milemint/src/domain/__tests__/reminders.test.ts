@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { tomorrowAt, upcomingSundays, weeklyMessage, WEEKLY_MESSAGES } from '../reminders';
+import { setupReminderSettings, tomorrowAt, upcomingSundays, weeklyMessage, WEEKLY_MESSAGES } from '../reminders';
 
 describe('upcomingSundays', () => {
   it('starts today when it is Sunday before the reminder time', () => {
@@ -38,5 +38,34 @@ describe('tomorrowAt', () => {
   it('rolls over the month', () => {
     const next = tomorrowAt(new Date(2026, 8, 30, 21), 18);
     expect([next.getMonth(), next.getDate(), next.getHours()]).toEqual([9, 1, 18]);
+  });
+});
+
+describe('setupReminderSettings', () => {
+  it('keeps the Sunday recap on only when it could be queued, and never asks again cold', () => {
+    expect(setupReminderSettings(true, 'answered')).toEqual({
+      weeklyReminder: true,
+      reminderDefaulted: true,
+      reminderAsked: true,
+    });
+    expect(setupReminderSettings(false, 'answered')).toEqual({
+      weeklyReminder: false,
+      reminderDefaulted: true,
+      reminderAsked: true,
+    });
+  });
+
+  // A restored backup brings back the old phone's reminderAsked: true. Saving that
+  // with the recap off would hide home's offer for good, though they only said "Not now".
+  it('after "Not now", leaves home free to offer the recap', () => {
+    const saved = setupReminderSettings(false, 'not-now');
+    expect(saved).toEqual({ weeklyReminder: false, reminderDefaulted: true, reminderAsked: false });
+    // ReminderAsk shows while neither is set.
+    expect(!saved.reminderAsked && !saved.weeklyReminder).toBe(true);
+  });
+
+  it("leaves reminderAsked as it was when the step wasn't shown", () => {
+    expect(setupReminderSettings(true, 'not-shown')).toEqual({ weeklyReminder: true, reminderDefaulted: true });
+    expect(setupReminderSettings(false, 'not-shown')).not.toHaveProperty('reminderAsked');
   });
 });

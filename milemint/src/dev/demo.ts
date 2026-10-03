@@ -28,6 +28,7 @@ import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/tri
  *   ?demo=courier shift mode on (the swipe-to-start shift bar)
  *   ?demo=places no Home or Work saved yet: "Is this home?" (then, after No, "Is this work?")
  *   ?demo=motion Motion & Fitness not asked yet: set-up offers it after location
+ *   &notify      notifications not asked yet: set-up shows its reminders step
  *   ?demo=tutorial the practice run shown after setup, over an empty home
  *   ?demo=empty  home just after setup, with no drives yet
  *   &courier     (with tutorial or empty) a shift worker; &hours: set work hours
@@ -124,6 +125,13 @@ export const DEMO_DRIVING = demoParam === 'driving';
  * that sits behind iOS's question on screen (there's no real question on the web).
  */
 export const DEMO_MOTION = demoParam === 'motion';
+
+/**
+ * `?demo=notify` (or `&notify`): notifications not asked yet, so set-up shows
+ * its reminders step; tapping "Turn on notifications" keeps the coaching that
+ * sits under iOS's question on screen (there's no real question on the web).
+ */
+export const DEMO_NOTIFY = demoParam === 'notify' || demoFlag('notify');
 
 /**
  * `?today=2027-03-20`: the tax-year countdown and the seasonal opening as they

@@ -98,6 +98,16 @@ const ALWAYS = ReduceMotion.Never;
  * "typical": full-time drivers do far more and casual ones far less.
  */
 const DEMO_MONTH = { mi: 400, km: 650 } as const;
+/**
+ * Canada's example month, so the year matches the website's single Canadian
+ * figure: 7,680 km at 73¢ then 67¢ past 5,000 km is about $5,446 ($467 a month).
+ */
+const DEMO_MONTH_CA_KM = 640;
+
+/** The example month's distance for a region, in its own unit. */
+function demoMonth(region: (typeof REGIONS)[RegionCode]): number {
+  return region.code === 'CA' ? DEMO_MONTH_CA_KM : DEMO_MONTH[region.unit];
+}
 
 /**
  * A year of the example month (twelve of them) at today's rates, in minor units,
@@ -107,7 +117,7 @@ const DEMO_MONTH = { mi: 400, km: 650 } as const;
  */
 function exampleYearOf(region: (typeof REGIONS)[RegionCode]): number {
   const period = ratePeriodFor(toLocalIsoDate(new Date()), region) ?? region.rates[region.rates.length - 1];
-  let left = DEMO_MONTH[region.unit] * 12;
+  let left = demoMonth(region) * 12;
   let from = 0;
   let total = 0;
   for (const tier of period.tiers) {
@@ -120,7 +130,7 @@ function exampleYearOf(region: (typeof REGIONS)[RegionCode]): number {
   return Math.round(total);
 }
 
-/** A rounded amount for estimates ("£220", "$5,526"): pennies would only clutter them. */
+/** A rounded amount for estimates ("£220", "$5,446"): pennies would only clutter them. */
 function wholeMoney(minor: number, region: (typeof REGIONS)[RegionCode]): string {
   return new Intl.NumberFormat(region.locale, {
     style: 'currency',
@@ -215,7 +225,7 @@ function QuickIntro({
   const gained = totals.total - Math.max(0, Math.min(totals.seen, totals.total));
   const meters = totals.meters ?? 0;
   // A new user's first weeks lead with a month's worth, not the first drive's few pence.
-  const exampleUnits = DEMO_MONTH[region.unit];
+  const exampleUnits = demoMonth(region);
   const headline = useMemo(
     () =>
       launchHeadline({
@@ -431,7 +441,7 @@ function FullIntro({
   }));
   const fadeStyle = useAnimatedStyle(() => ({ opacity: fade.value }));
 
-  const units = Math.round(shown * DEMO_MONTH[region.unit]);
+  const units = Math.round(shown * demoMonth(region));
   const distance = new Intl.NumberFormat(region.locale).format(units);
   return (
     <Animated.View style={[StyleSheet.absoluteFill, styles.container, fadeStyle]}>

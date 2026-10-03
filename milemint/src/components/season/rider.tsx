@@ -21,7 +21,7 @@ type RiderSpec = {
   art: () => React.ReactNode;
 };
 
-function Reindeer({ x, nose }: { x: number; nose?: boolean }) {
+function Reindeer({ x }: { x: number }) {
   return (
     <G>
       <Ellipse cx={x} cy={30} rx={11} ry={6} fill="#92400E" />
@@ -36,7 +36,8 @@ function Reindeer({ x, nose }: { x: number; nose?: boolean }) {
         strokeLinecap="round"
         fill="none"
       />
-      <Circle cx={x + 20} cy={17} r={nose ? 2.6 : 1.4} fill={nose ? '#EF4444' : '#451A03'} />
+      {/* Every nose brown, the lead's too: a red one risks the Rudolph trade mark. */}
+      <Circle cx={x + 20} cy={17} r={1.4} fill="#451A03" />
     </G>
   );
 }
@@ -53,7 +54,7 @@ const RIDERS: Partial<Record<SeasonId, RiderSpec>> = {
         {/* Reins from the sleigh to the reindeer. */}
         <Path d="M26 22 C40 18 52 26 62 24 M26 22 C44 26 66 28 84 22" stroke="#FACC15" strokeWidth={1.4} fill="none" />
         <Reindeer x={52} />
-        <Reindeer x={72} nose />
+        <Reindeer x={72} />
         {/* Sleigh with a sack of parcels. */}
         <Rect x={6} y={10} width={14} height={14} rx={3} fill="#FACC15" />
         <Rect x={12} y={6} width={10} height={10} rx={2} fill="#38BDF8" />

@@ -8,7 +8,12 @@ export const TRACKING = 2;
 export const HOURS = 3;
 /** "What are most of your work drives for?", right after how they work. */
 export const PURPOSE = 4;
-export const DONE = 5;
+/**
+ * "A nudge when it counts.": notifications, explained before iOS asks. Only
+ * when iOS hasn't asked yet; it shares the last progress dot with the finish.
+ */
+export const REMINDERS = 5;
+export const DONE = 6;
 
 /** 'backup' is Settings' own: the first backup (or any made by hand) to iCloud. */
 export type CheerKind = 'thumbs' | 'tracking' | 'almost' | 'done' | 'thanks' | 'backup';
@@ -18,6 +23,7 @@ export type CheerKind = 'thumbs' | 'tracking' | 'almost' | 'done' | 'thanks' | '
  * cheers, and neither does skipping past the questions: a restored backup
  * goes from the welcome straight to tracking, then to the finish. Shift
  * workers skip the usual purpose, so they go from tracking's to the finish's.
+ * The reminders step has none of its own: "ALMOST DONE!" has just played.
  */
 export function setupCheer(from: number, to: number): CheerKind | null {
   if (to <= from) return null;

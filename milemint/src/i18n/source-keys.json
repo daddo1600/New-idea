@@ -638,9 +638,21 @@
     ]
   },
   {
+    "key": "{{rate}} a km",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "{{rate}} a km · {{vehicle}} · {{country}}",
     "files": [
       "components/home-empty.tsx"
+    ]
+  },
+  {
+    "key": "{{rate}} a mile",
+    "files": [
+      "app/welcome.tsx"
     ]
   },
   {
@@ -947,6 +959,12 @@
     ]
   },
   {
+    "key": "A nudge when it counts.",
+    "files": [
+      "components/reminders-step.tsx"
+    ]
+  },
+  {
     "key": "A quick question 🙋",
     "files": [
       "domain/reminders.ts"
@@ -974,6 +992,12 @@
     "key": "A short reminder on Sunday evening to sort the week’s drives.",
     "files": [
       "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "A walk is marked Not a drive. A drive is logged.",
+    "files": [
+      "components/walk-or-drive.tsx"
     ]
   },
   {
@@ -1193,6 +1217,7 @@
   {
     "key": "Allow",
     "files": [
+      "app/welcome.tsx",
       "components/motion-ask.tsx"
     ]
   },
@@ -1504,9 +1529,9 @@
     ]
   },
   {
-    "key": "Backups are on: your trips are saved, encrypted, to your own iCloud.",
+    "key": "Backups on",
     "files": [
-      "components/backup-check.tsx"
+      "app/welcome.tsx"
     ]
   },
   {
@@ -1723,6 +1748,12 @@
     "key": "Change language",
     "files": [
       "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Change them any time in Settings.",
+    "files": [
+      "components/reminders-step.tsx"
     ]
   },
   {
@@ -2390,6 +2421,18 @@
     ]
   },
   {
+    "key": "Drive",
+    "files": [
+      "components/setup-arrival.tsx"
+    ]
+  },
+  {
+    "key": "Drive ✓",
+    "files": [
+      "components/walk-or-drive.tsx"
+    ]
+  },
+  {
     "key": "Drive logging",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -2417,6 +2460,12 @@
     "key": "Drives are logged by themselves when you drive.",
     "files": [
       "components/tracking-health-card.tsx"
+    ]
+  },
+  {
+    "key": "Drives are saved when you park.",
+    "files": [
+      "components/home/tracking-card.tsx"
     ]
   },
   {
@@ -2953,12 +3002,6 @@
     ]
   },
   {
-    "key": "Every work drive adds to what you can claim.",
-    "files": [
-      "components/home/tracking-card.tsx"
-    ]
-  },
-  {
     "key": "Every work drive has a purpose ✓",
     "files": [
       "components/trips/list-bars.tsx"
@@ -2986,6 +3029,12 @@
     "key": "Every year",
     "files": [
       "app/tax-dates.tsx"
+    ]
+  },
+  {
+    "key": "Example notification: Your drives are waiting. Sort them before Monday.",
+    "files": [
+      "components/reminders-step.tsx"
     ]
   },
   {
@@ -3648,6 +3697,12 @@
     ]
   },
   {
+    "key": "If logging stops",
+    "files": [
+      "components/reminders-step.tsx"
+    ]
+  },
+  {
     "key": "If you’re employed",
     "files": [
       "app/tax-dates.tsx"
@@ -3773,6 +3828,12 @@
     "key": "Is this work? {{place}}",
     "files": [
       "components/place-ask-card.tsx"
+    ]
+  },
+  {
+    "key": "It appears",
+    "files": [
+      "components/setup-arrival.tsx"
     ]
   },
   {
@@ -4012,8 +4073,7 @@
   {
     "key": "Lets MileSprout tell driving from walking, so a stroll is never logged as a trip. It stays on your phone.",
     "files": [
-      "app/setup-tracking.tsx",
-      "components/motion-ask.tsx"
+      "app/setup-tracking.tsx"
     ]
   },
   {
@@ -4483,6 +4543,12 @@
     ]
   },
   {
+    "key": "Motion & Fitness lets MileSprout tell a drive from a walk. It stays on your phone.",
+    "files": [
+      "components/motion-ask.tsx"
+    ]
+  },
+  {
     "key": "Motorbike",
     "files": [
       "components/vehicle-picker.tsx"
@@ -4582,6 +4648,12 @@
     "key": "Needs a purpose",
     "files": [
       "components/trips/purpose-line.tsx"
+    ]
+  },
+  {
+    "key": "Needs attention",
+    "files": [
+      "components/setup-arrival.tsx"
     ]
   },
   {
@@ -4747,7 +4819,8 @@
   {
     "key": "Not a drive",
     "files": [
-      "components/tracking-health-card.tsx"
+      "components/tracking-health-card.tsx",
+      "components/walk-or-drive.tsx"
     ]
   },
   {
@@ -4993,15 +5066,21 @@
     ]
   },
   {
+    "key": "One last thing",
+    "files": [
+      "components/reminders-step.tsx"
+    ]
+  },
+  {
     "key": "One more for accuracy: Motion & Fitness",
     "files": [
-      "app/setup-tracking.tsx",
-      "components/motion-ask.tsx"
+      "app/setup-tracking.tsx"
     ]
   },
   {
     "key": "One week left in the {{year}} tax year 🏁",
     "files": [
+      "components/reminders-step.tsx",
       "domain/deadlines.ts"
     ]
   },
@@ -5187,7 +5266,7 @@
     ]
   },
   {
-    "key": "Outside work hours. Drives are saved when you park.",
+    "key": "Outside work hours",
     "files": [
       "components/home/tracking-card.tsx"
     ]
@@ -5232,6 +5311,12 @@
     "key": "Paid by your employer",
     "files": [
       "app/claim-relief.tsx"
+    ]
+  },
+  {
+    "key": "Park",
+    "files": [
+      "components/setup-arrival.tsx"
     ]
   },
   {
@@ -6160,6 +6245,12 @@
     ]
   },
   {
+    "key": "Set location to “Always”",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Set location to “Always” and MileSprout logs every drive, even when it’s closed.",
     "files": [
       "app/welcome.tsx"
@@ -6712,6 +6803,18 @@
     ]
   },
   {
+    "key": "Sunday recap on",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Sunday recap: drives to sort",
+    "files": [
+      "components/reminders-step.tsx"
+    ]
+  },
+  {
     "key": "Supermarket",
     "files": [
       "components/practice-tutorial.tsx"
@@ -6721,6 +6824,12 @@
     "key": "Swap from and to",
     "files": [
       "app/add-trip.tsx"
+    ]
+  },
+  {
+    "key": "Swipe “Work”",
+    "files": [
+      "components/setup-arrival.tsx"
     ]
   },
   {
@@ -6799,6 +6908,7 @@
   {
     "key": "Tap “{{button}}”",
     "files": [
+      "app/welcome.tsx",
       "components/motion-ask.tsx",
       "components/permission-preview.tsx"
     ]
@@ -6826,6 +6936,12 @@
     "key": "Tax dates ›",
     "files": [
       "components/tax-countdown.tsx"
+    ]
+  },
+  {
+    "key": "Tax deadlines",
+    "files": [
+      "components/reminders-step.tsx"
     ]
   },
   {
@@ -7459,6 +7575,12 @@
     ]
   },
   {
+    "key": "Turn on iCloud Drive",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Turn on in Settings",
     "files": [
       "app/welcome.tsx"
@@ -7468,6 +7590,12 @@
     "key": "Turn on Motion & Fitness",
     "files": [
       "app/setup-tracking.tsx",
+      "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Turn on notifications",
+    "files": [
       "app/welcome.tsx"
     ]
   },
@@ -7561,6 +7689,12 @@
     "key": "Unlocked",
     "files": [
       "components/invite.tsx"
+    ]
+  },
+  {
+    "key": "Until {{time}}",
+    "files": [
+      "components/home/tracking-card.tsx"
     ]
   },
   {
@@ -7660,6 +7794,12 @@
     ]
   },
   {
+    "key": "Usually one a week. Never ads.",
+    "files": [
+      "components/reminders-step.tsx"
+    ]
+  },
+  {
     "key": "Valets too. Not with other offers.",
     "files": [
       "perks/offers.ts"
@@ -7701,6 +7841,12 @@
     "key": "Waiting for your next drive",
     "files": [
       "live-activity/model.ts"
+    ]
+  },
+  {
+    "key": "Walks stay walks.",
+    "files": [
+      "components/motion-ask.tsx"
     ]
   },
   {
@@ -7797,6 +7943,18 @@
     "key": "What does your employer pay?",
     "files": [
       "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "What happens next",
+    "files": [
+      "components/setup-arrival.tsx"
+    ]
+  },
+  {
+    "key": "What happens next: drive, park, the trip appears, swipe it to Work.",
+    "files": [
+      "components/setup-arrival.tsx"
     ]
   },
   {

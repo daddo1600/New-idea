@@ -30,7 +30,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { findLatestBackup, isDatabaseEmpty, problemOf, restoreBackup, type FoundBackup } from '@/backup/backup';
 import { formatBackupDate, PROBLEM_TEXT } from '@/backup/copy';
 import { tripCount } from '@/backup/snapshot';
-import { BackupCheck } from '@/components/backup-check';
+import { useICloudAvailable } from '@/components/backup-check';
+import { ICLOUD_OFF_STEPS } from '@/components/home/backup-card';
 import { BrandGradient } from '@/components/brand-gradient';
 import { CelebrationOverlay } from '@/components/celebration-overlay';
 import { CountryOptions, phoneRegion } from '@/components/country-options';
@@ -45,6 +46,8 @@ import { MintWash, StepHeader } from '@/components/step-header';
 import { VehiclePicker } from '@/components/vehicle-picker';
 import { WorkStyleCard } from '@/components/work-style-card';
 import { firstCode, RedeemCode } from '@/components/redeem-code';
+import { RemindersStep } from '@/components/reminders-step';
+import { ArrivalSprout, arrivalMs, NextTimeline, type SetupTile, SetupTiles } from '@/components/setup-arrival';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import {
@@ -56,15 +59,28 @@ import {
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { loadSettings, updateSettings } from '@/db/settings-repo';
 import { marApplies, parsePence } from '@/domain/mar';
-import { displayLocale, REGIONS, vehicleRule, type RegionCode } from '@/domain/regions';
-import { type CheerKind, DONE, HOURS, PURPOSE, setupCheer } from '@/domain/setup-cheers';
+import {
+  displayLocale,
+  formatRate,
+  ratePeriodFor,
+  REGIONS,
+  vehicleRule,
+  type RegionCode,
+} from '@/domain/regions';
+import { setupReminderSettings } from '@/domain/reminders';
+import { type CheerKind, DONE, HOURS, PURPOSE, REMINDERS, setupCheer } from '@/domain/setup-cheers';
 import { shownStyles, type WorkStyle } from '@/domain/work-focus';
 import { useTheme } from '@/hooks/use-theme';
 import { LANGUAGES, msg, useLanguage, useT } from '@/i18n/i18n';
 import { Rich } from '@/i18n/rich';
 import { useReferral } from '@/referral/referral';
 import { useRegion } from '@/region/region';
-import { enableWeeklyReminder, scheduleWorkHoursNudge } from '@/reminders/weekly';
+import {
+  askForNotifications,
+  notificationsAskable,
+  refreshWeeklyReminder,
+  scheduleWorkHoursNudge,
+} from '@/reminders/weekly';
 import type { TrackingStatus } from '@/tracking/background';
 import { askForMotion, motionAskable } from '@/tracking/motion';
 import { useTracking } from '@/tracking/use-tracking';
@@ -77,7 +93,9 @@ import { ICloudBackup } from '../../modules/icloud-backup';
 /**
  * First launch, as one full-screen flow instead of a chain of pop-ups:
  * welcome → country → automatic tracking → how you work → usual purpose →
- * done. Shift workers skip the usual purpose (their drives are Deliveries,
+ * reminders → done. The reminders step explains notifications before iOS
+ * asks, and only shows while iOS hasn't asked yet; nothing else in set-up
+ * asks for them. Shift workers skip the usual purpose (their drives are Deliveries,
  * domain/auto-classify). Home and work aren't asked here: the home screen asks
  * "Is this home?" once the drives show it (domain/place-asks). Each step does
  * one thing, and the user always sees how far along they are.
@@ -87,7 +105,13 @@ import { ICloudBackup } from '../../modules/icloud-backup';
  * only the tracking step (a permission for this phone) remains.
  */
 
-/** Dots shown: the usual purpose is part of "Your work", not a step of its own. */
+/**
+ * Set-up's brand green starts darker than the app icon's #0E9F6E: at the top-left,
+ * where the eyebrows and body text sit, #D1FAE5 reads at about 5.2:1 (3.0:1 before).
+ */
+const SETUP_GREEN = '#0A7350';
+
+/** Dots shown: the usual purpose is part of "Your work", the reminders part of the finish. */
 const STEPS = 5;
 const EXTRA_LABELS: Record<VehicleType, string> = {
   car: msg('Car or van'),
@@ -148,7 +172,33 @@ export default function WelcomeScreen() {
   const [restoreError, setRestoreError] = useState<string | null>(null);
   /** Restored from iCloud: set-up is done but for tracking, which is per phone. */
   const [restored, setRestored] = useState(false);
-  const afterTracking = restored ? DONE : HOURS;
+  /** iOS hasn't asked about notifications yet: the reminders step comes before the finish. */
+  const [notifyAskable, setNotifyAskable] = useState(false);
+  /** iOS's notification question is up (the coach shows under it). */
+  const [notifyAsking, setNotifyAsking] = useState(false);
+  /** Answered on the reminders step: null if it didn't ask. */
+  const [notifyAllowed, setNotifyAllowed] = useState<boolean | null>(null);
+  /** "Not now" on the reminders step: home stays free to offer the Sunday recap later. */
+  const [notifyLater, setNotifyLater] = useState(false);
+  useEffect(() => {
+    let current = true;
+    notificationsAskable().then(
+      (askable) => current && setNotifyAskable(askable),
+      () => {},
+    );
+    return () => {
+      current = false;
+    };
+  }, []);
+  /** The step after the questions: reminders if iOS can still ask, else the finish. */
+  const toFinish = notifyAskable ? REMINDERS : DONE;
+  const afterTracking = restored ? toFinish : HOURS;
+  /**
+   * Counts each time "You're all set." arrives (the "YOU DID IT!" overlay has closed, or
+   * coming back to it): its choreography plays. 0 until the first.
+   */
+  const [arrival, setArrival] = useState(0);
+  const arrived = arrival > 0;
   const { status, enable } = useTracking(undefined, { watch: step === 2 });
   const [country, setCountry] = useState<RegionCode>(() => (chosen ? region.code : phoneRegion()));
   const [busy, setBusy] = useState(false);
@@ -209,6 +259,8 @@ export default function WelcomeScreen() {
     const kind = setupCheer(lastStep.current, step);
     lastStep.current = step;
     if (!kind) return;
+    // Back at the finish again: no overlay this time, so it arrives at once.
+    if (kind === 'done' && cheered.current.has('done')) setArrival((n) => n + 1);
     // Says tracking is set up only when it is: skipped (or not on this phone) is still a good start.
     const tracking = status === 'on' ? t('Drive logging’s set up') : t('Good start');
     celebrate(
@@ -360,7 +412,7 @@ export default function WelcomeScreen() {
     setWorkChoices([]);
     setShifts(true);
     setHoursSet(false);
-    setStep(DONE);
+    setStep(toFinish);
   };
 
   const saveHours = async () => {
@@ -398,7 +450,7 @@ export default function WelcomeScreen() {
     const first = choices[0] ?? null;
     await updateSettings(db, { defaultPurpose: first, workPurposes: choices });
     setWorkChoices(choices);
-    setStep(DONE);
+    setStep(toFinish);
   };
   const purposeOptions = quickPurposes({ shiftMode: false, clientPrivacy }, 10);
 
@@ -536,12 +588,31 @@ export default function WelcomeScreen() {
   /** Back to all three; the hours, vehicles and ticks entered are kept for coming back. */
   const backToMenu = () => setWorkStyle(null);
 
+  /**
+   * The reminders step's "Turn on notifications": the only place set-up asks.
+   * Allowed or not, on to the finish (iOS's question is answered before the cheer).
+   */
+  const allowNotifications = async () => {
+    setNotifyAsking(true);
+    try {
+      setNotifyAllowed(await askForNotifications().catch(() => false));
+      // Answered: iOS won't ask again, so Back from the finish skips this step.
+      setNotifyAskable(false);
+    } finally {
+      setNotifyAsking(false);
+      setStep(DONE);
+    }
+  };
+
   const finish = async () => {
     setBusy(true);
     try {
-      // The Sunday check-in is on by default: iOS asks once, here. Turning it off is in Settings.
-      const scheduled = await enableWeeklyReminder(picked.unit).catch(() => false);
-      await updateSettings(db, { weeklyReminder: scheduled, reminderAsked: true, reminderDefaulted: true });
+      // Never asks: the Sunday check-in is queued only if notifications are already allowed.
+      // Turning it off is in Settings; "Not now" leaves home free to offer it later.
+      const scheduled = await refreshWeeklyReminder(picked.unit).catch(() => false);
+      // A restored backup may bring back `reminderAsked`: after "Not now" it's cleared, so home can still offer.
+      const answer = notifyAllowed !== null ? 'answered' : notifyLater ? 'not-now' : 'not-shown';
+      await updateSettings(db, setupReminderSettings(scheduled, answer));
       if (!hoursSet && !shifts) await scheduleWorkHoursNudge().catch(() => {});
     } finally {
       setBusy(false);
@@ -550,20 +621,84 @@ export default function WelcomeScreen() {
     router.replace('/');
   };
 
-  // Full brand green for the welcome, the tracking ask (the one that matters most) and the
-  // finish; the steps in between open with a green header card.
-  const onBrand = step === 0 || step === 2 || step === DONE;
-  /** The dot lit for this step: the usual purpose shares "Your work"'s. */
-  const dot = step >= PURPOSE ? step - 1 : step;
+  // Full brand green for the welcome, the tracking ask (the one that matters most), the
+  // reminders and the finish; the steps in between open with a green header card.
+  const onBrand = step === 0 || step === 2 || step === REMINDERS || step === DONE;
+  /** The dot lit for this step: the usual purpose shares "Your work"'s, the reminders the finish's. */
+  const dot = step === DONE ? REMINDERS - 1 : step >= PURPOSE ? step - 1 : step;
   const scroller = useRef<ScrollView>(null);
   // Each step starts at its top, whatever the last one was scrolled to.
   useEffect(() => {
     scroller.current?.scrollTo({ y: 0, animated: false });
   }, [step]);
-  /** Back from the finish skips the steps that weren't shown (shift workers have no usual-purpose step). */
-  const previous = step === DONE ? (restored ? 2 : shifts ? HOURS : PURPOSE) : step - 1;
+  /**
+   * Back from the end skips the steps that weren't shown (shift workers have no usual-purpose
+   * step; the reminders step only shows while iOS can still ask).
+   */
+  const beforeEnd = restored ? 2 : shifts ? HOURS : PURPOSE;
+  const previous =
+    step === DONE ? (notifyAskable ? REMINDERS : beforeEnd) : step === REMINDERS ? beforeEnd : step - 1;
 
-  const primary = (label: string, onPress: () => void | Promise<void>, enabled = true) => (
+  // ─── The finish: what's set up, as tiles, and when its arrival ends ───
+  const iCloud = useICloudAvailable();
+  /** iCloud Drive is off: tapping its tile shows how to turn it on. */
+  const [iCloudHelp, setICloudHelp] = useState(false);
+  const rateTile = (() => {
+    const today = new Date();
+    const iso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    const rate = ratePeriodFor(iso, picked, vehicle)?.tiers[0]?.rate;
+    if (rate === undefined) return t(picked.name);
+    const amount = formatRate(rate, picked);
+    return picked.unit === 'mi' ? t('{{rate}} a mile', { rate: amount }) : t('{{rate}} a km', { rate: amount });
+  })();
+  /** A logging tile with a "!": straight to turning it on (the status is checked again on coming back). */
+  const fixLocation = () => router.push('/setup-tracking' as Href);
+  const workStyleDone: WorkStyle = shifts ? 'shifts' : hoursSet ? 'hours' : 'neither';
+  const workTile = WORK_STYLE_TEXT[workStyleDone];
+  const tiles: SetupTile[] = [
+    { key: 'rate', icon: picked.flag, label: rateTile, ok: true },
+    // "Neither" means nothing out of its question: its own line says it.
+    {
+      key: 'work',
+      icon: workTile.emoji,
+      label: t(workStyleDone === 'neither' ? workTile.detail : workTile.title),
+      ok: true,
+    },
+  ];
+  if (status === 'on') tiles.push({ key: 'logging', icon: '📍', label: t('Drive logging’s set up'), ok: true });
+  else if (status === 'needs-always') {
+    tiles.push({ key: 'logging', icon: '📍', label: t('Set location to “Always”'), ok: false, onPress: fixLocation });
+  } else if (status === 'needs-permission') {
+    tiles.push({ key: 'logging', icon: '📍', label: t('Location is off for now.'), ok: false, onPress: fixLocation });
+  }
+  if (iCloud === true) tiles.push({ key: 'backup', icon: '☁️', label: t('Backups on'), ok: true });
+  if (iCloud === false) {
+    tiles.push({
+      key: 'backup',
+      icon: '☁️',
+      label: t('Turn on iCloud Drive'),
+      ok: false,
+      onPress: () => setICloudHelp((shown) => !shown),
+    });
+  }
+  if (notifyAllowed) tiles.push({ key: 'reminders', icon: '🔔', label: t('Sunday recap on'), ok: true });
+  /** "What happens next" only once drives log by themselves; otherwise the line above says how. */
+  const timeline = status === 'on';
+  /** The button's sparkle starts as the arrival ends, so the eye ends on it. */
+  const [sparkledArrival, setSparkledArrival] = useState(0);
+  const sparkle = step === DONE && arrived && sparkledArrival === arrival;
+  useEffect(() => {
+    if (step !== DONE || !arrived) return;
+    const timer = setTimeout(
+      () => setSparkledArrival(arrival),
+      reduceMotion ? 0 : arrivalMs(tiles.length, timeline),
+    );
+    return () => clearTimeout(timer);
+    // Timed once per arrival, with the tiles there were then.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, arrival, reduceMotion]);
+
+  const primary = (label: string, onPress: () => void | Promise<void>, enabled = true, glint = false) => (
     <Pressable
       accessibilityRole="button"
       accessibilityState={{ disabled: busy || !enabled }}
@@ -571,8 +706,12 @@ export default function WelcomeScreen() {
       onPress={once(onPress)}
       style={[
         styles.primary,
+        // A pill from the first frame on the last two steps: only the sparkle arrives later.
+        (glint || step === REMINDERS || step === DONE) && styles.primaryPill,
         { backgroundColor: onBrand ? '#FFFFFF' : theme.accent, opacity: busy ? 0.6 : enabled ? 1 : 0.35 },
       ]}>
+      {/* The one thing left to tap: gold fairy dust round the pill (a still gold edge with Reduce Motion). */}
+      {glint && <GoldSparkle />}
       <ThemedText type="smallBold" style={{ color: onBrand ? '#064E3B' : theme.onAccent }}>
         {label}
       </ThemedText>
@@ -593,7 +732,8 @@ export default function WelcomeScreen() {
         { paddingTop: insets.top + Spacing.three, paddingBottom: insets.bottom + Spacing.three },
       ]}>
       <StatusBar style={onBrand ? 'light' : 'auto'} />
-      {onBrand ? <BrandGradient /> : <MintWash />}
+      {/* Started darker than elsewhere, so the small text at the top reads at WCAG AA. */}
+      {onBrand ? <BrandGradient from={SETUP_GREEN} /> : <MintWash />}
       <View style={styles.top}>
         {step > 0 ? (
           <Pressable
@@ -645,7 +785,7 @@ export default function WelcomeScreen() {
           ref={scroller}
           contentContainerStyle={[
             styles.content,
-            (!onBrand || step === 2 || step === DONE) && styles.contentTop,
+            (!onBrand || step === 2 || step === REMINDERS || step === DONE) && styles.contentTop,
           ]}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled">
@@ -869,16 +1009,31 @@ export default function WelcomeScreen() {
             </>
           )}
 
+          {step === REMINDERS &&
+            (notifyAsking ? (
+              // Under iOS's question, at the very bottom: it may stack three buttons, so no side arrow.
+              <View style={styles.coach} accessibilityLiveRegion="polite">
+                <View style={styles.coachPill}>
+                  <GoldSparkle />
+                  <Text style={styles.coachText} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.6}>
+                    {t('Tap “{{button}}”', { button: t('Allow') })}
+                  </Text>
+                </View>
+              </View>
+            ) : (
+              <RemindersStep region={picked} />
+            ))}
+
           {step === DONE && (
             <>
-              <LeafMark size={72} />
-              <Text style={styles.brandTitleSmall}>{t('You’re all set.')}</Text>
+              <ArrivalSprout start={arrived} />
+              <Text style={[styles.brandTitleSmall, styles.centred]}>{t('You’re all set.')}</Text>
               {restored && (
                 <Text style={styles.brandCallout}>
                   {t('Your trips are back, with your places, vehicles and settings.')}
                 </Text>
               )}
-              <Text style={styles.brandBody}>
+              <Text style={[styles.brandBody, styles.centred]}>
                 {status === 'on'
                   ? t('Just drive. Each trip appears after you park.')
                   : status === 'needs-always'
@@ -889,10 +1044,15 @@ export default function WelcomeScreen() {
                           'Turn on automatic logging from the home screen whenever you’re ready, or add a drive from the Drives tab.',
                         )}
               </Text>
-              {/* Backups are on by themselves: this says so, or how to turn on iCloud Drive. */}
-              <BackupCheck style={styles.glass} />
-              {/* Optional, and also in Settings for 30 days. */}
-              <RedeemCode onBrand initialCode={linkCode} style={styles.glass} />
+              <SetupTiles tiles={tiles} start={arrived} />
+              {iCloud === false && iCloudHelp && (
+                <Animated.View entering={reduceMotion ? undefined : FadeInDown.duration(220)} style={styles.glass}>
+                  <Text style={styles.pointBody}>{t(ICLOUD_OFF_STEPS)}</Text>
+                </Animated.View>
+              )}
+              {timeline && <NextTimeline start={arrived} tiles={tiles.length} />}
+              {/* Optional, and also in Settings for 30 days: a plain gold link until it's opened. */}
+              <RedeemCode onBrand initialCode={linkCode} style={styles.glass} linkStyle={styles.codeLink} />
             </>
           )}
         </GestureScrollView>
@@ -943,11 +1103,25 @@ export default function WelcomeScreen() {
                   : primary(t('Choose one to continue'), () => {}, false))}
           {step === PURPOSE && shownChoices.length > 0 && primary(t('Continue'), () => saveWork(shownChoices))}
           {step === PURPOSE && secondary(t('Skip for now'), () => saveWork([]))}
-          {step === DONE && primary(t('Start using MileSprout'), finish)}
+          {step === REMINDERS && !notifyAsking && primary(t('Turn on notifications'), allowNotifications, true, true)}
+          {step === REMINDERS && !notifyAsking && secondary(t('Not now'), () => {
+              setNotifyLater(true);
+              setStep(DONE);
+            })}
+          {step === DONE && primary(t('Start using MileSprout'), finish, true, sparkle)}
         </View>
       </KeyboardAvoidingView>
       {cheer && (
-        <CelebrationOverlay key={cheer.kind} kind={cheer.kind} text={cheer.text} onClose={() => setCheer(null)} />
+        <CelebrationOverlay
+          key={cheer.kind}
+          kind={cheer.kind}
+          text={cheer.text}
+          onClose={() => {
+            // The finish's arrival starts as "YOU DID IT!" closes.
+            if (cheer.kind === 'done') setArrival((n) => n + 1);
+            setCheer(null);
+          }}
+        />
       )}
     </ThemedView>
   );
@@ -1029,7 +1203,10 @@ const styles = StyleSheet.create({
   brandTitle: { color: '#FFFFFF', fontSize: 40, lineHeight: 46, fontWeight: '800', letterSpacing: -0.5 },
   brandBody: { color: '#D1FAE5', fontSize: 17, lineHeight: 24 },
   pointTitle: { color: '#FFFFFF', fontSize: 15, fontWeight: '700' },
-  brandEyebrow: { color: '#FACC15', fontSize: 12, fontWeight: '800', letterSpacing: 1.2, marginTop: Spacing.one },
+  // Pale gold at 13pt: about 4.7:1 on SETUP_GREEN (bright gold at 12pt was 2.2:1 on the old start).
+  brandEyebrow: { color: '#FDE68A', fontSize: 13, fontWeight: '800', letterSpacing: 1.2, marginTop: Spacing.one },
+  centred: { textAlign: 'center' },
+  codeLink: { alignItems: 'center' },
   brandTitleSmall: { color: '#FFFFFF', fontSize: 34, lineHeight: 40, fontWeight: '800', letterSpacing: -0.5 },
   brandCallout: { color: '#FACC15', fontSize: 17, lineHeight: 23, fontWeight: '800' },
   // The pulsing copy of iOS's alert and its one-line caption, as one centred block.
@@ -1120,5 +1297,7 @@ const styles = StyleSheet.create({
   card: { borderRadius: 12, padding: Spacing.three, gap: Spacing.one },
   actions: { gap: Spacing.two, width: '100%', maxWidth: MaxContentWidth, alignSelf: 'center' },
   primary: { alignItems: 'center', paddingVertical: Spacing.three, borderRadius: 12 },
+  // GoldSparkle draws round a pill.
+  primaryPill: { borderRadius: 999 },
   secondary: { alignItems: 'center', paddingVertical: Spacing.two },
 });

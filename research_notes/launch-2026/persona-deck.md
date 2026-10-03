@@ -30,11 +30,13 @@ Ride-hail is part of Deliveries & rides, because shift mode works the same for a
 | Trade jobs | tradespeople: builders, electricians, plumbers and more | contractors: builders, electricians, plumbers and more | the trades: contractors, electricians, plumbers and more | tradies: builders, sparkies, plumbers and more |
 | My own business | the self-employed and sole traders | the self-employed and freelancers | the self-employed and freelancers | sole traders and the self-employed |
 
-The line reads "For {label}." Chip text is the same everywhere, except Australia's trades chip, which reads **"Tradie jobs"**. No brand names (no "Dashers" or "Uber drivers"). Research should confirm "PSWs" (CA) and "sparkies" (AU) before go-live. The others come from our community notes (`communities-*.md`).
+The line reads "For {label}." Chip text is the same everywhere, except Australia's trades chip, which reads **"Tradie jobs"**. No brand names (no "Dashers" or "Uber drivers"). *(research, 3 Oct)* Labels checked, all pass: "tradies" and "sparkies" are everyday Australian words for tradespeople and electricians ([Wikipedia: Sparky](https://en.wikipedia.org/wiki/Sparky), [ANU ANDC](https://history.cass.anu.edu.au/centres/andc/dunny-diver)); "caregivers" and "home health aides" are the US terms, used by the BLS ([BLS OOH: Home health and personal care aides](https://www.bls.gov/ooh/healthcare/home-health-aides-and-personal-care-aides.htm)); "community nurses" is the NHS's own term, alongside "district nurses" ([HEE: Community and district nursing](https://www.hee.nhs.uk/our-work/community-district-nursing-0)). "PSWs" is mainly an Ontario title (BC says health care assistant, Alberta and Manitoba health care aide), so it fits Toronto and the biggest province, and "home care workers" in the same line covers the rest ([CDI College](https://www.cdicollege.ca/study-on-campus/manitoba/community/news/health-care-aide-vs-personal-support-worker-what-s-the-difference-in-manitoba/), [CBC](https://www.cbc.ca/news/canada/sudbury/gas-prices-difficult-workers-paid-mileage-1.6345498)). Keep the line as it is.
 
 ## 2. Screens and demo data per persona
 
 The deck follows the visitor's country (`MSSeason.country()`, `?country=` to force). Each persona is shot in all four regions, in one city per country. These cities match the app's own area examples (`domain/privacy.ts`): **Leeds, Austin, Toronto, Parramatta**. Distances are given in miles. For CA and AU the shot uses km, with each leg converted (×1.609, to 0.1 km). Values use `domain/regions.ts`: **GB 55p/mi, US 76¢/mi (from 1 Jul 2026), CA 73¢/km (first 5,000), AU 91¢/km (to 5,000)**. Year-to-date totals on Home and Money are whatever the app works out from the seeded history. Don't type them in by hand.
+
+*(research, 3 Oct)* **Watch the distance bands, or the per-day figures below will be wrong on screen.** The app values a drive at the rate for the band it falls in. Canada's tax year starts 1 Jan and drops to 67¢ after 5,000 km; Australia's starts 1 Jul and pays nothing after 5,000 km; the UK drops to 25p after 10,000 miles. The current seeders start history on 1 Jan: the business demo comes to about 6,200 mi (10,000 km) by 3 Oct, and a care history at 14–20 mi a weekday comes to about 5,400 km. So in Canada, **keep each persona's seeded work distance for the year under 4,800 km before yesterday** (start the CA history later, or thin it). Otherwise yesterday shows at 67¢: deliveries $16.62, care $18.16, trades $23.45, business $10.79 (or $4.56 with the fix in 2d). Australia (from 1 Jul, about 2,400–3,500 km) and the UK are inside their bands. Rates rechecked against `regions.ts` and the sources in `website-claims-check.md` (HMRC, IRS, Finance Canada, ATO, all checked 3 Oct).
 
 The Home status line is the app's own: **"Counting your miles"** (or "Counting your km") or **"On shift · 1h 15m"**, never "Tracking on". The 9:41 status bar stays.
 
@@ -83,13 +85,13 @@ The areas in other countries are **Austin 78751 / 78752 / 78757 / 78756 / 78705*
 
 The day's work driving (16.8 mi / 27.1 km) is worth **£9.24 · $12.77 · $19.78 CAD · $24.66 AUD**.
 
-History for the year: weekdays, 5 to 6 visits, 14 to 20 mi a day, same areas. For the GB relief screen, seed **only from 6 Apr 2026** (2,480 work miles). The screen sums every open tax year, and earlier years at 45p would muddy the headline. That gives (55p − 25p) × 2,480 = **£744.00 relief, about £148.80 tax back at 20%**.
+History for the year: weekdays, 5 to 6 visits, 14 to 20 mi a day, same areas. For the GB relief screen, seed **only from 6 Apr 2026** (2,480 work miles). The screen sums every open tax year, and earlier years at 45p would muddy the headline. That gives (55p − 25p) × 2,480 = **£744.00 relief, about £148.80 tax back at 20%**. *(research, 3 Oct)* Checked: HMRC's rate for 2026/27 is 55p for the first 10,000 business miles, then 25p, backdated to 6 Apr 2026 ([GOV.UK: Increasing mileage rates](https://www.gov.uk/government/publications/increase-to-approved-mileage-allowance-payments-amaps-and-self-employed-simplified-mileage-rates/increasing-mileage-rates)), and `regions.ts` matches (550/250 tenths of a penny, 10,000-mile tier, from 2026-04-06). Relief cuts taxable pay, so the tax back is the relief × the person's top rate: £148.80 only for basic-rate (20%) taxpayers, £297.60 at 40% ([GOV.UK: Claim tax relief for your job expenses](https://www.gov.uk/tax-relief-for-employees): relief is given at the rate you pay tax, e.g. 20% of a £6 weekly expense = £1.20. GOV.UK couldn't be fetched from the research sandbox on 3 Oct; the rule is long-standing and matches `mar.ts`. High confidence). The app's hero says "About £148.80 tax back at 20%" (the "Not sure" band also uses 20%), so the caption must name the 20% too. Seed the GB care demo with the band left at "Not sure" or "Basic".
 
 - **Home:** "Counting your miles", the year's total, and the 15:10 drive home waiting to be sorted.
 - **Drives:** yesterday's row of "Client visit · area" drives, each marked "Auto: in your work hours".
 - **Trip:** no map (that's the point): the areas, 3.8 mi, purpose "Client visit, no. 3", and the app's note that client privacy keeps no route.
 - **Relief (GB):** `app/claim-relief.tsx` showing £744.00 and "Your employer pays 25p a mile. HMRC's rate is 55p…".
-- **Reports (US/CA/AU):** the report screen with **Expense claim** chosen. In the US we don't mention tax deductions for employees, because unreimbursed employee mileage isn't deductible federally. The report is for the employer.
+- **Reports (US/CA/AU):** the report screen with **Expense claim** chosen. In the US we don't mention tax deductions for employees, because unreimbursed employee mileage isn't deductible federally. The report is for the employer. *(research, 3 Oct)* Checked, true. The TCJA suspended miscellaneous itemized deductions (where unreimbursed employee expenses sat) for 2018–2025, and the 2025 budget law (P.L. 119-21, s70110) made that permanent from 2026 by striking the sunset in IRC s67(g) ([Public Law 119-21](https://www.congress.gov/119/plaws/publ21/PLAW-119publ21.pdf); [CRS R48611](https://www.congress.gov/crs_external_products/R/PDF/R48611/R48611.2.pdf)). Only reservists, qualified performing artists, fee-basis officials and impairment-related expenses can still use Form 2106 ([IRS Form 2106 instructions](https://www.irs.gov/pub/irs-pdf/i2106.pdf)). "Expense claim, ready for your employer" is the right framing. State notes, not for the caption: California, Illinois and Massachusetts require employers to repay work driving (Cal. Labor Code 2802, 820 ILCS 115/9.5, 454 CMR 27.04), and a few states (including New York, California, Minnesota, Alabama, Arkansas and Hawaii) still allow some unreimbursed employee expenses on the state return ([Driversnote](https://www.driversnote.com/blog/mandatory-mileage-reimbursement-states), secondary; check each state before saying it anywhere). Canada and Australia differ: employees there can claim on their own return (CRA T777 with a T2200; ATO cents per km if the employer doesn't repay per km), so the caption shouldn't say the employer is the only route, and it doesn't.
 
 ### 2c. Trade jobs: Home · Drives · Trip · Reports
 
@@ -127,7 +129,9 @@ This persona exists now: the default `?demo` (San Jose: client meetings, learned
 - **Toronto:** Office, King St W · Client office, Mississauga · Pearson Airport.
 - **Parramatta:** Office, Smith St · Client office, Norwest · Sydney Airport.
 
-Today's two work drives (10.0 mi / 16.1 km) are worth **£5.50 · $7.60 · $11.75 CAD · $14.65 AUD**.
+~~Today's two work drives (10.0 mi / 16.1 km) are worth £5.50 · $7.60 · $11.75 CAD · $14.65 AUD.~~
+
+*(research, 3 Oct)* **Fix the morning drive.** One of today's two "work" drives is Home → Office, 7.9 mi, marked business ("Picked up samples"). That is ordinary commuting in all four countries, and carrying things doesn't change that (IRS Pub 463: "hauling tools or instruments in your car while commuting doesn't make your car expenses deductible", [IRS Pub 463](https://www.irs.gov/publications/p463); HMRC 490; CRA; ATO). It also contradicts the Drives caption ("Home to the office is flagged as a commute"). For the new GB/CA/AU sets (and San Jose if coding touches it), mark the morning Home → Office as personal, a commute, and add the return Client office → Office (2.1 mi). Today's work driving is then **4.2 mi / 6.8 km: £2.31 · $3.19 · $4.96 CAD · $6.19 AUD**.
 
 - **Home:** "Counting your miles", the total, the drive to sort.
 - **Drives:** learned-route drives sorted for you, and the evening drive home marked personal as a commute.
@@ -184,9 +188,9 @@ Each of the four persona cards swaps its panel (tag, heading, line, bullets). Th
    - Thank you for all you do. 💚
 2. **Drives** · *Free* · **Only the area. Never the address.** Each visit is saved as "Client visit · Leeds LS7", on your phone. No street, no house number.
    - Yesterday: 5 visits, 16.8 miles, **£9.24** of work driving.
-3. **Trip** · *Free* · **No route kept, still a proper log.** Date, area, distance and purpose: what the tax office asks for.
+3. **Trip** · *Free* · **No route kept, still a proper log.** Date, area, distance and purpose for every drive. *(research, 3 Oct: was "what the tax office asks for". The IRS and HMRC ask for where you went; a postcode area may not be enough for every claim, so we don't promise it is.)*
    - Add your own visit reference, like "no. 3". No names.
-4. **Relief (UK)** · *Free* · **Paid 25p a mile? Claim the rest.** Your employer pays less than HMRC's 55p, so you can claim tax relief on the gap. MileSprout shows the figure and how to claim. Example: **£744 to claim**, about £148.80 back.
+4. **Relief (UK)** · *Free* · **Paid 25p a mile? Claim relief on the rest.** Your employer pays less than HMRC's 55p, so you can claim tax relief on the gap. MileSprout shows the figure and how to claim. Example: **£744 to claim**, about £148.80 tax back if you pay tax at 20%. *(research, 3 Oct: "Claim the rest" read as if the 30p comes back as money; it's relief, worth 20p or 40p in the pound. "Back" now names the 20%, as the app's Relief screen does.)*
    **Reports (US, CA, AU)** · *Pro* · **Your mileage claim, done.** An expense claim with every visit by area, ready for your employer.
 
 ### Trade jobs
@@ -194,7 +198,7 @@ Each of the four persona cards swaps its panel (tag, heading, line, bullets). Th
    - The drive home waits for one swipe.
 2. **Drives** · *Free* · **Every job, every supplies run.** Site visit, Buying supplies, Client meeting: one tap each. Yesterday: 21.8 miles, **£11.99**.
 3. **Trip** · *Free* · **Parking at the quote? Add it.** The route on a map, the purpose, and parking or tolls kept with the drive.
-4. **Reports** · *Pro* · **Hand your accountant a clean log.** PDF report, spreadsheet, Xero, QuickBooks and FreeAgent.
+4. **Reports** · *Pro* · **Hand your accountant a clean log.** PDF report, spreadsheet, Xero and QuickBooks, plus FreeAgent in the UK. *(research, 3 Oct: the app offers FreeAgent only in the UK; show "FreeAgent" only to UK visitors.)*
 
 ### My own business
 1. **Home** · *Free* · **Drive as normal. It's counted.** What your work miles are worth this tax year, at a glance.
@@ -203,6 +207,8 @@ Each of the four persona cards swaps its panel (tag, heading, line, bullets). Th
 4. **Reports** · *Pro* · **Ready when your tax return is.** An itemised report and exports for your accounting software.
 
 *All wording rules checked: no "tracking", nothing that says we keep or see data, "we" for the company. Figures are from `regions.ts`; the relief example is (55p − 25p) × 2,480 mi. Research to check the MAR line and the US employee note before go-live.*
+
+*(research, 3 Oct) Checked: labels, the 2026/27 rates and bands, every per-day figure (all correct at first-band rates), the MAR example, the US employee note, and every caption for claims and wording rules. No "tracking", nothing that says we keep or see data. Changes are marked above.*
 
 ## Order of work
 
