@@ -30,10 +30,13 @@ export function RedeemCode({
   onBrand = false,
   initialCode,
   style,
+  linkStyle,
 }: {
   onBrand?: boolean;
   initialCode?: string;
   style?: StyleProp<ViewStyle>;
+  /** In place of `style` while it's only the link (set-up's finish: a plain centred link, no box). */
+  linkStyle?: StyleProp<ViewStyle>;
 }) {
   const t = useT();
   const theme = useTheme();
@@ -85,7 +88,7 @@ export function RedeemCode({
 
   if (!open) {
     return (
-      <View style={[refusal ? styles.box : null, style]}>
+      <View style={[refusal ? styles.box : null, linkStyle ?? style]}>
         {refusal}
         <Pressable accessibilityRole="button" hitSlop={8} onPress={() => setOpen(true)}>
           <Text style={[styles.link, { color: link }]}>{t('Got a code from a friend?')}</Text>

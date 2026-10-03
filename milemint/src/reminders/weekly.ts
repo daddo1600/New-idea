@@ -1,6 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 
+import { DEMO_NOTIFY } from '@/dev/demo';
 import { countdownReminders, REMINDER_HOUR } from '@/domain/deadlines';
 import type { DistanceUnit, Region } from '@/domain/regions';
 import { tomorrowAt, upcomingSundays, weeklyMessage } from '@/domain/reminders';
@@ -32,6 +33,25 @@ async function allowed(ask: boolean): Promise<boolean> {
   return (await Notifications.requestPermissionsAsync()).granted;
 }
 
+/**
+ * Whether iOS hasn't asked about notifications yet, so set-up can explain
+ * them first (its reminders step). Never asks.
+ */
+export async function notificationsAskable(): Promise<boolean> {
+  if (DEMO_NOTIFY) return true;
+  if (!REMINDERS_SUPPORTED) return false;
+  const current = await Notifications.getPermissionsAsync();
+  return current.status === Notifications.PermissionStatus.UNDETERMINED;
+}
+
+/** Shows iOS's notification question (only after set-up's own explanation); resolves to whether they're allowed. */
+export async function askForNotifications(): Promise<boolean> {
+  // The web preview has no question to show: keep the coaching on screen for a while instead.
+  if (DEMO_NOTIFY) return new Promise((resolve) => setTimeout(() => resolve(false), 120_000));
+  if (!REMINDERS_SUPPORTED) return false;
+  return allowed(true);
+}
+
 async function cancelWeekly(): Promise<void> {
   const ids = [LEGACY_REMINDER_ID, ...Array.from({ length: WEEKS_AHEAD }, (_, i) => `${WEEKLY_PREFIX}${i}`)];
   await Promise.all(ids.map((id) => Notifications.cancelScheduledNotificationAsync(id)));
@@ -59,10 +79,15 @@ export async function enableWeeklyReminder(unit: DistanceUnit): Promise<boolean>
   return true;
 }
 
-/** On launch: keeps the next few Sundays queued (and in the right units). Never asks. */
-export async function refreshWeeklyReminder(unit: DistanceUnit): Promise<void> {
-  if (!REMINDERS_SUPPORTED || !(await allowed(false))) return;
+/**
+ * On launch, and at the end of set-up: keeps the next few Sundays queued (and
+ * in the right units) if notifications are allowed. Never asks; resolves to
+ * whether the reminder is scheduled.
+ */
+export async function refreshWeeklyReminder(unit: DistanceUnit): Promise<boolean> {
+  if (!REMINDERS_SUPPORTED || !(await allowed(false))) return false;
   await scheduleWeekly(unit);
+  return true;
 }
 
 export async function disableWeeklyReminder(): Promise<void> {

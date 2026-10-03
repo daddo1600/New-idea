@@ -11,7 +11,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { GoldSparkle } from '@/components/gold-sparkle';
-import { StepIcon } from '@/components/step-header';
+import { WalkOrDrive } from '@/components/walk-or-drive';
 import { Spacing } from '@/constants/theme';
 import { useT } from '@/i18n/i18n';
 
@@ -75,22 +75,40 @@ export function MotionPreview({ style }: { style?: StyleProp<ViewStyle> }) {
   );
 }
 
-/** Set-up's Motion & Fitness step, on the green brand background, above its buttons. */
+/**
+ * Set-up's Motion & Fitness step, on the green brand background, above its
+ * buttons: the benefit as a picture (a walk stays a walk, a drive is logged),
+ * then what to tap when iOS asks.
+ */
 export function MotionStep() {
   const t = useT();
+  // "Tap “Allow”" with Allow drawn as iOS's button, wherever the language puts it.
+  const [before, after = ''] = t('Tap “{{button}}”', { button: SLOT }).split(SLOT);
   return (
     <>
-      <View style={styles.icon}>
-        <StepIcon glyph="motion" size={30} />
-      </View>
       <Text style={styles.eyebrow}>{t('STEP 2 · YOUR DRIVES')}</Text>
       <Text style={styles.title} accessibilityRole="header">
-        {t('One more for accuracy: Motion & Fitness')}
+        {t('Walks stay walks.')}
       </Text>
       <Text style={styles.body}>
-        {t('Lets MileSprout tell driving from walking, so a stroll is never logged as a trip. It stays on your phone.')}
+        {t('Motion & Fitness lets MileSprout tell a drive from a walk. It stays on your phone.')}
       </Text>
-      <MotionPreview />
+      <WalkOrDrive />
+      <View style={styles.then}>
+        <View style={styles.thenLine} />
+        {/* The same fairy dust as the coach behind the real question: it's the one thing to tap. */}
+        <View style={styles.tapPill} accessible accessibilityLabel={t('Tap “{{button}}”', { button: t('Allow') })}>
+          <GoldSparkle />
+          {!!unquote(before) && <Text style={styles.tapText}>{unquote(before)}</Text>}
+          <View style={styles.allowChip}>
+            <Text style={styles.allowChipText} numberOfLines={1}>
+              {t('Allow')}
+            </Text>
+          </View>
+          {!!unquote(after) && <Text style={styles.tapText}>{unquote(after)}</Text>}
+        </View>
+        <View style={styles.thenLine} />
+      </View>
     </>
   );
 }
@@ -144,6 +162,14 @@ export function MotionCoach() {
   );
 }
 
+/** Stands in for the button in "Tap “{{button}}”", to split the sentence around it. */
+const SLOT = '\u0001';
+
+/** A part of that sentence without the quote marks that were round the button, or the space beside it. */
+function unquote(text: string) {
+  return text.replace(/^[\s“”"«»„]+|[\s“”"«»„]+$/g, '');
+}
+
 /** iOS 26's alert: about this share of the screen's width… */
 const ALERT_WIDTH = 0.8;
 /** …with its buttons ending about this far below the middle of the screen (points). */
@@ -190,18 +216,23 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   allowText: { color: '#0A84FF', fontSize: 17, fontWeight: '700', textAlign: 'center' },
-  icon: {
-    width: 56,
-    height: 56,
-    borderRadius: 18,
+  // Pale gold, 13pt: reads at AA on the top of the brand gradient.
+  eyebrow: { color: '#FDE68A', fontSize: 13, fontWeight: '800', letterSpacing: 1.2, marginTop: Spacing.one },
+  title: { color: '#FFFFFF', fontSize: 34, lineHeight: 40, fontWeight: '800', letterSpacing: -0.5 },
+  then: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three, marginTop: Spacing.two },
+  thenLine: { flex: 1, height: StyleSheet.hairlineWidth, backgroundColor: 'rgba(209,250,229,0.4)' },
+  tapPill: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.16)',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.3)',
+    gap: Spacing.one,
+    borderRadius: 999,
+    backgroundColor: 'rgba(1,28,20,0.55)',
+    paddingHorizontal: 6,
+    paddingVertical: 6,
   },
-  eyebrow: { color: '#FACC15', fontSize: 12, fontWeight: '800', letterSpacing: 1.2, marginTop: Spacing.one },
-  title: { color: '#FFFFFF', fontSize: 30, lineHeight: 36, fontWeight: '800', letterSpacing: -0.5 },
+  tapText: { color: '#FDE68A', fontSize: 17, fontWeight: '800', paddingHorizontal: 6 },
+  allowChip: { backgroundColor: '#FFFFFF', borderRadius: 999, paddingHorizontal: 16, paddingVertical: 6 },
+  allowChipText: { color: '#0A84FF', fontSize: 17, fontWeight: '700' },
   body: { color: '#D1FAE5', fontSize: 17, lineHeight: 24 },
   coach: { flex: 1, alignSelf: 'stretch', minHeight: 1 },
   coachColumn: { position: 'absolute', alignItems: 'center', gap: Spacing.one },
