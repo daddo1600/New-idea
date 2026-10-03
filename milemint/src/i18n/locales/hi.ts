@@ -569,8 +569,6 @@ const dictionary: Dictionary = {
   "Total miles": "कुल मील",
   "Counting your miles": "आपके मील गिने जा रहे हैं",
   "Counting your km": "आपके किमी गिने जा रहे हैं",
-  "Every work drive adds to what you can claim.": "काम की हर ड्राइव से आपका क्लेम बढ़ता है।",
-  "Outside work hours. Drives are saved when you park.": "काम के घंटों के बाहर। पार्क करते ही ड्राइव्स सेव होती हैं।",
   "Until {{time}}. Drives now count as work.": "{{time}} तक। अभी की ड्राइव्स काम में गिनी जाएँगी।",
   "{{money}} · {{distance}}": "{{money}} · {{distance}}",
   "This week: {{total}} of work driving.": "इस हफ़्ते: {{total}} काम की ड्राइविंग।",
@@ -1541,6 +1539,9 @@ const dictionary: Dictionary = {
   "What happens next": "आगे क्या होगा",
   "A walk is marked Not a drive. A drive is logged.": "पैदल सैर को “यह ट्रिप नहीं थी” मार्क किया जाता है। ड्राइव लॉग होती है।",
   "Drive ✓": "ट्रिप ✓",
+  "Until {{time}}": "{{time}} तक",
+  "Outside work hours": "काम के घंटों के बाहर",
+  "Drives are saved when you park.": "पार्क करते ही ड्राइव्स सेव होती हैं।",
 };
 
 export default dictionary;

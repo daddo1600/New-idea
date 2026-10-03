@@ -657,8 +657,6 @@ const dictionary: Dictionary = {
   "Total miles": "Łącznie mile",
   "Counting your miles": "Liczymy Twoje mile",
   "Counting your km": "Liczymy Twoje km",
-  "Every work drive adds to what you can claim.": "Każdy przejazd służbowy powiększa kwotę do rozliczenia.",
-  "Outside work hours. Drives are saved when you park.": "Poza godzinami pracy. Przejazdy zapisują się, gdy zaparkujesz.",
   "Until {{time}}. Drives now count as work.": "Do {{time}}. Przejazdy liczą się teraz jako służbowe.",
   "{{money}} · {{distance}}": "{{money}} · {{distance}}",
   "This week: {{total}} of work driving.": "W tym tygodniu: {{total}} jazdy służbowej.",
@@ -1684,6 +1682,9 @@ const dictionary: Dictionary = {
   "What happens next": "Co dalej",
   "A walk is marked Not a drive. A drive is logged.": "Spacer jest oznaczany jako „To nie był przejazd”. Przejazd jest zapisywany.",
   "Drive ✓": "Przejazd ✓",
+  "Until {{time}}": "Do {{time}}",
+  "Outside work hours": "Poza godzinami pracy",
+  "Drives are saved when you park.": "Przejazdy zapisują się, gdy zaparkujesz.",
 };
 
 export default dictionary;

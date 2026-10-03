@@ -2463,6 +2463,12 @@
     ]
   },
   {
+    "key": "Drives are saved when you park.",
+    "files": [
+      "components/home/tracking-card.tsx"
+    ]
+  },
+  {
     "key": "Drives can’t be measured from a rough position. Tap to fix it.",
     "files": [
       "tracking/health-alerts.ts"
@@ -2993,12 +2999,6 @@
     "key": "Every trip with date, places, miles, purpose and deduction. Opens in Excel, Numbers or Google Sheets.",
     "files": [
       "app/report.tsx"
-    ]
-  },
-  {
-    "key": "Every work drive adds to what you can claim.",
-    "files": [
-      "components/home/tracking-card.tsx"
     ]
   },
   {
@@ -5260,7 +5260,7 @@
     ]
   },
   {
-    "key": "Outside work hours. Drives are saved when you park.",
+    "key": "Outside work hours",
     "files": [
       "components/home/tracking-card.tsx"
     ]
@@ -7683,6 +7683,12 @@
     "key": "Unlocked",
     "files": [
       "components/invite.tsx"
+    ]
+  },
+  {
+    "key": "Until {{time}}",
+    "files": [
+      "components/home/tracking-card.tsx"
     ]
   },
   {

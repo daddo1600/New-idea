@@ -631,8 +631,6 @@ const dictionary: Dictionary = {
   "Total miles": "Total mile",
   "Counting your miles": "Îți numărăm milele",
   "Counting your km": "Îți numărăm km",
-  "Every work drive adds to what you can claim.": "Fiecare cursă de muncă se adaugă la ce poți revendica.",
-  "Outside work hours. Drives are saved when you park.": "În afara programului. Cursele se salvează când parchezi.",
   "Until {{time}}. Drives now count as work.": "Până la {{time}}. Cursele contează acum ca muncă.",
   "{{money}} · {{distance}}": "{{money}} · {{distance}}",
   "This week: {{total}} of work driving.": "Săptămâna asta: {{total}} de condus pentru muncă.",
@@ -1649,6 +1647,9 @@ const dictionary: Dictionary = {
   "What happens next": "Ce urmează",
   "A walk is marked Not a drive. A drive is logged.": "O plimbare e marcată Nu a fost o cursă. O cursă e înregistrată.",
   "Drive ✓": "Cursă ✓",
+  "Until {{time}}": "Până la {{time}}",
+  "Outside work hours": "În afara programului",
+  "Drives are saved when you park.": "Cursele se salvează când parchezi.",
 };
 
 export default dictionary;

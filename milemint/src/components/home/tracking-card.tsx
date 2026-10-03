@@ -2,7 +2,6 @@ import { router } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { msg, useT } from '@/i18n/i18n';
@@ -36,9 +35,13 @@ function clockLabel(clock: string, region: Region): string {
 }
 
 /**
- * "Counting your miles" (never "tracking": it's the money being counted, not the person), or what to do to get there. With work hours on, it says
- * whether they're running now ("Work hours · until 17:00"), so set-hours
- * workers see the app working for them without having to do anything.
+ * Home's logging status, as one tidy row. Logging on: the pulsing "Counting
+ * your miles" pill (never "tracking": it's the money being counted, not the
+ * person), with one small chip on the right only when something's worth
+ * knowing: "Until 17:00" while work hours run, "Outside work hours" after
+ * them. Nothing on the right otherwise. Logging off or limited: the problem
+ * in a pill and a "Turn on" chip, the whole row one tap to fix it. The longer
+ * explanations are the VoiceOver hint, not more lines on Home.
  */
 export function TrackingCard({
   status,
@@ -63,62 +66,100 @@ export function TrackingCard({
     const at = now === undefined ? null : new Date(now);
     const shift =
       workWeek && at ? currentShift(workWeek, at.getDay(), at.getHours() * 60 + at.getMinutes()) : null;
+    const label = shift ? t('Work hours') : region?.unit === 'km' ? t('Counting your km') : t('Counting your miles');
+    const until = shift && region ? clockLabel(shift.end, region) : null;
+    // Only what's worth knowing goes on the right.
+    const chip = until
+      ? { icon: '🕔', text: t('Until {{time}}', { time: until }) }
+      : workWeek
+        ? { icon: '🌙', text: t('Outside work hours') }
+        : null;
     return (
-      <View style={styles.trackingOn} accessibilityRole="text">
-        <View style={[styles.livePill, { backgroundColor: theme.accent + '1F' }]}>
+      <View
+        style={styles.row}
+        accessible
+        accessibilityRole="text"
+        accessibilityLabel={
+          until ? `${label}. ${t('Until {{time}}. Drives now count as work.', { time: until })}` : chip ? `${label}. ${chip.text}` : label
+        }
+        accessibilityHint={t('Drives are saved when you park.')}>
+        <View style={[styles.pill, { backgroundColor: theme.accent + '1F' }]}>
           <LiveDot color={theme.accent} />
-          <ThemedText type="smallBold" style={{ color: theme.accent }}>
-            {shift ? t('Work hours') : region?.unit === 'km' ? t('Counting your km') : t('Counting your miles')}
+          <ThemedText type="smallBold" numberOfLines={1} style={[styles.shrink, { color: theme.accent }]}>
+            {label}
           </ThemedText>
         </View>
-        <ThemedText type="small" themeColor="textSecondary" style={styles.flex}>
-          {shift && region
-            ? t('Until {{time}}. Drives now count as work.', { time: clockLabel(shift.end, region) })
-            : workWeek
-              ? t('Outside work hours. Drives are saved when you park.')
-              : t('Every work drive adds to what you can claim.')}
-        </ThemedText>
+        {chip && (
+          <View style={styles.chip}>
+            <ThemedText type="small" style={styles.chipIcon}>
+              {chip.icon}
+            </ThemedText>
+            <ThemedText type="small" themeColor="textSecondary" numberOfLines={1} style={styles.shrink}>
+              {chip.text}
+            </ThemedText>
+          </View>
+        )}
       </View>
     );
   }
   const message = TRACKING_MESSAGES[status];
-  return (
-    <ThemedView type="backgroundElement" style={[styles.trackingCard, { borderColor: theme.accent }]}>
-      <ThemedText type="smallBold">{t(message.title)}</ThemedText>
-      <ThemedText type="small" themeColor="textSecondary">
-        {t(message.body)}
+  const fixable = status !== 'unsupported';
+  const pill = (
+    <View style={[styles.pill, styles.shrinkPill, { backgroundColor: theme.warning + '24' }]}>
+      <View style={[styles.warnDot, { backgroundColor: theme.warning }]} />
+      <ThemedText type="smallBold" numberOfLines={1} style={styles.shrink}>
+        {t(message.title)}
       </ThemedText>
-      {status !== 'unsupported' && (
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => router.push('/setup-tracking')}
-          style={[styles.trackingButton, { backgroundColor: theme.accent }]}>
-          <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-            {t('Turn on')}
-          </ThemedText>
-        </Pressable>
-      )}
-    </ThemedView>
+    </View>
+  );
+  if (!fixable) {
+    return (
+      <View style={styles.row} accessible accessibilityLabel={t(message.title)} accessibilityHint={t(message.body)}>
+        {pill}
+      </View>
+    );
+  }
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`${t(message.title)}. ${t('Turn on')}`}
+      accessibilityHint={t(message.body)}
+      onPress={() => router.push('/setup-tracking')}
+      style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
+      {pill}
+      <View style={[styles.turnOn, { backgroundColor: theme.accent }]}>
+        <ThemedText type="smallBold" numberOfLines={1} style={{ color: theme.onAccent }}>
+          {t('Turn on')} ›
+        </ThemedText>
+      </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  flex: { flex: 1, gap: Spacing.one },
-  livePill: {
+  // One line: the pill on the left, at most one chip on the right.
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Spacing.two,
+    paddingHorizontal: Spacing.one,
+    minHeight: 36,
+  },
+  pressed: { opacity: 0.7 },
+  pill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.two,
     borderRadius: 999,
     paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.one,
+    paddingVertical: Spacing.one + 2,
+    flexShrink: 1,
   },
-  trackingOn: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, paddingHorizontal: Spacing.one },
-  trackingCard: { borderRadius: 16, borderWidth: 1, padding: Spacing.three, gap: Spacing.one },
-  trackingButton: {
-    alignSelf: 'flex-start',
-    marginTop: Spacing.two,
-    paddingVertical: Spacing.two,
-    paddingHorizontal: Spacing.four,
-    borderRadius: 10,
-  },
+  shrinkPill: { flexShrink: 1 },
+  shrink: { flexShrink: 1 },
+  warnDot: { width: 8, height: 8, borderRadius: 4 },
+  chip: { flexDirection: 'row', alignItems: 'center', gap: Spacing.one, flexShrink: 1 },
+  chipIcon: { fontSize: 13 },
+  turnOn: { borderRadius: 999, paddingHorizontal: Spacing.three, paddingVertical: Spacing.one + 2 },
 });

@@ -559,8 +559,6 @@ const dictionary: Dictionary = {
   "Total miles": "总英里数",
   "Counting your miles": "正在计算你的英里数",
   "Counting your km": "正在计算你的公里数",
-  "Every work drive adds to what you can claim.": "每次工作行程都会增加你可申报的金额。",
-  "Outside work hours. Drives are saved when you park.": "工作时间之外。停车后行程会自动保存。",
   "Until {{time}}. Drives now count as work.": "到 {{time}}。现在的行程算作工作。",
   "{{money}} · {{distance}}": "{{money}} · {{distance}}",
   "This week: {{total}} of work driving.": "本周：{{total}} 的工作驾驶。",
@@ -1509,6 +1507,9 @@ const dictionary: Dictionary = {
   "What happens next": "接下来",
   "A walk is marked Not a drive. A drive is logged.": "步行会标记为“不是行程”。开车会被记录。",
   "Drive ✓": "行程 ✓",
+  "Until {{time}}": "到 {{time}}",
+  "Outside work hours": "工作时间之外",
+  "Drives are saved when you park.": "停车后行程会自动保存。",
 };
 
 export default dictionary;
