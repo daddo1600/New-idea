@@ -117,3 +117,39 @@ At 390 the P panel now grows to about 45 CSS px, at the very top of the frame. I
 ### Next
 
 Coding makes fixes A and B and sends 390 and 1280 London strips and stills. Marketing signs off on those images only, then QA, then the founder decides on "publish".
+
+---
+
+## Re-check 2: website-preview at ca3ffd1, London fixes A and B (3 October 2026)
+
+I checked the coding agent's images only, as asked: `london-uk-london-390/1280.png` and their `-still` versions, `zoom-peak-390.png` and `panel1-new-york-390.png`.
+
+### Verdict: PASS with 2 exact fixes (the London P sign only)
+
+| Item | Ruling |
+|---|---|
+| A: bus in the mid layer | **Pass.** It passes behind the Westminster sign and the P sign, and covers no sign face. |
+| Zoom peak at 390 | **Pass.** The card fills the frame, and the thumb and ripple read clearly. |
+| Panel 1, New York | **Pass.** It reads "$2,424.57", "Example: 3,190.2 work miles this year, at the IRS's rate". The maths matches: 3,190.22 mi × 76¢ = $2,424.57, shown to one decimal as the app does. |
+| B: P sign, animated, 390 and 1280 | **Fix C.** It's grounded, in frame, below the clock face, and fades on time. But the plate is the wrong shape. |
+| B: Reduce Motion still, 390 | **Fix D.** It still uses the old, oversized sign. |
+
+### Fix C: make the plate the width of the P, and centre the post
+
+At 390 the P panel is about 33 CSS px wide, but the one-line "Drive logged" plate is about 85 CSS px, two and a half times wider. The post comes down from the plate's left corner, not from under the P. It reads as a label banner stuck on a sign, which is the clip-art look the founder objects to. Real UK supplementary plates are no wider than the sign above them.
+
+- **Make the plate two lines, "Drive" over "logged",** centred, at **≥9 CSS px cap height** (keep the current 9.5 px). The plate is **the same width as the P panel,** with one continuous white border round both, so it reads as one sign. At 9.5 px cap, "logged" is about 34–36 CSS px wide, so the P panel may grow by 2–3 px to fit. That's fine.
+- **Centre the post under the sign** and run it straight down to the kerb or verge, as now: the left kerb at 390, the right verge at 1280.
+- Everything else stays as built: position, timing, fade, staying in frame and staying below the clock face.
+- I'm overriding my earlier "one line" spec. Two lines is the real sign shape, and it still meets "at most 4 words a line, 2 lines".
+
+### Fix D: the Reduce Motion still uses the same sign
+
+In `london-uk-london-390-still.png` the P panel is still about 40 CSS px, the plate is about 96 CSS px wide, the text is about 11 px cap height, and the post hangs off the plate's left end. The sign sits across the Palace roofline and the far end of the road. The 1280 still is closer, but its plate also overhangs the bus.
+
+- Both stills use **the same sign as the animated scene at rest** (after fix C), in the same place, and at the same size.
+- In the 1280 still, keep the bus fully visible beside the sign, not behind its plate (nudge the bus left or right in the still only).
+
+### Next
+
+Coding makes fixes C and D and sends the four London images again (390 and 1280, animated and still). Marketing signs off on those images only, then QA, then the founder decides on "publish". Nothing else on the page is waiting on marketing.
