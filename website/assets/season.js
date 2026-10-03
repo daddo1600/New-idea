@@ -14,6 +14,8 @@
   var US_ZONES = /^(America\/(New_York|Chicago|Denver|Los_Angeles|Phoenix|Anchorage|Adak|Boise|Detroit|Juneau|Sitka|Metlakatla|Nome|Yakutat|Menominee|Indiana\/.+|Kentucky\/.+|North_Dakota\/.+)|Pacific\/Honolulu|US\/.+)$/;
 
   function country() {
+    var forced = /[?&]country=(UK|GB|US|CA|AU)\b/i.exec(location.search);
+    if (forced) return forced[1].toUpperCase() === 'UK' ? 'GB' : forced[1].toUpperCase();
     var tz = '';
     try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (err) { /* old browser */ }
     if (/^Australia\//.test(tz)) return 'AU';
@@ -405,7 +407,7 @@
     oak: 'M12 22V3.5M12 8l-3-1.5M12 8l3-1.5M12 12l-4-1.5M12 12l4-1.5M12 16l-4 0M12 16l4 0',
     beech: 'M12 22.5V3.5M12 9l-3-2M12 9l3-2M12 13l-3.6-2.2M12 13l3.6-2.2M12 17l-3.4-2M12 17l3.4-2'
   };
-  var AUTUMN = [['#FDE68A', '#F59E0B'], ['#FDBA74', '#EA580C'], ['#FCA5A5', '#DC2626'], ['#FCD34D', '#B45309'], ['#FB923C', '#9A3412'], ['#FEF08A', '#CA8A04'], ['#F87171', '#991B1B']];
+  var AUTUMN = [['#FDE68A', '#F59E0B'], ['#FDBA74', '#EA580C'], ['#F87171', '#B91C1C'], ['#FCD34D', '#B45309'], ['#FB923C', '#9A3412'], ['#FEF08A', '#CA8A04'], ['#F87171', '#991B1B']];
   function leafPiece(i, size) {
     var shape = ['maple', 'oak', 'maple', 'beech'][i % 4];
     return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24"><path d="' + LEAF_SHAPES[shape] + '" fill="url(#fx-al' + (i * 3 % AUTUMN.length) + ')"/>' +
@@ -438,13 +440,13 @@
       litter += '<ellipse cx="' + lx + '" cy="' + ly + '" rx="' + (1.6 + seed(i, 23) * 2.2).toFixed(1) + '" ry="1.1" fill="' + c + '" opacity="' + (0.7 + seed(i, 25) * 0.3).toFixed(2) + '" transform="rotate(' + ((seed(i, 24) - 0.5) * 60).toFixed(0) + ' ' + lx + ' ' + ly + ')"/>';
     }
     var FAR = [['#E7A35A', '#C97A35', '#9C5A2A'], ['#E58A55', '#C4643A', '#93452B'], ['#D9B25A', '#B38A3A', '#86662A'], ['#C9705A', '#A2513F', '#7A3A2E'], ['#9DB05A', '#7C8F3F', '#5C6B2E']];
-    var NEAR = [['#FCD34D', '#F59E0B', '#B45309'], ['#FDBA74', '#F97316', '#C2410C'], ['#FCA5A5', '#EF4444', '#991B1B'], ['#FDE68A', '#EAB308', '#A16207'], ['#FB923C', '#EA580C', '#9A3412']];
+    var NEAR = [['#FCD34D', '#F59E0B', '#B45309'], ['#FDBA74', '#F97316', '#C2410C'], ['#F87171', '#DC2626', '#7F1D1D'], ['#FDE68A', '#EAB308', '#A16207'], ['#FB923C', '#EA580C', '#9A3412']];
     return tints('fx-al', AUTUMN) +
       '<span class="fx-sunglow"></span><span class="fx-sun-disc"></span>' + layer('far', 18, leafPiece) +
       '<svg class="fx-land" viewBox="0 0 ' + W + ' 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><defs>' +
         '<linearGradient id="fx-mist" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FDE7C7" stop-opacity="0"/><stop offset="1" stop-color="#FDE7C7" stop-opacity=".28"/></linearGradient>' +
         '<linearGradient id="fx-ground" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0A5A41"/><stop offset="1" stop-color="#04382A"/></linearGradient></defs>' +
-        '<g opacity=".6"><path d="' + ridgePath(back, W) + '" fill="#2E8A62"/>' + trees(back, -4, 16, 5, [['#E9C08A', '#D9A066', '#B9855A'], ['#E3A684', '#CC8A6A', '#A86E58']], '#6B5A4A', 20, W) + '</g>' +
+        '<g opacity=".6"><path d="' + ridgePath(back, W) + '" fill="#2E8A62"/>' + trees(back, -4, 16, 5, [['#F2C27A', '#E0A25A', '#C0823F'], ['#EDA37A', '#D9844F', '#B4653A']], '#6B5A4A', 20, W) + '</g>' +
         '<rect x="-10" y="44" width="' + (W + 20) + '" height="44" fill="url(#fx-mist)"/>' +
         '<path d="' + ridgePath(far, W) + '" fill="#0E6A4C"/>' + trees(far, -6, 13, 7, FAR, '#3F2A1D', 30, W) +
         '<rect x="-10" y="70" width="' + (W + 20) + '" height="44" fill="url(#fx-mist)"/>' +

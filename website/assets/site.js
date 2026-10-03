@@ -13,7 +13,7 @@
      Only when intro-gate.js has put up its cover (first visit this session). The seed wakes, the road
      grows up as the stem past the road signs, the leaves unfold, and, as in the app, an example month's
      money and miles count up with the drive; then "A year of this is worth …" counts up and lands.
-     In a season (season.js) the sprout dresses up and the backdrop changes. About 2.75 s, then the
+     In a season (season.js) the sprout dresses up and the backdrop changes. About 3.5 s (the year holds ~0.9 s), then the
      sprout flies to the header logo. Tap, click, a key or scrolling ends it. With Reduce Motion it's a
      still: the grown sprout and the final figures, faded away after 2 s. The overlay is aria-hidden;
      the figures are read out once through a polite status line.
@@ -196,7 +196,7 @@
       var drop = !!(season && season.id === 'festive');
 
       var T_DRIVE = 200, DRIVE = 1250, T_LOW = 900, T_UP = 1150, LEAF = 300, T_RING = 1450,
-          T_YEAR = 1300, YEAR = 550, T_MORPH = 2200, MORPH = 500, END = 2750;
+          T_YEAR = 1500, YEAR = 550, T_MORPH = 3000, MORPH = 500, END = 3550; // the year lands at ~2.1 s and holds before the flight
       var inOut = function (x) { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
       var easeOut = function (x) { return 1 - Math.pow(1 - x, 3); };
       var back = function (x, k) { var c3 = k + 1; return 1 + c3 * Math.pow(x - 1, 3) + k * Math.pow(x - 1, 2); };
