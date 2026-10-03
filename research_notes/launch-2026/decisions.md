@@ -25,3 +25,4 @@ The founder signs these off; the team builds from them. The newest decision wins
 - **Copy:** `pro-value-plan.md`. **Partner pitch:** "Give MileSprout Pro drivers a second visit a week, in your quiet hours, from a pool you set. You pay only when a code is used at your till."
 - This **replaces** "same perks for Free and Pro" in `perks-simulation.md`, and "perks unlock nothing" in `rewards-partners.md`.
 - It needs the redemption server (Monday) before the plus can be claimed for real.
+- **Apple's code limits (checked 3 Oct 2026):** 1 million codes a quarter, made in batches of up to 25,000. No cap is needed. Codes can only be generated once the app is live, so they're made on launch day. The launch-day plan is in `website-claims-check.md`, under "Offer code limits". **Tick "no auto-renew" when creating the offer**: it can't be changed afterwards.

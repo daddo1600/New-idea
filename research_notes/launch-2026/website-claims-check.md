@@ -183,3 +183,43 @@ Source for the offer-code settings: [Apple, Set up offer codes](https://develope
 - The cost is capped (one code per person, 60-day window, waitlist closes at launch). At the expected list size (hundreds, not tens of thousands), it is a few hundred pounds of deferred revenue. **Worth it.**
 
 **For the founder to sign off (money and a promise to customers):** YES to 3 months free, non-renewing, waitlist closes at launch, testers get 12 months instead.
+
+## Offer code limits (waitlist reward), checked 3 Oct 2026
+
+Sources, all fetched 3 Oct 2026: [Set up offer codes (subscriptions)](https://developer.apple.com/help/app-store-connect/manage-subscriptions/set-up-subscription-offer-codes/) (A), [Create offer codes for In-App Purchases](https://developer.apple.com/help/app-store-connect/manage-in-app-purchases/create-offer-codes-for-in-app-purchases/) (B), [Auto-renewable subscriptions](https://developer.apple.com/app-store/subscriptions/) (C), [Market your subscriptions with offer codes](https://developer.apple.com/news/?id=dopmcbjk) (D, 2020 article, partly out of date).
+
+**Answer: the limits are not a problem at any realistic waitlist size.** The only real constraint is timing: codes can't be generated until the app is live, so they are made on launch day.
+
+| Question | Apple says | Confidence |
+|---|---|---|
+| Per app, per quarter | "Each app can have up to 1 million codes per quarter, shared across all subscriptions" (A). This covers all code types, so the friend custom code's redemption cap (`offer-code-setup.md`, 2,000) counts toward it too. | High |
+| Per offer / per subscription group | No separate limit is stated. The 1M figure is per app, not per group or per offer. | High (that nothing is stated) |
+| Per batch | One-time-use: **minimum 500, maximum 25,000** per batch; "If you need more than 25,000 codes, you can create multiple batches of codes for the same offer" (A, B). Custom codes: up to 25,000 redemptions per batch (A). | High |
+| Active offers | "up to 10 active offers per subscription SKU at a time" (A). The waitlist offer plus the testers' 12-month offer plus the friend offer = 3. | High |
+| Generation time | "It may take up to an hour before codes are redeemable by customers" (A). | High |
+| File format | Download from the Offer Codes tab as a zipped **`.csv`**. "One-time use code URLs are also included in the downloadable text file" (A). | High |
+| Expiry | One-time-use codes last up to **6 months** from creation and expire at **12:00 a.m. PT** on the expiration date (A). | High |
+| Create before live? | **No, plan on generating on launch day.** Redemption needs "Ready for Sale" (A, D). For generating codes, B says "your app must be Ready for Distribution and the associated In-App Purchase must be Approved". App Store Connect now calls the live state "Ready for Distribution", so treat this as "after release", not "Pending Developer Release". The offer itself (step 2 below) can probably be set up earlier, once the subscription is approved; A lists approval as the prerequisite. | Medium on the offer, high on codes |
+| Non-renewing option | Exists. A checkbox in offer setup: "Checking the box will prevent auto-renewal, ensuring customers receive a commitment-free trial subscription. If you choose this option, you'll only be able to choose Free offers" (A). Offers can't be edited after creation, so tick it first time. | High |
+| Redemption link | Copy the example link from the offer details page and add each code to it; the CSV already contains the per-code URLs (A). D gives the form `https://apps.apple.com/redeem?id=<AppAppleID>&code=<code>`. The `ctx=offercodes` form was **not** confirmed in Apple's current pages, so use the URLs exactly as they appear in the CSV and don't build them by hand. | High on "use the CSV" |
+| Out of date | D says "150,000 new codes every quarter per app". It has been replaced by the 1M in A and B. Don't quote 150k. | High |
+
+**Sizing** (25,000 per batch, 1M per quarter):
+- 10k sign-ups: 1 batch.
+- 50k: 2 batches.
+- 150k: 6 batches, still 15% of the quarterly limit.
+- No need for custom codes or splitting across quarters. Don't use a custom code: it would leak (see `offer-code-setup.md`).
+- If the list is under 500, you still have to generate 500 codes. The spares are harmless.
+
+**Setup beforehand (App Store Connect, founder):**
+1. Subscription group with the Pro products, submitted and **approved with an app version**. A first subscription can only be approved together with a build. Use manual release so the founder controls launch day.
+2. As soon as the subscription is approved, create the offer: Subscriptions > group > Pro product > Subscription Prices (+) > **Create Offer Codes**.
+   - Reference name: e.g. "Waitlist 3m free".
+   - Eligibility: **New subscribers**.
+   - Territories: UK, US, Canada, Australia.
+   - **Tick the no-auto-renew box.**
+   - Type: **Free**, 3 months.
+3. Launch day, after release: Offer Codes tab > offer > **Create One-Time Use Codes**, in batches of 25,000 or fewer.
+   - Expiry: the email's redeem-by date (60 days) **plus 1 day**, because codes die at midnight PT.
+   - Download the CSV(s), wait about an hour, then test one code on a real device before the mail-out.
+4. Email: one row per waitlist address, joined on the CSV's code and URL. Mark each code as used in our own list so none is sent twice. Send in tranches within the 3-day window.
