@@ -171,3 +171,15 @@ Every visible string goes into all 10 languages if the website is localised late
 Next after these: languages pills that say the slogan, comparison ticks plus hiding the floating pill, sign-up terms in `<details>` plus the sprout success.
 
 Re-review needed after the coding agent builds these: send screenshots at 390×844 and 1440×900, light and dark, plus one with Reduce Motion on.
+
+---
+
+## Addendum: interim release `82e41de` (calculator flags + live fixes), 3 October 2026
+
+**Brand sign-off: yes, as an interim release.** Checked at 390×844 and 1440×900, locale en-GB (`website/docs/brand-interim-*.png`).
+
+- Flags and calculator fit the brand: the gold ring and glow on the selected flag, the gold slider and the rolling gold amount are on brand and calm. 2×2 on phones fixes the orphaned Australia chip. The page opens at the top, and there is no sideways overflow (scrollWidth = viewport at both sizes).
+- Nothing gets worse for the brand. Removing Pause/Replay cleans up the hero on phones.
+- Follow-up for the next release (accessibility, not brand): with no Pause, the looping hero (9.6s, infinite) relies on Reduce Motion alone. WCAG 2.2.2 expects a way to pause motion that lasts more than 5 seconds. Add a 32px icon-only pause/play button in the scene's corner (`aria-label` "Pause the animation"), or stop the loop after 3 plays. QA to rule on it.
+- Stale deck screenshots ("Tracking on", "Automatic tracking", "our servers") are already live and this release doesn't add to them, so they don't block it. They're a must-fix in the next release.
+- Nit: the selected chip's label sits about 2px higher than the others (the pop transform); align it in the next pass.
