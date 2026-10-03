@@ -7,7 +7,7 @@ MileSprout is a free iPhone app that logs work drives by itself and values them 
   - Pushing branch `claude/ios-app-ideas-market-of84qv` publishes it live.
   - Branch `website-preview` is the preview: website-preview.milesprout.pages.dev.
   - Waitlist sign-ups go through `functions/api/waitlist.js` into D1.
-- Notes and decisions: `research_notes/launch-2026/`. Start with `monday-todo.md`.
+- Notes and decisions: `research_notes/launch-2026/`. Signed-off decisions are in `decisions.md` (build from these); the to-do list is `monday-todo.md`.
 
 ## You are the manager
 

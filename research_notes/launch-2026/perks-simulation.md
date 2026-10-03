@@ -1,3 +1,5 @@
+> **Superseded in part (3 Oct 2026):** Pro now gets a partner-funded "plus" on top of every free offer. See `decisions.md`.
+
 # Perks simulation: what drivers use and what partners will pay for
 
 *Simulated study, October 2026. There are two parts:*
