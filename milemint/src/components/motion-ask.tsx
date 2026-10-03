@@ -93,21 +93,24 @@ export function MotionStep() {
       <Text style={styles.body}>
         {t('Motion & Fitness lets MileSprout tell a drive from a walk. It stays on your phone.')}
       </Text>
-      <WalkOrDrive />
-      <View style={styles.then}>
-        <View style={styles.thenLine} />
-        {/* The same fairy dust as the coach behind the real question: it's the one thing to tap. */}
-        <View style={styles.tapPill} accessible accessibilityLabel={t('Tap “{{button}}”', { button: t('Allow') })}>
-          <GoldSparkle />
-          {!!unquote(before) && <Text style={styles.tapText}>{unquote(before)}</Text>}
-          <View style={styles.allowChip}>
-            <Text style={styles.allowChipText} numberOfLines={1}>
-              {t('Allow')}
-            </Text>
+      {/* The picture and what to tap, centred in the room left above the buttons. */}
+      <View style={styles.hero}>
+        <WalkOrDrive />
+        <View style={styles.then}>
+          <View style={styles.thenLine} />
+          {/* The same fairy dust as the coach behind the real question: it's the one thing to tap. */}
+          <View style={styles.tapPill} accessible accessibilityLabel={t('Tap “{{button}}”', { button: t('Allow') })}>
+            <GoldSparkle />
+            {!!unquote(before) && <Text style={styles.tapText}>{unquote(before)}</Text>}
+            <View style={styles.allowChip}>
+              <Text style={styles.allowChipText} numberOfLines={1}>
+                {t('Allow')}
+              </Text>
+            </View>
+            {!!unquote(after) && <Text style={styles.tapText}>{unquote(after)}</Text>}
           </View>
-          {!!unquote(after) && <Text style={styles.tapText}>{unquote(after)}</Text>}
+          <View style={styles.thenLine} />
         </View>
-        <View style={styles.thenLine} />
       </View>
     </>
   );
@@ -219,6 +222,7 @@ const styles = StyleSheet.create({
   // Pale gold, 13pt: reads at AA on the top of the brand gradient.
   eyebrow: { color: '#FDE68A', fontSize: 13, fontWeight: '800', letterSpacing: 1.2, marginTop: Spacing.one },
   title: { color: '#FFFFFF', fontSize: 34, lineHeight: 40, fontWeight: '800', letterSpacing: -0.5 },
+  hero: { flexGrow: 1, justifyContent: 'center', gap: Spacing.three },
   then: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three, marginTop: Spacing.two },
   thenLine: { flex: 1, height: StyleSheet.hairlineWidth, backgroundColor: 'rgba(209,250,229,0.4)' },
   tapPill: {

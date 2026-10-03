@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import Animated, {
   cancelAnimation,
   Easing,
@@ -45,7 +45,9 @@ const FINAL = HOLD_UNTIL;
 const PLAYS = 3;
 
 const PAD = 16;
+/** Each lane's height: taller on tall phones, so the scene fills the step (an SE gets the shorter one). */
 const LANE = 105;
+const LANE_TALL = 140;
 const WALKER = 34;
 const LEAF = 40;
 const DASH_COUNT = 12;
@@ -84,6 +86,7 @@ export function WalkOrDrive() {
   const t = useT();
   const reduceMotion = useReducedMotion();
   const [width, setWidth] = useState(0);
+  const lane = useWindowDimensions().height >= 800 ? LANE_TALL : LANE;
   const clock = useSharedValue(FINAL);
 
   useEffect(() => {
@@ -104,14 +107,14 @@ export function WalkOrDrive() {
 
   return (
     <View
-      style={styles.card}
+      style={[styles.card, { height: 2 * lane }]}
       accessible
       accessibilityLabel={t('A walk is marked Not a drive. A drive is logged.')}
       onLayout={(event) => setWidth(event.nativeEvent.layout.width)}>
       {width > 0 && (
         <>
-          <Walk clock={clock} width={width} notADrive={t('Not a drive')} />
-          <Drive clock={clock} width={width} drive={t('Drive ✓')} />
+          <Walk clock={clock} width={width} lane={lane} notADrive={t('Not a drive')} />
+          <Drive clock={clock} width={width} lane={lane} drive={t('Drive ✓')} />
         </>
       )}
     </View>
@@ -119,8 +122,18 @@ export function WalkOrDrive() {
 }
 
 /** The footpath: a walker strolls 60% of the way, bobbing, and is marked "Not a drive". */
-function Walk({ clock, width, notADrive }: { clock: SharedValue<number>; width: number; notADrive: string }) {
-  const path = { y: LANE - 14, from: PAD, to: width - PAD };
+function Walk({
+  clock,
+  width,
+  lane,
+  notADrive,
+}: {
+  clock: SharedValue<number>;
+  width: number;
+  lane: number;
+  notADrive: string;
+}) {
+  const path = { y: lane - 14, from: PAD, to: width - PAD };
   const travel = (width - 2 * PAD - WALKER) * 0.6;
   const walker = useAnimatedStyle(() => {
     const time = clock.value;
@@ -141,7 +154,7 @@ function Walk({ clock, width, notADrive }: { clock: SharedValue<number>; width: 
     };
   });
   return (
-    <View style={[styles.lane, { top: 0 }]}>
+    <View style={[styles.lane, { top: 0, height: lane }]}>
       <Svg style={StyleSheet.absoluteFill}>
         <Line
           x1={path.from}
@@ -157,7 +170,7 @@ function Walk({ clock, width, notADrive }: { clock: SharedValue<number>; width: 
       {/* The emoji faces left; flipped, it walks the way it's going. */}
       <Animated.Text style={[styles.walker, { left: PAD, top: path.y - WALKER - 4 }, walker]}>🚶</Animated.Text>
       {/* Above the end of the path, clear of the walker, with room for longer languages. */}
-      <Animated.View style={[styles.chip, styles.creamChip, { right: PAD, top: 12, maxWidth: width - 2 * PAD }, chip]}>
+      <Animated.View style={[styles.chip, styles.creamChip, { right: PAD, top: path.y - 79, maxWidth: width - 2 * PAD }, chip]}>
         <Text style={styles.chipText} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7}>
           ✕ {notADrive}
         </Text>
@@ -167,8 +180,18 @@ function Walk({ clock, width, notADrive }: { clock: SharedValue<number>; width: 
 }
 
 /** The road: the gold car drives it, dashes appear behind it, and a sprout springs up at the end. */
-function Drive({ clock, width, drive }: { clock: SharedValue<number>; width: number; drive: string }) {
-  const road = { y: LANE - 34, from: PAD, to: width - PAD - LEAF - 4 };
+function Drive({
+  clock,
+  width,
+  lane,
+  drive,
+}: {
+  clock: SharedValue<number>;
+  width: number;
+  lane: number;
+  drive: string;
+}) {
+  const road = { y: lane - 34, from: PAD, to: width - PAD - LEAF - 4 };
   const length = road.to - road.from;
   const car = useAnimatedStyle(() => {
     const time = clock.value;
@@ -196,7 +219,7 @@ function Drive({ clock, width, drive }: { clock: SharedValue<number>; width: num
   });
   const roadStyle = useAnimatedStyle(() => ({ opacity: Math.max(0.35, sceneOpacity(clock.value)) }));
   return (
-    <View style={[styles.lane, { top: LANE }]}>
+    <View style={[styles.lane, { top: lane, height: lane }]}>
       <Animated.View
         style={[styles.road, { left: road.from, top: road.y - ROAD / 2, width: length }, roadStyle]}>
         {Array.from({ length: DASH_COUNT }, (_, i) => (
@@ -232,7 +255,6 @@ function Dash({ index, clock, spacing, length }: { index: number; clock: SharedV
 
 const styles = StyleSheet.create({
   card: {
-    height: 2 * LANE,
     alignSelf: 'stretch',
     backgroundColor: 'rgba(255,255,255,0.10)',
     borderColor: 'rgba(255,255,255,0.18)',
@@ -240,7 +262,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     overflow: 'hidden',
   },
-  lane: { position: 'absolute', left: 0, right: 0, height: LANE },
+  lane: { position: 'absolute', left: 0, right: 0 },
   walker: { position: 'absolute', fontSize: WALKER, lineHeight: WALKER + 6, width: WALKER + 6, textAlign: 'center' },
   chip: {
     position: 'absolute',

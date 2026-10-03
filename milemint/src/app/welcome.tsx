@@ -650,10 +650,17 @@ export default function WelcomeScreen() {
     const amount = formatRate(rate, picked);
     return picked.unit === 'mi' ? t('{{rate}} a mile', { rate: amount }) : t('{{rate}} a km', { rate: amount });
   })();
-  const workTile = WORK_STYLE_TEXT[shifts ? 'shifts' : hoursSet ? 'hours' : 'neither'];
+  const workStyleDone: WorkStyle = shifts ? 'shifts' : hoursSet ? 'hours' : 'neither';
+  const workTile = WORK_STYLE_TEXT[workStyleDone];
   const tiles: SetupTile[] = [
     { key: 'rate', icon: picked.flag, label: rateTile, ok: true },
-    { key: 'work', icon: workTile.emoji, label: t(workTile.title), ok: true },
+    // "Neither" means nothing out of its question: its own line says it.
+    {
+      key: 'work',
+      icon: workTile.emoji,
+      label: t(workStyleDone === 'neither' ? workTile.detail : workTile.title),
+      ok: true,
+    },
   ];
   if (status === 'on') tiles.push({ key: 'logging', icon: '📍', label: t('Drive logging’s set up'), ok: true });
   else if (status === 'needs-always') {
@@ -696,7 +703,8 @@ export default function WelcomeScreen() {
       onPress={once(onPress)}
       style={[
         styles.primary,
-        glint && styles.primaryPill,
+        // A pill from the first frame on the last two steps: only the sparkle arrives later.
+        (glint || step === REMINDERS || step === DONE) && styles.primaryPill,
         { backgroundColor: onBrand ? '#FFFFFF' : theme.accent, opacity: busy ? 0.6 : enabled ? 1 : 0.35 },
       ]}>
       {/* The one thing left to tap: gold fairy dust round the pill (a still gold edge with Reduce Motion). */}

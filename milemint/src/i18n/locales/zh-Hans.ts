@@ -1507,7 +1507,7 @@ const dictionary: Dictionary = {
   "What happens next": "接下来",
   "A walk is marked Not a drive. A drive is logged.": "步行会标记为“不是行程”。开车会被记录。",
   "Drive ✓": "行程 ✓",
-  "Until {{time}}": "到 {{time}}",
+  "Until {{time}}": "至 {{time}}",
   "Outside work hours": "工作时间之外",
   "Drives are saved when you park.": "停车后行程会自动保存。",
 };

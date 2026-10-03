@@ -118,7 +118,7 @@ export function SetupTiles({ tiles, start }: { tiles: SetupTile[]; start: boolea
         const body = (
           <>
             <Text style={styles.tileIcon}>{tile.icon}</Text>
-            <Text style={styles.tileLabel} numberOfLines={2}>
+            <Text style={styles.tileLabel} numberOfLines={3}>
               {tile.label}
             </Text>
             <Animated.View
@@ -182,11 +182,13 @@ export function NextTimeline({ start, tiles }: { start: boolean; tiles: number }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [start, reduceMotion]);
 
+  /** From the first stop's centre to the last's. */
   const span = (width * (NODES.length - 1)) / NODES.length;
-  const roadStyle = useAnimatedStyle(() => ({ width: span * road.value }));
+  // Shares of a fixed track, so the animated styles never depend on the measured width.
+  const roadStyle = useAnimatedStyle(() => ({ width: `${100 * road.value}%` }));
   const carStyle = useAnimatedStyle(() => ({
     opacity: car.value > 0 && car.value < 1 ? 1 : 0,
-    transform: [{ translateX: span * car.value - CAR / 2 }],
+    left: `${100 * car.value}%`,
   }));
 
   return (
@@ -197,18 +199,16 @@ export function NextTimeline({ start, tiles }: { start: boolean; tiles: number }
       <Text style={styles.heading}>{t('What happens next').toLocaleUpperCase()}</Text>
       <View onLayout={(event) => setWidth(event.nativeEvent.layout.width)}>
         {width > 0 && (
-          <>
-            <Animated.View style={[styles.road, { left: width / NODES.length / 2 }, roadStyle]}>
+          <View style={[styles.track, { left: width / NODES.length / 2, width: span }]}>
+            <Animated.View style={[styles.road, roadStyle]}>
               <View style={[styles.lane, { width: span }]}>
                 {Array.from({ length: Math.max(1, Math.floor(span / 18)) }, (_, i) => (
                   <View key={i} style={styles.dash} />
                 ))}
               </View>
             </Animated.View>
-            {!reduceMotion && (
-              <Animated.View style={[styles.car, { left: width / NODES.length / 2 }, carStyle]} />
-            )}
-          </>
+            {!reduceMotion && <Animated.View style={[styles.car, carStyle]} />}
+          </View>
         )}
         <View style={styles.nodes}>
           {NODES.map((node, i) => (
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     gap: Spacing.two,
     paddingVertical: Spacing.two,
     paddingLeft: Spacing.three,
-    paddingRight: Spacing.four + 4,
+    paddingRight: Spacing.three + 4,
     borderRadius: 16,
     backgroundColor: 'rgba(255,255,255,0.12)',
     borderColor: 'rgba(255,255,255,0.18)',
@@ -294,8 +294,8 @@ const styles = StyleSheet.create({
   tileLabel: { flex: 1, color: '#FFFFFF', fontSize: 15, lineHeight: 19, fontWeight: '700' },
   badge: {
     position: 'absolute',
-    top: 6,
-    right: 6,
+    top: -6,
+    right: 8,
     width: 20,
     height: 20,
     borderRadius: 10,
@@ -307,12 +307,17 @@ const styles = StyleSheet.create({
   badgeText: { color: '#064E3B', fontSize: 12, lineHeight: 14, fontWeight: '900' },
   timeline: { gap: Spacing.two },
   heading: { color: '#FDE68A', fontSize: 13, fontWeight: '800', letterSpacing: 1.2 },
+  track: { position: 'absolute', top: 0, height: NODE },
   road: {
     position: 'absolute',
+    left: 0,
     top: NODE / 2 - 6,
     height: 12,
     borderRadius: 6,
-    backgroundColor: '#064E3B',
+    // Darker than the gradient's own bottom-right, with a light edge, so it reads to the last stop.
+    backgroundColor: '#022C22',
+    borderColor: 'rgba(255,255,255,0.22)',
+    borderWidth: StyleSheet.hairlineWidth,
     overflow: 'hidden',
   },
   lane: { height: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' },
@@ -320,6 +325,7 @@ const styles = StyleSheet.create({
   car: {
     position: 'absolute',
     top: NODE / 2 - CAR / 2,
+    marginLeft: -CAR / 2,
     width: CAR,
     height: CAR,
     borderRadius: CAR / 2,

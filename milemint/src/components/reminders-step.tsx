@@ -19,6 +19,8 @@ import { useLanguage, useT } from '@/i18n/i18n';
 
 /** The second banner stacks in behind the first after this long. */
 const SECOND_AFTER_MS = 1800;
+/** How far the second banner shows below the first: enough for its title line. */
+const PEEK = 30;
 
 /**
  * Set-up's reminders step, before iOS asks about notifications: what
@@ -99,8 +101,8 @@ function NotificationStack({ region }: { region: Region }) {
     transform: [{ translateY: -40 * (1 - first.value) }],
   }));
   const secondStyle = useAnimatedStyle(() => ({
-    opacity: 0.6 * second.value,
-    transform: [{ translateY: 18 * second.value }, { scale: 0.92 }],
+    opacity: 0.85 * second.value,
+    transform: [{ translateY: PEEK * second.value }, { scale: 0.92 }],
   }));
 
   const header = (
@@ -120,9 +122,9 @@ function NotificationStack({ region }: { region: Region }) {
       accessible
       accessibilityLabel={t('Example notification: Your drives are waiting. Sort them before Monday.')}>
       <View style={styles.stack}>
+        {/* Only its last line shows below the first: the real countdown, not a blank strip. */}
         <Animated.View style={[styles.banner, styles.behind, secondStyle]}>
-          {header}
-          <Text style={styles.bannerTitle} numberOfLines={1}>
+          <Text style={[styles.bannerTitle, styles.behindTitle]} numberOfLines={1}>
             {countdown}
           </Text>
         </Animated.View>
@@ -150,7 +152,7 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 20,
     padding: Spacing.three,
-    paddingBottom: Spacing.three + 12,
+    paddingBottom: Spacing.three + PEEK - 4,
     overflow: 'hidden',
   },
   stack: { minHeight: 96 },
@@ -162,7 +164,8 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     gap: 2,
   },
-  behind: { position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 },
+  behind: { position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, justifyContent: 'flex-end' },
+  behindTitle: { color: '#3A3A3C' },
   bannerHeader: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, marginBottom: 4 },
   appIcon: {
     width: 28,
