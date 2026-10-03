@@ -422,3 +422,12 @@ Checked against `regions.ts`, `site.js` (`RATES`, `yearWorth()`), `website-claim
 If this doesn't ship in the build testers get, drop the badge line here and on `testers.html` ("You get" list) and in `founding-testers.md` (lines 22 and 50).
 
 **Found in passing (not in this spec):** `index.html:7` ("mileage tracking") and `testers.html:7` ("mileage tracker") meta descriptions break the "never tracking" rule. They're for coding to fix on `website-preview`.
+
+## Languages for launch (founder, 3 Oct)
+The founder decided the tour ships in **English plus 2 languages** for now, not all 10. The manager picked:
+- **Spanish (es):** the largest non-English group among US drivers.
+- **Polish (pl):** the UK's most common main language after English (2021 census).
+
+Both have standard iPhone voices. The other 8 can follow later.
+- Language chips show only en, es and pl.
+- Any other browser language falls back to English.
