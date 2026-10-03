@@ -1649,6 +1649,7 @@ const dictionary: Dictionary = {
   "Until {{time}}": "Até {{time}}",
   "Outside work hours": "Fora do horário de trabalho",
   "Drives are saved when you park.": "Os trajetos são salvos quando você estaciona.",
+  "Needs attention": "Precisa de atenção",
 };
 
 export default dictionary;

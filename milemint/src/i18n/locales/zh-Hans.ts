@@ -1510,6 +1510,7 @@ const dictionary: Dictionary = {
   "Until {{time}}": "至 {{time}}",
   "Outside work hours": "工作时间之外",
   "Drives are saved when you park.": "停车后行程会自动保存。",
+  "Needs attention": "需要处理",
 };
 
 export default dictionary;

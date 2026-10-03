@@ -651,6 +651,8 @@ export default function WelcomeScreen() {
     const amount = formatRate(rate, picked);
     return picked.unit === 'mi' ? t('{{rate}} a mile', { rate: amount }) : t('{{rate}} a km', { rate: amount });
   })();
+  /** A logging tile with a "!": straight to turning it on (the status is checked again on coming back). */
+  const fixLocation = () => router.push('/setup-tracking' as Href);
   const workStyleDone: WorkStyle = shifts ? 'shifts' : hoursSet ? 'hours' : 'neither';
   const workTile = WORK_STYLE_TEXT[workStyleDone];
   const tiles: SetupTile[] = [
@@ -665,9 +667,9 @@ export default function WelcomeScreen() {
   ];
   if (status === 'on') tiles.push({ key: 'logging', icon: '📍', label: t('Drive logging’s set up'), ok: true });
   else if (status === 'needs-always') {
-    tiles.push({ key: 'logging', icon: '📍', label: t('Set location to “Always”'), ok: false });
+    tiles.push({ key: 'logging', icon: '📍', label: t('Set location to “Always”'), ok: false, onPress: fixLocation });
   } else if (status === 'needs-permission') {
-    tiles.push({ key: 'logging', icon: '📍', label: t('Location is off for now.'), ok: false });
+    tiles.push({ key: 'logging', icon: '📍', label: t('Location is off for now.'), ok: false, onPress: fixLocation });
   }
   if (iCloud === true) tiles.push({ key: 'backup', icon: '☁️', label: t('Backups on'), ok: true });
   if (iCloud === false) {

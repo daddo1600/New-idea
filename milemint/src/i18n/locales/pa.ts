@@ -1566,6 +1566,7 @@ const dictionary: Dictionary = {
   "Until {{time}}": "{{time}} ਤੱਕ",
   "Outside work hours": "ਕੰਮ ਦੇ ਘੰਟਿਆਂ ਤੋਂ ਬਾਹਰ",
   "Drives are saved when you park.": "ਪਾਰਕ ਕਰਦੇ ਹੀ ਡਰਾਈਵਾਂ ਸੇਵ ਹੁੰਦੀਆਂ ਹਨ।",
+  "Needs attention": "ਧਿਆਨ ਦੇਣ ਦੀ ਲੋੜ ਹੈ",
 };
 
 export default dictionary;

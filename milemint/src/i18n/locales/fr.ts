@@ -1650,6 +1650,7 @@ const dictionary: Dictionary = {
   "Until {{time}}": "Jusqu’à {{time}}",
   "Outside work hours": "Hors horaires de travail",
   "Drives are saved when you park.": "Les trajets sont enregistrés quand vous vous garez.",
+  "Needs attention": "À régler",
 };
 
 export default dictionary;

@@ -1542,6 +1542,7 @@ const dictionary: Dictionary = {
   "Until {{time}}": "{{time}} तक",
   "Outside work hours": "काम के घंटों के बाहर",
   "Drives are saved when you park.": "पार्क करते ही ड्राइव्स सेव होती हैं।",
+  "Needs attention": "ध्यान देना ज़रूरी है",
 };
 
 export default dictionary;

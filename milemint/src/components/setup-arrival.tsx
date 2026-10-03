@@ -97,6 +97,7 @@ export type SetupTile = {
 
 /** What's set up, as glass tiles in two columns that pop in one by one (the last spans both if odd). */
 export function SetupTiles({ tiles, start }: { tiles: SetupTile[]; start: boolean }) {
+  const t = useT();
   const reduceMotion = useReducedMotion();
   useEffect(() => {
     if (!start || reduceMotion || Platform.OS === 'web' || tiles.length === 0) return;
@@ -115,6 +116,8 @@ export function SetupTiles({ tiles, start }: { tiles: SetupTile[]; start: boolea
       {tiles.map((tile, i) => {
         const wide = tiles.length % 2 === 1 && i === tiles.length - 1;
         const delay = TILES_FROM + i * TILE_STAGGER;
+        // The gold "!" isn't read out: the label says so instead.
+        const label = tile.ok ? tile.label : `${tile.label}${/[.。।]$/.test(tile.label) ? ' ' : '. '}${t('Needs attention')}`;
         const body = (
           <>
             <Text style={styles.tileIcon}>{tile.icon}</Text>
@@ -135,11 +138,15 @@ export function SetupTiles({ tiles, start }: { tiles: SetupTile[]; start: boolea
             {start && (
               <Animated.View entering={reduceMotion ? undefined : ZoomIn.springify().damping(14).delay(delay)}>
                 {tile.onPress ? (
-                  <Pressable accessibilityRole="button" onPress={tile.onPress} style={styles.tile}>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={label}
+                    onPress={tile.onPress}
+                    style={styles.tile}>
                     {body}
                   </Pressable>
                 ) : (
-                  <View accessible style={styles.tile}>
+                  <View accessible accessibilityLabel={label} style={styles.tile}>
                     {body}
                   </View>
                 )}

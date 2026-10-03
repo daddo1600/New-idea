@@ -1650,6 +1650,7 @@ const dictionary: Dictionary = {
   "Until {{time}}": "Până la {{time}}",
   "Outside work hours": "În afara programului",
   "Drives are saved when you park.": "Cursele se salvează când parchezi.",
+  "Needs attention": "Necesită atenție",
 };
 
 export default dictionary;
