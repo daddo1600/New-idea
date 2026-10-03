@@ -5,7 +5,10 @@ import { useCallback, useState } from 'react';
 import { loadSettings, type AppSettings } from '@/db/settings-repo';
 import { usualPurpose } from '@/domain/auto-classify';
 
-type PurposeSettings = Pick<AppSettings, 'defaultPurpose' | 'workPurposes' | 'shiftMode' | 'clientPrivacy'>;
+type PurposeSettings = Pick<
+  AppSettings,
+  'defaultPurpose' | 'workPurposes' | 'shiftMode' | 'clientPrivacy' | 'workHoursEnabled' | 'workWeek'
+>;
 
 /**
  * What the trip list needs to offer business purposes: the usual purpose
@@ -34,5 +37,7 @@ export function usePurposeSettings() {
     chosen: stored?.workPurposes ?? [],
     shiftMode: stored?.shiftMode ?? false,
     clientPrivacy: stored?.clientPrivacy ?? false,
+    /** Work hours, when switched on: for Home's live status and the week's work days. */
+    workWeek: stored?.workHoursEnabled ? stored.workWeek : null,
   };
 }

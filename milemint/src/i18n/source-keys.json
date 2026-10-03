@@ -524,6 +524,12 @@
     ]
   },
   {
+    "key": "{{money}} · {{distance}}",
+    "files": [
+      "components/home/week-strip.tsx"
+    ]
+  },
+  {
     "key": "{{option}} selected. Double-tap Change to pick another",
     "files": [
       "app/welcome.tsx"
@@ -5083,6 +5089,12 @@
     ]
   },
   {
+    "key": "Outside work hours. Drives are logged when you park.",
+    "files": [
+      "components/home/tracking-card.tsx"
+    ]
+  },
+  {
     "key": "Over {{limit}}: claim on a Self Assessment return by {{date}}.",
     "files": [
       "app/claim-relief.tsx"
@@ -7107,6 +7119,7 @@
     "key": "This week",
     "files": [
       "app/scan-earnings.tsx",
+      "components/home/week-strip.tsx",
       "components/money/earnings-sheet.tsx",
       "components/money/set-aside-card.tsx",
       "domain/missed-miles.ts",
@@ -7123,6 +7136,18 @@
     "key": "This week so far: {{distance}} for work over {{count}} drives.",
     "files": [
       "domain/recap.ts"
+    ]
+  },
+  {
+    "key": "This week: {{total}} of work driving.",
+    "files": [
+      "components/home/week-strip.tsx"
+    ]
+  },
+  {
+    "key": "This week: no work drives yet.",
+    "files": [
+      "components/home/week-strip.tsx"
     ]
   },
   {
@@ -7470,6 +7495,12 @@
     "key": "Unlocked",
     "files": [
       "components/invite.tsx"
+    ]
+  },
+  {
+    "key": "Until {{time}}. Drives now count as work.",
+    "files": [
+      "components/home/tracking-card.tsx"
     ]
   },
   {
@@ -7826,7 +7857,8 @@
   {
     "key": "Work hours",
     "files": [
-      "app/(tabs)/settings.tsx"
+      "app/(tabs)/settings.tsx",
+      "components/home/tracking-card.tsx"
     ]
   },
   {
@@ -8377,6 +8409,12 @@
     "key": "Your week",
     "files": [
       "components/money/weekly-recap.tsx"
+    ]
+  },
+  {
+    "key": "Your week starts here. Each work drive fills in its day.",
+    "files": [
+      "components/home/week-strip.tsx"
     ]
   }
 ]

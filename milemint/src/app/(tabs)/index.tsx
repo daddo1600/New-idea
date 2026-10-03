@@ -20,6 +20,7 @@ import { PurposeNudge } from '@/components/home/purpose-nudge';
 import { ShiftBar } from '@/components/home/shift-bar';
 import { ReliefNudge, SummaryCard } from '@/components/home/summary-card';
 import { TrackingCard } from '@/components/home/tracking-card';
+import { WeekStrip } from '@/components/home/week-strip';
 import { AddTripLink } from '@/components/trips/add-trip-links';
 import { BulkActions, FillingBar, SelectBar } from '@/components/trips/list-bars';
 import { SelectableTripRow } from '@/components/trips/selectable-trip-row';
@@ -36,7 +37,8 @@ import { offShiftKind } from '@/domain/shift-rows';
 import { backdateStart } from '@/domain/shift-split';
 import { frequentPurposes, purposesByPlace } from '@/domain/suggestions';
 import { formatDistance, formatMoney, potentialDeductions, taxYearOf } from '@/domain/regions';
-import { type Trip, VEHICLE_ICONS } from '@/domain/trip';
+import { toLocalIsoDate, type Trip, VEHICLE_ICONS } from '@/domain/trip';
+import { buildWeek } from '@/domain/week-strip';
 import { usePlaceAsk } from '@/hooks/use-place-ask';
 import { usePurposeSettings } from '@/hooks/use-purpose-settings';
 import { useTheme } from '@/hooks/use-theme';
@@ -149,6 +151,10 @@ export default function HomeScreen() {
   }, [trips, onboarded, launchTotal, summary.businessMeters]);
 
   const placeAsk = usePlaceAsk(trips, places, now, reload);
+  const week = useMemo(
+    () => buildWeek(allTrips, deductions, toLocalIsoDate(new Date(now)), purposeSettings.workWeek),
+    [allTrips, deductions, now, purposeSettings.workWeek],
+  );
 
   if (!trips) return <ActivityIndicator style={styles.loading} />;
 
@@ -296,7 +302,15 @@ export default function HomeScreen() {
             <TrackingHealthCard state={trackingHealth} />
             {/* Backups that aren't working: a lost iPhone would take the trips with it. */}
             {backupWarning && <BackupCard warning={backupWarning} />}
-            <TrackingCard status={status} working={!trackingProblem} />
+            <TrackingCard
+              status={status}
+              working={!trackingProblem}
+              workWeek={purposeSettings.workWeek}
+              now={now}
+              region={region}
+            />
+            {/* The week so far, a column a day: fills itself in as drives are logged. */}
+            <WeekStrip week={week} region={region} />
             {/* Home and work, asked once the drives show where they are (not at set-up). */}
             {placeAsk.ask && !selecting && filling === null && (
               <PlaceAskCard
