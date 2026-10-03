@@ -5,6 +5,7 @@ Server code for milesprout.app. Cloudflare Pages runs every `.js` file in this f
 | File | Route | What it does |
 |---|---|---|
 | `api/waitlist.js` | `POST /api/waitlist` | Adds an email to the pre-launch waitlist in a D1 database bound as `DB` |
+| `api/scene.js` | `GET /api/scene?tz=<zone>` | Returns only `{"scene":"<key>"}` for the home page's hero scenery, from Cloudflare's rough location (`request.cf`) checked against the browser time zone; `standard` for the EU, mismatches, UTC and unknowns. `no-store`, nothing logged or kept. Tests: `node --test tests/scene-function.test.mjs` |
 
 Functions only run when the site is deployed with **Cloudflare Pages** (Git integration, or `npx wrangler pages deploy website`). The Workers static-assets flow in `wrangler.jsonc` serves `website/` only and does not run them.
 

@@ -146,7 +146,26 @@ section.hero { padding: 0; }
 .rd-line, .rd-post { fill: #FBF7EE; }
 .rd-dash { fill: var(--gold); }
 .rd-crown { fill: #0F6B45; }
+.rd-crown-d { fill: #0A5638; }
+.rd-crown-l { fill: #2A8A5E; }
 .rd-trunk { fill: #0A3D2C; }
+.rd-post-band { fill: #14261F; }
+.rd-dash-w { fill: #FBF7EE; }
+.rd-yellow { fill: var(--gold); }
+/* London's roadside: plane trees, dolphin-style lamps, bollards */
+.lt-trunk { fill: #5E7F6C; }
+.lt-bark { fill: #8DAA97; }
+.lt-mottle { fill: #3E9A6E; }
+.lt-iron { fill: #13221C; }
+.lt-band { fill: var(--gold); }
+.lt-globe { fill: #FBF7EE; }
+/* Scenes: cream clouds; a 300 ms cross-fade when the scene changes; glints shimmer on water */
+.sc-clouds { fill: #FBF7EE; }
+.sc-world { transition: opacity .15s ease; }
+.sc-world.is-swapping { opacity: 0; }
+.sc-glints { animation: sc-glint 3s ease-in-out infinite alternate; }
+@keyframes sc-glint { from { opacity: .35; } to { opacity: .95; } }
+@media (prefers-reduced-motion: reduce) { .sc-world { transition: none; } .sc-glints { animation: none; } }
 .rd-sun { fill: var(--gold); opacity: .85; }
 .rd-pillar, .rd-board { fill: #06261C; }
 .rd-trim { stroke: var(--gold); stroke-width: 2.2; opacity: .9; }
@@ -970,3 +989,21 @@ html.ms-intro::after {
 .offer-terms-link { font-size: .85rem; font-weight: 600; }
 .signup .offer-terms-link { color: #FFFFFF; }
 #offer-terms { scroll-margin-top: 24px; }
+
+/* Scenery chips (desktop only, under the scene): the visitor can always pick the standard scene */
+.scene-pick { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 10px 0 0; }
+.scene-pick[hidden] { display: none; }
+@media (max-width: 899px) { .scene-pick { display: none !important; } }
+.scene-pick-label { color: #D1FAE5; font-size: .85rem; font-weight: 700; }
+.scene-chips { display: flex; gap: 6px; }
+.scene-chip { position: relative; display: inline-flex; }
+.scene-chip input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.scene-chip > span {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 4px 12px 4px 8px; border-radius: 999px; pointer-events: none;
+  border: 1.5px solid rgba(255, 255, 255, .35); background: rgba(255, 255, 255, .1); color: #FFFFFF; font-weight: 700; font-size: .85rem;
+  transition: transform .2s ease, border-color .2s ease, background-color .2s ease;
+}
+.scene-chip .flag { width: 20px; height: 14px; border-radius: 3px; }
+.scene-chip input:checked + span { border-color: var(--gold); background: rgba(250, 204, 21, .16); transform: translateY(-1px); }
+.scene-chip input:focus-visible + span { outline: 3px solid #FFFFFF; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .scene-chip > span { transition: none; } }
