@@ -24,7 +24,7 @@ const ID_PREFIX = 'milemint-health-';
 
 const ALERTS: Partial<Record<HealthIssue, { title: string; body: string; url: string }>> = {
   'needs-permission': {
-    title: msg('Automatic tracking is off'),
+    title: msg('Automatic logging is off'),
     body: msg('Location access for MileSprout is off, so drives aren’t being logged. Tap to turn it back on.'),
     url: '/setup-tracking',
   },
@@ -39,8 +39,8 @@ const ALERTS: Partial<Record<HealthIssue, { title: string; body: string; url: st
     url: '/',
   },
   'tracking-stopped': {
-    title: msg('Tracking has stopped'),
-    body: msg('New drives aren’t being logged. Tap to turn tracking back on.'),
+    title: msg('Logging has stopped'),
+    body: msg('New drives aren’t being saved. Tap to turn automatic logging back on.'),
     url: '/',
   },
 };
@@ -107,7 +107,7 @@ export async function armDriveWatchdog(record: TrackerRecord, now: number): Prom
   await schedule(
     'stale',
     {
-      title: t('Tracking may have stopped'),
+      title: t('Logging may have stopped'),
       body: t('No location since {{time}}, in the middle of a drive. Open MileSprout to pick it back up.', { time }),
       data: { url: '/' },
     },

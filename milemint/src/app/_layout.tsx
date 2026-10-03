@@ -82,7 +82,7 @@ export default function RootLayout() {
                     <Stack.Screen name="add-trip" options={{ title: t('Add missed trip'), presentation: 'modal' }} />
                     <Stack.Screen
                       name="setup-tracking"
-                      options={{ title: t('Automatic tracking'), presentation: 'modal' }}
+                      options={{ title: t('Automatic logging'), presentation: 'modal' }}
                     />
                     <Stack.Screen name="trip/[id]" options={{ title: t('Trip') }} />
                     <Stack.Screen name="report" options={{ title: t('Reports') }} />

@@ -16,7 +16,7 @@ import { useTracking } from '@/tracking/use-tracking';
 const POINTS = [
   [msg('Automatic'), msg('Every drive is logged the moment you park. No buttons to press.')],
   [msg('Uses little battery'), msg('GPS only runs while you drive. Parked, MileSprout sleeps.')],
-  [msg('Private'), msg('Your trips are stored encrypted on your phone, not on our servers.')],
+  [msg('Private'), msg('Your trips are stored encrypted on your iPhone and are never sent to MileSprout.')],
 ] as const;
 
 export default function SetupTrackingScreen() {
@@ -135,7 +135,7 @@ export default function SetupTrackingScreen() {
 
         {status === 'unsupported' ? (
           <ThemedText type="small" themeColor="textSecondary">
-            {t('Automatic tracking runs on your iPhone. This preview can’t track drives.')}
+            {t('Automatic logging runs on your iPhone. This preview can’t log drives.')}
           </ThemedText>
         ) : (
           <Pressable
@@ -151,7 +151,7 @@ export default function SetupTrackingScreen() {
             }
             style={[styles.button, { backgroundColor: theme.accent, opacity: busy ? 0.6 : 1 }]}>
             <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-              {needsSettings ? t('Open Settings') : t('Turn on automatic tracking')}
+              {needsSettings ? t('Open Settings') : t('Turn on automatic logging')}
             </ThemedText>
           </Pressable>
         )}

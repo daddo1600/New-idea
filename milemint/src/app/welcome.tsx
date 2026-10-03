@@ -210,7 +210,7 @@ export default function WelcomeScreen() {
     lastStep.current = step;
     if (!kind) return;
     // Says tracking is set up only when it is: skipped (or not on this phone) is still a good start.
-    const tracking = status === 'on' ? t('Tracking’s set up') : t('Good start');
+    const tracking = status === 'on' ? t('Drive logging’s set up') : t('Good start');
     celebrate(
       kind,
       kind === 'thumbs'
@@ -728,7 +728,7 @@ export default function WelcomeScreen() {
               </View>
             ) : (
               <>
-                <Text style={styles.brandEyebrow}>{t('STEP 2 · TRACKING')}</Text>
+                <Text style={styles.brandEyebrow}>{t('STEP 2 · YOUR DRIVES')}</Text>
                 <Text style={styles.brandTitleSmall}>{t('Never miss a drive.')}</Text>
                 <Text style={styles.brandBody}>
                   {t('Set location to “Always” and MileSprout logs every drive, even when it’s closed.')}
@@ -755,7 +755,7 @@ export default function WelcomeScreen() {
                   </View>
                 ) : status === 'unsupported' ? (
                   <Text style={styles.pointBody}>
-                    {t('Automatic tracking runs on your iPhone. You can still add trips by hand here.')}
+                    {t('Automatic logging runs on your iPhone. You can still add trips by hand here.')}
                   </Text>
                 ) : (
                   <>
@@ -770,7 +770,7 @@ export default function WelcomeScreen() {
                       />
                     </View>
                     <Text style={styles.privacy}>
-                      {t('🔒 GPS runs only while you’re driving. Trips stay on your iPhone, never on our servers.')}
+                      {t('🔒 Location is used only while you’re driving. Your trips stay on your iPhone and are never sent to MileSprout.')}
                     </Text>
                   </>
                 )}
@@ -824,7 +824,7 @@ export default function WelcomeScreen() {
                 eyebrow={t('Step 3 · Your work')}
                 title={t('What are most of your work drives for?')}>
                 {t(
-                  'Tax offices want a purpose for every work drive. We’ll fill this in for you, and you can change it on any trip.',
+                  'Tax offices want a purpose for every work drive. MileSprout fills it in for you, and you can change it on any trip.',
                 )}
               </StepHeader>
               <ThemedText type="small" themeColor="textSecondary">
@@ -886,7 +886,7 @@ export default function WelcomeScreen() {
                     : status === 'unsupported'
                       ? t('Add your drives from the Drives tab.')
                       : t(
-                          'Turn on automatic tracking from the home screen whenever you’re ready, or add a drive from the Drives tab.',
+                          'Turn on automatic logging from the home screen whenever you’re ready, or add a drive from the Drives tab.',
                         )}
               </Text>
               {/* Backups are on by themselves: this says so, or how to turn on iCloud Drive. */}
@@ -980,7 +980,7 @@ function ClientPrivacyCheck({ value, onChange }: { value: boolean; onChange: (va
         <View style={styles.flex}>
           <ThemedText type="smallBold">{t('Care worker')}</ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
-            {t('Home visits. We keep the area, never the address.')}
+            {t('Home visits. Only the area is saved, on your phone, never the address.')}
           </ThemedText>
         </View>
         <View

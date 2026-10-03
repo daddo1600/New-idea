@@ -566,13 +566,13 @@
     ]
   },
   {
-    "key": "{{platform}} counted {{counted}} km on jobs · MileSprout tracked {{tracked}} work km",
+    "key": "{{platform}} counted {{counted}} km on jobs · MileSprout logged {{tracked}} work km",
     "files": [
       "components/money/platform-earnings-card.tsx"
     ]
   },
   {
-    "key": "{{platform}} counted {{counted}} mi on jobs · MileSprout tracked {{tracked}} work mi",
+    "key": "{{platform}} counted {{counted}} mi on jobs · MileSprout logged {{tracked}} work mi",
     "files": [
       "components/money/platform-earnings-card.tsx"
     ]
@@ -803,7 +803,7 @@
     ]
   },
   {
-    "key": "🔒 GPS runs only while you’re driving. Trips stay on your iPhone, never on our servers.",
+    "key": "🔒 Location is used only while you’re driving. Your trips stay on your iPhone and are never sent to MileSprout.",
     "files": [
       "app/welcome.tsx"
     ]
@@ -1344,14 +1344,14 @@
     ]
   },
   {
-    "key": "Automatic tracking",
+    "key": "Automatic logging",
     "files": [
       "app/_layout.tsx",
       "components/tracking-health-card.tsx"
     ]
   },
   {
-    "key": "Automatic tracking is off",
+    "key": "Automatic logging is off",
     "files": [
       "components/home/tracking-card.tsx",
       "components/tracking-health-card.tsx",
@@ -1359,38 +1359,38 @@
     ]
   },
   {
-    "key": "Automatic tracking is paused",
+    "key": "Automatic logging is paused",
     "files": [
       "components/home/tracking-card.tsx",
       "components/tracking-health-card.tsx"
     ]
   },
   {
-    "key": "Automatic tracking runs on your iPhone. Add a trip from the Drives tab to try the app here.",
+    "key": "Automatic logging runs on your iPhone. Add a trip from the Drives tab to try the app here.",
     "files": [
       "components/home/tracking-card.tsx"
     ]
   },
   {
-    "key": "Automatic tracking runs on your iPhone. This preview can’t track drives.",
+    "key": "Automatic logging runs on your iPhone. This preview can’t log drives.",
     "files": [
       "app/setup-tracking.tsx"
     ]
   },
   {
-    "key": "Automatic tracking runs on your iPhone. You can still add trips by hand here.",
+    "key": "Automatic logging runs on your iPhone. You can still add trips by hand here.",
     "files": [
       "app/welcome.tsx"
     ]
   },
   {
-    "key": "Automatic tracking stopped running, so new drives aren’t being logged.",
+    "key": "Automatic logging stopped, so new drives aren’t being saved.",
     "files": [
       "components/tracking-health-card.tsx"
     ]
   },
   {
-    "key": "Automatic tracking, no monthly limit",
+    "key": "Automatic logging, no monthly limit",
     "files": [
       "app/pro.tsx"
     ]
@@ -2366,6 +2366,18 @@
     ]
   },
   {
+    "key": "Drive logging",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
+    "key": "Drive logging’s set up",
+    "files": [
+      "app/welcome.tsx"
+    ]
+  },
+  {
     "key": "Drive safely! 🚗",
     "files": [
       "domain/cheers.ts"
@@ -3250,7 +3262,7 @@
     ]
   },
   {
-    "key": "Free: every drive tracked, with no monthly limit, plus your totals and year-end summary. Pro adds the itemised report, the PDF and every export.",
+    "key": "Free: every drive logged, with no monthly limit, plus your totals and year-end summary. Pro adds the itemised report, the PDF and every export.",
     "files": [
       "app/(tabs)/settings.tsx"
     ]
@@ -3472,7 +3484,7 @@
     ]
   },
   {
-    "key": "Home visits. We keep the area, never the address.",
+    "key": "Home visits. Only the area is saved, on your phone, never the address.",
     "files": [
       "app/(tabs)/settings.tsx",
       "app/welcome.tsx"
@@ -3528,13 +3540,13 @@
     ]
   },
   {
-    "key": "I log my work kilometres with MileSprout. It tracks every drive by itself, free, with no account.",
+    "key": "I log my work kilometres with MileSprout. It logs every drive by itself, free, with no account.",
     "files": [
       "referral/links.ts"
     ]
   },
   {
-    "key": "I log my work miles with MileSprout. It tracks every drive by itself, free, with no account.",
+    "key": "I log my work miles with MileSprout. It logs every drive by itself, free, with no account.",
     "files": [
       "referral/links.ts"
     ]
@@ -4030,6 +4042,44 @@
     ]
   },
   {
+    "key": "Logging check",
+    "files": [
+      "components/tracking-health-card.tsx"
+    ]
+  },
+  {
+    "key": "Logging has stopped",
+    "files": [
+      "components/tracking-health-card.tsx",
+      "tracking/health-alerts.ts"
+    ]
+  },
+  {
+    "key": "Logging is always free: every drive, with no monthly limit. Pro is for your report and exports.",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
+    "key": "Logging may have stopped",
+    "files": [
+      "components/tracking-health-card.tsx",
+      "tracking/health-alerts.ts"
+    ]
+  },
+  {
+    "key": "Logging stopped {{from}}–{{to}}",
+    "files": [
+      "components/tracking-health-card.tsx"
+    ]
+  },
+  {
+    "key": "Logging stops by itself when you park.",
+    "files": [
+      "tracking/background.ts"
+    ]
+  },
+  {
     "key": "Make tax time easy 🙌",
     "files": [
       "domain/reminders.ts"
@@ -4245,6 +4295,18 @@
     ]
   },
   {
+    "key": "MileSprout logged {{tracked}} work km",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
+    ]
+  },
+  {
+    "key": "MileSprout logged {{tracked}} work mi",
+    "files": [
+      "components/money/platform-earnings-card.tsx"
+    ]
+  },
+  {
     "key": "MileSprout logs your drives automatically and works out what they’re worth at tax time.",
     "files": [
       "app/welcome.tsx"
@@ -4290,18 +4352,6 @@
     "key": "MileSprout sorts your drives to match. You can always swipe to change a trip.",
     "files": [
       "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "MileSprout tracked {{tracked}} work km",
-    "files": [
-      "components/money/platform-earnings-card.tsx"
-    ]
-  },
-  {
-    "key": "MileSprout tracked {{tracked}} work mi",
-    "files": [
-      "components/money/platform-earnings-card.tsx"
     ]
   },
   {
@@ -4511,7 +4561,7 @@
     ]
   },
   {
-    "key": "New drives aren’t being logged. Tap to turn tracking back on.",
+    "key": "New drives aren’t being saved. Tap to turn automatic logging back on.",
     "files": [
       "tracking/health-alerts.ts"
     ]
@@ -6547,7 +6597,7 @@
     ]
   },
   {
-    "key": "STEP 2 · TRACKING",
+    "key": "STEP 2 · YOUR DRIVES",
     "files": [
       "app/welcome.tsx",
       "components/motion-ask.tsx"
@@ -6743,7 +6793,7 @@
     ]
   },
   {
-    "key": "Tax offices want a purpose for every work drive. We’ll fill this in for you, and you can change it on any trip.",
+    "key": "Tax offices want a purpose for every work drive. MileSprout fills it in for you, and you can change it on any trip.",
     "files": [
       "app/welcome.tsx"
     ]
@@ -6833,6 +6883,12 @@
     "key": "That doesn’t look like a MileSprout code. It’s 4 letters, a dash and 3 more, like TRVB-7K2.",
     "files": [
       "components/redeem-code.tsx"
+    ]
+  },
+  {
+    "key": "That invite code wasn’t found. Check it with your friend.",
+    "files": [
+      "referral/referral.tsx"
     ]
   },
   {
@@ -7258,56 +7314,6 @@
     ]
   },
   {
-    "key": "Tracking",
-    "files": [
-      "app/(tabs)/settings.tsx"
-    ]
-  },
-  {
-    "key": "Tracking check",
-    "files": [
-      "components/tracking-health-card.tsx"
-    ]
-  },
-  {
-    "key": "Tracking has stopped",
-    "files": [
-      "components/tracking-health-card.tsx",
-      "tracking/health-alerts.ts"
-    ]
-  },
-  {
-    "key": "Tracking is always free: every drive, with no monthly limit. Pro is for your report and exports.",
-    "files": [
-      "app/pro.tsx"
-    ]
-  },
-  {
-    "key": "Tracking may have stopped",
-    "files": [
-      "components/tracking-health-card.tsx",
-      "tracking/health-alerts.ts"
-    ]
-  },
-  {
-    "key": "Tracking stopped {{from}}–{{to}}",
-    "files": [
-      "components/tracking-health-card.tsx"
-    ]
-  },
-  {
-    "key": "Tracking stops automatically when you park.",
-    "files": [
-      "tracking/background.ts"
-    ]
-  },
-  {
-    "key": "Tracking’s set up",
-    "files": [
-      "app/welcome.tsx"
-    ]
-  },
-  {
     "key": "Trades, care or office work.",
     "files": [
       "app/welcome.tsx"
@@ -7362,6 +7368,12 @@
     ]
   },
   {
+    "key": "Turn logging back on",
+    "files": [
+      "components/tracking-health-card.tsx"
+    ]
+  },
+  {
     "key": "Turn on",
     "files": [
       "components/home/tracking-card.tsx",
@@ -7375,19 +7387,19 @@
     ]
   },
   {
-    "key": "Turn on automatic tracking",
+    "key": "Turn on automatic logging",
     "files": [
       "app/setup-tracking.tsx"
     ]
   },
   {
-    "key": "Turn on automatic tracking and your drives will appear here.",
+    "key": "Turn on automatic logging and your drives will appear here.",
     "files": [
       "components/home-empty.tsx"
     ]
   },
   {
-    "key": "Turn on automatic tracking from the home screen whenever you’re ready, or add a drive from the Drives tab.",
+    "key": "Turn on automatic logging from the home screen whenever you’re ready, or add a drive from the Drives tab.",
     "files": [
       "app/welcome.tsx"
     ]
@@ -7403,12 +7415,6 @@
     "files": [
       "app/setup-tracking.tsx",
       "app/welcome.tsx"
-    ]
-  },
-  {
-    "key": "Turn tracking back on",
-    "files": [
-      "components/tracking-health-card.tsx"
     ]
   },
   {
@@ -7656,21 +7662,9 @@
     ]
   },
   {
-    "key": "We couldn’t find that invite. Check the code with your friend.",
-    "files": [
-      "referral/referral.tsx"
-    ]
-  },
-  {
     "key": "We read every message",
     "files": [
       "app/(tabs)/settings.tsx"
-    ]
-  },
-  {
-    "key": "We’ll remind you 3 days before it ends.",
-    "files": [
-      "app/pro.tsx"
     ]
   },
   {
@@ -8038,6 +8032,12 @@
     ]
   },
   {
+    "key": "You’ll get a reminder 3 days before it ends.",
+    "files": [
+      "app/pro.tsx"
+    ]
+  },
+  {
     "key": "You’ll need: your employer’s name and PAYE reference (on your payslip or P60), your National Insurance number, and for each tax year your business miles and the mileage allowance you were paid. The P87 summary below has the figures.",
     "files": [
       "app/claim-relief.tsx"
@@ -8394,7 +8394,7 @@
     ]
   },
   {
-    "key": "Your trips are stored encrypted on your phone, not on our servers.",
+    "key": "Your trips are stored encrypted on your iPhone and are never sent to MileSprout.",
     "files": [
       "app/setup-tracking.tsx"
     ]

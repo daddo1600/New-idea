@@ -83,7 +83,7 @@ export function MotionStep() {
       <View style={styles.icon}>
         <StepIcon glyph="motion" size={30} />
       </View>
-      <Text style={styles.eyebrow}>{t('STEP 2 · TRACKING')}</Text>
+      <Text style={styles.eyebrow}>{t('STEP 2 · YOUR DRIVES')}</Text>
       <Text style={styles.title} accessibilityRole="header">
         {t('One more for accuracy: Motion & Fitness')}
       </Text>

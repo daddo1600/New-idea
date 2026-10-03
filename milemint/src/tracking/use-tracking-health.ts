@@ -61,7 +61,7 @@ export function useTrackingHealth() {
   );
   useEffect(() => onTrackingChecked(() => refresh()), [refresh]);
 
-  /** "Turn tracking back on": re-arms from where the phone is now. */
+  /** "Turn logging back on": re-arms from where the phone is now. */
   const restart = useCallback(async () => {
     if (!DEMO_MODE) await startTracking(db);
     trackingChecked();

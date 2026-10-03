@@ -54,8 +54,8 @@ export function inviteText(region: Region, today = new Date()): string {
   const rate = ratePeriodFor(toLocalIsoDate(today), region)?.tiers[0]?.rate;
   const lines = [
     miles
-      ? t('I log my work miles with MileSprout. It tracks every drive by itself, free, with no account.')
-      : t('I log my work kilometres with MileSprout. It tracks every drive by itself, free, with no account.'),
+      ? t('I log my work miles with MileSprout. It logs every drive by itself, free, with no account.')
+      : t('I log my work kilometres with MileSprout. It logs every drive by itself, free, with no account.'),
   ];
   if (rate) {
     const params = { authority: region.authority, rate: formatRate(rate, region) };

@@ -189,7 +189,7 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
   return (
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <GroupTitle title={t('Tracking')} />
+        <GroupTitle title={t('Drive logging')} />
 
         <TrackingCheckRow />
 
@@ -1164,7 +1164,7 @@ function ClientPrivacySection() {
           <View style={styles.flex}>
             <ThemedText type="smallBold">{t('Care worker')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              {t('Home visits. We keep the area, never the address.')}
+              {t('Home visits. Only the area is saved, on your phone, never the address.')}
             </ThemedText>
           </View>
           <Switch
@@ -1485,7 +1485,7 @@ function ProSection() {
           {isPro
             ? t('Pro is active: the itemised report, the PDF and every export.')
             : t(
-                'Free: every drive tracked, with no monthly limit, plus your totals and year-end summary. Pro adds the itemised report, the PDF and every export.',
+                'Free: every drive logged, with no monthly limit, plus your totals and year-end summary. Pro adds the itemised report, the PDF and every export.',
               )}
         </ThemedText>
         {isPro ? (

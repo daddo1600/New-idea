@@ -114,7 +114,7 @@ async function startGps(): Promise<void> {
     showsBackgroundLocationIndicator: true,
     foregroundService: {
       notificationTitle: t('MileSprout is logging this drive'),
-      notificationBody: t('Tracking stops automatically when you park.'),
+      notificationBody: t('Logging stops by itself when you park.'),
     },
   });
 }

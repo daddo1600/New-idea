@@ -39,12 +39,12 @@ const ISSUES: Partial<Record<HealthIssue, { title: string; body: string; fix: Fi
     fix: 'settings',
   },
   'tracking-stopped': {
-    title: msg('Tracking has stopped'),
-    body: msg('Automatic tracking stopped running, so new drives aren’t being logged.'),
+    title: msg('Logging has stopped'),
+    body: msg('Automatic logging stopped, so new drives aren’t being saved.'),
     fix: 'restart',
   },
   stale: {
-    title: msg('Tracking may have stopped'),
+    title: msg('Logging may have stopped'),
     body: msg('No location since {{time}}, in the middle of a drive.'),
     fix: 'restart',
   },
@@ -107,7 +107,7 @@ export function TrackingHealthCard({ state }: { state: ReturnType<typeof useTrac
           onPress={fix}
           style={[styles.button, { backgroundColor: theme.accent, opacity: busy ? 0.6 : 1 }]}>
           <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-            {issue.fix === 'settings' ? t('Open Settings') : t('Turn tracking back on')}
+            {issue.fix === 'settings' ? t('Open Settings') : t('Turn logging back on')}
           </ThemedText>
         </Pressable>
       </ThemedView>
@@ -129,7 +129,7 @@ export function TrackingHealthCard({ state }: { state: ReturnType<typeof useTrac
   return (
     <ThemedView type="backgroundElement" style={[styles.card, { borderColor: WARNING }]}>
       <ThemedText type="smallBold">
-        {gap.reason === 'cut' ? t('Tracking stopped {{from}}–{{to}}', params) : t('A drive may have been missed')}
+        {gap.reason === 'cut' ? t('Logging stopped {{from}}–{{to}}', params) : t('A drive may have been missed')}
       </ThemedText>
       <ThemedText type="small" themeColor="textSecondary">
         {gap.reason === 'cut'
@@ -180,12 +180,12 @@ function addTripParams(gap: TrackingGap, labels: { from: string; to: string }): 
 
 const STATUS: Record<HealthIssue, string> = {
   ok: msg('All good'),
-  off: msg('Automatic tracking is paused'),
-  'needs-permission': msg('Automatic tracking is off'),
+  off: msg('Automatic logging is paused'),
+  'needs-permission': msg('Automatic logging is off'),
   'needs-always': msg('Drives may be missed'),
   'precise-location-off': msg('Precise Location is off'),
-  'tracking-stopped': msg('Tracking has stopped'),
-  stale: msg('Tracking may have stopped'),
+  'tracking-stopped': msg('Logging has stopped'),
+  stale: msg('Logging may have stopped'),
   gap: msg('A drive may have been missed'),
 };
 
@@ -232,7 +232,7 @@ export function TrackingCheckRow() {
       {/* The one switch for automatic logging: off stops it completely, with no warnings. */}
       <ThemedView type="backgroundElement" style={[styles.row, styles.switchRow]}>
         <View style={styles.flex}>
-          <ThemedText type="smallBold">{t('Automatic tracking')}</ThemedText>
+          <ThemedText type="smallBold">{t('Automatic logging')}</ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
             {on
               ? t('Drives are logged by themselves when you drive.')
@@ -240,7 +240,7 @@ export function TrackingCheckRow() {
           </ThemedText>
         </View>
         <Switch
-          accessibilityLabel={t('Automatic tracking')}
+          accessibilityLabel={t('Automatic logging')}
           value={on}
           disabled={busy}
           onValueChange={(value) => {
@@ -251,7 +251,7 @@ export function TrackingCheckRow() {
       </ThemedView>
       {/* The state in the heading, so the group reads at a glance. */}
       <SectionTitle
-        title={t('Tracking check')}
+        title={t('Logging check')}
         value={t(STATUS[health.issue])}
         valueColor={
           good

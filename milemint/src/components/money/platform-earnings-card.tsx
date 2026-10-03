@@ -61,7 +61,7 @@ export function comparisonLine(t: T, entry: PlatformEarning, trackedMeters: numb
   const tracked = whole(trackedMeters);
   const miles = region.unit === 'mi';
   if (entry.distanceMeters === null) {
-    return miles ? t('MileSprout tracked {{tracked}} work mi', { tracked }) : t('MileSprout tracked {{tracked}} work km', { tracked });
+    return miles ? t('MileSprout logged {{tracked}} work mi', { tracked }) : t('MileSprout logged {{tracked}} work km', { tracked });
   }
   const params = {
     platform: entry.platform === 'other' ? t('The app') : PLATFORM_NAMES[entry.platform],
@@ -69,8 +69,8 @@ export function comparisonLine(t: T, entry: PlatformEarning, trackedMeters: numb
     tracked,
   };
   return miles
-    ? t('{{platform}} counted {{counted}} mi on jobs · MileSprout tracked {{tracked}} work mi', params)
-    : t('{{platform}} counted {{counted}} km on jobs · MileSprout tracked {{tracked}} work km', params);
+    ? t('{{platform}} counted {{counted}} mi on jobs · MileSprout logged {{tracked}} work mi', params)
+    : t('{{platform}} counted {{counted}} km on jobs · MileSprout logged {{tracked}} work km', params);
 }
 
 /**

@@ -57,7 +57,7 @@ const COUNT_EVERY_MS = 60 * 60 * 1000;
 
 /** Why a pending code was turned down, as a whole sentence. */
 export const REFUSAL_MESSAGES: Record<ClaimRefusal, string> = {
-  'not-found': msg('We couldn’t find that invite. Check the code with your friend.'),
+  'not-found': msg('That invite code wasn’t found. Check it with your friend.'),
   used: msg('That invite has already been used. Ask your friend to send you a new one.'),
   own: msg('That’s one of your own invites. Send it to a friend instead.'),
   'already-claimed': msg('This Apple Account has already joined with a friend’s invite.'),

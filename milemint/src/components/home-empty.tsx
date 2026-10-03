@@ -72,7 +72,7 @@ export function HomeEmptyLines({ trackingOn, style }: { trackingOn: boolean; sty
   if (!trackingOn) {
     return (
       <ThemedText type="small" themeColor="textSecondary" style={style}>
-        {t('Turn on automatic tracking and your drives will appear here.')}
+        {t('Turn on automatic logging and your drives will appear here.')}
       </ThemedText>
     );
   }
