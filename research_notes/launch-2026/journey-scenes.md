@@ -127,7 +127,9 @@ The road and camera timings in `site.js` stay as they are: drive to 1.8 s, park 
 | Decides | The street's **skin**: house types, shopfronts, road markings, signs, traffic side, the far skyline or landmark | The **journey** (§2.2), the **clip** (§1.3) and the parked sign |
 | Examples | UK terraces, double yellows by the takeaways, red post box, Transport signs. US: a strip mall, then single-family homes with lawns, driveways and mailboxes (no numbers). Australia: Queenslanders (stilts, verandas, tin roofs; a federation brick cottage later for Sydney). Canada: Toronto bay-and-gable semis with porches, hydro poles and maples. Unknown: the **neutral skin** (§3.3). | Deliveries, Care, Trades, Own business |
 
-A scene is now **`{country skin} × {persona journey}`**: for example `uk:deliveries`, `standard:care`. The skin's styling follows the art direction (the world in brand greens, cream windows, gold light; local colour only on the signs and one detail, at most 8% of the picture). **Houses are drawn in the green family like everything else**, with the brick texture suggested by one darker tone, not by red brick.
+**City scenes (decision of 3 Oct 2026 in `decisions.md`):** every major city gets its own styling over time, UK first. That slots in as the skin: **city skin, else the country skin, else the neutral skin**. A city skin is the country skin plus that city's far-layer skyline or landmark and any street details that are truly local (Glasgow tenements, Leeds back-to-backs). The persona journeys are shared by every city, so each new city costs roughly a skyline, not four new streets.
+
+A scene is now **`{city or country skin} × {persona journey}`**: for example `uk:deliveries`, `standard:care`. The skin's styling follows the art direction (the world in brand greens, cream windows, gold light; local colour only on the signs and one detail, at most 8% of the picture). **Houses are drawn in the green family like everything else**, with the brick texture suggested by one darker tone, not by red brick.
 
 ### 3.2 One choice, three places that agree
 
@@ -218,6 +220,7 @@ One session is one focused coding run plus its marketing review round. qa passes
 
 **How this fits the other scene work:**
 - The art direction's P1 landmark scenes (Sydney, Toronto, US city) and this plan overlap. A US, Canadian or Australian skin plus its skyline in the far layer gives both "it's local" and "it's a real job". The recommendation is to **fold the P1 landmark scenes into phase 3 as far-layer skylines over the journey streets**, rather than building open-road landmark scenes and then streets on top. This saves about 4 sessions against doing both.
+- **City scenes** (`decisions.md`, 3 Oct): Leeds is on the city list, and the GB demo data is set in Leeds, so a Leeds skin is the natural second UK city after London. It matches the place names on the phone.
 - The season overlays (`scene-calendar.md`) attach to the sky and far layers, so they're unaffected.
 
 ## Open items
