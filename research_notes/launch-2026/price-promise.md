@@ -81,7 +81,7 @@ Notes:
 - **"Your price" in the US and Canada.** The line has just said "plus sales tax" or "plus tax", so "your price" reads as the pre-tax price. The terms say so outright. **M**: no regulator speaks to this exact case, but it follows the "general impression" test (Competition Act s52(4)) and FTC deception practice.
 - **The free month.** Per `decisions.md`, the yearly plan keeps it. The chip line leaves it out, as `pro-price-display.md` advises. If it is mentioned, it must read in full: "Yearly starts with a free month, then £29.99 a year." (US: "…then US$29.99 a year, plus sales tax.")
 - **No "launch" or "introductory" price.** That wording needs an end date and a real rise afterwards (`pricing-case.md`). The promise does not need either, because it never says the price *will* rise.
-- **Only show prices once App Store Connect matches them.** App Store Connect still holds £5.99 / £49.99 (`pro-price-display.md` §1.1). Apple guideline 2.3.1(a) and DMCC Sch 20 para 5 / ACL s35 bar showing a price we can't sell at. The promise goes live together with the price, never before.
+- **Only show prices App Store Connect matches.** As of 3 Oct 2026 it holds the approved prices (`pro-price-display.md`, "Prices set in App Store Connect"). Apple guideline 2.3.1(a) and DMCC Sch 20 para 5 / ACL s35 bar showing a price we can't sell at. The promise goes live together with the price, never before.
 - **All 10 languages:** the headline, chip, one-liner and fine print go to the translator. French must also suit Quebec (Bill 96, see `pro-price-display.md`).
 
 ---
@@ -203,7 +203,7 @@ Also in the listing:
 1. **Founder:**
    - Include founding testers? Their 12 free months end after the window.
    - Accept that the first rise will keep *everyone* already subscribed on their price (3.1)?
-2. App Store Connect is set to option A prices (release agent, with sign-off). Only then do the price and the promise appear anywhere.
+2. ~~App Store Connect set to option A prices.~~ Done 3 Oct 2026 by the app-store agent (`pro-price-display.md`, "Prices set in App Store Connect"). The price and promise can show once launch dates are set.
 3. Launch date is set: fill in `{LAUNCH_DATE}` and `{PROMISE_END}` everywhere.
 4. Release checklist: "Every Pro price increase uses *Keep the current price for existing subscribers*, in every storefront."
 5. Translator (10 languages), then coding (website preview and paywall, with the date gate), then qa. Marketing signs off on brand; qa signs off that it works.
