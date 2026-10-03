@@ -32,3 +32,13 @@
    - **Park rule:** applies to "Use now" (and claiming), not just claiming.
    - **Screen-recording protection, as Three does:** hide the code while the screen is being recorded or mirrored (iOS `isCaptured`, e.g. expo-screen-capture), so codes can't be shared as videos. Screenshots can only be detected, not blocked.
    - **Changes:** a schema migration (`activated_at`, `hold_until`), `claims.ts` statuses (held, active, redeemed, lapsed), the Keychain ledger format, the offer card and code screen, new strings in 10 languages, and the server: activation should be checked by the server once it exists.
+   - **Researched, 3 Oct 2026:** how Three+ runs its £1 Coffee Network offer.
+     - It's claimable once a week from Monday, and the link waits in "My Codes".
+     - You choose a venue near you (by location, town or postcode). That generates a single-use voucher tied to the venue, and only then does the timer start: 30 minutes per Three's community thread, 1 hour per an earlier report.
+     - An activated voucher that isn't used expires, and there's no new one until next week.
+     - It covers about 1,400 independent cafés plus chains like Wenzel's and PAUL.
+     - Sources: three.co.uk/why-three/threeplus/help; stuff.tv/news/three-uk-offers-a-weekly-1-coffee-with-rewards-app; community.three.co.uk "Something new is brewing on Three+".
+     - Takeaways for MileSprout:
+       - Pick the venue when activating, so the partner sees which shop gets the visit.
+       - An activated code that isn't used counts against the allowance (stops "activate, show a mate, let it lapse").
+       - Partner with a café network, not single cafés, for coverage.
