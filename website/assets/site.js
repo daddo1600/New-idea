@@ -762,7 +762,7 @@
         clouds: null, cloudMarkup: cloudsG ? cloudsG.innerHTML : '', sun: sun && { cx: sun.getAttribute('cx'), cy: sun.getAttribute('cy'), r: sun.getAttribute('r') } };
       var bayG = null, bayYellow = null, bayWhite = null;
       var cur = null, curId = 'standard', sign = { list: [], parked: null }, passingEl = null, parkedEl = null, ambEl = null;
-      var loopIdx = 0, lastT = 0, cloudX = 0, depthEls = [];
+      var wanted = null, loopIdx = 0, lastT = 0, cloudX = 0, depthEls = [];
       var ctx = {
         text: SCENES.text,
         rate: function (c) {
@@ -923,7 +923,9 @@
         },
         still: function () { depthEls.forEach(function (g) { g.removeAttribute('transform'); }); if (cloudsG) cloudsG.removeAttribute('transform'); place(0, true); },
         set: function (id, instant) {
+          wanted = id; // the latest asked for wins: a slower file (standard's) never lands over a newer choice (London's)
           SCENES.load(id, function (def) {
+            if (id !== wanted) return;
             if (instant || still() || !curId || curId === id && !cur) { apply(id, def); return; }
             worldG.classList.add('is-swapping');
             setTimeout(function () { apply(id, def); worldG.classList.remove('is-swapping'); }, 150);
