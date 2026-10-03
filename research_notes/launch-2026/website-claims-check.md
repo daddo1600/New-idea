@@ -93,3 +93,93 @@ No figure in `regions.ts` is wrong. The only change is to wording:
 2. `milemint/src/components/launch-intro.tsx:480`: "That's {{amount}} a year left unclaimed if your drives aren't logged." → "A year of this is worth {{amount}} at the {{authority}} rate." Update the comments at lines 104 and 474, and add the CRA allowance caveat for Canada.
 3. Any website copy with "£2,640 … unclaimed" (I didn't find it in `website/` or `site/` at the time of checking) → "worth £2,640 at HMRC's 55p rate".
 4. Waitlist reward copy: add the redemption window, the renewal terms and "after launch".
+
+## Decisions, 3 Oct 2026
+
+*Research agent, for the manager. The founder delegated these three; each is a single recommendation. gov.uk and irs.gov refused direct fetches again, so tax points come from each primary site's text as returned by domain-restricted searches; developer.apple.com was fetched directly. Confidence is marked.*
+
+### Answers first
+
+1. **Setup screen line: "unclaimed" is not accurate. Replace with:** **"Without “Always”, drives get missed, and missed miles are hard to prove."**
+2. **Perks card, for the app as it works now:** **"Claim. Show. Save."** / ① "Claim it when you're ready to pay" / ② "Show the code before it runs out" / ③ "Save: the deal comes off what you pay". Drop "the partner picks up the bill": it is false (the partner gives a discount or a free item; it doesn't pay the user's bill) and it reads as "the whole bill is paid".
+3. **Waitlist reward: YES.** 3 months of Pro free, as a **non-renewing** App Store offer code (Apple's "commitment-free" free offer), for people who join the website waitlist before launch day; one-time-use code emailed within 3 days of launch; redeem within 60 days (date printed in the email). Founding testers get their 12 months instead, not as well.
+
+### 1. "Without “Always”, drives go unlogged and unclaimed."
+
+**Can a driver claim drives they didn't log?**
+
+| Country | Self-employed | Employee | What the tax office says about records | Confidence |
+|---|---|---|---|---|
+| UK | **Yes, in principle.** Nothing bars a claim built from other records, but HMRC's manual says a contemporaneous mileage record should be kept to support a flat-rate claim, so a reconstructed figure is weak if HMRC asks. | **Yes, but much harder now.** Since 14 Oct 2024 a P87 mileage claim must include a copy of the mileage log: reason for every journey and start and end postcodes. A log rebuilt from rotas or emails is acceptable in form, but every journey must be listed. | [BIM75005](https://www.gov.uk/hmrc-internal-manuals/business-income-manual/bim75005) ("a contemporaneous record of business mileage is maintained to support any claim"); [Simplified expenses](https://www.gov.uk/simpler-income-tax-simplified-expenses) (keep records of business miles); [GOV.UK: vehicles you use for work](https://www.gov.uk/tax-relief-for-employees/vehicles-you-use-for-work) and [P87 form, HMRC 06/26](https://assets.publishing.service.gov.uk/media/6a3a649433bc5beefd3c4772/P87.pdf) (log with reason and postcodes); [ICAS](https://www.icas.com/news-insights-events/news/tax/new-hmrc-evidence-requirement-for-paye-employment-expense-claims), [ICAEW Oct 2024](https://www.icaew.com/insights/tax-news/2024/oct-2024/new-process-for-paye-job-expense-claims) (start date 14 Oct 2024) | High |
+| US | **Yes, but strictly.** Car expenses fall under the strict substantiation rules: "adequate records" (a log kept at or near the time; a weekly log counts) **or** your own detailed statement **plus** other sufficient evidence. A log rebuilt later from delivery-app histories, calendars or receipts can work, but Pub 463 says a timely record "has more value than a statement prepared later". Estimates without evidence are not allowed for cars. | **Mostly no claim at all, logged or not.** Unreimbursed employee expenses (including car) are not deductible for most employees; the suspension was made permanent from 2026 by the 2025 budget law (OBBBA s70110). Exceptions: reservists, qualified performing artists, fee-basis officials, impairment-related expenses (and educators). Employees are paid back by employers instead. | [IRS Pub 463, Recordkeeping](https://www.irs.gov/publications/p463); [Form 2106 instructions](https://www.irs.gov/pub/irs-pdf/i2106.pdf) (exceptions). Permanence: secondary sources only, e.g. [H&R Block](https://www.hrblock.com/tax-center/irs/tax-law-and-policy/one-big-beautiful-bill-taxes/), [Keiter CPA](https://keitercpa.com/blog/individual-taxpayers-one-big-beautiful-bill-act/) | High (records); medium (OBBBA, secondary) |
+| Canada | **Yes, but at risk.** No per-km rate for the self-employed: they claim actual costs × business-use %. CRA calls a full-year logbook (date, destination, purpose, km) "the best evidence"; after one full base year, a 3-month sample log can be used. A log isn't strictly the only evidence, but without one the business-use % is easy for CRA to cut. | **Yes, with a signed T2200 from the employer and the same records** (business km and total km). | [CRA: Motor vehicle records](https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/sole-proprietorships-partnerships/business-expenses/motor-vehicle-expenses/motor-vehicle-records.html); [CRA: Line 22900 allowable motor vehicle expenses](https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/deductions-credits-expenses/line-22900-other-employment-expenses/salaried-employees/allowable-motor-vehicle-expenses.html) | High |
+| Australia | **Yes, clearly, under cents per km** (up to 5,000 km per car): no written evidence is needed, only a record of how the work km were worked out, and a "reasonable estimate" (e.g. 20 km × 48 weeks) is accepted. The **logbook method** (needed above 5,000 km or for actual costs) requires a 12-week logbook. | Same as self-employed (both methods available to employees). | [ATO: Cents per km method](https://www.ato.gov.au/individuals-and-families/income-deductions-offsets-and-records/deductions-you-can-claim/work-related-deductions/cars-transport-and-travel/motor-vehicle-and-car-expenses/expenses-for-a-car-you-own-or-lease/cents-per-kilometre-method); [myTax 2026 work-related car expenses](https://www.ato.gov.au/individuals-and-families/your-tax-return/instructions-to-complete-your-tax-return/mytax-instructions/2026/deductions/work-related-expenses/work-related-car-expenses) | High |
+
+**Verdict.** "Unclaimed" is not accurate in any of the four countries: an unlogged drive can still be claimed if it can be reconstructed (UK, US, CA) or reasonably estimated (AU cents per km). What's true everywhere is that a drive the app missed is **harder to prove**, and in the US and for UK employees the proof bar is high. "Unlogged" is also a slight overstatement, since with "While Using" the app still logs drives when it is open.
+
+**Recommendation (exact line):**
+> **Without “Always”, drives get missed, and missed miles are hard to prove.**
+
+Why: it keeps the loss-framing that sells "Always", "missed" is true (drives while the app is closed aren't logged), and "hard to prove" is true in all four countries without claiming the money is lost. Avoid "claim" words in this line altogether. Translator note: keep "hard to prove" as "difficult to back up/evidence", not "impossible to claim".
+
+### 2. Perks "how it works" card
+
+**How claiming works today (code read 3 Oct 2026):**
+- `claims.ts` `newClaim`: tapping Claim creates the code and starts the clock at once (`expiresAt = now + useWithinMinutes`). The code screen opens straight away (`perks.tsx` `claimOffer`).
+- The window is **set per offer**, not always 30 minutes: in store 30 min (fuel, coffee, car wash, bike check) and **60 min** (tyres); online **7 days** (phone mount) and **30 days** (tax software) (`offers.ts`). The offer card already shows the right time per offer.
+- Claiming is blocked while a drive is being recorded.
+- Offers are a mix of money off (10p a litre, £3, 15–20%, £20) and **free items** (hot drink, tyre check, bike check).
+- In the repo the card currently reads ① "Claim a deal" ② "Show the code at the till" ③ "The partner pays only when it's used". "Claim. Flash. Save." is not in the code; it seems to be a draft.
+
+**Checks on the wording:**
+- **"Show the code: you've got 30 min"**: wrong for the tyre offer (60 min) and online offers (days). Use no number on the card; each offer card states its own window.
+- **"Tap Claim when you're at the till"**: true for in-store offers today, but not for online ones (there's no till). "When you're ready to pay" covers both.
+- **"Pocket the saving: the partner picks up the bill"**: **don't use.** The partner funds a discount or a free item; it does not pay the user's bill, and "picks up the bill" in British English means paying the whole bill. That is a misleading claim under the CAP Code (rule 3.1, misleading advertising; 3.3, omitting material information) and the CPRs/DMCC Act unfair commercial practices rules, the FTC Act s5 (US), Competition Act (CA) and ACL s18 (AU). "The partner pays" also invites confusion with MileSprout's business model (the partner pays **MileSprout** a fee per redemption).
+- **"Save at the till: the discount comes off your bill"**: close, but "the till" is wrong for online offers and "the discount" is wrong for free items. "The deal comes off what you pay" covers money off and free items, in store and online.
+- "Flash" is slangy and translates badly into 10 languages; "Show" is plainer.
+- Keep the business-model line ("Partners pay MileSprout only when a code is used…") in the "How perks work" bullets, where it already is.
+
+**Recommendation, for the app as it is now:**
+> **Claim. Show. Save.**
+> ① **Claim it when you're ready to pay**: the timer starts straight away.
+> ② **Show the code before it runs out**: scan it at the till, or type it in online.
+> ③ **Save**: the deal comes off what you pay.
+
+Short form if the card has no room for the second halves: "Claim it when you're ready to pay" / "Show the code before it runs out" / "Save: the deal comes off what you pay".
+
+**Variant for after the two-step change (claim any time, then "Use now"):**
+> **Claim. Show. Save.**
+> ① **Claim it any time**: it waits in My codes.
+> ② **Tap Use now at the till, then show the code**: it works for a short time.
+> ③ **Save**: the deal comes off what you pay.
+
+Also change the bullet "Claim when you're at the till. Each code works once, for a short time (often 30 minutes)." at that point to "Tap Use now when you're at the till. The code then works once, for a short time (often 30 minutes)." It is accurate as it stands today.
+
+### 3. Waitlist reward: 3 months of Pro free
+
+**Decision: YES**, with these terms:
+
+| Term | Decision | Why |
+|---|---|---|
+| Who | Anyone who joins the website waitlist (email + consent) **before launch day**. One code per email; Apple limits it to one per Apple Account. App Store storefronts in the UK, US, Canada and Australia. New Pro subscribers only (everyone is new at launch). | Simple, checkable from D1 `created_at`. |
+| Join-by date | **The day MileSprout goes live in the App Store.** Show it as "Join before we launch". As soon as the launch date is fixed, put the date in the small print ("join by [date]"), and take the offer off the site that day. | CAP Code promotions rules need the closing date stated; a firm date replaces "before launch" once known. |
+| Code type | **One-time-use codes**, one per person, generated on launch day (offer codes only work once the app is Ready for Sale). Not a custom code. | A custom code would leak to deal sites (see `offer-code-setup.md`). |
+| When emailed | **Within 3 days of launch**, once, with the code, a one-tap redeem link and the redeem-by date. | Waitlist consent covers one launch email. |
+| Redeem window | **60 days from the email**; create the codes with an expiry of 60 days + a few days' margin (Apple max is 6 months from creation). | Long enough for people who miss the email; short enough to keep the cost bounded and the list fresh. |
+| Renewal | **Non-renewing.** In App Store Connect tick the box that stops auto-renewal (Apple: "ensuring customers receive a commitment-free trial subscription"; only Free offers allow it). After 3 months Pro simply ends, unless the person chooses to subscribe. | Fairer and less risky: no surprise charge, nothing for the DMCC Act subscription rules (spring 2027), ROSCA, or the ACCC's subscription-trap focus to bite on, and no "they charged me" posts in courier groups from our earliest fans. It also needs **no app change**: it's an offer on the existing auto-renewable subscription. Cost: we lose the "forgot to cancel" revenue, which is exactly the revenue regulators target. |
+| Founding testers | Testers get **12 months free instead, not as well** (also non-renewing). If someone is on both lists, send only the tester code. | Apple lets an account use an offer once, and once a tester has redeemed they are no longer a "new subscriber", so the 3-month code would fail anyway. Same 6-month code-expiry rule applies to the 12-month code (redeem within the window; the 12 months then run from redemption). |
+
+Source for the offer-code settings: [Apple, Set up offer codes](https://developer.apple.com/help/app-store-connect/manage-subscriptions/set-up-subscription-offer-codes/) (fetched 3 Oct 2026): non-renewing option ("Checking the box will prevent auto-renewal… you'll only be able to choose Free offers"); one-time-use codes expire at most 6 months after creation; eligibility new / existing / expired subscribers; offer codes are for auto-renewable subscriptions only. High confidence.
+
+**Exact website wording:**
+- Offer line: **Join the waitlist and get 3 months of Pro free when we launch.**
+- Small print: *For people who join before MileSprout launches in the App Store [from launch date known: "by {date}"]. We'll email you a one-time App Store code within 3 days of launch; redeem it within 60 days. One code per person and per Apple Account, for new Pro subscribers. It can't be combined with the free trial. **It doesn't renew: after 3 months Pro simply stops, and you're never charged unless you choose to subscribe.** Free logging stays free either way. Founding testers get 12 months instead.*
+- Confirmation: **You're on the list.** We'll email you once at launch with your code for 3 months of Pro free.
+- This replaces the small print in `waitlist-hooks-copy.md` §2, which said Pro renews unless cancelled.
+
+**Cost against lift (estimate from the simulation, not research):**
+- `pricing-simulation.md` gives about £1,400 a year of Pro revenue per 1,000 active installs (6.5% paying × about £22 blended, before Apple's commission). Waitlisters are keener than average, so the worst case is losing roughly **£1,000–£1,500 per 1,000 waitlisters** in year one. The realistic loss is smaller: yearly buyers are only delayed by 3 months, and the people most affected are tax-time-only users (UK Self Assessment on 31 Jan falls inside a November launch's free months), who in the panel were likely to pay once and cancel anyway.
+- The lift on sign-ups is **unmeasured**; no source gives a figure, and none should be quoted. The value is a launch-day list that installs and rates the app in the first week, which the playbook relies on. Non-renewing free months also show people the reports at tax time, the moment the panel says Pro sells itself.
+- The cost is capped (one code per person, 60-day window, waitlist closes at launch). At the expected list size (hundreds, not tens of thousands), it is a few hundred pounds of deferred revenue. **Worth it.**
+
+**For the founder to sign off (money and a promise to customers):** YES to 3 months free, non-renewing, waitlist closes at launch, testers get 12 months instead.
