@@ -1537,6 +1537,13 @@ const dictionary: Dictionary = {
   "MileSprout carries on by itself when you come back.": "MileSprout continuă singur când revii.",
   // Perks tab (demo partner offers; the brand names stay in English).
   "Perks": "Oferte",
+  "Home, {{count}} drives to sort": {
+    "one": "Acasă, {{count}} cursă de sortat",
+    "few": "Acasă, {{count}} curse de sortat",
+    "other": "Acasă, {{count}} de curse de sortat"
+  },
+  "Perks, new offers": "Oferte, oferte noi",
+  "{{label}}, tab, {{index}} of {{total}}": "{{label}}, filă, {{index}} din {{total}}",
   "Demo offers — these partners are examples": "Oferte demo — acești parteneri sunt exemple",
   "They’re not real businesses, and the codes won’t work in shops yet.": "Nu sunt firme reale, iar codurile încă nu merg în magazine.",
   "Claim. Show. Save.": "Ia. Arată. Economisește.",

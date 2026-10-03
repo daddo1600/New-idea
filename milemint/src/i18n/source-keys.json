@@ -494,6 +494,12 @@
     ]
   },
   {
+    "key": "{{label}}, tab, {{index}} of {{total}}",
+    "files": [
+      "app/(tabs)/_layout.tsx"
+    ]
+  },
+  {
     "key": "{{label}}: {{date}}. Hide calendar",
     "files": [
       "app/scan-earnings.tsx"
@@ -3515,6 +3521,12 @@
     ]
   },
   {
+    "key": "Home, {{count}} drives to sort",
+    "files": [
+      "app/(tabs)/_layout.tsx"
+    ]
+  },
+  {
     "key": "How do you work?",
     "files": [
       "app/welcome.tsx"
@@ -5366,6 +5378,12 @@
     "key": "Perks come from the partners shown. They’re not from, or endorsed by, delivery or ride apps.",
     "files": [
       "app/(tabs)/perks.tsx"
+    ]
+  },
+  {
+    "key": "Perks, new offers",
+    "files": [
+      "app/(tabs)/_layout.tsx"
     ]
   },
   {

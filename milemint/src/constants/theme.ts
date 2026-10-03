@@ -22,6 +22,18 @@ export const Colors = {
     /** Sheets that slide up over a screen, and the dimmed screen behind them. */
     sheet: '#ffffff',
     backdrop: 'rgba(0,0,0,0.3)',
+    /**
+     * The tab bar (research_notes/launch-2026/tab-bar-colour.md): unselected
+     * tabs in a grey that passes 4.5:1, a darker one with Increase Contrast,
+     * and a soft green pill behind the selected tab. The bar itself is the
+     * navigation theme's card colour (app/_layout).
+     */
+    tabInactive: '#6E6E73',
+    tabInactiveContrast: '#3C3C43',
+    tabActivePill: '#E6F2ED',
+    /** The Perks "new" dot (= accent) and the ring around it (= the bar). */
+    tabNewDot: '#0B7A55',
+    tabBar: '#FFFFFF',
   },
   dark: {
     text: '#ffffff',
@@ -36,6 +48,11 @@ export const Colors = {
     // Lifted off the black page, as iOS does, so a sheet's edge shows.
     sheet: '#1C1C1E',
     backdrop: 'rgba(0,0,0,0.6)',
+    tabInactive: '#98989D',
+    tabInactiveContrast: '#C7C7CC',
+    tabActivePill: '#163A2E',
+    tabNewDot: '#34D399',
+    tabBar: '#121212',
   },
 } as const;
 

@@ -1442,6 +1442,12 @@ const dictionary: Dictionary = {
   "MileSprout carries on by itself when you come back.": "ফিরে এলে MileSprout নিজে থেকেই চলতে থাকে।",
   // Perks tab (demo partner offers; the brand names stay in English).
   "Perks": "অফার",
+  "Home, {{count}} drives to sort": {
+    "one": "হোম, বাছাই করার জন্য {{count}}টি ট্রিপ",
+    "other": "হোম, বাছাই করার জন্য {{count}}টি ট্রিপ"
+  },
+  "Perks, new offers": "অফার, নতুন অফার",
+  "{{label}}, tab, {{index}} of {{total}}": "{{label}}, ট্যাব, {{total}}টির মধ্যে {{index}}",
   "Demo offers — these partners are examples": "ডেমো অফার — এই পার্টনাররা শুধু উদাহরণ",
   "They’re not real businesses, and the codes won’t work in shops yet.": "এগুলো আসল ব্যবসা নয়, আর কোডগুলো এখনও দোকানে কাজ করবে না।",
   "Claim. Show. Save.": "নিন। দেখান। সাশ্রয় করুন।",

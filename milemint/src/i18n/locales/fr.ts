@@ -1537,6 +1537,13 @@ const dictionary: Dictionary = {
   "MileSprout carries on by itself when you come back.": "MileSprout reprend tout seul à votre retour.",
   // Perks tab (demo partner offers; the brand names stay in English).
   "Perks": "Bons plans",
+  "Home, {{count}} drives to sort": {
+    "one": "Accueil, {{count}} trajet à classer",
+    "many": "Accueil, {{count}} trajets à classer",
+    "other": "Accueil, {{count}} trajets à classer"
+  },
+  "Perks, new offers": "Bons plans, nouvelles offres",
+  "{{label}}, tab, {{index}} of {{total}}": "{{label}}, onglet, {{index}} sur {{total}}",
   "Demo offers — these partners are examples": "Offres de démo — ces partenaires sont des exemples",
   "They’re not real businesses, and the codes won’t work in shops yet.": "Ce ne sont pas de vraies entreprises, et les codes ne fonctionnent pas encore en magasin.",
   "Claim. Show. Save.": "Obtenez. Montrez. Économisez.",

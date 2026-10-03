@@ -43,6 +43,8 @@ const en: Dictionary = {
   '{{count}} days free': { one: '{{count}} day free', other: '{{count}} days free' },
   '{{count}} months free': { one: '{{count}} month free', other: '{{count}} months free' },
   'Sort {{count}} drives': { one: 'Sort {{count}} drive', other: 'Sort {{count}} drives' },
+  // VoiceOver's name for the Home tab while there are drives to sort.
+  'Home, {{count}} drives to sort': { one: 'Home, {{count}} drive to sort', other: 'Home, {{count}} drives to sort' },
   'Select {{count}} unsorted': { one: 'Select {{count}} unsorted', other: 'Select {{count}} unsorted' },
   '{{count}} selected': { one: '{{count}} selected', other: '{{count}} selected' },
   '{{distance}} for work · {{count}} to review': {

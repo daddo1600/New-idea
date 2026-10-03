@@ -10,6 +10,7 @@ import { AddTripHeaderButton, AddTripLink, AddTripRow } from '@/components/trips
 import { BulkActions, SelectBar } from '@/components/trips/list-bars';
 import { SelectableTripRow } from '@/components/trips/selectable-trip-row';
 import { TripRow } from '@/components/trips/trip-row';
+import { tabBarStyle } from '@/components/tab-bar-style';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
@@ -88,7 +89,7 @@ export default function DrivesScreen() {
       {/* The bulk actions bar takes the tab bar's place while selecting; + adds a drive tracking missed. */}
       <Tabs.Screen
         options={{
-          tabBarStyle: selecting ? { display: 'none' } : undefined,
+          tabBarStyle: tabBarStyle(insets.bottom, selecting),
           headerRight: selecting ? undefined : () => <AddTripHeaderButton />,
         }}
       />

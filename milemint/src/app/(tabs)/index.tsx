@@ -28,6 +28,7 @@ import { LeavesWithPurpose, needsPurpose, TripRow } from '@/components/trips/tri
 import { TrackingHealthCard } from '@/components/tracking-health-card';
 import { useTrackingHealth } from '@/tracking/use-tracking-health';
 import { VehicleSheet } from '@/components/vehicle-sheet';
+import { tabBarStyle } from '@/components/tab-bar-style';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
@@ -230,7 +231,7 @@ export default function HomeScreen() {
   return (
     <ThemedView style={styles.container}>
       {/* The bulk actions bar takes the tab bar's place while selecting. */}
-      <Tabs.Screen options={{ tabBarStyle: selecting ? { display: 'none' } : undefined }} />
+      <Tabs.Screen options={{ tabBarStyle: tabBarStyle(insets.bottom, selecting) }} />
       <FlatList
         data={items}
         keyExtractor={(trip) => trip.id}

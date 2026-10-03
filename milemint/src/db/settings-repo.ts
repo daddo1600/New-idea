@@ -130,6 +130,12 @@ export type AppSettings = {
   setAsideReminderDefaulted: boolean;
   /** Pro: a notification two weeks before each quarterly deadline (MTD update, estimated tax, instalment, BAS). */
   quarterlyReminder: boolean;
+  /** Partner offer ids already seen on the Perks tab, for its "new" dot (perks/new-dot). */
+  perksSeenOfferIds: string[];
+  /** ISO time the Perks "new" dot last appeared: at most once a week. */
+  perksDotLastShownAt: string | null;
+  /** The Perks "new" dot is up, until Perks is opened. */
+  perksDotShowing: boolean;
 };
 
 const WEEKDAY_9_TO_5 = [{ start: '09:00', end: '17:00' }];
@@ -176,6 +182,9 @@ export const DEFAULT_SETTINGS: AppSettings = {
   setAsideReminder: false,
   setAsideReminderDefaulted: false,
   quarterlyReminder: true,
+  perksSeenOfferIds: [],
+  perksDotLastShownAt: null,
+  perksDotShowing: false,
 };
 
 type Check<T> = (value: unknown) => T | undefined;
@@ -289,6 +298,10 @@ const CHECKS: { [K in keyof AppSettings]-?: Check<AppSettings[K]> } = {
   setAsideReminder: bool,
   setAsideReminderDefaulted: bool,
   quarterlyReminder: bool,
+  perksSeenOfferIds: (value) =>
+    Array.isArray(value) ? value.filter((id): id is string => typeof id === 'string').slice(-200) : undefined,
+  perksDotLastShownAt: isoTimeOrNull,
+  perksDotShowing: bool,
 };
 
 /** Stored settings, each field checked against its type and allowed values (see CHECKS). */

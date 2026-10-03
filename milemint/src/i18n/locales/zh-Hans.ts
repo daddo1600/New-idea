@@ -1399,6 +1399,11 @@ const dictionary: Dictionary = {
   "MileSprout carries on by itself when you come back.": "你回来后 MileSprout 会自动继续。",
   // Perks tab (demo partner offers; the brand names stay in English).
   "Perks": "优惠",
+  "Home, {{count}} drives to sort": {
+    "other": "首页，{{count}} 次行程待分类"
+  },
+  "Perks, new offers": "优惠，有新优惠",
+  "{{label}}, tab, {{index}} of {{total}}": "{{label}}，标签页，第 {{index}} 个，共 {{total}} 个",
   "Demo offers — these partners are examples": "演示优惠：这些合作商家只是示例",
   "They’re not real businesses, and the codes won’t work in shops yet.": "它们不是真实的商家，优惠码目前在店里还不能用。",
   "Claim. Show. Save.": "领取，出示，省钱。",
