@@ -772,3 +772,12 @@ html.ms-intro::after {
 .on-dark .wl-ticks { color: #FFFFFF; }
 .wl-ticks li::before { content: "✓"; color: var(--brand); font-weight: 800; margin-right: 6px; }
 .on-dark .wl-ticks li::before { color: var(--gold); }
+
+/* Waitlist reward: the offer line over the form, its small print under the consent box */
+.signup-offer { font-size: 1.1rem; margin: 0 0 18px; color: var(--ink); }
+.signup-offer strong { color: var(--brand); }
+.signup .signup-offer { color: #FFFFFF; }
+.signup .signup-offer strong { color: var(--gold); }
+.wl-terms { margin: 10px 0 0; font-size: .8rem; line-height: 1.5; color: var(--text); }
+.on-dark .wl-terms { color: #D1FAE5; }
+.on-dark .wl-terms strong { color: #FFFFFF; }

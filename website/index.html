@@ -18,10 +18,10 @@
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/img/screens/home.webp" as="image" type="image/webp">
-<link rel="stylesheet" href="/assets/site.css?v=166d0416">
+<link rel="stylesheet" href="/assets/site.css?v=716c4a14">
 <script src="/assets/intro-gate.js?v=06c94b49"></script>
 <script src="/assets/season.js?v=06a20cf1" defer></script>
-<script src="/assets/site.js?v=ae7c6b56" defer></script>
+<script src="/assets/site.js?v=12ad3176" defer></script>
 <noscript><style>
   /* Without JavaScript: every feature is listed, the deck is a still picture. */
   .feat { opacity: 1 !important; visibility: visible !important; transform: none !important; grid-area: auto !important; }
@@ -260,11 +260,10 @@
       </section>
 
       <h2 class="wl-title" id="early-access">Get early access</h2>
-      <p class="signup-sub">Be first to know when MileSprout is in the App Store.</p>
-      <!-- Waitlist reward, waiting for the founder's sign-off: the offer line replaces .signup-sub above,
-           and research's small print goes under the consent box (research_notes/launch-2026/website-claims-check.md, "Decisions").
-      <p class="signup-offer">Join the list and get <strong>3 months of Pro free</strong> at launch.</p>
-      -->
+      <!-- Waitlist reward (founder signed off 3 Oct 2026). Small print: research's version,
+           research_notes/launch-2026/website-claims-check.md, "Decisions". Once the launch date is fixed,
+           add "by {date}" to the small print, and take the offer off the site on launch day. -->
+      <p class="signup-sub signup-offer">Join the list and get <strong>3 months of Pro free</strong> at launch.</p>
       <form class="waitlist on-dark" action="/api/waitlist" method="post" data-waitlist>
         <input type="hidden" name="source" value="home">
         <div class="wl-fields">
@@ -276,7 +275,7 @@
             <span class="sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
             </span>
           </div>
-          <p class="wl-micro">One email at launch. Never shared. Unsubscribe any time.</p>
+          <p class="wl-micro">One email at launch, with your Pro code. Never shared. Unsubscribe any time.</p>
           <ul class="wl-ticks">
             <li>No account</li>
             <li>No ads</li>
@@ -306,9 +305,10 @@
             </fieldset>
           </div>
           <label class="wl-consent"><input type="checkbox" name="consent" value="yes" required> <span>Email me when MileSprout launches. <a href="/privacy#waitlist">How we use your email</a></span></label>
+          <p class="fine wl-terms">For people who join before MileSprout launches in the App Store. We'll email you a one-time App Store code within 3 days of launch; redeem it within 60 days. One code per person and per Apple Account, for new Pro subscribers. It can't be combined with the free trial. <strong>It doesn't renew: after 3 months Pro simply stops, and you're never charged unless you choose to subscribe.</strong> Free logging stays free either way. Founding testers get 12 months instead.</p>
           <div class="wl-hp" aria-hidden="true"><label>Company <input type="text" name="company" tabindex="-1" autocomplete="off"></label></div>
         </div>
-        <p class="wl-done" tabindex="-1" hidden><strong>You're on the list.</strong> We'll email you once, when MileSprout is ready.</p>
+        <p class="wl-done" tabindex="-1" hidden><strong>You're on the list.</strong> We'll email you once at launch with your code for 3 months of Pro free.</p>
         <p class="wl-status" id="wl-status-h" role="status" aria-live="polite"></p>
       </form>
       <p class="tester-link"><a href="/testers">Want to test it early? Become a founding tester →</a></p>
@@ -481,7 +481,7 @@
   <section class="cta" aria-labelledby="cta-title">
     <div class="wrap">
       <h2 id="cta-title">Be on the road with it from day one</h2>
-      <p>Leave your email and we'll tell you the moment MileSprout is in the App Store. No spam, and we never share it.</p>
+      <p>Join the list and we'll email you a code for 3 months of Pro free when MileSprout is in the App Store. No spam, and we never share your email.</p>
       <p class="cta-actions"><a class="btn-gold" href="#early-access">Get early access</a></p>
       <p class="tester-link"><a href="/testers">Want to test it early? Become a founding tester →</a></p>
     </div>

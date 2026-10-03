@@ -798,6 +798,8 @@
       (opts || consent).parentNode.insertBefore(more, opts || consent);
       if (opts) inner.appendChild(opts);
       inner.appendChild(consent);
+      var terms = f.querySelector('.wl-terms'); // the reward's small print shows with the consent box
+      if (terms) inner.appendChild(terms);
       // screen readers hear once that more fields appeared (sighted users see them slide in)
       var live = document.createElement('p');
       live.className = 'sr-only';
@@ -814,7 +816,7 @@
         f.classList.add('wl-open');
         more.inert = false;
         btn.setAttribute('aria-expanded', 'true');
-        if (announce) live.textContent = 'A few optional questions and the consent box have appeared after the button.';
+        if (announce) live.textContent = 'A few optional questions, the consent box and the offer terms have appeared after the button.';
       }
       function check() { if (FULL_EMAIL.test(email.value.trim())) reveal(true); }
       email.addEventListener('input', check);

@@ -53,6 +53,10 @@ The function needs a D1 database bound as `DB`. Set-up, in short (details in [`f
 
 Functions run only on Cloudflare Pages deploys (not the Workers flow in `wrangler.jsonc`). Until the binding exists, sign-ups get a friendly "didn't go through" message (the function answers 503).
 
+## Waitlist reward
+
+Everyone who joins the waitlist before launch gets **3 months of Pro free** (signed off by the founder on 3 Oct 2026; terms from `research_notes/launch-2026/website-claims-check.md`, "Decisions"): a one-time, **non-renewing** App Store offer code, emailed within 3 days of launch, to redeem within 60 days; one per person and per Apple Account; founding testers get their 12 months instead. The offer line is over the form on the home page and `/waitlist`; the small print shows with the consent box. When the launch date is fixed, add "by {date}" to the small print, and take the offer off the site on launch day.
+
 ## Before launch
 
 - `index.html`: the App Store button is a placeholder (`href="#"`, "Coming to the App Store"). When the app is live, put in `https://apps.apple.com/app/id<APP_ID>` and use Apple's official "Download on the App Store" badge (saved locally, not hot-linked). There's a `TODO` comment next to it.
