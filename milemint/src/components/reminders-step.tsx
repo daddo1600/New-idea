@@ -20,7 +20,7 @@ import { useLanguage, useT } from '@/i18n/i18n';
 /** The second banner stacks in behind the first after this long. */
 const SECOND_AFTER_MS = 1800;
 /** How far the second banner shows below the first: enough for its title line. */
-const PEEK = 30;
+const PEEK = 40;
 
 /**
  * Set-up's reminders step, before iOS asks about notifications: what

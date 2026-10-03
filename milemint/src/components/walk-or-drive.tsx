@@ -141,7 +141,7 @@ function Walk({
     // A small bob every 300ms while walking.
     const bob = walked < 1 ? Math.abs(Math.sin((time / 300) * Math.PI)) * 2 : 0;
     return {
-      opacity: sceneOpacity(time) * (1 - 0.4 * phase(time, WALK_MS, 200)),
+      opacity: sceneOpacity(time) * (1 - 0.2 * phase(time, WALK_MS, 200)),
       transform: [{ translateX: travel * walked }, { translateY: -bob }, { scaleX: -1 }],
     };
   });
@@ -263,7 +263,18 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   lane: { position: 'absolute', left: 0, right: 0 },
-  walker: { position: 'absolute', fontSize: WALKER, lineHeight: WALKER + 6, width: WALKER + 6, textAlign: 'center' },
+  // A faint cream disc, so the walker reads on the green.
+  walker: {
+    position: 'absolute',
+    fontSize: WALKER,
+    lineHeight: WALKER + 6,
+    width: WALKER + 6,
+    height: WALKER + 6,
+    borderRadius: (WALKER + 6) / 2,
+    overflow: 'hidden',
+    backgroundColor: 'rgba(251,247,238,0.22)',
+    textAlign: 'center',
+  },
   chip: {
     position: 'absolute',
     borderRadius: 999,
