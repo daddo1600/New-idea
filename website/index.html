@@ -17,11 +17,11 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preload" href="/assets/img/screens/home.webp" as="image" type="image/webp">
-<link rel="stylesheet" href="/assets/site.css?v=c0c0f4b7">
-<script src="/assets/intro-gate.js?v=642feb4d"></script>
+<link rel="preload" href="/assets/img/screens/home.webp?v=14b25716" as="image" type="image/webp">
+<link rel="stylesheet" href="/assets/site.css?v=6f393e6a">
+<script src="/assets/intro-gate.js?v=0b876a06"></script>
 <script src="/assets/season.js?v=958db9cd" defer></script>
-<script src="/assets/site.js?v=6dab7bbc" defer></script>
+<script src="/assets/site.js?v=44a0176f" defer></script>
 <noscript><style>
   /* Without JavaScript: every feature is listed, the deck is a still picture. */
   .feat { opacity: 1 !important; visibility: visible !important; transform: none !important; grid-area: auto !important; }
@@ -58,7 +58,7 @@
         <svg class="hero-sprout" viewBox="12 9 77 84" aria-hidden="true" focusable="false"><defs><linearGradient id="ms-leaf-hero" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#77E8A0"/><stop offset="1" stop-color="#24B359"/></linearGradient></defs><g transform="translate(1.2 1.6)" fill="#085E42" opacity=".5"><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z"/><path d="M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z"/></g><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z" fill="url(#ms-leaf-hero)"/><path d="M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z" fill="url(#ms-leaf-hero)"/><path d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#064E3B" stroke-width="8" stroke-linecap="round" fill="none"/><path d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#FBF7EE" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="2.6 3.2" stroke-dashoffset="-3" fill="none"/><circle cx="51" cy="28" r="7.6" fill="#FFFFFF"/><circle cx="51" cy="28" r="5.6" fill="#FACC15"/></svg>
         <span class="pill">Coming October 2026 · UK · US · Canada · Australia</span>
         <h1 id="hero-title">Every work mile adds up.</h1>
-        <p class="money-line" data-money><span data-for="UK">An example year of part-time work driving is worth <strong>£2,640</strong> at HMRC's rate.</span><span data-for="US">An example year of part-time work driving is worth <strong>$3,648</strong> at the IRS's rate.</span><span data-for="CA">An example year of part-time work driving is worth about <strong>$5,446</strong> at the CRA's allowance rate (the most an employer can pay tax-free).</span><span data-for="AU">An example year of part-time work driving is worth <strong>$4,550</strong> at the ATO's rate.</span></p>
+        <p class="money-line" data-money><span data-for="UK">An example year of part-time work driving is worth <a class="money-amt" href="#calc" tabindex="-1" aria-hidden="true"><strong>£2,640</strong></a><span class="sr-only" data-amt-sr>£2,640</span> at HMRC's rate.</span><span data-for="US">An example year of part-time work driving is worth <a class="money-amt" href="#calc" tabindex="-1" aria-hidden="true"><strong>$3,648</strong></a><span class="sr-only" data-amt-sr>$3,648</span> at the IRS's rate.</span><span data-for="CA">An example year of part-time work driving is worth about <a class="money-amt" href="#calc" tabindex="-1" aria-hidden="true"><strong>$5,446</strong></a><span class="sr-only" data-amt-sr>$5,446</span> at the CRA's allowance rate (the most an employer can pay tax-free).</span><span data-for="AU">An example year of part-time work driving is worth <a class="money-amt" href="#calc" tabindex="-1" aria-hidden="true"><strong>$4,550</strong></a><span class="sr-only" data-amt-sr>$4,550</span> at the ATO's rate.</span> <a class="money-go" href="#calc">Work out yours ↓</a></p>
         <p class="lede">The free mileage log that fills itself in, for couriers, delivery riders, care workers and anyone who drives for work. Every work mile is logged and valued at the tax office's rate.</p>
         <p class="hero-actions">
           <a class="btn-gold" href="#how">See how it works</a>
@@ -73,37 +73,56 @@
         </a> For iPhone, in the UK, US, Canada and Australia.</p>
       </div>
       <div class="hero-phone">
-        <figure class="scene" id="scene">
+        <figure class="scene" id="scene" data-scenes-v="d8e668a5">
           <div class="scene-view">
             <div class="scene-pic" role="img" aria-label="A phone in a car mount while driving: the car parks, the drive (Meanwood Road to Home, 2.2 miles) appears on the MileSprout Home screen, it's swiped to Work, worth £1.21, and the year's total goes up.">
             <svg class="scene-road" viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
               <defs>
                 <linearGradient id="rd-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0B7A55"/><stop offset=".55" stop-color="#3FBF86"/><stop offset="1" stop-color="#BFF2D6"/></linearGradient>
                 <linearGradient id="rd-grass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E9E66"/><stop offset="1" stop-color="#0B5E40"/></linearGradient>
+                <linearGradient id="sc-water" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0E6E62"/><stop offset="1" stop-color="#2FA38E"/></linearGradient>
               </defs>
-              <rect width="400" height="151" fill="url(#rd-sky)"/>
-              <circle class="rd-sun" cx="292" cy="128" r="22"/>
-              <g class="rd-hills"><path d="M-60 150 C10 118 60 120 110 138 C150 126 190 112 240 130 C290 116 340 112 460 142 L460 152 L-60 152Z" fill="#1F8A5B"/><path d="M-60 150 C30 134 80 136 140 146 C200 134 260 132 320 144 C370 138 420 140 460 148 L460 152 L-60 152Z" fill="#167A4E"/></g>
-              <rect y="150" width="400" height="150" fill="url(#rd-grass)"/>
-              <g class="rd-live"><polygon class="rd-surface" points="65,450 1325,450 211.7,153.1 198.6,153.1"/><polygon class="rd-line" points="80,450 98,450 198.9,153.1 198.8,153.1"/><polygon class="rd-line" points="1292,450 1310,450 211.6,153.1 211.4,153.1"/><g class="rd-row"><g class="rd-tree"><rect class="rd-trunk" x="190.3" y="150.7" width="0.5" height="2.6" opacity="0"/><circle class="rd-crown" cx="190.6" cy="149" r="2" opacity="0"/></g><g class="rd-tree"><rect class="rd-trunk" x="188.6" y="150.8" width="0.6" height="3.1" opacity="0.177"/><circle class="rd-crown" cx="188.9" cy="148.8" r="2.3" opacity="0.177"/></g><g class="rd-tree"><rect class="rd-trunk" x="186" y="151" width="0.8" height="3.8" opacity="0.381"/><circle class="rd-crown" cx="186.4" cy="148.6" r="2.9" opacity="0.381"/></g><g class="rd-tree"><rect class="rd-trunk" x="182.1" y="151.2" width="1" height="4.9" opacity="0.585"/><circle class="rd-crown" cx="182.6" cy="148.2" r="3.7" opacity="0.585"/></g><g class="rd-tree"><rect class="rd-trunk" x="174.9" y="151.7" width="1.4" height="6.9" opacity="0.79"/><circle class="rd-crown" cx="175.6" cy="147.4" r="5.1" opacity="0.79"/></g><g class="rd-tree"><rect class="rd-trunk" x="158.1" y="152.9" width="2.3" height="11.4" opacity="0.9940000000000001"/><circle class="rd-crown" cx="159.3" cy="145.7" r="8.6" opacity="0.9940000000000001"/></g><g class="rd-tree"><rect class="rd-trunk" x="74.4" y="158.6" width="6.9" height="34.3" opacity="1"/><circle class="rd-crown" cx="77.9" cy="137.1" r="25.7" opacity="1"/></g></g><g class="rd-row"><g class="rd-tree"><rect class="rd-trunk" x="218.7" y="150.6" width="0.5" height="2.6" opacity="0"/><circle class="rd-crown" cx="219" cy="149" r="1.9" opacity="0"/></g><g class="rd-tree"><rect class="rd-trunk" x="221.5" y="150.7" width="0.6" height="2.9" opacity="0.10400000000000001"/><circle class="rd-crown" cx="221.8" cy="148.9" r="2.2" opacity="0.10400000000000001"/></g><g class="rd-tree"><rect class="rd-trunk" x="225.2" y="150.9" width="0.7" height="3.4" opacity="0.27899999999999997"/><circle class="rd-crown" cx="225.5" cy="148.7" r="2.6" opacity="0.27899999999999997"/></g><g class="rd-tree"><rect class="rd-trunk" x="230.4" y="151" width="0.8" height="4.1" opacity="0.45399999999999996"/><circle class="rd-crown" cx="230.8" cy="148.4" r="3.1" opacity="0.45399999999999996"/></g><g class="rd-tree"><rect class="rd-trunk" x="238.3" y="151.3" width="1" height="5.2" opacity="0.629"/><circle class="rd-crown" cx="238.8" cy="148" r="3.9" opacity="0.629"/></g><g class="rd-tree"><rect class="rd-trunk" x="251.8" y="151.8" width="1.4" height="7.1" opacity="0.804"/><circle class="rd-crown" cx="252.5" cy="147.4" r="5.3" opacity="0.804"/></g><g class="rd-tree"><rect class="rd-trunk" x="280" y="152.7" width="2.2" height="10.9" opacity="0.9790000000000001"/><circle class="rd-crown" cx="281.1" cy="145.9" r="8.2" opacity="0.9790000000000001"/></g><g class="rd-tree"><rect class="rd-trunk" x="376.1" y="156" width="4.8" height="24" opacity="1"/><circle class="rd-crown" cx="378.5" cy="141" r="18" opacity="1"/></g></g><g class="rd-row"><polygon class="rd-post" points="196.9,153.2 197.1,153.2 197.1,152.2 196.9,152.2" opacity="0"/><polygon class="rd-post" points="196.5,153.6 196.7,153.6 196.7,152.4 196.5,152.4" opacity="0.075"/><polygon class="rd-post" points="196,154.1 196.3,154.1 196.3,152.8 196,152.8" opacity="0.221"/><polygon class="rd-post" points="195.4,154.7 195.7,154.7 195.7,153.2 195.4,153.2" opacity="0.36700000000000005"/><polygon class="rd-post" points="194.5,155.6 194.9,155.6 194.9,153.8 194.5,153.8" opacity="0.513"/><polygon class="rd-post" points="193.3,156.8 193.8,156.8 193.8,154.6 193.3,154.6" opacity="0.6579999999999999"/><polygon class="rd-post" points="191.3,158.8 191.9,158.8 191.9,156 191.3,156" opacity="0.804"/><polygon class="rd-post" points="187.7,162.5 188.6,162.5 188.6,158.5 187.7,158.5" opacity="0.95"/><polygon class="rd-post" points="178.9,171.4 180.4,171.4 180.4,164.6 178.9,164.6" opacity="1"/><polygon class="rd-post" points="126.1,225 131.4,225 131.4,201 126.1,201" opacity="1"/></g><g class="rd-row"><polygon class="rd-post" points="212.8,153 213,153 213,152.1 212.8,152.1" opacity="0"/><polygon class="rd-post" points="214.2,153.4 214.4,153.4 214.4,152.3 214.2,152.3" opacity="0.002"/><polygon class="rd-post" points="216,153.8 216.3,153.8 216.3,152.6 216,152.6" opacity="0.14800000000000002"/><polygon class="rd-post" points="218.3,154.3 218.6,154.3 218.6,153 218.3,153" opacity="0.294"/><polygon class="rd-post" points="221.4,155.1 221.8,155.1 221.8,153.5 221.4,153.5" opacity="0.44"/><polygon class="rd-post" points="225.8,156.1 226.2,156.1 226.2,154.2 225.8,154.2" opacity="0.585"/><polygon class="rd-post" points="232.4,157.7 233,157.7 233,155.2 232.4,155.2" opacity="0.731"/><polygon class="rd-post" points="243.6,160.3 244.3,160.3 244.3,157 243.6,157" opacity="0.877"/><polygon class="rd-post" points="266.6,165.8 267.7,165.8 267.7,160.7 266.6,160.7" opacity="1"/><polygon class="rd-post" points="340.5,183.3 342.8,183.3 342.8,172.7 340.5,172.7" opacity="1"/></g><g class="rd-row"><polygon class="rd-dash" points="205.3,153.3 205.6,153.3 205.5,153.2 205.2,153.2" opacity="0"/><polygon class="rd-dash" points="205.6,153.5 205.9,153.5 205.8,153.4 205.5,153.4" opacity="0.049"/><polygon class="rd-dash" points="206,153.7 206.3,153.7 206.2,153.6 205.8,153.6" opacity="0.125"/><polygon class="rd-dash" points="206.4,154 206.8,154 206.6,153.9 206.2,153.9" opacity="0.2"/><polygon class="rd-dash" points="206.8,154.3 207.3,154.3 207.1,154.2 206.6,154.2" opacity="0.276"/><polygon class="rd-dash" points="207.4,154.6 207.8,154.6 207.6,154.5 207.2,154.5" opacity="0.35200000000000004"/><polygon class="rd-dash" points="208,155 208.5,155 208.3,154.9 207.8,154.9" opacity="0.428"/><polygon class="rd-dash" points="208.8,155.5 209.3,155.5 209,155.3 208.5,155.3" opacity="0.504"/><polygon class="rd-dash" points="209.7,156.1 210.3,156.1 209.9,155.8 209.3,155.8" opacity="0.58"/><polygon class="rd-dash" points="210.9,156.8 211.5,156.8 211,156.5 210.4,156.5" opacity="0.655"/><polygon class="rd-dash" points="212.3,157.7 213.1,157.7 212.4,157.3 211.7,157.3" opacity="0.731"/><polygon class="rd-dash" points="214.2,158.9 215.1,158.9 214.2,158.4 213.4,158.4" opacity="0.807"/><polygon class="rd-dash" points="216.8,160.5 217.8,160.5 216.7,159.8 215.7,159.8" opacity="0.883"/><polygon class="rd-dash" points="220.5,162.8 221.8,162.8 220.1,161.8 218.9,161.8" opacity="0.9590000000000001"/><polygon class="rd-dash" points="226.4,166.5 228,166.5 225.2,164.9 223.8,164.9" opacity="1"/><polygon class="rd-dash" points="236.9,173.1 239.2,173.1 234,170 232,170" opacity="1"/><polygon class="rd-dash" points="261.5,188.5 265.4,188.5 252,180.6 249,180.6" opacity="1"/><polygon class="rd-dash" points="384.6,265.4 396.2,265.4 310.9,215.2 304.3,215.2" opacity="1"/></g></g>
+              <g class="sc-world" data-scene="standard">
+                <rect width="400" height="152" fill="url(#rd-sky)"/>
+                <circle class="rd-sun sc-sun" cx="292" cy="128" r="22"/>
+                <g class="sc-clouds"><g opacity="0.2"><ellipse cx="66" cy="94" rx="26" ry="3.5"/><ellipse cx="56.64" cy="91.76" rx="10.4" ry="3.85"/><ellipse cx="71.2" cy="91.2" rx="8.32" ry="3.5"/></g><g opacity="0.2"><ellipse cx="229" cy="80" rx="33" ry="4"/><ellipse cx="217.12" cy="77.44" rx="13.2" ry="4.4"/><ellipse cx="235.6" cy="76.8" rx="10.56" ry="4"/></g><g opacity="0.18"><ellipse cx="340" cy="102" rx="22" ry="3"/><ellipse cx="332.08" cy="100.08" rx="8.8" ry="3.3"/><ellipse cx="344.4" cy="99.6" rx="7.04" ry="3"/></g></g>
+                <g class="sc-far"><g data-depth=".15"><path d="M-60 151 C20 138 70 140 130 145 C190 137 250 136 300 143 C350 138 410 139 460 146 L460 152 L-60 152Z" fill="#7CCFA4"/><path d="M-60 150 C10 118 60 120 110 138 C150 126 190 112 240 130 C290 116 340 112 460 142 L460 152 L-60 152Z" fill="#1F8A5B"/><g transform="translate(330 124) scale(.55)"><path d="M-1 12C-1 8-3 6-2 3S1 0 1-2" stroke="#167A4E" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M-2 5C-7 5-11 2-12-2-8-2-4 0-2 5Z" fill="#167A4E"/><path d="M1 0C2-4 6-7 11-7 11-3 6 0 1 0Z" fill="#167A4E"/></g><path d="M-60 150 C30 134 80 136 140 146 C200 134 260 132 320 144 C370 138 420 140 460 148 L460 152 L-60 152Z" fill="#167A4E"/></g></g>
+                <rect y="150" width="400" height="150" fill="url(#rd-grass)"/>
+                <g class="sc-mid"><g data-depth=".4"><path d="M-60 153 Q-56 148.6 -52 153 Q-48 148.6 -44 153 Q-40 148.6 -36 153 Q-32 148.6 -28 153 Q-24 148.6 -20 153 Q-16 148.6 -12 153 Q-8 148.6 -4 153 Q0 148.6 4 153 Q8 148.6 12 153 Q16 148.6 20 153 Q24 148.6 28 153 Q32 148.6 36 153 Q40 148.6 44 153 Q48 148.6 52 153 Q56 148.6 60 153 Q64 148.6 68 153 Q72 148.6 76 153 Q80 148.6 84 153 Q88 148.6 92 153 Q96 148.6 100 153 Q104 148.6 108 153 Q112 148.6 116 153 Q120 148.6 124 153 Q128 148.6 132 153 Q136 148.6 140 153 Q144 148.6 148 153 Q152 148.6 156 153 Q160 148.6 164 153 Q168 148.6 172 153 Q176 148.6 180 153 Q184 148.6 188 153 Q192 148.6 196 153 Q200 148.6 204 153 Q208 148.6 212 153 Q216 148.6 220 153 Q224 148.6 228 153 Q232 148.6 236 153 Q240 148.6 244 153 Q248 148.6 252 153 Q256 148.6 260 153 Q264 148.6 268 153 Q272 148.6 276 153 Q280 148.6 284 153 Q288 148.6 292 153 Q296 148.6 300 153 Q304 148.6 308 153 Q312 148.6 316 153 Q320 148.6 324 153 Q328 148.6 332 153 Q336 148.6 340 153 Q344 148.6 348 153 Q352 148.6 356 153 Q360 148.6 364 153 Q368 148.6 372 153 Q376 148.6 380 153 Q384 148.6 388 153 Q392 148.6 396 153 Q400 148.6 404 153 Q408 148.6 412 153 Q416 148.6 420 153 Q424 148.6 428 153 Q432 148.6 436 153 Q440 148.6 444 153 Q448 148.6 452 153 Q456 148.6 460 153 V155 H-60Z" fill="#0F6B45"/></g></g>
+                <g class="rd-live"><polygon class="rd-surface" points="65,450 1325,450 211.7,153.1 198.6,153.1"/><polygon class="rd-line" points="80,450 98,450 198.9,153.1 198.8,153.1"/><polygon class="rd-line" points="1292,450 1310,450 211.6,153.1 211.4,153.1"/><g class="rd-row"><g class="rd-tree" transform="translate(190.6 153.3) scale(3.3)" opacity="0"><rect class="rd-trunk" x="-.07" y="-.9" width=".14" height=".9"/><ellipse class="rd-crown-d" cx=".05" cy="-1.12" rx=".58" ry=".42"/><circle class="rd-crown" cx="-.02" cy="-1.32" r=".56"/><ellipse class="rd-crown-l" cx=".2" cy="-1.5" rx=".26" ry=".22"/></g><g class="rd-tree" transform="translate(188.9 153.9) scale(3.9)" opacity="0.177"><rect class="rd-trunk" x="-.07" y="-.9" width=".14" height=".9"/><ellipse class="rd-crown-d" cx=".05" cy="-1.12" rx=".58" ry=".42"/><circle class="rd-crown" cx="-.02" cy="-1.32" r=".56"/><ellipse class="rd-crown-l" cx=".2" cy="-1.5" rx=".26" ry=".22"/></g><g class="rd-tree" transform="translate(186.4 154.8) scale(4.76)" opacity="0.381"><rect class="rd-trunk" x="-.07" y="-.9" width=".14" height=".9"/><ellipse class="rd-crown-d" cx=".05" cy="-1.12" rx=".58" ry=".42"/><circle class="rd-crown" cx="-.02" cy="-1.32" r=".56"/><ellipse class="rd-crown-l" cx=".2" cy="-1.5" rx=".26" ry=".22"/></g><g class="rd-tree" transform="translate(182.6 156.1) scale(6.12)" opacity="0.585"><rect class="rd-trunk" x="-.07" y="-.9" width=".14" height=".9"/><ellipse class="rd-crown-d" cx=".05" cy="-1.12" rx=".58" ry=".42"/><circle class="rd-crown" cx="-.02" cy="-1.32" r=".56"/><ellipse class="rd-crown-l" cx=".2" cy="-1.5" rx=".26" ry=".22"/></g><g class="rd-tree" transform="translate(175.6 158.6) scale(8.57)" opacity="0.79"><rect class="rd-trunk" x="-.07" y="-.9" width=".14" height=".9"/><ellipse class="rd-crown-d" cx=".05" cy="-1.12" rx=".58" ry=".42"/><circle class="rd-crown" cx="-.02" cy="-1.32" r=".56"/><ellipse class="rd-crown-l" cx=".2" cy="-1.5" rx=".26" ry=".22"/></g><g class="rd-tree" transform="translate(159.3 164.3) scale(14.29)" opacity="0.9940000000000001"><rect class="rd-trunk" x="-.07" y="-.9" width=".14" height=".9"/><ellipse class="rd-crown-d" cx=".05" cy="-1.12" rx=".58" ry=".42"/><circle class="rd-crown" cx="-.02" cy="-1.32" r=".56"/><ellipse class="rd-crown-l" cx=".2" cy="-1.5" rx=".26" ry=".22"/></g><g class="rd-tree" transform="translate(77.9 192.9) scale(42.86)" opacity="1"><rect class="rd-trunk" x="-.07" y="-.9" width=".14" height=".9"/><ellipse class="rd-crown-d" cx=".05" cy="-1.12" rx=".58" ry=".42"/><circle class="rd-crown" cx="-.02" cy="-1.32" r=".56"/><ellipse class="rd-crown-l" cx=".2" cy="-1.5" rx=".26" ry=".22"/></g></g><g class="rd-row"><g class="rd-tree2" transform="translate(219 153.2) scale(3.19)" opacity="0"><rect class="rd-trunk" x="-.07" y="-.85" width=".14" height=".85"/><ellipse class="rd-crown-d" cx=".04" cy="-1.08" rx=".62" ry=".36"/><ellipse class="rd-crown" cx="-.2" cy="-1.32" rx=".42" ry=".5"/><ellipse class="rd-crown" cx=".24" cy="-1.42" rx=".4" ry=".52"/><ellipse class="rd-crown-l" cx=".36" cy="-1.6" rx=".18" ry=".2"/></g><g class="rd-tree2" transform="translate(221.8 153.7) scale(3.66)" opacity="0.10400000000000001"><rect class="rd-trunk" x="-.07" y="-.85" width=".14" height=".85"/><ellipse class="rd-crown-d" cx=".04" cy="-1.08" rx=".62" ry=".36"/><ellipse class="rd-crown" cx="-.2" cy="-1.32" rx=".42" ry=".5"/><ellipse class="rd-crown" cx=".24" cy="-1.42" rx=".4" ry=".52"/><ellipse class="rd-crown-l" cx=".36" cy="-1.6" rx=".18" ry=".2"/></g><g class="rd-tree2" transform="translate(225.5 154.3) scale(4.29)" opacity="0.27899999999999997"><rect class="rd-trunk" x="-.07" y="-.85" width=".14" height=".85"/><ellipse class="rd-crown-d" cx=".04" cy="-1.08" rx=".62" ry=".36"/><ellipse class="rd-crown" cx="-.2" cy="-1.32" rx=".42" ry=".5"/><ellipse class="rd-crown" cx=".24" cy="-1.42" rx=".4" ry=".52"/><ellipse class="rd-crown-l" cx=".36" cy="-1.6" rx=".18" ry=".2"/></g><g class="rd-tree2" transform="translate(230.8 155.2) scale(5.17)" opacity="0.45399999999999996"><rect class="rd-trunk" x="-.07" y="-.85" width=".14" height=".85"/><ellipse class="rd-crown-d" cx=".04" cy="-1.08" rx=".62" ry=".36"/><ellipse class="rd-crown" cx="-.2" cy="-1.32" rx=".42" ry=".5"/><ellipse class="rd-crown" cx=".24" cy="-1.42" rx=".4" ry=".52"/><ellipse class="rd-crown-l" cx=".36" cy="-1.6" rx=".18" ry=".2"/></g><g class="rd-tree2" transform="translate(238.8 156.5) scale(6.52)" opacity="0.629"><rect class="rd-trunk" x="-.07" y="-.85" width=".14" height=".85"/><ellipse class="rd-crown-d" cx=".04" cy="-1.08" rx=".62" ry=".36"/><ellipse class="rd-crown" cx="-.2" cy="-1.32" rx=".42" ry=".5"/><ellipse class="rd-crown" cx=".24" cy="-1.42" rx=".4" ry=".52"/><ellipse class="rd-crown-l" cx=".36" cy="-1.6" rx=".18" ry=".2"/></g><g class="rd-tree2" transform="translate(252.5 158.8) scale(8.82)" opacity="0.804"><rect class="rd-trunk" x="-.07" y="-.85" width=".14" height=".85"/><ellipse class="rd-crown-d" cx=".04" cy="-1.08" rx=".62" ry=".36"/><ellipse class="rd-crown" cx="-.2" cy="-1.32" rx=".42" ry=".5"/><ellipse class="rd-crown" cx=".24" cy="-1.42" rx=".4" ry=".52"/><ellipse class="rd-crown-l" cx=".36" cy="-1.6" rx=".18" ry=".2"/></g><g class="rd-tree2" transform="translate(281.1 163.6) scale(13.64)" opacity="0.9790000000000001"><rect class="rd-trunk" x="-.07" y="-.85" width=".14" height=".85"/><ellipse class="rd-crown-d" cx=".04" cy="-1.08" rx=".62" ry=".36"/><ellipse class="rd-crown" cx="-.2" cy="-1.32" rx=".42" ry=".5"/><ellipse class="rd-crown" cx=".24" cy="-1.42" rx=".4" ry=".52"/><ellipse class="rd-crown-l" cx=".36" cy="-1.6" rx=".18" ry=".2"/></g><g class="rd-tree2" transform="translate(378.5 180) scale(30)" opacity="1"><rect class="rd-trunk" x="-.07" y="-.85" width=".14" height=".85"/><ellipse class="rd-crown-d" cx=".04" cy="-1.08" rx=".62" ry=".36"/><ellipse class="rd-crown" cx="-.2" cy="-1.32" rx=".42" ry=".5"/><ellipse class="rd-crown" cx=".24" cy="-1.42" rx=".4" ry=".52"/><ellipse class="rd-crown-l" cx=".36" cy="-1.6" rx=".18" ry=".2"/></g></g><g class="rd-row"><g class="rd-post" transform="translate(197 153.2) scale(3.19)" opacity="0"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(196.6 153.6) scale(3.57)" opacity="0.075"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(196.1 154.1) scale(4.05)" opacity="0.221"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(195.5 154.7) scale(4.69)" opacity="0.36700000000000005"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(194.7 155.6) scale(5.56)" opacity="0.513"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(193.5 156.8) scale(6.82)" opacity="0.6579999999999999"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(191.6 158.8) scale(8.82)" opacity="0.804"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(188.1 162.5) scale(12.5)" opacity="0.95"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(179.6 171.4) scale(21.43)" opacity="1"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(128.8 225) scale(75)" opacity="1"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g></g><g class="rd-row"><g class="rd-post" transform="translate(212.9 153) scale(3.03)" opacity="0"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(214.3 153.4) scale(3.37)" opacity="0.002"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(216.1 153.8) scale(3.8)" opacity="0.14800000000000002"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(218.5 154.3) scale(4.35)" opacity="0.294"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(221.6 155.1) scale(5.08)" opacity="0.44"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(226 156.1) scale(6.12)" opacity="0.585"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(232.7 157.7) scale(7.69)" opacity="0.731"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(244 160.3) scale(10.34)" opacity="0.877"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(267.1 165.8) scale(15.79)" opacity="1"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g><g class="rd-post" transform="translate(341.7 183.3) scale(33.33)" opacity="1"><rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/></g></g><g class="rd-row"><polygon class="rd-dash" points="205.3,153.3 205.6,153.3 205.5,153.2 205.2,153.2" opacity="0"/><polygon class="rd-dash" points="205.6,153.5 205.9,153.5 205.8,153.4 205.5,153.4" opacity="0.049"/><polygon class="rd-dash" points="206,153.7 206.3,153.7 206.2,153.6 205.8,153.6" opacity="0.125"/><polygon class="rd-dash" points="206.4,154 206.8,154 206.6,153.9 206.2,153.9" opacity="0.2"/><polygon class="rd-dash" points="206.8,154.3 207.3,154.3 207.1,154.2 206.6,154.2" opacity="0.276"/><polygon class="rd-dash" points="207.4,154.6 207.8,154.6 207.6,154.5 207.2,154.5" opacity="0.35200000000000004"/><polygon class="rd-dash" points="208,155 208.5,155 208.3,154.9 207.8,154.9" opacity="0.428"/><polygon class="rd-dash" points="208.8,155.5 209.3,155.5 209,155.3 208.5,155.3" opacity="0.504"/><polygon class="rd-dash" points="209.7,156.1 210.3,156.1 209.9,155.8 209.3,155.8" opacity="0.58"/><polygon class="rd-dash" points="210.9,156.8 211.5,156.8 211,156.5 210.4,156.5" opacity="0.655"/><polygon class="rd-dash" points="212.3,157.7 213.1,157.7 212.4,157.3 211.7,157.3" opacity="0.731"/><polygon class="rd-dash" points="214.2,158.9 215.1,158.9 214.2,158.4 213.4,158.4" opacity="0.807"/><polygon class="rd-dash" points="216.8,160.5 217.8,160.5 216.7,159.8 215.7,159.8" opacity="0.883"/><polygon class="rd-dash" points="220.5,162.8 221.8,162.8 220.1,161.8 218.9,161.8" opacity="0.9590000000000001"/><polygon class="rd-dash" points="226.4,166.5 228,166.5 225.2,164.9 223.8,164.9" opacity="1"/><polygon class="rd-dash" points="236.9,173.1 239.2,173.1 234,170 232,170" opacity="1"/><polygon class="rd-dash" points="261.5,188.5 265.4,188.5 252,180.6 249,180.6" opacity="1"/><polygon class="rd-dash" points="384.6,265.4 396.2,265.4 310.9,215.2 304.3,215.2" opacity="1"/></g></g>
+                <g class="sc-signs"></g>
+                <g class="sc-ambient"></g>
+                <g class="sc-overlay"></g>
+              </g>
               <path class="rd-pillar" d="M-10 -10 L34 -10 L-10 120Z M410 -10 L366 -10 L410 120Z"/>
               <path class="rd-board" d="M-10 300 L-10 256 C90 238 310 238 410 256 L410 300Z"/>
               <path class="rd-trim" d="M-10 256 C90 238 310 238 410 256" fill="none"/>
             </svg>
-            <div class="mount" aria-hidden="true"></div>
+            <div class="scene-dim" aria-hidden="true"></div>
+            <div class="rig">
+              <div class="mount" aria-hidden="true"></div>
             <div class="phone" id="hero-phone">
               <div class="screen">
                 <video muted loop playsinline webkit-playsinline preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture
-                  poster="/assets/video/drive-logged-poster.webp?v=c030ce84" data-poster-saved="/assets/video/drive-logged-saved.webp?v=1dae25fd" data-poster-drive="/assets/video/drive-logged-poster.webp?v=c030ce84" width="390" height="908">
-                  <source src="/assets/video/drive-logged.webm?v=2d981edb" type="video/webm">
-                  <source src="/assets/video/drive-logged.mp4?v=7391f591" type="video/mp4">
+                  poster="/assets/video/drive-logged-poster.webp?v=d5060b02" data-poster-saved="/assets/video/drive-logged-saved.webp?v=ba5f0fa8" data-poster-drive="/assets/video/drive-logged-poster.webp?v=d5060b02" width="390" height="908">
+                  <source src="/assets/video/drive-logged.webm?v=1b77618a" type="video/webm">
+                  <source src="/assets/video/drive-logged.mp4?v=58d8760f" type="video/mp4">
                 </video>
+                <span class="touch" aria-hidden="true"></span>
                 <span class="sbar" aria-hidden="true"><b>9:41</b></span>
               </div>
             </div>
             </div>
+            </div>
           </div>
           <figcaption class="scene-cap">Park. The drive is already there. Swipe it to Work, and watch it add up.</figcaption>
+          <div class="scene-pick" hidden>
+            <span class="scene-pick-label" id="scene-pick-label">Scenery</span>
+            <div class="scene-chips" role="radiogroup" aria-labelledby="scene-pick-label">
+              <label class="scene-chip"><input type="radio" name="scenery" value="standard"><span><svg class="flag" viewBox="12 9 77 84" aria-hidden="true" focusable="false"><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z" fill="#24B359"/><path d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#064E3B" stroke-width="8" stroke-linecap="round" fill="none"/><circle cx="51" cy="28" r="6.6" fill="#FACC15"/></svg>Standard</span></label>
+              <label class="scene-chip"><input type="radio" name="scenery" value="uk-london"><span><svg class="flag" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><rect width="40" height="28" fill="#012169"/><path d="M0 0L40 28M40 0L0 28" stroke="#FFF" stroke-width="5"/><path d="M0 0L40 28M40 0L0 28" stroke="#C8102E" stroke-width="1.8"/><path d="M20 0V28M0 14H40" stroke="#FFF" stroke-width="8"/><path d="M20 0V28M0 14H40" stroke="#C8102E" stroke-width="4.6"/></svg>UK</span></label>
+            </div>
+          </div>
         </figure>
       </div>
     </div>
@@ -119,12 +138,12 @@
           <div class="deck" id="deck" role="region" aria-roledescription="carousel" aria-label="MileSprout app screens" aria-describedby="deck-help" tabindex="0">
             <p class="sr-only" id="deck-help">Use the left and right arrow keys, or the buttons below, to go through the screens.</p>
             <div class="deck-cards">
-              <div class="dcard" role="group" aria-roledescription="slide" aria-label="1 of 8: Home" data-depth="0"><div class="phone"><div class="screen"><img src="/assets/img/screens/home.webp" width="640" height="1490" draggable="false" alt="The Home screen: on shift for 1 hour 15 minutes, £1,754.40 of deductions found this tax year, and a drive to sort Work or Personal."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
-              <div class="dcard" role="group" aria-roledescription="slide" aria-label="2 of 8: Drives" data-depth="1"><div class="phone"><div class="screen"><img src="/assets/img/screens/drives.webp" width="640" height="1490" loading="lazy" draggable="false" alt="The Drives list: each shift is one row with its miles, time and drives."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
+              <div class="dcard" role="group" aria-roledescription="slide" aria-label="1 of 8: Home" data-depth="0"><div class="phone"><div class="screen"><img src="/assets/img/screens/home.webp?v=14b25716" width="640" height="1490" draggable="false" alt="The Home screen: on shift for 1 hour 15 minutes, £1,754.62 of deductions found this tax year, and a drive to sort Work or Personal."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
+              <div class="dcard" role="group" aria-roledescription="slide" aria-label="2 of 8: Drives" data-depth="1"><div class="phone"><div class="screen"><img src="/assets/img/screens/drives.webp?v=c380434c" width="640" height="1490" loading="lazy" draggable="false" alt="The Drives list: each shift is one row with its miles, time and drives."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
               <div class="dcard" role="group" aria-roledescription="slide" aria-label="3 of 8: Trip" data-depth="2"><div class="phone"><div class="screen"><img src="/assets/img/screens/trip.webp" width="640" height="1490" loading="lazy" draggable="false" alt="A single trip with its route on a street map, a Work or Personal switch, the start and end places, and parking and tolls fields."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
-              <div class="dcard" role="group" aria-roledescription="slide" aria-label="4 of 8: Money" data-depth="3"><div class="phone" data-tone="dark"><div class="screen"><img src="/assets/img/screens/money.webp" width="640" height="1490" loading="lazy" draggable="false" alt="The Money tab: quarterly figures with their due dates, and how much to put aside for tax this week."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
-              <div class="dcard" role="group" aria-roledescription="slide" aria-label="5 of 8: Reports" data-depth="far"><div class="phone"><div class="screen"><img src="/assets/img/screens/export.webp" width="640" height="1490" loading="lazy" draggable="false" alt="The Reports screen: odometer readings, export choices for spreadsheet, Xero, QuickBooks, FreeAgent and expense claim, and the HMRC mileage report."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
-              <div class="dcard" role="group" aria-roledescription="slide" aria-label="6 of 8: Privacy" data-depth="far"><div class="phone"><div class="screen"><img src="/assets/img/screens/privacy.webp" width="640" height="1490" loading="lazy" draggable="false" alt="The set-up screen: automatic, uses little battery, and private, with trips stored encrypted on your phone."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
+              <div class="dcard" role="group" aria-roledescription="slide" aria-label="4 of 8: Money" data-depth="3"><div class="phone" data-tone="dark"><div class="screen"><img src="/assets/img/screens/money.webp?v=8821bdb7" width="640" height="1490" loading="lazy" draggable="false" alt="The Money tab: quarterly figures with their due dates, and how much to put aside for tax this week."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
+              <div class="dcard" role="group" aria-roledescription="slide" aria-label="5 of 8: Reports" data-depth="far"><div class="phone"><div class="screen"><img src="/assets/img/screens/export.webp?v=9167afe1" width="640" height="1490" loading="lazy" draggable="false" alt="The Reports screen: odometer readings, export choices for spreadsheet, Xero, QuickBooks, FreeAgent and expense claim, and the HMRC mileage report."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
+              <div class="dcard" role="group" aria-roledescription="slide" aria-label="6 of 8: Privacy" data-depth="far"><div class="phone"><div class="screen"><img src="/assets/img/screens/privacy.webp?v=d4c4da3e" width="640" height="1490" loading="lazy" draggable="false" alt="The set-up screen: automatic, uses little battery, and private, with trips stored encrypted on your phone."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
               <div class="dcard" role="group" aria-roledescription="slide" aria-label="7 of 8: Perks" data-depth="far"><div class="phone"><div class="screen"><img src="/assets/img/screens/perks.webp" width="640" height="1490" loading="lazy" draggable="false" alt="The Perks tab: this week's offers, such as 10p off a litre of fuel and a free hot drink, each with a Claim button and how many are left this week."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
               <div class="dcard" role="group" aria-roledescription="slide" aria-label="8 of 8: Your code" data-depth="far"><div class="phone"><div class="screen"><img src="/assets/img/screens/perks-code.webp" width="640" height="1490" loading="lazy" draggable="false" alt="A claimed perk: a QR code and a short code to show at the till, with a countdown of how long it can be used."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
             </div>
@@ -144,90 +163,137 @@
             <button type="button" class="deck-btn" data-step="1" aria-controls="deck" aria-label="Next screen"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           </div>
           <p class="deck-hint" aria-hidden="true"><span class="count"><b id="deck-n">1</b> / 8</span> Swipe, drag or use the arrow keys</p>
+          <p class="deck-done" hidden><span class="deck-done-dot" aria-hidden="true"></span>You've seen it all. <a href="#early-access">Get early access ↓</a></p>
         </div>
 
         <div class="feats">
           <article class="feat on" aria-labelledby="f-home">
-            <span class="tag">Free</span>
+            <span class="mint-badge feat-badge"><svg class="b-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Free</span>
             <h3 id="f-home">Your shift at a glance</h3>
-            <p>Home shows how long you've been on shift, what your work miles have found this tax year, and any drive that still needs sorting.</p>
-            <ul>
-              <li>Swipe to start or end a shift.</li>
-              <li>Drives waiting to be sorted are right there, with what each is worth as Work.</li>
+            <div class="feat-top">
+              <p class="feat-stat"><b data-count="1754.62" data-prefix="£" data-dec="2" data-home-worth>£1,754.62</b><span data-home-note>Example: 3,190.2 work miles this tax year, shown on Home</span></p>
+              
+            </div>
+            <ul class="feat-tiles">
+              <li style="--i:0">Swipe to start or end a shift</li>
+              <li style="--i:1">Drives to sort, with what each is worth as Work</li>
+              <li style="--i:2">Your total for the tax year, always up to date</li>
             </ul>
           </article>
           <article class="feat" aria-labelledby="f-drives">
-            <span class="tag">Free</span>
+            <span class="mint-badge feat-badge"><svg class="b-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Free</span>
             <h3 id="f-drives">Drives log themselves</h3>
-            <p>Automatic logging is free and has no monthly limit. Nothing to start or stop: each drive is saved when you park.</p>
-            <ul>
-              <li>One row per shift, with your miles, time and drives.</li>
-              <li>GPS only runs while you drive, so it goes easy on your battery.</li>
-              <li>While you're on shift, your time and miles show on the Lock Screen and in the Dynamic Island.</li>
-              <li>Missed one? Add it by hand.</li>
+            <div class="feat-top">
+              <p class="feat-stat"><b data-count="0" data-prefix="£" data-cur-prefix>£0</b><span>Automatic logging, no monthly limit</span></p>
+              
+            </div>
+            <ul class="feat-tiles">
+              <li style="--i:0">Saved when you park. Nothing to start or stop</li>
+              <li style="--i:1">GPS only runs while you drive, easy on your battery</li>
+              <li style="--i:2">Time and miles on your Lock Screen while on shift</li>
             </ul>
           </article>
           <article class="feat" aria-labelledby="f-trip">
-            <span class="tag">Free</span>
+            <span class="mint-badge feat-badge"><svg class="b-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Free</span>
             <h3 id="f-trip">Work or Personal? One tap.</h3>
-            <p>See the route of every drive on a map, then sort it with a tap or a swipe. Only Work miles count towards your claim.</p>
-            <ul>
-              <li>Add a purpose, parking and tolls if you need them.</li>
-              <li>MileSprout learns your usual routes and work hours, and sorts many drives for you.</li>
-              <li>Client privacy mode keeps only the area of a visit, never the street address.</li>
+            <div class="feat-top">
+              <p class="feat-stat"><b data-count="1" data-suffix=" tap">1 tap</b><span>Work or Personal. Only Work miles count.</span></p>
+              
+            </div>
+            <ul class="feat-tiles">
+              <li style="--i:0">Every route on a map</li>
+              <li style="--i:1">Learns your usual routes and sorts many for you</li>
+              <li style="--i:2">Client privacy mode keeps only the area, never the street</li>
             </ul>
           </article>
           <article class="feat" aria-labelledby="f-money">
-            <span class="tag">Money tab</span>
+            <span class="mint-badge feat-badge"><b class="b-glyph" data-cur-sym>£</b>Free, more with Pro</span>
             <h3 id="f-money">Know what to put aside for tax</h3>
-            <p>The Money tab shows what your work miles are worth this tax year, free. With Pro it also does the sums you'd otherwise do on the back of a receipt:</p>
-            <ul>
-              <li>Quarterly figures for your Making Tax Digital updates, with the due dates.</li>
-              <li>A weekly tax set-aside, from the earnings you add.</li>
-              <li>Earnings by platform, read from a screenshot on your iPhone.</li>
+            <div class="feat-top">
+              <p class="feat-stat"><b data-count="55" data-suffix="p" data-rate="1">55p</b><span><span data-rate-label>a mile at HMRC's rate, for your first 10,000 work miles</span></span></p>
+              
+            </div>
+            <ul class="feat-tiles">
+              <li style="--i:0">What your work miles are worth this tax year, free</li>
+              <li style="--i:1">Pro: quarterly figures for Making Tax Digital, with due dates</li>
+              <li style="--i:2">Pro: what to put aside each week</li>
             </ul>
           </article>
-          <article class="feat" aria-labelledby="f-export">
-            <span class="tag">Pro</span>
-            <h3 id="f-export">Your mileage log, ready for HMRC</h3>
-            <p>When it's time to file, get your log out in the shape you need.</p>
-            <ul>
-              <li>An itemised PDF report with your totals and every trip.</li>
-              <li>Spreadsheet and CSV, plus Xero, QuickBooks and FreeAgent formats.</li>
-              <li>Send it straight to your accountant.</li>
+          <article class="feat is-pro" aria-labelledby="f-export">
+            <span class="pro-badge-wrap feat-badge"><span class="pro-badge"><svg class="b-icon" viewBox="12 9 77 84" aria-hidden="true" focusable="false"><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z" fill="#064E3B"/><path d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#064E3B" stroke-width="9" stroke-linecap="round" fill="none"/><circle cx="51" cy="28" r="8" fill="#064E3B"/></svg>Pro</span><span class="sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i></span></span>
+            <h3 id="f-export">Your mileage log, ready for <span data-auth>HMRC</span></h3>
+            <div class="feat-top">
+              <p class="feat-stat"><b data-count="1" data-suffix=" PDF">1 PDF</b><span>Every trip and your totals, ready to file</span></p>
+              <div class="feat-visual mini-pdf" aria-hidden="true">
+                <div class="pdf-page">
+                  <span class="pdf-head">Mileage log 2026/27</span>
+                  <i></i><i></i><i></i><i></i>
+                  <span class="pdf-total"><span>Total</span><b>£2,640.00</b></span>
+                  <svg class="pdf-seal" viewBox="12 9 77 84"><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z" fill="#24B359"/><path d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#064E3B" stroke-width="8" stroke-linecap="round" fill="none"/><circle cx="51" cy="28" r="7.6" fill="#FFFFFF"/><circle cx="51" cy="28" r="5.6" fill="#FACC15"/></svg>
+                </div>
+              </div>
+            </div>
+            <ul class="feat-tiles">
+              <li style="--i:0">Itemised PDF report with every trip</li>
+              <li style="--i:1">Spreadsheet, CSV, Xero, QuickBooks, FreeAgent</li>
+              <li style="--i:2">Send it straight to your accountant</li>
             </ul>
           </article>
           <article class="feat" aria-labelledby="f-privacy">
-            <span class="tag">Free</span>
+            <span class="mint-badge feat-badge"><svg class="b-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Free</span>
             <h3 id="f-privacy">Your trips stay on your phone</h3>
-            <p>Where you go is your business. MileSprout is built so we never see it.</p>
-            <ul>
-              <li>Your trips are stored encrypted on your iPhone.</li>
-              <li>No account to make. No ads, no analytics, no trackers.</li>
-              <li>Your data is never sold. We don't have it to sell.</li>
-              <li>Backups go to your own iCloud, encrypted on your phone first.</li>
+            <div class="feat-top">
+              <p class="feat-stat"><b>0</b><span>trips ever sent to us</span></p>
+              <div class="feat-visual mini-lock" aria-hidden="true">
+                <svg viewBox="0 0 120 150">
+                  <path class="lock-road" d="M14 150 C20 120 44 116 46 96" fill="none"/>
+                  <rect class="lock-phone" x="40" y="14" width="66" height="122" rx="14"/>
+                  <rect class="lock-screen" x="46" y="26" width="54" height="98" rx="8"/>
+                  <path class="lock-shackle" d="M64 72 v-10 a9 9 0 0 1 18 0 v10" fill="none"/>
+                  <rect class="lock-body" x="58" y="70" width="30" height="24" rx="5"/>
+                  <circle class="lock-hole" cx="73" cy="82" r="3"/>
+                </svg>
+              </div>
+            </div>
+            <ul class="feat-tiles">
+              <li style="--i:0">Stored encrypted on your iPhone</li>
+              <li style="--i:1">No account, no ads, no analytics</li>
+              <li style="--i:2">Backups go to your own iCloud, encrypted first</li>
             </ul>
-            <p><a href="/privacy">Read the privacy policy</a></p>
+            <p class="feat-link"><a href="/privacy">Read the privacy policy</a></p>
           </article>
           <article class="feat" aria-labelledby="f-perks">
-            <span class="tag">Perks</span>
+            <span class="mint-badge feat-badge"><svg class="b-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="2" y="6" width="12" height="3" rx="1"/><path d="M3 9v5h10V9M8 6v8M8 6C6.5 3 3.5 3.5 4.5 5.5 5 6 8 6 8 6zM8 6c1.5-3 4.5-2.5 3.5-.5C11 6 8 6 8 6z"/></g></svg>Perks</span>
             <h3 id="f-perks">Deals for the places you stop</h3>
-            <p>The Perks tab has offers for drivers on shift: fuel, a coffee between drops, tyres. Claim one when you're at the till.</p>
-            <ul>
-              <li>An in-store code lasts about 30 minutes once claimed.</li>
-              <li>Perks are deals only. They never unlock anything in MileSprout.</li>
-              <li>Perks is in early testing: the offers you see today are a demo.</li>
+            <div class="feat-top">
+              <p class="feat-stat"><b data-count="10" data-suffix="p off" data-perk-stat>10p off</b><span data-perk-note>a litre of fuel: a demo offer while Perks is in testing</span></p>
+              
+            </div>
+            <ul class="feat-tiles">
+              <li style="--i:0">Fuel, a coffee between drops, tyres</li>
+              <li style="--i:1">Claim at the till; the code lasts about 30 minutes</li>
+              <li style="--i:2">Deals only. They never unlock anything in MileSprout</li>
             </ul>
           </article>
           <article class="feat" aria-labelledby="f-code">
-            <span class="tag">Perks</span>
+            <span class="mint-badge feat-badge"><svg class="b-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="2" y="6" width="12" height="3" rx="1"/><path d="M3 9v5h10V9M8 6v8M8 6C6.5 3 3.5 3.5 4.5 5.5 5 6 8 6 8 6zM8 6c1.5-3 4.5-2.5 3.5-.5C11 6 8 6 8 6z"/></g></svg>Perks</span>
             <h3 id="f-code">A code with nothing about you in it</h3>
-            <p>Show the QR code or the short code at the till. It works once, and it carries no name, no trips and no location.</p>
-            <ul>
-              <li>The code is made on your phone, at random.</li>
-              <li>Claimed codes are kept on your phone only.</li>
+            <div class="feat-top">
+              <p class="feat-stat"><b data-count="30" data-prefix="~" data-suffix=" min">~30 min</b><span>then it expires</span></p>
+              <div class="feat-visual mini-receipt" aria-hidden="true">
+                <div class="rcpt">
+                  <span class="rcpt-qr"><i style="grid-area:1/1"></i><i style="grid-area:1/2"></i><i style="grid-area:1/4"></i><i style="grid-area:1/5"></i><i style="grid-area:2/1"></i><i style="grid-area:2/3"></i><i style="grid-area:2/5"></i><i style="grid-area:3/2"></i><i style="grid-area:3/3"></i><i style="grid-area:3/4"></i><i style="grid-area:4/1"></i><i style="grid-area:4/3"></i><i style="grid-area:4/5"></i><i style="grid-area:5/1"></i><i style="grid-area:5/2"></i><i style="grid-area:5/4"></i></span>
+                  <span class="rcpt-code">MS-DBK-42</span>
+                  <span class="rcpt-time" data-countdown>30:00</span>
+                </div>
+              </div>
+            </div>
+            <ul class="feat-tiles">
+              <li style="--i:0">Made on your phone, at random</li>
+              <li style="--i:1">Works once. No name, trips or location</li>
+              <li style="--i:2">Claimed codes stay on your phone</li>
             </ul>
-            <p>Run a business drivers stop at? <a href="/partners">Become a partner</a></p>
+            <p class="feat-link">Run a business drivers stop at? <a href="/partners">Become a partner</a></p>
           </article>
         </div>
       </div>
@@ -238,7 +304,7 @@
   <section class="signup" aria-labelledby="early-access">
     <div class="wrap">
       <section class="calc" id="calc" aria-labelledby="calc-title">
-        <h2 id="calc-title" class="calc-title">What are your work miles worth?</h2>
+        <h2 id="calc-title" class="calc-title" tabindex="-1">What are your work miles worth?</h2>
         <div class="calc-country" data-calc-js hidden>
           <span class="calc-country-label" id="calc-country-label">Rates for</span>
           <div class="flag-chips" role="radiogroup" aria-labelledby="calc-country-label">
@@ -474,7 +540,7 @@
       <p class="compare-checked fine">Checked October 2026. Prices and features change; see each app's site.</p>
       <ol class="compare-notes fine">
         <li id="cmp-1">Driversnote's free plan limits how many trips you can report each month. See their site for today's number.</li>
-        <li id="cmp-2">Gridwise's help centre lists automatic mileage and time tracking as a Plus feature. Manual tracking is free.</li>
+        <li id="cmp-2">Gridwise's help centre lists “automatic mileage and time tracking” as a Plus feature (their words); logging by hand is free.</li>
         <li id="cmp-3">From each app's App Store privacy label ("Data Linked to You" and "Data Used to Track You"). For MileSprout, see our <a href="/privacy">privacy policy</a>.</li>
         <li id="cmp-4">Pro prices are shown in the app.</li>
       </ol>

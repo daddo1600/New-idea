@@ -9,6 +9,21 @@
   function still() { return reduce.matches; }
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
 
+  /* Counts el's text from `from` to `to` over `ms` (ease-out, like the calculator), showing fmt(value).
+     The final value is always set exactly; Reduce Motion sets it at once. Returns a cancel function. */
+  function countTo(el, from, to, ms, fmt) {
+    if (still() || from === to) { el.textContent = fmt(to); return function () {}; }
+    var start = performance.now(), raf = 0;
+    function step(now) {
+      var k = Math.min(1, (now - start) / ms);
+      el.textContent = fmt(k < 1 ? from + (to - from) * (1 - Math.pow(1 - k, 3)) : to);
+      raf = k < 1 ? requestAnimationFrame(step) : 0;
+    }
+    el.textContent = fmt(from);
+    raf = requestAnimationFrame(step);
+    return function () { if (raf) cancelAnimationFrame(raf); el.textContent = fmt(to); };
+  }
+
   /* ---------- Home intro: the app's first-run opening (milemint/src/components/launch-intro.tsx, FullIntro) ----------
      Only when intro-gate.js has put up its cover (first visit this session). The seed wakes, the road
      grows up as the stem past the road signs, the leaves unfold, and, as in the app, an example month's
@@ -398,34 +413,58 @@
 
   /* ---------- The hero scene's road, in perspective (viewBox 0 0 400 300, horizon at y 150) ----------
      Ground items sit at a lateral X (road units, the left kerb at -1) and a depth z; they're
-     projected as x = vx + (X - c) * F / z, y = 150 + (1 - height) * F / z, where c is how far the
-     car has pulled in to the left (UK) kerb. One shared draw(), so the no-JS markup in index.html
-     is this same picture, parked (made with node; see website/README.md). */
+     projected as x = vx + (X - c) * F / z, y = 150 + F / z (the ground), scaled by F / z, where c is how
+     far the car has pulled in to the kerb. Each roadside row repeats one template (SVG in world units,
+     standing on 0,0: a tree, a post, a bollard…), so a scene changes its roadside by giving new rows and
+     templates. One shared draw(), so the no-JS markup in index.html is this same picture, parked (made
+     with node: tools/website/hero-road.js). */
   var ROAD = (function () {
     var NS = 'http://www.w3.org/2000/svg';
     var HZ = 150, F = 150, ZMIN = 0.5, ZMAX = 48;
     var KERB = -1, CENTRE = 1.1, FAR = 3.2;
-    // [kind, X, spacing, first z, count]
-    var ROWS = [['tree', -3.4, 7, 3, 7], ['tree', 5.4, 6, 4.5, 8], ['post', -1.5, 5, 1.5, 10], ['post', 3.7, 5, 4, 10], ['dash', CENTRE, 2.6, 0.8, 18]];
+    // The standard scene's roadside. Rows: [template, X, spacing, first z, count]
+    var STANDARD = {
+      rows: [['tree', -3.4, 7, 3, 7], ['tree2', 5.4, 6, 4.5, 8], ['post', -1.5, 5, 1.5, 10], ['post', 3.7, 5, 4, 10], ['dash', CENTRE, 2.6, 0.8, 18]],
+      lines: [['rd-line', KERB + 0.05, KERB + 0.11], ['rd-line', FAR - 0.11, FAR - 0.05]],
+      dash: 'rd-dash',
+      templates: {
+        // a round crown with a darker under-crown and a lit patch on the sun's side (the right)
+        tree: '<rect class="rd-trunk" x="-.07" y="-.9" width=".14" height=".9"/><ellipse class="rd-crown-d" cx=".05" cy="-1.12" rx=".58" ry=".42"/>' +
+          '<circle class="rd-crown" cx="-.02" cy="-1.32" r=".56"/><ellipse class="rd-crown-l" cx=".2" cy="-1.5" rx=".26" ry=".22"/>',
+        // a two-lobe oval crown
+        tree2: '<rect class="rd-trunk" x="-.07" y="-.85" width=".14" height=".85"/><ellipse class="rd-crown-d" cx=".04" cy="-1.08" rx=".62" ry=".36"/>' +
+          '<ellipse class="rd-crown" cx="-.2" cy="-1.32" rx=".42" ry=".5"/><ellipse class="rd-crown" cx=".24" cy="-1.42" rx=".4" ry=".52"/><ellipse class="rd-crown-l" cx=".36" cy="-1.6" rx=".18" ry=".2"/>',
+        post: '<rect class="rd-post" x="-.035" y="-.34" width=".07" height=".34"/><rect class="rd-post-band" x="-.035" y="-.3" width=".07" height=".06"/>'
+      }
+    };
     function f(n) { return Math.round(n * 10) / 10; }
     function quad(vx, c, x1, x2, z1, z2) {
       var a = F / z1, b = F / z2;
       return f(vx + (x1 - c) * a) + ',' + f(HZ + a) + ' ' + f(vx + (x2 - c) * a) + ',' + f(HZ + a) + ' ' +
         f(vx + (x2 - c) * b) + ',' + f(HZ + b) + ' ' + f(vx + (x1 - c) * b) + ',' + f(HZ + b);
     }
-    // make(name, class, parent) creates an element; the no-JS markup is made with a make() that writes text
-    function build(g, make) {
+    // make(name, class, parent, inner) creates an element; the no-JS markup is made with a make() that writes text
+    function build(g, scene, make) {
+      scene = scene || STANDARD;
       if (!make) {
         while (g.firstChild) g.removeChild(g.firstChild);
-        make = function (name, cls, parent) { var e = document.createElementNS(NS, name); e.setAttribute('class', cls); (parent || g).appendChild(e); return e; };
+        make = function (name, cls, parent, inner) {
+          var e = document.createElementNS(NS, name);
+          e.setAttribute('class', cls);
+          if (inner) e.innerHTML = inner;
+          (parent || g).appendChild(e);
+          return e;
+        };
       }
-      var out = { surface: make('polygon', 'rd-surface'), kerb: make('polygon', 'rd-line'), edge: make('polygon', 'rd-line'), items: [] };
-      ROWS.forEach(function (r) {
+      var out = { surface: make('polygon', 'rd-surface'), lines: [], items: [] };
+      (scene.lines || STANDARD.lines).forEach(function (l) { out.lines.push({ el: make('polygon', l[0]), x1: l[1], x2: l[2] }); });
+      var tpl = scene.templates || STANDARD.templates;
+      scene.rows.forEach(function (r) {
         var row = make('g', 'rd-row');
         for (var i = r[4] - 1; i >= 0; i--) { // far ones first, so nearer ones paint over them
           var it = { kind: r[0], X: r[1], z0: r[3] + i * r[2], span: r[2] * r[4], row: row, z: null };
-          if (it.kind === 'tree') { it.g = make('g', 'rd-tree', row); it.trunk = make('rect', 'rd-trunk', it.g); it.crown = make('circle', 'rd-crown', it.g); }
-          else it.g = it.el = make('polygon', 'rd-' + it.kind, row);
+          if (it.kind === 'dash') it.g = it.el = make('polygon', scene.dash || 'rd-dash', row);
+          else it.g = make('g', 'rd-' + it.kind, row, tpl[it.kind] || '');
           out.items.push(it);
         }
       });
@@ -434,29 +473,155 @@
     function draw(sh, s, c, shift) {
       var vx = 200 + (shift || 0);
       sh.surface.setAttribute('points', quad(vx, c, KERB, FAR, ZMIN, ZMAX));
-      sh.kerb.setAttribute('points', quad(vx, c, KERB + 0.05, KERB + 0.11, ZMIN, ZMAX));
-      sh.edge.setAttribute('points', quad(vx, c, FAR - 0.11, FAR - 0.05, ZMIN, ZMAX));
+      sh.lines.forEach(function (l) { l.el.setAttribute('points', quad(vx, c, l.x1, l.x2, ZMIN, ZMAX)); });
       sh.items.forEach(function (it) {
         var z = ZMIN + (((it.z0 - s) % it.span) + it.span) % it.span;
         // went past the car and came round again, far away: paint it behind the rest of its row
         if (it.z !== null && z > it.z + 1 && it.row.insertBefore) it.row.insertBefore(it.g, it.row.firstChild);
         it.z = z;
-        var k = F / z, x = vx + (it.X - c) * k, fog = f(clamp(1.3 - z / ZMAX * 1.4, 0, 1) * 100) / 100;
+        var k = F / z, fog = f(clamp(1.3 - z / ZMAX * 1.4, 0, 1) * 100) / 100;
         if (it.kind === 'dash') { it.el.setAttribute('points', quad(vx, c, it.X - 0.05, it.X + 0.05, z, z + 1)); it.el.setAttribute('opacity', fog); return; }
-        if (it.kind === 'post') {
-          var w = 0.035 * k, h = 0.32 * k, y = HZ + k;
-          it.el.setAttribute('points', f(x - w) + ',' + f(y) + ' ' + f(x + w) + ',' + f(y) + ' ' + f(x + w) + ',' + f(y - h) + ' ' + f(x - w) + ',' + f(y - h));
-          it.el.setAttribute('opacity', fog);
-          return;
-        }
-        var tw = 0.08 * k;
-        it.trunk.setAttribute('x', f(x - tw)); it.trunk.setAttribute('y', f(HZ + k - 0.8 * k));
-        it.trunk.setAttribute('width', f(tw * 2)); it.trunk.setAttribute('height', f(0.8 * k));
-        it.crown.setAttribute('cx', f(x)); it.crown.setAttribute('cy', f(HZ + k - 1.3 * k)); it.crown.setAttribute('r', f(0.6 * k));
-        it.trunk.setAttribute('opacity', fog); it.crown.setAttribute('opacity', fog);
+        it.g.setAttribute('transform', 'translate(' + f(vx + (it.X - c) * k) + ' ' + f(HZ + k) + ') scale(' + (Math.round(k * 100) / 100) + ')');
+        it.g.setAttribute('opacity', fog);
       });
     }
-    return { build: build, draw: draw, PARKED: -0.55 };
+    // Where a point on the ground (lateral X, depth z) lands on screen, and its scale: for signs and the like
+    function project(X, z, c, shift) {
+      var k = F / Math.max(ZMIN, z);
+      return { x: 200 + (shift || 0) + (X - c) * k, y: HZ + k, k: k };
+    }
+    return { build: build, draw: draw, project: project, STANDARD: STANDARD, PARKED: -0.55, FAR: FAR, KERB: KERB, CENTRE: CENTRE };
+  })();
+
+  /* ---------- Local scenes: which world the road runs through (local-scenes-*.md) ----------
+     The standard scene is the inline markup (it paints at once, and it's what shows without JS). Then
+     the page asks /api/scene, which answers with only a scene key worked out from Cloudflare's rough
+     location and checked against this browser's time zone (standard for the EU, VPNs, privacy tools,
+     anywhere uncertain). If that fails or takes over 1.5 s, the time zone alone decides, and otherwise
+     it's standard. Nothing is stored: no cookie, no localStorage. ?scene=<id> previews a scene;
+     ?scene=standard (linked from the privacy policy) always shows the standard one.
+     Scene files (assets/scenes/<id>.js) and their sign lettering load only for the chosen scene. */
+  var SCENES = (function () {
+    var reg = { glyphs: {}, scenes: {}, overlays: {}, calendar: null }, waiters = [];
+    var early = (window.MSScenes && window.MSScenes.queue) || [];
+    function take(item) {
+      if (!item) return;
+      if (item[0] === 'glyphs') reg.glyphs[item[1]] = item[2];
+      else if (item[0] === 'scene') reg.scenes[item[1]] = item[2];
+      else if (item[0] === 'overlay') reg.overlays[item[1]] = item[2];
+      else if (item[0] === 'calendar') reg.calendar = item[1];
+      waiters.slice().forEach(function (w) { w(); });
+    }
+    window.MSScenes = { queue: { push: take } };
+    if (early.forEach) early.forEach(take);
+
+    // What we have artwork for. Every other key goes to its country's built scene, or to standard.
+    var BUILT = { standard: 1, 'uk-london': 1 };
+    function route(key) {
+      if (BUILT[key]) return key;
+      if (/^uk-/.test(key)) return 'uk-london';   // until UK2-UK4 exist (countryside, Scotland, towns)
+      return 'standard';                          // AU, CA and US scenes are next (art direction §1.4)
+    }
+    // Without the server: the browser time zone alone, through intro-gate.js's window.MSCountry, so the
+    // scenery and the money line agree on the country (it can't tell London from Leeds; research §1.6)
+    var MC = window.MSCountry || { zoneCountry: function () { return null; }, zone: function () { return ''; }, forced: function () { return null; } };
+    function fromCountry(c, tz) {
+      if (c === 'GB') return 'uk-country';
+      if (c === 'AU') return /Darwin|Broken_Hill/.test(tz) ? 'au-outback' : /Sydney/.test(tz) ? 'au-sydney' : 'au-town';
+      if (c === 'CA') return 'ca-toronto';
+      if (c === 'US') return 'us-city';
+      return 'standard';
+    }
+    function fromZone(tz) {
+      if (!tz || /^(UTC|GMT|Etc\/|Universal|Zulu)/.test(tz)) return 'standard';
+      return fromCountry(MC.zoneCountry(tz), tz);
+    }
+    function pick(cb) {
+      var done = false;
+      function finish(key) {
+        if (done) return;
+        done = true;
+        var id = route(key);
+        MC.scene = id; // shared with the rest of the page
+        try { window.dispatchEvent(new CustomEvent('ms-scene', { detail: id })); } catch (err) { /* old browser */ }
+        cb(id);
+      }
+      var forced = /[?&]scene=([a-z0-9-]+)/i.exec(location.search);
+      if (forced) { finish(forced[1].toLowerCase() === 'none' ? 'standard' : forced[1].toLowerCase()); return; }
+      if (MC.forced()) { finish(fromCountry(MC.forced(), '')); return; } // a ?country= preview: its scenery too
+      var tz = MC.zone();
+      var timer = setTimeout(function () { finish(fromZone(tz)); }, 1500);
+      if (!window.fetch) { clearTimeout(timer); finish(fromZone(tz)); return; }
+      fetch('/api/scene?tz=' + encodeURIComponent(tz), { credentials: 'same-origin', cache: 'no-store' })
+        .then(function (r) { if (!r.ok) throw new Error('scene ' + r.status); return r.json(); })
+        .then(function (j) { clearTimeout(timer); finish(j && typeof j.scene === 'string' ? j.scene : 'standard'); })
+        .catch(function () { clearTimeout(timer); finish(fromZone(tz)); });
+    }
+
+    var V = (document.querySelector('[data-scenes-v]') || { getAttribute: function () { return ''; } }).getAttribute('data-scenes-v') || '';
+    var asked = {};
+    function script(name) {
+      if (asked[name]) return;
+      asked[name] = 1;
+      var s = document.createElement('script');
+      s.src = '/assets/scenes/' + name + '.js' + (V ? '?v=' + V : '');
+      s.async = true;
+      document.head.appendChild(s);
+    }
+    function when(test, cb) {
+      if (test()) { cb(); return; }
+      var w = function () { if (test()) { waiters.splice(waiters.indexOf(w), 1); cb(); } };
+      waiters.push(w);
+    }
+    function load(id, cb) {
+      script(id);
+      when(function () { return !!reg.scenes[id]; }, function () {
+        var g = reg.scenes[id].glyphs;
+        if (!g) { cb(reg.scenes[id]); return; }
+        script('glyphs-' + g);
+        when(function () { return !!reg.glyphs[g]; }, function () { cb(reg.scenes[id]); });
+      });
+    }
+
+    // Sign lettering: glyph paths (cap height 100) placed letter by letter; face is 'uk.medium' and the like
+    function glyphFace(face) { var p = face.split('.'); return (reg.glyphs[p[0]] || {})[p[1]] || {}; }
+    function width(str, face, cap) {
+      var g = glyphFace(face), w = 0;
+      for (var i = 0; i < str.length; i++) w += (g[str[i]] || g[' '] || [50])[0];
+      return w * cap / 100;
+    }
+    function text(str, face, cap, x, y, fill, anchor) {
+      var g = glyphFace(face), sc = cap / 100, w = width(str, face, cap);
+      var x0 = anchor === 'middle' ? x - w / 2 : anchor === 'end' ? x - w : x;
+      var out = '', off = 0;
+      for (var i = 0; i < str.length; i++) {
+        var gl = g[str[i]];
+        if (!gl) { off += 50; continue; }
+        if (gl[1]) out += '<path transform="translate(' + off + ' 0)" d="' + gl[1] + '"/>';
+        off += gl[0];
+      }
+      return '<g fill="' + fill + '" transform="translate(' + (Math.round(x0 * 100) / 100) + ' ' + y + ') scale(' + sc + ')">' + out + '</g>';
+    }
+    text.width = width;
+
+    // Calendar overlays (assets/scenes/calendar.js): today's window for this scene and country, if any
+    function overlayFor(sceneId, country, cb) {
+      script('calendar');
+      when(function () { return reg.calendar !== null; }, function () {
+        var now = new Date(), md = ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + now.getDate()).slice(-2);
+        var hit = null;
+        (reg.calendar || []).forEach(function (w) {
+          if (hit || (w.year && w.year !== now.getFullYear())) return;
+          var inside = w.from <= w.to ? md >= w.from && md <= w.to : md >= w.from || md <= w.to;
+          var c = w.countries || ['*'], s = w.scenes || ['*'];
+          if (inside && (c.indexOf('*') >= 0 || c.indexOf(country) >= 0) && (s.indexOf('*') >= 0 || s.indexOf(sceneId) >= 0)) hit = w;
+        });
+        if (!hit) return;
+        script('overlays/' + hit.id);
+        when(function () { return !!reg.overlays[hit.id]; }, function () { cb(reg.overlays[hit.id]); });
+      });
+    }
+    return { pick: pick, load: load, text: text, overlayFor: overlayFor, route: route, fromZone: fromZone, BUILT: BUILT };
   })();
 
   /* ---------- Hero scene: the phone in a car mount, the road going by ----------
@@ -474,7 +639,6 @@
     if (!root) return;
     var svg = root.querySelector('.scene-road');
     var live = svg && svg.querySelector('.rd-live');
-    var hills = svg && svg.querySelector('.rd-hills');
     var video = root.querySelector('video');
     if (!live || !video) return;
 
@@ -492,6 +656,82 @@
     }
     var posters = { drive: video.getAttribute('data-poster-drive'), saved: video.getAttribute('data-poster-saved') };
 
+    // The camera (the founder's "when it parks, the screen comes closer"): on the same clock, the phone
+    // zooms in once parked (2.7-3.4 s), frames the new drive while it's swiped (the touch rides on it),
+    // pans up to the total as it ticks over (5.8-6.35 s), and eases back out as the car pulls away
+    // (8.9-9.6 s). Phones: the app's screen fills about 95% of the viewport width; wider: about real size.
+    var rig = root.querySelector('.rig');
+    var dim = root.querySelector('.scene-dim');
+    var phoneEl = root.querySelector('.phone');
+    var geo = null;
+    function measure() {
+      var view = root.querySelector('.scene-view');
+      var scr = root.querySelector('.screen');
+      // the screen's box in the scene, untransformed (the zoom is lifted for the measurement, then put back)
+      var was = rig.style.transform;
+      rig.style.transform = '';
+      var vr = view.getBoundingClientRect(), sr = scr.getBoundingClientRect();
+      rig.style.transform = was;
+      geo = { W: view.clientWidth, H: view.clientHeight, VW: document.documentElement.clientWidth,
+        sx: sr.left - vr.left - view.clientLeft, sy: sr.top - vr.top - view.clientTop, sw: sr.width, sh: sr.height };
+    }
+    window.addEventListener('resize', function () { geo = null; });
+    function zoomAt(t) {
+      if (t < 2.7) return 0;
+      if (t < 3.4) return smooth((t - 2.7) / 0.7);
+      if (t < 8.9) return 1;
+      return 1 - smooth((t - 8.9) / 0.7);
+    }
+    // where on the phone the camera looks (0 = top, 1 = bottom): the new drive, then the total
+    // (with the video blocked the screen is the saved-state poster, so it looks at the total throughout)
+    function focusAt(t) {
+      if (blocked) return 0.19;
+      return t < 5.8 ? 0.79 : t < 6.35 ? 0.79 - 0.6 * smooth((t - 5.8) / 0.55) : 0.19;
+    }
+    // The touch (iOS screen-recording style) on the swipe in the clip: it presses on the drive at 3.95 s,
+    // drags left to right with the card until 5.4 s (eased like the recorded drag), lifts with a ripple.
+    // Positions are fractions of the screen, measured from the recording.
+    var touchEl = root.querySelector('.touch');
+    var screenEl = root.querySelector('.screen');
+    function touch(t) {
+      if (!touchEl) return;
+      if (blocked || t < 3.95 || t > 5.9) { if (touchEl.style.opacity !== '0') touchEl.style.opacity = '0'; return; }
+      var W = screenEl.clientWidth, H = screenEl.clientHeight;
+      var y = 0.775 * H, x, o = 0.85, s = 1, ro = 0, rs = 1;
+      if (t < 4.12) { var k = (t - 3.95) / 0.17; x = 0.13 * W; o = 0.85 * k; s = 1.35 - 0.35 * k; }       // press
+      else if (t < 5.4) { var d = (t - 4.12) / 1.28; x = (0.13 + 0.66 * (1 - Math.pow(1 - d, 2))) * W; }  // drag
+      else { var u = (t - 5.4) / 0.5; x = 0.79 * W; o = 0.85 * (1 - u); s = 1 - 0.15 * u; ro = 1 - u; rs = 1 + 0.9 * u; } // lift
+      touchEl.style.opacity = o.toFixed(3);
+      touchEl.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0) scale(' + s.toFixed(3) + ')';
+      touchEl.style.setProperty('--ripple-o', ro.toFixed(3));
+      touchEl.style.setProperty('--ripple-s', rs.toFixed(3));
+    }
+    function camera(t) {
+      var z = zoomAt(t);
+      if (!rig) return;
+      if (z <= 0) {
+        if (rig.style.transform) { rig.style.transform = ''; rig.style.willChange = ''; dim.style.opacity = ''; svg.style.transform = ''; }
+        return;
+      }
+      if (!geo) measure();
+      var g = geo;
+      // Phones: the app's screen fills the scene's width (about 90-92% of the viewport; the bezel and mount crop off
+      // the scene's edges), so its text reads at about real iPhone size. Wider: the screen comes up to about
+      // real size (390 CSS px wide, or 90% of the scene), its text readable too.
+      var S = g.VW <= 600 ? Math.min(0.95 * g.VW, g.W) / g.sw : Math.min(0.9 * g.W, 390) / g.sw; // never wider than the scene, so the whole card shows
+      S = clamp(S, 1.2, 6);
+      var fx = g.sx + g.sw / 2, fy = g.sy + g.sh * focusAt(t);
+      var tx = g.W / 2 - fx * S;
+      var ty = g.H / 2 - fy * S;
+      ty = clamp(ty, g.H - (g.sy + g.sh) * S, -g.sy * S);           // never past the screen's top or bottom
+      var k = z;
+      var sc = 1 + (S - 1) * k;
+      rig.style.willChange = 'transform';
+      rig.style.transform = 'translate3d(' + (tx * k).toFixed(1) + 'px,' + (ty * k).toFixed(1) + 'px,0) scale(' + sc.toFixed(4) + ')';
+      dim.style.opacity = (0.8 * k).toFixed(3);
+      svg.style.transform = 'scale(' + (1 + 0.05 * k).toFixed(4) + ')'; // a little camera move on the road
+    }
+
     var s = 0, steer = 0, steerTo = 0, last = 0, raf = 0;
     var clock = 0;                     // seconds into the loop
     var inView = false, videoOk = false, blocked = false, poster = '';
@@ -504,6 +744,197 @@
       poster = which;
       video.poster = posters[which];
     }
+    // ---- The world around the road: the scene's layers, its signs, its ambient detail, a seasonal slot ----
+    // Layers (back to front): sky (sun, clouds) > far (landmark, skyline) > mid (water, hedges) > ground >
+    // road and roadside rows > signs > ambient > overlay. Groups marked data-depth slide a little with the
+    // desktop pointer's steer (far 0.15, mid 0.4). The road and the phone are shared by every scene.
+    var world = (function () {
+      var NS = 'http://www.w3.org/2000/svg';
+      var q = function (sel) { return svg.querySelector(sel); };
+      var worldG = q('.sc-world'), farG = q('.sc-far'), midG = q('.sc-mid'), cloudsG = q('.sc-clouds'), sun = q('.sc-sun');
+      var signsG = q('.sc-signs'), ambientG = q('.sc-ambient'), overlayG = q('.sc-overlay');
+      if (!worldG) return null;
+      var stops = { sky: svg.querySelectorAll('#rd-sky stop'), ground: svg.querySelectorAll('#rd-grass stop'), water: svg.querySelectorAll('#sc-water stop') };
+      function colours(list, vals) { if (vals) Array.prototype.forEach.call(list, function (st, i) { if (vals[i]) st.setAttribute('stop-color', vals[i]); }); }
+      function grab(list) { return Array.prototype.map.call(list, function (st) { return st.getAttribute('stop-color'); }); }
+      // the standard scene's landscape, as painted by index.html
+      var STD = { sky: grab(stops.sky), ground: grab(stops.ground), water: grab(stops.water), far: farG.innerHTML, mid: midG.innerHTML,
+        clouds: null, cloudMarkup: cloudsG ? cloudsG.innerHTML : '', sun: sun && { cx: sun.getAttribute('cx'), cy: sun.getAttribute('cy'), r: sun.getAttribute('r') } };
+      var bayG = null, bayYellow = null, bayWhite = null;
+      var cur = null, curId = 'standard', sign = { list: [], parked: null }, passingEl = null, parkedEl = null, ambEl = null;
+      var wanted = null, loopIdx = 0, lastT = 0, cloudX = 0, depthEls = [];
+      var ctx = {
+        text: SCENES.text,
+        rate: function (c) {
+          var r = RATES[c], first = r.tiers[0];
+          var sign = { UK: 'p', US: '¢', CA: '¢', AU: 'c' }[c];
+          return { first: Math.round(first[1] * 100) + sign, limit: isFinite(first[0]) ? first[0].toLocaleString('en-GB') : '' };
+        }
+      };
+      function el(name, cls, parent, inner) {
+        var e = document.createElementNS(NS, name);
+        if (cls) e.setAttribute('class', cls);
+        if (inner) e.innerHTML = inner;
+        parent.appendChild(e);
+        return e;
+      }
+      // a sign: its face on one or two posts, drawn with the post's foot at 0,0 (sign px)
+      function signMarkup(sp) {
+        var postPx = (sp.postH || 0.8) * sp.w / sp.world, pc = sp.post || '#C9D3CE', pw = Math.max(2.5, sp.w * 0.022);
+        var posts = sp.posts === 2 ? [sp.w * 0.22, sp.w * 0.78] : [sp.w / 2];
+        var s = '';
+        posts.forEach(function (px) { s += '<rect x="' + (px - sp.w / 2 - pw / 2) + '" y="' + (-postPx - 2) + '" width="' + pw + '" height="' + (postPx + 2) + '" fill="' + pc + '"/>'; });
+        // anchor: where along the face its post stands (0.5 = the middle; 0.15 = near its left, like a flag)
+        var ax = sp.anchor != null ? sp.anchor : 0.5;
+        if (ax !== 0.5) s = s.replace(/x="([-\d.]+)"/, 'x="' + (sp.w * ax - sp.w / 2 - pw / 2) + '"');
+        return s + '<g transform="translate(' + (-sp.w * ax) + ' ' + (-postPx - sp.h) + ')">' + sp.face + '</g>';
+      }
+      function clouds(list) {
+        if (!list) return STD.cloudMarkup;
+        return list.map(function (c) {
+          var x = c[0], y = c[1], w = c[2], h = c[3];
+          return '<g opacity="' + c[4] + '"><ellipse cx="' + (x + w * .5) + '" cy="' + y + '" rx="' + (w * .5) + '" ry="' + (h * .5) + '"/><ellipse cx="' + (x + w * .32) + '" cy="' + (y - h * .32) + '" rx="' + (w * .2) + '" ry="' + (h * .55) + '"/><ellipse cx="' + (x + w * .6) + '" cy="' + (y - h * .4) + '" rx="' + (w * .16) + '" ry="' + (h * .5) + '"/></g>';
+        }).join('');
+      }
+      function apply(id, def) {
+        cur = def; curId = id;
+        var land = id === 'standard' ? STD : def;
+        colours(stops.sky, land.sky || STD.sky);
+        colours(stops.ground, land.ground || STD.ground);
+        colours(stops.water, land.water || STD.water);
+        farG.innerHTML = land.far != null ? land.far : STD.far;
+        midG.innerHTML = land.mid != null ? land.mid : STD.mid;
+        if (cloudsG) cloudsG.innerHTML = id === 'standard' ? STD.cloudMarkup : clouds(def.clouds);
+        var sn = land.sun || STD.sun;
+        if (sun && sn) { sun.setAttribute('cx', sn.cx); sun.setAttribute('cy', sn.cy); sun.setAttribute('r', sn.r); }
+        depthEls = Array.prototype.slice.call(svg.querySelectorAll('[data-depth]'));
+        shapes = road.build(live, def.rows ? def : ROAD.STANDARD);
+        bayG = null;
+        if (def.bay) {
+          // drawn on the road surface, under the roadside rows
+          bayG = document.createElementNS(NS, 'g');
+          bayYellow = el('path', 'rd-yellow', bayG); bayWhite = el('path', 'rd-dash-w', bayG);
+          live.insertBefore(bayG, live.children[1 + (def.lines || []).length] || null);
+        }
+        road.draw(shapes, 0, still() ? PARKED : 0, 0);
+        live.setAttribute('transform', def.side === 'right' ? 'matrix(-1 0 0 1 400 0)' : '');
+        worldG.setAttribute('data-scene', id);
+        // signs: one passing sign per loop, turning through the set; one where the car parks
+        signsG.innerHTML = ''; ambientG.innerHTML = ''; overlayG.innerHTML = '';
+        sign = def.signs ? def.signs(ctx) : { passing: [], parked: null };
+        passingEl = el('g', 'sc-sign', signsG); parkedEl = el('g', 'sc-sign', signsG);
+        if (sign.parked) {
+          // on a wide (desktop) scene it stands on the right verge, its face hanging back over the road
+          var spk = sign.parked, pk = def.parked || {};
+          if (window.innerWidth >= 900 && pk.wideAnchor != null) { spk = {}; for (var key in sign.parked) spk[key] = sign.parked[key]; spk.anchor = pk.wideAnchor; }
+          parkedEl.innerHTML = signMarkup(spk);
+        }
+        showPassing();
+        // the ambient detail can live in the mid layer (London's bus on the Embankment: behind every sign, post,
+        // tree and bollard), or above the signs (the default)
+        ambEl = def.ambient ? el('g', 'sc-amb', def.ambient.layer === 'mid' ? midG : ambientG, def.ambient.markup(ctx)) : null;
+        if (ambEl) ambEl.setAttribute('opacity', '0');
+        SCENES.overlayFor(id, visitorCountry(), function (ov) { if (curId === id && ov.draw) ov.draw(overlayG, ctx); });
+        if (still()) place(0, true);
+      }
+      function showPassing() {
+        var sp = sign.passing[loopIdx % Math.max(1, sign.passing.length)];
+        passingEl.innerHTML = sp ? signMarkup(sp) : '';
+      }
+      function put(g, sp, X, z, c, shift, minZ) {
+        if (!sp || z < minZ || z > 40) { g.setAttribute('opacity', '0'); return; }
+        var p = road.project(X, z, c, shift), sc = sp.world * p.k / sp.w;
+        var x = cur.side === 'right' ? 400 - p.x : p.x;
+        g.setAttribute('transform', 'translate(' + x.toFixed(1) + ' ' + p.y.toFixed(1) + ') scale(' + sc.toFixed(4) + ')');
+        g.setAttribute('opacity', String(clamp(1.3 - z / 40, 0, 1) * clamp((z - minZ) * 2, 0, 1)));
+      }
+      // signs and the ambient detail on the scene's clock; at rest (Reduce Motion) everything at its best pose
+      // How far the car has gone in the loop when it parks (9 units/s to 1.8 s, then slowing to 2.7 s), so
+      // things placed "where the car stops" come to rest exactly there.
+      var D_PARK = 9 * 1.8 + 9 * 0.9 * 0.5;
+      // How far the car has gone at t on the clip's clock (the integral of pace): worked out from the clock, not
+      // added up frame by frame, so the signs and the bay land in the same place every loop however the frames fall
+      function distAt(t) {
+        if (t < 1.8) return 9 * t;
+        if (t < 2.7) { var x = (t - 1.8) / 0.9; return 16.2 + 8.1 * (x - x * x * x + x * x * x * x / 2); }
+        if (t < 9.0) return D_PARK;
+        var y = Math.min(1, (t - 9.0) / 0.6); return D_PARK + 5.4 * (y * y * y - y * y * y * y / 2);
+      }
+      // Where the parked sign stands: by the kerb where the car stops, near enough to read on a phone; on a
+      // wide (desktop) scene the left kerb is behind the phone, so across the road on the right verge.
+      function parkedSpot() {
+        var wide = window.innerWidth >= 900; // the desktop layout, where the phone stands over the left kerb
+        var p = cur.parked || {};
+        return wide ? { X: (p.wideX != null ? p.wideX : 3.6), z: p.wideZ || 8 } : { X: (p.X != null ? p.X : (cur.signX || 3.9) - 1.1), z: p.z || 7 };
+      }
+      // A parking bay where the car stops (London): the double yellows stop short of it and start again
+      function bayDraw(d, c, shift, rest) {
+        if (!bayG) return;
+        var b = cur.bay, off = rest ? 0 : D_PARK - d; // how much further away it is than at rest
+        var zA = b.zA + off, zB = b.zB + off;
+        var qd = function (x1, x2, z1, z2) {
+          z1 = Math.max(0.5, z1); z2 = Math.min(48, z2);
+          if (z2 <= z1) return '';
+          var p1 = road.project(x1, z1, c, shift), p2 = road.project(x2, z1, c, shift), p3 = road.project(x2, z2, c, shift), p4 = road.project(x1, z2, c, shift);
+          return 'M' + p1.x.toFixed(1) + ' ' + p1.y.toFixed(1) + 'L' + p2.x.toFixed(1) + ' ' + p2.y.toFixed(1) + 'L' + p3.x.toFixed(1) + ' ' + p3.y.toFixed(1) + 'L' + p4.x.toFixed(1) + ' ' + p4.y.toFixed(1) + 'Z';
+        };
+        var y = '';
+        b.yellow.forEach(function (l) { y += qd(l[0], l[1], 0.5, zA - 0.15) + qd(l[0], l[1], zB + 0.15, 48); });
+        bayYellow.setAttribute('d', y);
+        var w = '', z;
+        for (z = zA; z < zB - 0.2; z += 0.6) w += qd(b.x - 0.03, b.x + 0.03, z, z + 0.32); // the bay's dashed edge
+        w += qd(b.kerb, b.x, zA - 0.03, zA + 0.03) + qd(b.kerb, b.x, zB - 0.03, zB + 0.03); // its two ends
+        bayWhite.setAttribute('d', w);
+      }
+      function place(t, rest, s, c, shift) {
+        if (!cur) return;
+        var X = cur.signX || 3.9, spot = parkedSpot();
+        var d = rest ? D_PARK : distAt(t);
+        if (rest) {
+          put(passingEl, null);
+          put(parkedEl, sign.parked, spot.X, spot.z, PARKED, 0, 0.8);
+        } else {
+          put(passingEl, sign.passing[loopIdx % Math.max(1, sign.passing.length)], X, 14 - d, c, shift, 0.9);
+          put(parkedEl, sign.parked, spot.X, spot.z + D_PARK - d, c, shift, 0.8);
+          // the parked sign comes into view only as the car slows (1.8 s), not while it's far off
+          if (cur.parked && cur.parked.from && t < cur.parked.from) parkedEl.setAttribute('opacity', '0');
+          // and as the car pulls away it fades (fadeOut: [from, to] s) before it can grow past the frame's edge
+          var fo = cur.parked && cur.parked.fadeOut;
+          if (fo && t > fo[0]) parkedEl.setAttribute('opacity', String(Number(parkedEl.getAttribute('opacity')) * clamp(1 - (t - fo[0]) / (fo[1] - fo[0]), 0, 1)));
+        }
+        bayDraw(d, rest ? PARKED : c, rest ? 0 : shift, rest);
+        if (ambEl && cur.ambient) {
+          var a = cur.ambient.at(t, rest);
+          if (!a) ambEl.setAttribute('opacity', '0');
+          else {
+            ambEl.setAttribute('opacity', String(a.o));
+            ambEl.setAttribute('transform', 'translate(' + a.x.toFixed(1) + ' ' + a.y.toFixed(1) + ')' + (a.flap ? ' scale(1 .55)' : ''));
+          }
+        }
+      }
+      return {
+        // the scene's clock ticks: parallax, clouds, signs, the ambient detail
+        frame: function (t, dt, s, c, steerPx) {
+          if (t < lastT - 1) { loopIdx++; if (sign.passing.length > 1) showPassing(); }
+          lastT = t;
+          depthEls.forEach(function (g) { g.setAttribute('transform', 'translate(' + (steerPx * Number(g.getAttribute('data-depth'))).toFixed(2) + ' 0)'); });
+          if (cloudsG) { cloudX = (cloudX + 2 * dt) % 520; cloudsG.setAttribute('transform', 'translate(' + (cloudX > 260 ? cloudX - 520 : cloudX).toFixed(1) + ' 0)'); }
+          place(t, false, s, c, steerPx);
+        },
+        still: function () { depthEls.forEach(function (g) { g.removeAttribute('transform'); }); if (cloudsG) cloudsG.removeAttribute('transform'); place(0, true); },
+        set: function (id, instant) {
+          wanted = id; // the latest asked for wins: a slower file (standard's) never lands over a newer choice (London's)
+          SCENES.load(id, function (def) {
+            if (id !== wanted) return;
+            if (instant || still() || !curId || curId === id && !cur) { apply(id, def); return; }
+            worldG.classList.add('is-swapping');
+            setTimeout(function () { apply(id, def); worldG.classList.remove('is-swapping'); }, 150);
+          });
+        },
+        id: function () { return curId; }
+      };
+    })();
+
     function tick(now) {
       raf = 0;
       if (!running()) return;
@@ -518,7 +949,9 @@
       s += (1 - k) * 9 * dt;                   // road units per second
       steer += (steerTo - steer) * Math.min(1, dt * 3);
       road.draw(shapes, s, PARKED * smooth(k), steer * 14);
-      if (hills) hills.setAttribute('transform', 'translate(' + (-steer * 6).toFixed(2) + ' 0)');
+      if (world) world.frame(clock, dt, s, PARKED * smooth(k), steer * 14);
+      camera(clock);
+      touch(clock);
       raf = requestAnimationFrame(tick);
     }
     function start() {
@@ -538,10 +971,12 @@
     function playVideo() {
       if (!running()) return;
       if (video.getAttribute('preload') === 'none') video.setAttribute('preload', 'auto');
-      try { video.currentTime = clock; } catch (err) { /* not loaded yet */ }
       var p;
       try { p = video.play(); } catch (err) { refused(); return; }
-      if (p && p.then) p.then(function () { videoOk = true; blocked = false; }, refused);
+      // line the clip up with the road only once it really plays (while it's blocked, WebKit would
+      // swap the poster for a decoded frame)
+      var sync = function () { videoOk = true; blocked = false; try { video.currentTime = clock; } catch (err) { /* fine */ } };
+      if (p && p.then) p.then(sync, refused); else sync();
     }
     function refused() {
       // the road keeps driving on its own clock; the phone shows the posters until a touch lets it play
@@ -553,7 +988,8 @@
     function retryOnGesture() {
       if (waiting) return;
       waiting = true;
-      var evs = ['touchstart', 'pointerdown', 'keydown', 'scroll'];
+      // only these count as a user gesture in Safari (a scroll doesn't, and would re-arm in a loop)
+      var evs = ['touchend', 'pointerup', 'click', 'keydown'];
       function retry() {
         evs.forEach(function (e) { window.removeEventListener(e, retry, true); });
         waiting = false;
@@ -570,8 +1006,27 @@
       video.removeAttribute('autoplay');
       showPoster('saved');
       road.draw(shapes, 0, PARKED, 0);
+      camera(0); // no zoom: the still is readable as it is
+      if (world) world.still();
       root.classList.add('is-still');
     }
+    if (world) {
+      world.set('standard', true);
+      var picker = document.querySelector('.scene-pick');
+      var mark = function (id) {
+        if (!picker) return;
+        Array.prototype.forEach.call(picker.querySelectorAll('input'), function (i) { i.checked = i.value === id; });
+      };
+      if (picker) {
+        picker.hidden = false;
+        mark('standard');
+        picker.addEventListener('change', function (e) { if (e.target.checked) { picked = true; world.set(e.target.value); } });
+      }
+      // a late answer from /api/scene never overrides a chip the visitor has already picked
+      var picked = false;
+      SCENES.pick(function (id) { if (picked) return; if (id !== 'standard') world.set(id); mark(id); });
+    }
+
     // the HTML poster is the clip's first frame (driving); Reduce Motion swaps in the saved state
     poster = 'drive';
     if (still()) rest();
@@ -641,8 +1096,10 @@
   };
   // WEEKS (48) is set with the intro's example, above.
   /** What a year of `perWeek` work miles (or km) is worth: each band at its rate, anything past the last band at nothing. */
-  function yearWorth(r, perWeek) {
-    var left = perWeek * WEEKS, total = 0;
+  function yearWorth(r, perWeek) { return worthOf(r, perWeek * WEEKS); }
+  /** What `dist` work miles (or km) are worth at a country's rate: each band at its rate, past the last band nothing. */
+  function worthOf(r, dist) {
+    var left = dist, total = 0;
     for (var i = 0; i < r.tiers.length && left > 0; i++) {
       var band = Math.min(left, r.tiers[i][0]);
       total += band * r.tiers[i][1];
@@ -659,6 +1116,9 @@
     return c === 'GB' ? 'UK' : RATES[c] ? c : 'UK';
   })();
 
+  // Panel 1's example: the Home screenshot's 3,190.22 work miles (£1,754.62 at HMRC's 55p), the same distance in km
+  // for Canada and Australia, valued at each country's rate with the calculator's sum (so no new claim)
+  var HOME_EXAMPLE = { mi: 3190.22, km: 5134.16 };
   // The calculator's starting point (100 miles or 160 km a week); the hero's example year is the same sum, so they always agree.
   function defaultWeek(r) { return EXAMPLE_WEEK[r.unit]; }
 
@@ -670,6 +1130,8 @@
       if (!r || !strong) return;
       var amount = money(r, yearWorth(r, defaultWeek(r)));
       if (strong.textContent !== amount) strong.textContent = amount;
+      var sr = span.querySelector('[data-amt-sr]'); // the screen-reader copy (the visible figure is an aria-hidden link to the calculator)
+      if (sr && sr.textContent !== amount) sr.textContent = amount;
     });
   })();
 
@@ -821,6 +1283,24 @@
         if (moved) range.dispatchEvent(new Event('change', { bubbles: true }));
       });
     }
+    // From the hero ("Work out yours ↓", or the gold amount): go to the calculator, put focus on its
+    // heading and pulse the slider's thumb once (Reduce Motion: just go there)
+    var calcTitle = document.getElementById('calc-title');
+    Array.prototype.forEach.call(document.querySelectorAll('a[href="#calc"]'), function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        root.scrollIntoView({ behavior: still() ? 'auto' : 'smooth', block: 'start' });
+        if (calcTitle) { try { calcTitle.focus({ preventScroll: true }); } catch (err) { calcTitle.focus(); } }
+        if (history.replaceState) history.replaceState(null, '', '#calc');
+        if (still()) return;
+        setTimeout(function () {
+          range.classList.remove('is-pulse');
+          void range.offsetWidth;
+          range.classList.add('is-pulse');
+          setTimeout(function () { range.classList.remove('is-pulse'); }, 700);
+        }, 450);
+      });
+    });
     range.addEventListener('input', function () { show(false); });
     range.addEventListener('change', function () { show(true); }); // the slider stopped: read the result out once
   })();
@@ -838,7 +1318,63 @@
 
     function depth(i) { var k = (i - active + n) % n; return k <= 3 ? String(k) : 'far'; }
 
-    function layout(announce) {
+    // The feature panels: on each change the new one enters from the side the deck moved, its stat
+    // counts up, the tiles follow, and on phones the box takes the panel's height (no empty gap).
+    var featBox = document.querySelector('.feats');
+    var narrow = window.matchMedia('(max-width: 899px)');
+    var dotsRow = document.querySelector('.dots');
+    var hint = document.querySelector('.deck-hint');
+    var doneLine = document.querySelector('.deck-done');
+    var stopCount = function () {}, tickTimer = 0, shownPanel = -1;
+    function fmtStat(b) {
+      var dec = Number(b.getAttribute('data-dec') || 0), pre = b.getAttribute('data-prefix') || '', suf = b.getAttribute('data-suffix') || '';
+      return function (v) {
+        return pre + v.toLocaleString('en-GB', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + suf;
+      };
+    }
+    function fitHeight() {
+      if (!featBox) return;
+      featBox.style.height = narrow.matches && feats[active] ? feats[active].offsetHeight + 'px' : '';
+    }
+    function countdown(panel) {
+      clearInterval(tickTimer);
+      var el = panel.querySelector('[data-countdown]');
+      if (!el) return;
+      var left = 30 * 60;
+      el.textContent = '30:00';
+      if (still()) return;
+      tickTimer = setInterval(function () {
+        left = Math.max(0, left - 1);
+        el.textContent = Math.floor(left / 60) + ':' + ('0' + (left % 60)).slice(-2);
+      }, 1000);
+    }
+    function enterPanel(dir) {
+      if (active === shownPanel) return;
+      shownPanel = active;
+      var panel = feats[active];
+      if (!panel) return;
+      if (featBox) featBox.setAttribute('data-dir', dir < 0 ? 'back' : 'next');
+      feats.forEach(function (f) { f.classList.remove('enter'); });
+      void panel.offsetWidth;
+      if (!still()) panel.classList.add('enter');
+      stopCount();
+      var b = panel.querySelector('.feat-stat b[data-count]');
+      if (b) {
+        var fmt = fmtStat(b), to = Number(b.getAttribute('data-count'));
+        var go = function () { stopCount = countTo(b, 0, to, 520, fmt); };
+        if (still()) go(); else { b.textContent = fmt(0); setTimeout(go, 200); } // after the h3 slides in
+      }
+      countdown(panel);
+      fitHeight();
+      // 8 of 8: the active dot turns gold and the hint becomes a way on
+      var last = active === n - 1;
+      if (dotsRow) dotsRow.classList.toggle('is-done', last);
+      if (doneLine) doneLine.hidden = !last;
+      if (hint) hint.hidden = last;
+    }
+    window.addEventListener('resize', fitHeight);
+
+    function layout(announce, dir) {
       cards.forEach(function (c, i) {
         c.setAttribute('data-depth', depth(i));
         c.setAttribute('aria-hidden', i === active ? 'false' : 'true');
@@ -852,6 +1388,7 @@
         var h = feats[active] && feats[active].querySelector('h3');
         live.textContent = (active + 1) + ' of ' + n + ': ' + (h ? h.textContent : '');
       }
+      if (announce) enterPanel(dir || 1);
     }
 
     // send card c off to one side; after a moment it tucks in at the back of the deck
@@ -867,7 +1404,7 @@
       var c = cards[active];
       active = (active + 1) % n;
       flyOff(c, dir || -1);
-      layout(true);
+      layout(true, 1);
     }
 
     function prev() {
@@ -883,7 +1420,7 @@
         c.style.opacity = '';
         c.classList.remove('fly-l');
       }
-      layout(true);
+      layout(true, -1);
     }
 
     function goTo(i) {
@@ -891,9 +1428,10 @@
       if (i === (active + 1) % n) return next(-1);
       if (i === (active - 1 + n) % n) return prev();
       var c = cards[active];
+      var dir = i > active ? 1 : -1;
       active = i;
       flyOff(c, -1);
-      layout(true);
+      layout(true, dir);
     }
 
     dots.forEach(function (d, i) { d.addEventListener('click', function () { goTo(i); }); });
@@ -989,7 +1527,71 @@
       }
     }
 
+    // The panels follow the visitor's country: the rate on Money, the tax office on Reports, the £ glyph
+    (function localise() {
+      var r = RATES[COUNTRY];
+      var first = r.tiers[0][1];
+      var cents = Math.round(first * 100);
+      var unitWord = r.unit === 'mi' ? 'a mile' : 'a km';
+      var sign = { UK: 'p', US: '¢', CA: '¢', AU: 'c' }[COUNTRY];
+      var rateB = document.querySelector('.feat-stat b[data-rate]');
+      var rateLabel = document.querySelector('[data-rate-label]');
+      if (rateB) { rateB.setAttribute('data-count', String(cents)); rateB.setAttribute('data-suffix', sign); rateB.textContent = cents + sign; }
+      if (rateLabel) {
+        rateLabel.textContent = {
+          UK: "a mile at HMRC's rate, for your first 10,000 work miles",
+          US: "a mile at the IRS's rate",
+          CA: "a km at the CRA's allowance rate, for your first 5,000 km",
+          AU: "a km at the ATO's rate, for up to 5,000 km a year"
+        }[COUNTRY] || unitWord;
+      }
+      var auth = document.querySelector('[data-auth]');
+      if (auth) auth.textContent = { UK: 'HMRC', US: 'the IRS', CA: 'the CRA', AU: 'the ATO' }[COUNTRY];
+      Array.prototype.forEach.call(document.querySelectorAll('[data-cur-sym]'), function (el) { el.textContent = COUNTRY === 'UK' ? '£' : '$'; });
+      Array.prototype.forEach.call(document.querySelectorAll('[data-cur-prefix]'), function (el) {
+        var sym = COUNTRY === 'UK' ? '£' : '$';
+        el.setAttribute('data-prefix', sym);
+        el.textContent = sym + '0';
+      });
+      var homeWorth = document.querySelector('[data-home-worth]'), homeNote = document.querySelector('[data-home-note]');
+      if (homeWorth) {
+        var hw = Math.round(worthOf(r, HOME_EXAMPLE[r.unit]) * 100) / 100;
+        homeWorth.setAttribute('data-count', hw.toFixed(2));
+        homeWorth.setAttribute('data-prefix', COUNTRY === 'UK' ? '£' : '$');
+        homeWorth.textContent = fmtStat(homeWorth)(hw);
+      }
+      if (homeNote) homeNote.textContent = {
+        UK: 'Example: 3,190.2 work miles this tax year, shown on Home',
+        US: "Example: 3,190.2 work miles this year, at the IRS's rate",
+        CA: "Example: 5,134.2 work km this year, at the CRA's allowance rate",
+        AU: "Example: 5,134.2 work km this year, at the ATO's rate"
+      }[COUNTRY];
+      // Perks' demo offer: 10p off a litre (UK), 10¢ off a gallon (US), 10¢ (Canada) or 10c (Australia) off a litre
+      var perkStat = document.querySelector('[data-perk-stat]'), perkNote = document.querySelector('[data-perk-note]');
+      if (perkStat) {
+        var perkSuf = { UK: 'p off', US: '¢ off', CA: '¢ off', AU: 'c off' }[COUNTRY];
+        perkStat.setAttribute('data-suffix', perkSuf);
+        perkStat.textContent = '10' + perkSuf;
+      }
+      if (perkNote && COUNTRY === 'US') perkNote.textContent = 'a gallon of gas: a demo offer while Perks is in testing';
+      var pdfTotal = document.querySelector('.pdf-total b'), pdfHead = document.querySelector('.pdf-head');
+      if (pdfTotal) pdfTotal.textContent = money(r, yearWorth(r, defaultWeek(r)));
+      if (pdfHead) pdfHead.textContent = 'Mileage log ' + { UK: '2026/27', US: '2026', CA: '2026', AU: '2026–27' }[COUNTRY];
+    })();
+
     layout(false);
+    shownPanel = 0;
+    fitHeight();
+    // the first panel counts up when the deck first comes into view
+    if ('IntersectionObserver' in window && feats[0]) {
+      var seen = new IntersectionObserver(function (es) {
+        if (!es[0].isIntersecting) return;
+        seen.disconnect();
+        if (active === 0) { shownPanel = -1; enterPanel(1); }
+      }, { threshold: 0.4 });
+      seen.observe(feats[0]);
+    }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitHeight);
   })();
 
   /* ---------- Waitlist form ---------- */

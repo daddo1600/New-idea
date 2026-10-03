@@ -128,12 +128,44 @@ section.hero { padding: 0; }
   box-shadow: 0 14px 36px rgba(3, 28, 20, .35), inset 0 0 0 1px rgba(255, 255, 255, .12);
 }
 .scene-pic { position: absolute; inset: 0; }
+/* The camera: when the car parks, the phone (with its mount) comes up close so the app can be read,
+   the road dims behind it; it eases back as the car pulls away. site.js sets the transforms. */
+.rig { position: absolute; inset: 0; z-index: 1; transform-origin: 0 0; }
+.scene-dim { position: absolute; inset: 0; z-index: 1; background: rgba(3, 30, 21, .62); opacity: 0; pointer-events: none; }
+.scene-road { transform-origin: 50% 60%; }
+/* The swipe, shown the way iOS screen recordings show a touch: a soft translucent circle that presses,
+   drags across the drive and lifts off with a ripple (site.js moves it on the scene's clock) */
+.touch {
+  position: absolute; z-index: 3; left: 0; top: 0; width: 11.5%; aspect-ratio: 1; margin: -5.75% 0 0 -5.75%;
+  border-radius: 50%; background: rgba(255, 255, 255, .55); box-shadow: 0 1px 4px rgba(0, 0, 0, .28), inset 0 0 0 1px rgba(255, 255, 255, .7);
+  opacity: 0; pointer-events: none; will-change: transform, opacity;
+}
+.touch::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .8); opacity: var(--ripple-o, 0); transform: scale(var(--ripple-s, 1)); }
 .scene-road { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .rd-surface { fill: #22332C; }
 .rd-line, .rd-post { fill: #FBF7EE; }
 .rd-dash { fill: var(--gold); }
 .rd-crown { fill: #0F6B45; }
+.rd-crown-d { fill: #0A5638; }
+.rd-crown-l { fill: #2A8A5E; }
 .rd-trunk { fill: #0A3D2C; }
+.rd-post-band { fill: #14261F; }
+.rd-dash-w { fill: #FBF7EE; }
+.rd-yellow { fill: var(--gold); }
+/* London's roadside: plane trees, dolphin-style lamps, bollards */
+.lt-trunk { fill: #5E7F6C; }
+.lt-bark { fill: #8DAA97; }
+.lt-mottle { fill: #3E9A6E; }
+.lt-iron { fill: #13221C; }
+.lt-band { fill: var(--gold); }
+.lt-globe { fill: #FBF7EE; }
+/* Scenes: cream clouds; a 300 ms cross-fade when the scene changes; glints shimmer on water */
+.sc-clouds { fill: #FBF7EE; }
+.sc-world { transition: opacity .15s ease; }
+.sc-world.is-swapping { opacity: 0; }
+.sc-glints { animation: sc-glint 3s ease-in-out infinite alternate; }
+@keyframes sc-glint { from { opacity: .35; } to { opacity: .95; } }
+@media (prefers-reduced-motion: reduce) { .sc-world { transition: none; } .sc-glints { animation: none; } }
 .rd-sun { fill: var(--gold); opacity: .85; }
 .rd-pillar, .rd-board { fill: #06261C; }
 .rd-trim { stroke: var(--gold); stroke-width: 2.2; opacity: .9; }
@@ -444,16 +476,118 @@ section { padding: 64px 0; }
 .deck-hint .count { font-variant-numeric: tabular-nums; color: var(--ink); margin-right: 8px; }
 .deck-hint .count b { font-weight: 800; }
 
-/* the caption: one feature at a time, crossfading in place (all of them show without JS) */
-.feats { display: grid; }
-.feat { grid-area: 1 / 1; transition: opacity .3s ease .18s, transform .3s ease .18s, visibility 0s linear .18s; }
+/* ---------- Feature panels: one card per screen, crossfading in place (all of them show without JS) ----------
+   A badge, the h3, one big stat that counts up, at most three tick tiles, and for Reports, Privacy and
+   Your code a small picture. Content slides in from the side the deck moved (data-dir on .feats). */
+.feats { display: grid; align-items: start; --dx: 12px; }
+.feats[data-dir="back"] { --dx: -12px; }
+@media (max-width: 899px) {
+  .feats { max-width: 36rem; width: 100%; margin: -12px auto 0; transition: height .25s ease; }
+}
+@media (min-width: 900px) { .feats { align-self: center; } }
+.feat {
+  grid-area: 1 / 1; position: relative; overflow: hidden;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 22px 22px 18px 26px; box-shadow: var(--shadow);
+  transition: opacity .3s ease .18s, transform .3s ease .18s, visibility 0s linear .18s;
+}
+/* the road-green accent bar down the left edge */
+.feat::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(#0E9F6E, #053D2E); }
 .feat:not(.on) { opacity: 0; visibility: hidden; transform: translateY(10px); transition: opacity .18s ease, transform .18s ease, visibility 0s linear .18s; }
-@media (prefers-reduced-motion: reduce) { .feat, .feat:not(.on) { transform: none; } }
-.feat h3 { font-size: clamp(1.4rem, 3vw, 1.75rem); font-weight: 800; }
-.feat ul { padding-left: 1.2em; margin: 0 0 1em; }
-.feat li { margin-bottom: .4em; }
-.feat .tag { display: inline-block; font-size: .8rem; font-weight: 700; padding: 2px 10px; border-radius: 999px; background: var(--surface-2); color: var(--ink); border: 1px solid var(--border); margin-bottom: 10px; }
-@media (max-width: 899px) { .feats { max-width: 36rem; margin: 0 auto; } }
+.feat h3 { font-size: clamp(1.35rem, 3vw, 1.7rem); font-weight: 800; margin: 12px 0 14px; }
+
+/* Badges: Pro gold (with the sprout and sparkles), the rest mint */
+.feat-badge { vertical-align: middle; }
+.feat .pro-badge, .mint-badge { display: inline-flex; align-items: center; gap: 6px; }
+.b-icon { width: 14px; height: 14px; flex: none; }
+.mint-badge {
+  background: var(--mint); color: #065F46; font-weight: 800; font-size: .8rem; letter-spacing: .04em;
+  padding: 4px 11px 4px 9px; border-radius: 999px; line-height: 1.2;
+}
+.b-glyph { font-weight: 800; font-size: .9rem; line-height: 1; }
+
+/* The stat */
+.feat-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 14px; }
+.feat-stat { margin: 0; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.feat-stat b { font-size: 2.25rem; font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; color: var(--brand); font-variant-numeric: tabular-nums; }
+.feat-stat span { font-size: .9rem; color: var(--text); line-height: 1.4; max-width: 22em; }
+
+/* Tick tiles */
+.feat-tiles { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.feat-tiles li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: center; color: var(--ink); font-size: .97rem; line-height: 1.35; margin: 0; }
+.feat-tiles li::before {
+  content: ""; width: 28px; height: 28px; border-radius: 8px; box-sizing: border-box;
+  background: var(--mint) no-repeat center / 14px 14px
+    url("/assets/img/ui/tick.svg");
+}
+.feat.is-pro .feat-tiles li::before {
+  background-color: #FEF9C3;
+  background-image: url("/assets/img/ui/tick-pro.svg");
+}
+.feat-link { margin: 14px 0 0; font-size: .95rem; }
+
+/* Micro-visuals (about 120 x 150), beside the stat; hidden on the narrowest phones */
+.feat-visual { flex: none; width: 104px; height: 128px; }
+@media (min-width: 900px) { .feat-visual { width: 120px; height: 150px; } }
+@media (max-width: 359px) { .feat-visual { display: none; } }
+.mini-pdf, .mini-receipt { filter: drop-shadow(0 4px 10px rgba(20, 38, 31, .18)) drop-shadow(0 0 1px rgba(20, 38, 31, .35)); }
+.mini-pdf .pdf-page {
+  position: relative; width: 100%; height: 100%; background: #FFFFFF; border-radius: 6px; padding: 26px 10px 10px;
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.mini-pdf .pdf-page::after { content: ""; position: absolute; top: 0; right: 0; width: 18px; height: 18px; background: linear-gradient(225deg, transparent 50%, #D6E4DC 50%); }
+.pdf-head { position: absolute; left: 0; right: 18px; top: 0; height: 20px; background: #0B7A55; color: #FFFFFF; font-size: .5rem; font-weight: 700; padding: 5px 7px; white-space: nowrap; overflow: hidden; }
+.mini-pdf i { display: block; height: 5px; border-radius: 3px; background: #E3EBE6; }
+.mini-pdf i:nth-of-type(2) { width: 80%; } .mini-pdf i:nth-of-type(4) { width: 65%; }
+.pdf-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 4px; font-size: .5rem; color: #4A5A52; }
+.pdf-total b { color: #0B7A55; font-size: .62rem; }
+.pdf-seal { position: absolute; right: 6px; bottom: 6px; width: 22px; height: 26px; }
+.mini-lock svg { width: 100%; height: 100%; }
+.lock-road { stroke: var(--gold); stroke-width: 3; stroke-dasharray: 5 5; stroke-linecap: round; }
+.lock-phone { fill: #14261F; }
+.lock-screen { fill: var(--mint); }
+.lock-shackle { stroke: #0B7A55; stroke-width: 4; }
+.lock-body { fill: #0B7A55; }
+.lock-hole { fill: var(--mint); }
+.mini-receipt .rcpt {
+  height: 100%; background: #FFFFFF; border-radius: 6px 6px 0 0; padding: 10px 8px 16px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px; color: #14261F;
+  -webkit-mask: linear-gradient(#000 0 0) top / 100% calc(100% - 8px) no-repeat, conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 12px 8px repeat-x;
+  mask: linear-gradient(#000 0 0) top / 100% calc(100% - 8px) no-repeat, conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 12px 8px repeat-x;
+}
+.rcpt-qr { display: grid; grid-template: repeat(5, 1fr) / repeat(5, 1fr); gap: 2px; width: 58px; height: 58px; }
+.rcpt-qr i { background: #14261F; border-radius: 1px; }
+.rcpt-code { font: 700 .55rem/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .06em; }
+.rcpt-time { font-weight: 800; font-size: .95rem; color: #0B7A55; font-variant-numeric: tabular-nums; }
+
+/* In sync with the card: badge and h3, then the stat (it counts), then the tiles one by one, then the picture */
+@keyframes feat-in { from { opacity: 0; transform: translateX(var(--dx)); } to { opacity: 1; transform: none; } }
+@keyframes feat-up { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes feat-pop { 0% { opacity: 0; transform: translateY(8px) scale(.9); } 70% { opacity: 1; transform: translateY(-2px) scale(1.03); } 100% { transform: none; } }
+@keyframes seal-pop { from { transform: scale(.8); } 70% { transform: scale(1.12); } to { transform: scale(1); } }
+.feat.enter .feat-badge, .feat.enter h3 { animation: feat-in .3s ease both .12s; }
+.feat.enter .feat-stat { animation: feat-in .3s ease both .2s; }
+.feat.enter .feat-tiles li { animation: feat-up .3s ease both; animation-delay: calc(.32s + var(--i) * 60ms); }
+.feat.enter .feat-visual { animation: feat-pop .4s cubic-bezier(.34, 1.4, .64, 1) both .3s; }
+.feat.enter .pdf-seal { animation: seal-pop .3s ease both .62s; }
+@media (prefers-reduced-motion: reduce) {
+  .feat, .feat:not(.on) { transform: none; }
+  .feats { transition: none; }
+  .feat.enter .feat-badge, .feat.enter h3, .feat.enter .feat-stat, .feat.enter .feat-tiles li, .feat.enter .feat-visual, .feat.enter .pdf-seal { animation: none; }
+}
+@media (prefers-color-scheme: dark) {
+  .mint-badge { background: rgba(110, 231, 183, .14); color: #6EE7B7; }
+  .feat-stat b { color: #6EE7B7; }
+  .feat-tiles li::before { background-color: rgba(110, 231, 183, .14); }
+  .feat.is-pro .feat-tiles li::before { background-color: rgba(250, 204, 21, .16); }
+}
+
+/* 8 of 8: the active dot turns gold and the hint becomes a way on */
+.dots.is-done button[aria-current="true"]::before { background: var(--gold); box-shadow: 0 0 0 3px rgba(250, 204, 21, .25); }
+.deck-done { margin: 6px 0 0; font-size: .9rem; font-weight: 700; text-align: center; color: var(--ink); display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.deck-done[hidden] { display: none; }
+.deck-done-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 4px rgba(250, 204, 21, .25); }
 
 /* Closing call to action */
 .cta { background: linear-gradient(135deg, #E9F8F0 0%, var(--bg) 70%); border-top: 1px solid var(--border); overflow-x: hidden; overflow-x: clip; }
@@ -777,7 +911,7 @@ html.ms-intro::after {
     linear-gradient(135deg, #0E9F6E 0%, #053D2E 100%);
 }
 .signup .wrap { max-width: 40rem; }
-#early-access { scroll-margin-top: 24px; }
+#early-access, #calc { scroll-margin-top: 24px; }
 .signup .wl-title { color: #FFFFFF; font-size: clamp(1.6rem, 5vw, 2.1rem); margin: 0 0 .3em; }
 .signup-sub { color: #F0FDF7; margin: 0 0 18px; }
 .signup .tester-link a { color: #FFFFFF; }
@@ -906,3 +1040,35 @@ html[data-cc="CA"] .money-line [data-for="CA"], html[data-cc="AU"] .money-line [
 .offer-terms-link { font-size: .85rem; font-weight: 600; }
 .signup .offer-terms-link { color: #FFFFFF; }
 #offer-terms { scroll-margin-top: 24px; }
+
+/* Scenery chips (desktop only, under the scene): the visitor can always pick the standard scene */
+.scene-pick { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 10px 0 0; }
+/* the chips need JS: until it runs they keep their space but don't show (no layout shift when they appear) */
+.scene-pick[hidden] { display: flex; visibility: hidden; }
+@media (max-width: 899px) { .scene-pick { display: none !important; } }
+.scene-pick-label { color: #D1FAE5; font-size: .85rem; font-weight: 700; }
+.scene-chips { display: flex; gap: 6px; }
+.scene-chip { position: relative; display: inline-flex; }
+.scene-chip input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.scene-chip > span {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 4px 12px 4px 8px; border-radius: 999px; pointer-events: none;
+  border: 1.5px solid rgba(255, 255, 255, .35); background: rgba(255, 255, 255, .1); color: #FFFFFF; font-weight: 700; font-size: .85rem;
+  transition: transform .2s ease, border-color .2s ease, background-color .2s ease;
+}
+.scene-chip .flag { width: 20px; height: 14px; border-radius: 3px; }
+.scene-chip input:checked + span { border-color: var(--gold); background: rgba(250, 204, 21, .16); transform: translateY(-1px); }
+.scene-chip input:focus-visible + span { outline: 3px solid #FFFFFF; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .scene-chip > span { transition: none; } }
+
+/* "Work out yours ↓" after the hero's money line (the gold amount is a second, mouse-only way there) */
+.hero a.money-go { color: var(--gold); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.hero a.money-go:hover { text-decoration-thickness: 2px; }
+.hero a.money-go:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.hero a.money-amt { color: inherit; text-decoration: none; }
+.calc-title:focus { outline: none; }
+.calc-title:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; border-radius: 6px; }
+/* arriving from the money line: the slider's thumb pulses gold once */
+@keyframes thumb-pulse { 0% { box-shadow: 0 0 0 6px rgba(250, 204, 21, .22), 0 3px 10px rgba(0, 0, 0, .3); } 45% { box-shadow: 0 0 0 16px rgba(250, 204, 21, .55), 0 3px 10px rgba(0, 0, 0, .3); } 100% { box-shadow: 0 0 0 6px rgba(250, 204, 21, .22), 0 3px 10px rgba(0, 0, 0, .3); } }
+.calc-range.is-pulse::-webkit-slider-thumb { animation: thumb-pulse .6s ease-out; }
+.calc-range.is-pulse::-moz-range-thumb { animation: thumb-pulse .6s ease-out; }
+@media (prefers-reduced-motion: reduce) { .calc-range.is-pulse::-webkit-slider-thumb, .calc-range.is-pulse::-moz-range-thumb { animation: none; } }

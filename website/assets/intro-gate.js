@@ -8,24 +8,38 @@
      Decided here, before the page paints, and put on <html data-cc>, so the hero's money line shows the
      right country's text from the first frame (index.html carries all four; site.css shows one). No location
      is asked for. season.js and site.js use window.MSCountry. */
-  var CA_ZONES = /^America\/(Toronto|Montreal|Vancouver|Edmonton|Winnipeg|Halifax|St_Johns|Regina|Moncton|Glace_Bay|Goose_Bay|Whitehorse|Dawson|Dawson_Creek|Fort_Nelson|Creston|Iqaluit|Rankin_Inlet|Resolute|Cambridge_Bay|Inuvik|Yellowknife|Swift_Current|Atikokan|Blanc-Sablon|Nipigon|Thunder_Bay|Rainy_River|Pangnirtung)$/;
-  var US_ZONES = /^(America\/(New_York|Chicago|Denver|Los_Angeles|Phoenix|Anchorage|Adak|Boise|Detroit|Juneau|Sitka|Metlakatla|Nome|Yakutat|Menominee|Indiana\/.+|Kentucky\/.+|North_Dakota\/.+)|Pacific\/Honolulu|US\/.+)$/;
+  var CA_ZONES = /^America\/(Toronto|Montreal|Vancouver|Edmonton|Winnipeg|Halifax|St_Johns|Regina|Moncton|Glace_Bay|Goose_Bay|Whitehorse|Dawson|Dawson_Creek|Fort_Nelson|Creston|Iqaluit|Rankin_Inlet|Resolute|Cambridge_Bay|Inuvik|Yellowknife|Swift_Current|Atikokan|Blanc-Sablon|Nipigon|Thunder_Bay|Rainy_River|Pangnirtung|Coral_Harbour)$|^Canada\//;
+  var US_ZONES = /^(America\/(New_York|Chicago|Denver|Los_Angeles|Phoenix|Anchorage|Adak|Boise|Detroit|Juneau|Sitka|Metlakatla|Nome|Yakutat|Menominee|Indianapolis|Louisville|Fort_Wayne|Knox_IN|Shiprock|Atka|Indiana\/.+|Kentucky\/.+|North_Dakota\/.+)|Pacific\/Honolulu|US\/.+|Navajo)$/;
 
-  function country() {
-    var forced = /[?&]country=(UK|GB|US|CA|AU)\b/i.exec(location.search);
-    if (forced) return forced[1].toUpperCase() === 'UK' ? 'GB' : forced[1].toUpperCase();
-    var tz = '';
-    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (err) { /* old browser */ }
+  /** The country a time zone belongs to, of the four: 'GB', 'US', 'CA', 'AU', or null. */
+  function zoneCountry(tz) {
     if (/^Australia\//.test(tz)) return 'AU';
     if (CA_ZONES.test(tz)) return 'CA';
     if (US_ZONES.test(tz)) return 'US';
-    if (tz === 'Europe/London') return 'GB';
+    if (/^(Europe\/(London|Belfast)|GB|GB-Eire)$/.test(tz)) return 'GB';
+    return null;
+  }
+  function zone() {
+    try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (err) { return ''; } // old browser
+  }
+  /** A ?country= preview, if any: 'GB', 'US', 'CA' or 'AU'. */
+  function forcedCountry() {
+    var forced = /[?&]country=(UK|GB|US|CA|AU)\b/i.exec(location.search);
+    return forced ? (forced[1].toUpperCase() === 'UK' ? 'GB' : forced[1].toUpperCase()) : null;
+  }
+  function country() {
+    var forced = forcedCountry();
+    if (forced) return forced;
+    var byZone = zoneCountry(zone());
+    if (byZone) return byZone;
     var lang = (navigator.language || '').toUpperCase();
     var m = /-(AU|US|CA|GB)\b/.exec(lang);
     return m ? m[1] : 'GB';
   }
 
-  window.MSCountry = { country: country, CA_ZONES: CA_ZONES, US_ZONES: US_ZONES };
+  // One source of truth for "where": country() (money, units, seasons; never unknown, GB by default) and,
+  // once site.js has asked /api/scene, scene (the hero's scenery; 'standard' whenever we can't tell).
+  window.MSCountry = { country: country, zoneCountry: zoneCountry, zone: zone, forced: forcedCountry, scene: null, CA_ZONES: CA_ZONES, US_ZONES: US_ZONES };
   try { document.documentElement.setAttribute('data-cc', country()); } catch (err) { /* the UK text shows */ }
 
   /* The page always opens at the top unless the URL has a #hash. Safari otherwise restores the
