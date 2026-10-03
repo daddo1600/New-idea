@@ -677,3 +677,17 @@ html.ms-intro::after {
 .compare-notes li { margin-bottom: .3em; }
 .scroll-hint { display: none; margin: 0 0 8px; font-size: .85rem; text-align: right; }
 @media (max-width: 820px) { .scroll-hint { display: block; } }
+
+/* Home: the hero sells first (See how it works); the sign-up comes after the screens and Free & Pro. */
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; margin: 26px 0 0; }
+.hero-link { color: #FFFFFF; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.signup {
+  color: #FFFFFF;
+  background:
+    linear-gradient(rgba(4, 40, 30, .30), rgba(4, 40, 30, .30)),
+    linear-gradient(135deg, #0E9F6E 0%, #053D2E 100%);
+}
+.signup .wrap { max-width: 40rem; }
+.signup .wl-title { color: #FFFFFF; font-size: clamp(1.6rem, 5vw, 2.1rem); margin: 0 0 .3em; }
+.signup-sub { color: #F0FDF7; margin: 0 0 18px; }
+.signup .tester-link a { color: #FFFFFF; }

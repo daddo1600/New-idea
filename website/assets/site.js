@@ -207,11 +207,11 @@
   })();
 
   /* ---------- Home: links to the sign-up (and a floating "Get early access" pill) ----------
-     Every link to #early-access scrolls to the hero form and puts the cursor in the email box.
+     Every link to #early-access scrolls to the sign-up form and puts the cursor in the email box.
      The pill is made here (no JS, no pill) and shows only further down the page while
      scrolling down. */
   (function joinLinks() {
-    var form = document.querySelector('.hero form[data-waitlist]');
+    var form = document.querySelector('form[data-waitlist]');
     var heading = document.getElementById('early-access');
     if (!form || !heading) return;
     var email = form.querySelector('input[type="email"]');
