@@ -100,6 +100,24 @@ for (let i = 0; i <= STEM_SAMPLES; i++) {
   STEM_YS.push(y);
 }
 
+/**
+ * The car's spot `progress` (0–1) of the way up the stem, from the samples above.
+ * A worklet. Progress is clamped: a timing's first frame can land a hair below 0
+ * (Easing.inOut(cubic) at a frame stamped just before its start), which read
+ * STEM_XS[-1] and gave the car NaN coordinates.
+ */
+export function stemSampleAt(progress: number): { x: number; y: number } {
+  'worklet';
+  // `> 0` also turns NaN into the foot of the stem.
+  const at = (progress > 0 ? Math.min(1, progress) : 0) * STEM_SAMPLES;
+  const i = Math.min(STEM_SAMPLES - 1, Math.floor(at));
+  const f = at - i;
+  return {
+    x: STEM_XS[i] + (STEM_XS[i + 1] - STEM_XS[i]) * f,
+    y: STEM_YS[i] + (STEM_YS[i + 1] - STEM_YS[i]) * f,
+  };
+}
+
 /** The point `t` (0–1) of the way up the stem. */
 export function stemAt(t: number) {
   const [x, y] = pointAtLength(t * STEM_LENGTH);

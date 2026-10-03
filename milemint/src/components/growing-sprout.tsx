@@ -19,10 +19,8 @@ import {
   SPROUT_COLORS,
   STEM_LENGTH,
   STEM_PATH,
-  STEM_SAMPLES,
-  STEM_XS,
-  STEM_YS,
   stemAt,
+  stemSampleAt,
   TOP,
 } from '@/brand/sprout';
 import { LeafBody, LeafGradient, LeafVeins, markViewBox, Soil } from '@/components/leaf-mark';
@@ -194,9 +192,7 @@ function Road({ emerge, drive, car }: { emerge: SharedValue<number>; drive: Shar
   const length = STEM_LENGTH + 1;
   const roadProps = useAnimatedProps(() => ({ strokeDashoffset: length * (1 - drive.value) }));
   const carProps = useAnimatedProps(() => {
-    const at = drive.value * STEM_SAMPLES;
-    const i = Math.min(STEM_SAMPLES - 1, Math.floor(at));
-    const f = at - i;
+    const spot = stemSampleAt(drive.value);
     // Asleep in the soil it glows and trembles, swelling, then bursts up to the
     // stem's foot with a little bounce; its white ring draws in as it lands.
     const e = emerge.value;
@@ -207,8 +203,8 @@ function Road({ emerge, drive, car }: { emerge: SharedValue<number>; drive: Shar
     const ring = (RING_R - DOT_R) * Math.min(1, Math.max(0, (drive.value - RING_FROM) / (1 - RING_FROM)));
     const buried = BURIED.r + (DOT_R * 0.75 - BURIED.r) * stir;
     return {
-      cx: STEM_XS[i] + (STEM_XS[i + 1] - STEM_XS[i]) * f + tremble,
-      cy: STEM_YS[i] + (STEM_YS[i + 1] - STEM_YS[i]) * f + (BURIED.y - FOOT.y) * (1 - rise),
+      cx: spot.x + tremble,
+      cy: spot.y + (BURIED.y - FOOT.y) * (1 - rise),
       r: buried + (DOT_R - buried) * Math.min(1, out * 1.5) + ring / 2,
       strokeWidth: ring,
     };

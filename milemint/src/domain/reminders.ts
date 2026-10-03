@@ -83,3 +83,25 @@ export function upcomingSundays(now: Date, count: number, hour: number): Date[] 
 export function tomorrowAt(now: Date, hour: number): Date {
   return new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, hour);
 }
+
+/**
+ * How set-up's reminders step ended: iOS's question was answered, "Not now"
+ * was tapped, or the step wasn't shown (iOS had already asked).
+ */
+export type SetupNotifyAnswer = 'answered' | 'not-now' | 'not-shown';
+
+/**
+ * The reminder settings set-up saves at the finish. It never asks, so the
+ * Sunday recap is on only if it could be queued. After "Not now" home must
+ * stay free to offer it (ReminderAsk shows while neither flag is set), even
+ * when a restored backup brought back `reminderAsked` from the old phone.
+ */
+export function setupReminderSettings(
+  scheduled: boolean,
+  answer: SetupNotifyAnswer,
+): { weeklyReminder: boolean; reminderDefaulted: true; reminderAsked?: boolean } {
+  const settings = { weeklyReminder: scheduled, reminderDefaulted: true as const };
+  if (answer === 'answered') return { ...settings, reminderAsked: true };
+  if (answer === 'not-now' && !scheduled) return { ...settings, reminderAsked: false };
+  return settings;
+}

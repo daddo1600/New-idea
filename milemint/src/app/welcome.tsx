@@ -67,6 +67,7 @@ import {
   vehicleRule,
   type RegionCode,
 } from '@/domain/regions';
+import { setupReminderSettings } from '@/domain/reminders';
 import { type CheerKind, DONE, HOURS, PURPOSE, REMINDERS, setupCheer } from '@/domain/setup-cheers';
 import { shownStyles, type WorkStyle } from '@/domain/work-focus';
 import { useTheme } from '@/hooks/use-theme';
@@ -177,6 +178,8 @@ export default function WelcomeScreen() {
   const [notifyAsking, setNotifyAsking] = useState(false);
   /** Answered on the reminders step: null if it didn't ask. */
   const [notifyAllowed, setNotifyAllowed] = useState<boolean | null>(null);
+  /** "Not now" on the reminders step: home stays free to offer the Sunday recap later. */
+  const [notifyLater, setNotifyLater] = useState(false);
   useEffect(() => {
     let current = true;
     notificationsAskable().then(
@@ -607,11 +610,9 @@ export default function WelcomeScreen() {
       // Never asks: the Sunday check-in is queued only if notifications are already allowed.
       // Turning it off is in Settings; "Not now" leaves home free to offer it later.
       const scheduled = await refreshWeeklyReminder(picked.unit).catch(() => false);
-      await updateSettings(db, {
-        weeklyReminder: scheduled,
-        ...(notifyAllowed !== null && { reminderAsked: true }),
-        reminderDefaulted: true,
-      });
+      // A restored backup may bring back `reminderAsked`: after "Not now" it's cleared, so home can still offer.
+      const answer = notifyAllowed !== null ? 'answered' : notifyLater ? 'not-now' : 'not-shown';
+      await updateSettings(db, setupReminderSettings(scheduled, answer));
       if (!hoursSet && !shifts) await scheduleWorkHoursNudge().catch(() => {});
     } finally {
       setBusy(false);
@@ -1101,7 +1102,10 @@ export default function WelcomeScreen() {
           {step === PURPOSE && shownChoices.length > 0 && primary(t('Continue'), () => saveWork(shownChoices))}
           {step === PURPOSE && secondary(t('Skip for now'), () => saveWork([]))}
           {step === REMINDERS && !notifyAsking && primary(t('Turn on notifications'), allowNotifications, true, true)}
-          {step === REMINDERS && !notifyAsking && secondary(t('Not now'), () => setStep(DONE))}
+          {step === REMINDERS && !notifyAsking && secondary(t('Not now'), () => {
+              setNotifyLater(true);
+              setStep(DONE);
+            })}
           {step === DONE && primary(t('Start using MileSprout'), finish, true, sparkle)}
         </View>
       </KeyboardAvoidingView>
