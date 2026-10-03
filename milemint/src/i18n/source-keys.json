@@ -2123,6 +2123,18 @@
     ]
   },
   {
+    "key": "Counting your km",
+    "files": [
+      "components/home/tracking-card.tsx"
+    ]
+  },
+  {
+    "key": "Counting your miles",
+    "files": [
+      "components/home/tracking-card.tsx"
+    ]
+  },
+  {
     "key": "Country",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -2369,12 +2381,6 @@
     "key": "Drives are logged by themselves when you drive.",
     "files": [
       "components/tracking-health-card.tsx"
-    ]
-  },
-  {
-    "key": "Drives are logged when you park.",
-    "files": [
-      "components/home/tracking-card.tsx"
     ]
   },
   {
@@ -2914,6 +2920,12 @@
     "key": "Every work drive has a purpose ✓",
     "files": [
       "components/trips/list-bars.tsx"
+    ]
+  },
+  {
+    "key": "Every work drive is money back at tax time.",
+    "files": [
+      "components/home/tracking-card.tsx"
     ]
   },
   {
@@ -5089,7 +5101,7 @@
     ]
   },
   {
-    "key": "Outside work hours. Drives are logged when you park.",
+    "key": "Outside work hours. Drives are saved when you park.",
     "files": [
       "components/home/tracking-card.tsx"
     ]
@@ -7275,12 +7287,6 @@
     "files": [
       "components/tracking-health-card.tsx",
       "tracking/health-alerts.ts"
-    ]
-  },
-  {
-    "key": "Tracking on",
-    "files": [
-      "components/home/tracking-card.tsx"
     ]
   },
   {

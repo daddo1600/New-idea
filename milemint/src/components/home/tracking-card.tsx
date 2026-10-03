@@ -36,7 +36,7 @@ function clockLabel(clock: string, region: Region): string {
 }
 
 /**
- * "Tracking on", or what to do to get there. With work hours on, it says
+ * "Counting your miles" (never "tracking": it's the money being counted, not the person), or what to do to get there. With work hours on, it says
  * whether they're running now ("Work hours · until 17:00"), so set-hours
  * workers see the app working for them without having to do anything.
  */
@@ -68,15 +68,15 @@ export function TrackingCard({
         <View style={[styles.livePill, { backgroundColor: theme.accent + '1F' }]}>
           <LiveDot color={theme.accent} />
           <ThemedText type="smallBold" style={{ color: theme.accent }}>
-            {shift ? t('Work hours') : t('Tracking on')}
+            {shift ? t('Work hours') : region?.unit === 'km' ? t('Counting your km') : t('Counting your miles')}
           </ThemedText>
         </View>
         <ThemedText type="small" themeColor="textSecondary" style={styles.flex}>
           {shift && region
             ? t('Until {{time}}. Drives now count as work.', { time: clockLabel(shift.end, region) })
             : workWeek
-              ? t('Outside work hours. Drives are logged when you park.')
-              : t('Drives are logged when you park.')}
+              ? t('Outside work hours. Drives are saved when you park.')
+              : t('Every work drive is money back at tax time.')}
         </ThemedText>
       </View>
     );

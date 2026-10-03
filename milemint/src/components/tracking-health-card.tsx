@@ -65,7 +65,7 @@ export function formatMoment(at: number, region: Region, now: number, sameDayAs?
   });
 }
 
-/** Home's card; `state` comes from home's own useTrackingHealth, which also decides whether "Tracking on" shows. */
+/** Home's card; `state` comes from home's own useTrackingHealth, which also decides whether "Counting your miles" shows. */
 export function TrackingHealthCard({ state }: { state: ReturnType<typeof useTrackingHealth> }) {
   const theme = useTheme();
   const t = useT();
