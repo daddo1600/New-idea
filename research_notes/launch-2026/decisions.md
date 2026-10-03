@@ -68,3 +68,9 @@ The founder signs these off; the team builds from them. The newest decision wins
 - **There is no launch date yet.** `{LAUNCH_DATE}` and `{PROMISE_END}` stay as placeholders.
 - **Before launch,** the website words the window relative to launch ("within 12 months of launch day"), not with calendar dates. The dated wording replaces it once launch is set.
 - The testers' badge cut-off (`FOUNDING_TESTER_ENDS`) also waits for the date.
+
+## 3 Oct 2026: City scenes for every major city (approved)
+- The website hero shows the visitor's **own city**, not just one scene per country. It will take time; build them one at a time, each passing marketing and QA before it goes live (no founder publish needed, per the local-scenes decision).
+- **Order:** UK first (London is live; then Manchester, Glasgow, Liverpool, Birmingham, Edinburgh, Leeds, Cardiff, Belfast…), then the US (New York, Los Angeles, Chicago, Houston, San Jose/Bay Area, and other major and state-capital cities), then Australia (Sydney, Melbourne, Brisbane, Perth, Adelaide, Canberra…) and Canada (Toronto, Montréal, Vancouver, Calgary, Ottawa…).
+- **Fallbacks:** a visitor in an unbuilt city gets their country's best-matching regional scene, then the standard scene. City detection comes from Cloudflare's coarse location only; nothing is stored.
+- City styling combines with the persona journeys (`journey-scenes.md`) and the seasons calendar.
