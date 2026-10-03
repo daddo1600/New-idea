@@ -430,10 +430,12 @@
     function playVideo() {
       if (!running()) return;
       if (video.getAttribute('preload') === 'none') video.setAttribute('preload', 'auto');
-      try { video.currentTime = clock; } catch (err) { /* not loaded yet */ }
       var p;
       try { p = video.play(); } catch (err) { refused(); return; }
-      if (p && p.then) p.then(function () { videoOk = true; blocked = false; }, refused);
+      // line the clip up with the road only once it really plays (while it's blocked, WebKit would
+      // swap the poster for a decoded frame)
+      var sync = function () { videoOk = true; blocked = false; try { video.currentTime = clock; } catch (err) { /* fine */ } };
+      if (p && p.then) p.then(sync, refused); else sync();
     }
     function refused() {
       // the road keeps driving on its own clock; the phone shows the posters until a touch lets it play
@@ -445,7 +447,8 @@
     function retryOnGesture() {
       if (waiting) return;
       waiting = true;
-      var evs = ['touchstart', 'pointerdown', 'keydown', 'scroll'];
+      // only these count as a user gesture in Safari (a scroll doesn't, and would re-arm in a loop)
+      var evs = ['touchend', 'pointerup', 'click', 'keydown'];
       function retry() {
         evs.forEach(function (e) { window.removeEventListener(e, retry, true); });
         waiting = false;
