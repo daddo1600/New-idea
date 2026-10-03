@@ -2,7 +2,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import { AppState } from 'react-native';
 
-import { DEMO_DRIVING, DEMO_MODE } from '@/dev/demo';
+import { DEMO_CLIP, DEMO_DRIVING, DEMO_MODE } from '@/dev/demo';
 import { driveInProgress } from '@/domain/tracker-policy';
 import { currentDistanceM } from '@/domain/trip-detector';
 
@@ -22,7 +22,9 @@ const POLL_MS = 5_000;
 export function useLiveDrive(): LiveDrive | null {
   const db = useSQLiteContext();
   const [drive, setDrive] = useState<LiveDrive | null>(() =>
-    DEMO_DRIVING ? { startedAt: Date.now() - 14 * 60_000, distanceMeters: 5150, stopped: false } : null,
+    DEMO_DRIVING
+      ? { startedAt: Date.now() - 14 * 60_000, distanceMeters: DEMO_CLIP ? 3540 : 5150, stopped: false }
+      : null,
   );
 
   useEffect(() => {

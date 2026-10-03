@@ -1,6 +1,7 @@
-/* MileSprout website: hero phone tilt, the feature deck and the waitlist (and founding testers) form.
-   Vanilla JS, no libraries, no requests except the waitlist form posting to /api/waitlist.
-   The page works without it: the phone sits still and every feature is listed. */
+/* MileSprout website: the hero scene, the money line and calculator, the feature deck and the
+   waitlist (and founding testers) form. Vanilla JS, no libraries. Its only requests: the hero clip,
+   the form posting to /api/waitlist, and Cloudflare Turnstile once a whole email is typed.
+   The page works without it: the hero is a still picture and every feature is listed. */
 (function () {
   'use strict';
 
@@ -21,9 +22,12 @@
     if (!root.classList.contains('ms-intro')) return;
     var overlay = null;
     function cleanup() {
+      var was = root.classList.contains('ms-intro') || !!overlay;
       root.classList.remove('ms-intro');
       if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
       overlay = null;
+      // the hero clip waits for this (it doesn't play under the intro)
+      if (was) { try { window.dispatchEvent(new Event('ms-intro-end')); } catch (err) { /* old browser */ } }
     }
     try {
       try { window.sessionStorage.setItem('ms-intro-seen', '1'); } catch (err) { /* fine */ }
@@ -206,10 +210,10 @@
     } catch (err) { /* the plain mark stays */ }
   })();
 
-  /* ---------- Home: links to the sign-up (and a floating "Get early access" pill) ----------
+  /* ---------- Home: links to the sign-up (and a floating "Get early access ↑" pill) ----------
      Every link to #early-access scrolls to the sign-up form and puts the cursor in the email box.
-     The pill is made here (no JS, no pill) and shows only further down the page while
-     scrolling down. */
+     The pill is made here (no JS, no pill) and shows only once the sign-up section is above
+     the visitor (so its arrow points the right way), while scrolling down. */
   (function joinLinks() {
     var form = document.querySelector('form[data-waitlist]');
     var heading = document.getElementById('early-access');
@@ -235,17 +239,18 @@
     pill.addEventListener('click', go);
     document.body.appendChild(pill);
 
-    // Shows once the visitor is well past the hero and scrolling down; scrolling back up hides it.
-    // Never shown while another way to sign up is on screen (the hero form, the Pro card's
-    // button, the closing section's button), so the page never asks twice at once.
+    // Shows once the visitor has scrolled past the sign-up section and is scrolling down;
+    // scrolling back up hides it. Never shown while another way to sign up is on screen (the
+    // form, the Pro card's button, the closing section's button), so the page never asks twice at once.
+    var section = heading.closest('section') || form;
     var others = [form].concat(Array.prototype.filter.call(document.querySelectorAll('a[href="#early-access"]'), function (a) { return a !== pill; }));
     var seen = others.map(function () { return false; });
     var lastY = window.scrollY || window.pageYOffset, down = false, shown = null;
     function update() {
       var y = window.scrollY || window.pageYOffset;
       if (Math.abs(y - lastY) > 8) { down = y > lastY; lastY = y; } // ignore tiny jitters
-      var deep = y > window.innerHeight * 1.5;
-      var on = deep && down && seen.indexOf(true) < 0;
+      var past = section.getBoundingClientRect().bottom < 0; // the form is above: the ↑ is right
+      var on = past && down && seen.indexOf(true) < 0;
       if (on === shown) return;
       shown = on;
       pill.classList.toggle('on', on);
@@ -263,42 +268,336 @@
     update();
   })();
 
-  /* ---------- Hero: the phone turns to face you as you scroll; the sprout drifts ---------- */
-  (function hero() {
+  /* ---------- Hero: the big faint sprout drifts slower than the page ---------- */
+  (function heroMark() {
     var section = document.querySelector('.hero');
-    var phone = document.getElementById('hero-phone');
     var mark = document.querySelector('.hero-mark');
-    if (!section || !phone) return;
+    if (!section || !mark) return;
     var visible = true, queued = false;
-    var wide = window.matchMedia('(min-width: 900px)');
-
     function frame() {
       queued = false;
-      if (still()) { phone.style.transform = 'none'; if (mark) mark.style.transform = ''; return; }
       var y = window.scrollY || window.pageYOffset;
-      var p;
-      if (wide.matches) {
-        p = y / 320;
-      } else {
-        // phone sits under the copy on small screens: straighten as it comes up the screen
-        var r = phone.getBoundingClientRect(), vh = window.innerHeight;
-        p = Math.max(y / 320, (vh * 0.95 - r.top) / (vh * 0.55));
-      }
-      p = clamp(p, 0, 1);
-      var e = 1 - p * p * (3 - 2 * p) ; // smoothstep, inverted: 1 = fully turned
-      phone.style.transform = 'rotateY(' + (-22 * e).toFixed(2) + 'deg) rotateX(' + (8 * e).toFixed(2) +
-        'deg) rotateZ(' + (1.5 * e).toFixed(2) + 'deg)';
-      if (mark) mark.style.transform = 'translate3d(0,' + (y * 0.3).toFixed(1) + 'px,0)';
+      mark.style.transform = still() ? '' : 'translate3d(0,' + (y * 0.3).toFixed(1) + 'px,0)';
     }
     function queue() { if (visible && !queued) { queued = true; requestAnimationFrame(frame); } }
-
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) queue(); }).observe(section);
     }
     window.addEventListener('scroll', queue, { passive: true });
-    window.addEventListener('resize', queue);
     if (reduce.addEventListener) reduce.addEventListener('change', queue);
     frame();
+  })();
+
+  /* ---------- The hero scene's road, in perspective (viewBox 0 0 400 300, horizon at y 150) ----------
+     Ground items sit at a lateral X (road units, the left kerb at -1) and a depth z; they're
+     projected as x = vx + (X - c) * F / z, y = 150 + (1 - height) * F / z, where c is how far the
+     car has pulled in to the left (UK) kerb. One shared draw(), so the no-JS markup in index.html
+     is this same picture, parked (made with node; see website/README.md). */
+  var ROAD = (function () {
+    var NS = 'http://www.w3.org/2000/svg';
+    var HZ = 150, F = 150, ZMIN = 0.5, ZMAX = 48;
+    var KERB = -1, CENTRE = 1.1, FAR = 3.2;
+    // [kind, X, spacing, first z, count]
+    var ROWS = [['tree', -3.4, 7, 3, 7], ['tree', 5.4, 6, 4.5, 8], ['post', -1.5, 5, 1.5, 10], ['post', 3.7, 5, 4, 10], ['dash', CENTRE, 2.6, 0.8, 18]];
+    function f(n) { return Math.round(n * 10) / 10; }
+    function quad(vx, c, x1, x2, z1, z2) {
+      var a = F / z1, b = F / z2;
+      return f(vx + (x1 - c) * a) + ',' + f(HZ + a) + ' ' + f(vx + (x2 - c) * a) + ',' + f(HZ + a) + ' ' +
+        f(vx + (x2 - c) * b) + ',' + f(HZ + b) + ' ' + f(vx + (x1 - c) * b) + ',' + f(HZ + b);
+    }
+    // make(name, class, parent) creates an element; the no-JS markup is made with a make() that writes text
+    function build(g, make) {
+      if (!make) {
+        while (g.firstChild) g.removeChild(g.firstChild);
+        make = function (name, cls, parent) { var e = document.createElementNS(NS, name); e.setAttribute('class', cls); (parent || g).appendChild(e); return e; };
+      }
+      var out = { surface: make('polygon', 'rd-surface'), kerb: make('polygon', 'rd-line'), edge: make('polygon', 'rd-line'), items: [] };
+      ROWS.forEach(function (r) {
+        var row = make('g', 'rd-row');
+        for (var i = r[4] - 1; i >= 0; i--) { // far ones first, so nearer ones paint over them
+          var it = { kind: r[0], X: r[1], z0: r[3] + i * r[2], span: r[2] * r[4], row: row, z: null };
+          if (it.kind === 'tree') { it.g = make('g', 'rd-tree', row); it.trunk = make('rect', 'rd-trunk', it.g); it.crown = make('circle', 'rd-crown', it.g); }
+          else it.g = it.el = make('polygon', 'rd-' + it.kind, row);
+          out.items.push(it);
+        }
+      });
+      return out;
+    }
+    function draw(sh, s, c, shift) {
+      var vx = 200 + (shift || 0);
+      sh.surface.setAttribute('points', quad(vx, c, KERB, FAR, ZMIN, ZMAX));
+      sh.kerb.setAttribute('points', quad(vx, c, KERB + 0.05, KERB + 0.11, ZMIN, ZMAX));
+      sh.edge.setAttribute('points', quad(vx, c, FAR - 0.11, FAR - 0.05, ZMIN, ZMAX));
+      sh.items.forEach(function (it) {
+        var z = ZMIN + (((it.z0 - s) % it.span) + it.span) % it.span;
+        // went past the car and came round again, far away: paint it behind the rest of its row
+        if (it.z !== null && z > it.z + 1 && it.row.insertBefore) it.row.insertBefore(it.g, it.row.firstChild);
+        it.z = z;
+        var k = F / z, x = vx + (it.X - c) * k, fog = f(clamp(1.3 - z / ZMAX * 1.4, 0, 1) * 100) / 100;
+        if (it.kind === 'dash') { it.el.setAttribute('points', quad(vx, c, it.X - 0.05, it.X + 0.05, z, z + 1)); it.el.setAttribute('opacity', fog); return; }
+        if (it.kind === 'post') {
+          var w = 0.035 * k, h = 0.32 * k, y = HZ + k;
+          it.el.setAttribute('points', f(x - w) + ',' + f(y) + ' ' + f(x + w) + ',' + f(y) + ' ' + f(x + w) + ',' + f(y - h) + ' ' + f(x - w) + ',' + f(y - h));
+          it.el.setAttribute('opacity', fog);
+          return;
+        }
+        var tw = 0.08 * k;
+        it.trunk.setAttribute('x', f(x - tw)); it.trunk.setAttribute('y', f(HZ + k - 0.8 * k));
+        it.trunk.setAttribute('width', f(tw * 2)); it.trunk.setAttribute('height', f(0.8 * k));
+        it.crown.setAttribute('cx', f(x)); it.crown.setAttribute('cy', f(HZ + k - 1.3 * k)); it.crown.setAttribute('r', f(0.6 * k));
+        it.trunk.setAttribute('opacity', fog); it.crown.setAttribute('opacity', fog);
+      });
+    }
+    return { build: build, draw: draw, PARKED: -0.55 };
+  })();
+
+  /* ---------- Hero scene: the phone in a car mount, the road going by ----------
+     The phone's screen is a recording of the real app (assets/video/drive-logged.*, 9.6 s):
+     driving ("Recording a drive"), parked, the new drive on Home (Meanwood Rd → Home, 2.2 mi),
+     swiped to Work, the total up by £1.21. The road is drawn here from the video's clock, so the
+     car slows, pulls in to the kerb and stops as the drive is saved, and sets off when the clip loops.
+     It plays only while on screen; Pause / Play and Replay buttons, and tapping the phone replays.
+     Reduce Motion (and no JS): the saved state on the screen and a still road, parked. */
+  (function scene() {
+    var root = document.getElementById('scene');
+    if (!root) return;
+    var svg = root.querySelector('.scene-road');
+    var live = svg && svg.querySelector('.rd-live');
+    var hills = svg && svg.querySelector('.rd-hills');
+    var video = root.querySelector('video');
+    var phone = root.querySelector('.phone');
+    var toggle = root.querySelector('[data-scene="toggle"]');
+    var replay = root.querySelector('[data-scene="replay"]');
+    if (!live || !video) return;
+    root.querySelector('.scene-ctl').hidden = false;
+
+    var road = ROAD;
+    var shapes = road.build(live);
+    var PARKED = road.PARKED;
+    var D = 9.6;                       // the clip's length
+    var smooth = function (x) { x = clamp(x, 0, 1); return x * x * (3 - 2 * x); };
+    // From the clip's clock: driving to 1.8 s, slowing and pulling in to 2.7 s, parked, setting off from 9 s.
+    function pace(t) {
+      if (t < 1.8) return 0;
+      if (t < 2.7) return smooth((t - 1.8) / 0.9);
+      if (t < 9.0) return 1;
+      return 1 - smooth((t - 9.0) / 0.6);
+    }
+
+    var s = 0, steer = 0, steerTo = 0, last = 0, raf = 0;
+    var inView = false, userPaused = false;
+
+    function draw(parked, dt) {
+      var k = parked;                          // 0 = cruising, 1 = parked
+      s += (1 - k) * 9 * dt;                   // road units per second
+      steer += (steerTo - steer) * Math.min(1, dt * 3);
+      road.draw(shapes, s, PARKED * smooth(k), steer * 14);
+      if (hills) hills.setAttribute('transform', 'translate(' + (-steer * 6).toFixed(2) + ' 0)');
+    }
+    function tick(now) {
+      raf = 0;
+      var dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
+      last = now;
+      draw(pace(video.currentTime % D), dt);
+      if (!video.paused) raf = requestAnimationFrame(tick);
+    }
+    function loop() { if (!raf) { last = 0; raf = requestAnimationFrame(tick); } }
+
+    function setLabel() {
+      var playing = !userPaused;
+      toggle.textContent = playing ? 'Pause' : 'Play';
+      toggle.setAttribute('aria-label', playing ? 'Pause the animation' : 'Play the animation');
+    }
+    function introShowing() { return document.documentElement.classList.contains('ms-intro') || !!document.querySelector('.sprout-intro'); }
+    function play() {
+      if (still() || userPaused || !inView || introShowing()) return;
+      if (video.getAttribute('preload') === 'none') video.setAttribute('preload', 'auto');
+      var p = video.play();
+      if (p && p.catch) p.catch(function () { /* can't play: the poster and a still road stay */ });
+    }
+    function rest() {
+      // Reduce Motion: the saved state, parked; nothing moves
+      video.pause();
+      try { video.currentTime = 0; } catch (err) {}
+      video.removeAttribute('autoplay');
+      video.poster = video.getAttribute('data-poster-saved');
+      road.draw(shapes, 0, PARKED, 0);
+      root.classList.add('is-still');
+    }
+
+    video.addEventListener('play', loop);
+    video.addEventListener('playing', loop);
+
+    // the HTML poster is the clip's first frame (driving), so playing starts seamlessly; Reduce Motion swaps in the saved state
+    if (still()) rest();
+    else road.draw(shapes, 0, 0, 0);
+
+    // First visit: the sprout intro covers the page; start the clip from the top once it's gone
+    window.addEventListener('ms-intro-end', function () {
+      try { video.currentTime = 0; } catch (err) {}
+      play();
+    });
+
+    toggle.addEventListener('click', function () {
+      userPaused = !userPaused;
+      setLabel();
+      if (userPaused) video.pause(); else play();
+    });
+    function again() {
+      if (still()) return;
+      userPaused = false;
+      setLabel();
+      try { video.currentTime = 0; } catch (err) {}
+      play();
+    }
+    replay.addEventListener('click', again);
+    phone.addEventListener('click', again);
+
+    // Desktop: the road leans gently with the pointer (as if steering a little)
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      root.closest('.hero').addEventListener('pointermove', function (e) {
+        steerTo = clamp(e.clientX / window.innerWidth * 2 - 1, -1, 1);
+        if (video.paused && !still()) { road.draw(shapes, s, PARKED * smooth(pace(video.currentTime % D)), steerTo * 14); }
+      }, { passive: true });
+    }
+
+    // Watch for it on screen only after the page has loaded and settled (a link to /#early-access
+    // jumps past the hero first), so the clip is never fetched or played off screen.
+    function watch() {
+      if (!('IntersectionObserver' in window)) { inView = true; play(); return; }
+      // With a #link the page may still be scrolling there (smoothly) at the first report: ignore it
+      // and wait for the next, so the clip isn't fetched for a hero that's about to leave the screen.
+      var skipFirst = !!location.hash && location.hash !== '#main';
+      new IntersectionObserver(function (es) {
+        if (skipFirst) { skipFirst = false; if (es[0].isIntersecting) return; }
+        inView = es[0].isIntersecting;
+        if (inView) play(); else video.pause();
+      }, { threshold: 0.25 }).observe(root);
+    }
+    function afterLoad() { requestAnimationFrame(function () { requestAnimationFrame(watch); }); }
+    if (document.readyState === 'complete') afterLoad(); else window.addEventListener('load', afterLoad);
+
+    if (reduce.addEventListener) {
+      reduce.addEventListener('change', function () {
+        if (still()) rest();
+        else { root.classList.remove('is-still'); video.poster = video.getAttribute('data-poster-drive'); play(); }
+      });
+    }
+    setLabel();
+  })();
+
+  /* ---------- Money: the hero's money line and the "What are your work miles worth?" calculator ----------
+     Each country's real rules, as in the app (milemint/src/domain/regions.ts; checked in
+     research_notes/launch-2026/website-claims-check.md): UK 55p for the first 10,000 miles a year
+     then 25p; US 76¢ (from 1 Jul 2026); Canada 73¢ for the first 5,000 km then 67¢ (the CRA's
+     allowance rate, provinces); Australia 91c a km, capped at 5,000 km a year. 48 working weeks.
+     Figures are what the miles are worth at that rate: never "money back" or "tax saved".
+     The country comes from season.js (time zone, then language; ?country=CA previews one);
+     without JS the UK text shows. */
+  var RATES = {
+    UK: { unit: 'mi', cur: 'GBP', locale: 'en-GB', at: "HMRC's rate",
+      tiers: [[10000, 0.55], [Infinity, 0.25]],
+      note: "HMRC's rate for cars and vans in 2026/27: 55p a mile for the first 10,000 miles, then 25p.",
+      source: 'https://www.gov.uk/government/publications/increase-to-approved-mileage-allowance-payments-amaps-and-self-employed-simplified-mileage-rates/increasing-mileage-rates' },
+    US: { unit: 'mi', cur: 'USD', locale: 'en-US', at: "the IRS's rate",
+      tiers: [[Infinity, 0.76]],
+      note: "The IRS's standard mileage rate from 1 July 2026: 76¢ a mile.",
+      source: 'https://www.irs.gov/forms-pubs/the-standard-mileage-rates-and-maximum-automobile-fair-market-values-have-been-updated-for-2026' },
+    CA: { unit: 'km', cur: 'CAD', locale: 'en-CA', at: "the CRA's allowance rate",
+      tiers: [[5000, 0.73], [Infinity, 0.67]],
+      note: "The CRA's allowance rate for 2026 (provinces): 73¢ a km for the first 5,000 km, then 67¢. It's the most an employer can pay tax-free; self-employed drivers claim their actual costs.",
+      source: 'https://www.canada.ca/en/department-finance/news/2026/01/government-announces-the-2026-automobile-deduction-limits-and-expense-benefit-rates-for-businesses.html' },
+    AU: { unit: 'km', cur: 'AUD', locale: 'en-AU', at: "the ATO's rate",
+      tiers: [[5000, 0.91]], // capped: nothing above 5,000 km a year
+      note: "The ATO's cents per km rate for 2026–27: 91c a km, for up to 5,000 km a year per car.",
+      source: 'https://www.ato.gov.au/individuals-and-families/income-deductions-offsets-and-records/deductions-you-can-claim/work-related-deductions/cars-transport-and-travel/motor-vehicle-and-car-expenses/expenses-for-a-car-you-own-or-lease/cents-per-kilometre-method' }
+  };
+  var WEEKS = 48;
+  /** What a year of `perWeek` work miles (or km) is worth: each band at its rate, anything past the last band at nothing. */
+  function yearWorth(r, perWeek) {
+    var left = perWeek * WEEKS, total = 0;
+    for (var i = 0; i < r.tiers.length && left > 0; i++) {
+      var band = Math.min(left, r.tiers[i][0]);
+      total += band * r.tiers[i][1];
+      left -= band;
+    }
+    return total;
+  }
+  function money(r, n) {
+    try { return new Intl.NumberFormat(r.locale, { style: 'currency', currency: r.cur, maximumFractionDigits: 0, minimumFractionDigits: 0 }).format(Math.round(n)); }
+    catch (err) { return (r.cur === 'GBP' ? '£' : '$') + Math.round(n).toLocaleString('en'); }
+  }
+  var COUNTRY = (function () {
+    var c = 'GB';
+    try { c = window.MSSeason && window.MSSeason.country ? window.MSSeason.country() : 'GB'; } catch (err) { c = 'GB'; }
+    var forced = /[?&]country=(UK|GB|US|CA|AU)\b/i.exec(location.search);
+    if (forced) c = forced[1].toUpperCase();
+    return c === 'GB' ? 'UK' : RATES[c] ? c : 'UK';
+  })();
+
+  // The calculator's starting point (100 miles or 160 km a week); the hero's example year is the same sum, so they always agree.
+  function defaultWeek(r) { return r.unit === 'km' ? 160 : 100; }
+
+  (function moneyLine() {
+    var line = document.querySelector('[data-money]');
+    if (!line || COUNTRY === 'UK') return; // the page's own text is the UK one (£2,640)
+    var r = RATES[COUNTRY];
+    var amount = money(r, yearWorth(r, defaultWeek(r)));
+    line.innerHTML = COUNTRY === 'CA'
+      ? 'An example year of part-time work driving is worth about <strong>' + amount + '</strong> at the CRA\'s allowance rate (the most an employer can pay tax-free).'
+      : 'An example year of part-time work driving is worth <strong>' + amount + '</strong> at ' + r.at + '.';
+  })();
+
+  (function calculator() {
+    var root = document.getElementById('calc');
+    if (!root) return;
+    var select = root.querySelector('#calc-country');
+    var range = root.querySelector('#calc-range');
+    var q = function (k) { return root.querySelector('[data-calc="' + k + '"]'); };
+    var label = q('label'), dist = q('dist'), unitEl = q('unit'), result = q('result'), live = q('live'), note = q('note'), source = q('source');
+    if (!select || !range || !result) return;
+    var r = RATES[COUNTRY];
+    Array.prototype.forEach.call(root.querySelectorAll('[data-calc-js]'), function (el) { el.hidden = false; });
+    var eg = root.querySelector('.calc-eg');
+    if (eg) eg.hidden = true; // "An example:" is for the still, no-JS version
+
+    function units(n) { return r.unit === 'mi' ? (n === 1 ? 'mile' : 'miles') : 'km'; }
+    function show(announce) {
+      var n = Number(range.value);
+      var amount = money(r, yearWorth(r, n));
+      dist.textContent = n.toLocaleString('en');
+      unitEl.textContent = units(n) + ' a week';
+      range.setAttribute('aria-valuetext', n.toLocaleString('en') + ' ' + units(n) + ' a week');
+      result.innerHTML = "That's about <strong>" + amount + ' a year</strong> at ' + r.at + '.';
+      if (announce) live.textContent = 'About ' + amount + ' a year at ' + r.at + '.';
+    }
+    function setCountry(c, fromUser) {
+      var was = r;
+      r = RATES[c];
+      if (was.unit !== r.unit) {
+        // the same driving in the other unit, to the slider's step of 5
+        var v = Number(range.value) * (r.unit === 'km' ? 1.609344 : 1 / 1.609344);
+        range.min = r.unit === 'km' ? 15 : 10;
+        range.max = r.unit === 'km' ? 1000 : 600;
+        range.value = Math.round(v / 5) * 5;
+      }
+      label.textContent = r.unit === 'km' ? 'Work km a week' : 'Work miles a week';
+      note.textContent = r.note;
+      source.href = r.source;
+      show(fromUser);
+      if (fromUser) {
+        // one fewer tap in the form below
+        var chip = document.querySelector('form[data-waitlist] input[name="country"][value="' + c + '"]');
+        if (chip) chip.checked = true;
+      }
+    }
+    select.value = COUNTRY;
+    if (r.unit === 'km') { range.min = 15; range.max = 1000; }
+    range.value = defaultWeek(r);
+    setCountry(COUNTRY, false);
+    range.addEventListener('input', function () { show(false); });
+    range.addEventListener('change', function () { show(true); }); // the slider stopped: read the result out once
+    select.addEventListener('change', function () { setCountry(select.value, true); });
   })();
 
   /* ---------- Feature deck ---------- */
@@ -510,6 +809,64 @@
     // The optional chips and the consent box then slide in, and stay. Pressing the button
     // early reveals them and moves to the consent box (still required). No JS: all visible.
     var FULL_EMAIL = /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/;
+
+    /* Cloudflare Turnstile (bot check), loaded only once a whole email is typed, never before:
+       the form's data-turnstile-sitekey, managed mode, shown only if it needs the visitor
+       ('interaction-only'). Its token goes in the hidden cf-turnstile-response field it adds to
+       the form; the server checks it once TURNSTILE_SECRET_KEY is set there. If the script can't
+       load, the form still posts and the server decides. */
+    var TS_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=msTurnstileReady';
+    var tsState = 'idle', tsQueue = [];
+    function withTurnstile(fn) {
+      if (tsState === 'ready') { fn(window.turnstile); return; }
+      tsQueue.push(fn);
+      if (tsState !== 'idle') return;
+      tsState = 'loading';
+      window.msTurnstileReady = function () {
+        tsState = 'ready';
+        tsQueue.splice(0).forEach(function (f) { try { f(window.turnstile); } catch (err) { /* the form still posts */ } });
+      };
+      var s = document.createElement('script');
+      s.src = TS_SRC;
+      s.async = true;
+      s.onerror = function () {
+        // blocked or offline: send any sign-up that was waiting for a token (the server decides)
+        tsState = 'failed';
+        tsQueue.length = 0;
+        Array.prototype.forEach.call(forms, function (f) { if (f._ts) f._ts.waiting.splice(0).forEach(function (go) { go(); }); });
+      };
+      document.head.appendChild(s);
+    }
+    function botCheck(f, where) {
+      var key = f.getAttribute('data-turnstile-sitekey');
+      if (!key || f._ts) return;
+      var box = document.createElement('div');
+      box.className = 'wl-turnstile';
+      where.appendChild(box);
+      f._ts = { id: null, waiting: [] };
+      withTurnstile(function (ts) {
+        f._ts.id = ts.render(box, {
+          sitekey: key,
+          action: 'waitlist',
+          appearance: 'interaction-only',
+          callback: function () { f._ts.waiting.splice(0).forEach(function (go) { go(); }); },
+          'expired-callback': function () { ts.reset(f._ts.id); },
+          'error-callback': function () { f._ts.waiting.splice(0).forEach(function (go) { go(); }); }
+        });
+      });
+    }
+    // Calls go() once the form has a token (or straight away if there's no check, or after 5 s).
+    function whenChecked(f, go) {
+      var field = f.querySelector('input[name="cf-turnstile-response"]');
+      if (!f._ts || tsState === 'failed' || (field && field.value)) { go(); return; }
+      var done = false;
+      var once = function () { if (!done) { done = true; go(); } };
+      f._ts.waiting.push(once);
+      setTimeout(once, 5000);
+    }
+    function resetCheck(f) {
+      if (f._ts && f._ts.id !== null && window.turnstile) { try { window.turnstile.reset(f._ts.id); } catch (err) {} }
+    }
     Array.prototype.forEach.call(forms, function (f, n) {
       var email = f.querySelector('input[type="email"]');
       var btn = f.querySelector('button[type="submit"]');
@@ -542,7 +899,7 @@
         btn.setAttribute('aria-expanded', 'true');
         if (announce) live.textContent = 'A few optional questions and the consent box have appeared after the button.';
       }
-      function check() { if (FULL_EMAIL.test(email.value.trim())) reveal(true); }
+      function check() { if (FULL_EMAIL.test(email.value.trim())) { reveal(true); botCheck(f, inner); } }
       email.addEventListener('input', check);
       email.addEventListener('change', check);
       email.addEventListener('paste', function () { setTimeout(check, 0); });
@@ -564,10 +921,13 @@
 
       f.addEventListener('submit', function (e) {
         e.preventDefault();
-        var data = {};
-        new FormData(f).forEach(function (v, k) { data[k] = typeof v === 'string' ? v : ''; });
         btn.disabled = true;
         say('Adding you…');
+        whenChecked(f, send);
+      });
+      function send() {
+        var data = {};
+        new FormData(f).forEach(function (v, k) { data[k] = typeof v === 'string' ? v : ''; });
         fetch(f.getAttribute('action'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -576,14 +936,17 @@
         }).then(function (r) {
           return r.json().catch(function () { return {}; }).then(function (j) { return { r: r, j: j }; });
         }).then(function (x) {
-          if (x.r.ok && x.j.ok) { say(''); done(f); }
-          else if (x.r.status === 400 && x.j.error === 'email') say(MSG_EMAIL, true);
+          if (x.r.ok && x.j.ok) { say(''); done(f); return; }
+          resetCheck(f); // a token works once
+          if (x.r.status === 400 && x.j.error === 'email') say(MSG_EMAIL, true);
           else if (x.r.status === 400 && x.j.error === 'consent') say('Please tick the box so we can email you.', true);
+          else if ((x.j.error === 'rate' || x.j.error === 'bot') && x.j.message) say(x.j.message, true);
           else say(MSG_FAIL, true);
         }).catch(function () {
+          resetCheck(f);
           say(MSG_FAIL, true);
         }).then(function () { btn.disabled = false; });
-      });
+      }
     });
 
     // /waitlist?joined=1 (after a no-JS post) shows the success state; with #joined the CSS already does

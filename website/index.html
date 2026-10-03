@@ -18,10 +18,10 @@
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/img/screens/home.webp" as="image" type="image/webp">
-<link rel="stylesheet" href="/assets/site.css?v=60370e20">
+<link rel="stylesheet" href="/assets/site.css?v=3c3da7f7">
 <script src="/assets/intro-gate.js?v=06c94b49"></script>
-<script src="/assets/season.js?v=ad21733e" defer></script>
-<script src="/assets/site.js?v=86b5076f" defer></script>
+<script src="/assets/season.js?v=06a20cf1" defer></script>
+<script src="/assets/site.js?v=e5b81a58" defer></script>
 <noscript><style>
   /* Without JavaScript: every feature is listed, the deck is a still picture. */
   .feat { opacity: 1 !important; visibility: visible !important; transform: none !important; grid-area: auto !important; }
@@ -58,7 +58,8 @@
         <svg class="hero-sprout" viewBox="12 9 77 84" aria-hidden="true" focusable="false"><defs><linearGradient id="ms-leaf-hero" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#77E8A0"/><stop offset="1" stop-color="#24B359"/></linearGradient></defs><g transform="translate(1.2 1.6)" fill="#085E42" opacity=".5"><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z"/><path d="M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z"/></g><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z" fill="url(#ms-leaf-hero)"/><path d="M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z" fill="url(#ms-leaf-hero)"/><path d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#064E3B" stroke-width="8" stroke-linecap="round" fill="none"/><path d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#FBF7EE" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="2.6 3.2" stroke-dashoffset="-3" fill="none"/><circle cx="51" cy="28" r="7.6" fill="#FFFFFF"/><circle cx="51" cy="28" r="5.6" fill="#FACC15"/></svg>
         <span class="pill">Coming October 2026 · UK · US · Canada · Australia</span>
         <h1 id="hero-title">Every work mile adds up.</h1>
-        <p class="lede">The free mileage log that fills itself in, for couriers, delivery riders, care workers and anyone who drives for work. Every work mile becomes money back at tax time.</p>
+        <p class="money-line" data-money>An example year of part-time work driving is worth <strong>£2,640</strong> at HMRC's rate.</p>
+        <p class="lede">The free mileage log that fills itself in, for couriers, delivery riders, care workers and anyone who drives for work. Every work mile is logged and valued at the tax office's rate.</p>
         <p class="hero-actions">
           <a class="btn-gold" href="#how">See how it works</a>
           <a class="hero-link" href="#early-access">Get early access</a>
@@ -72,9 +73,42 @@
         </a> For iPhone, in the UK, US, Canada and Australia.</p>
       </div>
       <div class="hero-phone">
-        <div class="phone" id="hero-phone">
-          <div class="screen"><img src="/assets/img/screens/home.webp" width="640" height="1490" fetchpriority="high" draggable="false" alt="The MileSprout home screen: on shift for 1 hour 15 minutes, deductions found this tax year, and a drive waiting to be sorted Work or Personal."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div>
-        </div>
+        <figure class="scene" id="scene">
+          <div class="scene-view">
+            <div class="scene-pic" role="img" aria-label="A phone in a car mount while driving: the car parks, the drive (Meanwood Road to Home, 2.2 miles) appears on the MileSprout Home screen, it's swiped to Work, worth £1.21, and the year's total goes up.">
+            <svg class="scene-road" viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+              <defs>
+                <linearGradient id="rd-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0B7A55"/><stop offset=".55" stop-color="#3FBF86"/><stop offset="1" stop-color="#BFF2D6"/></linearGradient>
+                <linearGradient id="rd-grass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E9E66"/><stop offset="1" stop-color="#0B5E40"/></linearGradient>
+              </defs>
+              <rect width="400" height="151" fill="url(#rd-sky)"/>
+              <circle class="rd-sun" cx="292" cy="128" r="22"/>
+              <g class="rd-hills"><path d="M-60 150 C10 118 60 120 110 138 C150 126 190 112 240 130 C290 116 340 112 460 142 L460 152 L-60 152Z" fill="#1F8A5B"/><path d="M-60 150 C30 134 80 136 140 146 C200 134 260 132 320 144 C370 138 420 140 460 148 L460 152 L-60 152Z" fill="#167A4E"/></g>
+              <rect y="150" width="400" height="150" fill="url(#rd-grass)"/>
+              <g class="rd-live"><polygon class="rd-surface" points="65,450 1325,450 211.7,153.1 198.6,153.1"/><polygon class="rd-line" points="80,450 98,450 198.9,153.1 198.8,153.1"/><polygon class="rd-line" points="1292,450 1310,450 211.6,153.1 211.4,153.1"/><g class="rd-row"><g class="rd-tree"><rect class="rd-trunk" x="190.3" y="150.7" width="0.5" height="2.6" opacity="0"/><circle class="rd-crown" cx="190.6" cy="149" r="2" opacity="0"/></g><g class="rd-tree"><rect class="rd-trunk" x="188.6" y="150.8" width="0.6" height="3.1" opacity="0.177"/><circle class="rd-crown" cx="188.9" cy="148.8" r="2.3" opacity="0.177"/></g><g class="rd-tree"><rect class="rd-trunk" x="186" y="151" width="0.8" height="3.8" opacity="0.381"/><circle class="rd-crown" cx="186.4" cy="148.6" r="2.9" opacity="0.381"/></g><g class="rd-tree"><rect class="rd-trunk" x="182.1" y="151.2" width="1" height="4.9" opacity="0.585"/><circle class="rd-crown" cx="182.6" cy="148.2" r="3.7" opacity="0.585"/></g><g class="rd-tree"><rect class="rd-trunk" x="174.9" y="151.7" width="1.4" height="6.9" opacity="0.79"/><circle class="rd-crown" cx="175.6" cy="147.4" r="5.1" opacity="0.79"/></g><g class="rd-tree"><rect class="rd-trunk" x="158.1" y="152.9" width="2.3" height="11.4" opacity="0.9940000000000001"/><circle class="rd-crown" cx="159.3" cy="145.7" r="8.6" opacity="0.9940000000000001"/></g><g class="rd-tree"><rect class="rd-trunk" x="74.4" y="158.6" width="6.9" height="34.3" opacity="1"/><circle class="rd-crown" cx="77.9" cy="137.1" r="25.7" opacity="1"/></g></g><g class="rd-row"><g class="rd-tree"><rect class="rd-trunk" x="218.7" y="150.6" width="0.5" height="2.6" opacity="0"/><circle class="rd-crown" cx="219" cy="149" r="1.9" opacity="0"/></g><g class="rd-tree"><rect class="rd-trunk" x="221.5" y="150.7" width="0.6" height="2.9" opacity="0.10400000000000001"/><circle class="rd-crown" cx="221.8" cy="148.9" r="2.2" opacity="0.10400000000000001"/></g><g class="rd-tree"><rect class="rd-trunk" x="225.2" y="150.9" width="0.7" height="3.4" opacity="0.27899999999999997"/><circle class="rd-crown" cx="225.5" cy="148.7" r="2.6" opacity="0.27899999999999997"/></g><g class="rd-tree"><rect class="rd-trunk" x="230.4" y="151" width="0.8" height="4.1" opacity="0.45399999999999996"/><circle class="rd-crown" cx="230.8" cy="148.4" r="3.1" opacity="0.45399999999999996"/></g><g class="rd-tree"><rect class="rd-trunk" x="238.3" y="151.3" width="1" height="5.2" opacity="0.629"/><circle class="rd-crown" cx="238.8" cy="148" r="3.9" opacity="0.629"/></g><g class="rd-tree"><rect class="rd-trunk" x="251.8" y="151.8" width="1.4" height="7.1" opacity="0.804"/><circle class="rd-crown" cx="252.5" cy="147.4" r="5.3" opacity="0.804"/></g><g class="rd-tree"><rect class="rd-trunk" x="280" y="152.7" width="2.2" height="10.9" opacity="0.9790000000000001"/><circle class="rd-crown" cx="281.1" cy="145.9" r="8.2" opacity="0.9790000000000001"/></g><g class="rd-tree"><rect class="rd-trunk" x="376.1" y="156" width="4.8" height="24" opacity="1"/><circle class="rd-crown" cx="378.5" cy="141" r="18" opacity="1"/></g></g><g class="rd-row"><polygon class="rd-post" points="196.9,153.2 197.1,153.2 197.1,152.2 196.9,152.2" opacity="0"/><polygon class="rd-post" points="196.5,153.6 196.7,153.6 196.7,152.4 196.5,152.4" opacity="0.075"/><polygon class="rd-post" points="196,154.1 196.3,154.1 196.3,152.8 196,152.8" opacity="0.221"/><polygon class="rd-post" points="195.4,154.7 195.7,154.7 195.7,153.2 195.4,153.2" opacity="0.36700000000000005"/><polygon class="rd-post" points="194.5,155.6 194.9,155.6 194.9,153.8 194.5,153.8" opacity="0.513"/><polygon class="rd-post" points="193.3,156.8 193.8,156.8 193.8,154.6 193.3,154.6" opacity="0.6579999999999999"/><polygon class="rd-post" points="191.3,158.8 191.9,158.8 191.9,156 191.3,156" opacity="0.804"/><polygon class="rd-post" points="187.7,162.5 188.6,162.5 188.6,158.5 187.7,158.5" opacity="0.95"/><polygon class="rd-post" points="178.9,171.4 180.4,171.4 180.4,164.6 178.9,164.6" opacity="1"/><polygon class="rd-post" points="126.1,225 131.4,225 131.4,201 126.1,201" opacity="1"/></g><g class="rd-row"><polygon class="rd-post" points="212.8,153 213,153 213,152.1 212.8,152.1" opacity="0"/><polygon class="rd-post" points="214.2,153.4 214.4,153.4 214.4,152.3 214.2,152.3" opacity="0.002"/><polygon class="rd-post" points="216,153.8 216.3,153.8 216.3,152.6 216,152.6" opacity="0.14800000000000002"/><polygon class="rd-post" points="218.3,154.3 218.6,154.3 218.6,153 218.3,153" opacity="0.294"/><polygon class="rd-post" points="221.4,155.1 221.8,155.1 221.8,153.5 221.4,153.5" opacity="0.44"/><polygon class="rd-post" points="225.8,156.1 226.2,156.1 226.2,154.2 225.8,154.2" opacity="0.585"/><polygon class="rd-post" points="232.4,157.7 233,157.7 233,155.2 232.4,155.2" opacity="0.731"/><polygon class="rd-post" points="243.6,160.3 244.3,160.3 244.3,157 243.6,157" opacity="0.877"/><polygon class="rd-post" points="266.6,165.8 267.7,165.8 267.7,160.7 266.6,160.7" opacity="1"/><polygon class="rd-post" points="340.5,183.3 342.8,183.3 342.8,172.7 340.5,172.7" opacity="1"/></g><g class="rd-row"><polygon class="rd-dash" points="205.3,153.3 205.6,153.3 205.5,153.2 205.2,153.2" opacity="0"/><polygon class="rd-dash" points="205.6,153.5 205.9,153.5 205.8,153.4 205.5,153.4" opacity="0.049"/><polygon class="rd-dash" points="206,153.7 206.3,153.7 206.2,153.6 205.8,153.6" opacity="0.125"/><polygon class="rd-dash" points="206.4,154 206.8,154 206.6,153.9 206.2,153.9" opacity="0.2"/><polygon class="rd-dash" points="206.8,154.3 207.3,154.3 207.1,154.2 206.6,154.2" opacity="0.276"/><polygon class="rd-dash" points="207.4,154.6 207.8,154.6 207.6,154.5 207.2,154.5" opacity="0.35200000000000004"/><polygon class="rd-dash" points="208,155 208.5,155 208.3,154.9 207.8,154.9" opacity="0.428"/><polygon class="rd-dash" points="208.8,155.5 209.3,155.5 209,155.3 208.5,155.3" opacity="0.504"/><polygon class="rd-dash" points="209.7,156.1 210.3,156.1 209.9,155.8 209.3,155.8" opacity="0.58"/><polygon class="rd-dash" points="210.9,156.8 211.5,156.8 211,156.5 210.4,156.5" opacity="0.655"/><polygon class="rd-dash" points="212.3,157.7 213.1,157.7 212.4,157.3 211.7,157.3" opacity="0.731"/><polygon class="rd-dash" points="214.2,158.9 215.1,158.9 214.2,158.4 213.4,158.4" opacity="0.807"/><polygon class="rd-dash" points="216.8,160.5 217.8,160.5 216.7,159.8 215.7,159.8" opacity="0.883"/><polygon class="rd-dash" points="220.5,162.8 221.8,162.8 220.1,161.8 218.9,161.8" opacity="0.9590000000000001"/><polygon class="rd-dash" points="226.4,166.5 228,166.5 225.2,164.9 223.8,164.9" opacity="1"/><polygon class="rd-dash" points="236.9,173.1 239.2,173.1 234,170 232,170" opacity="1"/><polygon class="rd-dash" points="261.5,188.5 265.4,188.5 252,180.6 249,180.6" opacity="1"/><polygon class="rd-dash" points="384.6,265.4 396.2,265.4 310.9,215.2 304.3,215.2" opacity="1"/></g></g>
+              <path class="rd-pillar" d="M-10 -10 L34 -10 L-10 120Z M410 -10 L366 -10 L410 120Z"/>
+              <path class="rd-board" d="M-10 300 L-10 256 C90 238 310 238 410 256 L410 300Z"/>
+              <path class="rd-trim" d="M-10 256 C90 238 310 238 410 256" fill="none"/>
+            </svg>
+            <div class="mount" aria-hidden="true"></div>
+            <div class="phone" id="hero-phone">
+              <div class="screen">
+                <video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture
+                  poster="/assets/video/drive-logged-poster.webp?v=c030ce84" data-poster-saved="/assets/video/drive-logged-saved.webp?v=1dae25fd" data-poster-drive="/assets/video/drive-logged-poster.webp?v=c030ce84" width="390" height="908">
+                  <source src="/assets/video/drive-logged.webm?v=2d981edb" type="video/webm">
+                  <source src="/assets/video/drive-logged.mp4?v=7391f591" type="video/mp4">
+                </video>
+                <span class="sbar" aria-hidden="true"><b>9:41</b></span>
+              </div>
+            </div>
+            </div>
+            <div class="scene-ctl" hidden>
+              <button type="button" data-scene="toggle" aria-controls="scene">Pause</button>
+              <button type="button" data-scene="replay" aria-controls="scene" aria-label="Replay the animation">Replay</button>
+            </div>
+          </div>
+          <figcaption class="scene-cap">Park. The drive is already there. Swipe it to Work, and watch it add up.</figcaption>
+        </figure>
       </div>
     </div>
   </section>
@@ -94,7 +128,7 @@
               <div class="dcard" role="group" aria-roledescription="slide" aria-label="3 of 8: Trip" data-depth="2"><div class="phone"><div class="screen"><img src="/assets/img/screens/trip.webp" width="640" height="1490" loading="lazy" draggable="false" alt="A single trip with its route on a street map, a Work or Personal switch, the start and end places, and parking and tolls fields."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
               <div class="dcard" role="group" aria-roledescription="slide" aria-label="4 of 8: Money" data-depth="3"><div class="phone" data-tone="dark"><div class="screen"><img src="/assets/img/screens/money.webp" width="640" height="1490" loading="lazy" draggable="false" alt="The Money tab: quarterly figures with their due dates, and how much to put aside for tax this week."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
               <div class="dcard" role="group" aria-roledescription="slide" aria-label="5 of 8: Reports" data-depth="far"><div class="phone"><div class="screen"><img src="/assets/img/screens/export.webp" width="640" height="1490" loading="lazy" draggable="false" alt="The Reports screen: odometer readings, export choices for spreadsheet, Xero, QuickBooks, FreeAgent and expense claim, and the HMRC mileage report."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
-              <div class="dcard" role="group" aria-roledescription="slide" aria-label="6 of 8: Privacy" data-depth="far"><div class="phone"><div class="screen"><img src="/assets/img/screens/privacy.webp" width="640" height="1490" loading="lazy" draggable="false" alt="The tracking set-up screen: automatic, uses little battery, and private, with trips stored encrypted on your phone."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
+              <div class="dcard" role="group" aria-roledescription="slide" aria-label="6 of 8: Privacy" data-depth="far"><div class="phone"><div class="screen"><img src="/assets/img/screens/privacy.webp" width="640" height="1490" loading="lazy" draggable="false" alt="The set-up screen: automatic, uses little battery, and private, with trips stored encrypted on your phone."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
               <div class="dcard" role="group" aria-roledescription="slide" aria-label="7 of 8: Perks" data-depth="far"><div class="phone"><div class="screen"><img src="/assets/img/screens/perks.webp" width="640" height="1490" loading="lazy" draggable="false" alt="The Perks tab: this week's offers, such as 10p off a litre of fuel and a free hot drink, each with a Claim button and how many are left this week."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
               <div class="dcard" role="group" aria-roledescription="slide" aria-label="8 of 8: Your code" data-depth="far"><div class="phone"><div class="screen"><img src="/assets/img/screens/perks-code.webp" width="640" height="1490" loading="lazy" draggable="false" alt="A claimed perk: a QR code and a short code to show at the till, with a countdown of how long it can be used."><span class="sbar" aria-hidden="true"><b>9:41</b></span></div></div></div>
             </div>
@@ -207,10 +241,36 @@
 
   <section class="signup" aria-labelledby="early-access">
     <div class="wrap">
+      <section class="calc" id="calc" aria-labelledby="calc-title">
+        <h2 id="calc-title" class="calc-title">What are your work miles worth?</h2>
+        <p class="calc-country" data-calc-js hidden><label for="calc-country">Rates for</label>
+          <select id="calc-country">
+            <option value="UK">the UK</option>
+            <option value="US">the US</option>
+            <option value="CA">Canada</option>
+            <option value="AU">Australia</option>
+          </select></p>
+        <div class="calc-slide" data-calc-js hidden>
+          <label for="calc-range" class="calc-label" data-calc="label">Work miles a week</label>
+          <input id="calc-range" type="range" min="10" max="600" step="5" value="100" aria-valuetext="100 miles a week">
+        </div>
+        <p class="calc-dist"><span class="calc-eg">An example: </span><strong data-calc="dist">100</strong> <span data-calc="unit">miles a week</span></p>
+        <p class="calc-result" data-calc="result">That's about <strong>£2,640 a year</strong> at HMRC's rate.</p>
+        <p class="sr-only" data-calc="live" role="status" aria-live="polite"></p>
+        <p class="calc-note"><span data-calc="note">HMRC's rate for cars and vans in 2026/27: 55p a mile for the first 10,000 miles, then 25p.</span> Based on 48 working weeks. A guide, not tax advice. <a data-calc="source" href="https://www.gov.uk/government/publications/increase-to-approved-mileage-allowance-payments-amaps-and-self-employed-simplified-mileage-rates/increasing-mileage-rates" rel="noopener">Source</a></p>
+        <p class="calc-go"><a href="#early-access">Log every one of them. Get early access ↓</a></p>
+      </section>
+
       <h2 class="wl-title" id="early-access">Get early access</h2>
-      <p class="signup-sub">Be first to know when MileSprout is in the App Store. One email at launch, no spam, never shared.</p>
+      <!-- Waitlist reward (founder signed off 3 Oct 2026). Small print: research's version,
+           research_notes/launch-2026/website-claims-check.md, "Decisions". Once the launch date is fixed,
+           add "by {date}" to the small print, and take the offer off the site on launch day. -->
+      <p class="signup-sub signup-offer">Join the list and get <strong>3 months of Pro free</strong> at launch. <a class="offer-terms-link" href="#offer-terms">Doesn't renew. Terms below the form.</a></p>
+      <!-- Bot check (Cloudflare Turnstile) is OFF until the founder's site key is in: with no data-turnstile-sitekey
+         the script never loads and the form posts as before. TODO(founder): add data-turnstile-sitekey="<site key>"
+         to this form (and the other two) AND set TURNSTILE_SECRET_KEY on the Pages project, both at once; see website/README.md. -->
       <form class="waitlist on-dark" action="/api/waitlist" method="post" data-waitlist>
-        <input type="hidden" name="source" value="hero">
+        <input type="hidden" name="source" value="home">
         <div class="wl-fields">
           <label class="wl-label" for="wl-email-h">Your email</label>
           <div class="wl-row">
@@ -220,6 +280,12 @@
             <span class="sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
             </span>
           </div>
+          <p class="wl-micro">One email at launch, with your Pro code. Never shared. Unsubscribe any time.</p>
+          <ul class="wl-ticks">
+            <li>No account</li>
+            <li>No ads</li>
+            <li>Your trips stay on your phone</li>
+          </ul>
           <div class="wl-opts">
             <fieldset class="chips" data-chips>
             <legend>What do you drive for? <small>(optional)</small></legend>
@@ -243,10 +309,11 @@
             </div>
             </fieldset>
           </div>
-          <label class="wl-consent"><input type="checkbox" name="consent" value="yes" required> <span>Email me when MileSprout launches. Unsubscribe any time. <a href="/privacy#waitlist">How we use your email</a></span></label>
+          <label class="wl-consent"><input type="checkbox" name="consent" value="yes" required> <span>Email me when MileSprout launches. <a href="/privacy#waitlist">How we use your email</a></span></label>
+          <p class="fine wl-terms" id="offer-terms">For people who join before MileSprout launches in the App Store. We'll email you a one-time App Store code within 3 days of launch; redeem it within 60 days. One code per person and per Apple Account, for new Pro subscribers. It can't be combined with the free trial. <strong>It doesn't renew: after 3 months Pro simply stops, and you're never charged unless you choose to subscribe.</strong> Free logging stays free either way. Founding testers get 12 months instead.</p>
           <div class="wl-hp" aria-hidden="true"><label>Company <input type="text" name="company" tabindex="-1" autocomplete="off"></label></div>
         </div>
-        <p class="wl-done" tabindex="-1" hidden><strong>You're on the list.</strong> We'll email you once, when MileSprout is ready.</p>
+        <p class="wl-done" tabindex="-1" hidden><strong>You're on the list.</strong> We'll email you once at launch with your code for 3 months of Pro free.</p>
         <p class="wl-status" id="wl-status-h" role="status" aria-live="polite"></p>
       </form>
       <p class="tester-link"><a href="/testers">Want to test it early? Become a founding tester →</a></p>
@@ -419,7 +486,7 @@
   <section class="cta" aria-labelledby="cta-title">
     <div class="wrap">
       <h2 id="cta-title">Be on the road with it from day one</h2>
-      <p>Leave your email and we'll tell you the moment MileSprout is in the App Store. No spam, and we never share it.</p>
+      <p>Join the list and we'll email you a code for 3 months of Pro free when MileSprout is in the App Store. No spam, and we never share your email. <a href="#offer-terms">Doesn't renew. Terms below the sign-up form.</a></p>
       <p class="cta-actions"><a class="btn-gold" href="#early-access">Get early access</a></p>
       <p class="tester-link"><a href="/testers">Want to test it early? Become a founding tester →</a></p>
     </div>

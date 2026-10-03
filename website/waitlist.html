@@ -10,8 +10,8 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/assets/site.css?v=60370e20">
-<script src="/assets/site.js?v=86b5076f" defer></script>
+<link rel="stylesheet" href="/assets/site.css?v=3c3da7f7">
+<script src="/assets/site.js?v=e5b81a58" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -36,14 +36,20 @@
     <div class="wrap">
       <p class="eyebrow">Early access</p>
       <h1>Be first to try MileSprout</h1>
-      <p>MileSprout is a free, automatic mileage tracker for couriers, delivery riders and self-employed drivers. It's coming to the App Store in the UK in October 2026. Leave your email and we'll tell you when it's ready.</p>
+      <p>MileSprout is a free, automatic mileage log app for couriers, delivery riders and self-employed drivers. It's coming to the App Store in the UK, US, Canada and Australia in October 2026. Leave your email and we'll tell you when it's ready.</p>
+      <p class="signup-offer">Join the list and get <strong>3 months of Pro free</strong> at launch. <a class="offer-terms-link" href="#offer-terms">Doesn't renew. Terms below the form.</a></p>
     </div>
   </div>
 
   <div class="wrap waitlist-page">
     <!-- Shown after a sign-up without JavaScript: the server redirects to /waitlist?joined=1#joined -->
-    <p class="wl-done wl-target" id="joined" tabindex="-1"><strong>You're on the list.</strong> We'll email you once, when MileSprout is ready.</p>
+    <p class="wl-done wl-target" id="joined" tabindex="-1"><strong>You're on the list.</strong> We'll email you once at launch with your code for 3 months of Pro free.</p>
     <p class="wl-error wl-target" id="error" tabindex="-1">Sorry, that didn't work. Check your email address, tick the box, and try again. Or email <a href="mailto:hello@milesprout.app">hello@milesprout.app</a>.</p>
+    <p class="wl-error wl-target" id="error-js" tabindex="-1">Please turn on JavaScript so we can check you're not a bot, then try again. Or email <a href="mailto:hello@milesprout.app">hello@milesprout.app</a> and we'll add you.</p>
+    <p class="wl-error wl-target" id="error-rate" tabindex="-1">That's a lot of sign-ups from one connection. Please try again in an hour, or email <a href="mailto:hello@milesprout.app">hello@milesprout.app</a>.</p>
+    <!-- Bot check (Cloudflare Turnstile) is OFF until the founder's site key is in: with no data-turnstile-sitekey
+         the script never loads and the form posts as before. TODO(founder): add data-turnstile-sitekey="<site key>"
+         to this form (and the other two) AND set TURNSTILE_SECRET_KEY on the Pages project, both at once; see website/README.md. -->
     <form class="waitlist" action="/api/waitlist" method="post" data-waitlist>
         <input type="hidden" name="source" value="waitlist-page">
         <div class="wl-fields">
@@ -79,13 +85,14 @@
             </fieldset>
           </div>
           <label class="wl-consent"><input type="checkbox" name="consent" value="yes" required> <span>Email me when MileSprout launches. Unsubscribe any time. <a href="/privacy#waitlist">How we use your email</a></span></label>
+          <p class="fine wl-terms" id="offer-terms">For people who join before MileSprout launches in the App Store. We'll email you a one-time App Store code within 3 days of launch; redeem it within 60 days. One code per person and per Apple Account, for new Pro subscribers. It can't be combined with the free trial. <strong>It doesn't renew: after 3 months Pro simply stops, and you're never charged unless you choose to subscribe.</strong> Free logging stays free either way. Founding testers get 12 months instead.</p>
           <div class="wl-hp" aria-hidden="true"><label>Company <input type="text" name="company" tabindex="-1" autocomplete="off"></label></div>
         </div>
-        <p class="wl-done" tabindex="-1" hidden><strong>You're on the list.</strong> We'll email you once, when MileSprout is ready.</p>
+        <p class="wl-done" tabindex="-1" hidden><strong>You're on the list.</strong> We'll email you once at launch with your code for 3 months of Pro free.</p>
         <p class="wl-status" id="wl-status-p" role="status" aria-live="polite"></p>
       </form>
     <p class="tester-link"><a href="/testers">Want to test it early? Become a founding tester →</a></p>
-    <p class="fine">We'll use your email only to tell you about MileSprout's launch. It's stored with Cloudflare, never sold or shared, and you can ask us to delete it any time at <a href="mailto:privacy@milesprout.app">privacy@milesprout.app</a>. <a href="/privacy#waitlist">Privacy policy</a></p>
+    <p class="fine">We'll use your email only to tell you about MileSprout's launch and send your Pro code. It's stored with Cloudflare, never sold or shared, and you can ask us to delete it any time at <a href="mailto:privacy@milesprout.app">privacy@milesprout.app</a>. <a href="/privacy#waitlist">Privacy policy</a></p>
   </div>
 </main>
 

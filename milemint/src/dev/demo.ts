@@ -35,6 +35,10 @@ import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/tri
  *   &friends=2   friends joined with this user's invites (the perk ladder)
  *   &offer=CODE  as if the friend's 50% off offer code were set; &gift: joined with a friend's code
  *   &noearnings  no weekly earnings entered yet (the tax set-aside's first-use state)
+ *   &clip        the website's clip: the drive to sort is Meanwood Rd → Home (2.2 mi)
+ *                and every work drive (that one too, "Deliveries") has a purpose, so the row
+ *                sits under the total and no purpose nudge follows the swipe;
+ *                with ?demo=driving, that drive is the one still being recorded
  */
 const demoParam =
   __DEV__ && Platform.OS === 'web' && typeof window !== 'undefined'
@@ -154,6 +158,12 @@ export const DEMO_FRIENDS = (() => {
 
 /** `&offer=CODE`: preview the friend's 50% off as if FRIEND_OFFER_CODE were set. */
 export const DEMO_OFFER_CODE = demoValue('offer') ?? '';
+
+/**
+ * `&clip`: the website's clip (`?demo=1&clip&region=GB`): one drive to sort,
+ * Meanwood Rd → Home. With `?demo=driving` it's still being recorded, so not listed yet.
+ */
+export const DEMO_CLIP = demoFlag('clip');
 
 /** `&noearnings`: the tax set-aside before any earnings are entered. */
 const DEMO_NO_EARNINGS = demoFlag('noearnings');
@@ -468,9 +478,19 @@ export async function seedDemoTrips(db: SQLiteDatabase): Promise<void> {
   if (DEMO_COURIER) await seedCourierShifts(db, placeIds);
   if (!DEMO_NO_EARNINGS) await seedDemoEarnings(db);
   // A courier's days are all shifts (above); everyone else gets the office drives.
+  const trips = DEMO_CLIP
+    ? [
+        ...(DEMO_DRIVING ? [] : [[0, new Date().getHours(), 'Meanwood Rd', 'Home', 2.2, 'unclassified', 'Deliveries'] as DemoTrip]),
+        ...[...TRIPS.slice(1), ...historyTrips()].map((trip): DemoTrip => {
+          const [daysAgo, hour, from, to, miles, classification, purpose, autoReason] = trip;
+          const filled = classification === 'business' && !purpose ? 'Client visit' : purpose;
+          return [daysAgo, hour, from, to, miles, classification, filled, autoReason];
+        }),
+      ]
+    : [...TRIPS, ...historyTrips()];
   for (const [daysAgo, hour, rawFrom, rawTo, miles, classification, purpose, autoReason] of (DEMO_COURIER
     ? []
-    : [...TRIPS, ...historyTrips()]
+    : trips
   ).reverse()) {
     const [from, to] = DEMO_PLACES ? [UNNAMED[rawFrom] ?? rawFrom, UNNAMED[rawTo] ?? rawTo] : [rawFrom, rawTo];
     const start = new Date();

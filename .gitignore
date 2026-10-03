@@ -1,3 +1,6 @@
 
 # Parallel build workspaces
 .claude/worktrees/
+
+# Website clip recordings (tools/website/clip-record.js)
+tools/website/rec/
