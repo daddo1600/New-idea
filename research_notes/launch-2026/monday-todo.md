@@ -82,3 +82,9 @@
   - coding: the 10-second app clip on `website-preview`.
 - **Next on the website:** the calculator, money line, waitlist reward (3 months of Pro proposed; the founder confirms after research), trust line by the form, then qa, then "publish". Social proof waits for real tester quotes.
 - **The App Store Connect key** needs to be in the environment (variable `EXPO_ASC_KEY_P8_BASE64`) for uploads from new sessions.
+
+11. **Build the Pro perks "plus"** (signed off; see `decisions.md`, specs in `pro-value-plan.md` and `pro-perks-rules.md`). Delegate:
+    - coding: a plus slot on offer cards, its own weekly pool, the teaser rules, a "Don't show Pro tips" switch, the Pro screen row, the "MileSprout this year" value line and the Pro extras tally;
+    - translator;
+    - qa.
+    The live plus needs the redemption server. Also update the partner deck with the pitch line.
