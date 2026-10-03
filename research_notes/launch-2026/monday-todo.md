@@ -63,3 +63,12 @@
      - Canada: T2200 / T777.
      - Australia: cents per km, for both employees and the self-employed.
    - The money maths gets tests for mixed years (some drives self-employed, some employee) and for a company car.
+10. **Backups: make failures visible and add backup to setup.** On the user's build 59, Settings shows "Not backed up yet" even though auto-backup is on by default (`useAutoBackup` in `(tabs)/_layout.tsx`) and there are trips. So automatic backups are failing silently: `use-backup.ts` swallows every error. iCloud availability passed, or Settings would say "iCloud is off".
+    - **Diagnose first.** The user taps "Back up now" and reports the message. "Couldn't back up…" means `ICloudBackup.write` or `seal` threw: the container ID or entitlement, a refused Keychain key, or the iCloud container not created yet.
+    - **Record the last error** (code plus time) and show it in Settings in plain words. Add a Home card if there are trips and no successful backup for 3+ days: "Your trips aren't backed up yet", with a fix button.
+    - **Setup step "Keep your trips safe"** after location permission:
+      - check that iCloud and iCloud Drive are on and that iCloud Keychain holds the key;
+      - if not, show the steps (Settings → [your name] → iCloud → iCloud Drive on, and MileSprout allowed);
+      - otherwise say "Backups are on" and run the first backup after the first trip;
+      - with no iCloud, offer the export as a fallback.
+    - Don't make it optional and don't ask for permission. It's already on; the step only confirms it works.
