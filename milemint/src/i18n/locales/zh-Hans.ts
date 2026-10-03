@@ -743,6 +743,7 @@ const dictionary: Dictionary = {
   "Nothing to back up yet. Your trips are backed up once you have some.": "还没有可备份的内容。有了行程后就会备份。",
   "iCloud isn’t available. Sign in to iCloud and turn on iCloud Drive in iPhone Settings.": "iCloud 不可用。请在 iPhone 的“设置”中登录 iCloud，并打开 iCloud 云盘。",
   "Couldn’t back up. Check your connection and try again.": "无法备份。请检查网络连接后重试。",
+  "Your trips are safe in iCloud.": "你的行程已安全保存在 iCloud。",
   "Backups are on: your trips are saved, encrypted, to your own iCloud.": "备份已开启：你的行程会加密保存到你自己的 iCloud。",
   "iCloud Drive is off for MileSprout. In iPhone Settings, tap your name, then iCloud, then iCloud Drive, and turn it on.": "MileSprout 的 iCloud 云盘已关闭。在 iPhone 的“设置”中，轻点你的名字，然后轻点 iCloud，再轻点 iCloud 云盘并将其打开。",
   "Your trips aren’t backed up": "你的行程尚未备份",

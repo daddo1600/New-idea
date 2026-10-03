@@ -853,6 +853,7 @@ const dictionary: Dictionary = {
   "Nothing to back up yet. Your trips are backed up once you have some.": "Na razie nie ma czego kopiować. Kopia zapasowa przejazdów powstanie, gdy jakieś się pojawią.",
   "iCloud isn’t available. Sign in to iCloud and turn on iCloud Drive in iPhone Settings.": "iCloud jest niedostępny. Zaloguj się do iCloud i włącz iCloud Drive w Ustawieniach iPhone’a.",
   "Couldn’t back up. Check your connection and try again.": "Nie udało się utworzyć kopii zapasowej. Sprawdź połączenie i spróbuj ponownie.",
+  "Your trips are safe in iCloud.": "Twoje przejazdy są bezpieczne w iCloud.",
   "Backups are on: your trips are saved, encrypted, to your own iCloud.": "Kopie zapasowe są włączone: Twoje przejazdy są zapisywane, zaszyfrowane, w Twoim własnym iCloud.",
   "iCloud Drive is off for MileSprout. In iPhone Settings, tap your name, then iCloud, then iCloud Drive, and turn it on.": "iCloud Drive jest wyłączony dla MileSprout. W Ustawieniach iPhone’a stuknij swoje imię, potem iCloud, potem iCloud Drive i go włącz.",
   "Your trips aren’t backed up": "Twoje przejazdy nie mają kopii zapasowej",

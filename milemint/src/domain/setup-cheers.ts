@@ -10,7 +10,8 @@ export const HOURS = 3;
 export const PURPOSE = 4;
 export const DONE = 5;
 
-export type CheerKind = 'thumbs' | 'tracking' | 'almost' | 'done' | 'thanks';
+/** 'backup' is Settings' own: the first backup (or any made by hand) to iCloud. */
+export type CheerKind = 'thumbs' | 'tracking' | 'almost' | 'done' | 'thanks' | 'backup';
 
 /**
  * The cheer for moving from step `from` to `to`, or null. Going back never

@@ -823,6 +823,7 @@ const dictionary: Dictionary = {
   "Nothing to back up yet. Your trips are backed up once you have some.": "Rien à sauvegarder pour l’instant. Vos trajets seront sauvegardés dès que vous en aurez.",
   "iCloud isn’t available. Sign in to iCloud and turn on iCloud Drive in iPhone Settings.": "iCloud n’est pas disponible. Connectez-vous à iCloud et activez iCloud Drive dans Réglages sur votre iPhone.",
   "Couldn’t back up. Check your connection and try again.": "Sauvegarde impossible. Vérifiez votre connexion et réessayez.",
+  "Your trips are safe in iCloud.": "Vos trajets sont en sécurité dans iCloud.",
   "Backups are on: your trips are saved, encrypted, to your own iCloud.": "Les sauvegardes sont activées : vos trajets sont enregistrés, chiffrés, dans votre propre iCloud.",
   "iCloud Drive is off for MileSprout. In iPhone Settings, tap your name, then iCloud, then iCloud Drive, and turn it on.": "iCloud Drive est désactivé pour MileSprout. Dans Réglages sur l’iPhone, touchez votre nom, puis iCloud, puis iCloud Drive, et activez-le.",
   "Your trips aren’t backed up": "Vos trajets ne sont pas sauvegardés",

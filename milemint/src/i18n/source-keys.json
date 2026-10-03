@@ -8332,6 +8332,12 @@
     ]
   },
   {
+    "key": "Your trips are safe in iCloud.",
+    "files": [
+      "app/(tabs)/settings.tsx"
+    ]
+  },
+  {
     "key": "Your trips are stored encrypted on your phone, not on our servers.",
     "files": [
       "app/setup-tracking.tsx"

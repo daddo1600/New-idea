@@ -41,6 +41,7 @@ import { SectionTitle } from '@/components/section-title';
 import { Segmented } from '@/components/segmented';
 import { TrackingCheckRow } from '@/components/tracking-health-card';
 import { VehiclePicker } from '@/components/vehicle-picker';
+import { CelebrationOverlay } from '@/components/celebration-overlay';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
@@ -116,6 +117,8 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
   const db = useSQLiteContext();
   const theme = useTheme();
   const t = useT();
+  /** A backup made by hand: a short celebration over the whole screen. */
+  const [cheer, setCheer] = useState<string | null>(null);
   const { region } = useRegion();
   const [enabled, setEnabled] = useState(false);
   const [week, setWeek] = useState<WorkShift[][] | null>(null);
@@ -366,7 +369,7 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
         {(ICloudBackup.supported || Platform.OS === 'web') && (
           <>
             <GroupTitle title={t('Backup & data')} />
-            <BackupSection onRestored={onRestored} />
+            <BackupSection onRestored={onRestored} onBackedUp={() => setCheer(t('Your trips are safe in iCloud.'))} />
           </>
         )}
 
@@ -397,6 +400,7 @@ function SettingsScreen({ onRestored }: { onRestored: () => void }) {
           />
         </ThemedView>
       </ScrollView>
+      {cheer && <CelebrationOverlay kind="backup" text={cheer} onClose={() => setCheer(null)} />}
     </ThemedView>
   );
 }
@@ -618,7 +622,7 @@ function ReminderRow({
 }
 
 /** Encrypted iCloud backup: whether it's working, when it last ran, and back up or restore now. */
-function BackupSection({ onRestored }: { onRestored: () => void }) {
+function BackupSection({ onRestored, onBackedUp }: { onRestored: () => void; onBackedUp: () => void }) {
   const db = useSQLiteContext();
   const theme = useTheme();
   const t = useT();
@@ -656,6 +660,7 @@ function BackupSection({ onRestored }: { onRestored: () => void }) {
     setNote(null);
     try {
       const outcome = await backUp(db, { force: true });
+      if (outcome === 'written') onBackedUp();
       setNote(
         outcome === 'written'
           ? { error: false, text: t('Backed up to iCloud.') }
@@ -747,19 +752,6 @@ function BackupSection({ onRestored }: { onRestored: () => void }) {
             {status}
           </ThemedText>
         </View>
-        <ThemedText type="small" themeColor="textSecondary">
-          {t('Encrypted with a key only your iCloud Keychain holds. MileSprout never sees your trips.')}
-        </ThemedText>
-        <ThemedText type="small" themeColor="textSecondary">
-          {t('Backs up by itself when something changes, at most once a day, and keeps the last four backups.')}
-        </ThemedText>
-        {key?.exists && !key.synchronizable && (
-          <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
-            {t(
-              'iCloud Keychain isn’t available, so the backup key is kept on this iPhone only. These backups can’t be restored on a new iPhone.',
-            )}
-          </ThemedText>
-        )}
         {failure && !note && (
           <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
             {t('The last backup didn’t finish ({{code}}). Tap Back up now to try again. If it keeps happening, send us this code.', {
@@ -773,6 +765,19 @@ function BackupSection({ onRestored }: { onRestored: () => void }) {
             themeColor={note.error ? 'danger' : 'textSecondary'}
             accessibilityRole={note.error ? 'alert' : undefined}>
             {note.text}
+          </ThemedText>
+        )}
+        <ThemedText type="small" themeColor="textSecondary">
+          {t('Encrypted with a key only your iCloud Keychain holds. MileSprout never sees your trips.')}
+        </ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          {t('Backs up by itself when something changes, at most once a day, and keeps the last four backups.')}
+        </ThemedText>
+        {key?.exists && !key.synchronizable && (
+          <ThemedText type="small" themeColor="danger" accessibilityRole="alert">
+            {t(
+              'iCloud Keychain isn’t available, so the backup key is kept on this iPhone only. These backups can’t be restored on a new iPhone.',
+            )}
           </ThemedText>
         )}
         {ICloudBackup.supported && available && (

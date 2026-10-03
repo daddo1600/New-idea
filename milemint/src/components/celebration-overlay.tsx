@@ -33,6 +33,7 @@ const SHOWN_MS: Record<CheerKind, number> = {
   almost: 1600,
   done: 1600,
   thanks: 2200,
+  backup: 1900,
 };
 const FADE_MS = 180;
 
@@ -47,7 +48,7 @@ function cheerHaptic(kind: CheerKind) {
 }
 
 /**
- * A short celebration over the whole of its parent (set-up's welcome screen):
+ * A short celebration over the whole of its parent (set-up's welcome screen, or Settings):
  * `kind` picks the animation, `text` is said and shown. It closes by itself,
  * or at once on a tap, and never holds up what's underneath. Reduce Motion
  * shows only the text on a card, faded in.
@@ -108,6 +109,8 @@ export function CelebrationOverlay({
           <AlmostDone text={text} />
         ) : kind === 'done' ? (
           <YouDidIt text={text} />
+        ) : kind === 'backup' ? (
+          <SafeInCloud text={text} />
         ) : (
           <ThankYou text={text} />
         )}
@@ -182,6 +185,34 @@ function ThumbsUp({ text }: { text: string }) {
         </Animated.View>
       </View>
       <Headline text={text} delay={160} style={styles.headline} />
+    </>
+  );
+}
+
+/** A backup made: the cloud springs in, rings burst out, and a gold tick lands on it. */
+function SafeInCloud({ text }: { text: string }) {
+  const pop = useSharedValue(0);
+  const tick = useSharedValue(0);
+  useEffect(() => {
+    pop.set(withSpring(1, { mass: 1, damping: 10, stiffness: 190 }));
+    tick.set(withDelay(380, withSpring(1, { mass: 1, damping: 8, stiffness: 260 })));
+  }, [pop, tick]);
+  const badgeStyle = useAnimatedStyle(() => ({ transform: [{ scale: pop.value }] }));
+  const tickStyle = useAnimatedStyle(() => ({ transform: [{ scale: tick.value }], opacity: Math.min(1, tick.value * 2) }));
+  return (
+    <>
+      <View style={styles.picture}>
+        <Ring size={150} color={GOLD} delay={140} width={5} />
+        <Ring size={150} color="#FFFFFF" delay={300} width={2} />
+        <Burst style={styles.centre} count={14} reach={1.05} />
+        <Animated.View style={[styles.badge, badgeStyle]}>
+          <Text style={styles.badgeEmoji}>☁️</Text>
+          <Animated.View style={[styles.tick, tickStyle]}>
+            <Text style={styles.tickText}>✓</Text>
+          </Animated.View>
+        </Animated.View>
+      </View>
+      <Headline text={text} delay={260} style={styles.headline} />
     </>
   );
 }
@@ -405,6 +436,20 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
   },
   badgeEmoji: { fontSize: 66, lineHeight: 78 },
+  tick: {
+    position: 'absolute',
+    right: -4,
+    bottom: -4,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: GOLD,
+    borderWidth: 3,
+    borderColor: '#0B7A55',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tickText: { color: INK, fontSize: 26, lineHeight: 30, fontWeight: '900' },
   disc: {
     width: 184,
     height: 184,

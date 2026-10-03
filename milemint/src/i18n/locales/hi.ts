@@ -757,6 +757,7 @@ const dictionary: Dictionary = {
   "Nothing to back up yet. Your trips are backed up once you have some.": "अभी बैकअप के लिए कुछ नहीं है। ट्रिप आते ही उनका बैकअप होने लगेगा।",
   "iCloud isn’t available. Sign in to iCloud and turn on iCloud Drive in iPhone Settings.": "iCloud उपलब्ध नहीं है। iPhone की सेटिंग्ज़ में iCloud में साइन इन करें और iCloud Drive चालू करें।",
   "Couldn’t back up. Check your connection and try again.": "बैकअप नहीं हो पाया। अपना कनेक्शन जाँचें और फिर से कोशिश करें।",
+  "Your trips are safe in iCloud.": "आपकी ट्रिप्स iCloud में सुरक्षित हैं।",
   "Backups are on: your trips are saved, encrypted, to your own iCloud.": "बैकअप चालू हैं: आपकी ट्रिप्स एन्क्रिप्ट होकर आपके अपने iCloud में सेव होती हैं।",
   "iCloud Drive is off for MileSprout. In iPhone Settings, tap your name, then iCloud, then iCloud Drive, and turn it on.": "MileSprout के लिए iCloud Drive बंद है। iPhone की सेटिंग्ज़ में अपने नाम पर, फिर iCloud, फिर iCloud Drive पर टैप करें और इसे चालू करें।",
   "Your trips aren’t backed up": "आपकी ट्रिप्स का बैकअप नहीं है",

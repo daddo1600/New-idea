@@ -823,6 +823,7 @@ const dictionary: Dictionary = {
   "Nothing to back up yet. Your trips are backed up once you have some.": "Nimic de salvat încă. Cursele tale intră în backup după ce ai câteva.",
   "iCloud isn’t available. Sign in to iCloud and turn on iCloud Drive in iPhone Settings.": "iCloud nu e disponibil. Conectează-te la iCloud și pornește iCloud Drive din Configurări pe iPhone.",
   "Couldn’t back up. Check your connection and try again.": "Backupul n-a reușit. Verifică-ți conexiunea și încearcă din nou.",
+  "Your trips are safe in iCloud.": "Cursele tale sunt în siguranță în iCloud.",
   "Backups are on: your trips are saved, encrypted, to your own iCloud.": "Backupurile sunt pornite: cursele tale sunt salvate, criptate, în propriul tău iCloud.",
   "iCloud Drive is off for MileSprout. In iPhone Settings, tap your name, then iCloud, then iCloud Drive, and turn it on.": "iCloud Drive e oprit pentru MileSprout. În Configurări pe iPhone, atinge numele tău, apoi iCloud, apoi iCloud Drive, și pornește-l.",
   "Your trips aren’t backed up": "Cursele tale nu au backup",
