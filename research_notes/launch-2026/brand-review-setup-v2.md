@@ -92,3 +92,30 @@ Set-up scores against the first review: Motion & Fitness **2 → 4**, You're all
 ## Next
 
 The coding agent makes fixes 1 to 4 and recaptures `setup-v2-1`, `-3`, `-3b` and `-3r`. Marketing will re-check those four screenshots only. QA then reviews the build, and the work goes to the founder with screenshots.
+
+---
+
+## Re-check (3 October 2026, commit 30260ab)
+
+Re-checked the recaptured `setup-v2-0`, `-1`, `-1r`, `-1se`, `-2`, `-3`, `-3b` and `-3r`.
+
+**Verdict: PASS with 1 fix.**
+
+| # | Fix | Result |
+|---|---|---|
+| 1 | "Neither" tile | ✓ Now "✋ I’ll swipe each drive myself.", which wraps neatly to 3 lines. |
+| 2 | Button shape jump | ✓ The button is a pill from the first frame (3b) through to the sparkle (3). |
+| 3 | Timeline road | ✓ The road was invisible, not short. It is now darker with a light edge and reads clearly from "Drive" to "Swipe “Work”" (3, 3b, 3r). |
+| 4 | Motion empty green | ✓ The 280pt card is centred, so the space is now even above and below it, with no dead block. On iPhone SE (1se) everything fits, the buttons are pinned and nothing clips. Reduce Motion (1r) is correct. |
+| 8 | Welcome screenshot | ✓ Recaptured (0). |
+
+**One fix left (from optional item 6, which the coding agent took on):**
+
+- **Reminders, stacked banner (2):** the second banner now shows "One week left in the 2026/27 tax year …", but the front banner cuts it through the middle of the letters. On a phone that looks like a rendering bug. Choose one:
+  - raise `PEEK` in `components/reminders-step.tsx` so the whole title line shows below the front banner (about 10pt more); or
+  - drop the text and show only a clean edge.
+
+  Recapture `setup-v2-2` afterwards. Marketing only needs to see that one screenshot.
+
+Still optional: the walker is a little muddy on the green.
+Welcome (0) wasn't changed and is fine.
