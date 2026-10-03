@@ -51,10 +51,14 @@
     return '';
   }
 
+  /* Off for visitors until the seasonal artwork is redrawn; ?season=<id> still previews it. */
+  var SEASONS_LIVE = false;
+
   function detect() {
     var code = country();
     var forced = /[?&]season=([a-z-]+)/.exec(location.search);
     var id;
+    if (!forced && !SEASONS_LIVE) return null;
     if (forced) {
       if (forced[1] === 'none') return null;
       id = IDS.indexOf(forced[1]) >= 0 ? forced[1] : null;
