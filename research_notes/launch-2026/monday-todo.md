@@ -42,3 +42,24 @@
        - Pick the venue when activating, so the partner sees which shop gets the visit.
        - An activated code that isn't used counts against the allowance (stops "activate, show a mate, let it lapse").
        - Partner with a café network, not single cafés, for coverage.
+9. **"How you're paid for mileage" for people with more than one kind of work.** Today it's one global switch (Self-employed or Employee, in `settings.tsx` `MileagePayForm`, `use-mileage-pay.ts`, `use-year-money.ts`). That breaks for:
+   - people who move from gig work to an employed job, or the reverse;
+   - people who do both, e.g. a care worker employed by an agency who also does Uber Eats at weekends;
+   - employees with a company car, who can't claim mileage relief on it.
+
+   The user's own phone shows the risk: Employee at 45p per mile, with Shift mode on. So gig drives are being valued as employee drives.
+
+   Proposal:
+   - **Jobs, not one switch.** Each kind of work has its own basis: "Deliveries: self-employed", "Care agency: employee, paid 35p, own car", "Company car". A work drive belongs to a job. Shift-mode drives default to the self-employed job, and drives in work hours or for a saved workplace default to the employee job. A drive can be changed with a tap.
+   - **Dated, never retroactive.** A change applies from a date, so switching from gig to employed doesn't revalue last year's drives.
+   - **Vehicle per job.** Own car, van, motorbike or bicycle (self-employed rates differ), or company car, which has no mileage relief. Company-car drives are still logged for the employer, and relief applies only to unreimbursed fuel. Check each country's rules before writing copy.
+   - **Short guided setup** (the tutorial):
+     - Questions: "Do you work for yourself (delivery, ride-hail, trades)?", "Do you drive for an employer?", "Whose vehicle?", "What do they pay per mile?".
+     - It sets up the jobs, and appears in onboarding after the work style.
+     - Prompt again when it looks out of date: e.g. Shift mode turned on while only an employee job exists, a new tax year starts, or drives keep being re-marked.
+   - **Per-country checks:**
+     - UK: Mileage Allowance Relief for employees; simplified expenses for the self-employed.
+     - US: no deduction for unreimbursed employee mileage at present; check whether that's still the case.
+     - Canada: T2200 / T777.
+     - Australia: cents per km, for both employees and the self-employed.
+   - The money maths gets tests for mixed years (some drives self-employed, some employee) and for a company car.
