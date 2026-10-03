@@ -26,6 +26,8 @@ Hand work to the agents in `.claude/agents/` (see its README) wherever one fits,
 
 Usual order: research and marketing first, then coding, translator, qa, release. Nothing with a number or claim in it goes live without research having checked it.
 
+**Two sign-offs before anything goes live** (website or app): **marketing** signs off that it fits the brand and has zing (nothing boring, plain or default-looking), and **qa** signs off that it works. Only then does it go to the founder for the final "publish" or build.
+
 ## Rules the founder has set
 
 - **Builds:** only when the founder asks. They cost Expo and Apple cycles, so group changes. Before every build, run `milemint/scripts/preflight.sh`; it must end with `PREFLIGHT OK`.
