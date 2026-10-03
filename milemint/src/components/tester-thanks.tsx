@@ -3,13 +3,15 @@ import { useCallback, useState } from 'react';
 
 import { CelebrationOverlay } from '@/components/celebration-overlay';
 import { useLaunchIntroDone } from '@/components/launch-intro-state';
+import { thanksCanOpen } from '@/domain/home-overlays';
 import { useT } from '@/i18n/i18n';
 import { useReferral } from '@/referral/referral';
 
 /**
  * A small thank-you on home, once, when a TestFlight install has just earned
  * the Founding driver badge (referral/founding-tester). It waits for the
- * launch animation, for home to be in view and for nothing else to be up.
+ * launch animation, for home to be in view and for nothing else to be up;
+ * a milestone celebration waits for it in turn (domain/home-overlays).
  * Reduce Motion shows just the card (CelebrationOverlay).
  */
 export function TesterThanks({ hold }: { hold: boolean }) {
@@ -25,7 +27,7 @@ export function TesterThanks({ hold }: { hold: boolean }) {
   );
   // Once it's up it stays until it closes by itself (or is tapped away).
   const [open, setOpen] = useState(false);
-  if (testerThanks && !open && introDone && focused && !hold) setOpen(true);
+  if (!open && thanksCanOpen({ testerThanks, introDone, focused, hold })) setOpen(true);
   if (!open) return null;
   return (
     <CelebrationOverlay

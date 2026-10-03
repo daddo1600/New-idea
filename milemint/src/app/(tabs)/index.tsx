@@ -118,8 +118,9 @@ export default function HomeScreen() {
     () => (shiftMode.shift ? (trips ?? []).filter((trip) => trip.shiftId === shiftMode.shift?.id) : []),
     [trips, shiftMode.shift],
   );
-  const celebration = useMilestoneCelebration(trips ? allTrips : null, deductions, region);
   const { testerThanks } = useReferral();
+  // Waits for a founding tester's thank-you, so the two never stack.
+  const celebration = useMilestoneCelebration(trips ? allTrips : null, deductions, region, testerThanks);
   // Tax offices want a purpose for every business drive: the one-tap choices, and the drives still missing one.
   const trackingHealth = useTrackingHealth();
   const backupWarning = useBackupWarning(!DEMO_MODE);

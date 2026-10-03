@@ -11,6 +11,7 @@ import {
   type Progress,
   reachedMilestones,
 } from '@/domain/milestones';
+import { milestoneCanShow } from '@/domain/home-overlays';
 import { marApplies } from '@/domain/mar';
 import { toUnits, type Region } from '@/domain/regions';
 import { toLocalIsoDate, type Trip } from '@/domain/trip';
@@ -39,15 +40,20 @@ export function milestoneProgress(
 
 /**
  * Watches the trips for a newly reached milestone and returns the
- * celebration to show (once per milestone, remembered in settings).
+ * celebration to show (once per milestone, remembered in settings). While a
+ * founding tester's thank-you is due or up (`testerThanks`), a new one waits
+ * for it; one already showing stays (domain/home-overlays).
  */
 export function useMilestoneCelebration(
   trips: readonly Trip[] | null,
   deductions: ReadonlyMap<string, number>,
   region: Region,
+  testerThanks: boolean,
 ) {
   const db = useSQLiteContext();
   const [content, setContent] = useState<CelebrationContent | null>(null);
+  const [showing, setShowing] = useState(false);
+  if (content && !showing && milestoneCanShow({ showing, testerThanks })) setShowing(true);
   const tripsKey = useMemo(
     () => (trips ? `${trips.length}:${trips.filter((t) => t.classification === 'business').length}` : ''),
     [trips],
@@ -76,5 +82,11 @@ export function useMilestoneCelebration(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db, tripsKey, region]);
 
-  return { content, close: () => setContent(null) };
+  return {
+    content: showing ? content : null,
+    close: () => {
+      setContent(null);
+      setShowing(false);
+    },
+  };
 }
