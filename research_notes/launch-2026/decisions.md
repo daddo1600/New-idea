@@ -62,3 +62,9 @@ The founder signs these off; the team builds from them. The newest decision wins
   - App Store Connect prices change to option A.
   - Then the website price chip, the comparison table, the app's demo paywall, the App Store listing and the friend offer code (half of yearly) all follow.
 - This replaces the £5.99 / £49.99 set in App Store Connect.
+
+## 3 Oct 2026: Price promise for founding testers; no launch date yet (approved)
+- **Founding testers get the price promise.** When their 12 free months end and they start paying the full price, they keep the launch price (option A) for as long as they stay subscribed.
+- **There is no launch date yet.** `{LAUNCH_DATE}` and `{PROMISE_END}` stay as placeholders.
+- **Before launch,** the website words the window relative to launch ("within 12 months of launch day"), not with calendar dates. The dated wording replaces it once launch is set.
+- The testers' badge cut-off (`FOUNDING_TESTER_ENDS`) also waits for the date.
