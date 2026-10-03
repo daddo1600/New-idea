@@ -18,10 +18,10 @@
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/img/screens/home.webp?v=14b25716" as="image" type="image/webp">
-<link rel="stylesheet" href="/assets/site.css?v=187961aa">
+<link rel="stylesheet" href="/assets/site.css?v=3efb309c">
 <script src="/assets/intro-gate.js?v=59c0d459"></script>
 <script src="/assets/season.js?v=06a20cf1" defer></script>
-<script src="/assets/site.js?v=ecd8203f" defer></script>
+<script src="/assets/site.js?v=7017f72e" defer></script>
 <noscript><style>
   /* Without JavaScript: every feature is listed, the deck is a still picture. */
   .feat { opacity: 1 !important; visibility: visible !important; transform: none !important; grid-area: auto !important; }
@@ -147,90 +147,137 @@
             <button type="button" class="deck-btn" data-step="1" aria-controls="deck" aria-label="Next screen"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           </div>
           <p class="deck-hint" aria-hidden="true"><span class="count"><b id="deck-n">1</b> / 8</span> Swipe, drag or use the arrow keys</p>
+          <p class="deck-done" hidden><span class="deck-done-dot" aria-hidden="true"></span>You've seen it all. <a href="#early-access">Get early access ↓</a></p>
         </div>
 
         <div class="feats">
           <article class="feat on" aria-labelledby="f-home">
-            <span class="tag">Free</span>
+            <span class="mint-badge feat-badge"><svg class="b-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Free</span>
             <h3 id="f-home">Your shift at a glance</h3>
-            <p>Home shows how long you've been on shift, what your work miles have found this tax year, and any drive that still needs sorting.</p>
-            <ul>
-              <li>Swipe to start or end a shift.</li>
-              <li>Drives waiting to be sorted are right there, with what each is worth as Work.</li>
+            <div class="feat-top">
+              <p class="feat-stat"><b data-count="1754.62" data-prefix="£" data-dec="2">£1,754.62</b><span>Example: found this tax year, shown on Home</span></p>
+              
+            </div>
+            <ul class="feat-tiles">
+              <li style="--i:0">Swipe to start or end a shift</li>
+              <li style="--i:1">Drives to sort, with what each is worth as Work</li>
+              <li style="--i:2">Your total for the tax year, always up to date</li>
             </ul>
           </article>
           <article class="feat" aria-labelledby="f-drives">
-            <span class="tag">Free</span>
+            <span class="mint-badge feat-badge"><svg class="b-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Free</span>
             <h3 id="f-drives">Drives log themselves</h3>
-            <p>Automatic logging is free and has no monthly limit. Nothing to start or stop: each drive is saved when you park.</p>
-            <ul>
-              <li>One row per shift, with your miles, time and drives.</li>
-              <li>GPS only runs while you drive, so it goes easy on your battery.</li>
-              <li>While you're on shift, your time and miles show on the Lock Screen and in the Dynamic Island.</li>
-              <li>Missed one? Add it by hand.</li>
+            <div class="feat-top">
+              <p class="feat-stat"><b>Free</b><span>Automatic logging, no monthly limit</span></p>
+              
+            </div>
+            <ul class="feat-tiles">
+              <li style="--i:0">Saved when you park. Nothing to start or stop</li>
+              <li style="--i:1">GPS only runs while you drive, easy on your battery</li>
+              <li style="--i:2">Time and miles on your Lock Screen while on shift</li>
             </ul>
           </article>
           <article class="feat" aria-labelledby="f-trip">
-            <span class="tag">Free</span>
+            <span class="mint-badge feat-badge"><svg class="b-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Free</span>
             <h3 id="f-trip">Work or Personal? One tap.</h3>
-            <p>See the route of every drive on a map, then sort it with a tap or a swipe. Only Work miles count towards your claim.</p>
-            <ul>
-              <li>Add a purpose, parking and tolls if you need them.</li>
-              <li>MileSprout learns your usual routes and work hours, and sorts many drives for you.</li>
-              <li>Client privacy mode keeps only the area of a visit, never the street address.</li>
+            <div class="feat-top">
+              <p class="feat-stat"><b data-count="1" data-suffix=" tap">1 tap</b><span>Work or Personal. Only Work miles count.</span></p>
+              
+            </div>
+            <ul class="feat-tiles">
+              <li style="--i:0">Every route on a map</li>
+              <li style="--i:1">Learns your usual routes and sorts many for you</li>
+              <li style="--i:2">Client privacy mode keeps only the area, never the street</li>
             </ul>
           </article>
           <article class="feat" aria-labelledby="f-money">
-            <span class="tag">Money tab</span>
+            <span class="mint-badge feat-badge"><b class="b-glyph" data-cur-sym>£</b>Free, more with Pro</span>
             <h3 id="f-money">Know what to put aside for tax</h3>
-            <p>The Money tab shows what your work miles are worth this tax year, free. With Pro it also does the sums you'd otherwise do on the back of a receipt:</p>
-            <ul>
-              <li>Quarterly figures for your Making Tax Digital updates, with the due dates.</li>
-              <li>A weekly tax set-aside, from the earnings you add.</li>
-              <li>Earnings by platform, read from a screenshot on your iPhone.</li>
+            <div class="feat-top">
+              <p class="feat-stat"><b data-count="55" data-suffix="p" data-rate="1">55p</b><span><span data-rate-label>a mile at HMRC's rate, for your first 10,000 work miles</span></span></p>
+              
+            </div>
+            <ul class="feat-tiles">
+              <li style="--i:0">What your work miles are worth this tax year, free</li>
+              <li style="--i:1">Pro: quarterly figures for Making Tax Digital, with due dates</li>
+              <li style="--i:2">Pro: what to put aside each week</li>
             </ul>
           </article>
-          <article class="feat" aria-labelledby="f-export">
-            <span class="tag">Pro</span>
-            <h3 id="f-export">Your mileage log, ready for HMRC</h3>
-            <p>When it's time to file, get your log out in the shape you need.</p>
-            <ul>
-              <li>An itemised PDF report with your totals and every trip.</li>
-              <li>Spreadsheet and CSV, plus Xero, QuickBooks and FreeAgent formats.</li>
-              <li>Send it straight to your accountant.</li>
+          <article class="feat is-pro" aria-labelledby="f-export">
+            <span class="pro-badge-wrap feat-badge"><span class="pro-badge"><svg class="b-icon" viewBox="12 9 77 84" aria-hidden="true" focusable="false"><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z" fill="#064E3B"/><path d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#064E3B" stroke-width="9" stroke-linecap="round" fill="none"/><circle cx="51" cy="28" r="8" fill="#064E3B"/></svg>Pro</span><span class="sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i></span></span>
+            <h3 id="f-export">Your mileage log, ready for <span data-auth>HMRC</span></h3>
+            <div class="feat-top">
+              <p class="feat-stat"><b data-count="1" data-suffix=" PDF">1 PDF</b><span>Every trip and your totals, ready to file</span></p>
+              <div class="feat-visual mini-pdf" aria-hidden="true">
+                <div class="pdf-page">
+                  <span class="pdf-head">Mileage log 2026/27</span>
+                  <i></i><i></i><i></i><i></i>
+                  <span class="pdf-total"><span>Total</span><b>£2,640.00</b></span>
+                  <svg class="pdf-seal" viewBox="12 9 77 84"><path d="M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z" fill="#24B359"/><path d="M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30" stroke="#064E3B" stroke-width="8" stroke-linecap="round" fill="none"/><circle cx="51" cy="28" r="7.6" fill="#FFFFFF"/><circle cx="51" cy="28" r="5.6" fill="#FACC15"/></svg>
+                </div>
+              </div>
+            </div>
+            <ul class="feat-tiles">
+              <li style="--i:0">Itemised PDF report with every trip</li>
+              <li style="--i:1">Spreadsheet, CSV, Xero, QuickBooks, FreeAgent</li>
+              <li style="--i:2">Send it straight to your accountant</li>
             </ul>
           </article>
           <article class="feat" aria-labelledby="f-privacy">
-            <span class="tag">Free</span>
+            <span class="mint-badge feat-badge"><svg class="b-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Free</span>
             <h3 id="f-privacy">Your trips stay on your phone</h3>
-            <p>Where you go is your business. MileSprout is built so we never see it.</p>
-            <ul>
-              <li>Your trips are stored encrypted on your iPhone.</li>
-              <li>No account to make. No ads, no analytics, no ad trackers.</li>
-              <li>Your data is never sold. We don't have it to sell.</li>
-              <li>Backups go to your own iCloud, encrypted on your phone first.</li>
+            <div class="feat-top">
+              <p class="feat-stat"><b>0</b><span>trips ever sent to us</span></p>
+              <div class="feat-visual mini-lock" aria-hidden="true">
+                <svg viewBox="0 0 120 150">
+                  <path class="lock-road" d="M14 150 C20 120 44 116 46 96" fill="none"/>
+                  <rect class="lock-phone" x="40" y="14" width="66" height="122" rx="14"/>
+                  <rect class="lock-screen" x="46" y="26" width="54" height="98" rx="8"/>
+                  <path class="lock-shackle" d="M64 72 v-10 a9 9 0 0 1 18 0 v10" fill="none"/>
+                  <rect class="lock-body" x="58" y="70" width="30" height="24" rx="5"/>
+                  <circle class="lock-hole" cx="73" cy="82" r="3"/>
+                </svg>
+              </div>
+            </div>
+            <ul class="feat-tiles">
+              <li style="--i:0">Stored encrypted on your iPhone</li>
+              <li style="--i:1">No account, no ads, no analytics</li>
+              <li style="--i:2">Backups go to your own iCloud, encrypted first</li>
             </ul>
-            <p><a href="/privacy">Read the privacy policy</a></p>
+            <p class="feat-link"><a href="/privacy">Read the privacy policy</a></p>
           </article>
           <article class="feat" aria-labelledby="f-perks">
-            <span class="tag">Perks</span>
+            <span class="mint-badge feat-badge"><svg class="b-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="2" y="6" width="12" height="3" rx="1"/><path d="M3 9v5h10V9M8 6v8M8 6C6.5 3 3.5 3.5 4.5 5.5 5 6 8 6 8 6zM8 6c1.5-3 4.5-2.5 3.5-.5C11 6 8 6 8 6z"/></g></svg>Perks</span>
             <h3 id="f-perks">Deals for the places you stop</h3>
-            <p>The Perks tab has offers for drivers on shift: fuel, a coffee between drops, tyres. Claim one when you're at the till.</p>
-            <ul>
-              <li>An in-store code lasts about 30 minutes once claimed.</li>
-              <li>Perks are deals only. They never unlock anything in MileSprout.</li>
-              <li>Perks is in early testing: the offers you see today are a demo.</li>
+            <div class="feat-top">
+              <p class="feat-stat"><b data-count="10" data-suffix="p off">10p off</b><span>a litre of fuel: a demo offer while Perks is in testing</span></p>
+              
+            </div>
+            <ul class="feat-tiles">
+              <li style="--i:0">Fuel, a coffee between drops, tyres</li>
+              <li style="--i:1">Claim at the till; the code lasts about 30 minutes</li>
+              <li style="--i:2">Deals only. They never unlock anything in MileSprout</li>
             </ul>
           </article>
           <article class="feat" aria-labelledby="f-code">
-            <span class="tag">Perks</span>
+            <span class="mint-badge feat-badge"><svg class="b-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="2" y="6" width="12" height="3" rx="1"/><path d="M3 9v5h10V9M8 6v8M8 6C6.5 3 3.5 3.5 4.5 5.5 5 6 8 6 8 6zM8 6c1.5-3 4.5-2.5 3.5-.5C11 6 8 6 8 6z"/></g></svg>Perks</span>
             <h3 id="f-code">A code with nothing about you in it</h3>
-            <p>Show the QR code or the short code at the till. It works once, and it carries no name, no trips and no location.</p>
-            <ul>
-              <li>The code is made on your phone, at random.</li>
-              <li>Claimed codes are kept on your phone only.</li>
+            <div class="feat-top">
+              <p class="feat-stat"><b data-count="30" data-prefix="~" data-suffix=" min">~30 min</b><span>then it expires</span></p>
+              <div class="feat-visual mini-receipt" aria-hidden="true">
+                <div class="rcpt">
+                  <span class="rcpt-qr"><i style="grid-area:1/1"></i><i style="grid-area:1/2"></i><i style="grid-area:1/4"></i><i style="grid-area:1/5"></i><i style="grid-area:2/1"></i><i style="grid-area:2/3"></i><i style="grid-area:2/5"></i><i style="grid-area:3/2"></i><i style="grid-area:3/3"></i><i style="grid-area:3/4"></i><i style="grid-area:4/1"></i><i style="grid-area:4/3"></i><i style="grid-area:4/5"></i><i style="grid-area:5/1"></i><i style="grid-area:5/2"></i><i style="grid-area:5/4"></i></span>
+                  <span class="rcpt-code">MS-DBK-42</span>
+                  <span class="rcpt-time" data-countdown>30:00</span>
+                </div>
+              </div>
+            </div>
+            <ul class="feat-tiles">
+              <li style="--i:0">Made on your phone, at random</li>
+              <li style="--i:1">Works once. No name, trips or location</li>
+              <li style="--i:2">Claimed codes stay on your phone</li>
             </ul>
-            <p>Run a business drivers stop at? <a href="/partners">Become a partner</a></p>
+            <p class="feat-link">Run a business drivers stop at? <a href="/partners">Become a partner</a></p>
           </article>
         </div>
       </div>

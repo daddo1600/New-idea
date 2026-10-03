@@ -9,6 +9,21 @@
   function still() { return reduce.matches; }
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
 
+  /* Counts el's text from `from` to `to` over `ms` (ease-out, like the calculator), showing fmt(value).
+     The final value is always set exactly; Reduce Motion sets it at once. Returns a cancel function. */
+  function countTo(el, from, to, ms, fmt) {
+    if (still() || from === to) { el.textContent = fmt(to); return function () {}; }
+    var start = performance.now(), raf = 0;
+    function step(now) {
+      var k = Math.min(1, (now - start) / ms);
+      el.textContent = fmt(k < 1 ? from + (to - from) * (1 - Math.pow(1 - k, 3)) : to);
+      raf = k < 1 ? requestAnimationFrame(step) : 0;
+    }
+    el.textContent = fmt(from);
+    raf = requestAnimationFrame(step);
+    return function () { if (raf) cancelAnimationFrame(raf); el.textContent = fmt(to); };
+  }
+
   /* ---------- Home intro: the sprout grows, as in the app's opening, then becomes the header logo ----------
      Only when intro-gate.js has put up its cover (first visit this session, motion allowed).
      Road signs pop up beside the road; in a season (season.js) the sprout dresses up: a backdrop,
@@ -783,7 +798,63 @@
 
     function depth(i) { var k = (i - active + n) % n; return k <= 3 ? String(k) : 'far'; }
 
-    function layout(announce) {
+    // The feature panels: on each change the new one enters from the side the deck moved, its stat
+    // counts up, the tiles follow, and on phones the box takes the panel's height (no empty gap).
+    var featBox = document.querySelector('.feats');
+    var narrow = window.matchMedia('(max-width: 899px)');
+    var dotsRow = document.querySelector('.dots');
+    var hint = document.querySelector('.deck-hint');
+    var doneLine = document.querySelector('.deck-done');
+    var stopCount = function () {}, tickTimer = 0, shownPanel = -1;
+    function fmtStat(b) {
+      var dec = Number(b.getAttribute('data-dec') || 0), pre = b.getAttribute('data-prefix') || '', suf = b.getAttribute('data-suffix') || '';
+      return function (v) {
+        return pre + v.toLocaleString('en-GB', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + suf;
+      };
+    }
+    function fitHeight() {
+      if (!featBox) return;
+      featBox.style.height = narrow.matches && feats[active] ? feats[active].offsetHeight + 'px' : '';
+    }
+    function countdown(panel) {
+      clearInterval(tickTimer);
+      var el = panel.querySelector('[data-countdown]');
+      if (!el) return;
+      var left = 30 * 60;
+      el.textContent = '30:00';
+      if (still()) return;
+      tickTimer = setInterval(function () {
+        left = Math.max(0, left - 1);
+        el.textContent = Math.floor(left / 60) + ':' + ('0' + (left % 60)).slice(-2);
+      }, 1000);
+    }
+    function enterPanel(dir) {
+      if (active === shownPanel) return;
+      shownPanel = active;
+      var panel = feats[active];
+      if (!panel) return;
+      if (featBox) featBox.setAttribute('data-dir', dir < 0 ? 'back' : 'next');
+      feats.forEach(function (f) { f.classList.remove('enter'); });
+      void panel.offsetWidth;
+      if (!still()) panel.classList.add('enter');
+      stopCount();
+      var b = panel.querySelector('.feat-stat b[data-count]');
+      if (b) {
+        var fmt = fmtStat(b), to = Number(b.getAttribute('data-count'));
+        var go = function () { stopCount = countTo(b, 0, to, 520, fmt); };
+        if (still()) go(); else { b.textContent = fmt(0); setTimeout(go, 200); } // after the h3 slides in
+      }
+      countdown(panel);
+      fitHeight();
+      // 8 of 8: the active dot turns gold and the hint becomes a way on
+      var last = active === n - 1;
+      if (dotsRow) dotsRow.classList.toggle('is-done', last);
+      if (doneLine) doneLine.hidden = !last;
+      if (hint) hint.hidden = last;
+    }
+    window.addEventListener('resize', fitHeight);
+
+    function layout(announce, dir) {
       cards.forEach(function (c, i) {
         c.setAttribute('data-depth', depth(i));
         c.setAttribute('aria-hidden', i === active ? 'false' : 'true');
@@ -797,6 +868,7 @@
         var h = feats[active] && feats[active].querySelector('h3');
         live.textContent = (active + 1) + ' of ' + n + ': ' + (h ? h.textContent : '');
       }
+      if (announce) enterPanel(dir || 1);
     }
 
     // send card c off to one side; after a moment it tucks in at the back of the deck
@@ -812,7 +884,7 @@
       var c = cards[active];
       active = (active + 1) % n;
       flyOff(c, dir || -1);
-      layout(true);
+      layout(true, 1);
     }
 
     function prev() {
@@ -828,7 +900,7 @@
         c.style.opacity = '';
         c.classList.remove('fly-l');
       }
-      layout(true);
+      layout(true, -1);
     }
 
     function goTo(i) {
@@ -836,9 +908,10 @@
       if (i === (active + 1) % n) return next(-1);
       if (i === (active - 1 + n) % n) return prev();
       var c = cards[active];
+      var dir = i > active ? 1 : -1;
       active = i;
       flyOff(c, -1);
-      layout(true);
+      layout(true, dir);
     }
 
     dots.forEach(function (d, i) { d.addEventListener('click', function () { goTo(i); }); });
@@ -934,7 +1007,45 @@
       }
     }
 
+    // The panels follow the visitor's country: the rate on Money, the tax office on Reports, the £ glyph
+    (function localise() {
+      var r = RATES[COUNTRY];
+      var first = r.tiers[0][1];
+      var cents = Math.round(first * 100);
+      var unitWord = r.unit === 'mi' ? 'a mile' : 'a km';
+      var sign = { UK: 'p', US: '¢', CA: '¢', AU: 'c' }[COUNTRY];
+      var rateB = document.querySelector('.feat-stat b[data-rate]');
+      var rateLabel = document.querySelector('[data-rate-label]');
+      if (rateB) { rateB.setAttribute('data-count', String(cents)); rateB.setAttribute('data-suffix', sign); rateB.textContent = cents + sign; }
+      if (rateLabel) {
+        rateLabel.textContent = {
+          UK: "a mile at HMRC's rate, for your first 10,000 work miles",
+          US: "a mile at the IRS's rate",
+          CA: "a km at the CRA's allowance rate, for your first 5,000 km",
+          AU: "a km at the ATO's rate, for up to 5,000 km a year"
+        }[COUNTRY] || unitWord;
+      }
+      var auth = document.querySelector('[data-auth]');
+      if (auth) auth.textContent = { UK: 'HMRC', US: 'the IRS', CA: 'the CRA', AU: 'the ATO' }[COUNTRY];
+      Array.prototype.forEach.call(document.querySelectorAll('[data-cur-sym]'), function (el) { el.textContent = COUNTRY === 'UK' ? '£' : '$'; });
+      var pdfTotal = document.querySelector('.pdf-total b'), pdfHead = document.querySelector('.pdf-head');
+      if (pdfTotal) pdfTotal.textContent = money(r, yearWorth(r, defaultWeek(r)));
+      if (pdfHead) pdfHead.textContent = 'Mileage log ' + { UK: '2026/27', US: '2026', CA: '2026', AU: '2026–27' }[COUNTRY];
+    })();
+
     layout(false);
+    shownPanel = 0;
+    fitHeight();
+    // the first panel counts up when the deck first comes into view
+    if ('IntersectionObserver' in window && feats[0]) {
+      var seen = new IntersectionObserver(function (es) {
+        if (!es[0].isIntersecting) return;
+        seen.disconnect();
+        if (active === 0) { shownPanel = -1; enterPanel(1); }
+      }, { threshold: 0.4 });
+      seen.observe(feats[0]);
+    }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitHeight);
   })();
 
   /* ---------- Waitlist form ---------- */
