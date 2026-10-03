@@ -421,7 +421,25 @@
     // (with the video blocked the screen is the saved-state poster, so it looks at the total throughout)
     function focusAt(t) {
       if (blocked) return 0.22;
-      return t < 5.4 ? 0.74 : t < 6.0 ? 0.74 - 0.52 * smooth((t - 5.4) / 0.6) : 0.22;
+      return t < 5.25 ? 0.74 : t < 5.85 ? 0.74 - 0.52 * smooth((t - 5.25) / 0.6) : 0.22;
+    }
+    // The touch (iOS screen-recording style) on the swipe in the clip: it presses on the drive at 3.6 s,
+    // drags left to right with the card until 4.95 s (eased like the recorded drag), lifts with a ripple.
+    // Positions are fractions of the screen, measured from the recording.
+    var touchEl = root.querySelector('.touch');
+    var screenEl = root.querySelector('.screen');
+    function touch(t) {
+      if (!touchEl) return;
+      if (blocked || t < 3.6 || t > 5.45) { if (touchEl.style.opacity !== '0') touchEl.style.opacity = '0'; return; }
+      var W = screenEl.clientWidth, H = screenEl.clientHeight;
+      var y = 0.775 * H, x, o = 0.85, s = 1, ro = 0, rs = 1;
+      if (t < 3.8) { var k = (t - 3.6) / 0.2; x = 0.13 * W; o = 0.85 * k; s = 1.35 - 0.35 * k; }       // press
+      else if (t < 4.95) { var d = (t - 3.8) / 1.15; x = (0.13 + 0.66 * (1 - Math.pow(1 - d, 2))) * W; }  // drag
+      else { var u = (t - 4.95) / 0.5; x = 0.79 * W; o = 0.85 * (1 - u); s = 1 - 0.15 * u; ro = 1 - u; rs = 1 + 0.9 * u; } // lift
+      touchEl.style.opacity = o.toFixed(3);
+      touchEl.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0) scale(' + s.toFixed(3) + ')';
+      touchEl.style.setProperty('--ripple-o', ro.toFixed(3));
+      touchEl.style.setProperty('--ripple-s', rs.toFixed(3));
     }
     function camera(t) {
       var z = zoomAt(t);
@@ -473,6 +491,7 @@
       road.draw(shapes, s, PARKED * smooth(k), steer * 14);
       if (hills) hills.setAttribute('transform', 'translate(' + (-steer * 6).toFixed(2) + ' 0)');
       camera(clock);
+      touch(clock);
       raf = requestAnimationFrame(tick);
     }
     function start() {
