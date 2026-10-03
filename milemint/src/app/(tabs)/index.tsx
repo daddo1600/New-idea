@@ -4,6 +4,7 @@ import { useEffect, useMemo, useReducer, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useBackupWarning } from '@/backup/use-backup-warning';
 import { HomeEmptyLines } from '@/components/home-empty';
 import { LeafMark } from '@/components/leaf-mark';
 import { PracticeTutorial } from '@/components/practice-tutorial';
@@ -13,6 +14,7 @@ import { quickPurposes } from '@/components/purpose-picker';
 import { PlaceAskCard } from '@/components/place-ask-card';
 import { BackdateOffer, EndShiftPrompt, UndoEndBar } from '@/components/shift-prompts';
 import { shortTime } from '@/components/shift-row';
+import { BackupCard } from '@/components/home/backup-card';
 import { LiveDriveBanner } from '@/components/home/live-drive-banner';
 import { PurposeNudge } from '@/components/home/purpose-nudge';
 import { ShiftBar } from '@/components/home/shift-bar';
@@ -114,6 +116,7 @@ export default function HomeScreen() {
   const celebration = useMilestoneCelebration(trips ? allTrips : null, deductions, region);
   // Tax offices want a purpose for every business drive: the one-tap choices, and the drives still missing one.
   const trackingHealth = useTrackingHealth();
+  const backupWarning = useBackupWarning(!DEMO_MODE);
   const trackingProblem = ['tracking-stopped', 'stale', 'precise-location-off'].includes(trackingHealth.health?.issue ?? '');
   const purposeChoices = useMemo(
     () =>
@@ -291,6 +294,8 @@ export default function HomeScreen() {
             {liveDrive && <LiveDriveBanner drive={liveDrive} />}
             {/* Tracking that stopped, or a drive it lost: never silent. */}
             <TrackingHealthCard state={trackingHealth} />
+            {/* Backups that aren't working: a lost iPhone would take the trips with it. */}
+            {backupWarning && <BackupCard warning={backupWarning} />}
             <TrackingCard status={status} working={!trackingProblem} />
             {/* Home and work, asked once the drives show where they are (not at set-up). */}
             {placeAsk.ask && !selecting && filling === null && (

@@ -30,6 +30,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { findLatestBackup, isDatabaseEmpty, problemOf, restoreBackup, type FoundBackup } from '@/backup/backup';
 import { formatBackupDate, PROBLEM_TEXT } from '@/backup/copy';
 import { tripCount } from '@/backup/snapshot';
+import { BackupCheck } from '@/components/backup-check';
 import { BrandGradient } from '@/components/brand-gradient';
 import { CelebrationOverlay } from '@/components/celebration-overlay';
 import { CountryOptions, phoneRegion } from '@/components/country-options';
@@ -888,6 +889,8 @@ export default function WelcomeScreen() {
                           'Turn on automatic tracking from the home screen whenever you’re ready, or add a drive from the Drives tab.',
                         )}
               </Text>
+              {/* Backups are on by themselves: this says so, or how to turn on iCloud Drive. */}
+              <BackupCheck style={styles.glass} />
               {/* Optional, and also in Settings for 30 days. */}
               <RedeemCode onBrand initialCode={linkCode} style={styles.glass} />
             </>

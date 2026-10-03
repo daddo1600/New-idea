@@ -1390,6 +1390,12 @@
     ]
   },
   {
+    "key": "Back up in Settings",
+    "files": [
+      "components/home/backup-card.tsx"
+    ]
+  },
+  {
     "key": "Back up now",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -1459,6 +1465,18 @@
     "key": "Backup from {{date}} with {{count}} trips",
     "files": [
       "app/welcome.tsx"
+    ]
+  },
+  {
+    "key": "Backups are on: your trips are saved, encrypted, to your own iCloud.",
+    "files": [
+      "components/backup-check.tsx"
+    ]
+  },
+  {
+    "key": "Backups to iCloud keep failing. Open Backup in Settings to see why and try again.",
+    "files": [
+      "components/home/backup-card.tsx"
     ]
   },
   {
@@ -3528,6 +3546,12 @@
     ]
   },
   {
+    "key": "iCloud Drive is off for MileSprout. In iPhone Settings, tap your name, then iCloud, then iCloud Drive, and turn it on.",
+    "files": [
+      "components/home/backup-card.tsx"
+    ]
+  },
+  {
     "key": "iCloud is off for MileSprout. Sign in to iCloud and turn on iCloud Drive in iPhone Settings to back up your trips.",
     "files": [
       "app/(tabs)/settings.tsx"
@@ -4164,6 +4188,12 @@
     "key": "MileSprout has now logged {{amount}} of work mileage at {{authority}} rates, ready for your expense and relief claims.",
     "files": [
       "milestones/copy.ts"
+    ]
+  },
+  {
+    "key": "MileSprout hasn’t been able to back up to iCloud yet. Open Backup in Settings to back up now.",
+    "files": [
+      "components/home/backup-card.tsx"
     ]
   },
   {
@@ -8188,6 +8218,12 @@
     ]
   },
   {
+    "key": "Your last backup is over two weeks old",
+    "files": [
+      "components/home/backup-card.tsx"
+    ]
+  },
+  {
     "key": "Your mileage covered last week’s earnings, so there’s nothing to put aside.",
     "files": [
       "reminders/money.ts"
@@ -8233,6 +8269,12 @@
     "key": "Your money back and badges",
     "files": [
       "app/(tabs)/money.tsx"
+    ]
+  },
+  {
+    "key": "Your newer trips aren’t in iCloud yet. Open Backup in Settings to back up now.",
+    "files": [
+      "components/home/backup-card.tsx"
     ]
   },
   {
@@ -8293,6 +8335,12 @@
     "key": "Your trips are stored encrypted on your phone, not on our servers.",
     "files": [
       "app/setup-tracking.tsx"
+    ]
+  },
+  {
+    "key": "Your trips aren’t backed up",
+    "files": [
+      "components/home/backup-card.tsx"
     ]
   },
   {
