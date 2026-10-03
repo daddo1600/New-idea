@@ -42,3 +42,23 @@ The founder signs these off; the team builds from them. The newest decision wins
   - Research must confirm the App Store price tiers for USD, CAD and AUD before go-live.
 - **Testing is open to the UK, US, Canada and Australia.**
 - **The Founding driver badge goes to testers (2a):** a TestFlight install before launch day earns `founding-badge`, which is kept for good. The method is in `tester-tour.md` §6.1, line 15.
+
+## 3 Oct 2026: Pro price set, with a price promise (approved)
+- **Option A** from `pricing-case.md`:
+
+  | Country | Monthly | Yearly |
+  |---|---|---|
+  | UK | £3.99 | £29.99 |
+  | US | US$3.99 | US$29.99 |
+  | Canada | CA$4.99 | CA$37.99 |
+  | Australia | A$5.99 | A$44.99 |
+
+- **Trial:** the yearly plan keeps its free month; monthly has no trial. Show it as the plain price, not as "launch" or "introductory" pricing.
+- **Price promise:** "Subscribe in our first year and keep your price for as long as you stay subscribed."
+  - **What it means in practice:** when the price rises for new subscribers, existing subscribers stay on their price, which Apple allows.
+  - **Who it covers:** anyone who subscribes during the first 12 months after launch.
+  - **The exact wording:** the conditions (what counts as "staying", and what happens after a lapse) need marketing's copy and research's legal check before it goes anywhere public.
+- **Next steps:**
+  - App Store Connect prices change to option A.
+  - Then the website price chip, the comparison table, the app's demo paywall, the App Store listing and the friend offer code (half of yearly) all follow.
+- This replaces the £5.99 / £49.99 set in App Store Connect.
