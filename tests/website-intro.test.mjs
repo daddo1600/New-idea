@@ -153,9 +153,10 @@ test('the intro and the hero/calculator show the same year for every country (on
 test("the hero's four money lines are in the page, with the figures the calculator works out", () => {
   const html = read('website/index.html');
   for (const [code, amount] of [['UK', '£2,640'], ['US', '$3,648'], ['CA', '$5,446'], ['AU', '$4,550']]) {
-    const m = new RegExp('<span data-for="' + code + '">([^<]*)<strong>([^<]+)</strong>').exec(html);
+    const m = new RegExp('<span data-for="' + code + '">([^<]*)(?:<a class="money-amt" href="#calc" tabindex="-1" aria-hidden="true">)?<strong>([^<]+)</strong>(?:</a><span class="sr-only" data-amt-sr>([^<]+)</span>)?').exec(html);
     assert.ok(m, code + ' line in index.html');
     assert.equal(m[2], amount, code);
+    if (m[3] !== undefined) assert.equal(m[3], amount, code + ' screen-reader copy');
   }
   // shown by <html data-cc>, set before paint
   assert.ok(read('website/assets/intro-gate.js').includes("setAttribute('data-cc', country())"));

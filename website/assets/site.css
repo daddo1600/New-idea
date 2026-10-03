@@ -911,7 +911,7 @@ html.ms-intro::after {
     linear-gradient(135deg, #0E9F6E 0%, #053D2E 100%);
 }
 .signup .wrap { max-width: 40rem; }
-#early-access { scroll-margin-top: 24px; }
+#early-access, #calc { scroll-margin-top: 24px; }
 .signup .wl-title { color: #FFFFFF; font-size: clamp(1.6rem, 5vw, 2.1rem); margin: 0 0 .3em; }
 .signup-sub { color: #F0FDF7; margin: 0 0 18px; }
 .signup .tester-link a { color: #FFFFFF; }
@@ -1059,3 +1059,16 @@ html[data-cc="CA"] .money-line [data-for="CA"], html[data-cc="AU"] .money-line [
 .scene-chip input:checked + span { border-color: var(--gold); background: rgba(250, 204, 21, .16); transform: translateY(-1px); }
 .scene-chip input:focus-visible + span { outline: 3px solid #FFFFFF; outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .scene-chip > span { transition: none; } }
+
+/* "Work out yours ↓" after the hero's money line (the gold amount is a second, mouse-only way there) */
+.hero a.money-go { color: var(--gold); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.hero a.money-go:hover { text-decoration-thickness: 2px; }
+.hero a.money-go:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.hero a.money-amt { color: inherit; text-decoration: none; }
+.calc-title:focus { outline: none; }
+.calc-title:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; border-radius: 6px; }
+/* arriving from the money line: the slider's thumb pulses gold once */
+@keyframes thumb-pulse { 0% { box-shadow: 0 0 0 6px rgba(250, 204, 21, .22), 0 3px 10px rgba(0, 0, 0, .3); } 45% { box-shadow: 0 0 0 16px rgba(250, 204, 21, .55), 0 3px 10px rgba(0, 0, 0, .3); } 100% { box-shadow: 0 0 0 6px rgba(250, 204, 21, .22), 0 3px 10px rgba(0, 0, 0, .3); } }
+.calc-range.is-pulse::-webkit-slider-thumb { animation: thumb-pulse .6s ease-out; }
+.calc-range.is-pulse::-moz-range-thumb { animation: thumb-pulse .6s ease-out; }
+@media (prefers-reduced-motion: reduce) { .calc-range.is-pulse::-webkit-slider-thumb, .calc-range.is-pulse::-moz-range-thumb { animation: none; } }

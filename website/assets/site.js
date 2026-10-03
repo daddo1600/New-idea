@@ -657,15 +657,19 @@
     var posters = { drive: video.getAttribute('data-poster-drive'), saved: video.getAttribute('data-poster-saved') };
 
     // The camera (the founder's "when it parks, the screen comes closer"): on the same clock, the phone
-    // zooms in once parked (2.7-3.4 s), looks at the new drive while it's swiped, pans up to the total
-    // as it ticks over (5.4-6.0 s), and eases back out as the car pulls away (8.9-9.6 s).
+    // zooms in once parked (2.7-3.4 s), frames the new drive while it's swiped (the touch rides on it),
+    // pans up to the total as it ticks over (5.8-6.35 s), and eases back out as the car pulls away
+    // (8.9-9.6 s). Phones: the app's screen fills about 95% of the viewport width; wider: about real size.
     var rig = root.querySelector('.rig');
     var dim = root.querySelector('.scene-dim');
     var phoneEl = root.querySelector('.phone');
     var geo = null;
     function measure() {
       var view = root.querySelector('.scene-view');
-      geo = { W: view.clientWidth, H: view.clientHeight, px: phoneEl.offsetLeft, py: phoneEl.offsetTop, pw: phoneEl.offsetWidth, ph: phoneEl.offsetHeight };
+      var scr = root.querySelector('.screen');
+      // layout sizes (transforms don't change them), so measuring mid-zoom is fine
+      geo = { W: view.clientWidth, H: view.clientHeight, VW: document.documentElement.clientWidth,
+        sx: phoneEl.offsetLeft + scr.offsetLeft, sy: phoneEl.offsetTop + scr.offsetTop, sw: scr.offsetWidth, sh: scr.offsetHeight };
     }
     window.addEventListener('resize', function () { geo = null; });
     function zoomAt(t) {
@@ -677,22 +681,22 @@
     // where on the phone the camera looks (0 = top, 1 = bottom): the new drive, then the total
     // (with the video blocked the screen is the saved-state poster, so it looks at the total throughout)
     function focusAt(t) {
-      if (blocked) return 0.22;
-      return t < 5.25 ? 0.74 : t < 5.85 ? 0.74 - 0.52 * smooth((t - 5.25) / 0.6) : 0.22;
+      if (blocked) return 0.19;
+      return t < 5.8 ? 0.79 : t < 6.35 ? 0.79 - 0.6 * smooth((t - 5.8) / 0.55) : 0.19;
     }
-    // The touch (iOS screen-recording style) on the swipe in the clip: it presses on the drive at 3.6 s,
-    // drags left to right with the card until 4.95 s (eased like the recorded drag), lifts with a ripple.
+    // The touch (iOS screen-recording style) on the swipe in the clip: it presses on the drive at 3.95 s,
+    // drags left to right with the card until 5.4 s (eased like the recorded drag), lifts with a ripple.
     // Positions are fractions of the screen, measured from the recording.
     var touchEl = root.querySelector('.touch');
     var screenEl = root.querySelector('.screen');
     function touch(t) {
       if (!touchEl) return;
-      if (blocked || t < 3.6 || t > 5.45) { if (touchEl.style.opacity !== '0') touchEl.style.opacity = '0'; return; }
+      if (blocked || t < 3.95 || t > 5.9) { if (touchEl.style.opacity !== '0') touchEl.style.opacity = '0'; return; }
       var W = screenEl.clientWidth, H = screenEl.clientHeight;
       var y = 0.775 * H, x, o = 0.85, s = 1, ro = 0, rs = 1;
-      if (t < 3.8) { var k = (t - 3.6) / 0.2; x = 0.13 * W; o = 0.85 * k; s = 1.35 - 0.35 * k; }       // press
-      else if (t < 4.95) { var d = (t - 3.8) / 1.15; x = (0.13 + 0.66 * (1 - Math.pow(1 - d, 2))) * W; }  // drag
-      else { var u = (t - 4.95) / 0.5; x = 0.79 * W; o = 0.85 * (1 - u); s = 1 - 0.15 * u; ro = 1 - u; rs = 1 + 0.9 * u; } // lift
+      if (t < 4.12) { var k = (t - 3.95) / 0.17; x = 0.13 * W; o = 0.85 * k; s = 1.35 - 0.35 * k; }       // press
+      else if (t < 5.4) { var d = (t - 4.12) / 1.28; x = (0.13 + 0.66 * (1 - Math.pow(1 - d, 2))) * W; }  // drag
+      else { var u = (t - 5.4) / 0.5; x = 0.79 * W; o = 0.85 * (1 - u); s = 1 - 0.15 * u; ro = 1 - u; rs = 1 + 0.9 * u; } // lift
       touchEl.style.opacity = o.toFixed(3);
       touchEl.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0) scale(' + s.toFixed(3) + ')';
       touchEl.style.setProperty('--ripple-o', ro.toFixed(3));
@@ -707,11 +711,15 @@
       }
       if (!geo) measure();
       var g = geo;
-      var S = Math.min(3.6, Math.max(1.2, 0.86 * g.W / g.pw));       // the phone fills about 86% of the width
-      var fx = g.px + g.pw / 2, fy = g.py + g.ph * focusAt(t);
+      // Phones: the app's screen fills about 95% of the viewport's width (the bezel and mount crop off the
+      // scene's edges), so its text reads at about real iPhone size. Wider: the screen comes up to about
+      // real size (390 CSS px wide, or 90% of the scene), its text readable too.
+      var S = g.VW <= 600 ? 0.95 * g.VW / g.sw : Math.min(0.9 * g.W, 390) / g.sw;
+      S = clamp(S, 1.2, 6);
+      var fx = g.sx + g.sw / 2, fy = g.sy + g.sh * focusAt(t);
       var tx = g.W / 2 - fx * S;
       var ty = g.H / 2 - fy * S;
-      ty = clamp(ty, g.H - (g.py + g.ph) * S, -g.py * S);           // never past the phone's top or bottom
+      ty = clamp(ty, g.H - (g.sy + g.sh) * S, -g.sy * S);           // never past the screen's top or bottom
       var k = z;
       var sc = 1 + (S - 1) * k;
       rig.style.willChange = 'transform';
@@ -748,6 +756,7 @@
       // the standard scene's landscape, as painted by index.html
       var STD = { sky: grab(stops.sky), ground: grab(stops.ground), water: grab(stops.water), far: farG.innerHTML, mid: midG.innerHTML,
         clouds: null, cloudMarkup: cloudsG ? cloudsG.innerHTML : '', sun: sun && { cx: sun.getAttribute('cx'), cy: sun.getAttribute('cy'), r: sun.getAttribute('r') } };
+      var bayG = null, bayYellow = null, bayWhite = null;
       var cur = null, curId = 'standard', sign = { list: [], parked: null }, passingEl = null, parkedEl = null, ambEl = null;
       var loopIdx = 0, sLoop = 0, lastT = 0, cloudX = 0, depthEls = [];
       var ctx = {
@@ -771,7 +780,10 @@
         var posts = sp.posts === 2 ? [sp.w * 0.22, sp.w * 0.78] : [sp.w / 2];
         var s = '';
         posts.forEach(function (px) { s += '<rect x="' + (px - sp.w / 2 - pw / 2) + '" y="' + (-postPx - 2) + '" width="' + pw + '" height="' + (postPx + 2) + '" fill="' + pc + '"/>'; });
-        return s + '<g transform="translate(' + (-sp.w / 2) + ' ' + (-postPx - sp.h) + ')">' + sp.face + '</g>';
+        // anchor: where along the face its post stands (0.5 = the middle; 0.15 = near its left, like a flag)
+        var ax = sp.anchor != null ? sp.anchor : 0.5;
+        if (ax !== 0.5) s = s.replace(/x="([-\d.]+)"/, 'x="' + (sp.w * ax - sp.w / 2 - pw / 2) + '"');
+        return s + '<g transform="translate(' + (-sp.w * ax) + ' ' + (-postPx - sp.h) + ')">' + sp.face + '</g>';
       }
       function clouds(list) {
         if (!list) return STD.cloudMarkup;
@@ -793,6 +805,13 @@
         if (sun && sn) { sun.setAttribute('cx', sn.cx); sun.setAttribute('cy', sn.cy); sun.setAttribute('r', sn.r); }
         depthEls = Array.prototype.slice.call(svg.querySelectorAll('[data-depth]'));
         shapes = road.build(live, def.rows ? def : ROAD.STANDARD);
+        bayG = null;
+        if (def.bay) {
+          // drawn on the road surface, under the roadside rows
+          bayG = document.createElementNS(NS, 'g');
+          bayYellow = el('path', 'rd-yellow', bayG); bayWhite = el('path', 'rd-dash-w', bayG);
+          live.insertBefore(bayG, live.children[1 + (def.lines || []).length] || null);
+        }
         road.draw(shapes, 0, still() ? PARKED : 0, 0);
         live.setAttribute('transform', def.side === 'right' ? 'matrix(-1 0 0 1 400 0)' : '');
         worldG.setAttribute('data-scene', id);
@@ -819,17 +838,49 @@
         g.setAttribute('opacity', String(clamp(1.3 - z / 40, 0, 1) * clamp((z - minZ) * 2, 0, 1)));
       }
       // signs and the ambient detail on the scene's clock; at rest (Reduce Motion) everything at its best pose
+      // How far the car has gone in the loop when it parks (9 units/s to 1.8 s, then slowing to 2.7 s), so
+      // things placed "where the car stops" come to rest exactly there.
+      var D_PARK = 9 * 1.8 + 9 * 0.9 * 0.5;
+      // Where the parked sign stands: by the kerb where the car stops, near enough to read on a phone; on a
+      // wide (desktop) scene the left kerb is behind the phone, so across the road on the right verge.
+      function parkedSpot() {
+        var wide = window.innerWidth >= 900; // the desktop layout, where the phone stands over the left kerb
+        var p = cur.parked || {};
+        return wide ? { X: (p.wideX != null ? p.wideX : 3.6), z: p.wideZ || 8 } : { X: (p.X != null ? p.X : (cur.signX || 3.9) - 1.1), z: p.z || 7 };
+      }
+      // A parking bay where the car stops (London): the double yellows stop short of it and start again
+      function bayDraw(d, c, shift, rest) {
+        if (!bayG) return;
+        var b = cur.bay, off = rest ? 0 : D_PARK - d; // how much further away it is than at rest
+        var zA = b.zA + off, zB = b.zB + off;
+        var qd = function (x1, x2, z1, z2) {
+          z1 = Math.max(0.5, z1); z2 = Math.min(48, z2);
+          if (z2 <= z1) return '';
+          var p1 = road.project(x1, z1, c, shift), p2 = road.project(x2, z1, c, shift), p3 = road.project(x2, z2, c, shift), p4 = road.project(x1, z2, c, shift);
+          return 'M' + p1.x.toFixed(1) + ' ' + p1.y.toFixed(1) + 'L' + p2.x.toFixed(1) + ' ' + p2.y.toFixed(1) + 'L' + p3.x.toFixed(1) + ' ' + p3.y.toFixed(1) + 'L' + p4.x.toFixed(1) + ' ' + p4.y.toFixed(1) + 'Z';
+        };
+        var y = '';
+        b.yellow.forEach(function (l) { y += qd(l[0], l[1], 0.5, zA - 0.15) + qd(l[0], l[1], zB + 0.15, 48); });
+        bayYellow.setAttribute('d', y);
+        var w = '', z;
+        for (z = zA; z < zB - 0.2; z += 0.6) w += qd(b.x - 0.03, b.x + 0.03, z, z + 0.32); // the bay's dashed edge
+        w += qd(b.kerb, b.x, zA - 0.03, zA + 0.03) + qd(b.kerb, b.x, zB - 0.03, zB + 0.03); // its two ends
+        bayWhite.setAttribute('d', w);
+      }
       function place(t, rest, s, c, shift) {
         if (!cur) return;
-        var X = cur.signX || 3.9;
+        var X = cur.signX || 3.9, spot = parkedSpot();
+        var d = rest ? D_PARK : s - sLoop;
         if (rest) {
           put(passingEl, null);
-          put(parkedEl, sign.parked, X - 1.1, 7, PARKED, 0, 0.8);
+          put(parkedEl, sign.parked, spot.X, spot.z, PARKED, 0, 0.8);
         } else {
-          var d = s - sLoop;
           put(passingEl, sign.passing[loopIdx % Math.max(1, sign.passing.length)], X, 14 - d, c, shift, 0.9);
-          put(parkedEl, sign.parked, X - 1.1, 27.25 - d, c, shift, 0.8);
+          put(parkedEl, sign.parked, spot.X, spot.z + D_PARK - d, c, shift, 0.8);
+          // the parked sign comes into view only as the car slows (1.8 s), not while it's far off
+          if (cur.parked && cur.parked.from && t < cur.parked.from) parkedEl.setAttribute('opacity', '0');
         }
+        bayDraw(d, rest ? PARKED : c, rest ? 0 : shift, rest);
         if (ambEl && cur.ambient) {
           var a = cur.ambient.at(t, rest);
           if (!a) ambEl.setAttribute('opacity', '0');
@@ -1048,6 +1099,8 @@
       if (!r || !strong) return;
       var amount = money(r, yearWorth(r, defaultWeek(r)));
       if (strong.textContent !== amount) strong.textContent = amount;
+      var sr = span.querySelector('[data-amt-sr]'); // the screen-reader copy (the visible figure is an aria-hidden link to the calculator)
+      if (sr && sr.textContent !== amount) sr.textContent = amount;
     });
   })();
 
@@ -1199,6 +1252,24 @@
         if (moved) range.dispatchEvent(new Event('change', { bubbles: true }));
       });
     }
+    // From the hero ("Work out yours ↓", or the gold amount): go to the calculator, put focus on its
+    // heading and pulse the slider's thumb once (Reduce Motion: just go there)
+    var calcTitle = document.getElementById('calc-title');
+    Array.prototype.forEach.call(document.querySelectorAll('a[href="#calc"]'), function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        root.scrollIntoView({ behavior: still() ? 'auto' : 'smooth', block: 'start' });
+        if (calcTitle) { try { calcTitle.focus({ preventScroll: true }); } catch (err) { calcTitle.focus(); } }
+        if (history.replaceState) history.replaceState(null, '', '#calc');
+        if (still()) return;
+        setTimeout(function () {
+          range.classList.remove('is-pulse');
+          void range.offsetWidth;
+          range.classList.add('is-pulse');
+          setTimeout(function () { range.classList.remove('is-pulse'); }, 700);
+        }, 450);
+      });
+    });
     range.addEventListener('input', function () { show(false); });
     range.addEventListener('change', function () { show(true); }); // the slider stopped: read the result out once
   })();
@@ -1446,6 +1517,11 @@
       var auth = document.querySelector('[data-auth]');
       if (auth) auth.textContent = { UK: 'HMRC', US: 'the IRS', CA: 'the CRA', AU: 'the ATO' }[COUNTRY];
       Array.prototype.forEach.call(document.querySelectorAll('[data-cur-sym]'), function (el) { el.textContent = COUNTRY === 'UK' ? '£' : '$'; });
+      Array.prototype.forEach.call(document.querySelectorAll('[data-cur-prefix]'), function (el) {
+        var sym = COUNTRY === 'UK' ? '£' : '$';
+        el.setAttribute('data-prefix', sym);
+        el.textContent = sym + '0';
+      });
       var pdfTotal = document.querySelector('.pdf-total b'), pdfHead = document.querySelector('.pdf-head');
       if (pdfTotal) pdfTotal.textContent = money(r, yearWorth(r, defaultWeek(r)));
       if (pdfHead) pdfHead.textContent = 'Mileage log ' + { UK: '2026/27', US: '2026', CA: '2026', AU: '2026–27' }[COUNTRY];
