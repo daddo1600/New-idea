@@ -20,21 +20,21 @@ export type InstallFacts = {
   demoTester: boolean;
   /** From modules/install-source; null where it's missing (web, Jest, Android). */
   signals: InstallSignals | null;
-  /** StoreKit 2's AppTransaction environment ("Sandbox", "Production", "Xcode"), or null if it couldn't say. */
-  environment: string | null;
 };
 
 /**
  * Whether this is a TestFlight install. Only ever true for a build Apple
  * signed (no provisioning profile, not the Simulator, not a development
- * build) whose AppTransaction is in the sandbox; when StoreKit can't say,
- * the receipt's name ("sandboxReceipt") decides. An App Store install is
- * "Production" with a receipt named "receipt", so it's never marked.
+ * build) whose receipt is named "sandboxReceipt". An App Store install's
+ * receipt is named "receipt", so it's never marked.
+ *
+ * StoreKit (AppTransaction.shared) is deliberately not asked: when it has
+ * nothing cached it can show an Apple Account sign-in at launch, in the
+ * sandbox that TestFlight runs in, on top of the welcome flow.
  */
-export function isTestFlight({ dev, demoTester, signals, environment }: InstallFacts): boolean {
+export function isTestFlight({ dev, demoTester, signals }: InstallFacts): boolean {
   if (demoTester) return true;
   if (dev || !signals || signals.simulator || signals.provisioned) return false;
-  if (environment) return environment.toLowerCase() === 'sandbox';
   return signals.receiptName === 'sandboxReceipt';
 }
 

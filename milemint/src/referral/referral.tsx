@@ -8,7 +8,6 @@ import { loadSettings, updateSettings, type AppSettings } from '@/db/settings-re
 import { DEMO_FRIENDS, DEMO_GIFT, DEMO_TESTER } from '@/dev/demo';
 import { earnedPerks, foundingBoost, friendGiftOpen, nextPerk, type Perk } from '@/domain/plan';
 import { msg, t } from '@/i18n/i18n';
-import { appEnvironment } from '@/purchases/store';
 import { useRegion } from '@/region/region';
 import { rememberGoldLeaves } from '@/region/remembered-region';
 
@@ -184,13 +183,9 @@ const redeemState = (saved: Saved) => ({
   installedAt: saved.installedAt,
 });
 
-/** Whether this copy of the app came from TestFlight (see ./founding-tester). */
-async function testFlightInstall(): Promise<boolean> {
-  if (DEMO_TESTER) return true;
-  const signals = installSignals();
-  // Not on the web, in Jest, in development or in the Simulator: StoreKit isn't asked.
-  if (__DEV__ || !signals || signals.simulator || signals.provisioned) return false;
-  return isTestFlight({ dev: __DEV__, demoTester: false, signals, environment: await appEnvironment() });
+/** Whether this copy of the app came from TestFlight (see ./founding-tester). Never asks StoreKit. */
+function testFlightInstall(): boolean {
+  return isTestFlight({ dev: __DEV__, demoTester: DEMO_TESTER, signals: installSignals() });
 }
 
 /** Reads the referral settings, squaring them with what this iPhone's keychain remembers. */
@@ -273,12 +268,12 @@ export function ReferralProvider({ children }: { children: ReactNode }) {
   );
 
   // Founding testers: a TestFlight install before launch day earns the badge,
-  // once. After launch day StoreKit isn't even asked.
+  // once. After launch day the install isn't even looked at.
   useEffect(() => {
     if (!loaded || !foundingTesterOpen(new Date())) return;
     let cancelled = false;
     (async () => {
-      if (!(await testFlightInstall())) return;
+      if (!testFlightInstall()) return;
       keychainSet(FOUNDING_TESTER_KEY, 'yes');
       const added = await mutate<boolean>(async (current) => {
         const perksEarned = foundingTesterPerks(current.perksEarned, { testFlight: true, now: new Date() });

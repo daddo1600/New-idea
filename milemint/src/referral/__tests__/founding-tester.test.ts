@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import { describe, expect, it } from '@jest/globals';
 
 import { FOUNDING_BOOST_ENDS, FOUNDING_TESTER_ENDS } from '@/constants/rewards';
@@ -17,19 +20,17 @@ const ENDS = '2026-11-15';
 const day = (iso: string) => new Date(`${iso}T12:00:00`);
 const BEFORE = day('2026-11-14');
 
-/** A TestFlight install: Apple-signed, StoreKit says sandbox, receipt is sandboxReceipt. */
+/** A TestFlight install: Apple-signed, receipt is sandboxReceipt. */
 const testFlight: InstallFacts = {
   dev: false,
   demoTester: false,
   signals: { receiptName: 'sandboxReceipt', provisioned: false, simulator: false },
-  environment: 'Sandbox',
 };
 /** An App Store install. */
 const appStore: InstallFacts = {
   dev: false,
   demoTester: false,
   signals: { receiptName: 'receipt', provisioned: false, simulator: false },
-  environment: 'Production',
 };
 
 describe('isTestFlight', () => {
@@ -37,31 +38,28 @@ describe('isTestFlight', () => {
     expect(isTestFlight(testFlight)).toBe(true);
   });
 
-  it('falls back to the receipt name when StoreKit can’t say', () => {
-    expect(isTestFlight({ ...testFlight, environment: null })).toBe(true);
-    expect(isTestFlight({ ...appStore, environment: null })).toBe(false);
+  it('never marks an App Store install, or one with no receipt', () => {
+    expect(isTestFlight(appStore)).toBe(false);
+    expect(isTestFlight({ ...appStore, signals: { ...appStore.signals!, receiptName: '' } })).toBe(false);
   });
 
-  it('never marks an App Store install', () => {
-    expect(isTestFlight(appStore)).toBe(false);
-    // StoreKit's word wins over the receipt's name.
-    expect(isTestFlight({ ...testFlight, environment: 'Production' })).toBe(false);
-    expect(isTestFlight({ ...appStore, signals: { ...appStore.signals!, receiptName: '' }, environment: null })).toBe(
-      false,
-    );
+  it('never asks StoreKit, which can show an Apple Account sign-in at launch', () => {
+    for (const file of ['../founding-tester.ts', '../referral.tsx']) {
+      const source = readFileSync(join(__dirname, file), 'utf8');
+      expect(source).not.toMatch(/getAppTransactionIOS|appEnvironment|@\/purchases\/store/);
+    }
   });
 
   it('is false in development, the Simulator, ad hoc builds and without the native module', () => {
     expect(isTestFlight({ ...testFlight, dev: true })).toBe(false);
     expect(isTestFlight({ ...testFlight, signals: { ...testFlight.signals!, simulator: true } })).toBe(false);
     expect(isTestFlight({ ...testFlight, signals: { ...testFlight.signals!, provisioned: true } })).toBe(false);
-    expect(isTestFlight({ ...testFlight, environment: 'Xcode' })).toBe(false);
     expect(isTestFlight({ ...testFlight, signals: null })).toBe(false);
   });
 
   it('is true in the web demo only when it asks to play a tester', () => {
-    expect(isTestFlight({ dev: true, demoTester: true, signals: null, environment: null })).toBe(true);
-    expect(isTestFlight({ dev: true, demoTester: false, signals: null, environment: null })).toBe(false);
+    expect(isTestFlight({ dev: true, demoTester: true, signals: null })).toBe(true);
+    expect(isTestFlight({ dev: true, demoTester: false, signals: null })).toBe(false);
   });
 });
 

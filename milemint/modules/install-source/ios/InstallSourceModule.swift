@@ -1,4 +1,5 @@
 import ExpoModulesCore
+import Foundation
 
 /**
  * Where this copy of the app came from, for the founding testers' badge
