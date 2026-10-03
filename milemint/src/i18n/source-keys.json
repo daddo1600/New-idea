@@ -7038,6 +7038,12 @@
     ]
   },
   {
+    "key": "Thanks for testing 🌱 The Founding driver badge is yours, for good.",
+    "files": [
+      "components/tester-thanks.tsx"
+    ]
+  },
+  {
     "key": "Thanks! It counts towards your friend’s perks.",
     "files": [
       "components/redeem-code.tsx"

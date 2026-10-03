@@ -1651,6 +1651,7 @@ const dictionary: Dictionary = {
   "Outside work hours": "În afara programului",
   "Drives are saved when you park.": "Cursele se salvează când parchezi.",
   "Needs attention": "Necesită atenție",
+  "Thanks for testing 🌱 The Founding driver badge is yours, for good.": "Mulțumim că testezi aplicația 🌱 Insigna de șofer fondator e a ta, pentru totdeauna.",
 };
 
 export default dictionary;

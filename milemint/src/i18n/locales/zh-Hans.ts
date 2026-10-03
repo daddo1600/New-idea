@@ -1511,6 +1511,7 @@ const dictionary: Dictionary = {
   "Outside work hours": "工作时间之外",
   "Drives are saved when you park.": "停车后行程会自动保存。",
   "Needs attention": "需要处理",
+  "Thanks for testing 🌱 The Founding driver badge is yours, for good.": "感谢你参与测试 🌱 创始司机徽章永久归你所有。",
 };
 
 export default dictionary;

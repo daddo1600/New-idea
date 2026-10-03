@@ -1650,6 +1650,7 @@ const dictionary: Dictionary = {
   "Outside work hours": "Fora do horário de trabalho",
   "Drives are saved when you park.": "Os trajetos são salvos quando você estaciona.",
   "Needs attention": "Precisa de atenção",
+  "Thanks for testing 🌱 The Founding driver badge is yours, for good.": "Obrigado por testar o app 🌱 O selo de motorista fundador é seu, para sempre.",
 };
 
 export default dictionary;

@@ -10,6 +10,7 @@ import { LeafMark } from '@/components/leaf-mark';
 import { PracticeTutorial } from '@/components/practice-tutorial';
 import { Celebration } from '@/components/celebration';
 import { ReminderAsk } from '@/components/reminder-ask';
+import { TesterThanks } from '@/components/tester-thanks';
 import { quickPurposes } from '@/components/purpose-picker';
 import { PlaceAskCard } from '@/components/place-ask-card';
 import { BackdateOffer, EndShiftPrompt, UndoEndBar } from '@/components/shift-prompts';
@@ -46,6 +47,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { useTripList } from '@/hooks/use-trip-list';
 import { useYearMoney } from '@/hooks/use-year-money';
 import { useT } from '@/i18n/i18n';
+import { useReferral } from '@/referral/referral';
 import { useRegion } from '@/region/region';
 import { rememberTotal } from '@/region/remembered-region';
 import { useShift } from '@/tracking/use-shift';
@@ -117,6 +119,7 @@ export default function HomeScreen() {
     [trips, shiftMode.shift],
   );
   const celebration = useMilestoneCelebration(trips ? allTrips : null, deductions, region);
+  const { testerThanks } = useReferral();
   // Tax offices want a purpose for every business drive: the one-tap choices, and the drives still missing one.
   const trackingHealth = useTrackingHealth();
   const backupWarning = useBackupWarning(!DEMO_MODE);
@@ -387,6 +390,8 @@ export default function HomeScreen() {
         }
       />
       <Celebration content={celebration.content} onClose={celebration.close} />
+      {/* A founding tester's thank-you, once, before the practice run. */}
+      <TesterThanks hold={liveDrive !== null || celebration.content !== null || picking !== null} />
       {/* Once after setup (or replayed from Settings): sort two sample drives, nothing saved. */}
       <PracticeTutorial
         TripRow={TripRow}
@@ -396,6 +401,7 @@ export default function HomeScreen() {
           shiftMode.shift !== null ||
           shiftMode.ended !== null ||
           celebration.content !== null ||
+          testerThanks ||
           picking !== null
         }
       />

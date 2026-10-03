@@ -1567,6 +1567,7 @@ const dictionary: Dictionary = {
   "Outside work hours": "ਕੰਮ ਦੇ ਘੰਟਿਆਂ ਤੋਂ ਬਾਹਰ",
   "Drives are saved when you park.": "ਪਾਰਕ ਕਰਦੇ ਹੀ ਡਰਾਈਵਾਂ ਸੇਵ ਹੁੰਦੀਆਂ ਹਨ।",
   "Needs attention": "ਧਿਆਨ ਦੇਣ ਦੀ ਲੋੜ ਹੈ",
+  "Thanks for testing 🌱 The Founding driver badge is yours, for good.": "ਟੈਸਟ ਕਰਨ ਲਈ ਧੰਨਵਾਦ 🌱 ਫ਼ਾਊਂਡਿੰਗ ਡਰਾਈਵਰ ਬੈਜ ਹੁਣ ਹਮੇਸ਼ਾਂ ਲਈ ਤੁਹਾਡਾ ਹੈ।",
 };
 
 export default dictionary;

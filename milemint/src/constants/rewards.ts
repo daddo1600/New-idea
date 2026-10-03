@@ -19,3 +19,16 @@ export const FRIEND_GIFT_MONTHS = 12;
  * perks unlock at 1, 2 and 3 friends instead of 1, 3 and 5.
  */
 export const FOUNDING_BOOST_ENDS = '2027-01-31';
+
+/**
+ * PLACEHOLDER: launch day isn't set yet (decisions.md, monday-todo.md). Set it
+ * to the real App Store launch date before the testers' build.
+ */
+const LAUNCH_DAY_PLACEHOLDER = '2027-01-31';
+
+/**
+ * Founding testers: a TestFlight install opened before this day (launch day,
+ * the user's local date) earns the Founding driver badge, kept for good
+ * (decisions.md, 3 Oct 2026, option 2a).
+ */
+export const FOUNDING_TESTER_ENDS = LAUNCH_DAY_PLACEHOLDER;

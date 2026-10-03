@@ -107,6 +107,23 @@ export async function checkPro(): Promise<boolean> {
 }
 
 /**
+ * StoreKit 2's AppTransaction environment for this copy of the app:
+ * "Sandbox" under TestFlight, "Production" from the App Store, "Xcode" from
+ * Xcode. Null when StoreKit can't say (no store, offline before it's cached).
+ * Needs iOS 16.0 (expo-iap guards it), so it's fine on 16.4.
+ */
+export async function appEnvironment(): Promise<string | null> {
+  if (!STORE_AVAILABLE) return null;
+  try {
+    await connect();
+    const transaction = await iap().getAppTransactionIOS();
+    return transaction?.environment ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Starts Apple's purchase sheet. The result arrives through `onPurchase`
  * (it can also arrive later, e.g. after Ask to Buy), so this only reports
  * whether the sheet opened.

@@ -5,14 +5,18 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { Alert, AppState, Platform, Share } from 'react-native';
 
 import { loadSettings, updateSettings, type AppSettings } from '@/db/settings-repo';
-import { DEMO_FRIENDS, DEMO_GIFT } from '@/dev/demo';
+import { DEMO_FRIENDS, DEMO_GIFT, DEMO_TESTER } from '@/dev/demo';
 import { earnedPerks, foundingBoost, friendGiftOpen, nextPerk, type Perk } from '@/domain/plan';
 import { msg, t } from '@/i18n/i18n';
+import { appEnvironment } from '@/purchases/store';
 import { useRegion } from '@/region/region';
 import { rememberGoldLeaves } from '@/region/remembered-region';
 
+import { installSignals } from '../../modules/install-source';
+
 import { DRIVES_BEFORE_RECORDING, ReferralCloud } from './cloud';
 import { canRedeem as canRedeemNow, firstInstall, type RedeemProblem } from './code';
+import { foundingTesterOpen, foundingTesterPerks, isTestFlight, withFoundingBadge } from './founding-tester';
 import {
   issueInvite,
   mergeRedemption,
@@ -51,6 +55,11 @@ const REDEEMED_KEY = 'milemint.referral-redeemed';
 const INSTALLED_KEY = 'milemint.installed-at';
 /** The permanent personal code from before single-use invites, cleared out. */
 const OLD_CODE_KEY = 'milemint.referral-code';
+/**
+ * Set once this iPhone has earned the founding testers' badge: restoring a
+ * backup from before then (on this iPhone) puts it back.
+ */
+const FOUNDING_TESTER_KEY = 'milemint.founding-tester';
 const useKeychain = Platform.OS !== 'web';
 /** CloudKit is asked for the sharer's count at most this often. */
 const COUNT_EVERY_MS = 60 * 60 * 1000;
@@ -100,6 +109,10 @@ type Referral = {
   sharing: boolean;
   /** Re-reads the settings, after restoring a backup replaced them. */
   reload: () => Promise<void>;
+  /** The Founding driver badge has just been earned for testing: home says thank you, once. */
+  testerThanks: boolean;
+  /** The thank-you has been shown. */
+  thankedTester: () => void;
 };
 
 type Saved = Pick<
@@ -171,6 +184,15 @@ const redeemState = (saved: Saved) => ({
   installedAt: saved.installedAt,
 });
 
+/** Whether this copy of the app came from TestFlight (see ./founding-tester). */
+async function testFlightInstall(): Promise<boolean> {
+  if (DEMO_TESTER) return true;
+  const signals = installSignals();
+  // Not on the web, in Jest, in development or in the Simulator: StoreKit isn't asked.
+  if (__DEV__ || !signals || signals.simulator || signals.provisioned) return false;
+  return isTestFlight({ dev: __DEV__, demoTester: false, signals, environment: await appEnvironment() });
+}
+
 /** Reads the referral settings, squaring them with what this iPhone's keychain remembers. */
 async function prepare(db: SQLiteDatabase): Promise<Saved> {
   const settings = await loadSettings(db);
@@ -189,6 +211,11 @@ async function prepare(db: SQLiteDatabase): Promise<Saved> {
   // Perks reached in an earlier build (or before a restore) are kept from now on.
   const perksEarned = newPerks(settings, new Date());
   if (perksEarned) changes.perksEarned = perksEarned;
+  // A founding tester's badge is for good, even after a restore from before it was earned.
+  if ((await keychainGet(FOUNDING_TESTER_KEY)) === 'yes') {
+    const withBadge = withFoundingBadge(changes.perksEarned ?? settings.perksEarned);
+    if (withBadge) changes.perksEarned = withBadge;
+  }
   const next = { ...settings, ...changes };
   if (Object.keys(changes).length > 0) await updateSettings(db, changes);
   if (installedAt !== keptInstall) keychainSet(INSTALLED_KEY, installedAt);
@@ -205,6 +232,7 @@ export function ReferralProvider({ children }: { children: ReactNode }) {
   const [saved, setSaved] = useState<Saved>(EMPTY);
   const [loaded, setLoaded] = useState(false);
   const [sharing, setSharing] = useState(false);
+  const [testerThanks, setTesterThanks] = useState(false);
   const lastCount = useRef(0);
   /** Referral changes run one at a time, each on the latest settings, so none overwrites another. */
   const queue = useRef<Promise<unknown>>(Promise.resolve());
@@ -243,6 +271,27 @@ export function ReferralProvider({ children }: { children: ReactNode }) {
     },
     [db],
   );
+
+  // Founding testers: a TestFlight install before launch day earns the badge,
+  // once. After launch day StoreKit isn't even asked.
+  useEffect(() => {
+    if (!loaded || !foundingTesterOpen(new Date())) return;
+    let cancelled = false;
+    (async () => {
+      if (!(await testFlightInstall())) return;
+      keychainSet(FOUNDING_TESTER_KEY, 'yes');
+      const added = await mutate<boolean>(async (current) => {
+        const perksEarned = foundingTesterPerks(current.perksEarned, { testFlight: true, now: new Date() });
+        return { changes: perksEarned ? { perksEarned } : {}, result: perksEarned !== null };
+      });
+      if (added && !cancelled) setTesterThanks(true);
+    })().catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [loaded, mutate]);
+
+  const thankedTester = useCallback(() => setTesterThanks(false), []);
 
   // CloudKit, once it's on: publish waiting invites, check a pending code,
   // credit the friend who invited us, and count the friends who joined.
@@ -409,8 +458,10 @@ export function ReferralProvider({ children }: { children: ReactNode }) {
       shareInvite,
       sharing,
       reload,
+      testerThanks,
+      thankedTester,
     };
-  }, [loaded, saved, friendsJoined, perks, redeem, shareInvite, sharing, reload]);
+  }, [loaded, saved, friendsJoined, perks, redeem, shareInvite, sharing, reload, testerThanks, thankedTester]);
 
   return <ReferralContext.Provider value={value}>{children}</ReferralContext.Provider>;
 }

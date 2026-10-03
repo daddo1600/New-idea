@@ -35,6 +35,7 @@ import { milesToMeters, toLocalIsoDate, type Classification } from '@/domain/tri
  *   &region=GB   preview another country's currency, units and rules
  *   &friends=2   friends joined with this user's invites (the perk ladder)
  *   &offer=CODE  as if the friend's 50% off offer code were set; &gift: joined with a friend's code
+ *   &tester      a TestFlight install before launch day: the Founding driver badge and its thank-you
  *   &noearnings  no weekly earnings entered yet (the tax set-aside's first-use state)
  *   &clip        the website's clip: the drive to sort is Meanwood Rd → Home (2.2 mi)
  *                and every work drive (that one too, "Deliveries") has a purpose, so the row
@@ -193,6 +194,9 @@ async function seedDemoEarnings(db: SQLiteDatabase): Promise<void> {
 
 /** `&founding`: three friends have joined, so every invite perk (and the Founding driver badge) is earned. */
 export const DEMO_FOUNDING = demoFlag('founding');
+
+/** `&tester`: plays a TestFlight install before launch day, so the Founding driver badge and its thank-you arrive. */
+export const DEMO_TESTER = demoFlag('tester');
 
 /** `&gift`: this user joined with a friend's code today, so the Pro screen offers the friend's gift (with `&offer`). */
 export const DEMO_GIFT = demoFlag('gift');
