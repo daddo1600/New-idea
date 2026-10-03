@@ -21,17 +21,20 @@
   var SEASON = null;
   try { SEASON = window.MSSeason ? window.MSSeason.detect() : null; } catch (err) { SEASON = null; }
 
-  /* The app's own figures (milemint/src/domain/regions.ts, the current rate periods; rates in tenths of a
-     penny or cent, as there) and its example month of part-time work driving: 400 miles or 650 km.
-     Checked by research in research_notes/launch-2026/website-claims-check.md §3:
-     a year of it is £2,640, US $3,648, CA $5,526 (allowance rate, "about"), AU $4,550. */
+  /* The app's own rates (milemint/src/domain/regions.ts, the current rate periods; rates in tenths of a
+     penny or cent, as there). The example is the page's one example, shared with the hero's money line and
+     the calculator's starting point: 100 miles (160 km) a week for 48 weeks, so a month is 400 miles or
+     640 km. (The app's intro uses 650 km; on the page a second Canadian figure would show beside the
+     calculator's, so the page keeps one.) A year of it: £2,640, US $3,648, CA $5,446 (allowance rate,
+     "about"), AU $4,550; rates checked in research_notes/launch-2026/website-claims-check.md. */
   var APP_REGIONS = {
     GB: { cur: 'GBP', locale: 'en-GB', unit: 'mi', tiers: [[10000, 550], [null, 250]], authority: 'HMRC' },
     US: { cur: 'USD', locale: 'en-US', unit: 'mi', tiers: [[null, 760]], authority: 'the IRS' },
     CA: { cur: 'CAD', locale: 'en-CA', unit: 'km', tiers: [[5000, 730], [null, 670]], authority: 'the CRA' },
     AU: { cur: 'AUD', locale: 'en-AU', unit: 'km', tiers: [[5000, 910], [null, 0]], authority: 'the ATO' }
   };
-  var DEMO_MONTH = { mi: 400, km: 650 };
+  var WEEKS = 48, EXAMPLE_WEEK = { mi: 100, km: 160 };
+  var DEMO_MONTH = { mi: EXAMPLE_WEEK.mi * WEEKS / 12, km: EXAMPLE_WEEK.km * WEEKS / 12 };
   /** The visitor's country: ?country=CA previews one, else season.js (time zone, then language). */
   function visitorCountry() {
     var c = 'GB';
@@ -40,7 +43,7 @@
     if (forced) c = forced[1].toUpperCase();
     return c === 'UK' ? 'GB' : APP_REGIONS[c] ? c : 'GB';
   }
-  /** wholeMoney() in the app: minor units to a whole amount ("£220", "$5,526"). */
+  /** wholeMoney() in the app: minor units to a whole amount ("£220", "$5,446"). */
   function wholeMoney(minor, r) {
     var n = Math.round(minor / 100);
     try { return new Intl.NumberFormat(r.locale, { style: 'currency', currency: r.cur, maximumFractionDigits: 0, minimumFractionDigits: 0 }).format(n); }
@@ -638,7 +641,7 @@
       note: "The ATO's cents per km rate for 2026–27: 91c a km, for up to 5,000 km a year per car.",
       source: 'https://www.ato.gov.au/individuals-and-families/income-deductions-offsets-and-records/deductions-you-can-claim/work-related-deductions/cars-transport-and-travel/motor-vehicle-and-car-expenses/expenses-for-a-car-you-own-or-lease/cents-per-kilometre-method' }
   };
-  var WEEKS = 48;
+  // WEEKS (48) is set with the intro's example, above.
   /** What a year of `perWeek` work miles (or km) is worth: each band at its rate, anything past the last band at nothing. */
   function yearWorth(r, perWeek) {
     var left = perWeek * WEEKS, total = 0;
@@ -659,7 +662,7 @@
   })();
 
   // The calculator's starting point (100 miles or 160 km a week); the hero's example year is the same sum, so they always agree.
-  function defaultWeek(r) { return r.unit === 'km' ? 160 : 100; }
+  function defaultWeek(r) { return EXAMPLE_WEEK[r.unit]; }
 
   (function moneyLine() {
     var line = document.querySelector('[data-money]');

@@ -75,8 +75,12 @@ function siteRegion(code) {
   assert.ok(m, 'APP_REGIONS.' + code + ' in site.js');
   return { cur: m[1], locale: m[2], unit: m[3], tiers: JSON.parse(m[4]), authority: m[5] };
 }
+// the page's one example: EXAMPLE_WEEK for WEEKS weeks (site.js)
+const weekM = /var WEEKS = (\d+), EXAMPLE_WEEK = \{ mi: (\d+), km: (\d+) \};/.exec(site);
+assert.ok(weekM, 'WEEKS and EXAMPLE_WEEK in site.js');
+const WEEKS = +weekM[1], WEEK = { mi: +weekM[2], km: +weekM[3] };
 function exampleYear(r) {
-  let left = (r.unit === 'mi' ? 400 : 650) * 12, total = 0;
+  let left = WEEK[r.unit] * WEEKS, total = 0;
   for (const [upTo, rate] of r.tiers) {
     if (left <= 0) break;
     const room = upTo === null ? left : Math.min(left, upTo);
@@ -99,8 +103,8 @@ test("the intro's rates match the app's current rates", () => {
   }
 });
 
-test("a year of the example month is the research-checked figure", () => {
-  const want = { GB: ['£2,640', 'HMRC'], US: ['$3,648', 'the IRS'], CA: ['$5,526', 'the CRA'], AU: ['$4,550', 'the ATO'] };
+test("a year of the example month is the expected figure", () => {
+  const want = { GB: ['£2,640', 'HMRC'], US: ['$3,648', 'the IRS'], CA: ['$5,446', 'the CRA'], AU: ['$4,550', 'the ATO'] };
   for (const [code, [amount, authority]] of Object.entries(want)) {
     const r = siteRegion(code);
     const text = new Intl.NumberFormat(r.locale, { style: 'currency', currency: r.cur, maximumFractionDigits: 0, minimumFractionDigits: 0 }).format(exampleYear(r) / 100);
@@ -117,5 +121,28 @@ test("the intro uses the app's wording, and never the banned words", () => {
     const text = read(file);
     assert.ok(!/\btracking\b/i.test(text), file + ': tracking');
     assert.ok(!/\bwe keep\b|our servers/i.test(text), file + ': we keep');
+  }
+});
+
+// The hero's money line and the calculator's starting point (RATES, yearWorth, defaultWeek in site.js)
+function heroTiers(code) {
+  const m = new RegExp(code + ": \\{ unit: '(mi|km)'[\\s\\S]*?tiers: (\\[\\[.*?\\]\\])").exec(site);
+  assert.ok(m, 'RATES.' + code + ' in site.js');
+  return { unit: m[1], tiers: JSON.parse(m[2].replace(/Infinity/g, 'null')) };
+}
+test('the intro and the hero/calculator show the same year for every country (one Canadian figure)', () => {
+  assert.ok(site.includes("function defaultWeek(r) { return EXAMPLE_WEEK[r.unit]; }"), 'calculator starts at the example week');
+  assert.ok(site.includes('DEMO_MONTH = { mi: EXAMPLE_WEEK.mi * WEEKS / 12, km: EXAMPLE_WEEK.km * WEEKS / 12 }'), 'intro month from the example week');
+  for (const [app, hero] of [['GB', 'UK'], ['US', 'US'], ['CA', 'CA'], ['AU', 'AU']]) {
+    const r = siteRegion(app), h = heroTiers(hero);
+    assert.equal(h.unit, r.unit, app);
+    let left = WEEK[h.unit] * WEEKS, total = 0; // yearWorth()
+    for (const [upTo, rate] of h.tiers) {
+      if (left <= 0) break;
+      const band = upTo === null ? left : Math.min(left, upTo);
+      total += band * rate;
+      left -= band;
+    }
+    assert.equal(Math.round(total), Math.round(exampleYear(r) / 100), app);
   }
 });
