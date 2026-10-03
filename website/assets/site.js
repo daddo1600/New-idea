@@ -206,10 +206,10 @@
     } catch (err) { /* the plain mark stays */ }
   })();
 
-  /* ---------- Home: links to the sign-up (and a floating "Get early access" pill) ----------
+  /* ---------- Home: links to the sign-up (and a floating "Get early access ↑" pill) ----------
      Every link to #early-access scrolls to the sign-up form and puts the cursor in the email box.
-     The pill is made here (no JS, no pill) and shows only further down the page while
-     scrolling down. */
+     The pill is made here (no JS, no pill) and shows only once the sign-up section is above
+     the visitor (so its arrow points the right way), while scrolling down. */
   (function joinLinks() {
     var form = document.querySelector('form[data-waitlist]');
     var heading = document.getElementById('early-access');
@@ -235,17 +235,18 @@
     pill.addEventListener('click', go);
     document.body.appendChild(pill);
 
-    // Shows once the visitor is well past the hero and scrolling down; scrolling back up hides it.
-    // Never shown while another way to sign up is on screen (the hero form, the Pro card's
-    // button, the closing section's button), so the page never asks twice at once.
+    // Shows once the visitor has scrolled past the sign-up section and is scrolling down;
+    // scrolling back up hides it. Never shown while another way to sign up is on screen (the
+    // form, the Pro card's button, the closing section's button), so the page never asks twice at once.
+    var section = heading.closest('section') || form;
     var others = [form].concat(Array.prototype.filter.call(document.querySelectorAll('a[href="#early-access"]'), function (a) { return a !== pill; }));
     var seen = others.map(function () { return false; });
     var lastY = window.scrollY || window.pageYOffset, down = false, shown = null;
     function update() {
       var y = window.scrollY || window.pageYOffset;
       if (Math.abs(y - lastY) > 8) { down = y > lastY; lastY = y; } // ignore tiny jitters
-      var deep = y > window.innerHeight * 1.5;
-      var on = deep && down && seen.indexOf(true) < 0;
+      var past = section.getBoundingClientRect().bottom < 0; // the form is above: the ↑ is right
+      var on = past && down && seen.indexOf(true) < 0;
       if (on === shown) return;
       shown = on;
       pill.classList.toggle('on', on);

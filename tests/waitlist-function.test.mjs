@@ -57,6 +57,16 @@ test('stores a valid sign-up, trimmed and lowercased, with only the allowed colu
   assert.deepEqual(Object.keys(row).sort(), ['consent_at', 'country', 'created_at', 'email', 'segment', 'source']);
 });
 
+test("the home form's source is 'home'; the old 'hero' is still accepted", async () => {
+  const DB = fakeDB();
+  await handleWaitlist(postJSON({ email: 'h@ex.com', consent: 'yes', source: 'home' }), { DB });
+  await handleWaitlist(postJSON({ email: 'o@ex.com', consent: 'yes', source: 'hero' }), { DB });
+  await handleWaitlist(postJSON({ email: 'x@ex.com', consent: 'yes', source: 'somewhere' }), { DB });
+  assert.equal(DB.rows.get('h@ex.com').source, 'home');
+  assert.equal(DB.rows.get('o@ex.com').source, 'hero');
+  assert.equal(DB.rows.get('x@ex.com').source, 'web');
+});
+
 test('a duplicate looks exactly like a first sign-up', async () => {
   const DB = fakeDB();
   const a = await handleWaitlist(postJSON({ email: 'a@b.com', consent: 'yes' }), { DB });

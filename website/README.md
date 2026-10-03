@@ -4,7 +4,7 @@ The public website for MileSprout: plain static HTML, one CSS file and one small
 
 | Path | What it is |
 |---|---|
-| `index.html` | Landing page: hero with waitlist form, the feature deck, Free vs Pro, regions, closing sign-up |
+| `index.html` | Landing page: hero (the phone in a car mount), the feature deck, the sign-up form, Free vs Pro, regions, closing call to action |
 | `waitlist.html` | Early-access page (also where no-JS form posts land: `?joined=1#joined`, `?error=1#error`) |
 | `testers.html` | Founding testers sign-up (`/testers?g=<group>`): the offer, the form (adds "Which iPhone?"), FAQ. Group links and what gets stored: `../functions/README.md` |
 | `privacy.html` | Privacy policy for the app and the site (effective 2 Oct 2026) |
@@ -17,7 +17,7 @@ The public website for MileSprout: plain static HTML, one CSS file and one small
 | `robots.txt`, `sitemap.xml` | For search engines |
 | `favicon.svg`, `favicon-32.png`, `apple-touch-icon.png` | Icons (the PNGs are made from `milemint/assets/images/icon.png`) |
 | `assets/site.css` | All styles, light and dark mode, including the CSS-built iPhone frame |
-| `assets/site.js` | The sprout intro, hero phone tilt, the feature deck (drag, swipe, trackpad, keys, dots), the form's choice chips and the waitlist form. The page reads fine without it |
+| `assets/site.js` | The sprout intro, the hero scene (road and clip), the feature deck (drag, swipe, trackpad, keys, dots), the form's choice chips and the waitlist form. The page reads fine without it |
 | `assets/season.js` | Home page only: the app's seasons (same date rules and greetings as `milemint/src/domain/seasons.ts`) and the intro's road signs, hats, riders and seasonal backdrops. Country from the browser's time zone, then its language; no location asked. `?season=<id>` previews a season, `?season=none` turns it off |
 | `assets/intro-gate.js` | Home page only, loaded before paint (not deferred): decides whether the intro plays and puts up a green cover so the hero doesn't flash first |
 | `assets/img/screens/` | Raw app captures (`milemint/assets/store/raw/`, `milemint/docs/screenshots/perks/`) as 640 px WebP, with the top and bottom rows extended to leave room for the CSS status bar and home indicator. `trip.webp` has an invented street map drawn under the route (the capture's map panel was blank); `perks.webp` has the Expo dev button painted out of the tab bar |
@@ -40,7 +40,7 @@ Links between pages are extensionless (`/privacy`), which is how Cloudflare Page
 
 ## Waitlist
 
-The home hero, `/waitlist` and `/testers` have the same form (with JavaScript, only the email box and button show until a whole email is typed; then the rest slides in): email, optional "What do you drive for?" and country (choice chips: radio buttons styled as pills, tap a chosen one again to clear it), a consent box, and a hidden honeypot field. With JavaScript it posts JSON to `/api/waitlist` and shows "You're on the list" in place; without it, it's a normal form post and the function redirects back to `/waitlist`.
+The home page's sign-up section (after the screens), `/waitlist` and `/testers` have the same form (with JavaScript, only the email box and button show until a whole email is typed; then the rest slides in): email, optional "What do you drive for?" and country (choice chips: radio buttons styled as pills, tap a chosen one again to clear it), a consent box, and a hidden honeypot field. With JavaScript it posts JSON to `/api/waitlist` and shows "You're on the list" in place; without it, it's a normal form post and the function redirects back to `/waitlist`.
 
 The function needs a D1 database bound as `DB`. Set-up, in short (details in [`functions/README.md`](../functions/README.md)):
 

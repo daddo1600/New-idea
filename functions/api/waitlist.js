@@ -19,7 +19,8 @@ const MAX_BODY = 4096;
 const EMAIL_RE = /^[^\s@<>()",;:]+@[^\s@<>()",;:]+\.[^\s@<>()",;:]{2,}$/;
 const SEGMENTS = new Set(['food', 'parcels', 'ridehail', 'care', 'trades', 'other']);
 const COUNTRIES = new Set(['UK', 'US', 'CA', 'AU', 'other']);
-const SOURCES = new Set(['hero', 'home-bottom', 'waitlist-page', 'testers']);
+// 'hero' was the home form's source until Oct 2026 (the form is now further down the page); still accepted.
+const SOURCES = new Set(['home', 'hero', 'home-bottom', 'waitlist-page', 'testers']);
 const DEVICES = new Set(['15pro-or-newer', '12-to-15', 'older', 'not-sure']);
 
 // Group tag from a sign-up link (?g=fb-leeds-couriers): lowercase, runs of anything other than

@@ -614,7 +614,7 @@ html.ms-intro::after {
 .hero-sprout { display: block; width: 52px; height: auto; margin: 0 0 14px; filter: drop-shadow(0 4px 10px rgba(3, 28, 20, .35)); }
 @media (min-width: 900px) { .hero-sprout { width: 64px; } }
 
-/* Closing call to action (the form itself is in the hero) */
+/* Closing call to action (the form itself is in the sign-up section after the screens) */
 .cta-actions { margin: 18px 0 0; }
 
 /* ---------- Floating "Get early access" pill (home page, made by site.js) ---------- */
@@ -722,6 +722,7 @@ html.ms-intro::after {
     linear-gradient(135deg, #0E9F6E 0%, #053D2E 100%);
 }
 .signup .wrap { max-width: 40rem; }
+#early-access { scroll-margin-top: 24px; }
 .signup .wl-title { color: #FFFFFF; font-size: clamp(1.6rem, 5vw, 2.1rem); margin: 0 0 .3em; }
 .signup-sub { color: #F0FDF7; margin: 0 0 18px; }
 .signup .tester-link a { color: #FFFFFF; }
@@ -731,4 +732,5 @@ html.ms-intro::after {
   .hero .wrap { gap: 18px; padding-top: 16px; }
   .hero .hero-sprout { display: none; }
   .hero .pill { margin-bottom: 10px; }
+  .hero .season-greeting { display: none; } /* the sprout it belongs to is hidden here too */
 }
