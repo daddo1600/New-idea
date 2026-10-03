@@ -28,10 +28,13 @@ export function shownStyles(focus: WorkStyle | null): readonly WorkStyle[] {
  * Where the card sits for a finger `dy` points down: it follows at first,
  * then resists more and more (iOS's rubber band), and never goes up.
  */
-export function rubberBand(dy: number, limit = PULL_LIMIT): number {
+export function rubberBand(dy: number, limit?: number): number {
   'worklet';
+  // No default parameter: in a worklet it runs before the closure is unpacked, so on the
+  // UI thread `limit = PULL_LIMIT` threw (PULL_LIMIT not yet defined) and closed the app.
+  const max = limit ?? PULL_LIMIT;
   if (dy <= 0) return 0;
-  return limit * (1 - 1 / ((dy * 0.55) / limit + 1));
+  return max * (1 - 1 / ((dy * 0.55) / max + 1));
 }
 
 /** Let go after pulling `dy` points down at `vy` points a second: back to the menu, or springs back. */
