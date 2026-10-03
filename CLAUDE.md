@@ -35,6 +35,7 @@ Usual order: research and marketing first, then coding, translator, qa, release.
   - never imply MileSprout keeps or sees data ("we keep", "our servers"): trips stay on the user's phone;
   - "we" for the company;
   - plain, short British English.
+- **Design with zing:** no plain, default-looking controls (dropdowns, bare selects, grey static images). Use tappable chips and flags, gentle motion, counting numbers and small celebrations, polished but calm. Always respect Reduce Motion and accessibility. Show the founder screenshots, not descriptions.
 - **Every visible string in all 10 languages** (en, es, pt-BR, fr, ro, pl, hi, pa, bn, zh-Hans).
 - **Worklets have no default parameters.** A test enforces it; this caused a TestFlight crash.
 - **The app supports iOS 16.4.** No iOS 17-only APIs or resources without a guard. Build 60 failed on `AppShortcuts.xcstrings`.
