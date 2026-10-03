@@ -18,10 +18,10 @@
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/img/screens/home.webp" as="image" type="image/webp">
-<link rel="stylesheet" href="/assets/site.css?v=716c4a14">
+<link rel="stylesheet" href="/assets/site.css?v=13378188">
 <script src="/assets/intro-gate.js?v=06c94b49"></script>
 <script src="/assets/season.js?v=06a20cf1" defer></script>
-<script src="/assets/site.js?v=12ad3176" defer></script>
+<script src="/assets/site.js?v=b7801408" defer></script>
 <noscript><style>
   /* Without JavaScript: every feature is listed, the deck is a still picture. */
   .feat { opacity: 1 !important; visibility: visible !important; transform: none !important; grid-area: auto !important; }
@@ -264,7 +264,9 @@
            research_notes/launch-2026/website-claims-check.md, "Decisions". Once the launch date is fixed,
            add "by {date}" to the small print, and take the offer off the site on launch day. -->
       <p class="signup-sub signup-offer">Join the list and get <strong>3 months of Pro free</strong> at launch.</p>
-      <form class="waitlist on-dark" action="/api/waitlist" method="post" data-waitlist>
+      <!-- Turnstile site key: 1x00000000000000000000AA is Cloudflare's always-passes test key, for the preview.
+         TODO(founder): put the real site key here (Cloudflare → Turnstile → milesprout.app); see website/README.md. -->
+      <form class="waitlist on-dark" action="/api/waitlist" method="post" data-waitlist data-turnstile-sitekey="1x00000000000000000000AA">
         <input type="hidden" name="source" value="home">
         <div class="wl-fields">
           <label class="wl-label" for="wl-email-h">Your email</label>

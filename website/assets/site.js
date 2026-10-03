@@ -1,6 +1,7 @@
-/* MileSprout website: hero phone tilt, the feature deck and the waitlist (and founding testers) form.
-   Vanilla JS, no libraries, no requests except the waitlist form posting to /api/waitlist.
-   The page works without it: the phone sits still and every feature is listed. */
+/* MileSprout website: the hero scene, the money line and calculator, the feature deck and the
+   waitlist (and founding testers) form. Vanilla JS, no libraries. Its only requests: the hero clip,
+   the form posting to /api/waitlist, and Cloudflare Turnstile once a whole email is typed.
+   The page works without it: the hero is a still picture and every feature is listed. */
 (function () {
   'use strict';
 
@@ -784,6 +785,59 @@
     // The optional chips and the consent box then slide in, and stay. Pressing the button
     // early reveals them and moves to the consent box (still required). No JS: all visible.
     var FULL_EMAIL = /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/;
+
+    /* Cloudflare Turnstile (bot check), loaded only once a whole email is typed, never before:
+       the form's data-turnstile-sitekey, managed mode, shown only if it needs the visitor
+       ('interaction-only'). Its token goes in the hidden cf-turnstile-response field it adds to
+       the form; the server checks it once TURNSTILE_SECRET_KEY is set there. If the script can't
+       load, the form still posts and the server decides. */
+    var TS_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=msTurnstileReady';
+    var tsState = 'idle', tsQueue = [];
+    function withTurnstile(fn) {
+      if (tsState === 'ready') { fn(window.turnstile); return; }
+      tsQueue.push(fn);
+      if (tsState !== 'idle') return;
+      tsState = 'loading';
+      window.msTurnstileReady = function () {
+        tsState = 'ready';
+        tsQueue.splice(0).forEach(function (f) { try { f(window.turnstile); } catch (err) { /* the form still posts */ } });
+      };
+      var s = document.createElement('script');
+      s.src = TS_SRC;
+      s.async = true;
+      s.onerror = function () { tsState = 'failed'; tsQueue.length = 0; };
+      document.head.appendChild(s);
+    }
+    function botCheck(f, where) {
+      var key = f.getAttribute('data-turnstile-sitekey');
+      if (!key || f._ts) return;
+      var box = document.createElement('div');
+      box.className = 'wl-turnstile';
+      where.appendChild(box);
+      f._ts = { id: null, waiting: [] };
+      withTurnstile(function (ts) {
+        f._ts.id = ts.render(box, {
+          sitekey: key,
+          action: 'waitlist',
+          appearance: 'interaction-only',
+          callback: function () { f._ts.waiting.splice(0).forEach(function (go) { go(); }); },
+          'expired-callback': function () { ts.reset(f._ts.id); },
+          'error-callback': function () { f._ts.waiting.splice(0).forEach(function (go) { go(); }); }
+        });
+      });
+    }
+    // Calls go() once the form has a token (or straight away if there's no check, or after 12 s).
+    function whenChecked(f, go) {
+      var field = f.querySelector('input[name="cf-turnstile-response"]');
+      if (!f._ts || tsState === 'failed' || (field && field.value)) { go(); return; }
+      var done = false;
+      var once = function () { if (!done) { done = true; go(); } };
+      f._ts.waiting.push(once);
+      setTimeout(once, 12000);
+    }
+    function resetCheck(f) {
+      if (f._ts && f._ts.id !== null && window.turnstile) { try { window.turnstile.reset(f._ts.id); } catch (err) {} }
+    }
     Array.prototype.forEach.call(forms, function (f, n) {
       var email = f.querySelector('input[type="email"]');
       var btn = f.querySelector('button[type="submit"]');
@@ -818,7 +872,7 @@
         btn.setAttribute('aria-expanded', 'true');
         if (announce) live.textContent = 'A few optional questions, the consent box and the offer terms have appeared after the button.';
       }
-      function check() { if (FULL_EMAIL.test(email.value.trim())) reveal(true); }
+      function check() { if (FULL_EMAIL.test(email.value.trim())) { reveal(true); botCheck(f, inner); } }
       email.addEventListener('input', check);
       email.addEventListener('change', check);
       email.addEventListener('paste', function () { setTimeout(check, 0); });
@@ -840,10 +894,13 @@
 
       f.addEventListener('submit', function (e) {
         e.preventDefault();
-        var data = {};
-        new FormData(f).forEach(function (v, k) { data[k] = typeof v === 'string' ? v : ''; });
         btn.disabled = true;
         say('Adding you…');
+        whenChecked(f, send);
+      });
+      function send() {
+        var data = {};
+        new FormData(f).forEach(function (v, k) { data[k] = typeof v === 'string' ? v : ''; });
         fetch(f.getAttribute('action'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -852,14 +909,17 @@
         }).then(function (r) {
           return r.json().catch(function () { return {}; }).then(function (j) { return { r: r, j: j }; });
         }).then(function (x) {
-          if (x.r.ok && x.j.ok) { say(''); done(f); }
-          else if (x.r.status === 400 && x.j.error === 'email') say(MSG_EMAIL, true);
+          if (x.r.ok && x.j.ok) { say(''); done(f); return; }
+          resetCheck(f); // a token works once
+          if (x.r.status === 400 && x.j.error === 'email') say(MSG_EMAIL, true);
           else if (x.r.status === 400 && x.j.error === 'consent') say('Please tick the box so we can email you.', true);
+          else if ((x.j.error === 'rate' || x.j.error === 'bot') && x.j.message) say(x.j.message, true);
           else say(MSG_FAIL, true);
         }).catch(function () {
+          resetCheck(f);
           say(MSG_FAIL, true);
         }).then(function () { btn.disabled = false; });
-      });
+      }
     });
 
     // /waitlist?joined=1 (after a no-JS post) shows the success state; with #joined the CSS already does

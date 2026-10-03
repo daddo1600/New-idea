@@ -781,3 +781,7 @@ html.ms-intro::after {
 .wl-terms { margin: 10px 0 0; font-size: .8rem; line-height: 1.5; color: var(--text); }
 .on-dark .wl-terms { color: #D1FAE5; }
 .on-dark .wl-terms strong { color: #FFFFFF; }
+
+/* Turnstile's box: empty unless Cloudflare needs the visitor to tick it */
+.wl-turnstile { margin-top: 10px; }
+.wl-turnstile:empty { margin: 0; }
