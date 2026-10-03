@@ -72,3 +72,13 @@
       - otherwise say "Backups are on" and run the first backup after the first trip;
       - with no iCloud, offer the export as a fallback.
     - Don't make it optional and don't ask for permission. It's already on; the step only confirms it works.
+
+## Handover, 3 Oct 2026 (from the long first session)
+- **Build 61** (crash fixes, backup, perks, opening, This week strip, wording) was building on EAS; check its state on TestFlight. Build 60 failed on AppShortcuts.xcstrings, which is now fixed and checked by preflight.
+- **In flight in the old session, when it finished:**
+  - research: website-claims-check.md, checking the app's rates, the typical month, the "unclaimed" claim and the waitlist reward rules;
+  - qa: review of today's live website changes;
+  - marketing: waitlist-hooks-copy.md;
+  - coding: the 10-second app clip on `website-preview`.
+- **Next on the website:** the calculator, money line, waitlist reward (3 months of Pro proposed; the founder confirms after research), trust line by the form, then qa, then "publish". Social proof waits for real tester quotes.
+- **The App Store Connect key** needs to be in the environment (variable `EXPO_ASC_KEY_P8_BASE64`) for uploads from new sessions.
