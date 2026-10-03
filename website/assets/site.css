@@ -659,7 +659,11 @@ html.ms-intro::after {
 @media (max-height: 700px) { .fx-jac { width: clamp(120px, 34vw, 260px); } }
 
 /* The sprout mark in the hero, so the brand is there after the intro too */
-.season-greeting { margin: -6px 0 12px; color: var(--mint); font-weight: 600; font-size: .95rem; }
+/* The greeting sits beside the mark and takes no space, so adding it (after first paint) moves nothing. */
+.hero .copy { position: relative; }
+.season-greeting { position: absolute; top: 22px; left: 80px; margin: 0; white-space: nowrap; color: var(--mint); font-weight: 600; font-size: .95rem;
+  padding: 4px 12px; border-radius: 999px; background: rgba(4, 56, 42, .35); border: 1px solid rgba(209, 250, 229, .22); }
+@media (min-width: 900px) { .season-greeting { top: 20px; left: 88px; } }
 .hero-sprout.has-hat { width: 52px; overflow: visible; }
 @media (min-width: 900px) { .hero-sprout.has-hat { width: 64px; } }
 .hero-sprout { display: block; width: 52px; height: auto; margin: 0 0 14px; filter: drop-shadow(0 4px 10px rgba(3, 28, 20, .35)); }
@@ -787,6 +791,10 @@ html.ms-intro::after {
 }
 
 /* ---------- Money line (under the hero h1) and the "What are your work miles worth?" calculator ---------- */
+/* All four countries' lines are in the page; <html data-cc> (set by intro-gate.js before paint) shows one, so it never jumps. Without JS: the UK one. */
+.money-line [data-for] { display: none; }
+html:not([data-cc]) .money-line [data-for="UK"], html[data-cc="GB"] .money-line [data-for="UK"], html[data-cc="US"] .money-line [data-for="US"],
+html[data-cc="CA"] .money-line [data-for="CA"], html[data-cc="AU"] .money-line [data-for="AU"] { display: inline; }
 .hero .money-line { color: #FFFFFF; font-size: 1.1rem; font-weight: 600; line-height: 1.4; margin: -.15em 0 .6em; max-width: 30em; }
 .hero .money-line strong { color: var(--gold); font-weight: 800; font-size: max(1.2rem, 1em); } /* large bold text, so 3:1 on the green is enough */
 

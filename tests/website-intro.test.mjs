@@ -10,8 +10,11 @@ const root = new URL('../', import.meta.url);
 const read = (p) => readFileSync(new URL(p, root), 'utf8');
 
 function loadSeason() {
-  const window = {};
-  vm.runInNewContext(read('website/assets/season.js'), { window, location: { search: '' }, navigator: { language: 'en-GB' }, Intl, Math, Date });
+  const window = { matchMedia: () => ({ matches: false }), addEventListener() {}, sessionStorage: { getItem: () => '1' } };
+  const html = { attrs: {}, setAttribute(k, v) { this.attrs[k] = v; }, classList: { add() {} } };
+  const ctx = { window, location: { search: '', hash: '' }, navigator: { language: 'en-GB' }, history: {}, document: { documentElement: html }, Intl, Math, Date };
+  vm.runInNewContext(read('website/assets/intro-gate.js'), ctx); // decides the country (window.MSCountry) first
+  vm.runInNewContext(read('website/assets/season.js'), ctx);
   return window.MSSeason;
 }
 const S = loadSeason();
@@ -145,4 +148,16 @@ test('the intro and the hero/calculator show the same year for every country (on
     }
     assert.equal(Math.round(total), Math.round(exampleYear(r) / 100), app);
   }
+});
+
+test("the hero's four money lines are in the page, with the figures the calculator works out", () => {
+  const html = read('website/index.html');
+  for (const [code, amount] of [['UK', '£2,640'], ['US', '$3,648'], ['CA', '$5,446'], ['AU', '$4,550']]) {
+    const m = new RegExp('<span data-for="' + code + '">([^<]*)<strong>([^<]+)</strong>').exec(html);
+    assert.ok(m, code + ' line in index.html');
+    assert.equal(m[2], amount, code);
+  }
+  // shown by <html data-cc>, set before paint
+  assert.ok(read('website/assets/intro-gate.js').includes("setAttribute('data-cc', country())"));
+  assert.ok(read('website/assets/site.css').includes('html[data-cc="CA"] .money-line [data-for="CA"]'));
 });

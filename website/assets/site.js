@@ -38,9 +38,7 @@
   /** The visitor's country: ?country=CA previews one, else season.js (time zone, then language). */
   function visitorCountry() {
     var c = 'GB';
-    try { c = window.MSSeason && window.MSSeason.country ? window.MSSeason.country() : 'GB'; } catch (err) { c = 'GB'; }
-    var forced = /[?&]country=(UK|GB|US|CA|AU)\b/i.exec(location.search);
-    if (forced) c = forced[1].toUpperCase();
+    try { c = window.MSCountry ? window.MSCountry.country() : 'GB'; } catch (err) { c = 'GB'; } // intro-gate.js: ?country=, time zone, language
     return c === 'UK' ? 'GB' : APP_REGIONS[c] ? c : 'GB';
   }
   /** wholeMoney() in the app: minor units to a whole amount ("£220", "$5,446"). */
@@ -310,7 +308,7 @@
       var hat = S.hat(SEASON.id, still());
       if (hat) {
         mark.insertAdjacentHTML('beforeend', hat);
-        mark.setAttribute('viewBox', '12 2 77 91'); // room for the hat
+        // the box keeps its size (no layout shift): the hat draws above it (overflow: visible)
         mark.classList.add('has-hat');
       }
       var p = document.createElement('p');
@@ -665,13 +663,14 @@
   function defaultWeek(r) { return EXAMPLE_WEEK[r.unit]; }
 
   (function moneyLine() {
-    var line = document.querySelector('[data-money]');
-    if (!line || COUNTRY === 'UK') return; // the page's own text is the UK one (£2,640)
-    var r = RATES[COUNTRY];
-    var amount = money(r, yearWorth(r, defaultWeek(r)));
-    line.innerHTML = COUNTRY === 'CA'
-      ? 'An example year of part-time work driving is worth about <strong>' + amount + '</strong> at the CRA\'s allowance rate (the most an employer can pay tax-free).'
-      : 'An example year of part-time work driving is worth <strong>' + amount + '</strong> at ' + r.at + '.';
+    // index.html carries each country's line and site.css shows the visitor's (no jump); this keeps each one's figure
+    // in step with RATES (it rewrites only a figure that differs, so normally nothing changes)
+    Array.prototype.forEach.call(document.querySelectorAll('[data-money] [data-for]'), function (span) {
+      var r = RATES[span.getAttribute('data-for')], strong = span.querySelector('strong');
+      if (!r || !strong) return;
+      var amount = money(r, yearWorth(r, defaultWeek(r)));
+      if (strong.textContent !== amount) strong.textContent = amount;
+    });
   })();
 
   (function calculator() {

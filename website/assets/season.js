@@ -9,23 +9,9 @@
 
   var IDS = ['festive', 'new-year', 'halloween', 'aussie-summer', 'winter', 'spring', 'summer', 'autumn', 'jacaranda'];
 
-  /* ---------- Which country (only AU, US/CA and the rest matter here) ---------- */
-  var CA_ZONES = /^America\/(Toronto|Montreal|Vancouver|Edmonton|Winnipeg|Halifax|St_Johns|Regina|Moncton|Glace_Bay|Goose_Bay|Whitehorse|Dawson|Dawson_Creek|Fort_Nelson|Creston|Iqaluit|Rankin_Inlet|Resolute|Cambridge_Bay|Inuvik|Yellowknife|Swift_Current|Atikokan|Blanc-Sablon|Nipigon|Thunder_Bay|Rainy_River|Pangnirtung)$/;
-  var US_ZONES = /^(America\/(New_York|Chicago|Denver|Los_Angeles|Phoenix|Anchorage|Adak|Boise|Detroit|Juneau|Sitka|Metlakatla|Nome|Yakutat|Menominee|Indiana\/.+|Kentucky\/.+|North_Dakota\/.+)|Pacific\/Honolulu|US\/.+)$/;
-
-  function country() {
-    var forced = /[?&]country=(UK|GB|US|CA|AU)\b/i.exec(location.search);
-    if (forced) return forced[1].toUpperCase() === 'UK' ? 'GB' : forced[1].toUpperCase();
-    var tz = '';
-    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (err) { /* old browser */ }
-    if (/^Australia\//.test(tz)) return 'AU';
-    if (CA_ZONES.test(tz)) return 'CA';
-    if (US_ZONES.test(tz)) return 'US';
-    if (tz === 'Europe/London') return 'GB';
-    var lang = (navigator.language || '').toUpperCase();
-    var m = /-(AU|US|CA|GB)\b/.exec(lang);
-    return m ? m[1] : 'GB';
-  }
+  /* ---------- Which country: intro-gate.js decides it before the page paints (window.MSCountry) ---------- */
+  var MC = window.MSCountry;
+  var CA_ZONES = MC.CA_ZONES, US_ZONES = MC.US_ZONES, country = MC.country;
 
   /* ---------- Which season (same rules as the app) ---------- */
   function seasonId(day, southern) {
