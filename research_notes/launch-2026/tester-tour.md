@@ -32,7 +32,7 @@ Timings are for English with the iPhone's default voice at rate 1.0 (about 2.8 w
 
 - **Visual:** the hero road scene in motion, same code as the home page. The phone shows `assets/video/drive-logged-poster.webp` ("Recording a drive"). As sentence 3 plays, a few faint mile markers drift past and fade to grey: the "missed" ones.
 - **Voice and caption:**
-  1. Drive for work? Your miles are worth money at tax time.
+  1. Drive for work? Your miles can count at tax time. *(research, 3 Oct): was "are worth money"; not true for most US employees, who can't deduct work miles, so we use the approved "count at tax time" from `plain-copy-audit.md`.*
   2. But writing every drive down is a pain.
   3. Miss a few, and they're hard to prove.
 - **Interaction:** none; swipe or tap ▶ to skip.
@@ -43,7 +43,7 @@ Timings are for English with the iPhone's default voice at rate 1.0 (about 2.8 w
   - For non-UK viewers, a small tag shows on the phone: "Shown in pounds. Yours uses your money and rate." (The clip has £1.21 in it.)
 - **Voice and caption:**
   1. MileSprout logs your drives by itself.
-  2. When you park, the drive is already there.
+  2. When you park, it saves the drive for you. *(research, 3 Oct): was "the drive is already there". The app saves a drive once the car has stood still for 5 minutes (`trip-detector.ts`, `stopDurationMs`), so a viewer who checks straight away won't see it yet.*
   3. Swipe it to Work, and watch it add up.
 - **Interaction: "Try it".** When the clip ends, a drive card slides up over the phone with a **Work ⟶** swipe handle (the same card the app has; built in HTML).
   - The card shows the viewer's own country:
@@ -69,12 +69,14 @@ Timings are for English with the iPhone's default voice at rate 1.0 (about 2.8 w
   - An example year of part-time work driving is worth three thousand, six hundred and forty-eight dollars. ▸ "$3,648"
 - **Canada** (replaces 2 and 3, and adds a fourth):
   - In Canada, the CRA's allowance rate is seventy-three cents a kilometre. ▸ "73¢ a km"
-  - An example year of part-time work driving is worth about five thousand, four hundred dollars. ▸ "about C$5,400"
-  - If you're self-employed, treat that as a guide.
+  - An example year of part-time work driving is worth about five thousand, four hundred and forty-six dollars. ▸ "about C$5,446"
+  - Self-employed? The CRA wants your actual car costs, so treat it as a guide.
+
+  *(research, 3 Oct): was "about C$5,400", but the counting number above it uses `yearWorth()` and shows C$5,446, as the home page does, so the caption now matches. The caveat now says why, in the app's own words (`regions.ts`: "CRA usually wants your actual car costs").*
 - **Australia** (replaces 2 and 3):
-  - In Australia, the ATO rate is ninety-one cents a kilometre, up to five thousand a year. ▸ "91c a km, up to 5,000 km a year"
+  - In Australia, the ATO rate is ninety-one cents a kilometre, up to five thousand kilometres a year. ▸ "91c a km, up to 5,000 km a year" *(research, 3 Oct): `say` now says "kilometres" to match `show`.*
   - An example year of part-time work driving is worth four thousand, five hundred and fifty dollars. ▸ "A$4,550"
-- **Small print, always on screen (not spoken):** "Example: 100 miles (160 km) a week for 48 weeks, at {authority}'s 2026 rate. A guide, not tax advice. Source ↗". It uses each country's `note` and `source` from the `RATES` object in `site.js`, with "Motorbikes and bicycles have their own rates" added for the UK.
+- **Small print, always on screen (not spoken):** "Example: 100 miles (160 km) a week for 48 weeks, at {authority}'s current rate. A guide, not tax advice. Source ↗". It uses each country's `note` and `source` from the `RATES` object in `site.js`, with "Motorbikes and bicycles have their own rates" added for the UK. *(research, 3 Oct): was "2026 rate", which is wrong for the UK and Australia (2026/27, 2026–27 tax years) and ambiguous for the US (72.5¢, then 76¢ from 1 July). Each `note` already gives the dates.*
 - **Interaction:**
   - **Tap a flag.** The number counts to the new country's sum (0.8 s, ease-out), and the voice stops and re-speaks sentences 2 and 3 for that country.
   - **Tap a distance chip.** The number re-counts, using `yearWorth()` from `site.js` (shared, not copied). The voice doesn't re-speak, and the caption keeps the example.
@@ -121,6 +123,8 @@ Timings are for English with the iPhone's default voice at rate 1.0 (about 2.8 w
   1. Before we launch, we want drivers on real shifts to try to break it.
   2. Founding testers get twelve months of Pro free when we launch. ▸ show: "12 months"
   3. It doesn't renew. And you get the Founding driver badge.
+
+  *(research, 3 Oct): **only if coding ships the tester badge (§6.1, line 15) in the next TestFlight build.** Today the app can't give testers the badge. If that change isn't in, sentence 3 is just "It doesn't renew." and the badge pill is dropped. The same promise on `testers.html` ("The Founding driver badge in the app") needs the same decision.*
 - **Small print:** the terms line from `testers.html`, linked: "Code emailed within 3 days of launch; redeem within 60 days. One per person and per Apple Account. Doesn't renew. Terms ↗".
 - **Interaction:** none; the counting 12 and the badge pop are the moment. Reduce Motion: "12" and the badge simply appear.
 
@@ -152,8 +156,8 @@ Timings are for English with the iPhone's default voice at rate 1.0 (about 2.8 w
 
 | Scene | Words | Est. seconds |
 |---|---|---|
-| 1 Miles add up | 27 | 10.8 |
-| 2 Drive, park, swipe | 23 | 9.4 |
+| 1 Miles add up | 26 | 10.4 |
+| 2 Drive, park, swipe | 24 | 9.8 |
 | 3 At your rate (UK) | 32 | 13.0 |
 | 4 Stays on your phone | 18 | 7.6 |
 | 5 Free and Pro | 24 | 9.8 |
@@ -163,13 +167,13 @@ Timings are for English with the iPhone's default voice at rate 1.0 (about 2.8 w
 | 9 Join us | 24 | 9.8 |
 | **Total** | **237** | **about 95 s** |
 
-The estimate is words ÷ 2.8, plus the gaps. iPhone voices at rate 1.0 usually speak a little faster than that, so expect about 90 s. The "Try it" wait can add up to 4 s. The US version runs about the same as the UK, and Canada about 3 s longer. Every sentence is 16 words or fewer.
+The estimate is words ÷ 2.8, plus the gaps. iPhone voices at rate 1.0 usually speak a little faster than that, so expect about 90 s. The "Try it" wait can add up to 4 s. The US version runs about the same as the UK, and Canada about 5 s longer. Every sentence is 17 words or fewer. *(research, 3 Oct): the Canada money line is now 17 words.*
 
 ---
 
 ## 2. Voice script rules (for coding and the translator)
 
-- **Every sentence is under 20 words.** The longest is 16. Keep that in translation, and split a sentence rather than let it run on.
+- **Every sentence is under 20 words.** The longest is 17 (Canada's money line). Keep that in translation, and split a sentence rather than let it run on.
 - **The `say` form has no symbols or numerals.** Numbers are written out in words in each language: "fifty-five p", "seventy-six cents", "twelve months", "a hundred". No £, $, ¢, %, &, slashes or brackets.
 - **If a voice mispronounces a name, fix it in `say` only.** For example, a phonetic spelling of "MileSprout" or "TestFlight" for one language. `show` always keeps the real spelling.
 - **Wording rules:** never "tracking"; never "we keep" or "our servers"; "we" for the company; plain, short British English in captions.
@@ -249,7 +253,7 @@ The voice and auto-advance still work, because they aren't motion. Everything el
 ### 3.6 Link preview (og)
 
 - **`og:title`:** "Drive for work? See MileSprout in 90 seconds"
-- **`og:description`:** "The free iPhone app that logs your work drives by itself. Founding testers get 12 months of Pro free."
+- **`og:description`:** "The free iPhone app that logs your work drives by itself. Founding testers get 12 months of Pro free at launch." *(research, 3 Oct): added "at launch", as on `testers.html`; the code comes at launch, not on joining.*
 - **`og:image`:** `/assets/img/og-tour-{lang}.jpg`, 1200 × 630, built from existing assets:
   - the hero road scene, with no season art, so it doesn't date;
   - the phone in its car mount, showing `drive-logged-saved.webp`;
@@ -322,6 +326,8 @@ Post this only after the group's admin says yes. The DM to admins is in `foundin
 >
 > iPhone only for now, and the first 100 places. Ask me anything in the comments.
 
+*(research, 3 Oct): checked. It's first person, with no pronouns for the founder. Every fact in it matches §6.1. It doesn't mention the badge, so it stands whatever happens with line 15.*
+
 ---
 
 ## 5. Checks before it ships
@@ -340,7 +346,7 @@ None of these is new: each comes from `website-claims-check.md`, `decisions.md`,
 
 | # | Line (as spoken or shown) | Where it comes from | Check |
 |---|---|---|---|
-| 1 | "Your miles are worth money at tax time." | Brand line; mileage rates are deductions or allowances in all four countries | That it's fair for UK employees (Mileage Allowance Relief), US employees (mostly no deduction, per `website-claims-check.md` "Decisions, 3 Oct 2026" §1) and Canada (an allowance rate, not a self-employed rate). Suggest a softer line if needed. |
+| 1 | "Your miles are worth money at tax time." | Brand line; mileage rates are deductions or allowances in all four countries | That it's fair for UK employees (Mileage Allowance Relief), US employees (mostly no deduction, per the records table under `website-claims-check.md` "Decisions, 3 Oct 2026"; *(research, 3 Oct): it isn't in §1*) and Canada (an allowance rate, not a self-employed rate). Suggest a softer line if needed. |
 | 2 | "Miss a few, and they're hard to prove." | Approved line: "missed miles are hard to prove" | Same as the approved wording. Confirm. |
 | 3 | "MileSprout logs your drives by itself. When you park, the drive is already there." | Home page; the app needs location "Always" | That it holds with "Always" on (scene 8's card says so). |
 | 4 | UK: "55p a mile for cars and vans" | `regions.ts`, claims check §1 | It's 55p for the first 10,000 business miles; the small print says "then 25p". |
@@ -360,5 +366,59 @@ None of these is new: each comes from `website-claims-check.md`, `decisions.md`,
 | 18 | "Something wrong? Screenshot it and send it to us." | `testers.html` ("TestFlight has a button for this") | That TestFlight's screenshot feedback works on iOS 16.4+ (take a screenshot, then Share Beta Feedback). Settings → Help & feedback in the app also emails us. |
 | 19 | "It's iPhone only for now, and places are limited to a hundred." | `testers.html` "First 100 places" | That the public TestFlight link's tester limit will be raised from 10 (`founding-testers.md`). |
 | 20 | "It takes a minute." | `testers.html` ("It takes a minute") | Matches the page. |
-| 21 | og: "The free iPhone app that logs your work drives by itself." | Home og | Matches the page. |
+| 21 | og: "The free iPhone app that logs your work drives by itself." | Home og *(research, 3 Oct): the home og says "The free mileage log that fills itself in"; this line is the home hero's "logs your drives by itself"* | Matches the page. |
 | 22 | Voices: which iPhone languages have built-in voices | Platform fact | Check whether iOS 16.4+ ships Punjabi, Bengali, Romanian and Hindi voices, and whether the Facebook in-app browser exposes `speechSynthesis`. This decides how often the captions-only fallback shows. |
+
+### 6.1 Research results (research, 3 Oct)
+
+Checked against `regions.ts`, `site.js` (`RATES`, `yearWorth()`), `website-claims-check.md` (rates confirmed from primary sources on 3 Oct), `decisions.md`, `testers.html`, `index.html` and the app code. **17 pass, 5 fixed above. Line 15 is false today and needs a code change or a cut.**
+
+| # | Verdict | Evidence |
+|---|---|---|
+| 1 | **Fixed** → "Your miles can count at tax time." | Most US employees can't deduct unreimbursed car costs (claims check, records table, IRS Pub 463 / Form 2106). UK employees get Mileage Allowance Relief and Canadian employees an allowance, so "count" is true in all four; "worth money" isn't for US employees. |
+| 2 | Pass | Same meaning as the approved "missed miles are hard to prove" (claims check, Decisions §1). |
+| 3 | **Fixed** → "When you park, it saves the drive for you." | It logs by itself with "Always" (`tracking/background.ts`: geofence wake, even after iOS ends the app). It saves a drive only after a 5-minute stop (`domain/trip-detector.ts` `stopDurationMs: 5 * 60_000`). `index.html:106` has the same "already there" line; flagged to marketing. |
+| 4 | Pass | `regions.ts` GB: 550 then 250 above 10,000 mi from 6 Apr 2026. The `site.js` UK note gives "then 25p". The 4,800-mile example is under the 10,000 band. |
+| 5 | Pass | 4,800 × £0.55 = £2,640 (`yearWorth`). The spoken line follows "HMRC's rate is 55p", so the approved "at HMRC's 55p rate" is kept in meaning. |
+| 6 | Pass | 4,800 × $0.76 = $3,648. 76¢ from 1 Jul 2026 (IRB 2026-29; claims check). Saying 76¢ as "the IRS rate" is fine because the `site.js` note says "from 1 July 2026". Small print changed from "2026 rate" to "current rate". |
+| 7 | **Fixed** | 5,000 × 0.73 + 2,680 × 0.67 = C$5,445.60, which `money()` shows as C$5,446. The caption now matches the counting number. The caveat now gives the reason (CRA wants actual costs). |
+| 8 | Pass, with `say` fixed | 160 × 48 = 7,680 km, capped at 5,000 × A$0.91 = A$4,550. 91c is for 2026–27 only (89c + 2c one-off). **Re-check in June 2027.** The cap is per car (`regions.ts`). |
+| 9 | Pass | 2.2 × 55 = 121p; 2.2 × 76 = 167.2¢ → $1.67; 3.5 × 73 = 255.5¢ → $2.56; 3.5 × 91 = 318.5¢ → $3.19. These round half up, as the app does (tenths of a minor unit, `Math.round`). Fine as examples. |
+| 10 | Pass | No account or sign-in anywhere in `src`. Trips are in SQLCipher, with the key in the Keychain (`db/database.ts`), and TestFlight builds never fall back to an unencrypted database. iCloud backups are encrypted on the phone before upload (`backup/backup.ts`). There are no `fetch` calls, no analytics and no crash SDK. The referral cloud handles only invite codes. TestFlight crash reports are opt-in (`testers.html` FAQ). |
+| 11 | Pass | `domain/plan.ts`: "unlimited automatic … no monthly cap". `pro.tsx`: "Automatic logging, no monthly limit" in both columns. |
+| 12 | Pass | `ProFeature`: reports and exports, accountant, quarterly, earnings by platform, tax set-aside, import, weekly recap, Siri. "Money tools" fairly covers quarterly, platform earnings and set-aside. |
+| 13 | Pass | `perks/offers.ts` is "DEMO ONLY", with made-up brands, Fuel and Coffee among them. The tab banner says "Demo offers — these partners are examples". The home page says "the offers you see today are a demo". |
+| 14 | Pass | `decisions.md` 3 Oct ("Founding testers get 12 months instead"). The `testers.html` terms match the small print word for word. |
+| 15 | **False today** | See "The Founding driver badge" below. |
+| 16 | Pass | Apple: TestFlight is its app for testing beta builds before release ([TestFlight](https://developer.apple.com/testflight/)). |
+| 17 | Pass | `testers.html`: "Use it on your normal shifts for 2 weeks"; "5 questions, 2 minutes". |
+| 18 | Pass | With TestFlight 2.3 or later on iOS, testers can send feedback by taking a screenshot in the beta app ([TestFlight overview](https://developer.apple.com/help/app-store-connect/test-a-beta-version/testflight-overview)). In the app, Settings → Help & feedback opens an email to hello@milesprout.app (`settings.tsx:392–399`). |
+| 19 | Pass, with actions | The app is iPhone-only (`app.json` `supportsTablet: false`). 100 places is within Apple's limits. See TestFlight facts below. |
+| 20 | Pass | `testers.html`: "It takes a minute." |
+| 21 | Pass (source corrected) | True: the app logs drives by itself. It comes from the home hero, not the home og. |
+| 22 | Partly confirmed; QA to test | Hindi, Romanian, Polish, Portuguese (Brazil), Spanish, French, Mandarin and the English variants are standard iOS voices. Bangla (India) is on Apple's Spoken Content list but may need downloading, and possibly a newer iOS than 16.4. **No Punjabi voice could be confirmed** (apple.com was blocked here, so this is from search results only; low confidence). Nothing documents `speechSynthesis` in Facebook's in-app browser (a WKWebView), so QA must test it on a real iPhone. Expect captions-only for Punjabi and some Bengali viewers, as §3.3 already plans. |
+
+**TestFlight facts (Apple, checked 3 Oct 2026; high confidence):**
+- **Joining:** by an email invite or a public link. The tester accepts in the TestFlight app on the device ([Invite external testers](https://developer.apple.com/help/app-store-connect/test-a-beta-version/invite-external-testers)). `testers.html` promises an emailed invite; either route works.
+- **TestFlight app:** needs iOS 16.0 or later on iPhone ([App Store listing](https://apps.apple.com/us/app/testflight/id899247664)), so it works for everyone who can run our iOS 16.4 build.
+- **Limits:** up to 10,000 external testers per app. A public link can have its own limit, from 1 to 10,000. **Raise ours from 10 to 100** before posting (`founding-testers.md` step 2).
+- **Review:** the first build for external testers must pass TestFlight App Review, and later builds for the same version may not need a full review. Allow for that before the first post.
+- **Expiry:** each build can be tested for 90 days ([TestFlight overview](https://developer.apple.com/help/app-store-connect/test-a-beta-version/testflight-overview)). A tester joining late gets the current build, so upload a fresh build if launch slips past about day 75 of the last one, so no tester's two weeks run past the 90 days.
+- **iPhone only:** correct for our build. iPads can run iPhone apps, but logging needs the phone in the car, so "iPhone only" stays.
+
+**The Founding driver badge (line 15): what the app does today**
+- The badge is the top step of the invite ladder (`domain/plan.ts` `PERK_LADDER`): 5 friends, or 3 during the founding boost until 31 Jan 2027 (`constants/rewards.ts`).
+- A friend counts only after they've redeemed an invite code and logged a few automatic drives (`referral/referral.tsx`, `ReferralCloud.countQualifiedClaims`).
+- When earned, it's saved in `perksEarned` for good and shown as a pill in Settings → Invite friends (`settings.tsx:1589`, `components/invite.tsx` `FoundingBadge`).
+- **Nothing in the app knows someone is a tester.** There's no TestFlight check, and redeeming the 12-month offer code doesn't award it. Most testers will never invite 3 friends, so today the promise isn't kept.
+
+**What would make it true (for coding; no code changed here):**
+1. Detect a TestFlight install. StoreKit 2's `AppTransaction.shared` (iOS 16.0+, so fine for 16.4) reports the `sandbox` environment under TestFlight; the older check is `appStoreReceiptURL` ending in `sandboxReceipt`. This needs a small native module or `expo-iap`, if it exposes the app transaction.
+2. On launch, if it's a TestFlight build and the date is before a new `FOUNDING_TESTER_ENDS` (launch day, in `constants/rewards.ts`), add `'founding-badge'` to `perksEarned` through the same `mutate`/`updateSettings` path. `earnedPerks()` already keeps kept perks, and `founding-badge` unlocks no Pro feature (`PERK_FEATURES`), so nothing else changes.
+3. Installing the App Store version over the TestFlight build keeps the app's data, so the badge carries over. It also travels in the encrypted iCloud backup with the other settings.
+4. Optional: a one-off "Thanks for testing" moment when it's awarded. Any new string needs all 10 languages.
+5. Tests: awarded under TestFlight before the cut-off; not awarded on App Store or dev builds; kept after the cut-off.
+
+If this doesn't ship in the build testers get, drop the badge line here and on `testers.html` ("You get" list) and in `founding-testers.md` (lines 22 and 50).
+
+**Found in passing (not in this spec):** `index.html:7` ("mileage tracking") and `testers.html:7` ("mileage tracker") meta descriptions break the "never tracking" rule. They're for coding to fix on `website-preview`.
