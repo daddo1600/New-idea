@@ -352,11 +352,14 @@
   })();
 
   /* ---------- Hero scene: the phone in a car mount, the road going by ----------
-     The phone's screen is a recording of the real app (assets/video/drive-logged.*, 9.6 s):
+     The phone's screen is a recording of the real app (assets/video/drive-logged.*, 9.6 s, looping):
      driving ("Recording a drive"), parked, the new drive on Home (Meanwood Rd → Home, 2.2 mi),
-     swiped to Work, the total up by £1.21. The road is drawn here from the video's clock, so the
-     car slows, pulls in to the kerb and stops as the drive is saved, and sets off when the clip loops.
-     It plays only while on screen; Pause / Play and Replay buttons, and tapping the phone replays.
+     swiped to Work, the total up by £1.21. The road runs on its own clock (requestAnimationFrame),
+     so it drives, slows, pulls in to the kerb and stops, then sets off again every 9.6 s, whether or
+     not the video plays. When the video plays, the clock follows it, so the two stay in step. When it
+     can't (iOS Low Power Mode blocks autoplay; play() is refused), the phone shows the posters as
+     stills in step with the road (driving, then the saved drive), and the video is tried again on the
+     first touch, click or scroll. Runs only while on screen and never under the sprout intro.
      Reduce Motion (and no JS): the saved state on the screen and a still road, parked. */
   (function scene() {
     var root = document.getElementById('scene');
@@ -365,113 +368,130 @@
     var live = svg && svg.querySelector('.rd-live');
     var hills = svg && svg.querySelector('.rd-hills');
     var video = root.querySelector('video');
-    var phone = root.querySelector('.phone');
-    var toggle = root.querySelector('[data-scene="toggle"]');
-    var replay = root.querySelector('[data-scene="replay"]');
     if (!live || !video) return;
-    root.querySelector('.scene-ctl').hidden = false;
 
     var road = ROAD;
     var shapes = road.build(live);
     var PARKED = road.PARKED;
     var D = 9.6;                       // the clip's length
     var smooth = function (x) { x = clamp(x, 0, 1); return x * x * (3 - 2 * x); };
-    // From the clip's clock: driving to 1.8 s, slowing and pulling in to 2.7 s, parked, setting off from 9 s.
+    // On the clip's clock: driving to 1.8 s, slowing and pulling in to 2.7 s, parked, setting off from 9 s.
     function pace(t) {
       if (t < 1.8) return 0;
       if (t < 2.7) return smooth((t - 1.8) / 0.9);
       if (t < 9.0) return 1;
       return 1 - smooth((t - 9.0) / 0.6);
     }
+    var posters = { drive: video.getAttribute('data-poster-drive'), saved: video.getAttribute('data-poster-saved') };
 
     var s = 0, steer = 0, steerTo = 0, last = 0, raf = 0;
-    var inView = false, userPaused = false;
+    var clock = 0;                     // seconds into the loop
+    var inView = false, videoOk = false, blocked = false, poster = '';
 
-    function draw(parked, dt) {
-      var k = parked;                          // 0 = cruising, 1 = parked
+    function introShowing() { return document.documentElement.classList.contains('ms-intro') || !!document.querySelector('.sprout-intro'); }
+    function running() { return inView && !still() && !introShowing(); }
+
+    function showPoster(which) {
+      if (poster === which) return;
+      poster = which;
+      video.poster = posters[which];
+    }
+    function tick(now) {
+      raf = 0;
+      if (!running()) return;
+      var dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
+      last = now;
+      if (videoOk && !video.paused && video.readyState >= 2) clock = video.currentTime % D; // follow the clip
+      else {
+        clock = (clock + dt) % D;                                                         // the road's own clock
+        if (blocked) showPoster(clock < 2.7 ? 'drive' : 'saved');                         // stills in step
+      }
+      var k = pace(clock);
       s += (1 - k) * 9 * dt;                   // road units per second
       steer += (steerTo - steer) * Math.min(1, dt * 3);
       road.draw(shapes, s, PARKED * smooth(k), steer * 14);
       if (hills) hills.setAttribute('transform', 'translate(' + (-steer * 6).toFixed(2) + ' 0)');
+      raf = requestAnimationFrame(tick);
     }
-    function tick(now) {
-      raf = 0;
-      var dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
-      last = now;
-      draw(pace(video.currentTime % D), dt);
-      if (!video.paused) raf = requestAnimationFrame(tick);
+    function start() {
+      if (!running()) return;
+      if (!raf) { last = 0; raf = requestAnimationFrame(tick); }
+      playVideo();
     }
-    function loop() { if (!raf) { last = 0; raf = requestAnimationFrame(tick); } }
+    function stop() {
+      video.pause();
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    }
 
-    function setLabel() {
-      var playing = !userPaused;
-      toggle.textContent = playing ? 'Pause' : 'Play';
-      toggle.setAttribute('aria-label', playing ? 'Pause the animation' : 'Play the animation');
-    }
-    function introShowing() { return document.documentElement.classList.contains('ms-intro') || !!document.querySelector('.sprout-intro'); }
-    function play() {
-      if (still() || userPaused || !inView || introShowing()) return;
+    // iOS: muted + playsinline (also in the HTML) let it autoplay, except in Low Power Mode
+    video.muted = true;
+    video.defaultMuted = true;
+    video.setAttribute('playsinline', '');
+    function playVideo() {
+      if (!running()) return;
       if (video.getAttribute('preload') === 'none') video.setAttribute('preload', 'auto');
-      var p = video.play();
-      if (p && p.catch) p.catch(function () { /* can't play: the poster and a still road stay */ });
+      try { video.currentTime = clock; } catch (err) { /* not loaded yet */ }
+      var p;
+      try { p = video.play(); } catch (err) { refused(); return; }
+      if (p && p.then) p.then(function () { videoOk = true; blocked = false; }, refused);
     }
+    function refused() {
+      // the road keeps driving on its own clock; the phone shows the posters until a touch lets it play
+      videoOk = false;
+      blocked = true;
+      retryOnGesture();
+    }
+    var waiting = false;
+    function retryOnGesture() {
+      if (waiting) return;
+      waiting = true;
+      var evs = ['touchstart', 'pointerdown', 'keydown', 'scroll'];
+      function retry() {
+        evs.forEach(function (e) { window.removeEventListener(e, retry, true); });
+        waiting = false;
+        playVideo();
+      }
+      evs.forEach(function (e) { window.addEventListener(e, retry, { capture: true, passive: true }); });
+    }
+    video.addEventListener('playing', function () { videoOk = true; blocked = false; });
+
     function rest() {
       // Reduce Motion: the saved state, parked; nothing moves
-      video.pause();
+      stop();
       try { video.currentTime = 0; } catch (err) {}
       video.removeAttribute('autoplay');
-      video.poster = video.getAttribute('data-poster-saved');
+      showPoster('saved');
       road.draw(shapes, 0, PARKED, 0);
       root.classList.add('is-still');
     }
-
-    video.addEventListener('play', loop);
-    video.addEventListener('playing', loop);
-
-    // the HTML poster is the clip's first frame (driving), so playing starts seamlessly; Reduce Motion swaps in the saved state
+    // the HTML poster is the clip's first frame (driving); Reduce Motion swaps in the saved state
+    poster = 'drive';
     if (still()) rest();
     else road.draw(shapes, 0, 0, 0);
 
-    // First visit: the sprout intro covers the page; start the clip from the top once it's gone
+    // First visit: the sprout intro covers the page; start from the top once it's gone
     window.addEventListener('ms-intro-end', function () {
+      clock = 0;
       try { video.currentTime = 0; } catch (err) {}
-      play();
+      start();
     });
-
-    toggle.addEventListener('click', function () {
-      userPaused = !userPaused;
-      setLabel();
-      if (userPaused) video.pause(); else play();
-    });
-    function again() {
-      if (still()) return;
-      userPaused = false;
-      setLabel();
-      try { video.currentTime = 0; } catch (err) {}
-      play();
-    }
-    replay.addEventListener('click', again);
-    phone.addEventListener('click', again);
 
     // Desktop: the road leans gently with the pointer (as if steering a little)
     if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
       root.closest('.hero').addEventListener('pointermove', function (e) {
         steerTo = clamp(e.clientX / window.innerWidth * 2 - 1, -1, 1);
-        if (video.paused && !still()) { road.draw(shapes, s, PARKED * smooth(pace(video.currentTime % D)), steerTo * 14); }
       }, { passive: true });
     }
 
     // Watch for it on screen only after the page has loaded and settled (a link to /#early-access
     // jumps past the hero first), so the clip is never fetched or played off screen.
     function watch() {
-      if (!('IntersectionObserver' in window)) { inView = true; play(); return; }
-      // With a #link the page may still be scrolling there (smoothly) at the first report: ignore it
-      // and wait for the next, so the clip isn't fetched for a hero that's about to leave the screen.
+      if (!('IntersectionObserver' in window)) { inView = true; start(); return; }
       var skipFirst = !!location.hash && location.hash !== '#main';
       new IntersectionObserver(function (es) {
         if (skipFirst) { skipFirst = false; if (es[0].isIntersecting) return; }
         inView = es[0].isIntersecting;
-        if (inView) play(); else video.pause();
+        if (inView) start(); else stop();
       }, { threshold: 0.25 }).observe(root);
     }
     function afterLoad() { requestAnimationFrame(function () { requestAnimationFrame(watch); }); }
@@ -480,10 +500,9 @@
     if (reduce.addEventListener) {
       reduce.addEventListener('change', function () {
         if (still()) rest();
-        else { root.classList.remove('is-still'); video.poster = video.getAttribute('data-poster-drive'); play(); }
+        else { root.classList.remove('is-still'); showPoster('drive'); start(); }
       });
     }
-    setLabel();
   })();
 
   /* ---------- Money: the hero's money line and the "What are your work miles worth?" calculator ----------
@@ -565,12 +584,12 @@
 
     // The yearly amount rolls to its new value (about half a second, easing out), then shimmers once
     // if it crossed a milestone (every 1,000 of the currency). Reduce Motion: it just changes.
-    var shown = null, target = 0, rollFrom = 0, rollStart = 0, raf = 0;
+    var shown = null, onScreen = 0, target = 0, rollFrom = 0, rollStart = 0, raf = 0;
     function easeOut(x) { return 1 - Math.pow(1 - x, 3); }
     function roll(now) {
       var k = Math.min(1, (now - rollStart) / 520);
-      var v = rollFrom + (target - rollFrom) * easeOut(k);
-      amountEl.textContent = money(r, k < 1 ? v : target);
+      onScreen = k < 1 ? rollFrom + (target - rollFrom) * easeOut(k) : target;
+      amountEl.textContent = money(r, onScreen);
       raf = k < 1 ? requestAnimationFrame(roll) : 0;
     }
     function shimmer() {
@@ -579,17 +598,19 @@
       strong.classList.add('is-shimmer');
     }
     function setAmount(value, instant) {
-      var from = shown === null ? value : shown;
+      // roll from the number on screen (mid-roll during a drag), not the last target, so it never skips
+      var from = shown === null ? value : raf ? onScreen : shown;
       target = value;
       shown = value;
       if (raf) { cancelAnimationFrame(raf); raf = 0; }
-      if (instant || still() || from === value) { amountEl.textContent = money(r, value); return; }
+      if (instant || still() || from === value) { onScreen = value; amountEl.textContent = money(r, value); return; }
       rollFrom = from; rollStart = performance.now();
       raf = requestAnimationFrame(roll);
       if (Math.floor(from / 1000) !== Math.floor(value / 1000)) shimmer();
     }
     strong.addEventListener('animationend', function () { strong.classList.remove('is-shimmer'); });
 
+    var say = 0;
     function units(n) { return r.unit === 'mi' ? (n === 1 ? 'mile' : 'miles') : 'km'; }
     function fill() {
       var p = (Number(range.value) - Number(range.min)) / (Number(range.max) - Number(range.min)) * 100;
@@ -604,7 +625,12 @@
       atEl.textContent = r.at;
       fill();
       setAmount(worth, instant);
-      if (announce) live.textContent = 'About ' + money(r, worth) + ' a year at ' + r.at + '.'; // the final value only
+      if (announce) {
+        // the final value only, and once the arrow keys have been still for a moment
+        clearTimeout(say);
+        var text = 'About ' + money(r, worth) + ' a year at ' + r.at + '.';
+        say = setTimeout(function () { live.textContent = text; }, 400);
+      }
     }
     function setCountry(c, fromUser, instant) {
       var was = r;
@@ -642,6 +668,53 @@
     if (r.unit === 'km') { range.min = 15; range.max = 1000; }
     range.value = defaultWeek(r);
     setCountry(COUNTRY, false, true);
+    // The whole slider band takes the finger: anywhere on it sets the value there and follows the drag
+    // (iOS only moves a range by its thumb, so a near miss used to drag the page instead).
+    var band = root.querySelector('.calc-slide'), dragId = null;
+    function valueAt(x) {
+      var box = range.getBoundingClientRect();
+      var thumb = parseFloat(getComputedStyle(range).getPropertyValue('--thumb')) || 26;
+      var k = clamp((x - box.left - thumb / 2) / Math.max(1, box.width - thumb), 0, 1);
+      var min = Number(range.min), max = Number(range.max), step = Number(range.step) || 1;
+      return Math.round((min + k * (max - min)) / step) * step;
+    }
+    function setFrom(e) {
+      var v = valueAt(e.clientX);
+      if (String(v) !== range.value) { range.value = v; range.dispatchEvent(new Event('input', { bubbles: true })); }
+    }
+    if (band && window.PointerEvent) {
+      band.classList.add('is-live');
+      band.addEventListener('pointerdown', function (e) {
+        if (e.button !== 0 || e.target.closest('label')) return;
+        dragId = e.pointerId;
+        try { band.setPointerCapture(dragId); } catch (err) { /* fine */ }
+        try { range.focus({ preventScroll: true }); } catch (err) { range.focus(); }
+        e.preventDefault();
+        moved = false; downX = e.clientX; downY = e.clientY;
+        // a mouse sets the value at once; a finger waits to see if it's a tap or a sideways drag, so a
+        // scroll that happens to start on the slider (pointercancel) leaves the value alone
+        if (e.pointerType === 'mouse') { setFrom(e); moved = true; }
+      });
+      var moved = false, downX = 0, downY = 0;
+      band.addEventListener('pointermove', function (e) {
+        if (e.pointerId !== dragId) return;
+        var dx = Math.abs(e.clientX - downX), dy = Math.abs(e.clientY - downY);
+        if (!moved && e.pointerType !== 'mouse' && (dx < 6 || dy > dx)) return; // not (yet) a sideways drag
+        setFrom(e);
+        moved = true;
+      });
+      band.addEventListener('pointerup', function (e) {
+        if (e.pointerId !== dragId) return;
+        dragId = null;
+        if (moved || Math.abs(e.clientY - downY) < 10) setFrom(e); // a tap on the track jumps there
+        range.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      band.addEventListener('pointercancel', function (e) {
+        if (e.pointerId !== dragId) return;
+        dragId = null;
+        if (moved) range.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    }
     range.addEventListener('input', function () { show(false); });
     range.addEventListener('change', function () { show(true); }); // the slider stopped: read the result out once
   })();

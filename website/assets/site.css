@@ -41,6 +41,8 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+/* safety net: nothing may widen the page sideways (clip, not hidden, so position: sticky keeps working) */
+html, body { overflow-x: clip; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
@@ -135,7 +137,7 @@ section.hero { padding: 0; }
 .rd-sun { fill: var(--gold); opacity: .85; }
 .rd-pillar, .rd-board { fill: #06261C; }
 .rd-trim { stroke: var(--gold); stroke-width: 2.2; opacity: .9; }
-.scene .phone { --w: var(--pw); position: absolute; z-index: 2; left: var(--pl); bottom: var(--pb); cursor: pointer; }
+.scene .phone { --w: var(--pw); position: absolute; z-index: 2; left: var(--pl); bottom: var(--pb); }
 .scene .screen { -webkit-mask-image: none; }
 .scene .screen video { width: 100%; height: 100%; object-fit: cover; display: block; background: #FFFFFF; }
 /* the cradle's side clamps peek out behind the phone; its arm runs down into the dashboard */
@@ -148,17 +150,9 @@ section.hero { padding: 0; }
   content: ""; position: absolute; left: 50%; top: 100%; width: 12px; height: calc(var(--pw) * .9 + var(--pb));
   transform: translateX(-50%); background: linear-gradient(90deg, #0E1210, #2A302D 50%, #0E1210); border-radius: 4px;
 }
-.scene-ctl { position: absolute; z-index: 3; right: 10px; bottom: 10px; display: flex; gap: 6px; }
-.scene-ctl[hidden], .scene.is-still .scene-ctl { display: none; }
 .scene-cap { margin: 12px 4px 0; color: #D1FAE5; font-size: .95rem; text-align: center; }
 /* phones: the headline comes first, so the caption is for screen readers only there */
 @media (max-width: 899px) { .scene-cap { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
-.scene-ctl button {
-  font: 700 .78rem/1 var(--font); color: #FFFFFF; background: rgba(6, 38, 28, .78); cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, .35); border-radius: 999px; min-height: 30px; padding: 0 12px;
-}
-.scene-ctl button:hover { background: rgba(6, 38, 28, .95); border-color: var(--gold); }
-.scene-ctl button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 /* tablets and wide phones: a band capped in width, so the sky, hills and road all show */
 @media (min-width: 600px) and (max-width: 899px) {
   .scene { max-width: 460px; margin-inline: auto; --sh: 236px; }
@@ -166,7 +160,6 @@ section.hero { padding: 0; }
 @media (min-width: 900px) {
   .scene { --sh: clamp(440px, 46vw, 540px); --pw: calc((var(--sh) - 50px) / 2.24); --pl: 10%; --pb: 26px; }
   .scene-view { border-radius: 28px; }
-  .scene-ctl { right: 14px; bottom: 14px; }
 }
 
 .store-btn {
@@ -346,6 +339,12 @@ section.hero { padding: 0; }
   84% { opacity: 0; transform: scale(.4) rotate(90deg); }
 }
 @media (prefers-reduced-motion: reduce) { .sparkles { display: none; } }
+/* Phones: the button is full width, so the glints stay inside its edges (they used to poke 6-22 px past
+   the right edge of the screen, which let iOS Safari pan the whole page sideways) */
+@media (max-width: 420px) {
+  .wl-go .sparkles { inset: -14px 0; }
+  .wl-go .sparkles i:nth-child(3) { right: 4px; }
+}
 
 .pill { display: inline-block; background: var(--gold); color: #14261F; font-weight: 700; font-size: .8rem; letter-spacing: .02em; padding: 4px 10px; border-radius: 999px; margin-bottom: 16px; }
 
@@ -561,7 +560,7 @@ html.ms-intro::after {
   animation: intro-failsafe .3s ease 2.5s forwards;
 }
 @keyframes intro-failsafe { to { opacity: 0; visibility: hidden; } }
-.sprout-intro { position: fixed; inset: 0; z-index: 101; transition: opacity .25s ease; }
+.sprout-intro { position: fixed; inset: 0; z-index: 101; overflow: hidden; transition: opacity .25s ease; }
 .sprout-intro.intro-out { opacity: 0; }
 .intro-bg { position: absolute; inset: 0; background: radial-gradient(120% 90% at 50% 40%, #0E9F6E 0%, #0B7A55 45%, #064E3B 100%); }
 .intro-stage { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2vh; }
@@ -758,6 +757,7 @@ html.ms-intro::after {
 
 /* Flag chips: a radio group (arrow keys move between them). The chosen one lifts, ringed in gold, with a small pop. */
 .flag-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 420px) { .flag-chips { display: grid; grid-template-columns: 1fr 1fr; } .flag-chip > span { width: 100%; } }
 .flag-chip { position: relative; display: inline-flex; }
 .flag-chip input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
 .flag-chip > span {
@@ -778,10 +778,15 @@ html.ms-intro::after {
 
 /* The slider: a gold thumb with a soft glow, the track filled in gold up to it (site.js sets --fill) */
 .calc-range {
-  -webkit-appearance: none; appearance: none; width: 100%; height: 32px; margin: 4px 0 2px; background: transparent; cursor: pointer;
-  --fill: 15%; --thumb: 24px;
+  -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 52px; margin: 0; background: transparent; cursor: pointer;
+  --fill: 15%; --thumb: 26px;
 }
-@media (pointer: coarse) { .calc-range { --thumb: 32px; height: 40px; } }
+/* The whole band is the slider's hit area: touch or press anywhere on it and the value jumps there and
+   follows the finger (site.js). pan-y: sideways drags go to the slider, up and down still scrolls. */
+.calc-slide { touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+/* with JS the band handles touch and mouse itself (one behaviour everywhere); keys still go to the input */
+.calc-slide.is-live .calc-range { pointer-events: none; }
+@media (pointer: coarse) { .calc-range { --thumb: 34px; height: 56px; } }
 .calc-range::-webkit-slider-runnable-track {
   height: 8px; border-radius: 999px;
   background: linear-gradient(90deg, var(--gold) 0 var(--fill), rgba(255, 255, 255, .22) var(--fill) 100%);
