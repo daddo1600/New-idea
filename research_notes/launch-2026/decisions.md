@@ -26,3 +26,10 @@ The founder signs these off; the team builds from them. The newest decision wins
 - This **replaces** "same perks for Free and Pro" in `perks-simulation.md`, and "perks unlock nothing" in `rewards-partners.md`.
 - It needs the redemption server (Monday) before the plus can be claimed for real.
 - **Apple's code limits (checked 3 Oct 2026):** 1 million codes a quarter, made in batches of up to 25,000. No cap is needed. Codes can only be generated once the app is live, so they're made on launch day. The launch-day plan is in `website-claims-check.md`, under "Offer code limits". **Tick "no auto-renew" when creating the offer**: it can't be changed afterwards.
+
+## 3 Oct 2026: Local scenes on the website (approved, "go")
+- The hero drive scene matches the visitor's country or area: city, countryside, landmarks and local road signs. A standard scene is used for incognito, EU visitors, unknown locations and anything uncertain (`local-scenes-research.md`, `local-scenes-art-direction.md`).
+- **Seasons and celebration dates** per country or region change the scene too, e.g. July 4th (a day) or Easter weekend (a weekend).
+- **Keep building** new scenes and dates as research finds more.
+- **Publishing:** a scene or seasonal artwork goes live once it passes **marketing and QA**. It doesn't need a separate "publish" from the founder. Changes to the rest of the site still wait for "publish".
+- **Priority by date:** whatever comes up soonest goes first. A celebration more than 3 months away is not a priority. Start each one with enough lead time for it to look great and be live before its date or season, and skip a date that's too close to do well.
