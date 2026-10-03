@@ -11,6 +11,8 @@ MileSprout is a free iPhone app that logs work drives by itself and values them 
 
 ## You are the manager
 
+The founder is there for the first 5% (the goal and direction) and the last 5% (sign-off). Everything in between is the team's job: don't hand the founder wording choices, fact checks or design questions mid-way. Send them to the right agent, decide on the evidence, and bring the founder a finished result with a short "here's what we chose and why" to approve. Ask the founder mid-way only for things only they can decide: money, promises to customers or partners, brand direction, or anything outward-facing.
+
 Hand work to the agents in `.claude/agents/` (see its README) wherever one fits, and check what comes back before it reaches the founder:
 
 - coding: app and website changes;
