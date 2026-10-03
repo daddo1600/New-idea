@@ -153,3 +153,19 @@ In `london-uk-london-390-still.png` the P panel is still about 40 CSS px, the pl
 ### Next
 
 Coding makes fixes C and D and sends the four London images again (390 and 1280, animated and still). Marketing signs off on those images only, then QA, then the founder decides on "publish". Nothing else on the page is waiting on marketing.
+
+---
+
+## Re-check 3: website-preview at 7cdef35, London fixes C and D (3 October 2026)
+
+I checked `london-uk-london-390.png`, `london-uk-london-1280.png` and both `-still` versions.
+
+### Verdict: PASS. Marketing signs off website-preview at 7cdef35 for the founder's "publish" (after QA).
+
+- **Fix C: pass.** The P sign and the "Drive / logged" plate are now one blue sign of the same width, with one white border and a post centred beneath it, standing on the kerb by the bay at 390 and on the right verge at 1280. It reads as a real UK parking sign, not a label.
+- **Fix D: pass.** Both stills show the same grounded sign. In the 1280 still the bus is fully visible beside it. The 390 still uses a slightly different camera, so the sign there is a few pixels larger (about 38 CSS px wide). It's grounded, below the clock face and clear of the tower, so that's fine.
+- **The P panel is about 4 px wider than I allowed: accepted.** The sign is still well below the clock face, and Elizabeth Tower stays the hero.
+- **The lettering is condensed to 68% width at a 9.4 px cap height: accepted.** "Drive" and "logged" read cleanly at 390, and the cap height meets our ≥9 px rule. Condensing letters is better than shrinking them.
+- **The sign's top is 1 px above the clock face for 9.36–9.38 s, at about 10% opacity: accepted.** It's invisible at that opacity and lasts two frames. No fix needed.
+
+That closes this review. Every item from ffd766b is resolved: the clip ghosting, the signs, the bus and the P sign timing, the bay, the bigger zoom, the "Work out yours ↓" link and panel 2. One founder decision is still open from the first review, and doesn't block this publish: the "tracker/tracking" wording in the `<title>` and meta description, which was already live before this preview.
