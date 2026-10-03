@@ -9,18 +9,70 @@
   function still() { return reduce.matches; }
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
 
-  /* ---------- Home intro: the sprout grows, as in the app's opening, then becomes the header logo ----------
-     Only when intro-gate.js has put up its cover (first visit this session, motion allowed).
-     Road signs pop up beside the road; in a season (season.js) the sprout dresses up: a backdrop,
-     a hat on the gold dot, autumn leaves, the sleigh or the pumpkin, and a greeting.
+  /* ---------- Home intro: the app's first-run opening (milemint/src/components/launch-intro.tsx, FullIntro) ----------
+     Only when intro-gate.js has put up its cover (first visit this session). The seed wakes, the road
+     grows up as the stem past the road signs, the leaves unfold, and, as in the app, an example month's
+     money and miles count up with the drive; then "A year of this is worth …" counts up and lands.
+     In a season (season.js) the sprout dresses up and the backdrop changes. About 3.5 s (the year holds ~0.9 s), then the
+     sprout flies to the header logo. Tap, click, a key or scrolling ends it. With Reduce Motion it's a
+     still: the grown sprout and the final figures, faded away after 2 s. The overlay is aria-hidden;
+     the figures are read out once through a polite status line.
      Everything is drawn from one clock in requestAnimationFrame, so a skip or an error just ends it. */
   var SEASON = null;
   try { SEASON = window.MSSeason ? window.MSSeason.detect() : null; } catch (err) { SEASON = null; }
 
+  /* The app's own rates (milemint/src/domain/regions.ts, the current rate periods; rates in tenths of a
+     penny or cent, as there). The example is the page's one example, shared with the hero's money line and
+     the calculator's starting point: 100 miles (160 km) a week for 48 weeks, so a month is 400 miles or
+     640 km. (The app's intro uses 650 km; on the page a second Canadian figure would show beside the
+     calculator's, so the page keeps one.) A year of it: £2,640, US $3,648, CA $5,446 (allowance rate,
+     "about"), AU $4,550; rates checked in research_notes/launch-2026/website-claims-check.md. */
+  var APP_REGIONS = {
+    GB: { cur: 'GBP', locale: 'en-GB', unit: 'mi', tiers: [[10000, 550], [null, 250]], authority: 'HMRC' },
+    US: { cur: 'USD', locale: 'en-US', unit: 'mi', tiers: [[null, 760]], authority: 'the IRS' },
+    CA: { cur: 'CAD', locale: 'en-CA', unit: 'km', tiers: [[5000, 730], [null, 670]], authority: 'the CRA' },
+    AU: { cur: 'AUD', locale: 'en-AU', unit: 'km', tiers: [[5000, 910], [null, 0]], authority: 'the ATO' }
+  };
+  var WEEKS = 48, EXAMPLE_WEEK = { mi: 100, km: 160 };
+  var DEMO_MONTH = { mi: EXAMPLE_WEEK.mi * WEEKS / 12, km: EXAMPLE_WEEK.km * WEEKS / 12 };
+  /** The visitor's country: ?country=CA previews one, else season.js (time zone, then language). */
+  function visitorCountry() {
+    var c = 'GB';
+    try { c = window.MSCountry ? window.MSCountry.country() : 'GB'; } catch (err) { c = 'GB'; } // intro-gate.js: ?country=, time zone, language
+    return c === 'UK' ? 'GB' : APP_REGIONS[c] ? c : 'GB';
+  }
+  /** wholeMoney() in the app: minor units to a whole amount ("£220", "$5,446"). */
+  function wholeMoney(minor, r) {
+    var n = Math.round(minor / 100);
+    try { return new Intl.NumberFormat(r.locale, { style: 'currency', currency: r.cur, maximumFractionDigits: 0, minimumFractionDigits: 0 }).format(n); }
+    catch (err) { return (r.cur === 'GBP' ? '£' : '$') + n.toLocaleString('en'); }
+  }
+  /** exampleYearOf() in the app: twelve example months, each tier at its rate, in minor units. */
+  function exampleYear(r) {
+    var left = DEMO_MONTH[r.unit] * 12, total = 0;
+    for (var i = 0; i < r.tiers.length && left > 0; i++) {
+      var room = r.tiers[i][0] === null ? left : Math.min(left, r.tiers[i][0]);
+      total += room * r.tiers[i][1] / 10;
+      left -= room;
+    }
+    return Math.round(total);
+  }
+  /** The intro's lines, word for word from the app (English). */
+  function introLines(r) {
+    var year = wholeMoney(exampleYear(r), r);
+    return {
+      unitWord: r.unit === 'mi' ? 'miles' : 'km',
+      month: ' · an example month of part-time work driving',
+      year: r.authority === 'the CRA'
+        ? ['A year of this is worth about ', year, '\u00a0at ' + r.authority + '’s allowance rate.']
+        : ['A year of this is worth ', year, '\u00a0at ' + r.authority + '’s rate.']
+    };
+  }
+
   (function intro() {
     var root = document.documentElement;
     if (!root.classList.contains('ms-intro')) return;
-    var overlay = null;
+    var overlay = null, live = null;
     function cleanup() {
       var was = root.classList.contains('ms-intro') || !!overlay;
       root.classList.remove('ms-intro');
@@ -31,14 +83,25 @@
     }
     try {
       try { window.sessionStorage.setItem('ms-intro-seen', '1'); } catch (err) { /* fine */ }
+      var calm = still();
       var S = window.MSSeason, season = S ? SEASON : null;
+      var R = APP_REGIONS[visitorCountry()], lines = introLines(R);
+      var monthUnits = DEMO_MONTH[R.unit], perUnit = R.tiers[0][1] / 10;
+      var fmtUnits = function (n) { try { return new Intl.NumberFormat(R.locale).format(n); } catch (err) { return String(n); } };
+      var monthMoney = function (f) { return wholeMoney(Math.round(f * monthUnits) * perUnit, R); };
+      var yearMinor = exampleYear(R);
+      // a number that counts in a box sized to its final value, so nothing around it moves
+      var counter = function (cls, finalText, startText) {
+        return '<span class="ct ' + cls + '"><span class="ct-ghost">' + finalText + '</span><span class="ct-live">' + (calm ? finalText : startText) + '</span></span>';
+      };
+
       var ROAD = 'M50 87 C50 78 38 74 40 64 C42 55 54 54 54 44 C54 37 50 35 51 30';
       var LOW = 'M47 54 C37 55 20 48 14 34 C27 32 41 39 47 54Z';
       var UP = 'M52 31 C56 19 70 11 86 11 C85 25 70 34 52 31Z';
       var pal = S ? S.palette(season && season.id) : { light: '#77E8A0', deep: '#24B359', shadow: '#085E42' };
-      var rider = season && S ? S.rider(season.id) : null;
+      var rider = season && S && !calm ? S.rider(season.id) : null;
       overlay = document.createElement('div');
-      overlay.className = 'sprout-intro' + (season ? ' season-' + season.id : '');
+      overlay.className = 'sprout-intro' + (season ? ' season-' + season.id : '') + (calm ? ' is-still' : '');
       overlay.setAttribute('aria-hidden', 'true');
       overlay.innerHTML =
         '<div class="intro-bg"></div>' +
@@ -53,23 +116,71 @@
           '<path class="i-road" d="' + ROAD + '" stroke="#064E3B" stroke-width="8" stroke-linecap="round"/>' +
           '<path class="i-dash" d="' + ROAD + '" stroke="#FBF7EE" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="2.6 3.2" stroke-dashoffset="-3" mask="url(#ms-intro-mask)"/>' +
           '<g class="i-dot"><circle class="i-ring" r="7.6" fill="#FFFFFF"/><circle r="5.6" fill="#FACC15"/></g>' +
-          (season && S ? '<g class="i-hat-wrap" opacity="0">' + S.hat(season.id, false) + '</g>' : '') +
+          (season && S ? '<g class="i-hat-wrap" opacity="0">' + S.hat(season.id, calm) + '</g>' : '') +
           (rider ? rider.svg : '') +
         '</svg>' +
-        (season ? '<p class="intro-greeting">' + season.greeting + '</p>' : '') +
-        '<p class="intro-word"><span class="wm-mile">Mile</span><span class="wm-sprout">Sprout</span></p></div>' +
+        '<div class="intro-count">' +
+          (season ? '<p class="intro-greeting">' + season.greeting + '</p>' : '') +
+          '<p class="ic-money">' + counter('ct-mid', monthMoney(1), monthMoney(0)) + '</p>' +
+          '<p class="ic-month">' + counter('ct-end', fmtUnits(monthUnits), '0') + ' ' + lines.unitWord + lines.month + '</p>' +
+          '<p class="ic-year">' + lines.year[0] + '<strong>' + counter('ct-end', lines.year[1], wholeMoney(0, R)) + '</strong>' + lines.year[2] + '</p>' +
+        '</div></div>' +
         '<button type="button" class="intro-skip" tabindex="-1">Skip intro</button>';
       document.body.appendChild(overlay);
       root.classList.remove('ms-intro'); // the overlay takes over from the plain cover
 
+      // the figures, read out once (the overlay itself is hidden from screen readers)
+      live = document.createElement('p');
+      live.className = 'sr-only intro-live';
+      live.setAttribute('role', 'status');
+      document.body.appendChild(live);
+      var said = false;
+      function announce() {
+        if (said || !live) return;
+        said = true;
+        var el = live;
+        el.textContent = monthMoney(1) + ', ' + fmtUnits(monthUnits) + ' ' + lines.unitWord + lines.month + '. ' + lines.year.join('');
+        setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 8000);
+      }
+
       var q = function (s) { return overlay.querySelector(s); };
-      var bg = q('.intro-bg'), fx = q('.season-fx'), art = q('.intro-art'), word = q('.intro-word'), skip = q('.intro-skip');
-      var greet = q('.intro-greeting'), hatWrap = q('.i-hat-wrap'), riderEl = q('.i-rider');
+      var bg = q('.intro-bg'), fx = q('.season-fx'), art = q('.intro-art'), count = q('.intro-count'), skip = q('.intro-skip');
+      var hatWrap = q('.i-hat-wrap'), riderEl = q('.i-rider');
       var road = q('.i-road'), mask = q('.i-mask'), dot = q('.i-dot'), ring = q('.i-ring');
-      var low = q('.i-low'), up = q('.i-up');
+      var low = q('.i-low'), up = q('.i-up'), yearLine = q('.ic-year'), yearAmount = q('.ic-year strong');
+      var liveMoney = q('.ic-money .ct-live'), liveUnits = q('.ic-month .ct-live'), liveYear = q('.ic-year .ct-live');
       var L = road.getTotalLength();
       road.style.strokeDasharray = mask.style.strokeDasharray = L + ' ' + (L + 1);
       var roadAt = function (f) { return road.getPointAtLength(L * clamp(f, 0, 1)); };
+
+      var ending = false, raf = 0;
+      function finish() {
+        if (ending || !overlay) return;
+        ending = true;
+        cancelAnimationFrame(raf);
+        announce();
+        overlay.classList.add('intro-out');
+        setTimeout(cleanup, 260);
+        unlisten();
+      }
+      var evs = ['keydown', 'wheel', 'touchmove', 'scroll'];
+      function unlisten() {
+        evs.forEach(function (e) { window.removeEventListener(e, finish, true); });
+      }
+      evs.forEach(function (e) { window.addEventListener(e, finish, { capture: true, passive: true }); });
+      overlay.addEventListener('pointerdown', finish);
+      skip.addEventListener('click', finish);
+
+      if (calm) {
+        // Reduce Motion: the finished sprout and the final figures, still; then a fade (as the app's cross-fade)
+        var top = roadAt(1);
+        road.style.strokeDashoffset = mask.style.strokeDashoffset = '0';
+        dot.setAttribute('transform', 'translate(' + top.x.toFixed(2) + ' ' + (top.y - 2).toFixed(2) + ')');
+        if (hatWrap) hatWrap.setAttribute('opacity', '1');
+        setTimeout(announce, 300);
+        setTimeout(finish, 2200);
+        return;
+      }
 
       // the signs beside the road (the app's petrol station, shops and café; gifts or Halloween treats in season)
       var signs = [];
@@ -82,18 +193,17 @@
       }
       var drop = !!(season && season.id === 'festive');
 
-      // a season gets a little longer, to enjoy the touches
-      var EXTRA = season ? 700 : 0;
-      var T_DRIVE = 250, DRIVE = 1400, T_LOW = 1050, T_UP = 1400, LEAF = 300, T_RING = 1650, T_WORD = 1700,
-          T_MORPH = 2450 + EXTRA, MORPH = 600, END = 3200 + EXTRA;
+      var T_DRIVE = 200, DRIVE = 1250, T_LOW = 900, T_UP = 1150, LEAF = 300, T_RING = 1450,
+          T_YEAR = 1500, YEAR = 550, T_MORPH = 3000, MORPH = 500, END = 3550; // the year lands at ~2.1 s and holds before the flight
       var inOut = function (x) { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+      var easeOut = function (x) { return 1 - Math.pow(1 - x, 3); };
       var back = function (x, k) { var c3 = k + 1; return 1 + c3 * Math.pow(x - 1, 3) + k * Math.pow(x - 1, 2); };
+      var t = 0, start = null, target = null, step = -1, yearStep = -1, landed = false;
       var leaf = function (el, t0, ox, oy, k) {
         var x = clamp((t - t0) / LEAF, 0, 1);
         var s = x === 0 ? 0.001 : back(x, k);
         el.setAttribute('transform', 'translate(' + ox + ' ' + oy + ') rotate(' + (-25 * (1 - x)).toFixed(2) + ') scale(' + s.toFixed(3) + ') translate(' + -ox + ' ' + -oy + ')');
       };
-      var t = 0, start = null, target = null, ending = false, raf = 0;
 
       function frame(now) {
         if (!overlay) return;
@@ -125,7 +235,6 @@
           var rp = road.getPointAtLength(L * Math.min(1, p * rider.reach)), so = rider.soar(p);
           riderEl.setAttribute('transform', 'translate(' + (rp.x + so.x).toFixed(2) + ' ' + (rp.y + so.y).toFixed(2) + ')');
           riderEl.setAttribute('opacity', season.id === 'festive' ? (1 - clamp((p - 0.85) / 0.15, 0, 1)).toFixed(3) : '1');
-          // the pumpkin stays under the witch hat; after the sleigh has gone, the dot pops in at the top
           dot.setAttribute('opacity', season.id === 'festive' ? ringIn.toFixed(3) : '0');
         }
         if (hatWrap) {
@@ -134,12 +243,27 @@
           hatWrap.setAttribute('transform', 'translate(0 ' + (-6 * (1 - back(h, 1.2))).toFixed(2) + ')');
         }
 
-        var w = clamp((t - T_WORD) / 400, 0, 1);
-        word.style.opacity = w;
-        word.style.transform = 'translateY(' + (12 * (1 - w)).toFixed(1) + 'px)';
-        if (greet) {
-          greet.style.opacity = w;
-          greet.style.transform = word.style.transform;
+        // the money and the miles climb with the drive, in 1% steps (as the app)
+        var c = clamp((p - 0.1) / 0.3, 0, 1);
+        count.style.opacity = c;
+        count.style.transform = 'translateY(' + (12 * (1 - c)).toFixed(1) + 'px)';
+        var s100 = Math.round(p * 100);
+        if (s100 !== step) {
+          step = s100;
+          liveMoney.textContent = monthMoney(step / 100);
+          liveUnits.textContent = fmtUnits(Math.round(step / 100 * monthUnits));
+        }
+        // then what a year of it is worth counts up and lands with a small gold pop
+        yearLine.style.opacity = clamp((t - T_YEAR) / 220, 0, 1);
+        var y = easeOut(clamp((t - T_YEAR - 80) / YEAR, 0, 1)), ys = Math.round(y * 200);
+        if (ys !== yearStep) {
+          yearStep = ys;
+          liveYear.textContent = wholeMoney(Math.round(yearMinor * ys / 200), R);
+        }
+        if (y === 1 && !landed) {
+          landed = true;
+          yearAmount.classList.add('is-landed');
+          announce();
         }
 
         // the sprout flies to the header logo while the green lifts away
@@ -153,31 +277,15 @@
           art.style.transform = 'translate(' + (target.x * m).toFixed(1) + 'px,' + (target.y * m).toFixed(1) + 'px) scale(' + (1 + (target.s - 1) * m).toFixed(4) + ')';
           bg.style.opacity = 1 - m;
           if (fx) fx.style.opacity = 1 - m;
-          word.style.opacity = Math.max(0, 1 - m * 2.5);
-          if (greet) greet.style.opacity = word.style.opacity;
+          count.style.opacity = Math.max(0, 1 - m * 1.6);
           if (hatWrap) hatWrap.setAttribute('opacity', Math.max(0, 1 - m * 2).toFixed(3));
           skip.style.opacity = 1 - m;
           if (m === 1) art.style.opacity = 1 - clamp((t - T_MORPH - MORPH) / (END - T_MORPH - MORPH), 0, 1);
         }
-        if (t >= END) return cleanup();
+        if (t >= END) { announce(); unlisten(); return cleanup(); }
         raf = requestAnimationFrame(frame);
       }
 
-      function finish() {
-        if (ending || !overlay) return;
-        ending = true;
-        cancelAnimationFrame(raf);
-        overlay.classList.add('intro-out');
-        setTimeout(cleanup, 260);
-        unlisten();
-      }
-      var evs = ['keydown', 'wheel', 'touchmove', 'scroll'];
-      function unlisten() {
-        evs.forEach(function (e) { window.removeEventListener(e, finish, true); });
-      }
-      evs.forEach(function (e) { window.addEventListener(e, finish, { capture: true, passive: true }); });
-      overlay.addEventListener('pointerdown', finish);
-      skip.addEventListener('click', finish);
       setTimeout(function () { if (overlay) finish(); }, END + 2000); // never get stuck
       raf = requestAnimationFrame(frame);
     } catch (err) {
@@ -200,7 +308,7 @@
       var hat = S.hat(SEASON.id, still());
       if (hat) {
         mark.insertAdjacentHTML('beforeend', hat);
-        mark.setAttribute('viewBox', '12 2 77 91'); // room for the hat
+        // the box keeps its size (no layout shift): the hat draws above it (overflow: visible)
         mark.classList.add('has-hat');
       }
       var p = document.createElement('p');
@@ -531,7 +639,7 @@
       note: "The ATO's cents per km rate for 2026–27: 91c a km, for up to 5,000 km a year per car.",
       source: 'https://www.ato.gov.au/individuals-and-families/income-deductions-offsets-and-records/deductions-you-can-claim/work-related-deductions/cars-transport-and-travel/motor-vehicle-and-car-expenses/expenses-for-a-car-you-own-or-lease/cents-per-kilometre-method' }
   };
-  var WEEKS = 48;
+  // WEEKS (48) is set with the intro's example, above.
   /** What a year of `perWeek` work miles (or km) is worth: each band at its rate, anything past the last band at nothing. */
   function yearWorth(r, perWeek) {
     var left = perWeek * WEEKS, total = 0;
@@ -547,24 +655,22 @@
     catch (err) { return (r.cur === 'GBP' ? '£' : '$') + Math.round(n).toLocaleString('en'); }
   }
   var COUNTRY = (function () {
-    var c = 'GB';
-    try { c = window.MSSeason && window.MSSeason.country ? window.MSSeason.country() : 'GB'; } catch (err) { c = 'GB'; }
-    var forced = /[?&]country=(UK|GB|US|CA|AU)\b/i.exec(location.search);
-    if (forced) c = forced[1].toUpperCase();
+    var c = visitorCountry(); // the same as the intro's
     return c === 'GB' ? 'UK' : RATES[c] ? c : 'UK';
   })();
 
   // The calculator's starting point (100 miles or 160 km a week); the hero's example year is the same sum, so they always agree.
-  function defaultWeek(r) { return r.unit === 'km' ? 160 : 100; }
+  function defaultWeek(r) { return EXAMPLE_WEEK[r.unit]; }
 
   (function moneyLine() {
-    var line = document.querySelector('[data-money]');
-    if (!line || COUNTRY === 'UK') return; // the page's own text is the UK one (£2,640)
-    var r = RATES[COUNTRY];
-    var amount = money(r, yearWorth(r, defaultWeek(r)));
-    line.innerHTML = COUNTRY === 'CA'
-      ? 'An example year of part-time work driving is worth about <strong>' + amount + '</strong> at the CRA\'s allowance rate (the most an employer can pay tax-free).'
-      : 'An example year of part-time work driving is worth <strong>' + amount + '</strong> at ' + r.at + '.';
+    // index.html carries each country's line and site.css shows the visitor's (no jump); this keeps each one's figure
+    // in step with RATES (it rewrites only a figure that differs, so normally nothing changes)
+    Array.prototype.forEach.call(document.querySelectorAll('[data-money] [data-for]'), function (span) {
+      var r = RATES[span.getAttribute('data-for')], strong = span.querySelector('strong');
+      if (!r || !strong) return;
+      var amount = money(r, yearWorth(r, defaultWeek(r)));
+      if (strong.textContent !== amount) strong.textContent = amount;
+    });
   })();
 
   (function calculator() {

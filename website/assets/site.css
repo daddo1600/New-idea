@@ -551,7 +551,7 @@ kbd, code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospac
 .hero .tester-link a { color: #FFFFFF; }
 .waitlist-page .tester-link { margin: -8px 0 20px; }
 
-/* ---------- Home intro (site.js), once per session, never with reduced motion ---------- */
+/* ---------- Home intro (site.js), once per session; a still with reduced motion ---------- */
 /* intro-gate.js adds .ms-intro before the first paint: a plain green cover until the animation starts.
    If site.js never runs, the cover fades out on its own after 2.5 s. */
 html.ms-intro::after {
@@ -563,21 +563,39 @@ html.ms-intro::after {
 .sprout-intro { position: fixed; inset: 0; z-index: 101; overflow: hidden; transition: opacity .25s ease; }
 .sprout-intro.intro-out { opacity: 0; }
 .intro-bg { position: absolute; inset: 0; background: radial-gradient(120% 90% at 50% 40%, #0E9F6E 0%, #0B7A55 45%, #064E3B 100%); }
-.intro-stage { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2vh; }
-.intro-art { height: 40vh; width: auto; aspect-ratio: 77 / 84; overflow: visible; transform-origin: 50% 50%; will-change: transform; }
-.intro-word { margin: 0; font-weight: 800; font-size: clamp(2rem, 6vh, 3.4rem); letter-spacing: -0.03em; line-height: 1; opacity: 0; }
-.intro-word .wm-mile { color: #FFFFFF; }
-.intro-word .wm-sprout { color: var(--mint); }
+.intro-stage { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.6vh; padding: 0 16px; }
+.intro-art { height: clamp(140px, 33vh, 330px); width: auto; aspect-ratio: 77 / 84; overflow: visible; transform-origin: 50% 50%; will-change: transform; }
+/* The counter, as in the app: the month's money (white), its miles (gold), and what a year of it is worth.
+   Each number sits in a box sized to its final value (.ct-ghost), so nothing moves while it counts. */
+.intro-count { display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; color: #FFFFFF; opacity: 0; max-width: 100%; }
+.sprout-intro.is-still .intro-count { opacity: 1; }
+.intro-count p { margin: 0; }
+.intro-count .intro-greeting, .ic-month, .ic-year { text-shadow: 0 1px 8px rgba(3, 28, 20, .5); } /* leaves pass behind; the words stay crisp */
+.ic-money { font-weight: 800; font-size: clamp(2.5rem, 7vh, 3.75rem); letter-spacing: -0.02em; line-height: 1.05; font-variant-numeric: tabular-nums; text-shadow: 0 2px 14px rgba(3, 28, 20, .35); }
+.ic-month { color: var(--gold); font-weight: 700; font-size: clamp(1rem, 2.3vh, 1.125rem); line-height: 1.35; max-width: 21em; font-variant-numeric: tabular-nums; text-wrap: balance; }
+.ic-year { margin-top: 8px !important; font-weight: 700; font-size: clamp(.95rem, 2.1vh, 1.05rem); line-height: 1.4; max-width: 22em; text-wrap: balance; opacity: 0; }
+.sprout-intro.is-still .ic-year { opacity: 1; }
+.ic-year strong { display: inline-block; margin: 0 .2em; font-size: 1.55em; vertical-align: -0.08em; color: var(--gold); font-variant-numeric: tabular-nums; }
+.ct { display: inline-grid; }
+.ct > span { grid-area: 1 / 1; }
+.ct-ghost { visibility: hidden; }
+.ct-mid > span { text-align: center; }
+.ct-end > span { text-align: right; }
+.ic-year strong.is-landed { animation: ic-land .55s cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes ic-land { 0% { transform: scale(1); } 40% { transform: scale(1.22); text-shadow: 0 0 22px rgba(250, 204, 21, .95); } 100% { transform: scale(1); text-shadow: none; } }
 .intro-skip {
   position: absolute; right: 20px; bottom: 20px; font: inherit; font-size: .9rem; font-weight: 500; cursor: pointer;
-  color: #FFFFFF; background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .4); border-radius: 999px; padding: 8px 16px;
+  color: #FFFFFF; background: rgba(4, 56, 42, .55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border: 1px solid rgba(255, 255, 255, .4); border-radius: 999px; padding: 8px 16px;
+  z-index: 2;
 }
-.intro-skip:hover { background: rgba(255, 255, 255, .24); }
-@media (prefers-reduced-motion: reduce) { .sprout-intro, html.ms-intro::after { display: none; } }
+.intro-skip:hover { background: rgba(4, 56, 42, .75); }
+/* Reduce Motion: a still frame (the grown sprout, the final figures, the backdrop held mid-fall), then a fade */
+.sprout-intro.is-still *, .sprout-intro.is-still *::before, .sprout-intro.is-still *::after { animation-play-state: paused !important; }
+.sprout-intro.is-still .fx-near { display: none; } /* nothing frozen over the figures */
 
 /* Seasons (season.js): the backdrop behind the sprout, and the greeting */
 .season-fx { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-.intro-greeting { margin: 0; color: #FFFFFF; font-weight: 700; font-size: clamp(1rem, 2.4vh, 1.2rem); opacity: 0; }
+.intro-greeting { margin: 0 0 4px !important; color: #FFFFFF; font-weight: 700; font-size: clamp(1rem, 2.4vh, 1.2rem); }
 .season-halloween .intro-bg { background: radial-gradient(120% 90% at 50% 40%, #0B7A55 0%, #064E3B 50%, #1E1B2E 100%); }
 .season-new-year .intro-bg { background: radial-gradient(120% 90% at 50% 40%, #0B7A55 0%, #053D2E 55%, #0F172A 100%); }
 .fx-fall { position: absolute; top: -30px; animation: fx-fall linear infinite; }
@@ -615,8 +633,37 @@ html.ms-intro::after {
 @keyframes fx-hop { 0%, 100% { transform: translateY(0) rotate(0deg); } 25% { transform: translateY(-24px) rotate(-10deg); } 50% { transform: translateY(-34px) rotate(0deg); } 75% { transform: translateY(-24px) rotate(10deg); } }
 @keyframes fx-trot { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 
+/* Redrawn seasons (season.js): northern autumn and the Australian jacaranda spring */
+.fx-defs { position: absolute; width: 0; height: 0; }
+.fx-layer { position: absolute; inset: 0; }
+.fx-far { opacity: .6; }
+.fx-layer .fx-sway { perspective: 140px; }
+.fx-flip { display: block; animation: fx-flip ease-in-out infinite alternate; transform-origin: 50% 40%; }
+@keyframes fx-flip { from { transform: rotateX(18deg) rotateY(-50deg); } to { transform: rotateX(-12deg) rotateY(55deg); } }
+.fx-near .fx-flip svg { filter: drop-shadow(0 4px 6px rgba(3, 28, 20, .35)); }
+.fx-haze { position: absolute; inset: 0; background: radial-gradient(70% 45% at 82% 6%, rgba(253, 186, 116, .5) 0%, rgba(251, 146, 60, .18) 45%, rgba(251, 146, 60, 0) 75%); }
+.fx-haze-lilac { background: radial-gradient(75% 50% at 50% 0%, rgba(221, 214, 254, .38) 0%, rgba(167, 139, 250, .14) 50%, rgba(167, 139, 250, 0) 80%); }
+.fx-sunglow { position: absolute; width: 560px; height: 560px; right: -230px; top: -250px; border-radius: 50%; background: radial-gradient(circle, rgba(254, 240, 138, .5) 0%, rgba(251, 191, 36, .2) 32%, rgba(251, 146, 60, 0) 66%); animation: fx-breathe 6s ease-in-out infinite alternate; }
+.fx-sun-disc { position: absolute; width: 64px; height: 64px; right: 30px; top: 36px; border-radius: 50%; background: radial-gradient(circle at 40% 38%, #FFFBEB 0%, #FDE68A 45%, #F59E0B 100%); box-shadow: 0 0 36px 10px rgba(253, 224, 71, .35); opacity: .92; }
+@keyframes fx-breathe { from { transform: scale(1); opacity: .85; } to { transform: scale(1.07); opacity: 1; } }
+@media (min-width: 900px) { .fx-sun-disc { width: 84px; height: 84px; right: 9vw; top: 7vh; } .fx-sunglow { right: calc(9vw - 240px); top: calc(7vh - 240px); } }
+.season-autumn .intro-bg { background: radial-gradient(120% 90% at 50% 40%, #13A06F 0%, #0B7A55 45%, #07523C 100%); }
+.fx-land { position: absolute; left: 0; bottom: 0; width: 100%; height: clamp(110px, 21vh, 220px); } /* its viewBox is as wide as the screen (season.js), so nothing is cropped */
+.season-jacaranda .intro-bg { background: radial-gradient(120% 90% at 50% 38%, #10A06E 0%, #0B7A55 46%, #133F45 100%); }
+.fx-carpet { position: absolute; left: 0; bottom: 0; width: 100%; height: clamp(34px, 6vh, 64px); }
+.fx-jac { position: absolute; bottom: 0; width: clamp(150px, 40vw, 360px); height: auto; overflow: visible; }
+.fx-jac-l { left: clamp(-90px, -9vw, -24px); }
+.fx-jac-r { right: clamp(-90px, -9vw, -24px); transform: scaleX(-1); }
+.fx-canopy { transform-box: fill-box; transform-origin: 30% 100%; animation: fx-breeze 5.5s ease-in-out infinite alternate; }
+@keyframes fx-breeze { from { transform: rotate(-.8deg); } to { transform: rotate(.8deg); } }
+@media (max-height: 700px) { .fx-jac { width: clamp(120px, 34vw, 260px); } }
+
 /* The sprout mark in the hero, so the brand is there after the intro too */
-.season-greeting { margin: -6px 0 12px; color: var(--mint); font-weight: 600; font-size: .95rem; }
+/* The greeting sits beside the mark and takes no space, so adding it (after first paint) moves nothing. */
+.hero .copy { position: relative; }
+.season-greeting { position: absolute; top: 22px; left: 80px; margin: 0; white-space: nowrap; color: var(--mint); font-weight: 600; font-size: .95rem;
+  padding: 4px 12px; border-radius: 999px; background: rgba(4, 56, 42, .35); border: 1px solid rgba(209, 250, 229, .22); }
+@media (min-width: 900px) { .season-greeting { top: 20px; left: 88px; } }
 .hero-sprout.has-hat { width: 52px; overflow: visible; }
 @media (min-width: 900px) { .hero-sprout.has-hat { width: 64px; } }
 .hero-sprout { display: block; width: 52px; height: auto; margin: 0 0 14px; filter: drop-shadow(0 4px 10px rgba(3, 28, 20, .35)); }
@@ -744,6 +791,10 @@ html.ms-intro::after {
 }
 
 /* ---------- Money line (under the hero h1) and the "What are your work miles worth?" calculator ---------- */
+/* All four countries' lines are in the page; <html data-cc> (set by intro-gate.js before paint) shows one, so it never jumps. Without JS: the UK one. */
+.money-line [data-for] { display: none; }
+html:not([data-cc]) .money-line [data-for="UK"], html[data-cc="GB"] .money-line [data-for="UK"], html[data-cc="US"] .money-line [data-for="US"],
+html[data-cc="CA"] .money-line [data-for="CA"], html[data-cc="AU"] .money-line [data-for="AU"] { display: inline; }
 .hero .money-line { color: #FFFFFF; font-size: 1.1rem; font-weight: 600; line-height: 1.4; margin: -.15em 0 .6em; max-width: 30em; }
 .hero .money-line strong { color: var(--gold); font-weight: 800; font-size: max(1.2rem, 1em); } /* large bold text, so 3:1 on the green is enough */
 
